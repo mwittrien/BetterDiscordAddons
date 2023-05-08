@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.1.5
+ * @version 7.1.6
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -15,7 +15,7 @@
 module.exports = (_ => {
 	const changeLog = {
 		"fixed": {
-			"DisplayServersAsChannels Compatibility": "Better works with DisplayServersAsChannels Plugin now"
+			"CollapsibleUi Compatibility": "Better works with CollapsibleUi Plugin now"
 		}
 	};
 	
@@ -531,6 +531,7 @@ module.exports = (_ => {
 					${BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.notCN.guildswrapperhidden} {
 						transition: width 0.2s cubic-bezier(.44,1.04,1,1.01) !important;
 					}
+					${BDFDB.dotCN.guildswrapper}[style*="width: 0px"] ~ ${BDFDB.dotCN._serverfoldersfoldercontent},
 					${BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.dotCN._serverfoldersfoldercontentclosed} {
 						width: 0 !important;
 					}
