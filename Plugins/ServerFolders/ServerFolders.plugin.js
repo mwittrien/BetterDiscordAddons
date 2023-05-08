@@ -529,7 +529,7 @@ module.exports = (_ => {
 						z-index: 10000 !important;
 					}
 					${BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.notCN.guildswrapperhidden} {
-						transition: width 0.2s cubic-bezier(.44,1.04,1,1.01) !important;
+						transition: width 0.25s cubic-bezier(.44,1.04,1,1.01) !important;
 					}
 					${BDFDB.dotCN.guildswrapper}[style*="width: 0px"] ~ ${BDFDB.dotCN._serverfoldersfoldercontent},
 					${BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.dotCN._serverfoldersfoldercontentclosed} {
