@@ -1476,10 +1476,10 @@ body::after {
 	backdrop-filter: blur(var(--popoutblur));
 }
 
-#app-mount .spoilerText-2G40u0 {							/* messageelement		spoiler								*/
+#app-mount .spoilerContent-32CqO- {							/* messageelement		spoiler								*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .spoilerText-2G40u0.hidden-2lQZ5q {				/* messageelement		hiddenspoiler						*/
+#app-mount .spoilerContent-32CqO-.hidden-2lQZ5q {				/* messageelement		hiddenspoiler						*/
 	background-color: rgba(var(--transparencycolor), .6);
 }
 

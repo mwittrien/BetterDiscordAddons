@@ -3221,7 +3221,7 @@
 		"spoilerembedhidden": ["MessageAttachment", "hiddenSpoilers"],
 		"spoilerembedinline": ["MessageAttachment", "inline"],
 		"spoilerhidden": ["Spoiler", "hidden"],
-		"spoilertext": ["Spoiler", "spoilerText"],
+		"spoilertext": ["Spoiler", "spoilerContent"],
 		"spoilerwarning": ["Spoiler", "spoilerWarning"],
 		"splashbackground": ["NotFound", "splashBackground"],
 		"strikethrough": ["TextStyle", "strikethrough"],
