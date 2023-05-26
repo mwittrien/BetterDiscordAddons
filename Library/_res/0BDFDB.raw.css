@@ -1268,6 +1268,9 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	padding-top: 4px;
 }
 
+[REPLACE_CLASS_tooltiprow]:has([REPLACE_CLASS_usersummarycontainer]:empty) {
+	display: none;
+}
 [REPLACE_CLASS_tooltipnote] {
 	color: var(--text-muted);
 	font-size: 11px;

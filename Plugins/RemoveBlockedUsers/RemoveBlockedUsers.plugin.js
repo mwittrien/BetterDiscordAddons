@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.3
+ * @version 1.6.4
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"Blocked in VC": "No longer plays audio/notifications of blocked users in voice chats"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -96,6 +94,7 @@ module.exports = (_ => {
 						"Messages",
 						"NowPlayingItem",
 						"Reactors",
+						"RTCConnectionVoiceUsers",
 						"SearchResults",
 						"UserSummaryItem",
 						"VoiceUsers"
@@ -454,6 +453,11 @@ module.exports = (_ => {
 				else {
 					if (e.instance.props.children && e.instance.props.children.props && e.instance.props.children.props.numAudience === 0) return null;
 				}
+			}
+
+			processRTCConnectionVoiceUsers (e) {
+				if (!this.settings.places.voiceChat || !e.instance.props.voiceStates) return;
+				e.instance.props.voiceStates = [].concat(e.instance.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 			}
 
 			processDirectMessage (e) {
