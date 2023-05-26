@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.2.4
+ * @version 5.2.5
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -288,6 +288,7 @@ module.exports = (_ => {
 						border-radius: 8px !important;
 						height: calc(100% - 1rem - 16px) !important;
 						max-height: unset !important;
+						margin-left: unset !important;
 					}
 					${BDFDB.dotCNS._imageutilitiesimagedetailsadded + BDFDB.dotCN.imagealttextcontainer} {
 						bottom: calc(1rem + 16px) !important;
