@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.0
+ * @version 2.5.1
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"Outdated for broken Plugins": "No longer shows broken Plugins as outdated"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -124,7 +126,7 @@ module.exports = (_ => {
 				let plugins = grabbedPlugins.map(plugin => {
 					if (plugin.failed) return;
 					const installedPlugin = _this.getInstalledPlugin(plugin);
-					const state = installedPlugin ? (plugin.version && _this.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
+					const state = installedPlugin ? (plugin.version && _this.compareVersions(plugin.version, _this.getString(installedPlugin.plugin && installedPlugin.plugin.version || installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
 					return Object.assign(plugin, {
 						search: [plugin.name, plugin.version, plugin.authorname, plugin.description, plugin.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
 						description: plugin.description || "No Description found",
@@ -768,7 +770,7 @@ module.exports = (_ => {
 									if (version) {
 										plugin.version = version;
 										const installedPlugin = this.getInstalledPlugin(plugin);
-										if (installedPlugin && this.compareVersions(version, this.getString(installedPlugin.version))) outdatedEntries++;
+										if (installedPlugin && this.compareVersions(version, this.getString(installedPlugin.plugin && installedPlugin.plugin.version || installedPlugin.version))) outdatedEntries++;
 									}
 								}
 								if (!cachedPlugins.includes(plugin.id)) newEntries++;
