@@ -233,6 +233,7 @@ html {
 		6.	CALL
 	5.	PEOPLES
 	6.	STORE/NITRO
+		1.	BIRTHDAY PAGE
 	7.	LIBRARY
 	8.	DISCOVERY
 	9.	USERSETTINGS
@@ -1528,7 +1529,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ~~~~		5.		PEOPLES							~~~~ */
 
-#app-mount .container-2cd8Mz,
 #app-mount .container-2cd8Mz {
 	background-color: var(--background-primary);
 }
@@ -1553,12 +1553,9 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .outer-2JOHae.active-1W_Gl9,
-#app-mount .outer-2JOHae.interactive-2zD88a:hover,
-#app-mount .outer-2JOHae.active-1W_Gl9,
 #app-mount .outer-2JOHae.interactive-2zD88a:hover {
 	background-color: var(--background-floating);
 }
-#app-mount .inset-SbsSFp,
 #app-mount .inset-SbsSFp {
 	background-color: var(--background-secondary);
 }
@@ -1869,6 +1866,22 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .price-1PvQ0u {
 	background-color: var(--background-accent);
 	color: var(--header-primary);
+}
+
+/* ----		6.1.	BIRTHDAY PAGE					---- */
+
+#app-mount .outerContainer-2qLQSo {
+	background-color: var(--background-primary);
+}
+#app-mount .outerContainer-2qLQSo .heroWrapper-20MPew {
+	overflow: hidden;
+	border-radius: 10px;
+}
+#app-mount .outerContainer-2qLQSo .birthdayExplanationWrapper-c5wg5T,
+#app-mount .outerContainer-2qLQSo .flipCardOpened-hiYLHX,
+#app-mount .outerContainer-2qLQSo .activityCard-3EABg3,
+#app-mount .outerContainer-2qLQSo .celebrateCardContainer-MAdnBa {
+	background-color: var(--background-secondary);
 }
 
 
