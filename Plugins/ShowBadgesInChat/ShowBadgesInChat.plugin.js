@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.9
+ * @version 2.0.0
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -454,6 +454,7 @@ module.exports = (_ => {
 				children.push(BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
 					render() {
 						if (!loadedUsers[user.id] || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
+							queuedInstances[user.id] = [].concat(queuedInstances[user.id]).filter(n => n);
 							if (queuedInstances[user.id].indexOf(this) == -1) queuedInstances[user.id].push(this);
 							return null;
 						}
