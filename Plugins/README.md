@@ -16,7 +16,6 @@
  - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatAliases) - Allows you to configure your own Aliases/Commands
  - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allows you to censor Words or block complete Messages/Statuses
  - [Complete Timestamps](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CompleteTimestamps) - Replaces Timestamps with your own custom Timestamps
- - [Copy Raw Message](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage) - Allows you to copy the raw Contents of a Message
  - [Custom Quoter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter) - Brings back the Quote Feature and allows you to set your own Quote Formats
  - [Custom Status Presets](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomStatusPresets) - Allows you to save Custom Statuses as Quick Select
  - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Displays Servers in a similar way as Channels

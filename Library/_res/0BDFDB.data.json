@@ -2,6 +2,7 @@
 	"PluginNameMap": {},
 	"PluginUrlMap": {
 		"BDFDB": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
+		"CopyRawMessage": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/CopyRawMessage.plugin.js",
 		"CreationDate": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/CreationDate.plugin.js",
 		"ForceImagePreviews": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ForceImagePreviews.plugin.js",
 		"JoinedAtDate": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/JoinedAtDate.plugin.js",
