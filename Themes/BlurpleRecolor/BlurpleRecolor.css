@@ -2591,6 +2591,9 @@ input.input-2g-os5 {										/* textinput												*/
 
 /* ----		12.5.	ICONS							---- */
 
+.avatar-2LpRdK {
+	border-radius: 50%;
+}
 [style*="/assets/18126c8a9aafeefa76bbb770759203a9.png"],
 [src*="/assets/18126c8a9aafeefa76bbb770759203a9.png"] {		/* avatars				clyde								*/
 	object-position: -999999px -999999px;
