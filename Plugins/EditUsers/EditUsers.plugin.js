@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.9
+ * @version 4.8.0
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -109,7 +109,6 @@ module.exports = (_ => {
 						"GuildInvitationRow",
 						"GuildInvites",
 						"GuildMemberEntry",
-						"HeaderBarContainer",
 						"MemberListItem",
 						"Message",
 						"MessageContent",
@@ -144,6 +143,7 @@ module.exports = (_ => {
 						"DirectMessageAddPopoutRow",
 						"DiscordTag",
 						"GuildInvitationRow",
+						"HeaderBarRecipient",
 						"IncomingCallModal",
 						"MemberListItem",
 						"Mention",
@@ -472,15 +472,16 @@ module.exports = (_ => {
 				}
 			}
 
-			processHeaderBarContainer (e) {
-				if (!this.settings.places.dmHeader) return;
-				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.channelId);
-				if (!channel || !channel.isDM()) return;
-				let userName = BDFDB.ReactUtils.findChild(e.instance, {props: [["className", BDFDB.disCN.channelheadercursorpointer]]});
-				if (!userName) return;
-				let recipientId = channel.getRecipientId();
-				userName.props.children = this.getUserData(recipientId).username;
-				this.changeUserColor(userName, recipientId);
+			processHeaderBarRecipient (e) {
+				if (!this.settings.places.dmHeader || !e.instance.props.channel || !e.instance.props.channel.isDM()) return;
+				let recipientId = e.instance.props.channel.getRecipientId();
+				let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelheaderavatar]]});
+				if (avatar) avatar.props.src = this.getUserAvatar(recipientId);
+				let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelheadercursorpointer]]});
+				if (userName) {
+					userName.props.children = this.getUserData(recipientId).username;
+					this.changeUserColor(userName, recipientId);
+				}
 			}
 
 			processChannelCallHeader (e) {
