@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.3
+ * @version 1.5.4
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -376,7 +376,7 @@ module.exports = (_ => {
 					else if (this.settings.general.addMutualGuild) {
 						let mutualGuilds = BDFDB.ArrayUtils.removeCopies([].concat(BDFDB.LibraryStores.GuildMemberStore.memberOf(e.instance.props.user.id), (BDFDB.LibraryStores.UserProfileStore.getMutualGuilds(e.instance.props.user.id) || []).map(n => n && n.guild && n.guild.id)).flat()).filter(n => n);
 						if (mutualGuilds && mutualGuilds.length) {
-							let guildsIds = BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds();
+							let guildsIds = BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds();
 							let childrenRender = e.returnvalue.props.children;
 							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let returnValue = childrenRender(...args);

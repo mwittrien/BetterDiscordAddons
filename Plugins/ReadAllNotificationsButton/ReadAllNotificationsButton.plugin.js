@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.4
+ * @version 1.7.5
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -68,7 +68,7 @@ module.exports = (_ => {
 				BDFDB.GuildUtils.markAsRead(guildIds.filter(id => id && !blacklist.includes(id)));
 			}
 			getGuilds() {
-				return BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuilds().map(g => g.id).filter(n => n);
+				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.GuildStore.getGuild).map(g => g.id).filter(n => n);
 			}
 			getUnread() {
 				return this.getGuilds().filter(id => BDFDB.LibraryStores.GuildReadStateStore.hasUnread(id) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(id) > 0);
@@ -94,37 +94,35 @@ module.exports = (_ => {
 								if (!_this.settings.general.confirmClear) this.clearClick();
 								else BDFDB.ModalUtils.confirm(_this, _this.labels.modal_confirmnotifications, _ => this.clearClick());
 							},
-							onContextMenu: event => {
-								BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-									children: [
-										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: _this.labels.context_unreadguilds,
-											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-unread-read"),
-											action: _ => this.clearGuilds(this.getUnread())
-										}),
-										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: _this.labels.context_pingedguilds,
-											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-pinged-read"),
-											action: _ => this.clearGuilds(this.getPinged())
-										}),
-										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: _this.labels.context_mutedguilds,
-											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-muted-read"),
-											action: _ => this.clearGuilds(this.getMuted())
-										}),
-										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: _this.labels.context_guilds,
-											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-all-read"),
-											action: _ => this.clearGuilds(this.getGuilds())
-										}),
-										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: _this.labels.context_dms,
-											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-dms-read"),
-											action: _ => BDFDB.DMUtils.markAsRead(this.getPingedDMs())
-										})
-									]
-								}));
-							}
+							onContextMenu: event => BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+								children: [
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: _this.labels.context_unreadguilds,
+										id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-unread-read"),
+										action: _ => this.clearGuilds(this.getUnread())
+									}),
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: _this.labels.context_pingedguilds,
+										id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-pinged-read"),
+										action: _ => this.clearGuilds(this.getPinged())
+									}),
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: _this.labels.context_mutedguilds,
+										id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-muted-read"),
+										action: _ => this.clearGuilds(this.getMuted())
+									}),
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: _this.labels.context_guilds,
+										id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-all-read"),
+										action: _ => this.clearGuilds(this.getGuilds())
+									}),
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: _this.labels.context_dms,
+										id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-dms-read"),
+										action: _ => BDFDB.DMUtils.markAsRead(this.getPingedDMs())
+									})
+								]
+							}))
 						})
 					})
 				});
@@ -224,7 +222,7 @@ module.exports = (_ => {
 				
 				let listInstance = null, batchSetGuilds = value => {
 					if (!value) {
-						for (let id of BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds()) blacklist.push(id);
+						for (let id of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds()) blacklist.push(id);
 						blacklist = BDFDB.ArrayUtils.removeCopies(blacklist);
 					}
 					else blacklist = [];

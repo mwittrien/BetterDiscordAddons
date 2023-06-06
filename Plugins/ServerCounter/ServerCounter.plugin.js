@@ -2,7 +2,7 @@
  * @name ServerCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Adds a Server Counter to the Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -79,7 +79,7 @@ module.exports = (_ => {
 					className: BDFDB.disCNS.guildouter + BDFDB.disCN._servercounterservercountwrap,
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
-						children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} – ${BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds().length}`
+						children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} – ${BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().length}`
 					})
 				}));
 			}

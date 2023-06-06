@@ -2,7 +2,7 @@
  * @name EmojiStatistics
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.0
+ * @version 3.0.1
  * @description Shows you an Overview of Emojis and Emoji Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -165,7 +165,7 @@ module.exports = (_ => {
 								else return item[data.key];
 							}
 						})),
-						data: BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuilds().map((guild, i) => {
+						data: BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.GuildStore.getGuild).map((guild, i) => {
 							let itemData = {
 								index: i,
 								guild: guild,

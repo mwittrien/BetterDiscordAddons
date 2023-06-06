@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.6
+ * @version 6.2.7
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -80,7 +80,7 @@ module.exports = (_ => {
 					if (e.methodArguments[0].type == "STREAMER_MODE_UPDATE") BDFDB.DiscordUtils.rerenderAll(true);
 				}});
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SortedGuildUtils, "getGuildFolderById", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.SortedGuildStore, "getGuildFolderById", {after: e => {
 					let hiddenGuildIds = hiddenEles.servers || [];
 					if (e.returnValue && hiddenGuildIds.length) {
 						let folder = Object.assign({}, e.returnValue);
@@ -193,8 +193,8 @@ module.exports = (_ => {
 				
 				let hiddenGuildIds = hiddenEles && hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles && hiddenEles.folders || [];
-				let guilds = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.map(n => n.guildIds).flat(10).map(guildId => BDFDB.LibraryStores.GuildStore.getGuild(guildId)).filter(n => n);
-				let folders = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.filter(n => n.folderId);
+				let guilds = BDFDB.LibraryStores.SortedGuildStore.getGuildFolders().map(n => n.guildIds).flat(10).map(guildId => BDFDB.LibraryStores.GuildStore.getGuild(guildId)).filter(n => n);
+				let folders = BDFDB.LibraryStores.SortedGuildStore.getGuildFolders().filter(n => n.folderId);
 				let foldersAdded = [];
 				
 				BDFDB.ModalUtils.open(this, {

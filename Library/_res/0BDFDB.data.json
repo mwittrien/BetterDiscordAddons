@@ -242,7 +242,6 @@
 			"createSoundpackSound": [");return"],
 			"playSound": ["getSoundpack"]
 		}},
-		"SortedGuildUtils": {"props": ["getSortedGuilds", "getFlattenedGuildIds"]},
 		"SpotifyUtils": {"strings": ["\"SPOTIFY_SET_ACTIVE_DEVICE\"", "deviceId", "accountId"], "exported": false, "value": "exports", "map": {
 			"getAccessToken": ["SPOTIFY_ACCOUNT_ACCESS_TOKEN_REVOKE", "CONNECTION_ACCESS_TOKEN"],
 			"pause": ["SPOTIFY_PLAYER_PAUSE"],
