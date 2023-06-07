@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.4
+ * @version 1.6.5
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -107,6 +107,7 @@ module.exports = (_ => {
 						"MemberListItem",
 						"PrivateChannel",
 						"Reactions",
+						"ReactorsList",
 						"RecentMentions",
 						"RichUserMention",
 						"SearchResultsInner",
@@ -310,45 +311,37 @@ module.exports = (_ => {
 				if (!e.returnvalue || !e.returnvalue.props.children) return;
 				let emojiArrayIndex = e.returnvalue.props.children.findIndex(n => BDFDB.ArrayUtils.is(n) && n[0] && n[0].props && n[0].props.emoji);
 				if (emojiArrayIndex == -1) return;
-				let updateTimeout, relationshipCount = BDFDB.LibraryStores.RelationshipStore.getRelationshipCount();
-				if (cachedChannelId != e.instance.props.message.channel_id) {
-					cachedReactions = {};
-					cachedChannelId = e.instance.props.message.channel_id;
-				}
-				if (!cachedReactions[e.instance.props.message.id]) cachedReactions[e.instance.props.message.id] = {};
 				for (let i in e.returnvalue.props.children[emojiArrayIndex]) {
 					let reaction = e.returnvalue.props.children[emojiArrayIndex][i];
-					let emojiId = reaction.props.emoji.name || reaction.props.emoji.id;
-					let oldCount = (reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId) || {}).count;
-					if (oldCount && oldCount < 10) {
-						if (cachedReactions[reaction.props.message.id][emojiId] && cachedReactions[reaction.props.message.id][emojiId].relationshipCount == relationshipCount && cachedReactions[reaction.props.message.id][emojiId].oldCount == oldCount) {
-							reaction.props.count = cachedReactions[reaction.props.message.id][emojiId].reactions.length;
-							if (reaction.props.count < 1) e.returnvalue.props.children[emojiArrayIndex][i] = null;
-						}
-						else BDFDB.LibraryModules.ReactionUtils.getReactions(reaction.props.message.channel_id, reaction.props.message.id, reaction.props.emoji).then(reactions => {
-							if (!reactions || !reactions.length) return;
-							let someBlocked = false;
-							let filteredReactions = reactions.filter(n => {
-								let isBlocked = n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id);
-								someBlocked = someBlocked || isBlocked;
-								return !isBlocked;
-							});
-							if (someBlocked) {
-								reaction.props.reactions = filteredReactions;
-								reaction.props.count = reaction.props.reactions.length;
-								BDFDB.TimeUtils.clear(updateTimeout);
-								updateTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.ReactUtils.forceUpdate(e.instance), 1000);
-							}
-							if (cachedReactions && cachedReactions[reaction.props.message.id]) cachedReactions[reaction.props.message.id][emojiId] = {
-								blocked: someBlocked,
-								relationshipCount: relationshipCount,
-								oldCount: oldCount || 0,
-								reactions: reaction.props.reactions || reactions
-							};
-						});
+					let nativeReaction = reaction.props.message.reactions.find(n => n && n.emoji == reaction.props.emoji);
+					if (nativeReaction) reaction.props.count = nativeReaction.count;
+					let reactions = BDFDB.ObjectUtils.toArray(BDFDB.LibraryStores.MessageReactionsStore.getReactions(reaction.props.message.channel_id, reaction.props.message.id, reaction.props.emoji));
+					if (!reactions || !reactions.length) return;
+					let blocked = 0;
+					reactions.forEach(n => {if (n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id)) blocked++;});
+					if (blocked) {
+						reaction.props.count -= blocked;
+						if (!reaction.props.count) e.returnvalue.props.children[emojiArrayIndex][i] = null;
 					}
 				}
 				if (!e.returnvalue.props.children[emojiArrayIndex].filter(n => n).length) return null;
+			}
+		
+			processReactorsList (e) {
+				if (!this.settings.places.reactions) return;
+				let [reactionEntries, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children, {filter: n => n && n.props && n.props.emoji});
+				if (index == -1) return;
+				for (let i in reactionEntries) {
+					let reaction = reactionEntries[i];
+					reaction.props = Object.assign({}, reaction.props);
+					let reactions = BDFDB.ObjectUtils.toArray(BDFDB.LibraryStores.MessageReactionsStore.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, reaction.props.emoji));
+					if (reactions && reactions.length) {
+						let blocked = 0;
+						reactions.forEach(n => {if (n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id)) blocked++;});
+						if (blocked) reaction.props.count -= blocked;
+						if (!reaction.props.count) reactionEntries[i] = null;
+					}
+				}
 			}
 		
 			processReactors (e) {
