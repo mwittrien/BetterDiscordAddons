@@ -214,9 +214,6 @@
 		"ReactionEmojiUtils": {"strings": ["optionallyDiverseSequence,animated", "convertSurrogateToName"], "exported": false, "value": "exports", "map": {
 			"getReactionEmojiName": ["convertSurrogateToName"]
 		}},
-		"ReactionUtils": {"strings": ["\"MESSAGE_REACTION_ADD\"", "\"MESSAGE_REACTION_REMOVE\"", "\"@me\""], "exported": false, "value": "exports", "map": {
-			"getReactions": [".apply("]
-		}},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
 		"RoleIconUtils": {"strings": [".ROLE_ICONS", "convertSurrogateToName", "customIconSrc"], "exported": false, "value": "exports", "map": {
@@ -527,9 +524,10 @@
 		"QuickSwitchGroupDMResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "dmIconContainer"]},
 		"QuickSwitchGuildResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "guildIconContainer"]},
 		"QuickSwitchUserResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "getDisplayNickname"]},
-		"Reactions": {"strings": ["disableTransitionAppear", "reactionsCount:", "message.reactions.length"]},
+		"Reactions": {"strings": [".O.BURST", ".reactions", ".emoji.name", "\"reactions\""], "noSearch": true},
 		"Reactor": {"strings": ["currentUser cannot be undefined", "reactorDefault"]},
-		"Reactors": {"strings": ["hasMore", "emoji", "spinnerMore"]},
+		"Reactors": {"strings": ["hasMore", "emoji", "spinnerMore"], "noSearch": true},
+		"ReactorsList": {"strings": [".O.BURST", ".reactions", ".emoji.name", "selectedReaction"], "noSearch": true},
 		"RecentMentions": {"strings": ["canCloseAllMessages", "RECENT_MENTIONS", "badgeable"]},
 		"RecentsChannelHeader": {"strings": [".subtextContainer", ".channelNameSpan", ".channelNameHeader", ".gotoChannel"]},
 		"RichChannelMention": {"strings": ["iconType:", "Messages.DELETED_CHANNEL_PLACEHOLDER"]},

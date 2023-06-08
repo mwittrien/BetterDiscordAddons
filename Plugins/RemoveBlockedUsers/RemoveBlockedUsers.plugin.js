@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.5
+ * @version 1.6.6
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -180,7 +180,10 @@ module.exports = (_ => {
 						if (unmutedBlockedUsers.length) {
 							BDFDB.TimeUtils.clear(muteTimeout);
 							muteTimeout = BDFDB.TimeUtils.timeout(_ => {
-								while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaEngineUtils.toggleLocalMute(unmutedBlockedUsers.pop().user.id);
+								while (unmutedBlockedUsers.length) {
+									let userId = unmutedBlockedUsers.pop().user.id;
+									if (!BDFDB.LibraryStores.MediaEngineStore.isLocalMute(userId)) BDFDB.LibraryModules.MediaEngineUtils.toggleLocalMute(userId);
+								}
 							}, 1000);
 						}
 						if (unblockedUsers.length == oldUnblockedConnectedUsers.length) e.methodArguments[1] = 0;
