@@ -15,7 +15,7 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/ServerColumns/ServerColumns.css);
 
 :root {
-	--columns:			3;							/* default:	3					(amount of servercolumns)																		*/
+	--columns:			5;							/* default:	3					(amount of servercolumns)																		*/
 	
 	--guildsize:		50;							/* default:	50					(serversize in pixel)																			*/
 	--guildgap:			3;							/* default:	3					(top/bottom gap between servers in pixel)														*/
