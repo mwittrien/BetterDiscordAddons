@@ -6315,17 +6315,17 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		15.3.	INPUTS							---- */
 
-.input-2g-os5 {												/* valueinput			bordered							*/
+.input-3O04eu {												/* valueinput			bordered							*/
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
 }
-.input-2g-os5:hover:not(:focus) {
+.input-3O04eu:hover:not(:focus) {
 	border-color: rgb(var(--transparencycolor));
 }
 .textInput-3g8y92 {											/* textinput												*/
 	background-color: rgba(var(--transparencycolor), .1);
 }
-.textInput-3g8y92 .input-2g-os5 {
+.textInput-3g8y92 .input-3O04eu {
 	background: transparent;
 }
 

@@ -2434,17 +2434,17 @@ a.metadataDownload-3IY84h {
 
 /* ----		12.3.	INPUTS							---- */
 
-input.input-2g-os5 {										/* textinput												*/
+input.input-3O04eu {										/* textinput												*/
 	border: 1px solid var(--deprecated-text-input-border);
 }
-.input-2g-os5:hover {
+.input-3O04eu:hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
-.input-2g-os5:not(.error-8r7mjf):not(.success-3HR983).focused-1AtTHC,
-.input-2g-os5:not(.error-8r7mjf):not(.success-3HR983):focus {
+.input-3O04eu:not(.error-10GvqR):not(.success-1V4i3f).focused-16iuXg,
+.input-3O04eu:not(.error-10GvqR):not(.success-1V4i3f):focus {
 	border-color: rgb(var(--accentcolor));
 }
-.focused-1AtTHC {
+.focused-16iuXg {
 	border-color: rgb(var(--accentcolor));
 }
 #app-mount .prefixInput-w72mM6:not(.error-UVCAd2).focused-2JC6KT {
@@ -2453,7 +2453,7 @@ input.input-2g-os5 {										/* textinput												*/
 .addFriendInputWrapper-kkoSV9:focus-within {
 	border-color: rgb(var(--accentcolor));
 }
-.addFriendInputWrapper-kkoSV9 .input-2g-os5 {
+.addFriendInputWrapper-kkoSV9 .input-3O04eu {
 	background-color: transparent !important;
 	border-color: transparent !important;
 }
