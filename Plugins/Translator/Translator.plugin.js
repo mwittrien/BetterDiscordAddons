@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.5
+ * @version 2.5.6
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -554,15 +554,15 @@ module.exports = (_ => {
 						disabled: !translated && isTranslating,
 						action: _ => this.translateMessage(e.instance.props.message, e.instance.props.channel)
 					}));
-					this.injectSearchItem(e);
+					this.injectSearchItem(e, false);
 				}
 			}
 			
 			onTextAreaContextMenu (e) {
-				this.injectSearchItem(e);
+				this.injectSearchItem(e, true);
 			}
 			
-			injectSearchItem (e) {
+			injectSearchItem (e, ownMessage) {
 				let text = document.getSelection().toString();
 				if (text) {
 					let translating, foundTranslation, foundInput, foundOutput;
@@ -600,7 +600,7 @@ module.exports = (_ => {
 									}
 									else if (!translating) {
 										translating = true;
-										this.translateText(text, messageTypes.RECEIVED, (translation, input, output) => {
+										this.translateText(text, ownMessage ? messageTypes.SENT : messageTypes.RECEIVED, (translation, input, output) => {
 											if (translation) {
 												foundTranslation = translation, foundInput = input, foundOutput = output;
 												createTooltip();
