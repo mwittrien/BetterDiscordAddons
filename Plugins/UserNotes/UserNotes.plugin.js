@@ -107,7 +107,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "LARGE",
 					header: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
-					subHeader: user.username,
+					subHeader: user.globalName || user.username,
 					scroller: false,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextArea, {
