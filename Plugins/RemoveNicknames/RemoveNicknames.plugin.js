@@ -2,7 +2,7 @@
  * @name RemoveNicknames
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.3
+ * @version 1.4.4
  * @description Replaces Nicknames with Accountnames
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -62,6 +62,7 @@ module.exports = (_ => {
 					general: {
 						replaceOwn:			{value: false, 			description: "Replaces your own Name"},
 						replaceBots:		{value: true, 			description: "Replaces the Nickname of Bots"},
+						removeGlobal:		{value: true, 			description: "Also removes global Displaynames"},
 						addNickname:		{value: false, 			description: "Adds Nickname as Parentheses"},
 						swapPositions:		{value: false, 			description: "Swaps the Position of Username and Nickname"},
 					},
@@ -91,7 +92,10 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				let init = false;
+				BDFDB.TimeUtils.timeout(_ => init = true, 3000);
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UserNameUtils, "getName", {after: e => {
+					if (!init) return;
 					return this.getNewName(e.methodArguments[2], e.methodArguments[0]);
 				}});
 				
@@ -152,14 +156,14 @@ module.exports = (_ => {
 			}
 
 			processAutocompleteUserResult (e) {
-				if (e.instance.props.user && e.instance.props.nick && this.settings.places.autocompletes) {
+				if (e.instance.props.user && (e.instance.props.nick || e.instance.props.user.globalName) && this.settings.places.autocompletes) {
 					let newName = this.getNewName(e.instance.props.user);
 					if (newName) e.instance.props.nick = newName;
 				}
 			}
 
 			processVoiceUser (e) {
-				if (e.instance.props.user && e.instance.props.nick && this.settings.places.voiceChat) {
+				if (e.instance.props.user && (e.instance.props.nick || e.instance.props.user.globalName) && this.settings.places.voiceChat) {
 					let newName = this.getNewName(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.guild_id);
 					if (newName) e.instance.props.nick = newName;
 				}
@@ -233,7 +237,7 @@ module.exports = (_ => {
 			}
 
 			processMemberListItem (e) {
-				if (e.instance.props.user && e.instance.props.nick && this.settings.places.memberList) {
+				if (e.instance.props.user && (e.instance.props.nick || e.instance.props.user.globalName) && this.settings.places.memberList) {
 					let newName = this.getNewName(e.instance.props.user, e.instance.props.channel.guild_id);
 					if (newName) e.instance.props.nick = newName;
 				}
@@ -243,11 +247,12 @@ module.exports = (_ => {
 				if (!user) return null;
 				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, user.id) || {};
 				let origUser = BDFDB.LibraryStores.UserStore.getUser(user.id) || {};
-				let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers", true);
-				let username = EditUsers && EditUsers.getUserData(user, true, false, origUser).username || user.username;
-				if (!member) return username;
-				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !this.settings.general.replaceOwn || user.bot && !this.settings.general.replaceBots) return username != origUser.username ? username : (member.nick || username);
-				return this.settings.general.addNickname ? (this.settings.general.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
+				let EUname = BDFDB.BDUtils.getPlugin("EditUsers", true)?.getUserData(user, true, false, origUser).username;
+				let nick = member && member.nick || this.settings.general.removeGlobal && user.globalName;
+				if (!nick) return EUname || user.globalName || user.username;
+				let username = EUname || user.username;
+				if (user.id == BDFDB.UserUtils.me.id && !this.settings.general.replaceOwn || user.bot && !this.settings.general.replaceBots) return username != origUser.username ? username : (nick || username);
+				return this.settings.general.addNickname ? (this.settings.general.swapPositions ? (nick + " (" + username + ")") : (username + " (" + nick + ")")) : username;
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

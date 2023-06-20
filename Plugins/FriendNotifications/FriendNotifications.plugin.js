@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.1
+ * @version 1.9.2
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -449,7 +449,7 @@ module.exports = (_ => {
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-								children: cardData.username
+								children: cardData.globalName || cardData.username
 							})
 						],
 						onHeaderClick: config => {
@@ -827,7 +827,7 @@ module.exports = (_ => {
 							userStatusStore[id].name != status.name
 						))) {
 							let EUdata = BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
-							let name = EUdata.name || user.username;
+							let name = EUdata.name || user.globalName || user.username;
 							let nickname = EUdata.name || BDFDB.LibraryStores.RelationshipStore.getNickname(user.id);
 							let avatar = EUdata.removeIcon ? "" : (EUdata.url || BDFDB.UserUtils.getAvatar(user.id));
 							let timestamp = new Date().getTime();
