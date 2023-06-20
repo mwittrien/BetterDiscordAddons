@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
+ * @version 1.3.3
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -399,7 +399,7 @@ module.exports = (_ => {
 						let user = BDFDB.LibraryStores.UserStore.getUser(match);
 						if (user) {
 							let userMember = channel.guild_id && BDFDB.LibraryStores.GuildMemberStore.getMember(guild.id, match);
-							return `@ ${userMember && userMember.nick || user.username}`;
+							return `@ ${userMember && userMember.nick || user.globalName || user.username}`;
 						}
 						else if (channel.guild_id && guild.roles[match] && guild.roles[match].name) return `${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"} ${guild.roles[match].name}`;
 						return string;
@@ -411,12 +411,12 @@ module.exports = (_ => {
 				return BDFDB.StringUtils.insertNRST(quoteFormat)
 					.replace("$mention", channel.isDM() ? "" : `<@!${message.author.id}>`)
 					.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
-					.replace("$authorName", member && member.nick || message.author.username || "")
-					.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
+					.replace("$authorName", member && member.nick || message.author.globalName || message.author.username || "")
+					.replace("$authorAccount", message.author.discriminator ? `${message.author.username}#${message.author.discriminator}` : message.author.username)
 					.replace("$authorId", message.author.id || "")
 					.replace("$channelName", channel.name || "")
 					.replace("$channelId", channel.id || "")
-					.replace("$channel", channel.isDM() && channel.rawRecipients[0] ? `@ ${channel.rawRecipients[0].username}` : `<#${channel.id}>`)
+					.replace("$channel", channel.isDM() && channel.rawRecipients[0] ? `@ ${channel.rawRecipients[0].globalName || channel.rawRecipients[0].username}` : `<#${channel.id}>`)
 					.replace("$serverId", guild.id || "")
 					.replace("$serverName", guild.name || "")
 					.replace("$timestamp", BDFDB.LibraryComponents.DateInput.format(this.settings.dates.quoteDate, new Date(message.editedTimestamp || message.timestamp)))

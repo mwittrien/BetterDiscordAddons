@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.7
+ * @version 2.1.8
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -126,7 +126,7 @@ module.exports = (_ => {
 				}
 				let searchKey = popoutProps.searchKey.toUpperCase();
 				if (searchKey) {
-					let searchValues = ["content", "author.username", "rawDescription", "author.name"];
+					let searchValues = ["content", "author.globalName", "author.username", "rawDescription", "author.name"];
 					messages = messages.filter(m => m.note.tags && m.note.tags.some(tag => tag.indexOf(searchKey.toUpperCase()) > -1) || searchValues.some(key => this.containsSearchkey(m.message, key, searchKey) || m.message.embeds.some(embed => this.containsSearchkey(embed, key, searchKey))));
 				}
 				BDFDB.ArrayUtils.keySort(messages, popoutProps.selectedSort.value);
@@ -141,8 +141,9 @@ module.exports = (_ => {
 				if (role) message.colorString = role.colorString;
 				if (popoutProps.selectedFilter.value != "channel" && !channelName && channel.recipients.length > 0) {
 					for (let dmuser_id of channel.recipients) {
+						let user = (BDFDB.LibraryStores.UserStore.getUser(dmuser_id) || {});
 						channelName = channelName ? channelName + ", @" : channelName;
-						channelName = channelName + ((BDFDB.LibraryStores.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
+						channelName = channelName + (user.globalName || user.username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
 					}
 				}
 				return [

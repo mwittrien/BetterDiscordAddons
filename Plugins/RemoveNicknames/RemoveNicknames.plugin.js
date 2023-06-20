@@ -247,10 +247,10 @@ module.exports = (_ => {
 				if (!user) return null;
 				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, user.id) || {};
 				let origUser = BDFDB.LibraryStores.UserStore.getUser(user.id) || {};
-				let EUname = BDFDB.BDUtils.getPlugin("EditUsers", true)?.getUserData(user, true, false, origUser).username;
+				let EUdata = BDFDB.BDUtils.getPlugin("EditUsers", true)?.getUserData(user, true, false, origUser);
 				let nick = member && member.nick || this.settings.general.removeGlobal && user.globalName;
-				if (!nick) return EUname || user.globalName || user.username;
-				let username = EUname || user.username;
+				if (!nick) return EUdata && (EUdata.globalName || EUdata.username) || user.globalName || user.username;
+				let username = EUdata && (EUdata.globalName || EUdata.username) || user.username;
 				if (user.id == BDFDB.UserUtils.me.id && !this.settings.general.replaceOwn || user.bot && !this.settings.general.replaceBots) return username != origUser.username ? username : (nick || username);
 				return this.settings.general.addNickname ? (this.settings.general.swapPositions ? (nick + " (" + username + ")") : (username + " (" + nick + ")")) : username;
 			}
