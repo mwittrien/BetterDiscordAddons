@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.1
+ * @version 4.8.2
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -975,7 +975,7 @@ module.exports = (_ => {
 			}
 			
 			processMemberListItem (e) {
-				if (!this.settings.places.memberList || !e.instance.props.user) return;
+				if (!this.settings.places.memberList || !e.instance.props.user || !this.shouldChangeInChat(e.instance.props.channel.id)) return;
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					let data = changedUsers[e.instance.props.user.id];
