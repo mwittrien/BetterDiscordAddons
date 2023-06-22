@@ -128,7 +128,7 @@ module.exports = (_ => {
 							})),
 							_this.settings.items.owner && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER,
-								string: !owner ? BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER : (!owner.discriminator ? owner.username : `${owner.username}#${owner.discriminator}`)
+								string: !owner ? BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER : (owner.discriminator === "0" ? owner.username : `${owner.username}#${owner.discriminator}`)
 							}),
 							_this.settings.items.creationDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: _this.labels.creation_date,
