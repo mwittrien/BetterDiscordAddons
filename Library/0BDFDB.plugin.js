@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.9
+ * @version 3.3.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -805,7 +805,7 @@ module.exports = (_ => {
 					}
 					else {
 						let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
-						let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
+						let newName = (body.match(/@name ([^"^\n^\t^\t]+)|['"]([^"^\n^\t^\t]+)['"]/i) || []).filter(n => n)[1] || pluginName;
 						let newVersion = (body.match(/@version ([0-9]+\.[0-9]+\.[0-9]+)|['"]([0-9]+\.[0-9]+\.[0-9]+)['"]/i) || []).filter(n => n)[1];
 						let oldVersion = PluginStores.updateData.plugins[url].version;
 						let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
