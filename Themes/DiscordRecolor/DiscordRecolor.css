@@ -264,6 +264,7 @@ html {
 		23.	HYPESQUADQUIZ
 		24.	NITROFEATUREMODAL
 		25.	DIRECTORYMODAL
+		26.	SERVERAPPMODAL
 	12.	POPOUTS
 		1.	USERPOPOUT
 		2.	EMOJIPICKER
@@ -3423,6 +3424,12 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 /* ----		11.25.	DIRECTORYMODAL					---- */
 
 #app-mount .directoryModal-YJsOMv {
+	background: var(--background-primary);
+}
+
+/* ----		11.26.	SERVERAPPMODAL					---- */
+
+#app-mount .directoryContainer-z-0pgp {
 	background: var(--background-primary);
 }
 
