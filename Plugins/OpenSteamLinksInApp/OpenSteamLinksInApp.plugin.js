@@ -2,7 +2,7 @@
  * @name OpenSteamLinksInApp
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.5
+ * @version 1.1.6
  * @description Opens Steam Links in Steam instead of your Browser
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -61,7 +61,13 @@ module.exports = (_ => {
 		};
 		
 		return class OpenSteamLinksInApp extends Plugin {
-			onLoad () {}
+			onLoad () {
+				this.modulePatches = {
+					before: [
+						"MessageContent"
+					]
+				};
+			}
 			
 			onStart () {
 				for (let key in urls) BDFDB.ListenerUtils.add(this, document, "click", BDFDB.ArrayUtils.removeCopies(urls[key].map(url => url.indexOf("http") == 0 ? (url.indexOf("https://") == 0 ? [`a[href^="${url}"]`, `a[href^="${url.replace(/https:\/\//i, "http://")}"]`] : `a[href^="${url}"]`) : `a[href*="${url}"][href*="${key}"]`).flat(10).filter(n => n)).join(", "), e => {
@@ -70,6 +76,19 @@ module.exports = (_ => {
 			}
 			
 			onStop () {}
+			
+			processMessageContent (e) {
+				if (!BDFDB.ArrayUtils.is(e.instance.props.content)) return;
+				for (let i in e.instance.props.content) if (e.instance.props.content[i] && e.instance.props.content[i].type == "span" && typeof e.instance.props.content[i].props.children == "string" && e.instance.props.content[i].props.children.indexOf("steam://") == 0) {
+					const url = e.instance.props.content[i].props.children;
+					e.instance.props.content[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+						href: url,
+						title: url,
+						onClick: _ => BDFDB.LibraryRequires.electron.shell.openExternal(url),
+						children: BDFDB.ReactUtils.createElement("span", {children: url})
+					});
+				}
+			}
 		
 			openIn (e, key, url) {
 				let platform = BDFDB.StringUtils.upperCaseFirstChar(key);
