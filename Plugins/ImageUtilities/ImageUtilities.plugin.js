@@ -781,7 +781,7 @@ module.exports = (_ => {
 				});
 				
 				let [children, index] = config.isNative && nativeIndex > -1 ? [nativeParent, nativeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-				children.splice(index > -1 ? index : children.length, 0, config.isNative ? subMenu : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children.splice(index > -1 ? index : children.length, 0, config.isNative && nativeIndex > -1 ? subMenu : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: config.label || (this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, config.id, "main-subitem"),

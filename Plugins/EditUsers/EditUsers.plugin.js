@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.2
+ * @version 4.8.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -403,7 +403,7 @@ module.exports = (_ => {
 				}
 				if (e.instance.props.user) {
 					if (this.settings.places.contextMenu) {
-						let userData = this.getUserData(user.id);
+						let userData = this.getUserData(e.instance.props.user.id);
 						if (userData.globalName && userData.globalName != e.instance.props.user.globalName || !userData.globalName && userData.username != e.instance.props.user.username) {
 							let username = userData.globalName || userData.username;
 							let [timeoutChildren, timeoutIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "timeout"});
