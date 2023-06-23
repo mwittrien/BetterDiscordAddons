@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -412,7 +412,7 @@ module.exports = (_ => {
 					.replace("$mention", channel.isDM() ? "" : `<@!${message.author.id}>`)
 					.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
 					.replace("$authorName", member && member.nick || message.author.globalName || message.author.username || "")
-					.replace("$authorAccount", message.author.discriminator ? `${message.author.username}#${message.author.discriminator}` : message.author.username)
+					.replace("$authorAccount", message.author.discriminator && message.author.discriminator != "0" ? `${message.author.username}#${message.author.discriminator}` : message.author.username)
 					.replace("$authorId", message.author.id || "")
 					.replace("$channelName", channel.name || "")
 					.replace("$channelId", channel.id || "")

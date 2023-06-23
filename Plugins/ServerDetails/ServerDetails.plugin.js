@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.7
+ * @version 1.1.8
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -128,7 +128,7 @@ module.exports = (_ => {
 							})),
 							_this.settings.items.owner && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER,
-								string: !owner ? BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER : (!owner.discriminator ? owner.username : `${owner.username}#${owner.discriminator}`)
+								string: !owner ? BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER : (owner.discriminator && owner.discriminator != "0" ? `${owner.username}#${owner.discriminator}` : owner.username)
 							}),
 							_this.settings.items.creationDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: _this.labels.creation_date,

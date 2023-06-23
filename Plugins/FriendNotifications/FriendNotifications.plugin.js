@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.2
+ * @version 1.9.3
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -838,8 +838,8 @@ module.exports = (_ => {
 							let string = this.settings.notificationStrings[screensharingNotice ? "screensharing" : customChanged ? "custom" : loginNotice ? "login" : status.name] || "'$user' changed status to '$status'";
 							let hasUserPlaceholder = string.indexOf("$user") > -1;
 							let toastString = BDFDB.StringUtils.htmlEscape(string)
-								.replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${this.settings.general.showDiscriminator && user.discriminator ? ("#" + user.discriminator) : ""}`)
-								.replace(/'{0,1}\$nick'{0,1}/g, nickname ? `<strong>${BDFDB.StringUtils.htmlEscape(nickname)}</strong>${!hasUserPlaceholder && this.settings.general.showDiscriminator && user.discriminator ? ("#" + user.discriminator) : ""}` : !hasUserPlaceholder ? `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${this.settings.general.showDiscriminator && user.discriminator ? ("#" + user.discriminator) : ""}` : "")
+								.replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${this.settings.general.showDiscriminator && user.discriminator && user.discriminator != "0" ? ("#" + user.discriminator) : ""}`)
+								.replace(/'{0,1}\$nick'{0,1}/g, nickname ? `<strong>${BDFDB.StringUtils.htmlEscape(nickname)}</strong>${!hasUserPlaceholder && this.settings.general.showDiscriminator && user.discriminator && user.discriminator != "0" ? ("#" + user.discriminator) : ""}` : !hasUserPlaceholder ? `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${this.settings.general.showDiscriminator && user.discriminator && user.discriminator != "0" ? ("#" + user.discriminator) : ""}` : "")
 								.replace(/'{0,1}\$statusOld'{0,1}/g, `<strong>${oldStatusName}</strong>`)
 								.replace(/'{0,1}\$status'{0,1}/g, `<strong>${statusName}</strong>`);
 							if (status.activity) {
