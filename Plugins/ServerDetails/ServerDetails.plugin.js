@@ -140,19 +140,19 @@ module.exports = (_ => {
 							}),
 							_this.settings.items.members && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
-								string: BDFDB.LibraryStores.GuildMemberCountStore.getMemberCount(this.props.guild.id)
+								string: BDFDB.LibraryStores.GuildMemberCountStore.getMemberCount(this.props.guild.id).toLocaleString("en-US")
 							}),
 							_this.settings.items.boosts && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: _this.labels.boosts,
-								string: this.props.guild.premiumSubscriberCount
+								string: this.props.guild.premiumSubscriberCount.toLocaleString("en-US")
 							}),
 							_this.settings.items.channels && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
-								string: BDFDB.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id).count
+								string: BDFDB.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id).count.toLocaleString("en-US")
 							}),
 							_this.settings.items.roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
-								string: Object.keys(this.props.guild.roles).length
+								string: Object.keys(this.props.guild.roles).length.toLocaleString("en-US")
 							}),
 							_this.settings.items.language && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.LANGUAGE,
