@@ -1281,7 +1281,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	color: #fff;
 }
 [REPLACE_CLASS_tooltip] [REPLACE_CLASS_tooltipcontent]:empty,
-[REPLACE_CLASS_tooltip] [REPLACE_CLASS_tooltipcontent]:empty > * {
+[REPLACE_CLASS_tooltip] [REPLACE_CLASS_tooltipcontent]:empty ~ * {
 	display: none !important;
 }
 [REPLACE_CLASS_tooltip][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipnote],
