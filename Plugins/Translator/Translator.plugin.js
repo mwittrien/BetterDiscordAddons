@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.6
+ * @version 2.5.7
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -322,7 +322,7 @@ module.exports = (_ => {
 				name: "Baidu",
 				auto: true,
 				funcName: "baiduTranslate",
-				languages: ["ar","bg","cs","da","de","el","en","es","et","fi","fr","hu","it","jp","ko","nl","pl","pt","ro","ru","sl","sv","th","vi","zh","zh-CN","zh-TW"],
+				languages: ["ar","bg","cs","da","de","el","en","es","et","fi","fr","hu","it","ja","ko","nl","pl","pt","ro","ru","sl","sv","th","vi","zh","zh-CN","zh-TW"],
 				parser: {
 					"ar": "ara",
 					"bg": "bul",
@@ -331,6 +331,7 @@ module.exports = (_ => {
 					"et": "est",
 					"fi": "fin",
 					"fr": "fra",
+					"ja": "jp",
 					"ko": "kor",
 					"ro": "rom",
 					"sl": "slo",
