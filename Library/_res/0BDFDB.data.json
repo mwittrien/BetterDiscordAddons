@@ -2080,6 +2080,7 @@
 		"channelchildiconbase": ["ChannelContainer", "iconBase"],
 		"channelchildren": ["Channel", "children"],
 		"channelcontainerdefault": ["ChannelContainer", "containerDefault"],
+		"channelcontent": ["Channel", "link"],
 		"channelheaderavatar": ["ChatWindow", "avatar"],
 		"channelheaderchannelname": ["ChatWindow", "channelName"],
 		"channelheaderchildren": ["HeaderBar", "children"],
