@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.5
+ * @version 1.6.6
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -57,6 +57,8 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var languages, dictionaries, langDictionaries, languageToasts, checkTimeout, currentText;
+		
+		const dictionaryLanguageIds = ["af", "bg", "cs", "da", "de", "el", "en", "es", "fr", "hr", "it", "nl", "pl", "pt-BR", "pt", "ru", "sv", "tr", "uk"];
 	
 		return class SpellCheck extends Plugin {
 			onLoad () {
@@ -95,22 +97,19 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.LibraryRequires.request("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck/dic", (error, response, body) => {
-					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
-					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
-					
-					if (BDFDB.LibraryStores.SpellcheckStore && BDFDB.LibraryStores.SpellcheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: "SPELLCHECK_TOGGLE"});
+				languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
+				
+				if (BDFDB.LibraryStores.SpellcheckStore && BDFDB.LibraryStores.SpellcheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: "SPELLCHECK_TOGGLE"});
 
-					BDFDB.PatchUtils.forceAllUpdates(this);
-					
-					for (let key in this.settings.choices) {
-						if (key == "dictionaryLanguage" && !languages[this.settings.choices[key]]) {
-							this.settings.choices[key] = "en";
-							BDFDB.DataUtils.save(this.settings.choices[key], this, "choices", key);
-						}
-						this.setDictionary(key, this.settings.choices[key]);
+				BDFDB.PatchUtils.forceAllUpdates(this);
+				
+				for (let key in this.settings.choices) {
+					if (key == "dictionaryLanguage" && !languages[this.settings.choices[key]]) {
+						this.settings.choices[key] = "en";
+						BDFDB.DataUtils.save(this.settings.choices[key], this, "choices", key);
 					}
-				});
+					this.setDictionary(key, this.settings.choices[key]);
+				}
 			}
 			
 			onStop () {
