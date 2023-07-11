@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		fixed: {
-			"ESC": "Works again"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
