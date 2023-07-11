@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.6
+ * @version 1.9.7
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -305,23 +305,23 @@ module.exports = (_ => {
 				let type = event.type;
 				if (!firedEvents.includes(type)) {
 					firedEvents.push(type);
-					let priorityAction = null;
-					let clickType = clickMap[type.toUpperCase()];
-					for (let action in enabledBindings) {
-						let binding = enabledBindings[action];
-						let priorityBinding = enabledBindings[priorityAction];
-						if (this.checkIfBindingIsValid(binding, clickType) && (!enabledBindings[priorityAction] || binding.click > priorityBinding.click || binding.keycombo.length > priorityBinding.keycombo.length)) priorityAction = action;
-					}
-					if (priorityAction) {
-						let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsmessage, event.target);
-						if (messageDiv) {
+					let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsmessage, event.target);
+					if (messageDiv) {
+						let priorityAction = null;
+						let clickType = clickMap[type.toUpperCase()];
+						for (let action in enabledBindings) {
+							let binding = enabledBindings[action];
+							let priorityBinding = enabledBindings[priorityAction];
+							if (this.checkIfBindingIsValid(binding, clickType) && this.checkIfActionIsValid({messageDiv, message}, action, event) && (!enabledBindings[priorityAction] || binding.click > priorityBinding.click || binding.keycombo.length > priorityBinding.keycombo.length)) priorityAction = action;
+						}
+						if (priorityAction) {
 							BDFDB.ListenerUtils.stopEvent(event);
 							BDFDB.TimeUtils.clear(clickTimeout);
 							if (!this.hasDoubleClickOverwrite(enabledBindings[priorityAction])) {
-								BDFDB.TimeUtils.suppress(_ => this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction, event]), "", this)();
+								BDFDB.TimeUtils.suppress(_ => this.defaults.bindings[priorityAction].func.apply(this, [true, {messageDiv, message}, priorityAction, event]), "", this)();
 							}
 							else clickTimeout = BDFDB.TimeUtils.timeout(_ => {
-								BDFDB.TimeUtils.suppress(_ => this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction, event]), "", this)();
+								BDFDB.TimeUtils.suppress(_ => this.defaults.bindings[priorityAction].func.apply(this, [true, {messageDiv, message}, priorityAction, event]), "", this)();
 							}, 500);
 						}
 					}
@@ -345,6 +345,10 @@ module.exports = (_ => {
 				return true;
 			}
 
+			checkIfActionIsValid ({messageDiv, message}, action, event) {
+				return BDFDB.TimeUtils.suppress(_ => this.defaults.bindings[action].func.apply(this, [false, {messageDiv, message}, action, event]), "", this)()
+			}
+
 			hasDoubleClickOverwrite (binding) {
 				if (binding.click == clickMap.DBLCLICK) return false;
 				let dblBindings = BDFDB.ObjectUtils.filter(enabledBindings, bndg => bndg.click == clickMap.DBLCLICK);
@@ -356,93 +360,133 @@ module.exports = (_ => {
 				return false;
 			}
 
-			doDelete ({messageDiv, message}, action, event) {
+			doDelete (execute, {messageDiv, message}, action, event) {
 				let deleteLink = messageDiv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
 				if (deleteLink) deleteLink.click();
 				else if (BDFDB.DiscordConstants.MessageTypeGroups.DELETABLE.has(message.type)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.UserUtils.can("MANAGE_MESSAGES") || message.author.id == BDFDB.UserUtils.me.id)) {
-						BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != BDFDB.DiscordConstants.MessageStates.SENT);
-						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(this.labels.toast_message_deleted), {type: "success"});
+						if (execute) {
+							BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != BDFDB.DiscordConstants.MessageStates.SENT);
+							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(this.labels.toast_message_deleted), {type: "success"});
+						}
+						return true;
 					}
 				}
+				return false;
 			}
 
-			doEdit ({messageDiv, message}, action, event) {
+			doEdit (execute, {messageDiv, message}, action, event) {
 				if (message.author.id == BDFDB.UserUtils.me.id && !messageDiv.querySelector(BDFDB.dotCN.messagechanneltextarea)) {
-					BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
-					if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.EDITING_MESSAGE), {type: "success"});
+					if (execute) {
+						BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
+						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.EDITING_MESSAGE), {type: "success"});
+					}
+					return true;
 				}
+				return false;
 			}
 
-			doOpenReact ({messageDiv, message}, action, event) {
+			doOpenReact (execute, {messageDiv, message}, action, event) {
 				let reactButton = messageDiv.querySelector(`${BDFDB.dotCN.messagetoolbarbutton}[aria-label="${BDFDB.LanguageUtils.LanguageStrings.ADD_REACTION}"]`);
 				if (reactButton) {
-					reactButton.click();
-					if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.ADD_REACTIONS), {type: "success"});
+					if (execute) {
+						reactButton.click();
+						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.ADD_REACTIONS), {type: "success"});
+					}
+					return true;
 				}
+				return false;
 			}
 
-			doPinUnPin ({messageDiv, message}, action, event) {
+			doPinUnPin (execute, {messageDiv, message}, action, event) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type)) {
-						if (message.pinned) {
-							BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.MESSAGE_UNPINNED), {type: "danger"});
+						if (execute) {
+							if (message.pinned) {
+								BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
+								if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.MESSAGE_UNPINNED), {type: "danger"});
+							}
+							else {
+								BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
+								if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.MESSAGE_PINNED), {type: "success"});
+							}
 						}
-						else {
-							BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
-							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.MESSAGE_PINNED), {type: "success"});
-						}
+						return true;
 					}
 				}
+				return false;
 			}
 			
-			doReply ({messageDiv, message}, action, event) {
+			doReply (execute, {messageDiv, message}, action, event) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type)) {
-						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, {});
-						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
+						if (execute) {
+							BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, {});
+							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
+						}
+						return true;
 					}
 				}
+				return false;
 			}
 
-			doCopyRaw ({messageDiv, message}, action, event) {
+			doCopyRaw (execute, {messageDiv, message}, action, event) {
 				if (message.content) {
-					BDFDB.LibraryModules.WindowUtils.copy(message.content);
-					if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_TEXT), {type: "success"});
+					if (execute) {
+						BDFDB.LibraryModules.WindowUtils.copy(message.content);
+						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_TEXT), {type: "success"});
+					}
+					return true;
 				}
+				return false;
 			}
 
-			doCopyLink ({messageDiv, message}, action, event) {
+			doCopyLink (execute, {messageDiv, message}, action, event) {
 				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 				if (channel) {
-					BDFDB.LibraryModules.MessageManageUtils.copyLink(channel, message);
-					if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED), {type: "success"});
+					if (execute) {
+						BDFDB.LibraryModules.MessageManageUtils.copyLink(channel, message);
+						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED), {type: "success"});
+					}
+					return true;
 				}
+				return false;
 			}
 
-			doQuote ({messageDiv, message}, action, event) {
+			doQuote (execute, {messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
-					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Quote_Message.plugin).quote(channel, message);
+					if (channel) {
+						if (execute) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Quote_Message.plugin).quote(channel, message);
+						return true;
+					}
 				}
+				return false;
 			}
 
-			doNote ({messageDiv, message}, action, event) {
+			doNote (execute, {messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
-					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, channel);
+					if (channel) {
+						if (execute) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, channel);
+						return true;
+					}
 				}
+				return false;
 			}
 
-			doTranslate ({messageDiv, message}, action, event) {
+			doTranslate (execute, {messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
-					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, channel);
+					if (channel) {
+						if (execute) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, channel);
+						return true;
+					}
 				}
+				return false;
 			}
 			
 			formatToast (string) {
