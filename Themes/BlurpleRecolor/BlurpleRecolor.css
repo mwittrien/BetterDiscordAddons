@@ -1038,10 +1038,6 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	filter: brightness(75%);
 }
 .uploadSizeIcon-3OSRBC {									/* boostsettings		perkicon upload						*/
-	color: rgb(var(--accentcolor2));
-	filter: brightness(75%);
-}
-.memberBadgeIcon-1H0qHW {									/* boostsettings		perkicon guild						*/
 	color: rgb(var(--accentcolor));
 	filter: brightness(150%);
 }
