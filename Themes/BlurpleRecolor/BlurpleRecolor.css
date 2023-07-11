@@ -1391,6 +1391,7 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl5_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl5_colors.svg) center/cover no-repeat;
 }
+.iconImage-1PY-Hf[src="/assets/e07c08cdc72bcc78b69c76d2c7ceb344.svg"],
 .profileBadge-12r2Nm[src="https://cdn.discordapp.com/badge-icons/991c9f39ee33d7537d9f408c3e53141e.png"] {
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl6_details.svg) center/cover no-repeat;
@@ -2426,6 +2427,10 @@ a.metadataDownload-3IY84h {
 #app-mount .borderBrand-dgox0N,
 #app-mount .borderBrandNew-2SIdEy {
 	border-color: rgb(var(--accentcolor)) !important;
+}
+
+.guildBoostCtaBoostContent-kTBm5Z {
+	color: var(--guild-boosting-pink);
 }
 
 /* ----		12.3.	INPUTS							---- */
