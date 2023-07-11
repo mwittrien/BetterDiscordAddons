@@ -52,8 +52,8 @@
 body #app-mount .sidebarRegion-1VBisG:has(.socialLinks-3ywLUf) {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-body #app-mount .sidebar-nqHbhN,
-body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
+body #app-mount .sidebar-nqHbhN:has(.socialLinks-3ywLUf),
+body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3ywLUf) {
 	width: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy {
