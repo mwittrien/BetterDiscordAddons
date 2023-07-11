@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.0
+ * @version 3.8.1
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -74,6 +74,16 @@ module.exports = (_ => {
 			role:		{src: "./mention1.mp3", name: "Message Mentioned (role)", force: false, focus: true},
 			everyone:	{src: "./mention2.mp3", name: "Message Mentioned (@everyone)", force: false, focus: true},
 			here:		{src: "./mention3.mp3", name: "Message Mentioned (@here)", force: false, focus: true}
+		};
+		
+		const namePrefixes = {
+			"user_join":	"Voice Channel",
+			"user_leave":	"Voice Channel",
+			"user_moved":	"Voice Channel"
+		};
+		
+		const nameSynonymes = {
+			"reconnect":	"Invited To Speak"
 		};
 		
 		const defaultAudios = {
@@ -163,7 +173,7 @@ module.exports = (_ => {
 				const soundKeys = BDFDB.LibraryModules.SoundParser.keys();
 				for (let key of soundKeys) {	
 					const id = key.replace("./", "").replace(".mp3", "");
-					const name = id == "reconnect" ? "Invited To Speak" : id.replace("ddr-", "HotKeys_").replace("ptt_", "Push2Talk_").split("_").map(BDFDB.StringUtils.upperCaseFirstChar).join(" ").replace(/1$/g, "");
+					const name = [namePrefixes[id], (nameSynonymes[id] || id).replace("ddr-", "HotKeys_").replace("ptt_", "Push2Talk_").split(/[_-]/)].flat(10).filter(n => n).map(BDFDB.StringUtils.upperCaseFirstChar).join(" ").replace(/1$/g, "");
 					const src = BDFDB.LibraryModules.SoundParser(key);	
 					
 					let soundPackName = id.split("_")[0];
