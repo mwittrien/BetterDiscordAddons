@@ -476,6 +476,7 @@
 		"InboxHeader": {"strings": [".UNREADS", ".TODOS", ".controls"]},
 		"IncomingCallModal": {"strings": [".Messages.INCOMING_VIDEO_CALL_ELLIPSIS", ".isFocused", "maxX:window.innerWidth"]},
 		"InviteGuildName": {"strings": [".guild;return", "().guildName", "().guildNameWrapper"]},
+		"KeybindRecorder": {"strings": [".RECORDING", ".DEFAULT", "toggleRecordMode"]},
 		"LayerProvider": {"strings": ["layerContainerElement", "getContextValue"]},
 		"LayersProvider": {"strings": ["._currentlyTransitioningKeys", "._keysToEnter", "._keyChildMapping"]},
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
