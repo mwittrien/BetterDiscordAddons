@@ -7,6 +7,7 @@
 	--settingsicons-myaccount: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/account.svg);
 	--settingsicons-profile: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/profile.svg);
 	--settingsicons-privacy: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/privacy.svg);
+	--settingsicons-family: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/family.svg);
 	--settingsicons-apps: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/apps.svg);
 	--settingsicons-sessions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/sessions.svg);
 	--settingsicons-connections: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/connections.svg);
@@ -88,102 +89,106 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 	-webkit-mask: var(--settingsicons-privacy) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(5)::before,
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="family-center-tab" i]::before {
+	-webkit-mask: var(--settingsicons-family) center/contain no-repeat;
+}
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(6)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="authorized-apps-tab" i]::before {
 	-webkit-mask: var(--settingsicons-apps) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(6)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(7)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="sessions-tab" i]::before {
 	-webkit-mask: var(--settingsicons-sessions) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(7)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(8)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="connections-tab" i]::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="passport-tab" i]::before {
 	-webkit-mask: var(--settingsicons-connections) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(8)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(9)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="friend-requests-tab" i]::before {
 	-webkit-mask: var(--settingsicons-friendrequests) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(11)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(12)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="discord-nitro-tab" i]::before {
 	-webkit-mask: var(--settingsicons-nitro) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(12)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(13)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="nitro-server-boost-tab" i]::before {
 	-webkit-mask: var(--settingsicons-boosts) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(13)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(14)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="subscriptions-tab" i]::before {
 	-webkit-mask: var(--settingsicons-subscriptions) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(14)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(15)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="library-inventory-tab" i]::before {
 	-webkit-mask: var(--settingsicons-gifts) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(15)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(16)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="billing-tab" i]::before {
 	-webkit-mask: var(--settingsicons-billing) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(18)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(17)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="appearance-tab" i]::before {
 	-webkit-mask: var(--settingsicons-appearance) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(19)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(18)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="accessibility-tab" i]::before {
 	-webkit-mask: var(--settingsicons-accessibility) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(20)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(21)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="voice-&-video-tab" i]::before {
 	-webkit-mask: var(--settingsicons-voice) center/contain no-repeat;
 }
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="powermode-settings-tab" i]::before {
 	-webkit-mask: var(--settingsicons-powermode) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(21)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(22)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-&-images-tab" i]::before {
 	-webkit-mask: var(--settingsicons-text) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(22)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(23)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="notifications-tab" i]::before {
 	-webkit-mask: var(--settingsicons-notifications) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(23)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(24)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="keybinds-tab" i]::before {
 	-webkit-mask: var(--settingsicons-keybinds) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(24)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(25)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="language-tab" i]::before {
 	-webkit-mask: var(--settingsicons-language) center/contain no-repeat;
 }
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(25)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="windows-tab" i]::before {
 	-webkit-mask: var(--settingsicons-windows) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(25)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(27)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="streamer-mode-tab" i]::before {
 	-webkit-mask: var(--settingsicons-streamermode) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(27)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(27)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(28)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="advanced-tab" i]::before {
 	-webkit-mask: var(--settingsicons-advanced) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(29)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(30)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(30)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="activity-privacy-tab" i]::before {
 	-webkit-mask: var(--settingsicons-activityprivacy) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(30)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(32)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="game-activity-tab" i]::before {
 	-webkit-mask: var(--settingsicons-games) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(32)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(32)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(33)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="overlay-tab" i]::before {
 	-webkit-mask: var(--settingsicons-overlay) center/contain no-repeat;
 }
@@ -210,17 +215,6 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 	-webkit-mask: var(--settingsicons-bd-themerepo) center/contain no-repeat !important;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(40)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(41)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="changelog-tab" i]::before {
-	-webkit-mask: var(--settingsicons-changelog) center/contain no-repeat;
-}
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(41)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(42)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
@@ -229,8 +223,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(43)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hypesquad-online-tab" i]::before {
-	-webkit-mask: var(--settingsicons-hypesquad) center/contain no-repeat;
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="changelog-tab" i]::before {
+	-webkit-mask: var(--settingsicons-changelog) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(42)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(43)::before,
@@ -240,8 +234,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(44)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="experiments-tab" i]::before {
-	-webkit-mask: var(--settingsicons-experiments) center/contain no-repeat;
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hypesquad-online-tab" i]::before {
+	-webkit-mask: var(--settingsicons-hypesquad) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(43)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(44)::before,
@@ -251,8 +245,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(45)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="developer-options-tab" i]::before {
-	-webkit-mask: var(--settingsicons-developer) center/contain no-repeat;
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="experiments-tab" i]::before {
+	-webkit-mask: var(--settingsicons-experiments) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(44)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(45)::before,
@@ -262,8 +256,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(46)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hotspot-options-tab" i]::before {
-	-webkit-mask: var(--settingsicons-hotspots) center/contain no-repeat;
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="developer-options-tab" i]::before {
+	-webkit-mask: var(--settingsicons-developer) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(45)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(46)::before,
@@ -273,8 +267,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(47)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="dismissible-content-options-tab" i]::before {
-	-webkit-mask: var(--settingsicons-dismissable) center/contain no-repeat;
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hotspot-options-tab" i]::before {
+	-webkit-mask: var(--settingsicons-hotspots) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(46)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(47)::before,
@@ -284,8 +278,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(48)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="payment-flow-modals-tab" i]::before {
-	-webkit-mask: var(--settingsicons-paymentmodals) center/contain no-repeat;
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="dismissible-content-options-tab" i]::before {
+	-webkit-mask: var(--settingsicons-dismissable) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(47)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(48)::before,
@@ -295,8 +289,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(49)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-playground-tab" i]::before {
-	-webkit-mask: var(--settingsicons-textplayground) center/contain no-repeat;
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="payment-flow-modals-tab" i]::before {
+	-webkit-mask: var(--settingsicons-paymentmodals) center/contain no-repeat;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(48)::before,
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(49)::before,
@@ -306,6 +300,17 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(50)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
 .platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(51)::before,
+#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-playground-tab" i]::before {
+	-webkit-mask: var(--settingsicons-textplayground) center/contain no-repeat;
+}
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(49)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(50)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(51)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(50)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(51)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(51)::before,
+.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(52)::before,
 #app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-component-tab" i]::before {
 	-webkit-mask: var(--settingsicons-textcomponent) center/contain no-repeat;
 }
