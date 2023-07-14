@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.1
+ * @version 3.8.2
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -109,6 +109,16 @@ module.exports = (_ => {
 				this._ensureAudio().then(audio => {
 					audio.loop = false;
 					audio.play();
+				});
+			}
+			playWithListener (duration) {
+				return new Promise((callback, errorCallback) => {
+					this._ensureAudio().then(audio => {
+						if (!duration && duration !== 0) errorCallback(new Error("sound has no duration"));
+						audio.loop = false;
+						audio.play();
+						setTimeout(_ => callback(true), duration);
+					});
 				});
 			}
 			pause () {
@@ -300,25 +310,22 @@ module.exports = (_ => {
 					let cancel = BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
 						if (e.returnValue && e.returnValue.constructor && e.returnValue.constructor.prototype && typeof e.returnValue.constructor.prototype.play == "function") {
 							cancel();
-							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, ["play", "loop"], {instead: e2 => {
+							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, ["play", "loop", "playWithListener"], {instead: e2 => {
 								let type = e2.instance && e2.instance.name;
-								let loop = e2.originalMethodName == "loop";
 								if (type && choices[type]) {
 									e2.stopOriginalMethodCall();
-									BDFDB.TimeUtils.timeout(_ => {
-										if (type == "message1") {
-											let called = false;
-											for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
-												delete firedEvents[subType];
-												called = true;
-												break;
-											}
-											if (!called) this.playAudio(type, loop);
+									if (type == "message1") BDFDB.TimeUtils.timeout(_ => {
+										let called = false;
+										for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
+											delete firedEvents[subType];
+											called = true;
+											break;
 										}
-										else this.playAudio(type, loop);
+										if (!called) return this.playAudio(type, e2.originalMethodName, e2.instance.duration);
 									});
+									else return this.playAudio(type, e2.originalMethodName, e2.instance.duration);
 								}
-								else this.playAudio(type, loop);
+								else return this.playAudio(type, e2.originalMethodName, e2.instance.duration);
 							}});
 							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, "stop", {after: e2 => {
 								let type = e2.instance && e2.instance.name;
@@ -708,11 +715,11 @@ module.exports = (_ => {
 				}
 			}
 
-			playAudio (type, loop = false) {
+			playAudio (type, functionCall = "play", duration = 0) {
 				if (this.dontPlayAudio(type) || BDFDB.LibraryStores.StreamerModeStore.disableSounds) return;
 				if (createdAudios[type]) createdAudios[type].stop();
 				createdAudios[type] = new WebAudioSound(type);
-				createdAudios[type][loop ? "loop" : "play"]();
+				return createdAudios[type][typeof createdAudios[type][functionCall] == "function" ? functionCall : "play"](duration);
 			}
 			
 			isSuppressMentionsEnabled (guildId, channelId) {
