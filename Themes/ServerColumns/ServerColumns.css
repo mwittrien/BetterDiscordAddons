@@ -205,7 +205,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eI
 	width: calc(1px * (var(--guildsize) * var(--columns) + 20 * (var(--guildsize)/50) + 14 * (var(--guildsize)/50) * (var(--columns) - 1))) !important;
 }
 .wrapper-1_HaEi.content-Pph8t6 .wrapper-38slSD > .listItem-3SmSlK {
-    margin: calc(1px * var(--guildgap)) calc(5px * var(--guildsize)/50) calc(1px * var(--guildgap)) 0 !important;
+	margin: calc(1px * var(--guildgap)) calc(5px * var(--guildsize)/50) calc(1px * var(--guildgap)) 0 !important;
 }
 .wrapper-1_HaEi.content-Pph8t6 .wrapper-38slSD .expandedFolderBackground-1kSAf6 {
 	right: 0 !important;
@@ -214,9 +214,9 @@ body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eI
 .wrapper-1_HaEi.content-Pph8t6 .wrapper-38slSD [role="group"] {
 	margin: 0 !important;
 	padding: 0 calc(13px * var(--guildsize)/50) 0 calc(10px * var(--guildsize)/50) !important;
-    display: flex !important;
-    flex-flow: row wrap !important;
-    justify-content: space-between !important;
+	display: flex !important;
+	flex-flow: row wrap !important;
+	justify-content: space-between !important;
 }
 .wrapper-1_HaEi.content-Pph8t6 .wrapper-38slSD .expandedFolderBackground-1kSAf6 ~ [role="group"] {
 	padding-bottom: calc(8px * var(--guildsize)/50) !important;

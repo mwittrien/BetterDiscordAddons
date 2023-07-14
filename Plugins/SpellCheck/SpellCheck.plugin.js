@@ -308,9 +308,9 @@ module.exports = (_ => {
 				});
 				editor.history.stack.splice(editor.history.index + 1, 0, {
 					type: "other",
-    				mergeable: false,
-    				createdAt: new Date().getTime(),
-    				value: BDFDB.SlateUtils.toRichValue(newString.join("")),
+					mergeable: false,
+					createdAt: new Date().getTime(),
+					value: BDFDB.SlateUtils.toRichValue(newString.join("")),
 					selection: editor.history.stack[editor.history.index].selection
 				});
 				editor.redo();

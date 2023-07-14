@@ -363,7 +363,7 @@ svg [fill="#4F545C"] {
 
 #app-mount .card-2ART2V::before {
 	background-color: var(--background-primary);
-    border-color: var(--background-secondary);
+	border-color: var(--background-secondary);
 }
 #app-mount .button-1yVL_7 {
 	background-color: var(--background-primary);
@@ -992,7 +992,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .wrapper-3kah-n.selected-1Drb7Z .childWrapper-1j_1ub,
 #app-mount .wrapper-3kah-n:hover .childWrapper-1j_1ub {
-    background-color: var(--brand-experiment);
+	background-color: var(--brand-experiment);
 }
 #app-mount .circleIconButton-1VxDrg.selected-2r1Hvo {
 	background-color: var(--green-360);
@@ -1071,7 +1071,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-primary);
 }
 .snowsgivingLink-1TZi3c {
-    border-radius: 4px;
+	border-radius: 4px;
 }
 
 /* ----		3.4.	ACCOUNT/VOICE/GOLIVE			---- */
@@ -1175,12 +1175,12 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .reaction-3vwAF2.reactionMe-1PwQAc {
-    background-color: var(--brand-experiment-15a);
-    border-color: var(--brand-experiment);
+	background-color: var(--brand-experiment-15a);
+	border-color: var(--brand-experiment);
 }
 
 #app-mount .reaction-3vwAF2.reactionMe-1PwQAc .reactionCount-26U4As {
-    color: var(--brand-experiment-200);
+	color: var(--brand-experiment-200);
 }
 
 #app-mount .noResultIcon-3o4K-b {
@@ -2897,7 +2897,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .tabButton-1hJ4oW {
 	background-color: var(--text-muted);
 	border: 1px solid var(--background-tertiary);
-    border-radius: 4px;
+	border-radius: 4px;
 	box-shadow: inset 0 -4px 0 rgba(var(--backgroundtertiary),.6);
 	color: var(--header-primary);
 }
@@ -4160,23 +4160,23 @@ html .monaco-editor .findOptionsWidget {
 }
 
 html .monaco-editor .peekview-widget .head {
-    background: var(--background-tertiary) !important;
+	background: var(--background-tertiary) !important;
 }
 html .monaco-editor .peekview-widget .head .peekview-title .filename {
-    color: var(--header-primary) !important;
+	color: var(--header-primary) !important;
 }
 html .monaco-editor .peekview-widget .head .peekview-title .dirname {
-    color: var(--header-secondary) !important;
+	color: var(--header-secondary) !important;
 }
 html .monaco-editor .reference-zone-widget .ref-tree {
-    background: var(--background-secondary) !important;
-    color: var(--header-secondary) !important;
+	background: var(--background-secondary) !important;
+	color: var(--header-secondary) !important;
 }
 html .monaco-list[class*="list_id"] .monaco-list-rows {
-    background: var(--background-secondary) !important;
+	background: var(--background-secondary) !important;
 }
 html .monaco-list[class*="list_id"] .monaco-list-row {
-    color: var(--text-muted) !important;
+	color: var(--text-muted) !important;
 }
 html .monaco-drag-image,
 html .monaco-list[class*="list_id"] .monaco-list-row.focused,
@@ -4185,14 +4185,14 @@ html .monaco-list[class*="list_id"] .monaco-list-row.selected,
 html .monaco-list[class*="list_id"] .monaco-list-row.selected:hover,
 html .monaco-list[class*="list_id"]:focus .monaco-list-row.selected.focused,
 html .monaco-list[class*="list_id"]:not(.drop-target) .monaco-list-row:hover:not(.selected):not(.focused) {
-    color: var(--header-primary) !important;
+	color: var(--header-primary) !important;
 }
 html .monaco-list[class*="list_id"] .monaco-list-row.focused,
 html .monaco-list[class*="list_id"] .monaco-list-row.focused:hover,
 html .monaco-list[class*="list_id"] .monaco-list-row.selected,
 html .monaco-list[class*="list_id"] .monaco-list-row.selected:hover,
 html .monaco-list[class*="list_id"]:not(.drop-target) .monaco-list-row:hover:not(.selected):not(.focused) {
-    background: var(--background-primary) !important;
+	background: var(--background-primary) !important;
 }
 html .monaco-editor .reference-zone-widget .preview .monaco-editor .margin {
 	background: var(--background-secondary) linear-gradient(0deg, rgba(var(--accentcolor), .1), rgba(var(--accentcolor), .1));
@@ -4202,8 +4202,8 @@ html .monaco-editor .reference-zone-widget .preview .monaco-editor .inputarea.im
 	background: var(--background-secondary) linear-gradient(0deg, rgba(var(--accentcolor), .1), rgba(var(--accentcolor), .1));
 }
 html .monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .monaco-list-rows > .monaco-list-row.selected:not(.highlighted) {
-    background: var(--background-primary) !important;
-    color: var(--header-primary) !important;
+	background: var(--background-primary) !important;
+	color: var(--header-primary) !important;
 }
 html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
 	background: rgb(var(--mentioncolor, --warningcolor));
@@ -4211,12 +4211,12 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 html .codicon-close,
 html .codicon-remove-close,
 html .codicon-x {
-    color: var(--interactive-normal) !important;
+	color: var(--interactive-normal) !important;
 }
 html .codicon-close:hover,
 html .codicon-remove-close:hover,
 html .codicon-x:hover {
-    color: var(--interactive-hover) !important;
+	color: var(--interactive-hover) !important;
 }
 
 html .monaco-menu .monaco-action-bar.vertical {
@@ -4279,8 +4279,8 @@ html .monaco-menu .monaco-action-bar.vertical .submenu-indicator {
 	line-height: unset;
 	padding-left: unset;
 	flex: 0 0 auto;
-    max-height: 18px;
-    margin-left: 8px;
+	max-height: 18px;
+	margin-left: 8px;
 }
 html .monaco-menu .monaco-action-bar.vertical .submenu-indicator.codicon::before {
 	margin-left: 0;

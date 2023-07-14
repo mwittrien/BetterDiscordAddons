@@ -1130,7 +1130,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	pointer-events: none;
 }
 [REPLACE_CLASS__repomodalsettings] {
-    padding: 0 16px 16px 16px;
+	padding: 0 16px 16px 16px;
 }
 [REPLACE_CLASS__repochangelogbutton] {
 	position: fixed;

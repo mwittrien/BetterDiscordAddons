@@ -180,15 +180,15 @@
 	--premium-perk-blue: rgb(var(--accentcolor)) !important;
 	--premium-perk-pink: rgb(var(--accentcolor2)) !important;
 	--guild-boosting-pink: rgb(var(--accentcolor2)) !important;
-    --guild-boosting-pink-rgb: var(--accentcolor2) !important;
-    --guild-boosting-purple: rgb(var(--accentcolor2)) !important;
-    --guild-boosting-purple-rgb: var(--accentcolor2) !important;
-    --guild-boosting-blue: rgb(var(--accentcolor2)) !important;
-    --guild-boosting-blue-rgb: var(--accentcolor2) !important;
-    --guild-boosting-blue-for-gradients: rgb(var(--accentcolor2)) !important;
-    --guild-boosting-blue-for-gradients-rgb: var(--accentcolor2) !important;
-    --guild-boosting-purple-for-gradients: rgb(var(--accentcolor2)) !important;
-    --guild-boosting-purple-for-gradients-rgb: var(--accentcolor2) !important;
+	--guild-boosting-pink-rgb: var(--accentcolor2) !important;
+	--guild-boosting-purple: rgb(var(--accentcolor2)) !important;
+	--guild-boosting-purple-rgb: var(--accentcolor2) !important;
+	--guild-boosting-blue: rgb(var(--accentcolor2)) !important;
+	--guild-boosting-blue-rgb: var(--accentcolor2) !important;
+	--guild-boosting-blue-for-gradients: rgb(var(--accentcolor2)) !important;
+	--guild-boosting-blue-for-gradients-rgb: var(--accentcolor2) !important;
+	--guild-boosting-purple-for-gradients: rgb(var(--accentcolor2)) !important;
+	--guild-boosting-purple-for-gradients-rgb: var(--accentcolor2) !important;
 	
 	--search-popout-date-picker-hint-value-background: var(--brand-experiment-90a);
 	--search-popout-date-picker-hint-value-background-hover: var(--brand-experiment-430);
@@ -1237,8 +1237,8 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	content: "";
 	position: absolute;
 	top: -281px;
-    width: 428px;
-    height: 241px;
+	width: 428px;
+	height: 241px;
 	pointer-events: none;
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_partnerprogram_accent.svg) center/cover no-repeat;
@@ -1529,27 +1529,27 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 }
 .attachment-1PZZB2 .icon-1KCy88 + *::before,
 .attachment-1PZZB2 .icon-1KCy88 + *::after {
-    top: 10px;
-    left: 10px;
-    width: 30px;
-    height: 40px;
+	top: 10px;
+	left: 10px;
+	width: 30px;
+	height: 40px;
 }
 .attachment-1PZZB2.newMosaicStyle-35X6XO .icon-1KCy88 + *::before,
 .attachment-1PZZB2.newMosaicStyle-35X6XO .icon-1KCy88 + *::after {
-    top: 16px;
-    left: 16px;
+	top: 16px;
+	left: 16px;
 }
 .wrapperAudio-1Bzv_Z .audioMetadata-1Hrt8T > *:first-child::before,
 .wrapperAudio-1Bzv_Z .audioMetadata-1Hrt8T > *:first-child::after {
-    top: 10px;
-    left: 10px;
-    width: 24px;
-    height: 32px;
+	top: 10px;
+	left: 10px;
+	width: 24px;
+	height: 32px;
 }
 .wrapperAudio-1Bzv_Z.newMosaicStyle-31sBoZ .audioMetadata-1Hrt8T > *:first-child::before,
 .wrapperAudio-1Bzv_Z.newMosaicStyle-31sBoZ .audioMetadata-1Hrt8T > *:first-child::after {
-    top: 16px;
-    left: 16px;
+	top: 16px;
+	left: 16px;
 }
 .uploadContainer-TCg-Ji .icon-2bPCaV::before,
 .uploadContainer-TCg-Ji .icon-2bPCaV::after {
@@ -2178,13 +2178,13 @@ a.metadataDownload-3IY84h {
 }
 
 .colorPremiumGradient-38tGFG:not(.focused-3LIdPu):not(:active) {
-    background-image: linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor)));
+	background-image: linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor)));
 	color: transparent;
 	-webkit-background-clip: text;
 }
 .colorPremiumGradient-38tGFG.focused-3LIdPu,
 .colorPremiumGradient-38tGFG:active:not(.hideInteraction-1vQrZJ) {
-    background: linear-gradient(90deg, rgb(var(--accentcolor2)), rgb(var(--accentcolor)));
+	background: linear-gradient(90deg, rgb(var(--accentcolor2)), rgb(var(--accentcolor)));
 }
 .colorPremiumGradient-38tGFG:not(.focused-3LIdPu):not(:active) .radioSelection-3PDNAQ {
 	color: rgb(var(--accentcolor));
@@ -2821,9 +2821,9 @@ input.input-3O04eu {										/* textinput												*/
 .bd-description-wrap .banner {
 	background: var(--background-primary);
 	border-color: var(--background-secondary);
-    color: var(--header-secondary);
-    font-size: 14px;
-    line-height: 18px;
+	color: var(--header-secondary);
+	font-size: 14px;
+	line-height: 18px;
 }
 .banner.banner-danger {
 	background: var(--background-secondary);
@@ -3083,24 +3083,24 @@ html .powercord-updater .debug-info b {
 /* ----		15.3.	SERVERSEARCH					---- */
 
 #server-search .wrapper-28eC3z {
-    background-color: var(--background-primary) !important;
-    transition: background-color .16s ease-out;
+	background-color: var(--background-primary) !important;
+	transition: background-color .16s ease-out;
 }
 #server-search .wrapper-28eC3z:hover {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 #server-search .wrapper-28eC3z [fill="white"] {
-    fill: var(--header-primary);
+	fill: var(--header-primary);
 }
 #server-search .wrapper-28eC3z:hover [fill="white"] {
-    fill: #fff;
+	fill: #fff;
 }
 #server-search .circleIconButton-1QV--U {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-    width: 48px;
-    height: 48px;
+	width: 48px;
+	height: 48px;
 }
 
 /* ----		15.4.	CHANNELTABS						---- */

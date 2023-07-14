@@ -431,7 +431,7 @@ body::after {
 }
 #app-mount .wrapper-3kah-n:hover .childWrapper-1j_1ub,
 #app-mount .wrapper-3kah-n.selected-1Drb7Z .childWrapper-1j_1ub {
-    background-color: var(--brand-experiment);
+	background-color: var(--brand-experiment);
 	text-shadow: 1px 1px var(--textshadow);
 }
 #app-mount .wrapper-3kah-n rect[fill] {
@@ -738,7 +738,7 @@ body::after {
 	text-shadow: 1px 1px var(--textshadow);
 }
 .snowsgivingLink-1TZi3c {
-    border-radius: 4px;
+	border-radius: 4px;
 }
 .selected-26oxtA svg:not(.svg-2azL_l) {
 	filter: drop-shadow(1px 1px var(--textshadow));
@@ -843,7 +843,7 @@ body::after {
 }
 #app-mount .container-2qVG6q.isOpen-2OXbFs {				/* forum				selected post						*/
 	background-color: rgb(var(--accentcolor));
-    text-shadow: 1px 1px var(--textshadow);
+	text-shadow: 1px 1px var(--textshadow);
 }
 #app-mount .container-2qVG6q.isOpen-2OXbFs .defaultColor-24IHKz,
 #app-mount .container-2qVG6q.isOpen-2OXbFs [style*="color: var(--header-secondary)"] {
@@ -3149,7 +3149,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .4);
 }
 #app-mount .footerImage-4UrEF0 {
-    background-image: url(https://discord.com/assets/36d0e0bb009fa362c2533003c0af67b5.svg);
+	background-image: url(https://discord.com/assets/36d0e0bb009fa362c2533003c0af67b5.svg);
 	opacity: 0.6;
 }
 
@@ -4599,7 +4599,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .item-5ApiZt.colorPremiumGradient-38tGFG.focused-3LIdPu,
 .item-5ApiZt.colorPremiumGradient-38tGFG:hover:not(.hideInteraction-1vQrZJ) {
-    background: linear-gradient(90deg, rgba(var(--accentcolor2), .2), rgba(var(--accentcolor), .2)) !important;
+	background: linear-gradient(90deg, rgba(var(--accentcolor2), .2), rgba(var(--accentcolor), .2)) !important;
 }
 #app-mount .item-5ApiZt .checkbox-397WsK {					/* contextmenu			checkbox 							*/
 	color: rgb(var(--accentcolor));
@@ -4658,9 +4658,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	display: block !important;
 }
 .profileColors-2AgAV4 {										/* popout				profilecolors						*/
-    --profile-body-background-color: rgba(0,0,0,.4) !important;
-    --profile-body-divider-color: var(--background-modifier-accent) !important;
-    --profile-body-divider-opacity: 1 !important;
+	--profile-body-background-color: rgba(0,0,0,.4) !important;
+	--profile-body-divider-color: var(--background-modifier-accent) !important;
+	--profile-body-divider-opacity: 1 !important;
 }
 #app-mount .userProfileOuterThemed-2BgJCM ::-webkit-scrollbar-thumb {
 	background-color: var(--profile-gradient-secondary-color) !important;
@@ -7090,7 +7090,7 @@ html .colorDefault-XdNdIp .bg-8df5St::after {
 /* ----		18.5.	PERMISSIONVIEWER				---- */
 
 html #permissions-modal-wrapper {								/* modal				wrapper							*/
-    z-index: 1001;
+	z-index: 1001;
 }
 html #permissions-modal-wrapper #permissions-modal {			/* modal				container							*/
 	background-color: transparent;
