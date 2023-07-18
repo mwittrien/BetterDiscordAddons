@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.3.5
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -133,7 +133,7 @@ module.exports = (_ => {
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
 				return BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, !this.props.song && BDFDB.disCN._spotifycontrolscontainerpaused, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._spotifycontrolscontainerinner,
@@ -311,6 +311,7 @@ module.exports = (_ => {
 														barStyles: {height: 6, top: 3},
 														fillStyles: {backgroundColor: "var(--SC-spotify-green)"},
 														onValueRender: value => {
+															if (currentVolume == value) return;
 															this.props.draggingVolume = true;
 															currentVolume = value;
 															BDFDB.TimeUtils.clear(changeTimeout);
@@ -320,6 +321,7 @@ module.exports = (_ => {
 															return value + "%";
 														},
 														onValueChange: value => {
+															if (currentVolume == value) return;
 															this.props.draggingVolume = false;
 															currentVolume = value;
 															this.request(socketDevice.socket, socketDevice.device, "volume", {
