@@ -719,7 +719,6 @@ module.exports = (_ => {
 								icon: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_PIN
 							});
 						}
-						if (this.getChannelListCategory(e.instance.props.channel.id)) this.updateContainer("channelList");
 					}
 				}
 			}
