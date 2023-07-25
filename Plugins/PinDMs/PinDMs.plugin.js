@@ -261,7 +261,7 @@ module.exports = (_ => {
 			onUserContextMenu (e) {
 				if (e.instance.props.channel && !e.instance.props.channel.guild_id) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "close-dm"});
-					children.splice(index > -1 ? index : children.length, 0, this.createItem(e.instance.props.channel.id));
+					children.splice(index > -1 ? index : children.length, 0, this.createItem(e.instance, e.instance.props.channel.id));
 				}
 			}
 
@@ -269,12 +269,12 @@ module.exports = (_ => {
 				if (e.instance.props.channel) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "change-icon", group: true});
 					children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: this.createItem(e.instance.props.channel.id)
+						children: this.createItem(e.instance, e.instance.props.channel.id)
 					}));
 				}
 			}
 
-			createItem (id) {
+			createItem (instance, id) {
 				if (!id) return;
 				let pinnedInGuild = this.isPinnedInGuilds(id);
 				
@@ -314,6 +314,7 @@ module.exports = (_ => {
 										label: category.name || this.labels.header_pinneddms,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "pin-channellist", category.id),
 										action: _ => {
+											BDFDB.ContextMenuUtils.close(instance);
 											if (currentCategory) this.removeFromCategory(id, currentCategory, "channelList");
 											this.addToCategory(id, category, "channelList");
 										}
@@ -326,6 +327,7 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, pinnedInGuild ? "unpin-serverlist" : "pin-serverlist"),
 							color: pinnedInGuild ? BDFDB.DiscordConstants.MenuItemColors.DANGER : BDFDB.DiscordConstants.MenuItemColors.DEFAULT,
 							action: _ => {
+								BDFDB.ContextMenuUtils.close(instance);
 								if (!pinnedInGuild) this.addPin(id, "guildList");
 								else this.removePin(id, "guildList");
 							}
