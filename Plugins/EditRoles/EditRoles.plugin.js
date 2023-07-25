@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.5
+ * @version 1.1.6
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -91,8 +91,8 @@ module.exports = (_ => {
 						if (guild) {
 							let colorRole, iconRole;
 							for (let id of e.returnValue.roles) {
-								if (guild.roles[id] && guild.roles[id].colorString && (!colorRole || colorRole.position < guild.roles[id].position)) colorRole = guild.roles[id];
-								if (guild.roles[id] && guild.roles[id].icon && (!iconRole || iconRole.position < guild.roles[id].position)) iconRole = guild.roles[id];
+								if (guild.roles[id] && (guild.roles[id].colorString || changedRoles[id] && changedRoles[id].color) && (!colorRole || colorRole.position < guild.roles[id].position)) colorRole = guild.roles[id];
+								if (guild.roles[id] && (guild.roles[id].icon || changedRoles[id] && changedRoles[id].icon) && (!iconRole || iconRole.position < guild.roles[id].position)) iconRole = guild.roles[id];
 							}
 							let color = colorRole && changedRoles[colorRole.id] && changedRoles[colorRole.id].color;
 							if (color) e.returnValue = Object.assign({}, e.returnValue, {colorString: BDFDB.ColorUtils.convert(color, "HEX")});
@@ -107,6 +107,7 @@ module.exports = (_ => {
 					}
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "canGuildUseRoleIcons", {after: e => {
+					if (e.returnValue === false && Object.keys(e.methodArguments[0].roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) console.log(2, e);
 					if (e.returnValue === false && Object.keys(e.methodArguments[0].roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) return true;
 				}});
 				
