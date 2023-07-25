@@ -107,7 +107,6 @@ module.exports = (_ => {
 					}
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "canGuildUseRoleIcons", {after: e => {
-					if (e.returnValue === false && Object.keys(e.methodArguments[0].roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) console.log(2, e);
 					if (e.returnValue === false && Object.keys(e.methodArguments[0].roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) return true;
 				}});
 				
