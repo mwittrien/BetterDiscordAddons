@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.0
+ * @version 2.0.1
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -526,7 +526,7 @@ module.exports = (_ => {
 														if (!this.settings.preCategories[category.id]) return;
 														this.settings.preCategories[category.id].enabled = false;
 														BDFDB.DataUtils.save(this.settings.preCategories, this, "preCategories");
-														this.updateContainer("channelList");
+														this.updateContainer("channelList", true);
 													}
 												}) : [
 													BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -542,7 +542,7 @@ module.exports = (_ => {
 															let newData = this.getPinnedChannels("channelList");
 															delete newData[category.id];
 															this.savePinnedChannels(newData, "channelList");
-															this.updateContainer("channelList");
+															this.updateContainer("channelList", true);
 														}
 													})
 												]
@@ -754,7 +754,7 @@ module.exports = (_ => {
 				if (!category.dms.includes(id)) category.dms.unshift(id);
 				this.savePinnedChannels(Object.assign({}, this.getPinnedChannels(type), {[category.id]: category}), type);
 				if (wasEmpty && category.dms.length) category.collapsed = false;
-				this.updateContainer(type);
+				this.updateContainer(type, true);
 			}
 
 			removeFromCategory (id, category, type) {
@@ -762,7 +762,7 @@ module.exports = (_ => {
 				BDFDB.ArrayUtils.remove(category.dms, id, true);
 				if (!this.filterDMs(category.dms).length) category.collapsed = true;
 				this.savePinnedChannels(Object.assign({}, this.getPinnedChannels(type), {[category.id]: category}), type);
-				this.updateContainer(type);
+				this.updateContainer(type, true);
 			}
 
 			getChannelListCategory (id) {
@@ -903,12 +903,15 @@ module.exports = (_ => {
 				return this.getPinnedChannels("guildList")[id] != undefined;
 			}
 			
-			updateContainer (type) {
+			updateContainer (type, force) {
 				switch (type) {
 					case "channelList":
-						if (!channelListIsRenderendering) BDFDB.DiscordUtils.rerenderAll(true);
-						channelListIsRenderendering = true;
-						BDFDB.TimeUtils.timeout(_ => channelListIsRenderendering = false, 3000);
+						if (force) {
+							if (!channelListIsRenderendering) BDFDB.DiscordUtils.rerenderAll(true);
+							channelListIsRenderendering = true;
+							BDFDB.TimeUtils.timeout(_ => channelListIsRenderendering = false, 3000);
+						}
+						else BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
 						break;
 					case "guildList":
 						BDFDB.DiscordUtils.rerenderAll(true);
