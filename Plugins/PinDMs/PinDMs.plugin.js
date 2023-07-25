@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.7
+ * @version 1.9.8
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -903,8 +903,7 @@ module.exports = (_ => {
 			updateContainer (type) {
 				switch (type) {
 					case "channelList":
-						BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList"); /* DOES NOT WORK */
-						if (!Object.keys(this.settings.preCategories).every(type => this.settings.preCategories[type].enabled) && BDFDB.ObjectUtils.isEmpty(this.getPinnedChannels(type))) this.forceUpdateAll();
+						this.forceUpdateAll();
 						break;
 					case "guildList":
 						BDFDB.DiscordUtils.rerenderAll(true);
