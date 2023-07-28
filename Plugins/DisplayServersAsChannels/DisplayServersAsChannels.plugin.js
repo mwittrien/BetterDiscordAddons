@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -168,7 +168,6 @@ module.exports = (_ => {
 				let scroller = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildsscroller]]});
 				if (scroller) {
 					scroller.props.fade = true;
-					scroller.type = BDFDB.LibraryComponents.Scrollers.Thin;
 					let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isDarwin() ? 0 : 12) + 10;
 					let isVisible = (currentItem, t, items) => {
 						if (!scroller.ref || !scroller.ref.current) return false;
