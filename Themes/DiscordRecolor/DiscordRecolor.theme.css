@@ -37,8 +37,8 @@
 	--textdarker: 				115,115,115;			/*	Text Color 5		 - 	default:	114,118,125		 - 	hex:	#72767d		*/
 	--textdarkest: 				80,80,80;				/*	Text Color 6		 - 	default:	79,84,92		 - 	hex:	#4f545c		*/
 	
-	--backgroundaccent: 		255,81,208;				/*	Background Accent	 - 	default:	64,68,75		 - 	hex:	#40444b		*/
-	--backgroundprimary: 		30,30,30;				/*	Background 1		 - 	default:	54,57,63		 - 	hex:	#36393f		*/
+	--backgroundaccent: 		50,50,50;				/*	Background Accent	 - 	default:	64,68,75		 - 	hex:	#40444b		*/
+	--backgroundprimary: 		127,40,104;				/*	Background 1		 - 	default:	54,57,63		 - 	hex:	#36393f		*/
 	--backgroundsecondary: 		20,20,20;				/*	Background 2		 - 	default:	47,49,54		 - 	hex:	#2f3136		*/
 	--backgroundsecondaryalt: 	15,15,15;				/*	Background 3		 - 	default:	41,43,47		 - 	hex:	#292b2f		*/
 	--backgroundtertiary: 		10,10,10;				/*	Background 4		 - 	default:	32,34,37		 - 	hex:	#202225		*/
