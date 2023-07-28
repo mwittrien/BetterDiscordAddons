@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.0
+ * @version 3.3.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1222,7 +1222,7 @@ module.exports = (_ => {
 				};
 				Internal.checkModuleStrings = function (module, strings, config = {}) {
 					const check = (s1, s2) => {
-						s1 = config.ignoreCase ? s1.toString().toLowerCase() : s1.toString();
+						s1 = (config.ignoreCase ? s1.toString().toLowerCase() : s1.toString()).replace(/[\n\t\r]/g, "");
 						return config.hasNot ? s1.indexOf(s2) == -1 : s1.indexOf(s2) > -1;
 					};
 					return [strings].flat(10).filter(n => typeof n == "string").map(config.ignoreCase ? (n => n.toLowerCase()) : (n => n)).every(string => module && ((typeof module == "function" || typeof module == "string") && (check(module, string) || typeof module.__originalFunction == "function" && check(module.__originalFunction, string)) || typeof module.type == "function" && check(module.type, string) || (typeof module == "function" || typeof module == "object") && module.prototype && Object.keys(module.prototype).filter(n => n.indexOf("render") == 0).some(n => check(module.prototype[n], string))));
@@ -2454,7 +2454,7 @@ module.exports = (_ => {
 									if (!n || !n[1]) return;
 									let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
 									let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
-									return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString && funcString.indexOf(string) > -1 || renderFuncString && renderFuncString.indexOf(string) > -1);
+									return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString && funcString.replace(/[\n\t\r]/g, "").indexOf(string) > -1 || renderFuncString && renderFuncString.replace(/[\n\t\r]/g, "").indexOf(string) > -1);
 								});
 								if (foundFunc) {
 									dataStorage[item]._mappedItems[item2] = foundFunc[0];
