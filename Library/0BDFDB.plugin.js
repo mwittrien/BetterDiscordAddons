@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.1
+ * @version 3.3.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1222,7 +1222,7 @@ module.exports = (_ => {
 				};
 				Internal.checkModuleStrings = function (module, strings, config = {}) {
 					const check = (s1, s2) => {
-						s1 = (config.ignoreCase ? s1.toString().toLowerCase() : s1.toString()).replace(/[\n\t\r]/g, "");
+						s1 = config.ignoreCase ? s1.toString().toLowerCase() : s1.toString();
 						return config.hasNot ? s1.indexOf(s2) == -1 : s1.indexOf(s2) > -1;
 					};
 					return [strings].flat(10).filter(n => typeof n == "string").map(config.ignoreCase ? (n => n.toLowerCase()) : (n => n)).every(string => module && ((typeof module == "function" || typeof module == "string") && (check(module, string) || typeof module.__originalFunction == "function" && check(module.__originalFunction, string)) || typeof module.type == "function" && check(module.type, string) || (typeof module == "function" || typeof module == "object") && module.prototype && Object.keys(module.prototype).filter(n => n.indexOf("render") == 0).some(n => check(module.prototype[n], string))));
