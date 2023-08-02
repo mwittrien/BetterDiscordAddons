@@ -246,6 +246,7 @@
 		}},
 		"StateStoreUtils": {"strings": ["this._currentDispatchActionType"], "exported": false, "value": "exports"},
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
+		"TimeoutUtils": {"strings": ["_timeout.isStarted()"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
