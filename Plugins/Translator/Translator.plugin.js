@@ -15,7 +15,7 @@
 module.exports = (_ => {
 	const changeLog = {
 		"fixed": {
-			"Papago": "works again"
+			"Papago": "detectLangs DEMO"
 		}
 	};
 	
@@ -315,7 +315,7 @@ module.exports = (_ => {
 			},
 			papago: {
 				name: "Papago",
-				auto: false,
+				auto: true,
 				funcName: "papagoTranslate",
 				languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"],
 				key: "xxxxxxxxxxxxxxxxxxxx xxxxxxxxxx"
@@ -1112,10 +1112,35 @@ module.exports = (_ => {
 			
 			papagoTranslate (data, callback) {
 				const credentials = (authKeys.papago && authKeys.papago.key || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(" ");
+
+				/* PAPAGO AUTO DEMO**/
+				let langCode = data.input.id;
+				if (data.input.auto) {
+              				BDFDB.LibraryRequires.request('https://openapi.naver.com/v1/papago/detectLangs', {
+                  				method: 'post',
+                  				form: {
+                    					query: data.text,
+                  				},
+                  				headers: {
+                    					'X-Naver-Client-Id': credentials[0],
+                    					'X-Naver-Client-Secret': credentials[1],
+                    					'Content-Type':	'application/x-www-form-urlencoded',
+                  				},
+                			}, (error, response, body) => {
+                  				if (!error && body && response.statusCode == 200) {
+                    					try {
+                      						return (langCode = JSON.parse(body)['langCode']);
+                    					} catch (err) {
+                      						return (langCode = 'en');
+	                    				}
+                  				}
+                			});
+            			}
+						
 				BDFDB.LibraryRequires.request("https://openapi.naver.com/v1/papago/n2mt", {
 					method: "post",
 					form: {
-						source: data.input.id,
+						source: langCode,
 						target: data.output.id,
 						text: data.text
 					},
