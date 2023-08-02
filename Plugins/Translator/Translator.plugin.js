@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.7
+ * @version 2.5.8
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"Papago": "works again"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -1119,7 +1121,8 @@ module.exports = (_ => {
 					},
 					headers: {
 						"X-Naver-Client-Id": credentials[0],
-						"X-Naver-Client-Secret": credentials[1]
+						"X-Naver-Client-Secret": credentials[1],
+						"Content-Type": "application/x-www-form-urlencoded"
 					}
 				}, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) {
