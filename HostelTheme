@@ -1,0 +1,37 @@
+/**
+ * @name Hostel 2
+ * @description Join our server
+ * @author OstRonic
+ * @version 1.0.0
+ * @authorId 278543574059057154
+
+ * @invite cD5Dw4kWNb
+ * @donate https://www.donationalerts.com/r/hostelstaff
+
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Themes/DiscordRecolor/DiscordRecolor.theme.css
+ */
+
+@import url(https://capnkitten.github.io/BetterDiscord/Themes/Material-Discord/css/source.css);
+
+:root {
+	--accent-hue: 5;
+	--accent-saturation: 71%;
+	--accent-lightness: 61%;
+	--accent-text-color: #fff;
+	--accent-button-action: #fff; /*	-	*/
+
+	--avatar-radius: 50%; /*	-	*/
+
+	--message-radius: 19px;
+	--message-padding-top: 8px;
+	--message-padding-side: 12px; /*	-	*/
+
+	--media-radius: 19px; /*	-	*/
+
+	--card-radius: 8px;
+	--card-radius-big: 18px; /*	-	*/
+
+	--popout-radius: 8px;
+	--popout-radius-big: 18px;
+}
+
