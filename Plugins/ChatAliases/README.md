@@ -13,6 +13,3 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to configure your own Aliases/Commands
-
-
-![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ChatAliases/_res/cover.png)
