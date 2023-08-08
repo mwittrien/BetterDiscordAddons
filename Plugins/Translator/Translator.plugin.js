@@ -315,7 +315,7 @@ module.exports = (_ => {
 			},
 			papago: {
 				name: "Papago",
-				auto: false,
+				auto: true,
 				funcName: "papagoTranslate",
 				languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"],
 				key: "xxxxxxxxxxxxxxxxxxxx xxxxxxxxxx"
@@ -1112,40 +1112,68 @@ module.exports = (_ => {
 			
 			papagoTranslate (data, callback) {
 				const credentials = (authKeys.papago && authKeys.papago.key || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(" ");
-				BDFDB.LibraryRequires.request("https://openapi.naver.com/v1/papago/n2mt", {
-					method: "post",
-					form: {
-						source: data.input.id,
-						target: data.output.id,
-						text: data.text
-					},
-					headers: {
-						"X-Naver-Client-Id": credentials[0],
-						"X-Naver-Client-Secret": credentials[1],
-						"Content-Type": "application/x-www-form-urlencoded"
-					}
-				}, (error, response, body) => {
-					if (!error && body && response.statusCode == 200) {
-						try {
-							let message = (JSON.parse(body) || {}).message;
-							let result = message && (message.body || message.result);
-							if (result && result.translatedText) callback(result.translatedText);
-							else callback("");
+				const doTranslate = langCode => {
+					BDFDB.LibraryRequires.request("https://openapi.naver.com/v1/papago/n2mt", {
+						method: "post",
+						form: {
+							source: langCode,
+							target: data.output.id,
+							text: data.text
+						},
+						headers: {
+							"X-Naver-Client-Id": credentials[0],
+							"X-Naver-Client-Secret": credentials[1],
+							"Content-Type": "application/x-www-form-urlencoded"
 						}
-						catch (err) {callback("");}
-					}
-					else {
-						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_hourlylimit}`, {
-							type: "danger",
-							position: "center"
-						});
-						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}/${this.labels.error_keyoutdated}`, {
-							type: "danger",
-							position: "center"
-						});
-						callback("");
-					}
-				});
+					}, (error, response, body) => {
+						if (!error && body && response.statusCode == 200) {
+							try {
+								let message = (JSON.parse(body) || {}).message;
+								let result = message && (message.body || message.result);
+								if (result && result.translatedText) callback(result.translatedText);
+								else callback("");
+							}
+							catch (err) {callback("");}
+						}
+						else {
+							if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_hourlylimit}`, {
+								type: "danger",
+								position: "center"
+							});
+							else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}/${this.labels.error_keyoutdated}`, {
+								type: "danger",
+								position: "center"
+							});
+							callback("");
+						}
+					});
+				};
+				if (data.input.auto) {
+					BDFDB.LibraryRequires.request("https://openapi.naver.com/v1/papago/detectLangs", {
+						method: "post",
+						form: {
+							query: data.text,
+						},
+						headers: {
+							"X-Naver-Client-Id": credentials[0],
+							"X-Naver-Client-Secret": credentials[1],
+							"Content-Type": "application/x-www-form-urlencoded"
+						},
+					}, (error, response, body) => {
+						let langCode = "en";
+						if (!error && body && response.statusCode == 200) {
+							try {
+								langCode = JSON.parse(body)["langCode"];
+							} catch (err) {
+								langCode = "en";
+							}
+						}
+						data.input.name = languages[langCode].name;
+						data.input.ownlang = languages[langCode].ownlang;
+						doTranslate(langCode);
+					});
+				}
+				else doTranslate(data.input.id);
 			}
 			
 			baiduTranslate (data, callback) {
