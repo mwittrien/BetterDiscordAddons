@@ -146,7 +146,6 @@
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
-		"FileRequestUtils": {"props": ["getFileData", "getImageData"]},
 		"FolderSettingsUtils": {"props": ["updateLocale", "updateTheme"], "exported": false, "value": "exports", "map": {
 			"saveGuildFolders": ["guildFolders"]
 		}},
@@ -1542,7 +1541,7 @@
 		"MembersWrapper": {"props": ["membersWrap", "membersGroup"]},
 		"Message": {"props": ["message", "mentioned"]},
 		"MessageAccessory": {"props": ["embedWrapper", "gifFavoriteButton"]},
-		"MessageAttachment": {"props": ["hiddenSpoilers", "spoiler"]},
+		"MessageAttachment": {"props": ["removeAttachmentButton", "inline"]},
 		"MessageBlocked": {"props": ["blockedMessageText", "expanded"]},
 		"MessageBody": {"props": ["markupRtl", "edited"]},
 		"MessageDivider": {"props": ["isUnread", "divider"]},
@@ -3228,9 +3227,6 @@
 		"slidertrack": ["Slider", "track"],
 		"spinner": ["Spinner", "spinner"],
 		"spoilercontainer": ["Spoiler", "spoilerContainer"],
-		"spoilerembed": ["MessageAttachment", "spoiler"],
-		"spoilerembedhidden": ["MessageAttachment", "hiddenSpoilers"],
-		"spoilerembedinline": ["MessageAttachment", "inline"],
 		"spoilerhidden": ["Spoiler", "hidden"],
 		"spoilertext": ["Spoiler", "spoilerContent"],
 		"spoilerwarning": ["Spoiler", "spoilerWarning"],
