@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.0
+ * @version 2.0.1
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -204,6 +204,7 @@ module.exports = (_ => {
 					userCopy.premium_guild_since = data.premium_guild_since;
 					loadedUsers[id] = BDFDB.ObjectUtils.extract(userCopy, "flags", "premium_since", "premium_guild_since");
 					loadedUsers[id].date = (new Date()).getTime();
+					if (data.badges && data.badges.find(n => n.id == "automod")) loadedUsers[id].automod = true;
 					if (data.badges) for (let badge of data.badges) {
 						let userFlag = BDFDB.DiscordConstants.UserFlags[(userBadgeFlagNameMap[badge.id] || badge.id || "").toUpperCase()];
 						if (userFlag && (loadedUsers[id].flags | userFlag) != loadedUsers[id].flags) loadedUsers[id].flags += userFlag;
@@ -243,6 +244,7 @@ module.exports = (_ => {
 									if (badges[keyName]) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges[keyName], id: keyName});
 								}
 							}
+							if (loadedUsers[realUserId].automod) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges.automod, id: "automod"});
 							if (loadedUsers[realUserId].premium_since) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges.premium, id: "premium"});
 							if (loadedUsers[realUserId].premium_guild_since) {
 								let level = this.getBoostLevel(new Date(loadedUsers[realUserId].premium_guild_since));
@@ -272,7 +274,8 @@ module.exports = (_ => {
 					}
 					else if (e.methodArguments[0].startsWith("SHOWBADGES__")) {
 						let keyName = "";
-						if (e.methodArguments[0] == "SHOWBADGES__NITRO") keyName = "premium";
+						if (e.methodArguments[0] == "SHOWBADGES__AUTOMOD") keyName = "automod";
+						else if (e.methodArguments[0] == "SHOWBADGES__NITRO") keyName = "premium";
 						else if (e.methodArguments[0].endsWith("__FLAG")) {
 							let flag = e.methodArguments[0].split("__")[1];
 							let userFlag = flag !== undefined && Object.entries(BDFDB.DiscordConstants.UserFlags).find(n => n && n[1] == flag);
@@ -500,6 +503,7 @@ module.exports = (_ => {
 					size: BDFDB.LibraryComponents.UserBadgeComponents.Sizes.SIZE_18,
 					custom: true,
 					place: place,
+					automod: loadedUsers[realUserId] && loadedUsers[realUserId].automod ? true : (realUserId == "SHOWBADGES__AUTOMOD" ? true : null),
 					premiumSince: loadedUsers[realUserId] && loadedUsers[realUserId].premium_since ? new Date(loadedUsers[realUserId].premium_since) : (realUserId == "SHOWBADGES__NITRO" ? new Date() : null),
 					premiumGuildSince: fakeGuildBoostDate || (loadedUsers[realUserId] && loadedUsers[realUserId].premium_guild_since ? new Date(loadedUsers[realUserId].premium_guild_since) : null),
 					premiumCurrentGuildSince: member && member.premiumSince && new Date(member.premiumSince) || realUserId == "SHOWBADGES__CURRENT_GUILD_BOOST" && new Date()
@@ -515,11 +519,12 @@ module.exports = (_ => {
 				else for (let key of badges[flag].keys) {
 					let keyName = key.replace("_lvl", "_level_");
 					keyName = (userBadgeFlagNameMap[keyName] || keyName || "").toUpperCase();
-					let userFlag = flag == "premium" || flag == "guild_booster" ? 0 : BDFDB.DiscordConstants.UserFlags[keyName.toUpperCase()];
+					let userFlag = flag == "automod" || flag == "premium" || flag == "guild_booster" ? 0 : BDFDB.DiscordConstants.UserFlags[keyName.toUpperCase()];
 					if (userFlag == null && keyName) userFlag = BDFDB.DiscordConstants.UserFlags[keyName] != null ? BDFDB.DiscordConstants.UserFlags[keyName] : BDFDB.DiscordConstants.UserFlags[Object.keys(BDFDB.DiscordConstants.UserFlags).find(f => f.indexOf(keyName) > -1 || keyName.indexOf(f) > -1)];
 					if (userFlag != null) {
 						let id = "SHOWBADGES__" + userFlag + "__FLAG";
-						if (flag == "premium") id = "SHOWBADGES__NITRO";
+						if (flag == "automod") id = "SHOWBADGES__AUTOMOD";
+						else if (flag == "premium") id = "SHOWBADGES__NITRO";
 						else if (flag == "guild_booster" && keyName) id = "SHOWBADGES__GUILD_BOOST__" + keyName.split("_").pop();
 						let user = new BDFDB.DiscordObjects.User({flags: userFlag, id: id});
 						wrappers.push(this.createBadges(user, null, "settings"));
