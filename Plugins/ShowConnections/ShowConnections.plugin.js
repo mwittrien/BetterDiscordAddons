@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.7
+ * @version 1.1.8
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,8 +86,18 @@ module.exports = (_ => {
 							children: connections.map(c => {
 								let provider = BDFDB.LibraryModules.ConnectionProviderUtils.get(c.type);
 								let url = _this.settings.general.openWebpage && provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
+								let metadata = [];
+								if (_this.settings.general.showDetails && provider.hasMetadata) {
+									if (c.metadata.created_at) metadata.push(BDFDB.ReactUtils.createElement("span", {children: BDFDB.LanguageUtils.LanguageStringsFormat("CONNECTIONS_PROFILE_MEMBER_SINCE", (new Date(c.metadata.created_at)).toLocaleDateString("default", {year: "numeric", month: "long", day: "numeric"}))}));
+									let metadataGetter = BDFDB.LibraryModules.ConnectionMetadataUtils["get" + BDFDB.StringUtils.upperCaseFirstChar(c.type)];
+									if (metadataGetter) metadata = metadata.concat(metadataGetter(c.metadata));
+								}
 								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 									text: `${provider.name}: ${c.name}`,
+									note: metadata && metadata.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+										children: metadata
+									}): null,
 									tooltipConfig: {backgroundColor: _this.settings.general.useColoredTooltips && BDFDB.ColorUtils.change(provider.color, -0.3), color: !_this.settings.general.useColoredTooltips || !provider.color ? "black" : null},
 									children: BDFDB.ReactUtils.createElement(!url ? "div" : BDFDB.LibraryComponents.Anchor, Object.assign(!url ? {} : {
 										href: url
@@ -157,6 +167,7 @@ module.exports = (_ => {
 					general: {
 						useColoredIcons:	{value: true, 	description: "Uses colored Version of the Icons"},
 						useColoredTooltips:	{value: true, 	description: "Uses colored Version of the Tooltips"},
+						showDetails:		{value: true, 	description: "Shows Details of Connection on hover"},
 						showVerifiedBadge:	{value: true, 	description: "Shows the Badge for verified Connections"},
 						openWebpage:		{value: true, 	description: "Opens the Connection Page when clicking the Icon"}
 					},
