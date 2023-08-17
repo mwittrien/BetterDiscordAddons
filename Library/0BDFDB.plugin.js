@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.3
+ * @version 3.3.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3161,6 +3161,7 @@ module.exports = (_ => {
 				
 				BDFDB.ColorUtils = {};
 				BDFDB.ColorUtils.convert = function (color, conv, type) {
+					if (typeof color == "string" && color.indexOf("var(--") == 0) return color;
 					if (BDFDB.ObjectUtils.is(color)) {
 						let newColor = {};
 						for (let pos in color) newColor[pos] = BDFDB.ColorUtils.convert(color[pos], conv, type);
@@ -3405,6 +3406,7 @@ module.exports = (_ => {
 					return null;
 				};
 				BDFDB.ColorUtils.change = function (color, value, conv) {
+					if (typeof color == "string" && color.indexOf("var(--") == 0) return color;
 					value = parseFloat(value);
 					if (color != null && typeof value == "number" && !isNaN(value)) {
 						if (BDFDB.ObjectUtils.is(color)) {
@@ -3435,6 +3437,7 @@ module.exports = (_ => {
 					return null;
 				};
 				BDFDB.ColorUtils.invert = function (color, conv) {
+					if (typeof color == "string" && color.indexOf("var(--") == 0) return color;
 					if (BDFDB.ObjectUtils.is(color)) {
 						let newColor = {};
 						for (let pos in color) newColor[pos] = BDFDB.ColorUtils.invert(color[pos], conv);
