@@ -1098,6 +1098,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ~~~~		4.		CHAT							~~~~ */
 
+.mainTableContainer-3Nxvkd {
+	background: var(--background-secondary);
+}
+
 /* ----		4.1.	CHANNELHEADER					---- */
 
 #app-mount .container-ZMc96U.themed-Hp1KC_ {
