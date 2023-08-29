@@ -525,7 +525,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandedbackground} {
 						top: -2px;
-						right: 2px;
+						right: 10px;
 						bottom: -2px;
 						left: 6px;
 						width: auto;
