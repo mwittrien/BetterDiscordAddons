@@ -3374,6 +3374,7 @@ module.exports = (_ => {
 					};
 				};
 				BDFDB.ColorUtils.setAlpha = function (color, a, conv) {
+					if (typeof color == "string" && color.indexOf("var(--") == 0) return color;
 					if (BDFDB.ObjectUtils.is(color)) {
 						let newcolor = {};
 						for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.setAlpha(color[pos], a, conv);
