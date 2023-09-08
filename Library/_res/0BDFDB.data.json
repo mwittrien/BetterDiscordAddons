@@ -180,7 +180,7 @@
 			"renderImageComponent": ["renderAdjacentContent", "imageContent"]
 		}},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
-		"MemberDisplayUtils": {"strings": ["getUserProfile", "getGuildMemberProfile", "_userProfile"], "exported": false, "value": "exports", "map": {
+		"MemberDisplayUtils": {"strings": ["getUserProfile", "getGuildMemberProfile", ".getUser("], "exported": false, "value": "exports", "map": {
 			"getDisplayProfile": ["getUserProfile"],
 			"getUserProfile": ["function(){return"]
 		}},
