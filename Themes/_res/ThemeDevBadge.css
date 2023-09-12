@@ -49,6 +49,3 @@
 	-webkit-app-region: drag !important;
 	z-index: 1000000 !important;
 }
-span {
-	-webkit-backface-visibility: hidden;
-}
