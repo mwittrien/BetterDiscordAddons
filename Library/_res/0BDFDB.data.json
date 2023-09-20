@@ -1504,7 +1504,7 @@
 		"GuildFolder": {"props": ["folder", "expandedFolderIconWrapper"]},
 		"GuildHeader": {"props": ["header", "name", "bannerImage"]},
 		"GuildHeaderButton": {"props": ["button", "open"]},
-		"GuildItem": {"props": ["listItem", "participating"], "length": 10, "smaller": true},
+		"GuildItem": {"props": ["listItem", "serverEmoji"]},
 		"GuildIcon": {"props": ["acronym", "selected", "wrapper"]},
 		"GuildInvite": {"props": ["wrapper", "guildIconJoined"]},
 		"GuildsButton": {"props": ["circleIconButton", "circleIcon"], "length": 6, "smaller": true},
