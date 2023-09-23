@@ -80,6 +80,7 @@
 	--logo-primary: rgb(var(--textbrightest));
 	--modal-background: rgba(var(--transparencycolor), .2);
 	--modal-footer-background: rgba(var(--transparencycolor), .2);
+	--home-background: transparent;
 	--background-accent: rgba(var(--transparencycolor), .1);
 	--background-primary: rgba(var(--transparencycolor), .2);
 	--background-secondary: rgba(var(--transparencycolor), .3);
