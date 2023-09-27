@@ -304,7 +304,7 @@
 			"NumberBadge": [".numberBadge"],
 			"TextBadge": [".textBadge"]
 		}},
-		"Checkmark": {"strings": ["d:\"M8.99991 16.17L4.82991"]},
+		"Checkmark": {"strings": ["d:\"M8.99991 16.17L4.82991"], "funcStrings": ["foreground:"]},
 		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["autoplay"]},
 		"EmojiButton": {"strings": ["renderButtonContents", "PickerPerRow", "SELECT_EMOJI"]},
 		"EmojiPicker": {"strings": ["emojiSize", "disableEmojiTutorial", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
