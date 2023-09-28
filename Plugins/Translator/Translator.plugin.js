@@ -895,7 +895,7 @@ module.exports = (_ => {
 				});
 			}
 
-			translateText (text, place, callback) {
+			translateText (text, place, showToast = true, callback) {
 				let toast = null, toastInterval, finished = false, finishTranslation = translation => {
 					isTranslating = false;
 					if (toast) toast.close();
@@ -933,6 +933,7 @@ module.exports = (_ => {
 							if (toast) toast.close();
 							BDFDB.TimeUtils.clear(toastInterval);
 							
+							if (!showToast) return;
 							toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_translating} (${translationEngines[engine].name}) - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {
 								timeout: 0,
 								ellipsis: true,
