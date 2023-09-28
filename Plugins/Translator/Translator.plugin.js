@@ -794,8 +794,10 @@ module.exports = (_ => {
 			}
 
 			showTooltipForMessageContent (message, translation) {
-				let node = document.getElementById(`message-content-${message.id}`);
-				if (!node || node.parentElement.querySelector(":hover") !== node) return;
+				// NOTE: Although id props should be unique, Discord reuses them when, for example, displaying threads in floating views.
+				let nodes = document.querySelectorAll(`#message-content-${message.id}`);
+				let node = Array.from(nodes).find((n) => n === n.parentElement.querySelector(":hover"));
+				if (!node) return;
 				
 				let tooltip = node.__translatorMessageContentTooltip;
 				if (!tooltip) {
