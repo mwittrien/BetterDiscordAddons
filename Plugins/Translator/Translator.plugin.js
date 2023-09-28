@@ -368,6 +368,9 @@ module.exports = (_ => {
 		var translationEnabledStates = [], isTranslating;
 		var translatedMessages = {}, oldMessages = {};
 		
+		var messageContentTimeouts = {};
+		var messageContentTranslations = {};
+		
 		const defaultLanguages = {
 			INPUT: "auto",
 			OUTPUT: "$discord"
@@ -739,8 +742,10 @@ module.exports = (_ => {
 			}
 
 			processMessageContent (e) {
-				if (!e.instance.props.message) return;
-				let translation = translatedMessages[e.instance.props.message.id];
+				let message = e.instance.props.message;
+				if (!message) return;
+				
+				let translation = translatedMessages[message.id];
 				if (translation && translation.content) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.getName(translation.output)}`,
 					tooltipConfig: {style: "max-width: 400px"},
@@ -752,6 +757,60 @@ module.exports = (_ => {
 						})
 					})
 				}));
+				
+				let originalOnMouseEnter = e.returnvalue.props.onMouseEnter;
+				e.returnvalue.props.onMouseEnter = (e) => {
+					originalOnMouseEnter && originalOnMouseEnter(e);
+					this.handleMessageContentOnMouseEnter(e, message);
+				}
+				
+				let originalOnMouseLeave = e.returnvalue.props.onMouseLeave;
+				e.returnvalue.props.onMouseLeave = (e) => {
+					originalOnMouseLeave && originalOnMouseLeave(e);
+					this.handleMessageContentOnMouseLeave(e, message);
+				}
+			}
+
+			handleMessageContentOnMouseEnter (e, message) {
+				let translation = messageContentTranslations[message.id];
+				if (translation) {
+					this.showTooltipForMessageContent(message, translation);
+				}
+				else {
+					messageContentTimeouts[message.id] = BDFDB.TimeUtils.timeout(() => {
+						this.translateText(message.content, messageTypes.RECEIVED, false, (translation, input, output) => {
+							if (translation) {
+								messageContentTranslations[message.id] = translation;
+								this.showTooltipForMessageContent(message, translation);
+							}
+						})
+					}, 500);
+				}
+			}
+
+			handleMessageContentOnMouseLeave (e, message) {
+				BDFDB.TimeUtils.clear(messageContentTimeouts[message.id]);
+				delete messageContentTimeouts[message.id];
+			}
+
+			showTooltipForMessageContent (message, translation) {
+				let node = document.getElementById(`message-content-${message.id}`);
+				if (!node || node.parentElement.querySelector(":hover") !== node) return;
+				
+				let tooltip = node.__translatorMessageContentTooltip;
+				if (!tooltip) {
+					tooltip = BdApi.UI.createTooltip(node, translation, { disabled: true });
+					tooltip.tooltipElement.style.setProperty("white-space", "pre-wrap");
+					tooltip.tooltipElement.style.setProperty("line-height", "20px");
+					node.__translatorMessageContentTooltip = tooltip;
+				}
+				const rect = node.getBoundingClientRect();
+				const paddingLeft = parseInt(window.getComputedStyle(node, null).paddingLeft, 10);
+				tooltip.tooltipElement.style.setProperty("max-width", `${rect.width - paddingLeft}px`);
+				tooltip.show();
+				
+				// NOTE: Must set after calling `show()` to override what `show()` sets.
+				tooltip.element.style.setProperty("left", `${rect.left + paddingLeft}px`);
 			}
 
 			processEmbed (e) {
