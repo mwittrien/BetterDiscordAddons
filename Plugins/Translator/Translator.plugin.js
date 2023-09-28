@@ -379,7 +379,8 @@ module.exports = (_ => {
 						addTranslateButton:		{value: true, 	popout: false},
 						usePerChatTranslation:	{value: true, 	popout: false},
 						sendOriginalMessage:	{value: false, 	popout: true},
-						showOriginalMessage:	{value: false, 	popout: true}
+						showOriginalMessage:	{value: false, 	popout: true},
+						showTranslationOnHover:	{value: false, 	popout: true}
 					},
 					choices: {},
 					exceptions: {
@@ -743,16 +744,18 @@ module.exports = (_ => {
 					})
 				}));
 				
-				let originalOnMouseEnter = e.returnvalue.props.onMouseEnter;
-				e.returnvalue.props.onMouseEnter = (e) => {
-					originalOnMouseEnter && originalOnMouseEnter(e);
-					this.handleMessageContentOnMouseEnter(e, message);
-				}
-				
-				let originalOnMouseLeave = e.returnvalue.props.onMouseLeave;
-				e.returnvalue.props.onMouseLeave = (e) => {
-					originalOnMouseLeave && originalOnMouseLeave(e);
-					this.handleMessageContentOnMouseLeave(e, message);
+				if (this.settings.general.showTranslationOnHover) {
+					let originalOnMouseEnter = e.returnvalue.props.onMouseEnter;
+					e.returnvalue.props.onMouseEnter = (e) => {
+						originalOnMouseEnter && originalOnMouseEnter(e);
+						this.handleMessageContentOnMouseEnter(e, message);
+					}
+					
+					let originalOnMouseLeave = e.returnvalue.props.onMouseLeave;
+					e.returnvalue.props.onMouseLeave = (e) => {
+						originalOnMouseLeave && originalOnMouseLeave(e);
+						this.handleMessageContentOnMouseLeave(e, message);
+					}
 				}
 			}
 
@@ -2424,6 +2427,7 @@ module.exports = (_ => {
 							general_addTranslateButton:			"Adds a Translate Button to the Channel Textarea",
 							general_sendOriginalMessage:		"Also sends the original Message when translating your sent Message",
 							general_showOriginalMessage:		"Also shows the original Message when translating a received Message",
+							general_showTranslationOnHover:		"Shows translation in a popup when mouse hovers over a Message",
 							general_usePerChatTranslation:		"Enables/Disables the Translator Button State per Channel and not globally",
 							language_choice_input_received:		"Input Language in received Messages",
 							language_choice_input_sent:			"Input Language in your sent Messages",
