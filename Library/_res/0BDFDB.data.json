@@ -5584,6 +5584,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"864982372751245313": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "windowsuss (fynn)"},
 		"148234730523852800": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "inbroso (MaEp)"},
 		"105509397211406336": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "samtino (SgJeff)"},
 		"323494393828999168": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "polak (SzKu)"},
