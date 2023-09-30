@@ -2503,6 +2503,7 @@ input.input-3O04eu {										/* textinput												*/
 	background-color: rgb(114, 118, 125) !important;
 	transition: background-color .1s ease-out;
 }															/* switch				checked								*/
+.container-1QtPKm[style*="background-color: var(--green-"],
 .container-1QtPKm[style*="background-color: rgb(35, "],
 .container-1QtPKm[style*="background-color: rgb(59, "],
 .container-1QtPKm[style*="background-color: rgb(88, "],
@@ -2512,6 +2513,7 @@ input.input-3O04eu {										/* textinput												*/
 .container-1QtPKm[style*="background-color: hsl(235, "] {
 	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
+.container-1QtPKm[style*="background-color: var(--green-"]:hover,
 .container-1QtPKm[style*="background-color: rgb(35, "]:hover,
 .container-1QtPKm[style*="background-color: rgb(59, "]:hover,
 .container-1QtPKm[style*="background-color: rgb(88, "]:hover,
@@ -2527,6 +2529,7 @@ input.input-3O04eu {										/* textinput												*/
 .container-1QtPKm path[fill] {
 	fill: rgb(114, 118, 125) !important;
 }
+.container-1QtPKm[style*="background-color: var(--green-"] path[fill],
 .container-1QtPKm[style*="background-color: rgb(35, "] path[fill],
 .container-1QtPKm[style*="background-color: rgb(59, "] path[fill],
 .container-1QtPKm[style*="background-color: rgb(88, "] path[fill],
