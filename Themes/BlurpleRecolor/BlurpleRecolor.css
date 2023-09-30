@@ -2554,15 +2554,15 @@ input.input-3O04eu {										/* textinput												*/
 }
 
 .theme-light .select-Zz0IcO:focus,							/* dropdown select		nitro subscription					*/
-.theme-light .lookFilled-Zz0IcO.select-Zz0IcO:focus,
+.theme-light .lookFilled-GPyucw.select-Zz0IcO:focus,
 .theme-dark .select-Zz0IcO:focus,
-.theme-dark .lookFilled-Zz0IcO.select-Zz0IcO:focus {
+.theme-dark .lookFilled-GPyucw.select-Zz0IcO:focus {
 	border-color: rgb(var(--accentcolor));
 }
-.theme-light .lookFilled-Zz0IcO.select-Zz0IcO:hover.open-1FRZsK,
-.theme-light .lookFilled-Zz0IcO.open-1FRZsK,
-.theme-dark .lookFilled-Zz0IcO.select-Zz0IcO:hover.open-1FRZsK,
-.theme-dark .lookFilled-Zz0IcO.open-1FRZsK {
+.theme-light .lookFilled-GPyucw.select-Zz0IcO:hover.open-1FRZsK,
+.theme-light .lookFilled-GPyucw.open-1FRZsK,
+.theme-dark .lookFilled-GPyucw.select-Zz0IcO:hover.open-1FRZsK,
+.theme-dark .lookFilled-GPyucw.open-1FRZsK {
 	border-color: rgb(var(--accentcolor)) rgb(var(--accentcolor)) rgba(0, 0, 0, 0.3);
 }
 

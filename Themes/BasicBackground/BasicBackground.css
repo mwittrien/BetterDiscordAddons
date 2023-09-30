@@ -6489,20 +6489,20 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .select-1YfRS9 [class*="css-"][class*="-container"] {		/* select				container							*/
 	background-color: transparent;
 }
-.lookFilled-Zz0IcO.select-Zz0IcO,
+.lookFilled-GPyucw.select-Zz0IcO,
 .select-1YfRS9 [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
 	color: var(--text-normal);
 }
-.lookFilled-Zz0IcO.select-Zz0IcO:hover {
+.lookFilled-GPyucw.select-Zz0IcO:hover {
 	border-color: rgb(var(--transparencycolor));
 }
-.lookFilled-Zz0IcO.select-Zz0IcO:hover.open-1FRZsK,
-.lookFilled-Zz0IcO.open-1FRZsK {
+.lookFilled-GPyucw.select-Zz0IcO:hover.open-1FRZsK,
+.lookFilled-GPyucw.open-1FRZsK {
 	border-color: rgb(var(--transparencycolor)) rgb(var(--transparencycolor)) rgba(var(--transparencycolor), .3);
 }
-.lookFilled-Zz0IcO.select-Zz0IcO .searchInput-3pIoTy {
+.lookFilled-GPyucw.select-Zz0IcO .searchInput-3pIoTy {
 	background: transparent;
 }
 .select-1YfRS9 [class*="css-"][class*="-control"]:hover,
