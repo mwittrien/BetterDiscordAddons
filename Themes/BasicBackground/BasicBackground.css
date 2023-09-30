@@ -766,10 +766,10 @@ body::after {
 	border-top: 1px solid rgba(var(--transparencycolor), .2);
 }
 
-.button-12Fmur.enabled-9OeuTA {								/* account/voice		panel button						*/
+button.button-12Fmur.enabled-9OeuTA {								/* account/voice		panel button						*/
 	opacity: 0.7;
 }
-.button-12Fmur.enabled-9OeuTA:hover {
+button.button-12Fmur.enabled-9OeuTA:hover {
 	opacity: 1;
 	background-color: rgb(var(--accentcolor));
 }
@@ -777,7 +777,7 @@ body::after {
 .withTagless-10ooWt:hover {
 	background-color: rgb(var(--accentcolor));
 }
-.button-12Fmur.enabled-9OeuTA:hover svg {
+button.button-12Fmur.enabled-9OeuTA:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 .button-1EGGcP.buttonColor-3bP3fX {
