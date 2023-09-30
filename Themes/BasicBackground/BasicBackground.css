@@ -3015,6 +3015,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
+															/* emojisettings		alias								*/
+#app-mount .emojiRow-1aPaM-:hover .emojiAliasPlaceholderContent-12ybcH,
+#app-mount .emojiRow-1aPaM-:focus-within .emojiAliasPlaceholderContent-12ybcH {
+	visibility: hidden !important;
+	color: transparent !important;
+}
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/
 	background-color: rgba(var(--transparencycolor), .1);
 }
