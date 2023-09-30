@@ -36,7 +36,9 @@
 	--settingsicons-bd-customcss: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/custom.svg);
 	--settingsicons-bd-plugins: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/plugins.svg);
 	--settingsicons-bd-themes: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themes.svg);
-	--settingsicons-bd-pluginrepo: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/pluginrepo.svg);
+	--settingsicons-vc-cloud: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/cloud.svg);
+	--settingsicons-vc-backup-restore: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/backuprestore.svg);
+	--settingsicons-bd-themerepo: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themerepo.svg);
 	--settingsicons-bd-themerepo: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themerepo.svg);
 	--settingsicons-changelog: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.svg);
 	--settingsicons-merchandise: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/merchandise.svg);
@@ -193,20 +195,26 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 	-webkit-mask: var(--settingsicons-overlay) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-settings-tab::before {
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-settings-tab::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings::before {
 	-webkit-mask: var(--settingsicons-bd-settings) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-updates-tab::before {
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-updates-tab::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-updater::before {
 	-webkit-mask: var(--settingsicons-bd-changelog) center/contain no-repeat !important;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-customcss-tab::before {
 	-webkit-mask: var(--settingsicons-bd-customcss) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-plugins-tab::before {
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-plugins-tab::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-plugins::before {
 	-webkit-mask: var(--settingsicons-bd-plugins) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-themes-tab::before {
-	-webkit-mask: var(--settingsicons-bd-themes) center/contain no-repeat !important;
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-cloud::before {
+	-webkit-mask: var(--settingsicons-vc-cloud) center/contain no-repeat !important;
+}
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-backup-restore::before {
+	-webkit-mask: var(--settingsicons-vc-backup-restore) center/contain no-repeat !important;
 }
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab::before {
 	-webkit-mask: var(--settingsicons-bd-pluginrepo) center/contain no-repeat !important;
