@@ -216,6 +216,10 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-plugins::before {
 	-webkit-mask: var(--settingsicons-bd-plugins) center/contain no-repeat !important;
 }
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-themes-tab::before,
+.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-themes::before {
+	-webkit-mask: var(--settingsicons-bd-themes) center/contain no-repeat !important;
+}
 .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-cloud::before {
 	-webkit-mask: var(--settingsicons-vc-cloud) center/contain no-repeat !important;
 }
