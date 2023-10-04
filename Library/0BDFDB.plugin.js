@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.5
+ * @version 3.3.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4002,6 +4002,9 @@ module.exports = (_ => {
 						let children = BDFDB.ArrayUtils.is(contextMenu.props.children) ? contextMenu.props.children : [contextMenu.props.children];
 						for (let i in children) if (children[i]) {
 							if (check(children[i])) return [children, parseInt(i)];
+							else if (BDFDB.ArrayUtils.is(children[i])) {
+								for (let j in children[i]) if (check(children[i][j])) return [children[i], parseInt(j)];
+							}
 							else if (children[i].props) {
 								if (BDFDB.ArrayUtils.is(children[i].props.children) && children[i].props.children.length) {
 									let [possibleChildren, possibleIndex] = BDFDB.ContextMenuUtils.findItem(children[i].props.children, config);
