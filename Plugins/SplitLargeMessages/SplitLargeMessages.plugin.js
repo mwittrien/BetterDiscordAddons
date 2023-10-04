@@ -67,6 +67,7 @@ module.exports = (_ => {
 					},
 					amounts: {
 						splitCounter:	{value: 0, 		description: "Messages will be split after roughly X Characters"},
+            maxPages: { value: 0, description: 'Maximum number of split pages', note: "(0 for unlimited) Pages beyond this count will be discarded" }
 					}
 				};
 				
@@ -130,6 +131,22 @@ module.exports = (_ => {
 							max: maxMessageLength,
 							value: this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter
 						}));
+
+            settingsItems.push(
+              BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+                type: 'TextInput',
+                childProps: {
+                  type: 'number'
+                },
+                plugin: this,
+                keys: ['amounts', 'maxPages'],
+                label: this.defaults.amounts.maxPages.description,
+                note: this.defaults.amounts.maxPages.note,
+                min: 0,
+                max: 20,
+                value: this.settings.amounts.splitCounter
+              })
+            );
 						
 						return settingsItems;
 					}
@@ -189,6 +206,7 @@ module.exports = (_ => {
 			formatText (text) {
 				const separator = !this.settings.general.byNewlines ? "\n" : " ";
 				const splitMessageLength = this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter;
+        const maxPages = this.settings.amounts.maxPages || Infinity;
 				
 				text = text.replace(/\t/g, "    ");
 				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${splitMessageLength * (19/20)},}`, "gm"));
@@ -231,7 +249,7 @@ module.exports = (_ => {
 						messages[j] = messages[j] + insertCodeLine;
 					}
 				}
-				return messages;
+				return messages.slice(0, maxPages);
 			}
 
 			setLabelsByLanguage () {
