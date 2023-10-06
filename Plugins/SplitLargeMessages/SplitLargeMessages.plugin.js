@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.0
+ * @version 1.8.1
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -56,7 +56,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		const messageDelay = 1000; //changing at own risk, might result in bans or mutes
+		const messageDelay = 2000; //changing at own risk, might result in bans or mutes
 		let maxMessageLength = 2000;
 	
 		return class SplitLargeMessages extends Plugin {
@@ -67,7 +67,7 @@ module.exports = (_ => {
 					},
 					amounts: {
 						splitCounter:	{value: 0, 		description: "Messages will be split after roughly X Characters"},
-            maxPages: { value: 0, description: 'Maximum number of split pages', note: "(0 for unlimited) Pages beyond this count will be discarded" }
+						maxPages:		{value:	0,		description: "Maximum number of split pages",							note: "(0 for unlimited) Pages beyond this count will be discarded"}
 					}
 				};
 				
@@ -132,21 +132,19 @@ module.exports = (_ => {
 							value: this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter
 						}));
 
-            settingsItems.push(
-              BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-                type: 'TextInput',
-                childProps: {
-                  type: 'number'
-                },
-                plugin: this,
-                keys: ['amounts', 'maxPages'],
-                label: this.defaults.amounts.maxPages.description,
-                note: this.defaults.amounts.maxPages.note,
-                min: 0,
-                max: 20,
-                value: this.settings.amounts.splitCounter
-              })
-            );
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "TextInput",
+							childProps: {
+								type: "number"
+							},
+							plugin: this,
+							keys: ["amounts", "maxPages"],
+							label: this.defaults.amounts.maxPages.description,
+							note: this.defaults.amounts.maxPages.note,
+							min: 0,
+							max: 20,
+							value: this.settings.amounts.splitCounter
+						}));
 						
 						return settingsItems;
 					}
@@ -196,7 +194,7 @@ module.exports = (_ => {
 			}
 
 			processChannelTextAreaEditor (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.uploadPromptCharacterCount = 999999999999999;
+				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.uploadPromptCharacterCount = 100000;
 			}
 			
 			isSlowDowned (channel) {
@@ -206,7 +204,7 @@ module.exports = (_ => {
 			formatText (text) {
 				const separator = !this.settings.general.byNewlines ? "\n" : " ";
 				const splitMessageLength = this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter;
-        const maxPages = this.settings.amounts.maxPages || Infinity;
+				const maxPages = this.settings.amounts.maxPages || Infinity;
 				
 				text = text.replace(/\t/g, "    ");
 				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${splitMessageLength * (19/20)},}`, "gm"));
