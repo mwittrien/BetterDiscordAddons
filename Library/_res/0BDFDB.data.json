@@ -490,7 +490,7 @@
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
 		"LazyImageZoomable": {"strings": ["renderLinkComponent", "onCloseImage"]},
 		"ListItemTooltip": {"strings": [".listItemWrapper", "tooltipClassName", "disableWrapper"]},
-		"MemberListItem": {"protos": ["renderOwner", "renderDecorators", "renderPremium"]},
+		"MemberListItem": {"strings": ["ownerTooltipText", ".onClickPremiumGuildIcon", "Messages.GUILD_OWNER"]},
 		"Mention": {"strings": [".iconType", ".color,", "),backgroundColor:"]},
 		"Menu": {"strings": ["\"empty\"", "getItemProps", "isUsingKeyboardNavigation"]},
 		"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo", ".buttonContainer"]},
