@@ -232,7 +232,8 @@ html {
 		5.	MEMBERLIST
 		6.	CALL
 	5.	PEOPLES
-		1.	FAMILY CENTER
+		1.	SHOP
+		2.	FAMILY CENTER
 	6.	STORE/NITRO
 		1.	BIRTHDAY PAGE
 	7.	LIBRARY
@@ -1627,7 +1628,13 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-secondary-alt);
 }
 
-/* ----		5.1.	FAMILY CENTER					---- */
+/* ----		5.1.	SHOP							---- */
+
+#app-mount .shop-3sIaH8 {
+	background: var(--background-primary);
+}
+
+/* ----		5.2.	FAMILY CENTER					---- */
 
 .contentPanel-2uDEUG::-webkit-scrollbar {
 	width: 16px;
