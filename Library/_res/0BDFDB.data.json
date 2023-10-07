@@ -362,7 +362,6 @@
 		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"], "funcStrings": ["impressionName"]},
 		"PrivateChannelItems": {"strings": ["getRecipientId", "LEAVE_GROUP_DM_MANAGED_BODY"], "exported": false, "value": "exports", "map": {
 			"DirectMessage": ["getUser", "getRecipientId"],
-			"GroupDM": [".getGuildId", "selected:n,muted"],
 			"LinkButton": [".apply(this"]
 		}},
 		"Scrollers": {"strings": ["().thin", "().none", "().auto", "().fade)}"], "exported": false, "value": "exports"},
