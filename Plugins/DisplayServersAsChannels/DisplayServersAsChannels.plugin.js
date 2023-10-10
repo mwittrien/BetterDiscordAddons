@@ -497,6 +497,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder}[data-folder-name]::after {
 						content: attr(data-folder-name);
+						color: var(--text-normal);
 						display: flex;
 						justify-content: flex-start;
 						align-items: center;
