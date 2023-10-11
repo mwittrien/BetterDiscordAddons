@@ -91,8 +91,7 @@ module.exports = (_ => {
 						"PrivateChannelsList"
 					],
 					componentDidMount: [
-						"DirectMessage",
-						"PrivateChannel"
+						"DirectMessage"
 					],
 					componentWillUnmount: [
 						"DirectMessage"
@@ -610,65 +609,6 @@ module.exports = (_ => {
 				if (!e.instance.props.channel || this.getPredefinedCategory(e.instance.props.channel.id)) return;
 				let category = this.getChannelListCategory(e.instance.props.channel.id);
 				if (!category) return;
-				if (e.node) {
-					BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsdmchannelpinned);
-					e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
-					if (this.settings.recentOrder.channelList) return;
-					e.node.setAttribute("draggable", false);
-					e.node.PinDMsMouseDownListener = event => {
-						if (!this.started) e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
-						else {
-							event = event.nativeEvent || event;
-							let mouseMove = event2 => {
-								if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
-									BDFDB.ListenerUtils.stopEvent(event);
-									draggedChannel = e.instance.props.channel.id;
-									this.updateContainer("channelList");
-									let dragPreview = this.createDragPreview(e.node, event2);
-									document.removeEventListener("mousemove", mouseMove);
-									document.removeEventListener("mouseup", mouseUp);
-									let dragging = event3 => {
-										this.updateDragPreview(dragPreview, event3);
-										let maybeHoveredChannel = null;
-										let categoryNode = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event3.target);
-										if (categoryNode) {
-											let hoveredCategoryId = categoryNode.getAttribute("categoryid");
-											if (hoveredCategoryId && hoveredCategoryId == category.id) maybeHoveredChannel = "header_" + category.id;
-										}
-										else {
-											let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelplaceholder, event3.target);
-											maybeHoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
-											let maybeHoveredCategory = maybeHoveredChannel && this.getChannelListCategory(maybeHoveredChannel);
-											if (!maybeHoveredCategory || maybeHoveredCategory.id != category.id) maybeHoveredChannel = null;
-										};
-										let update = maybeHoveredChannel != hoveredChannel;
-										if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
-										else hoveredChannel = null; 
-										if (update) this.updateContainer("channelList");
-									};
-									let releasing = event3 => {
-										BDFDB.DOMUtils.remove(dragPreview);
-										if (hoveredChannel) releasedChannel = hoveredChannel;
-										else draggedChannel = null;
-										hoveredChannel = null;
-										this.updateContainer("channelList");
-										document.removeEventListener("mousemove", dragging);
-										document.removeEventListener("mouseup", releasing);
-									};
-									document.addEventListener("mousemove", dragging);
-									document.addEventListener("mouseup", releasing);
-								}
-							};
-							let mouseUp = _ => {
-								document.removeEventListener("mousemove", mouseMove);
-								document.removeEventListener("mouseup", mouseUp);
-							};
-							document.addEventListener("mousemove", mouseMove);
-							document.addEventListener("mouseup", mouseUp);
-						}
-					};
-					e.node.addEventListener("mousedown", e.node.PinDMsMouseDownListener);
-				}
 				if (e.returnvalue) {
 					let process = returnvalue => {
 						let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "CloseButton"});
