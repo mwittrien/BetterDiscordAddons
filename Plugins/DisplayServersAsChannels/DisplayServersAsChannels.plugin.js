@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.0
+ * @version 1.7.1
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -435,6 +435,13 @@ module.exports = (_ => {
 						font-weight: 500;
 						padding-top: 1px;
 						overflow: hidden;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN._displayserversaschannelsname} ~ img {
+						height: 130%;
+						width: unset;
+						object-fit: cover;
+						margin-right: calc(-12% + 12px);
+						-webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,1) 15%, rgba(0,0,0,1));
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS._displayserversaschannelsmuted + BDFDB.dotCN._displayserversaschannelsname} {
 						opacity: 0.6;
