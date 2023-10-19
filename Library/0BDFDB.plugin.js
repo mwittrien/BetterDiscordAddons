@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.7
+ * @version 3.3.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -175,8 +175,9 @@ module.exports = (_ => {
 					if (config && config.form && typeof config.form == "object") {
 						let query = Object.entries(config.form).map(n => n[0] + "=" + n[1]).join("&");
 						if (query) {
-							if (uIndex == 0) args[0] += `?${query}`;
-							else if (uIndex == 1) args[1].url += `?${query}`;
+							url += `?${query}`;
+							if (uIndex == 0) args[0] += url;
+							else if (uIndex == 1) args[1].url += url;
 						}
 					}
 					if (config && !isNaN(parseInt(config.timeout)) && config.timeout > 0) timeout = config.timeout;
@@ -201,28 +202,29 @@ module.exports = (_ => {
 					};
 					let requestError = false;
 					try {Buffer} catch (err) {requestError = true;}
-					if (!requestError) return request(...args);
+					if (!requestError || !request) return request(...args);
 					else {
 						let xhttp = new XMLHttpRequest();
-						xhttp.onreadystatechange = event => {
-							if (event && event.currentTarget && event.currentTarget.readyState == 4) {
+						xhttp.onreadystatechange = _ => {
+							if (xhttp && xhttp.readyState == 4) {
 								BDFDB.TimeUtils.clear(timeoutObj);
-								let headers = {}, headersArray = (event.currentTarget.getAllResponseHeaders && event.currentTarget.getAllResponseHeaders() || "").split("\r\n").map(n => n.split(":")).filter(n => n);
+								let headers = {}, headersArray = (xhttp.getAllResponseHeaders && xhttp.getAllResponseHeaders() || "").split("\r\n").map(n => n.split(":")).filter(n => n);
 								if (headersArray && headersArray.length > 1) for (let entry of headersArray) if (entry[0] != undefined && entry[1] != undefined) headers[entry[0]] = entry[1].trim();
-								callback(event.currentTarget.status != 200 ? new Error(`XML Request Failed`) : null, {
+								callback(xhttp.status != 200 ? new Error(`XML Request Failed`) : null, {
 									aborted: false,
 									complete: true,
 									end: undefined,
 									headers: {},
 									method: config && config.method || "get",
 									rawHeaders: [],
-									statusCode: event.currentTarget.status,
+									statusCode: xhttp.status,
 									statusMessage: "OK",
-									url: event.currentTarget.responseURL
-								}, event.currentTarget.status != 200 ? null : event.currentTarget.response);
+									url: xhttp.responseURL
+								}, xhttp.status != 200 ? null : xhttp.response);
 							}
 						};
 						xhttp.open((config && config.method || "get").toUpperCase(), url, true);
+						if (config && config.headers) for (let key in config.headers) if (key != "user-agent") xhttp.setRequestHeader(key, config.headers[key]);
 						xhttp.send();
 					}
 				}
