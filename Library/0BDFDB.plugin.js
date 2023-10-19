@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.7
+ * @version 3.3.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -199,32 +199,7 @@ module.exports = (_ => {
 						BDFDB.TimeUtils.clear(timeoutObj);
 						if (!killed) callback(...args2);
 					};
-					let requestError = false;
-					try {Buffer} catch (err) {requestError = true;}
-					if (!requestError) return request(...args);
-					else {
-						let xhttp = new XMLHttpRequest();
-						xhttp.onreadystatechange = event => {
-							if (event && event.currentTarget && event.currentTarget.readyState == 4) {
-								console.log("yes");
-								let headers = {}, headersArray = (event.currentTarget.getAllResponseHeaders && event.currentTarget.getAllResponseHeaders() || "").split("\r\n").map(n => n.split(":")).filter(n => n);
-								if (headersArray && headersArray.length > 1) for (let entry of headersArray) if (entry[0] != undefined && entry[1] != undefined) headers[entry[0]] = entry[1].trim();
-								callback(event.currentTarget.status != 200 ? new Error(`XML Request Failed`) : null, {
-									aborted: false,
-									complete: true,
-									end: undefined,
-									headers: {},
-									method: config && config.method || "get",
-									rawHeaders: [],
-									statusCode: event.currentTarget.status,
-									statusMessage: "OK",
-									url: event.currentTarget.responseURL
-								}, event.currentTarget.status != 200 ? null : event.currentTarget.response);
-							}
-						};
-						xhttp.open((config && config.method || "get").toUpperCase(), url, true);
-						xhttp.send();
-					}
+					return request(...args);
 				}
 			};
 
