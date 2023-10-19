@@ -1,6 +1,9 @@
 ﻿.supporter-Z3FfwL.hasBadge-4rT8_u {
 	overflow: visible;
 }
+.member-2gU6Ar .supporter-Z3FfwL.hasBadge-4rT8_u {
+	position: relative;
+}
 .dev-A7f2Rx::before,
 .supporter-Z3FfwL::before {
 	display: none !important;
