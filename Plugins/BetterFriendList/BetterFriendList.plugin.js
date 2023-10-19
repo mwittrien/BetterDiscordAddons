@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.4
+ * @version 1.5.5
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -219,7 +219,7 @@ module.exports = (_ => {
 			}
 			
 			processTabBar (e) {
-				if (e.instance.props.children && e.instance.props.children.some(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
+				if (e.instance.props.children && e.instance.props.children.some(c => c && c.props && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
 					currentSection = e.instance.props.selectedItem;
 					isFavoritesSelected = currentSection == favorizedFriendsSection;
 					isHiddenSelected = currentSection == hiddenFriendsSection;
