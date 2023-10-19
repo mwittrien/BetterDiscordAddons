@@ -206,6 +206,7 @@ module.exports = (_ => {
 						let xhttp = new XMLHttpRequest();
 						xhttp.onreadystatechange = event => {
 							if (event && event.currentTarget && event.currentTarget.readyState == 4) {
+								BDFDB.TimeUtils.clear(timeoutObj);
 								let headers = {}, headersArray = (event.currentTarget.getAllResponseHeaders && event.currentTarget.getAllResponseHeaders() || "").split("\r\n").map(n => n.split(":")).filter(n => n);
 								if (headersArray && headersArray.length > 1) for (let entry of headersArray) if (entry[0] != undefined && entry[1] != undefined) headers[entry[0]] = entry[1].trim();
 								callback(event.currentTarget.status != 200 ? new Error(`XML Request Failed`) : null, {
@@ -8017,7 +8018,6 @@ module.exports = (_ => {
 				
 				if (InternalData.LibraryComponents.Scrollers && Internal.LibraryComponents.Scrollers) {
 					InternalData.LibraryComponents.Scrollers._originalModule = Internal.LibraryComponents.Scrollers;
-					let originalModule = InternalData.LibraryComponents.Scrollers._originalModule;
 					InternalData.LibraryComponents.Scrollers._mappedItems = {};
 					for (let type of Object.keys(Internal.LibraryComponents.Scrollers)) if (Internal.LibraryComponents.Scrollers[type] && typeof Internal.LibraryComponents.Scrollers[type].render == "function") {
 						let scroller = BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Scrollers[type].render, {});
@@ -8031,10 +8031,10 @@ module.exports = (_ => {
 							if (mappedType) InternalData.LibraryComponents.Scrollers._mappedItems[mappedType] = type;
 						}
 					}
-					Internal.LibraryComponents.Scrollers = new Proxy(Object.assign({}, originalModule), {
+					Internal.LibraryComponents.Scrollers = new Proxy(Object.assign({}, InternalData.LibraryComponents.Scrollers._originalModule), {
 						get: function (_, item) {
-							if (originalModule[item]) return originalModule[item];
-							if (InternalData.LibraryComponents.Scrollers._mappedItems[item]) return originalModule[InternalData.LibraryComponents.Scrollers._mappedItems[item]];
+							if (InternalData.LibraryComponents.Scrollers._originalModule[item]) return InternalData.LibraryComponents.Scrollers._originalModule[item];
+							if (InternalData.LibraryComponents.Scrollers._mappedItems[item]) return InternalData.LibraryComponents.Scrollers._originalModule[InternalData.LibraryComponents.Scrollers._mappedItems[item]];
 							return "div";
 						}
 					});
