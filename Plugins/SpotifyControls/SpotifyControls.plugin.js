@@ -85,26 +85,26 @@ module.exports = (_ => {
 							method = "get";
 							break;
 					};
-					BDFDB.LibraryRequires.request(`https://api.spotify.com/v1/me/player${type ? "/" + type : ""}`, {method: method, form: Object.assign({device_id: device.id}, data), headers: {authorization: `Bearer ${socket.accessToken}`}}, (error, response, result) => {
-						if (response && response.statusCode == 401) {
-							BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
-								let newSocketDevice = BDFDB.LibraryStores.SpotifyStore.getActiveSocketAndDevice();
-								this.request(newSocketDevice.socket, newSocketDevice.device, type, data).then(_ => {
-									try {callback(JSON.parse(result));}
-									catch (err) {callback({});}
+					BdApi.Net.fetch(`https://api.spotify.com/v1/me/player${type ? "/" + type : ""}`, {method: method, form: Object.assign({device_id: device.id}, data), headers: {authorization: `Bearer ${socket.accessToken}`}}).then(response => {
+						response.json().then(result => {
+							if (response && response.status == 401) {
+								BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
+									let newSocketDevice = BDFDB.LibraryStores.SpotifyStore.getActiveSocketAndDevice();
+									this.request(newSocketDevice.socket, newSocketDevice.device, type, data).then(_ => {
+										try {callback(JSON.parse(result));}
+										catch (err) {callback({});}
+									});
 								});
-							});
-						}
-						else if (response && response.statusCode == 404) {
-							this.props.noDevice = true;
-							BDFDB.NotificationUtils.toast(_this.labels.nodevice_text, {type: "danger", timeout: 60000});
-							lastSong = null;
-							callback({});
-						}
-						else {
-							try {callback(JSON.parse(result));}
-							catch (err) {callback({});}
-						}
+							} else if (response && response.status == 404) {
+								this.props.noDevice = true;
+								BDFDB.NotificationUtils.toast(_this.labels.nodevice_text, {type: "danger", timeout: 60000});
+								lastSong = null;
+								callback({});
+							} else {
+								try {callback(JSON.parse(result));}
+								catch (err) {callback({});}
+							}
+						})
 					});
 				});
 			}
