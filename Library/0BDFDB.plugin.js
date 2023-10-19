@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.6
+ * @version 3.3.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -199,7 +199,31 @@ module.exports = (_ => {
 						BDFDB.TimeUtils.clear(timeoutObj);
 						if (!killed) callback(...args2);
 					};
-					return request(...args);
+					let requestError = false;
+					try {Buffer} catch (err) {requestError = true;}
+					if (!requestError) return request(...args);
+					else {
+						let xhttp = new XMLHttpRequest();
+						xhttp.onreadystatechange = event => {
+							if (event && event.currentTarget && event.currentTarget.readyState == 4) {
+								let headers = {}, headersArray = (event.currentTarget.getAllResponseHeaders && event.currentTarget.getAllResponseHeaders() || "").split("\r\n").map(n => n.split(":")).filter(n => n);
+								if (headersArray && headersArray.length > 1) for (let entry of headersArray) if (entry[0] != undefined && entry[1] != undefined) headers[entry[0]] = entry[1].trim();
+								callback(event.currentTarget.status != 200 ? new Error(`XML Request Failed`) : null, {
+									aborted: false,
+									complete: true,
+									end: undefined,
+									headers: {},
+									method: config && config.method || "get",
+									rawHeaders: [],
+									statusCode: event.currentTarget.status,
+									statusMessage: "OK",
+									url: event.currentTarget.responseURL
+								}, event.currentTarget.status != 200 ? null : event.currentTarget.response);
+							}
+						};
+						xhttp.open((config && config.method || "get").toUpperCase(), url, true);
+						xhttp.send();
+					}
 				}
 			};
 
@@ -7993,6 +8017,7 @@ module.exports = (_ => {
 				
 				if (InternalData.LibraryComponents.Scrollers && Internal.LibraryComponents.Scrollers) {
 					InternalData.LibraryComponents.Scrollers._originalModule = Internal.LibraryComponents.Scrollers;
+					let originalModule = InternalData.LibraryComponents.Scrollers._originalModule;
 					InternalData.LibraryComponents.Scrollers._mappedItems = {};
 					for (let type of Object.keys(Internal.LibraryComponents.Scrollers)) if (Internal.LibraryComponents.Scrollers[type] && typeof Internal.LibraryComponents.Scrollers[type].render == "function") {
 						let scroller = BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Scrollers[type].render, {});
@@ -8006,10 +8031,10 @@ module.exports = (_ => {
 							if (mappedType) InternalData.LibraryComponents.Scrollers._mappedItems[mappedType] = type;
 						}
 					}
-					Internal.LibraryComponents.Scrollers = new Proxy(Object.assign({}, InternalData.LibraryComponents.Scrollers._originalModule), {
+					Internal.LibraryComponents.Scrollers = new Proxy(Object.assign({}, originalModule), {
 						get: function (_, item) {
-							if (InternalData.LibraryComponents.Scrollers._originalModule[item]) return InternalData.LibraryComponents.Scrollers._originalModule[item];
-							if (InternalData.LibraryComponents.Scrollers._mappedItems[item]) return InternalData.LibraryComponents.Scrollers._originalModule[InternalData.LibraryComponents.Scrollers._mappedItems[item]];
+							if (originalModule[item]) return originalModule[item];
+							if (InternalData.LibraryComponents.Scrollers._mappedItems[item]) return originalModule[InternalData.LibraryComponents.Scrollers._mappedItems[item]];
 							return "div";
 						}
 					});
@@ -8089,20 +8114,17 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
+						"MemberListItem",
 						"UseCopyIdItem",
 						"UserPopoutAvatar"
 					],
 					componentDidMount: [
 						"Account",
-						"AnalyticsContext",
-						"MemberListItem",
-						"PrivateChannel"
+						"AnalyticsContext"
 					],
 					componentDidUpdate: [
 						"Account",
-						"AnalyticsContext",
-						"MemberListItem",
-						"PrivateChannel"
+						"AnalyticsContext"
 					]
 				};
 
@@ -8288,7 +8310,7 @@ module.exports = (_ => {
 					if (e.instance.props.emojiDescriptors && Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) for (let i in e.instance.props.emojiDescriptors) e.instance.props.emojiDescriptors[i] = Object.assign({}, e.instance.props.emojiDescriptors[i], {isDisabled: false});
 				};
 				Internal.processMemberListItem = function (e) {
-					Internal._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
+					e.returnvalue.props.avatar = Internal._processAvatarRender(e.instance.props.user, e.returnvalue.props.avatar) || e.returnvalue.props.avatar;
 				};
 				Internal.processMenu = function (e) {
 					if (e.instance.props && (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length)) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
@@ -8306,9 +8328,6 @@ module.exports = (_ => {
 							}, "Error in Avatar Render of MessageHeader!");
 						}
 					}
-				};
-				Internal.processPrivateChannel = function (e) {
-					Internal._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 				};
 				Internal.processSearchBar = function (e) {
 					if (typeof e.instance.props.query != "string") e.instance.props.query = "";
