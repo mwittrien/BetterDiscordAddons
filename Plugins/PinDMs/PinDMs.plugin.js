@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.2
+ * @version 2.0.3
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -762,7 +762,7 @@ module.exports = (_ => {
 				if (dms.length > 1 && this.settings.recentOrder[type]) {
 					let timestamps = BDFDB.LibraryStores.PrivateChannelSortStore.getPrivateChannelIds().reduce((newObj, channelId) => (newObj[channelId] = BDFDB.LibraryStores.ReadStateStore.lastMessageId(channelId), newObj), {});
 					return [].concat(dms).sort(function (x, y) {
-						const xT = parseFloat(timestamps[x]), yT = parseFloat(timestamps[y]);
+						const xT = !timestamps[x] ? 0 : parseFloat(timestamps[x]), yT = !timestamps[y] ? 0 : parseFloat(timestamps[y]);
 						return xT > yT ? -1 : xT < yT ? 1 : 0;
 					});
 				}
