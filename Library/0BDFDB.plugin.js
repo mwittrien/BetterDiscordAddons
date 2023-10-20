@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.3.8
+ * @version 3.3.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -15,7 +15,7 @@
 module.exports = (_ => {
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
 	
-	const request = require("request"), fs = require("fs"), path = require("path");
+	const fs = require("fs"), path = require("path");
 	
 	var BDFDB, Internal;
 	var LibraryRequires = {};
@@ -172,15 +172,13 @@ module.exports = (_ => {
 				else {
 					let config = args[0] && typeof args[0] == "object" ? args[0] : (args[1] && typeof args[1] == "object" && args[1]);
 					let timeout = 600000;
+					if (config && config.url) delete config.url;
 					if (config && config.form && typeof config.form == "object") {
 						let query = Object.entries(config.form).map(n => n[0] + "=" + n[1]).join("&");
-						if (query) {
-							url += `?${query}`;
-							if (uIndex == 0) args[0] += url;
-							else if (uIndex == 1) args[1].url += url;
-						}
+						if (query) url += `?${query}`;
 					}
 					if (config && !isNaN(parseInt(config.timeout)) && config.timeout > 0) timeout = config.timeout;
+					if (config && config.method) config.method = config.method.toUpperCase();
 					let killed = false, timeoutObj = BDFDB.TimeUtils.timeout(_ => {
 						killed = true;
 						BDFDB.TimeUtils.clear(timeoutObj);
@@ -196,37 +194,15 @@ module.exports = (_ => {
 							url: ""
 						}, null);
 					}, timeout);
-					args[cIndex] = (...args2) => {
+					let response = null;
+					return (config && config.bdVersion && BdApi && BdApi.Net && BdApi.Net.fetch ? BdApi.Net.fetch : fetch)(url, Object.assign({}, config, {timeout: 60000})).then(r => {
+						response = r;
+						response.statusCode = response.status;
 						BDFDB.TimeUtils.clear(timeoutObj);
-						if (!killed) callback(...args2);
-					};
-					let requestError = false;
-					try {Buffer} catch (err) {requestError = true;}
-					if (!requestError || !request) return request(...args);
-					else {
-						let xhttp = new XMLHttpRequest();
-						xhttp.onreadystatechange = _ => {
-							if (xhttp && xhttp.readyState == 4) {
-								BDFDB.TimeUtils.clear(timeoutObj);
-								let headers = {}, headersArray = (xhttp.getAllResponseHeaders && xhttp.getAllResponseHeaders() || "").split("\r\n").map(n => n.split(":")).filter(n => n);
-								if (headersArray && headersArray.length > 1) for (let entry of headersArray) if (entry[0] != undefined && entry[1] != undefined) headers[entry[0]] = entry[1].trim();
-								callback(xhttp.status != 200 ? new Error(`XML Request Failed`) : null, {
-									aborted: false,
-									complete: true,
-									end: undefined,
-									headers: {},
-									method: config && config.method || "get",
-									rawHeaders: [],
-									statusCode: xhttp.status,
-									statusMessage: "OK",
-									url: xhttp.responseURL
-								}, xhttp.status != 200 ? null : xhttp.response);
-							}
-						};
-						xhttp.open((config && config.method || "get").toUpperCase(), url, true);
-						if (config && config.headers) for (let key in config.headers) if (key != "user-agent") xhttp.setRequestHeader(key, config.headers[key]);
-						xhttp.send();
-					}
+						return response.text();
+					}).then(body => {
+						if (!killed) callback(response.status != 200 ? new Error(response.statusText || "Fetch Failed") : null, response, body);
+					});
 				}
 			};
 
@@ -1139,7 +1115,7 @@ module.exports = (_ => {
 				return {backup: fs.existsSync(path) && (fs.readFileSync(path) || "").toString(), hashIsSame: libHashes[fileName] && oldLibHashes[fileName] && libHashes[fileName] == oldLibHashes[fileName]};
 			};
 			const requestLibraryHashes = tryAgain => {
-				requestFunction("https://api.github.com/repos/mwittrien/BetterDiscordAddons/contents/Library/_res/", {headers: {"user-agent": "node.js"}, timeout: 60000}, (e, r, b) => {
+				requestFunction("https://api.github.com/repos/mwittrien/BetterDiscordAddons/contents/Library/_res/", {timeout: 60000}, (e, r, b) => {
 					if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryHashes(), 10000);
 					else {
 						try {

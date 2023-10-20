@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.1
+ * @version 2.5.2
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -492,7 +492,7 @@ module.exports = (_ => {
 																loadingToast.close();
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
 															}
-															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), Buffer.from(buffer).toString(), error2 => {
+															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), (new TextDecoder()).decode(buffer), error2 => {
 																delete this.props.downloading;
 																loadingToast.close();
 																if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
@@ -761,7 +761,7 @@ module.exports = (_ => {
 						BDFDB.DiscordUtils.requestFileData(plugin.rawSourceUrl, (error, buffer) => {
 							if (error || !buffer) plugin.failed = true;
 							else {
-								let body = Buffer.from(buffer).toString();
+								let body = (new TextDecoder()).decode(buffer);
 								if (body && body.indexOf("404: Not Found") != 0) {
 									const META = body.split("*/")[0];
 									plugin.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.name || "");
@@ -787,7 +787,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", {bdVersion: true}, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) try {
 						grabbedPlugins = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
 						BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(grabbedPlugins.map(n => n.id)).join(" "), this, "cached");
@@ -851,7 +851,7 @@ module.exports = (_ => {
 			}
 
 			checkForNewPlugins () {
-				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", {bdVersion: true}, (error, response, body) => {
 					if (!error && body) try {
 						if (JSON.parse(body).filter(n => n).length != grabbedPlugins.length) {
 							loading = {is: false, timeout: null, amount: 0};

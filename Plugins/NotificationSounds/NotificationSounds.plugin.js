@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.2
+ * @version 3.8.3
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -437,7 +437,7 @@ module.exports = (_ => {
 												});
 												else BDFDB.LibraryRequires.fs.readFile(source, "", (error, buffer) => {
 													if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists", {type: "danger"});
-													else return successSavedAudio({category, sound, source: `data:audio/mpeg;base64,${Buffer.from(buffer).toString("base64")}`});
+													else return successSavedAudio({category, sound, source: `data:audio/mpeg;base64,${btoa((new TextDecoder()).decode(buffer))}`});
 												});
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.SAVE
