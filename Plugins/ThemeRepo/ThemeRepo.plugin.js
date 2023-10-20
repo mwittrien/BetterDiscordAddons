@@ -968,7 +968,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/themes", {bdVersion: true}, (error, response, body) => {
+				BDFDB.TimeUtils.timeout(_ => BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/themes", {bdVersion: true}, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) try {
 						grabbedThemes = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
 						
@@ -1001,7 +1001,7 @@ module.exports = (_ => {
 					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Theme Store", {type: "danger"});}
 					if (response && response.statusCode == 403) BDFDB.NotificationUtils.toast("Failed to fetch Theme Store from the Website Api due to DDoS Protection", {type: "danger"});
 					else if (response && response.statusCode == 404) BDFDB.NotificationUtils.toast("Failed to fetch Theme Store from the Website Api due to Connection Issue", {type: "danger"});
-				});
+				}), 10000);
 			}
 
 			getLoadingTooltipText () {

@@ -787,7 +787,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", {bdVersion: true}, (error, response, body) => {
+				BDFDB.TimeUtils.timeout(_ => BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", {bdVersion: true}, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) try {
 						grabbedPlugins = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
 						BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(grabbedPlugins.map(n => n.id)).join(" "), this, "cached");
@@ -819,7 +819,7 @@ module.exports = (_ => {
 					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Plugin Store", {type: "danger"});}
 					if (response && response.statusCode == 403) BDFDB.NotificationUtils.toast("Failed to fetch Plugin Store from the Website Api due to DDoS Protection", {type: "danger"});
 					else if (response && response.statusCode == 404) BDFDB.NotificationUtils.toast("Failed to fetch Plugin Store from the Website Api due to Connection Issue", {type: "danger"});
-				});
+				}), 10000);
 			}
 
 			getLoadingTooltipText () {
