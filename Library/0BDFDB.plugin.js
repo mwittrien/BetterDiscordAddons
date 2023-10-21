@@ -6169,7 +6169,7 @@ module.exports = (_ => {
 									onChange: e => {
 										let file = e.currentTarget.files[0];
 										if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
-											this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data:${file.type};base64,${Buffer.from(Internal.LibraryRequires.fs.readFileSync(file.path, "")).toString("base64")}`}${this.props.mode ? "')" : ""}`;
+											this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data:${file.type};base64,${btoa((new TextDecoder()).decode(Internal.LibraryRequires.fs.readFileSync(file.path, "")))}`}${this.props.mode ? "')" : ""}`;
 											BDFDB.ReactUtils.forceUpdate(this.refInput);
 											this.refInput.handleChange(this.refInput.props.value);
 										}
