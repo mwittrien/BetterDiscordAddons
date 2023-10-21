@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.1
+ * @version 2.5.2
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -638,7 +638,7 @@ module.exports = (_ => {
 																loadingToast.close();
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Theme "${this.props.data.name}"`), {type: "danger"});
 															}
-															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), (new TextDecoder()).decode(buffer), autoloadKey).then(error2 => {
+															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), BDFDB.DiscordUtils.bufferToString(buffer), autoloadKey).then(error2 => {
 																delete this.props.downloading;
 																loadingToast.close();
 																if (!error2) {
@@ -886,7 +886,7 @@ module.exports = (_ => {
 							}
 							
 							BDFDB.DiscordUtils.requestFileData("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/GeneratorList.txt", (error, buffer) => {
-								let body = !error && buffer && (new TextDecoder()).decode(buffer);
+								let body = !error && buffer && BDFDB.DiscordUtils.bufferToString(buffer);
 								if (body) for (let id of body.replace(/[\r\t]/g, "").split(" ").map(n => parseInt(n)).filter(n => n != null)) {
 									let theme = grabbedThemes.find(t => t.id == id);
 									if (theme) generatorThemes.push(theme);
@@ -894,7 +894,7 @@ module.exports = (_ => {
 							});
 							
 							BDFDB.DiscordUtils.requestFileData(document.querySelector("head link[rel='stylesheet'][integrity]").href, (error, buffer) => {
-								let nativeCSS = !error && buffer && (new TextDecoder()).decode(buffer);
+								let nativeCSS = !error && buffer && BDFDB.DiscordUtils.bufferToString(buffer);
 								if (nativeCSS) {
 									let theme = BDFDB.DiscordUtils.getTheme();
 									let vars = (nativeCSS.split(`.${theme}{`)[1] || "").split("}")[0];
@@ -922,7 +922,7 @@ module.exports = (_ => {
 						BDFDB.DiscordUtils.requestFileData(theme.rawSourceUrl, (error, buffer) => {
 							if (error || !buffer) theme.failed = true;
 							else {
-								let body = (new TextDecoder()).decode(buffer);
+								let body = BDFDB.DiscordUtils.bufferToString(buffer);
 								if (body && body.indexOf("404: Not Found") != 0) {
 									const META = body.split("*/")[0];
 									theme.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || theme.name || "");

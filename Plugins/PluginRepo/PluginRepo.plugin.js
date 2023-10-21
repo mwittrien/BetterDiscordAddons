@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.2
+ * @version 2.5.3
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -492,7 +492,7 @@ module.exports = (_ => {
 																loadingToast.close();
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
 															}
-															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), (new TextDecoder()).decode(buffer), error2 => {
+															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), BDFDB.DiscordUtils.bufferToString(buffer), error2 => {
 																delete this.props.downloading;
 																loadingToast.close();
 																if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
@@ -761,7 +761,7 @@ module.exports = (_ => {
 						BDFDB.DiscordUtils.requestFileData(plugin.rawSourceUrl, (error, buffer) => {
 							if (error || !buffer) plugin.failed = true;
 							else {
-								let body = (new TextDecoder()).decode(buffer);
+								let body = BDFDB.DiscordUtils.bufferToString(buffer);
 								if (body && body.indexOf("404: Not Found") != 0) {
 									const META = body.split("*/")[0];
 									plugin.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.name || "");

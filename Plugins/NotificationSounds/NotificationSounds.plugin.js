@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.3
+ * @version 3.8.4
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -424,7 +424,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 											style: {marginBottom: 1},
 											onClick: _ => {
-												for (let input of settingsPanel.props._node.querySelectorAll(".input-newsound " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new sound", {type: "danger"});
+												for (let input of settingsPanel.props._node.querySelectorAll(".input-newsound " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all Fields to add a new Sound", {type: "danger"});
 												let category = settingsPanel.props._node.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
 												let sound = settingsPanel.props._node.querySelector(".input-sound " + BDFDB.dotCN.input).value.trim();
 												let source = settingsPanel.props._node.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
@@ -436,8 +436,8 @@ module.exports = (_ => {
 													BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
 												});
 												else BDFDB.LibraryRequires.fs.readFile(source, "", (error, buffer) => {
-													if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists", {type: "danger"});
-													else return successSavedAudio({category, sound, source: `data:audio/mpeg;base64,${btoa((new TextDecoder()).decode(buffer))}`});
+													if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type: "danger"});
+													else return successSavedAudio({category, sound, source: `data:audio/mpeg;base64,${btoa(BDFDB.DiscordUtils.bufferToString(buffer))}`});
 												});
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.SAVE

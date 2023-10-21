@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.5
+ * @version 1.9.6
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -692,7 +692,7 @@ module.exports = (_ => {
 												});
 												else BDFDB.LibraryRequires.fs.readFile(source, "", (error, buffer) => {
 													if (error) BDFDB.NotificationUtils.toast("Could not fetch File, please make sure the File exists", {type: "danger"});
-													else successSavedAudio(key, source, `data:audio/mpeg;base64,${btoa((new TextDecoder()).decode(buffer))}`);
+													else successSavedAudio(key, source, `data:audio/mpeg;base64,${btoa(BDFDB.DiscordUtils.bufferToString(buffer))}`);
 												});
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.SAVE

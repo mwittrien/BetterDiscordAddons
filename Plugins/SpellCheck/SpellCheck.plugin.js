@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -365,7 +365,7 @@ module.exports = (_ => {
 					};
 					
 					if (this.settings.general.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, "", (error, buffer) => {
-						parse(error, buffer, (new TextDecoder()).decode(buffer), false);
+						parse(error, buffer, BDFDB.DiscordUtils.bufferToString(buffer), false);
 					});
 					else BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
 						parse(error, response, body, this.settings.general.downloadDictionary);
