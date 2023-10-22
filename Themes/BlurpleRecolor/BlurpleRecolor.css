@@ -2452,7 +2452,7 @@ a.metadataDownload-3IY84h {
 input.input-3O04eu {										/* textinput												*/
 	border: 1px solid var(--deprecated-text-input-border);
 }
-.input-3O04eu:hover {
+.input-3O04eu:not(.error-10GvqR):not(.success-1V4i3f):not(.focused-16iuXg):not(:focus):hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
 .input-3O04eu:not(.error-10GvqR):not(.success-1V4i3f).focused-16iuXg,
