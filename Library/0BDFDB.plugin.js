@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.4.0
+ * @version 3.4.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4328,6 +4328,7 @@ module.exports = (_ => {
 					getFileData(url).then(buffer => callback(null, buffer)).catch(error => callback(error, null));
 				};
 				BDFDB.DiscordUtils.bufferToString = function (u8a) {
+					u8a = new Uint8Array(u8a);
 					let CHUNK_SZ = 0x8000, c = [];
 					for (let i = 0; i < u8a.length; i += CHUNK_SZ) c.push(String.fromCharCode.apply(null, u8a.subarray(i, i + CHUNK_SZ)));
 					return c.join("");
