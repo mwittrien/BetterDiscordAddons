@@ -53,22 +53,22 @@
 	--settingsicons-logout: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/logout.svg);
 }
 
-body #app-mount .sidebarRegion-1VBisG:has(.socialLinks-3ywLUf) {
+body #app-mount .sidebarRegion__60457:has(.socialLinks_c1fc99) {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-body #app-mount .sidebar-nqHbhN:has(.socialLinks-3ywLUf),
-body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3ywLUf) {
+body #app-mount .sidebar__9e3e2:has(.socialLinks_c1fc99),
+body #app-mount .layer_e552e0 ~ .layer_e552e0 .sidebar__9e3e2:has(.socialLinks_c1fc99) {
 	width: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda {
 	display: flex;
 	align-items: center;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy > div {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda > div {
 	flex: 1 1 auto;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda::before {
 	content: "";
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * var(--settingsicons-size));
@@ -79,304 +79,304 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3
 	-webkit-mask: var(--settingsicons-default) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(2)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="my-account-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(2)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="my-account-tab" i]::before {
 	-webkit-mask: var(--settingsicons-myaccount) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(3)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="profile-customization-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(3)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="profile-customization-tab" i]::before {
 	-webkit-mask: var(--settingsicons-profile) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(4)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="privacy-&-safety-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(4)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="privacy-&-safety-tab" i]::before {
 	-webkit-mask: var(--settingsicons-privacy) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(5)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="family-center-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(5)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="family-center-tab" i]::before {
 	-webkit-mask: var(--settingsicons-family) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(6)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="authorized-apps-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(6)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="authorized-apps-tab" i]::before {
 	-webkit-mask: var(--settingsicons-apps) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(7)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="sessions-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(7)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="sessions-tab" i]::before {
 	-webkit-mask: var(--settingsicons-sessions) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(8)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="connections-tab" i]::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="passport-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(8)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="connections-tab" i]::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="passport-tab" i]::before {
 	-webkit-mask: var(--settingsicons-connections) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(9)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="friend-requests-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(9)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="friend-requests-tab" i]::before {
 	-webkit-mask: var(--settingsicons-friendrequests) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(12)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="discord-nitro-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(12)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="discord-nitro-tab" i]::before {
 	-webkit-mask: var(--settingsicons-nitro) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(13)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="nitro-server-boost-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(13)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="nitro-server-boost-tab" i]::before {
 	-webkit-mask: var(--settingsicons-boosts) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(14)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="subscriptions-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(14)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="subscriptions-tab" i]::before {
 	-webkit-mask: var(--settingsicons-subscriptions) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(15)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="library-inventory-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(15)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="library-inventory-tab" i]::before {
 	-webkit-mask: var(--settingsicons-gifts) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(16)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="billing-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(16)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="billing-tab" i]::before {
 	-webkit-mask: var(--settingsicons-billing) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(19)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="appearance-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(19)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="appearance-tab" i]::before {
 	-webkit-mask: var(--settingsicons-appearance) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(20)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="accessibility-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(20)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="accessibility-tab" i]::before {
 	-webkit-mask: var(--settingsicons-accessibility) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(21)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="voice-&-video-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(21)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="voice-&-video-tab" i]::before {
 	-webkit-mask: var(--settingsicons-voice) center/contain no-repeat;
 }
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="powermode-settings-tab" i]::before {
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="powermode-settings-tab" i]::before {
 	-webkit-mask: var(--settingsicons-powermode) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(22)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-&-images-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(22)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="text-&-images-tab" i]::before {
 	-webkit-mask: var(--settingsicons-text) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(23)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="notifications-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(23)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="notifications-tab" i]::before {
 	-webkit-mask: var(--settingsicons-notifications) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(24)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="keybinds-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(24)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="keybinds-tab" i]::before {
 	-webkit-mask: var(--settingsicons-keybinds) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(25)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="language-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(25)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="language-tab" i]::before {
 	-webkit-mask: var(--settingsicons-language) center/contain no-repeat;
 }
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="windows-tab" i]::before {
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(26)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="windows-tab" i]::before {
 	-webkit-mask: var(--settingsicons-windows) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(27)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="streamer-mode-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(26)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(27)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="streamer-mode-tab" i]::before {
 	-webkit-mask: var(--settingsicons-streamermode) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(27)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(28)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="advanced-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(27)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(28)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="advanced-tab" i]::before {
 	-webkit-mask: var(--settingsicons-advanced) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(30)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(38)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(39)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="activity-privacy-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(30)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(31)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(38)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(39)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="activity-privacy-tab" i]::before {
 	-webkit-mask: var(--settingsicons-activityprivacy) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(32)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(39)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(40)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="game-activity-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(31)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(32)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(39)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(40)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="game-activity-tab" i]::before {
 	-webkit-mask: var(--settingsicons-games) center/contain no-repeat;
 }
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(33)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(40)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(41)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="overlay-tab" i]::before {
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(33)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(40)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(41)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="overlay-tab" i]::before {
 	-webkit-mask: var(--settingsicons-overlay) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-settings-tab::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-settings-tab::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings::before {
 	-webkit-mask: var(--settingsicons-bd-settings) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-updates-tab::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-updater::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-updates-tab::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-updater::before {
 	-webkit-mask: var(--settingsicons-bd-changelog) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-customcss-tab::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-customcss-tab::before {
 	-webkit-mask: var(--settingsicons-bd-customcss) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-plugins-tab::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-plugins::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-plugins-tab::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-plugins::before {
 	-webkit-mask: var(--settingsicons-bd-plugins) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-themes-tab::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-themes::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-themes-tab::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-themes::before {
 	-webkit-mask: var(--settingsicons-bd-themes) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-cloud::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-cloud::before {
 	-webkit-mask: var(--settingsicons-vc-cloud) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-backup-restore::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-backup-restore::before {
 	-webkit-mask: var(--settingsicons-vc-backup-restore) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab::before {
 	-webkit-mask: var(--settingsicons-bd-pluginrepo) center/contain no-repeat !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab::before {
 	-webkit-mask: var(--settingsicons-bd-themerepo) center/contain no-repeat !important;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(40)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(43)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="changelog-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(40)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(41)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(41)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(42)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(42)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(42)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(43)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(43)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(43)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="changelog-tab" i]::before {
 	-webkit-mask: var(--settingsicons-changelog) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(44)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="merchandise-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(41)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(42)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(42)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(43)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(43)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(43)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(44)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(44)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="merchandise-tab" i]::before {
 	-webkit-mask: var(--settingsicons-merchandise) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(42)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(45)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hypesquad-online-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(42)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(43)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(43)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(44)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(44)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(45)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(45)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="hypesquad-online-tab" i]::before {
 	-webkit-mask: var(--settingsicons-hypesquad) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(43)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(46)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="experiments-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(43)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(44)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(45)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(45)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(46)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(46)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="experiments-tab" i]::before {
 	-webkit-mask: var(--settingsicons-experiments) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(44)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(47)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="developer-options-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(44)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(45)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(46)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(46)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(47)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(47)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="developer-options-tab" i]::before {
 	-webkit-mask: var(--settingsicons-developer) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(45)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(48)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hotspot-options-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(45)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(46)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(47)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(47)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(48)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(48)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="hotspot-options-tab" i]::before {
 	-webkit-mask: var(--settingsicons-hotspots) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(46)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(49)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="dismissible-content-options-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(46)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(47)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(48)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(48)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(49)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(49)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="dismissible-content-options-tab" i]::before {
 	-webkit-mask: var(--settingsicons-dismissable) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(47)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(51)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(50)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="payment-flow-modals-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(47)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(48)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(49)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(49)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(50)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(51)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(50)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="payment-flow-modals-tab" i]::before {
 	-webkit-mask: var(--settingsicons-paymentmodals) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(48)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(51)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(51)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(52)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(51)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-playground-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(48)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(49)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(50)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(50)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(51)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(51)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(52)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(51)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="text-playground-tab" i]::before {
 	-webkit-mask: var(--settingsicons-textplayground) center/contain no-repeat;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(49)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(51)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(51)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(51)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(52)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(52)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(53)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.vc-settings ~ .item-2GWPIy:nth-child(52)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-component-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(49)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(50)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(51)::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(51)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(51)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(52)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(52)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(53)::before,
+.platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(52)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="text-component-tab" i]::before {
 	-webkit-mask: var(--settingsicons-textcomponent) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-last-child(4)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="logout-tab" i]::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-last-child(4)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="logout-tab" i]::before {
 	-webkit-mask: var(--settingsicons-logout) center/contain no-repeat !important;
 }
 
-.bd-server-search ~ .item-2GWPIy::before {
+.bd-server-search ~ .item__48dda::before {
 	display: none;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy .icon-3FU6Ir,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .premiumLabel-3HPvdB > svg,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .premiumLabel-3HPvdB img,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .tabBarItemContainer-2HdIlr > svg,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .tabBarItemContainer-2HdIlr img {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda .icon-3FU6Ir,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .premiumLabel-3HPvdB > svg,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .premiumLabel-3HPvdB img,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .tabBarItemContainer-2HdIlr > svg,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .tabBarItemContainer-2HdIlr img {
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
 }
 

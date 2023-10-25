@@ -16,7 +16,7 @@
 	transition-property: inherit !important;
 	animation: inherit !important;
 }
-#app-mount .layer-86YKbF.stop-animations:first-child::after {
+#app-mount .layer_e552e0.stop-animations:first-child::after {
 	content: "" !important;
 	position: fixed !important;
 	background: rgb(0, 0, 0) !important;
@@ -31,7 +31,7 @@
 	pointer-events: none !important;
 }
 
-#app-mount .layer-86YKbF ~ .layer-86YKbF {
+#app-mount .layer_e552e0 ~ .layer_e552e0 {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -49,8 +49,8 @@
 	z-index: 1000 !important;
 	--settingsiconsadditionalsize: var(--use-settingsicons, 0) * (var(--settingsicons-size, 0px) + var(--settingsicons-gap, 0px));
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF > div,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .standardSidebarView-E9Pc3j {
+#app-mount .layer_e552e0 ~ .layer_e552e0 > div,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .standardSidebarView-E9Pc3j {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -59,42 +59,42 @@
 	padding: unset !important;
 	overflow: hidden !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebarRegion-1VBisG,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebarRegionScroller-FXiQOh {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .sidebarRegion__60457,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .sidebarRegionScroller-FXiQOh {
 	flex: 0 0 auto !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .sidebar__9e3e2 {
 	width: 218px !important;
 	padding: 20px 6px 20px 20px !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .contentColumnDefault-3eyv5o {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .contentColumnDefault-3eyv5o {
 	padding: 20px 40px !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .repo-k8F4Sd {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .repo-k8F4Sd {
 	max-width: calc(var(--settingsmodalwidth) - 226px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .repoHeader-2KfNvH {
 	padding-bottom: 0 !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH .tabBar-2StdUa {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .repoHeader-2KfNvH .tabBar-2StdUa {
 	gap: 30px !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH .quickSelectLabel-ArUyd9 {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .repoHeader-2KfNvH .quickSelectLabel-ArUyd9 {
 	font-size: 12px !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .repoScroller-9JnAPs {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .repoScroller-9JnAPs {
 	padding-top: 0 !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-3K3Z4C {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .sidebar-3K3Z4C {
 	height: var(--settingsmodalheight) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .standardSidebarView-E9Pc3j .editor {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .standardSidebarView-E9Pc3j .editor {
 	height: calc(var(--settingsmodalheight) - 120px) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V .tools-kIrEGr,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V .container-O54IuJ,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V .closeButton-PCZcma {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .toolsContainer-25FL6V,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .toolsContainer-25FL6V .tools-kIrEGr,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .toolsContainer-25FL6V .container-O54IuJ,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .toolsContainer-25FL6V .closeButton-PCZcma {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -112,49 +112,49 @@
 	opacity: 0 !important;
 	cursor: default !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .toolsContainer-25FL6V {
 	position: fixed !important;
 	top: 22px !important;
 	z-index: -1 !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .settingsToolbar-wu4yfQ {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .settingsToolbar-wu4yfQ {
 	display: none !important;
 }
 
-#app-mount .layer-86YKbF ~ .layer-86YKbF .accountProfileCard-lbN7n- {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .accountProfileCard-lbN7n- {
 	max-width: calc(var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm {
 	gap: 30px !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm .sectionsContainer-3BlPu4,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm .editor-328F1U,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm .sectionsContainer-3BlPu4,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm .editor-328F1U,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f {
 	min-width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .sectionsContainer-3BlPu4,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .editor-328F1U,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .preview-sMYs9f {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .sectionsContainer-3BlPu4,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .editor-328F1U,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .preview-sMYs9f {
 	min-width: calc((var(--settingsmodalwidth) - 344px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingsmodalwidth) - 344px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f .userPopoutOuter-1OHwPL {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f .userPopoutOuter-1OHwPL {
 	width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .preview-sMYs9f .userPopoutOuter-1OHwPL {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .preview-sMYs9f .userPopoutOuter-1OHwPL {
 	width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f .userPopoutOuter-1OHwPL,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .preview-sMYs9f .userPopoutOuter-1OHwPL {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f .userPopoutOuter-1OHwPL,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .baseLayout-1_9QRm.tryItOutLayout-2ypO8Z .preview-sMYs9f .userPopoutOuter-1OHwPL {
 	min-width: unset !important;
 	max-width: 340px !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f .userPopoutInner-nv9Y92 {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .profileCustomizationSection-53kreU .baseLayout-1_9QRm .preview-sMYs9f .userPopoutInner-nv9Y92 {
 	overflow: hidden !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .settingsContainer-36qZZ9,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .guildsSection-30CJxX {
+#app-mount .layer_e552e0 ~ .layer_e552e0 .settingsContainer-36qZZ9,
+#app-mount .layer_e552e0 ~ .layer_e552e0 .guildsSection-30CJxX {
 	max-width: calc(var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
 
