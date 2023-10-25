@@ -490,10 +490,6 @@
 	fill: var(--text-link);
 }
 
-.command-2rSEQ7 {											/* command				used command						*/
-	color: rgb(var(--accentcolor));
-}
-
 .icon_bc432e {												/* systemmessage		guild sub easter egg icon			*/
 	color: rgb(var(--accentcolor2));
 }
@@ -508,15 +504,12 @@
 	background-color: rgb(var(--accentcolor));
 	color: #fff;
 }
-.selectedVoid-3Kr388 {
-	background-color: rgb(var(--accentcolor));
-}
 
-.reactionMe-3I9gFK .reactionCount-1zkLcN,					/* reaction				count me							*/
-.reactionMe-3I9gFK:hover .reactionCount-1zkLcN {
+.reactionMe__98f57 .reactionCount_b49901,					/* reaction				count me							*/
+.reactionMe__98f57:hover .reactionCount_b49901 {
 	color: rgb(var(--accentcolor));
 }
-.reaction-2A2y9y.reactionMe-3I9gFK {						/* reaction				wrapper me							*/
+.reaction_fef95b.reactionMe__98f57 {						/* reaction				wrapper me							*/
 	background-color: rgba(var(--accentcolor), .3);
 }
 .reaction_fef95b:hover,										/* reaction				add react							*/

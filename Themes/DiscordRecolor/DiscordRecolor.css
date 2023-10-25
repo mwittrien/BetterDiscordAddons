@@ -1150,8 +1150,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .background_e80d5a .interactiveCard_d5a839,
 #app-mount .background_e80d5a .emptyStateContainer__3c229,
 #app-mount .background_e80d5a .card_d4f6c7,
-#app-mount .container-3wLKDe .mainCard-3KBsBI,
-#app-mount .container-3wLKDe .sidebarCard-1Gn1ch,
+#app-mount .container-3wLKDe .mainCard__8a660,
+#app-mount .container-3wLKDe .sidebarCard__44447,
 #app-mount .container__10dc7 .channelRow__96673 {
 	background-color: var(--background-secondary);
 }
@@ -1176,7 +1176,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .container__10dc7 .channelRow__96673:hover {
 	background: var(--background-tertiary);
 }
-#app-mount .textContentFooter-2JnNv8 {
+#app-mount .textContentFooter__5a630 {
 	background: linear-gradient(0deg, rgba(var(--backgroundsecondary), 1), rgba(var(--backgroundsecondary), .97) 36px, rgba(var(--backgroundsecondary), .4));
 }
 
