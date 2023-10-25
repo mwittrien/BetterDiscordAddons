@@ -59,7 +59,7 @@ body.folderContentIsOpen_zz6FgW .titleBar__01af6.typeMacOS__496b0 .macButtons__7
 	display: none;
 }
 .wrapper_a7e7a8 .listItem_fa7b36:first-child .listItemWrapper__1f93b,	/*	home	*/ 
-.wrapper_a7e7a8 .listItem_fa7b36 .pill-1eBbnB ~ div:not([className]) {	/*	fav		*/ 
+.wrapper_a7e7a8 .listItem_fa7b36 .pill__66ac8 ~ div:not([className]) {	/*	fav		*/ 
 	margin: 0 calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2)) calc(1px * var(--guildgap)) calc(1px * ((((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2))) !important;
 }
 .wrapper_a7e7a8 .listItem_fa7b36:first-child .pill__357e7 ~ .listItemWrapper__1f93b {
@@ -103,7 +103,7 @@ body.folderContentIsOpen_zz6FgW .titleBar__01af6.typeMacOS__496b0 .macButtons__7
 	transform-origin: 0 50% !important;
 }
 .wrapper_a7e7a8 .pill_d1140c,	/*	home	*/ 
-.wrapper_a7e7a8 .pill-1eBbnB {	/*	fav		*/ 
+.wrapper_a7e7a8 .pill__66ac8 {	/*	fav		*/ 
 	left: calc(1px * ((((var(--guildsize) + 10 * var(--guildsize)/50) * (var(--columns) - 1))/2) - 9)) !important;
 }
 .wrapper_a7e7a8 .pill__357e7 {	/*	dm		*/ 
