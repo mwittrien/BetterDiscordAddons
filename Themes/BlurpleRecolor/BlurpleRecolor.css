@@ -518,8 +518,8 @@
 	border-color: rgba(var(--accentcolor), .5);
 }
 															/* attachment			upload bar							*/
-.progressBar-1T6LYX[style*="background-color: hsl(227, "],
-.progressBar-1T6LYX[style*="background-color: hsl(235, "] {
+.progressBar__47525[style*="background-color: hsl(227, "],
+.progressBar__47525[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
@@ -603,7 +603,7 @@
 	stroke: rgb(var(--accentcolor)) !important;
 }
 
-.colorLink-2apWfY.mentionButton_a470c4 {					/* textarea				reply mention						*/
+.mentionButton_a470c4 {										/* textarea				reply mention						*/
 	color: rgb(var(--accentcolor));
 }
 
@@ -3053,7 +3053,7 @@ html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
 html .powercord-toast[data-toast-type=info] .icon {
 	color: rgb(var(--accentcolor));
 }
-html .powercord-toast .progressBar-1T6LYX {
+html .powercord-toast .progressBar__47525 {
 	background-color: rgb(var(--accentcolor));
 }
 
