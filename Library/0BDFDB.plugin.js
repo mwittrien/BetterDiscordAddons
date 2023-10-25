@@ -2458,6 +2458,7 @@ module.exports = (_ => {
 								if (!dataStorage[item].map[item2]) return dataStorage[item]._originalModule[item2];
 								let foundFunc = Object.entries(dataStorage[item]._originalModule).find(n => {
 									if (!n || !n[1]) return;
+									if (dataStorage[item].map[item2] && Object.keys(dataStorage[item].map[item2].length) == 1 && BDFDB.StringUtils.charIsUpperCase(dataStorage[item].map[item2][0]) && dataStorage[item].map[item2][0] == n[0]) return true;
 									let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
 									let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
 									return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString && funcString.replace(/[\n\t\r]/g, "").indexOf(string) > -1 || renderFuncString && renderFuncString.replace(/[\n\t\r]/g, "").indexOf(string) > -1);
@@ -4041,6 +4042,10 @@ module.exports = (_ => {
 				BDFDB.StringUtils.upperCaseFirstChar = function (string) {
 					if (typeof string != "string") return "";
 					else return "".concat(string.charAt(0).toUpperCase()).concat(string.slice(1));
+				};
+				BDFDB.StringUtils.charIsUpperCase = function (string) {
+					if (typeof string != "string") return false;
+					else string[0].toUpperCase() === string[0] && string[0].toLowerCase() !== string[0];
 				};
 				BDFDB.StringUtils.getAcronym = function (string) {
 					if (typeof string != "string") return "";
@@ -8002,30 +8007,6 @@ module.exports = (_ => {
 						return LibraryComponents[item] ? LibraryComponents[item] : "div";
 					}
 				});
-				
-				if (InternalData.LibraryComponents.Scrollers && Internal.LibraryComponents.Scrollers) {
-					InternalData.LibraryComponents.Scrollers._originalModule = Internal.LibraryComponents.Scrollers;
-					InternalData.LibraryComponents.Scrollers._mappedItems = {};
-					for (let type of Object.keys(Internal.LibraryComponents.Scrollers)) if (Internal.LibraryComponents.Scrollers[type] && typeof Internal.LibraryComponents.Scrollers[type].render == "function") {
-						let scroller = BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Scrollers[type].render, {});
-						if (scroller && scroller.props && scroller.props.className) {
-							let mappedType = "";
-							switch (scroller.props.className) {
-								case BDFDB.disCN.scrollerthin: mappedType = "Thin"; break; 
-								case BDFDB.disCN.scrollerauto: mappedType = "Auto"; break; 
-								case BDFDB.disCN.scrollernone: mappedType = "None"; break; 
-							}
-							if (mappedType) InternalData.LibraryComponents.Scrollers._mappedItems[mappedType] = type;
-						}
-					}
-					Internal.LibraryComponents.Scrollers = new Proxy(Object.assign({}, InternalData.LibraryComponents.Scrollers._originalModule), {
-						get: function (_, item) {
-							if (InternalData.LibraryComponents.Scrollers._originalModule[item]) return InternalData.LibraryComponents.Scrollers._originalModule[item];
-							if (InternalData.LibraryComponents.Scrollers._mappedItems[item]) return InternalData.LibraryComponents.Scrollers._originalModule[InternalData.LibraryComponents.Scrollers._mappedItems[item]];
-							return "div";
-						}
-					});
-				}
 				
 				const RealFilteredMenuItems = Object.keys(RealMenuItems).filter(type => typeof RealMenuItems[type] == "function" && RealMenuItems[type].toString().replace(/[\n\t\r]/g, "").endsWith("{return null}"));
 				for (let type of RealFilteredMenuItems) {
