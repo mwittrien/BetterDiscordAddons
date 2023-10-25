@@ -1,28 +1,28 @@
-﻿.supporter-Z3FfwL.hasBadge-4rT8_u {
+﻿.supporter_Z3FfwL.hasBadge_4rT8_u {
 	overflow: visible;
 }
-.member-2gU6Ar .supporter-Z3FfwL.hasBadge-4rT8_u {
+.member_aa4760 .supporter_Z3FfwL.hasBadge_4rT8_u {
 	position: relative;
 }
-.dev-A7f2Rx::before,
-.supporter-Z3FfwL::before {
+.dev_A7f2Rx::before,
+.supporter_Z3FfwL::before {
 	display: none !important;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1y0tyc {
+.supporter_Z3FfwL.hasBadge_4rT8_u .mask__1979f {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="m 0,0 v 0.588 c 0.04285503,0.002169 0.08764096,-2.7964e-4 0.127,0 0.1310673,9.3123e-4 0.16260999,0.0186869 0.163,0.15 2.5938e-4,0.0873322 0,0.262 0,0.262 H 1 V 0 Z"/></svg>') center/cover no-repeat;
 }
-.avatar-2e8lTP.supporter-Z3FfwL.hasBadge-4rT8_u > img {
+.avatar__08316.supporter_Z3FfwL.hasBadge_4rT8_u > img {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0 0 L 0 0.67578125 C 0.049283231 0.67827525 0.10122152 0.67545966 0.14648438 0.67578125 C 0.29721162 0.67685225 0.33353587 0.69859943 0.33398438 0.84960938 C 0.33413352 0.89982534 0.33402166 0.93722907 0.33398438 1 L 1 1 L 1 0 L 0 0 z"/></svg>') center/cover no-repeat;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .avatarHint-2g3Mcd,
-.supporter-Z3FfwL.hasBadge-4rT8_u ~ .avatarHint-2g3Mcd {
+.supporter_Z3FfwL.hasBadge_4rT8_u .avatarHint__8e5b9,
+.supporter_Z3FfwL.hasBadge_4rT8_u ~ .avatarHint__8e5b9 {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0 0 L 0 0.67578125 C 0.049283231 0.67827525 0.10122152 0.67545966 0.14648438 0.67578125 C 0.29721162 0.67685225 0.33353587 0.69859943 0.33398438 0.84960938 C 0.33413352 0.89982534 0.33402166 0.93722907 0.33398438 1 L 1 1 L 1 0 L 0 0 z"/></svg>') center/cover no-repeat;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .avatarDecoration-2OJuSI,
-.supporter-Z3FfwL.hasBadge-4rT8_u ~ .avatarDecoration-2OJuSI {
+.supporter_Z3FfwL.hasBadge_4rT8_u .avatarDecoration_ae35e3,
+.supporter_Z3FfwL.hasBadge_4rT8_u ~ .avatarDecoration_ae35e3 {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0 0 L 0 0.63578125 C 0.049283231 0.63827525 0.10122152 0.63545966 0.14648438 0.63578125 C 0.29721162 0.63685225 0.33353587 0.68859943 0.33398438 0.84960938 C 0.33413352 0.89982534 0.33402166 0.93722907 0.33398438 1 L 1 1 L 1 0 L 0 0 z"/></svg>') center/cover no-repeat;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .badge-7R_W3s {
+.supporter_Z3FfwL.hasBadge_4rT8_u .badge_7R_W3s {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M 4.5 0 C 3.672043 0 3 0.67204269 3 1.5 L 3 4.4160156 L 21 4.4160156 L 21 1.5 C 21 0.67204269 20.328003 0 19.5 0 L 4.5 0 z M 3 7.8027344 L 3 22.5 C 3 23.105995 3.3662743 23.655743 3.9257812 23.886719 C 4.1117802 23.963224 4.306496 24 4.5 24 C 4.889979 24 5.2740679 23.847026 5.5605469 23.560547 L 12 17.121094 L 18.439453 23.560547 C 18.725933 23.847026 19.11002 24 19.5 24 C 19.693503 24 19.887777 23.963177 20.072266 23.886719 C 20.633283 23.655743 21 23.105995 21 22.5 L 21 7.8027344 L 3 7.8027344 z"/></svg>') center/cover no-repeat !important;
 	background: #f96854 !important;
 	position: absolute !important;
@@ -31,13 +31,13 @@
 	width: 30% !important;
 	height: 30% !important;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1y0tyc[width="32"][height="32"] ~ .badge-7R_W3s {
+.supporter_Z3FfwL.hasBadge_4rT8_u .mask__1979f[width="32"][height="32"] ~ .badge_7R_W3s {
 	margin-top: -8% !important;
 	margin-left: -6% !important;
 }
-.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u .badge-7R_W3s {
+.supporter_Z3FfwL.tier3-yTxjsy.hasBadge_4rT8_u .badge_7R_W3s {
 	background: linear-gradient(90deg, #f96854, #ff73fa) !important;
 }
-.selected-1-Z6gm .supporter-Z3FfwL.hasBadge-4rT8_u .badge-7R_W3s {
+.selected__9800b .supporter_Z3FfwL.hasBadge_4rT8_u .badge_7R_W3s {
 	filter: brightness(80%) !important;
 }
