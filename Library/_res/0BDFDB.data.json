@@ -1568,7 +1568,7 @@
 		"MessageReply": {"props": ["container", "text", "closeButton"]},
 		"MessagesPopout": {"props": ["messagesPopoutWrap", "jumpButton"]},
 		"MessagesPopoutButtons": {"props": ["secondary", "tertiary", "button"]},
-		"MessagesPopoutTabBar": {"props": ["header", "tabBar", "active"]},
+		"MessagesPopoutTabBar": {"props": ["header", "tabBar", "active", "controls"]},
 		"MessagesLoading": {"props": ["attachment", "blob", "cozy"]},
 		"MessagesWelcome": {"props": ["emptyChannelIcon", "description", "header"]},
 		"MessagesWelcomeButton": {"props": ["button", "buttonIcon"], "length": 2},
