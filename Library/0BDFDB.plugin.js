@@ -1365,16 +1365,17 @@ module.exports = (_ => {
 					return Internal.findModule("proto", JSON.stringify(protoProps), m => Internal.checkModuleProtos(m, protoProps) && m, config);
 				};
 				BDFDB.ModuleUtils.findStringObject = function (props, config = {}) {
-					return BDFDB.ModuleUtils.find(m => {
+					let firstReturn = BDFDB.ModuleUtils.find(m => {
 						let amount = Object.keys(m).length;
 						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(prop => typeof m[prop] == "string") && m;
-					}) || BDFDB.ModuleUtils.find(m => {
+					}, {all: config.all, defaultExport: config.defaultExport});
+					return config.all && firstReturn && firstReturn.length > 0 || !config.all && firstReturn || BDFDB.ModuleUtils.find(m => {
 						if (typeof m != "function") return false;
 						let stringified = m.toString().replace(/\s/g, "");
 						if (stringified.indexOf("e=>{e.exports={") != 0 && stringified.indexOf("function(e,t,o){\"usestrict\";e.exports={") != 0) return false;
 						let amount = stringified.split(":\"").length - 1;
 						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(string => stringified.indexOf(`${string}:`) > -1) && m;
-					}, {onlySearchUnloaded: true});
+					}, {onlySearchUnloaded: true, all: config.all, defaultExport: config.defaultExport});
 				};
 				
 				Internal.DiscordConstants = new Proxy(DiscordConstants, {
