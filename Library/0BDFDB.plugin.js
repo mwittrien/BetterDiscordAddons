@@ -4510,7 +4510,7 @@ module.exports = (_ => {
 						return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ") || fallbackClassName;
 					}
 				};
-				const generationChars = "0123456789ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split("");
+				const generationChars = "0123456789ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-".split("");
 				Internal.generateClassId = function () {
 					let id = "";
 					while (id.length < 6) id += generationChars[Math.floor(Math.random() * generationChars.length)];
