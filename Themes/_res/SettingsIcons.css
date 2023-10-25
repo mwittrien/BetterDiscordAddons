@@ -372,11 +372,10 @@ body #app-mount .layer_e552e0 ~ .layer_e552e0 .sidebar__9e3e2:has(.socialLinks_c
 .bd-server-search ~ .item__48dda::before {
 	display: none;
 }
-.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda .icon-3FU6Ir,
-.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .premiumLabel-3HPvdB > svg,
-.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .premiumLabel-3HPvdB img,
-.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .tabBarItemContainer-2HdIlr > svg,
-.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .tabBarItemContainer-2HdIlr img {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .premiumLabel_f2cd55 > svg,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .premiumLabel_f2cd55 img,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .tabBarItemContainer_d74773 > svg,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .tabBarItemContainer_d74773 img {
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
 }
 
