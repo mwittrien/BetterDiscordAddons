@@ -604,7 +604,7 @@
 }
 
 .mentionButton_a470c4 {										/* textarea				reply mention						*/
-	color: rgb(var(--accentcolor));
+	--text-link: rgb(var(--accentcolor));
 }
 
 .premium__296ca path[fill] {
