@@ -6183,7 +6183,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		15.2.	BUTTONS							---- */
 
-.btn-115Sr0.btnPrimary-7AVO-X,
+.btn__51085.btnPrimary_e2a8df,
 .lookFilled__19298.hoverBrand__98583.hasHover__3ab8c:hover,
 .lookFilled__19298.hoverBrandNew_be3663.hasHover__3ab8c:hover,
 .lookFilled__19298.colorBrand_b2253e:not(.buttonColor_a6eb73):not([style*="background-color"]),
@@ -6509,8 +6509,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .lookFilled__3dba3.select__0eb48:hover {
 	border-color: rgb(var(--transparencycolor));
 }
-.lookFilled__3dba3.select__0eb48:hover.open-1FRZsK,
-.lookFilled__3dba3.open-1FRZsK {
+.lookFilled__3dba3.select__0eb48:hover.open_cd27aa,
+.lookFilled__3dba3.open_cd27aa {
 	border-color: rgb(var(--transparencycolor)) rgb(var(--transparencycolor)) rgba(var(--transparencycolor), .3);
 }
 .lookFilled__3dba3.select__0eb48 .searchInput-3pIoTy {
