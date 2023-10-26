@@ -230,6 +230,7 @@ body,														/* body														*/
 #app-mount .directoryContainer_d3edd9,						/* server app directory										*/
 #app-mount .panels__58331 > *,								/* account/voice		inner								*/
 #app-mount .chat__52833,									/* chat					container							*/
+#app-mount .chatContent__5dca8,								/* chat					channel								*/
 #app-mount .container_b181b6,								/* chat					forums								*/
 #app-mount .container__10dc7,								/* chat					search								*/
 #app-mount .container__7590f,								/* chat					search inner						*/
