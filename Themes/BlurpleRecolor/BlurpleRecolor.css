@@ -460,6 +460,10 @@
 .channelTextAreaInnerFocused__8561c {
 	border-color: rgb(var(--accentcolor));
 }
+
+#app-mount .selectedPill_f3e999 {
+	border-color: rgb(var(--accentcolor)) !important;
+}
 															/* textarea				follow channel icon					*/
 .image__04423[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] {
 	object-position: -999999px -999999px;
