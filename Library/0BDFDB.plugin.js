@@ -1290,10 +1290,12 @@ module.exports = (_ => {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
-							else if (Object.keys(m).length < 400) for (let key of Object.keys(m)) if (m[key] && !!(r = filter(m[key]))) {
-								if (all) found.push(defaultExport ? r : req.c[i]);
-								else return defaultExport ? r : req.c[i];
-							}
+							else if (Object.keys(m).length < 400) for (let key of Object.keys(m)) try {
+								if (m[key] && !!(r = filter(m[key]))) {
+									if (all) found.push(defaultExport ? r : req.c[i]);
+									else return defaultExport ? r : req.c[i];
+								}
+							} catch (err) {}
 						}
 						if (config.moduleName && m && m[config.moduleName] && (typeof m[config.moduleName] == "object" || typeof m[config.moduleName] == "function")) {
 							if (!!(r = filter(m[config.moduleName]))) {
