@@ -4342,7 +4342,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		13.16.	SCREENSHAREMODAL				---- */
 
-#app-mount .sourceThumbnail-3n4cjJ {						/* modal				preview tiles						*/
+#app-mount .sourceThumbnail__21c87 {						/* modal				preview tiles						*/
 	background-color: rgba(var(--transparencycolor), .4);
 	box-shadow: 0 2px 5px rgba(var(--transparencycolor), .2), 0 0 0 1px rgba(var(--transparencycolor), .6);
 }
@@ -4353,7 +4353,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .item-2OyinQ {
 	border-color: rgba(var(--transparencycolor), .4);
 }
-.selectorButton-3sW6Qm:not(.selectorButtonSelected-3Z0WNU) {
+.selectorButton_c6ae93:not(.selectorButtonSelected_fbe8fc) {
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .userListOverflow-2GkVmP {
@@ -5423,8 +5423,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.1));
 	backdrop-filter: blur(var(--popoutblur));
 }
-.focused-qp-W9B,
-.item-1BCeuB:hover:not(.disabled-Mmpvl7),
+.focused__2b1b2,
+.item-1BCeuB:hover:not(.disabled__1c6ff),
 .row-3UUG_l.selected-3LIQAc .rowInner-1mo-C8,
 .row-3UUG_l:hover .rowInner-1mo-C8 {
 	background: rgba(var(--transparencycolor), .4);
