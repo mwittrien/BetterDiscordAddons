@@ -724,6 +724,9 @@
 	background-color: rgb(255, 255, 255) !important;
 	background-image: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/nitrobadge_details.svg), linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5)) !important;
 }
+.pageWrapper__3bbe1 {										/* store				pagewrapper							*/
+	background: #fff linear-gradient(114deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.6));
+}
 
 .tier0__2e127 {
 	background: rgb(100, 100, 100) linear-gradient(195deg, rgba(var(--accentcolor), 0.9), rgba(var(--accentcolor), 0.5));
