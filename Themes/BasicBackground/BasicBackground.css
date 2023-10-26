@@ -7003,12 +7003,12 @@ html .powercord-toast .contents .inner {
 
 /* ----		18.1.	BDFDB							---- */
 
-html .colorDefault-XdNdIp .bg-8df5St {
+html .colorDefault_XdNdIp .bg_8df5St {
 	background: transparent;
 	opacity: 1;
 }
-html .colorDefault-XdNdIp .bg-8df5St::before,
-html .colorDefault-XdNdIp .bg-8df5St::after {
+html .colorDefault_XdNdIp .bg_8df5St::before,
+html .colorDefault_XdNdIp .bg_8df5St::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -7018,11 +7018,11 @@ html .colorDefault-XdNdIp .bg-8df5St::after {
 	pointer-events: none;
 	z-index: -1;
 }
-html .colorDefault-XdNdIp .bg-8df5St::before {
+html .colorDefault_XdNdIp .bg_8df5St::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-html .colorDefault-XdNdIp .bg-8df5St::after {
+html .colorDefault_XdNdIp .bg_8df5St::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
 }
