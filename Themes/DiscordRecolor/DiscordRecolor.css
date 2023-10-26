@@ -2001,33 +2001,33 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	opacity: .5;
 }
 
-#app-mount .search-25t1e9 .searchBox-31Zv9h {
+#app-mount .search_e47903 .searchBox__88a98 {
 	background-color: #fff;
 }
-#app-mount .search-25t1e9 .searchBox-31Zv9h:focus,
-#app-mount .search-25t1e9 .searchBox-31Zv9h:focus-within {
+#app-mount .search_e47903 .searchBox__88a98:focus,
+#app-mount .search_e47903 .searchBox__88a98:focus-within {
 	box-shadow: 0 0 0 1px rgb(91,67,240), 0 0 0 2px rgba(91,67,240,.6), 0 0 0 3px rgba(91,67,240,.3);
 	border-color: transparent;
 }
-#app-mount .search-25t1e9 .searchBox-31Zv9h .searchBoxInput-3h4etz {
+#app-mount .search_e47903 .searchBox__88a98 .searchBoxInput-3h4etz {
 	color: #2e3338;
 }
-#app-mount .search-25t1e9 .searchBox-31Zv9h .searchBoxInput-3h4etz::-webkit-input-placeholder,
-#app-mount .search-25t1e9 .searchBox-31Zv9h .searchBoxInput-3h4etz::-moz-placeholder,
-#app-mount .search-25t1e9 .searchBox-31Zv9h .searchBoxInput-3h4etz:-ms-input-placeholder,
-#app-mount .search-25t1e9 .searchBox-31Zv9h .searchBoxInput-3h4etz::placeholder {
+#app-mount .search_e47903 .searchBox__88a98 .searchBoxInput-3h4etz::-webkit-input-placeholder,
+#app-mount .search_e47903 .searchBox__88a98 .searchBoxInput-3h4etz::-moz-placeholder,
+#app-mount .search_e47903 .searchBox__88a98 .searchBoxInput-3h4etz:-ms-input-placeholder,
+#app-mount .search_e47903 .searchBox__88a98 .searchBoxInput-3h4etz::placeholder {
 	color: #72767d;
 }
-#app-mount .search-25t1e9 .searchBox-31Zv9h .closeIcon-BMGxx0 {
+#app-mount .search_e47903 .searchBox__88a98 .closeIcon-BMGxx0 {
 	color: #4f5660;
 }
-#app-mount .search-25t1e9 .searchBox-31Zv9h .closeIcon-BMGxx0:hover {
+#app-mount .search_e47903 .searchBox__88a98 .closeIcon-BMGxx0:hover {
 	color: #2e3338;
 }
-#app-mount .search-25t1e9 .searchBox-31Zv9h .closeIcon-BMGxx0:focus {
+#app-mount .search_e47903 .searchBox__88a98 .closeIcon-BMGxx0:focus {
 	color: #060607;
 }
-#app-mount .search-25t1e9 .searchBox-31Zv9h .searchIcon-3X4BYL {
+#app-mount .search_e47903 .searchBox__88a98 .searchIcon-3X4BYL {
 	color: rgba(79,84,92,.6);
 }
 
@@ -4454,10 +4454,10 @@ html:only-child > head + body > div#app-mount.appMount_fae9dd > div.typeWindows_
 	opacity: 1 !important;
 }
 
-html:only-child > head + body div.app_b1f720 > div.app__00c92 > div.layers_a40797.layers__12c9f > div.layer_e552e0.baseLayer__13b6b + div.layer_e552e0 > div.standardSidebarView__1129a > div.sidebarRegion__60457 > div.sidebarRegionScroller__1fa7e.thin_b1c063.scrollerBase_dc3aa9.fade_ba0fa0 > nav.sidebar__9e3e2 > div.side_b4b3f6 > div.info__755e1 {
+html:only-child > head + body div.app_b1f720 > div.app_de4237 > div.layers__1c917.layers_a23c37 > div.layer__2efaa.baseLayer__8fda3 + div.layer__2efaa > div.standardSidebarView__1129a > div.sidebarRegion__60457 > div.sidebarRegionScroller__1fa7e.thin_b1c063.scrollerBase_dc3aa9.fade_ba0fa0 > nav.sidebar__9e3e2 > div.side_b4b3f6 > div.info__755e1 {
 	position: relative !important;
 }
-html:only-child > head + body div.app_b1f720 > div.app__00c92 > div.layers_a40797.layers__12c9f > div.layer_e552e0.baseLayer__13b6b + div.layer_e552e0 > div.standardSidebarView__1129a > div.sidebarRegion__60457 > div.sidebarRegionScroller__1fa7e.thin_b1c063.scrollerBase_dc3aa9.fade_ba0fa0 > nav.sidebar__9e3e2 > div.side_b4b3f6 > div.info__755e1::after {
+html:only-child > head + body div.app_b1f720 > div.app_de4237 > div.layers__1c917.layers_a23c37 > div.layer__2efaa.baseLayer__8fda3 + div.layer__2efaa > div.standardSidebarView__1129a > div.sidebarRegion__60457 > div.sidebarRegionScroller__1fa7e.thin_b1c063.scrollerBase_dc3aa9.fade_ba0fa0 > nav.sidebar__9e3e2 > div.side_b4b3f6 > div.info__755e1::after {
 	content: "DiscordRecolor by" !important;
 	font-size: 12px !important;
 	color: var(--text-muted) !important;
@@ -4476,7 +4476,7 @@ html:only-child > head + body div.app_b1f720 > div.app__00c92 > div.layers_a4079
 	transform: unset !important;
 	animation: unset !important;
 }
-html:only-child > head + body div.app_b1f720 > div.app__00c92 > div.layers_a40797.layers__12c9f > div.layer_e552e0.baseLayer__13b6b + div.layer_e552e0 > div.standardSidebarView__1129a > div.sidebarRegion__60457 > div.sidebarRegionScroller__1fa7e.thin_b1c063.scrollerBase_dc3aa9.fade_ba0fa0 > nav.sidebar__9e3e2 > div.side_b4b3f6 > div.info__755e1::before {
+html:only-child > head + body div.app_b1f720 > div.app_de4237 > div.layers__1c917.layers_a23c37 > div.layer__2efaa.baseLayer__8fda3 + div.layer__2efaa > div.standardSidebarView__1129a > div.sidebarRegion__60457 > div.sidebarRegionScroller__1fa7e.thin_b1c063.scrollerBase_dc3aa9.fade_ba0fa0 > nav.sidebar__9e3e2 > div.side_b4b3f6 > div.info__755e1::before {
 	content: "DevilBro" !important;
 	font-size: 12px !important;
 	font-weight: 600 !important;

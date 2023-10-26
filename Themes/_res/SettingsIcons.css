@@ -57,7 +57,7 @@ body #app-mount .sidebarRegion__60457:has(.socialLinks_c1fc99) {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
 body #app-mount .sidebar__9e3e2:has(.socialLinks_c1fc99),
-body #app-mount .layer_e552e0 ~ .layer_e552e0 .sidebar__9e3e2:has(.socialLinks_c1fc99) {
+body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c1fc99) {
 	width: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda {
