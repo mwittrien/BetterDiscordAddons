@@ -2083,10 +2083,6 @@ input.input_d266e7 {										/* textinput												*/
 	background: white linear-gradient(rgba(var(--accentcolor), .5), rgba(var(--accentcolor), .5));
 	color: rgb(var(--accentcolor));
 }
-.newBadge-1LcB6t {											/* bottag				new forum post						*/
-	background: white linear-gradient(rgba(var(--accentcolor), .5), rgba(var(--accentcolor), .5)) !important;
-	color: rgb(var(--accentcolor)) !important;
-}
 
 #app-mount .tag_d31581 {
 	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
@@ -2325,14 +2321,14 @@ input.input_d266e7 {										/* textinput												*/
 	background: var(--accentcolor-active) !important;
 }
 
-#bd-editor-controls .checkboxInner-3yjcPe {
+#bd-editor-controls .checkbox-inner {
 	position: relative;
 	cursor: pointer;
 }
-#bd-editor-controls .checkboxElement-1qV33p {
+#bd-editor-controls .checkbox {
 	visibility: hidden;
 }
-#bd-editor-controls .checkboxElement-1qV33p + span {
+#bd-editor-controls .checkbox + span {
 	position: absolute;
 	display: block;
 	top: -2px;
@@ -2343,13 +2339,13 @@ input.input_d266e7 {										/* textinput												*/
 	border-radius: 2px;
 	pointer-events: none;
 }
-#bd-editor-controls .checkboxElement-1qV33p:not(:checked) + span {
+#bd-editor-controls .checkbox:not(:checked) + span {
 	border: 1px solid var(--header-primary);
 }
-#bd-editor-controls .checkboxElement-1qV33p:checked + span {
+#bd-editor-controls .checkbox:checked + span {
 	background: rgb(var(--accentcolor));
 }
-#bd-editor-controls .checkboxElement-1qV33p:checked + span:before {
+#bd-editor-controls .checkbox:checked + span:before {
 	content: "";
 	display: block;
 	position: relative;
