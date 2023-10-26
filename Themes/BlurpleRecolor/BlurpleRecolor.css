@@ -2250,92 +2250,92 @@ input.input_d266e7 {										/* textinput												*/
 
 /* ~~~~		13.		BDSUPPORT						~~~~ */
 
-#app-mount .bd-server-card.bd-server-card-pinned::after {
+.bd-server-card.bd-server-card-pinned::after {
 	background: var(--bd-blue);
 }
 
-#app-mount .bd-modal-wrapper .footer button {
+.bd-modal-wrapper .footer button {
 	background: var(--bd-blue);
 }
-#app-mount .bd-modal-wrapper .footer button:hover {
+.bd-modal-wrapper .footer button:hover {
 	background: var(--accentcolor-hover);
 }
-#app-mount .bd-modal-wrapper .footer button:active {
+.bd-modal-wrapper .footer button:active {
 	background: var(--accentcolor-active);
 }
-#app-mount .bd-modal-wrapper .error-link {
+.bd-modal-wrapper .error-link {
 	color: var(--bd-blue);
 }
 
-#app-mount .bd-pfbtn {
+.bd-pfbtn {
 	background: var(--bd-blue);
 }
-#app-mount .bd-pfbtn:hover {
+.bd-pfbtn:hover {
 	background: var(--accentcolor-hover);
 }
-#app-mount .bd-pfbtn:active {
+.bd-pfbtn:active {
 	background: var(--accentcolor-active);
 }
 
-#app-mount .bd-button,
-#app-mount .bd-addon-modal-footer .bd-button {
+.bd-button,
+.bd-addon-modal-footer .bd-button {
 	background: var(--bd-blue);
 }
-#app-mount .bd-button:hover,
-#app-mount .bd-addon-modal-footer .bd-button:hover {
+.bd-button:hover,
+.bd-addon-modal-footer .bd-button:hover {
 	background: var(--accentcolor-hover);
 }
-#app-mount .bd-button:active,
-#app-mount .bd-addon-modal-footer .bd-button:active {
+.bd-button:active,
+.bd-addon-modal-footer .bd-button:active {
 	background: var(--accentcolor-active);
 }
 
-#app-mount .bd-description-wrap .banner {
+.bd-description-wrap .banner {
 	background: var(--background-primary);
 	border-color: var(--background-secondary);
 	color: var(--header-secondary);
 	font-size: 14px;
 	line-height: 18px;
 }
-#app-mount .banner.banner-danger {
+.banner.banner-danger {
 	background: var(--background-secondary);
 	border-color: var(--status-danger);
 }
-#app-mount .banner-danger .bd-icon {
+.banner-danger .bd-icon {
 	fill: var(--status-danger);
 }
 
-#app-mount .bd-addon-views .bd-view-button.selected {
+.bd-addon-views .bd-view-button.selected {
 	background: var(--bd-blue);
 }
 
-#app-mount .bd-server-tag {
+.bd-server-tag {
 	background: var(--bd-blue);
 }
 
-#app-mount .bd-switch input:checked + .bd-switch-body {
+.bd-switch input:checked + .bd-switch-body {
 	--switch-color: rgba(var(--accentcolor), 0.8);
 	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
-#app-mount .bd-switch input:active + .bd-switch-body {
+.bd-switch input:active + .bd-switch-body {
 	--switch-color: rgba(var(--accentcolor));
 }
-#app-mount .bd-switch input:checked:hover + .bd-switch-body {
+.bd-switch input:checked:hover + .bd-switch-body {
 	background: var(--accentcolor-hover) !important;
 }
-#app-mount .bd-switch input:checked:active + .bd-switch-body {
+.bd-switch input:checked:active + .bd-switch-body {
 	--switch-color: rgb(var(--accentcolor));
 	background: var(--accentcolor-active) !important;
 }
 
-#bd-editor-controls .checkbox-inner {
+#bd-editor-controls .checkboxInner-3yjcPe {
 	position: relative;
 	cursor: pointer;
 }
-#bd-editor-controls .checkbox {
+#bd-editor-controls .checkboxElement-1qV33p {
 	visibility: hidden;
 }
-#bd-editor-controls .checkbox + span {
+#bd-editor-controls .checkboxElement-1qV33p + span {
 	position: absolute;
 	display: block;
 	top: -2px;
@@ -2346,13 +2346,13 @@ input.input_d266e7 {										/* textinput												*/
 	border-radius: 2px;
 	pointer-events: none;
 }
-#bd-editor-controls .checkbox:not(:checked) + span {
+#bd-editor-controls .checkboxElement-1qV33p:not(:checked) + span {
 	border: 1px solid var(--header-primary);
 }
-#bd-editor-controls .checkbox:checked + span {
+#bd-editor-controls .checkboxElement-1qV33p:checked + span {
 	background: rgb(var(--accentcolor));
 }
-#bd-editor-controls .checkbox:checked + span:before {
+#bd-editor-controls .checkboxElement-1qV33p:checked + span:before {
 	content: "";
 	display: block;
 	position: relative;
@@ -2517,8 +2517,8 @@ html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
 	border-left-color: rgb(var(--accentcolor)) !important;
 }
 
-#app-mount .embedFull__8dc21[style*="border-color: rgb(62, 130, 229)"],
-#app-mount .embedFull__8dc21[style*="border-color: rgb(62, 130, 226)"] {
+.embedFull__8dc21[style*="border-color: rgb(62, 130, 229)"],
+.embedFull__8dc21[style*="border-color: rgb(62, 130, 226)"] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 

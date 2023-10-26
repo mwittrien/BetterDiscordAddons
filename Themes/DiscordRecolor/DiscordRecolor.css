@@ -2363,25 +2363,25 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background: var(--interactive-active);
 }
 
-#app-mount .bd-social-link[title="BD" i] .bd-social-logo,
-#app-mount .bd-social-link[title="BetterDiscord" i] .bd-social-logo,
-#app-mount .bd-social-link[title="BBD" i] .bd-social-logo,
-#app-mount .bd-social-link[title="BandagedBD" i] .bd-social-logo {
+.bd-social-link[title="BD" i] .bd-social-logo,
+.bd-social-link[title="BetterDiscord" i] .bd-social-logo,
+.bd-social-link[title="BBD" i] .bd-social-logo,
+.bd-social-link[title="BandagedBD" i] .bd-social-logo {
 	background: var(--interactive-normal);
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/betterdiscord.svg) center/contain no-repeat;
 	opacity: 1;
 	transition: background .15s ease;
 }
-#app-mount .bd-social-link[title="BD" i]:hover .bd-social-logo,
-#app-mount .bd-social-link[title="BetterDiscord" i]:hover .bd-social-logo,
-#app-mount .bd-social-link[title="BBD" i]:hover .bd-social-logo,
-#app-mount .bd-social-link[title="BandagedBD" i]:hover .bd-social-logo {
+.bd-social-link[title="BD" i]:hover .bd-social-logo,
+.bd-social-link[title="BetterDiscord" i]:hover .bd-social-logo,
+.bd-social-link[title="BBD" i]:hover .bd-social-logo,
+.bd-social-link[title="BandagedBD" i]:hover .bd-social-logo {
 	background: var(--interactive-active);
 }
-#app-mount .bd-social-link[title="BD" i] .bd-social-logo > *,
-#app-mount .bd-social-link[title="BetterDiscord" i] .bd-social-logo > *,
-#app-mount .bd-social-link[title="BBD" i] .bd-social-logo > *,
-#app-mount .bd-social-link[title="BandagedBD" i] .bd-social-logo > * {
+.bd-social-link[title="BD" i] .bd-social-logo > *,
+.bd-social-link[title="BetterDiscord" i] .bd-social-logo > *,
+.bd-social-link[title="BBD" i] .bd-social-logo > *,
+.bd-social-link[title="BandagedBD" i] .bd-social-logo > * {
 	display: none;
 }
 
@@ -3974,11 +3974,11 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	background-color: currentColor;
 }
 
-#app-mount .bd-tab-item.selected:hover {
+.bd-tab-item.selected:hover {
 	background-color: var(--background-modifier-selected);
 }
 
-#app-mount .bd-error-modal-content {
+.bd-error-modal-content {
 	padding: 0 10px 16px 10px;
 }
 

@@ -2355,25 +2355,25 @@ button.button__4f306.enabled__470f0:hover svg {
 	background: var(--interactive-active);
 }
 
-#app-mount .bd-social-link[title="BD" i] .bd-social-logo,
-#app-mount .bd-social-link[title="BetterDiscord" i] .bd-social-logo,
-#app-mount .bd-social-link[title="BBD" i] .bd-social-logo,
-#app-mount .bd-social-link[title="BandagedBD" i] .bd-social-logo {
+.bd-social-link[title="BD" i] .bd-social-logo,
+.bd-social-link[title="BetterDiscord" i] .bd-social-logo,
+.bd-social-link[title="BBD" i] .bd-social-logo,
+.bd-social-link[title="BandagedBD" i] .bd-social-logo {
 	background: var(--interactive-normal);
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/betterdiscord.svg) center/contain no-repeat;
 	opacity: 1;
 	transition: background .15s ease;
 }
-#app-mount .bd-social-link[title="BD" i]:hover .bd-social-logo,
-#app-mount .bd-social-link[title="BetterDiscord" i]:hover .bd-social-logo,
-#app-mount .bd-social-link[title="BBD" i]:hover .bd-social-logo,
-#app-mount .bd-social-link[title="BandagedBD" i]:hover .bd-social-logo {
+.bd-social-link[title="BD" i]:hover .bd-social-logo,
+.bd-social-link[title="BetterDiscord" i]:hover .bd-social-logo,
+.bd-social-link[title="BBD" i]:hover .bd-social-logo,
+.bd-social-link[title="BandagedBD" i]:hover .bd-social-logo {
 	background: var(--interactive-active);
 }
-#app-mount .bd-social-link[title="BD" i] .bd-social-logo > *,
-#app-mount .bd-social-link[title="BetterDiscord" i] .bd-social-logo > *,
-#app-mount .bd-social-link[title="BBD" i] .bd-social-logo > *,
-#app-mount .bd-social-link[title="BandagedBD" i] .bd-social-logo > * {
+.bd-social-link[title="BD" i] .bd-social-logo > *,
+.bd-social-link[title="BetterDiscord" i] .bd-social-logo > *,
+.bd-social-link[title="BBD" i] .bd-social-logo > *,
+.bd-social-link[title="BandagedBD" i] .bd-social-logo > * {
 	display: none;
 }
 
@@ -6762,12 +6762,12 @@ html .bd-toast.toast-warn.icon::before {
 	background-color: rgba(var(--transparencycolor), .4);
 }
 
-#app-mount .bd-switch-body {											/* bd switch												*/
+.bd-switch-body {											/* bd switch												*/
 	--switch-color: rgb(var(--transparencycolor));
 	background-color: rgba(var(--transparencycolor), .3);
 }
 
-#app-mount .bd-select .bd-select-options {								/* bd select			popout								*/
+.bd-select .bd-select-options {								/* bd select			popout								*/
 	background-color: transparent;
 	border: none;
 	border-radius: 4px;
@@ -6776,8 +6776,8 @@ html .bd-toast.toast-warn.icon::before {
 	padding: 6px 8px;
 	margin-left: -9px;
 }
-#app-mount .bd-select .bd-select-options::before,
-#app-mount .bd-select .bd-select-options::after {
+.bd-select .bd-select-options::before,
+.bd-select .bd-select-options::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -6790,15 +6790,15 @@ html .bd-toast.toast-warn.icon::before {
 	pointer-events: none;
 	z-index: -1;
 }
-#app-mount .bd-select .bd-select-options::before {
+.bd-select .bd-select-options::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-#app-mount .bd-select .bd-select-options::after {
+.bd-select .bd-select-options::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.3));
 	backdrop-filter: blur(var(--popoutblur));
 }
-#app-mount .bd-select .bd-select-option {								/* bd select			popout option						*/
+.bd-select .bd-select-option {								/* bd select			popout option						*/
 	display: flex;
 	align-items: center;
 	min-height: 32px;
@@ -6812,25 +6812,25 @@ html .bd-toast.toast-warn.icon::before {
 	margin-bottom: 2px;
 	padding: 0 8px;
 }
-#app-mount .bd-select .bd-select-option:hover {
+.bd-select .bd-select-option:hover {
 	background-color: rgba(var(--transparencycolor), .2);
 	color: var(--interactive-hover);
 }
-#app-mount .bd-select .bd-select-option.selected {
+.bd-select .bd-select-option.selected {
 	background-color: rgba(var(--transparencycolor), .3);
 	color: var(--interactive-active);
 }
 
-#app-mount .bd-pfbtn {													/* addonlist			folder button						*/
+.bd-pfbtn {													/* addonlist			folder button						*/
 	text-shadow: 1px 1px var(--textshadow);
 }
 
-#app-mount .bd-server-tag {											/* addonlist			public list tag						*/
+.bd-server-tag {											/* addonlist			public list tag						*/
 	text-shadow: 1px 1px var(--textshadow);
 }
 
 
-#app-mount .bd-error-modal-content {
+.bd-error-modal-content {
 	padding: 0 10px 16px 10px;
 }
 #app-mount .bd-addon-error {
@@ -6842,18 +6842,18 @@ html .bd-toast.toast-warn.icon::before {
 	background-color: rgba(var(--transparencycolor), 0.3);
 }
 
-#app-mount .bd-addon-views .bd-view-button:hover {
+.bd-addon-views .bd-view-button:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 
-#app-mount .bd-button {
+.bd-button {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
-#app-mount .bd-button.bd-button-danger {
+.bd-button.bd-button-danger {
 	filter: unset;
 }
 
-#app-mount .floating-window.resizable {								/* customcss editor		detached							*/
+.floating-window.resizable {								/* customcss editor		detached							*/
 	background: rgb(var(--transparencycolor));
 }
 html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
