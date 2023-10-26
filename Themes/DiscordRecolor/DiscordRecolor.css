@@ -864,7 +864,7 @@ html .iconBadge-2wi9r4 {
 	background-image: url(https://discord.com/assets/da840b1a6c5d073ca1c6710f8967502a.svg);
 }
 #app-mount .image_dabcb8 {									/* crash screen			center image						*/
-	background-image: url(https://discord.com/assets/e9baf4b505eb54129f832556ea16538e.svg);
+	background-image: url(https://discord.com/assets/72eaa596042042be6259.svg);
 	opacity: .5;
 }
 
@@ -1135,7 +1135,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	display: none;
 }
 #app-mount .background_e80d5a,
-#app-mount .container-3wLKDe,
+#app-mount .container_b181b6,
 #app-mount .container__10dc7,
 #app-mount .header__60bef,
 #app-mount .container__7590f {
@@ -1150,8 +1150,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .background_e80d5a .interactiveCard_d5a839,
 #app-mount .background_e80d5a .emptyStateContainer__3c229,
 #app-mount .background_e80d5a .card_d4f6c7,
-#app-mount .container-3wLKDe .mainCard__8a660,
-#app-mount .container-3wLKDe .sidebarCard__44447,
+#app-mount .container_b181b6 .mainCard__8a660,
+#app-mount .container_b181b6 .sidebarCard__44447,
 #app-mount .container__10dc7 .channelRow__96673 {
 	background-color: var(--background-secondary);
 }
@@ -1172,7 +1172,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	border-color: var(--background-secondary);
 }
 #app-mount .background_e80d5a .container__16581:hover,
-#app-mount .container-3wLKDe .pill_f055c3,
+#app-mount .container_b181b6 .pill_f055c3,
 #app-mount .container__10dc7 .channelRow__96673:hover {
 	background: var(--background-tertiary);
 }
@@ -1430,7 +1430,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .categoryHeader_f97a5f {
 	background-color: var(--background-secondary);
 }
-#app-mount .selected-3H3-RC {
+#app-mount .selected__75860 {
 	background-color: var(--background-primary);
 }
 
@@ -2805,7 +2805,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 
-#app-mount .backdrop-1BR_bn,
+#app-mount .backdrop__3ff7b,
 #app-mount .backdrop__7e89b {
 	background-color: rgb(0, 0, 0) !important;
 }
@@ -3581,10 +3581,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-primary);
 	color: var(--header-secondary);
 }
-#app-mount .container-23gRWx {
+#app-mount .container_e84cda {
 	background-color: var(--background-secondary);
 }
-#app-mount .header-JHwfVI {
+#app-mount .header__02652 {
 	box-shadow: 0 1px 0 0 rgba(var(--backgroundfloating),.3), 0 1px 2px 0 rgba(var(--backgroundfloating),.3);
 }
 #app-mount .backButton__6a1f0 {
