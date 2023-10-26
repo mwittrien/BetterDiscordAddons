@@ -2578,7 +2578,7 @@ button.button__4f306.enabled__470f0:hover svg {
 .profileBannerPreview-3mLIdO *:not(foreignObject) > .banner_b7f1fb {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
-.questionMark-3V9mGJ svg {									/* accountsettings		questionmark new					*/
+.questionMark__8d22a svg {									/* accountsettings		questionmark						*/
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 #app-mount .avatarUploader-AF-hm- .removeButton-3B_Vmg {	/* accountsettings		removeavatar						*/
