@@ -202,8 +202,7 @@ html {
 		8.	CHANNELHISTORY
 		9.	CHANNELTABS
 		10.	TYPINGINDICATOR
-		11.	BADGESEVERYWHERE
-		12.	CHANNELDMS
+		11.	CHANNELDMS
 	19.	UPDATENOTICE
 	20.	WATERMARK
 */
@@ -6613,87 +6612,7 @@ html .typingindicator-folder {
 	padding: 2px 0;
 }
 
-/* ----		18.11	BADGESEVERYWHERE				---- */
-
-.inner-dA0J42:not(.colored-1armap) .badge-7CsdQq:not(.indicator-cY1-b4) {
-	background: #fff;
-}
-.badgesChat-f_cbR8 .inner-dA0J42:not(.colored-1armap) .badge-7CsdQq:not(.indicator-cY1-b4),
-.badgesList-Aw_p52 .inner-dA0J42:not(.colored-1armap) .badge-7CsdQq:not(.indicator-cY1-b4),
-.badgesSettings-ychoGn .inner-dA0J42:not(.colored-1armap) .badge-7CsdQq:not(.indicator-cY1-b4) {
-	background: var(--header-secondary);
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeStaff-3BXdTO {
-	-webkit-mask: url(https://discord.com/assets/7cfd90c8062139e4804a1fa59f564731.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgePartner-j6Lwhr {
-	-webkit-mask: url(https://discord.com/assets/a0e288a458c48dfcf548dadc277e42e6.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeHypesquad-12E2P6 {
-	-webkit-mask: url(https://discord.com/assets/3a050fcc884255231b99b7033c776070.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeHypeSquadOnlineHouse1-3rBtjf {
-	-webkit-mask: url(https://discord.com/assets/1115767aed344e96a27a12e97718c171.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeHypeSquadOnlineHouse2-2oU04B {
-	-webkit-mask: url(https://discord.com/assets/d3478c6bd5cee0fc600e55935ddc81aa.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeHypeSquadOnlineHouse3-1DoJkv {
-	-webkit-mask: url(https://discord.com/assets/2a085ed9c86f3613935a6a8667ba8b89.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeHypeSquadOnlineHouse1Winner-3wCl80 {
-	-webkit-mask: url(https://discord.com/assets/75f75c3142b8d44ea7052c2bcb9a9043.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeHypeSquadOnlineHouse2Winner-AS5bXe {
-	-webkit-mask: url(https://discord.com/assets/d4a8fe68fc5f40c8a778f858881a7b84.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeHypeSquadOnlineHouse3Winner-2CwwQi {
-	-webkit-mask: url(https://discord.com/assets/5dc48a7859a00e7d95ad8382156aab84.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeEarlySupporter-2ng_jL {
-	-webkit-mask: url(https://discord.com/assets/ce15562552e3d70c56d5408cfeed2ffd.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgePremium-1KDZYC {
-	-webkit-mask: url(https://discord.com/assets/379d2b3171722ef8be494231234da5d1.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeVerifiedDeveloper-195KfD {
-	-webkit-mask: url(https://discord.com/assets/785d81fdbedd133e213da693aba98774.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeBugHunterLevel1-dbEzVz {
-	-webkit-mask: url(https://discord.com/assets/df26f079738a4dcd07cbce6eb3c957f1.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileBadgeBugHunterLevel2-3TUciC {
-	-webkit-mask: url(https://discord.com/assets/16def052b03d75dac0ed9234c5d6a880.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl1-3oI9tx {
-	-webkit-mask: url(https://discord.com/assets/24e49184598820f274e62293349a2e43.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl2-r6nJHT {
-	-webkit-mask: url(https://discord.com/assets/cc73fba5c2e9b70752bbd1db35a1b9c3.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl3-38s3Dj {
-	-webkit-mask: url(https://discord.com/assets/a4c3939a9b03274246df9b144fcd86cf.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl4-2NXrsI {
-	-webkit-mask: url(https://discord.com/assets/d01bee8a9b41bd9dda26a43221b2e7e8.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl5-3XIa2K {
-	-webkit-mask: url(https://discord.com/assets/a99def5f819c077e5e5061cab741b7e6.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl6-3e3sxW {
-	-webkit-mask: url(https://discord.com/assets/2cfb317f3db3963d8ded9a97ee967bac.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl7-1dVhQT {
-	-webkit-mask: url(https://discord.com/assets/278736f579d810b11ddf308cb598b19e.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl8-1kXdFr {
-	-webkit-mask: url(https://discord.com/assets/38e40f25802a0fdf480d9b855a37a2f3.svg) center/contain no-repeat;
-}
-.inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl9-1d6zav {
-	-webkit-mask: url(https://discord.com/assets/cfbc2d8ceacfacf07850f986c8165195.svg) center/contain no-repeat;
-}
-
-/* ----		18.12	CHANNELDMS						---- */
+/* ----		18.11	CHANNELDMS						---- */
 
 .ChannelDms-channelmembers-wrap .ChannelDms-channelmembers-header {
 	background-color: rgba(var(--transparencycolor), var(--memberlisttransparency));
