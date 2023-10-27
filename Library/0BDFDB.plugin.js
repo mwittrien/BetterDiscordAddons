@@ -3744,9 +3744,9 @@ module.exports = (_ => {
 				};
 				BDFDB.DOMUtils.appendWebScript = function (url, container) {
 					if (typeof url != "string") return;
-					if (!container && !document.head.querySelector("bd-head bd-scripts")) document.head.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-scripts></bd-scripts></bd-head>`));
-					container = container || document.head.querySelector("bd-head bd-scripts") || document.head;
-					container = Node.prototype.isPrototypeOf(container) ? container : document.head;
+					if (!container && !document.body.querySelector("bd-head bd-scripts")) document.body.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-scripts></bd-scripts></bd-head>`));
+					container = container || document.body.querySelector("bd-head bd-scripts") || document.body;
+					container = Node.prototype.isPrototypeOf(container) ? container : document.body;
 					BDFDB.DOMUtils.removeWebScript(url, container);
 					let script = document.createElement("script");
 					script.src = url;
@@ -3754,36 +3754,36 @@ module.exports = (_ => {
 				};
 				BDFDB.DOMUtils.removeWebScript = function (url, container) {
 					if (typeof url != "string") return;
-					container = container || document.head.querySelector("bd-head bd-scripts") || document.head;
-					container = Node.prototype.isPrototypeOf(container) ? container : document.head;
+					container = container || document.body.querySelector("bd-head bd-scripts") || document.body;
+					container = Node.prototype.isPrototypeOf(container) ? container : document.body;
 					BDFDB.DOMUtils.remove(container.querySelectorAll(`script[src="${url}"]`));
 				};
 				BDFDB.DOMUtils.appendWebStyle = function (url, container) {
 					if (typeof url != "string") return;
-					if (!container && !document.head.querySelector("bd-head bd-styles")) document.head.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-styles></bd-styles></bd-head>`));
-					container = container || document.head.querySelector("bd-head bd-styles") || document.head;
-					container = Node.prototype.isPrototypeOf(container) ? container : document.head;
+					if (!container && !document.body.querySelector("bd-head bd-styles")) document.body.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-styles></bd-styles></bd-head>`));
+					container = container || document.body.querySelector("bd-head bd-styles") || document.body;
+					container = Node.prototype.isPrototypeOf(container) ? container : document.body;
 					BDFDB.DOMUtils.removeWebStyle(url, container);
 					container.appendChild(BDFDB.DOMUtils.create(`<link type="text/css" rel="stylesheet" href="${url}"></link>`));
 				};
 				BDFDB.DOMUtils.removeWebStyle = function (url, container) {
 					if (typeof url != "string") return;
-					container = container || document.head.querySelector("bd-head bd-styles") || document.head;
-					container = Node.prototype.isPrototypeOf(container) ? container : document.head;
+					container = container || document.body.querySelector("bd-head bd-styles") || document.body;
+					container = Node.prototype.isPrototypeOf(container) ? container : document.body;
 					BDFDB.DOMUtils.remove(container.querySelectorAll(`link[href="${url}"]`));
 				};
 				BDFDB.DOMUtils.appendLocalStyle = function (id, css, container) {
 					if (typeof id != "string" || typeof css != "string") return;
-					if (!container && !document.head.querySelector("bd-head bd-styles")) document.head.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-styles></bd-styles></bd-head>`));
-					container = container || document.head.querySelector("bd-head bd-styles") || document.head;
-					container = Node.prototype.isPrototypeOf(container) ? container : document.head;
+					if (!container && !document.body.querySelector("bd-head bd-styles")) document.body.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-styles></bd-styles></bd-head>`));
+					container = container || document.body.querySelector("bd-head bd-styles") || document.body;
+					container = Node.prototype.isPrototypeOf(container) ? container : document.body;
 					BDFDB.DOMUtils.removeLocalStyle(id, container);
 					container.appendChild(BDFDB.DOMUtils.create(`<style id="${id}CSS">${css.replace(/\t|\r|\n/g,"")}</style>`));
 				};
 				BDFDB.DOMUtils.removeLocalStyle = function (id, container) {
 					if (typeof id != "string") return;
-					container = container || document.head.querySelector("bd-head bd-styles") || document.head;
-					container = Node.prototype.isPrototypeOf(container) ? container : document.head;
+					container = container || document.body.querySelector("bd-head bd-styles") || document.body;
+					container = Node.prototype.isPrototypeOf(container) ? container : document.body;
 					BDFDB.DOMUtils.remove(container.querySelectorAll(`style[id="${id}CSS"]`));
 				};
 				

@@ -3109,23 +3109,16 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--header-secondary);
 }
 
-#app-mount .inviteSettingsInviteRow-1rZeIM {				/* invitesettings		invitecard							*/
+#app-mount .inviteSettingsInviteRow__0d747 {				/* invitesettings		invitecard							*/
 	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
 }
 
-#app-mount .bannedUser-1IalTM {								/* bansettings			bancard								*/
+#app-mount .bannedUser__38b44 {								/* bansettings			bancard								*/
+	background-color: transparent;
 	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
 }
-#app-mount .bannedUser-1IalTM .username-1b3MVI {			/* invitesettings		username							*/
-	color: var(--header-primary);
-}
-#app-mount .bannedUserModal-3RJCOV .reasonHeader-2etdjy {	/* invitesettings		banmodalreasonheader				*/
-	color: var(--text-normal);
-}
-#app-mount .bannedUser-1IalTM .username-1b3MVI .discrim-oGb-FO,
-#app-mount .bannedUserModal-3RJCOV .reason-YbfGC6,			/* invitesettings		banmodalreason						*/
-#app-mount .bannedUserModal-3RJCOV .userDiscrim-1D2NlF {	/* invitesettings		discriminator						*/
-	color: var(--text-muted);
+#app-mount .bannedUser__38b44:hover {
+	background-color: rgba(var(--transparencycolor), .3);
 }
 
 
@@ -3224,7 +3217,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	flex: 1 0 auto;
 }
 #app-mount .separator-2lLxgC {
-	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor),.3), 0 1px 2px 0 rgba(var(--transparencycolor),.3);
+	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor), .3), 0 1px 2px 0 rgba(var(--transparencycolor), .3);
 }
 #app-mount .modalTextContainer_ddfc28 {						/* modal				text file						*/
 	background-color: rgba(var(--transparencycolor), .5);
@@ -3240,9 +3233,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .footer-3Zgy_M {									/* modal				footer info						*/
 	background-color: rgba(var(--transparencycolor), .3);
-}
-#app-mount .close-1mLglB {									/* modal				closebutton						*/
-	z-index: 2;
 }
 
 .tabBarContainer-sCZC4w {									/* modal				tabbarcontainer					*/
@@ -6614,7 +6604,10 @@ html .bd-toast.toast-warn.icon::before {
 }
 
 .bd-addon-views .bd-view-button:hover {
-	background-color: rgba(var(--transparencycolor), .3);
+	background: rgba(var(--transparencycolor), .3);
+}
+.bd-addon-views .bd-view-button:active {
+	background: rgba(var(--accentcolor), .7);
 }
 
 .bd-button {

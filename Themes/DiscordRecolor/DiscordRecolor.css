@@ -2698,7 +2698,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background: var(--header-primary);
 }
 
-#app-mount .inviteSettingsInviteRow-1rZeIM {
+#app-mount .inviteSettingsInviteRow__0d747 {
 	box-shadow: 0 1px 0 0 rgba(var(--textbrightest),.04);
 }
 #app-mount .row-1oTw_K {
@@ -2708,18 +2708,18 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: rgba(var(--textbrightest),.04);
 }
 
-#app-mount .bannedUser-1IalTM {
+#app-mount .bannedUser__38b44 {
 	box-shadow: 0 1px 0 0 rgba(var(--textbrightest),.04);
 }
-#app-mount .bannedUser-1IalTM .username-1b3MVI {
+#app-mount .bannedUser__38b44 .username-1b3MVI {
 	color: var(--header-primary);
 }
-#app-mount .bannedUser-1IalTM .username-1b3MVI .discrim-oGb-FO,
-#app-mount .bannedUserModal-3RJCOV .reason-YbfGC6,
-#app-mount .bannedUserModal-3RJCOV .userDiscrim-1D2NlF {
+#app-mount .bannedUser__38b44 .username-1b3MVI .discrim-oGb-FO,
+#app-mount .bannedUserModal_f9f9e4 .reason-YbfGC6,
+#app-mount .bannedUserModal_f9f9e4 .userDiscrim-1D2NlF {
 	color: var(--text-muted);
 }
-#app-mount .bannedUserModal-3RJCOV .reasonHeader-2etdjy {
+#app-mount .bannedUserModal_f9f9e4 .reasonHeader__5e7c3 {
 	color: var(--text-normal);
 }
 
