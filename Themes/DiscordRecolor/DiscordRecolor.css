@@ -337,7 +337,7 @@ svg [fill="#4F545C"] {
 #app-mount .elevationHigh__80ea8, #app-mount .elevationHigh__312fd, .lightElevationHigh__1513c, .darkElevationHigh-1BaD2i {
 	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
 }
-#app-mount .elevationBorderLow__610e6, #app-mount .elevationBorderLow-2_BGCd, .lightElevationBorderLow_c9bfa0, .darkElevationBorderLow-34oHrM {
+#app-mount .elevationBorderLow__610e6, #app-mount .elevationBorderLow__1fa50, .lightElevationBorderLow_c9bfa0, .darkElevationBorderLow-34oHrM {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.6), 0 1px 5px 0 rgba(0,0,0,.3);
 }
 #app-mount .elevationBorderHigh_f9a758, #app-mount .elevationBorderHigh__39dae, .lightElevationBorderHigh_a30b06, .darkElevationBorderHigh__63ac9 {
@@ -380,7 +380,7 @@ svg [fill="#4F545C"] {
 	color: var(--header-primary);
 }
 #app-mount .editIcon__29477 {
-	-webkit-mask: url(https://discord.com/assets/860396b3ff3fa1c4ae355bebfabadecb.svg);
+	-webkit-mask: url(https://discord.com/assets/c87be216431a35927431.svg);
 	background: var(--header-primary);
 }
 
@@ -425,7 +425,7 @@ html .backgroundaccent-349kuI {
 	color: var(--header-primary);
 }
 
-html .iconBadge-2wi9r4 {
+html .iconBadge__2abac {
 	background-color: var(--background-floating);
 	color: var(--header-primary);
 }
@@ -548,7 +548,7 @@ html .iconBadge-2wi9r4 {
 	color: var(--header-primary);
 }
 
-#app-mount .borderPrimary-1ygM7_ {
+#app-mount .borderPrimary__60ecd {
 	border-color: var(--header-primary) !important;
 }
 
@@ -667,18 +667,18 @@ html .iconBadge-2wi9r4 {
 	background-color: var(--deprecated-text-input-bg);
 	border-color: var(--deprecated-text-input-border);
 }
-.searchInput-3pIoTy {
+.searchInput_e1c8d3 {
 	background-color: transparent;
 }
 .lookFilled__3dba3.select__0eb48:hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
 
-#app-mount .container-30qY7E {
+#app-mount .container__0c807 {
 	background-color: var(--deprecated-text-input-bg);
 	border-color: var(--deprecated-text-input-border);
 }
-#app-mount .container-30qY7E:hover {
+#app-mount .container__0c807:hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
 
@@ -724,7 +724,7 @@ html .iconBadge-2wi9r4 {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
-#app-mount .maxLength-IdVNmX {
+#app-mount .maxLength_f4921c {
 	color: var(--text-muted);
 }
 
@@ -766,7 +766,7 @@ html .iconBadge-2wi9r4 {
 .select__55f87 [class*="css-"][class*="-control"]:not(:last-child) {
 	border-color: var(--deprecated-text-input-border-hover);
 }
-.select__55f87.languageSelector-1hjSyO [class*="css-"][class*="-control"] {
+.select__55f87.languageSelector__4961a [class*="css-"][class*="-control"] {
 	background-color: var(--background-tertiary);
 	border: none;
 }
@@ -959,7 +959,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .image-1REvn0 {
-	background-image: url(https://discord.com/assets/cefc9c14adce616059f519c581331b32.svg);
+	background-image: url(https://discord.com/assets/9e9722bd5c8ec20fd746.svg);
 	opacity: .5;
 }
 
@@ -3688,10 +3688,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		12.7.	STREAMPREVIEW					---- */
 
-#app-mount .streamPreview-3qoMP4 {
+#app-mount .streamPreview__1846c {
 	background-color: var(--background-tertiary);
 }
-#app-mount .previewContainer-21fFBz {
+#app-mount .previewContainer_bb1924 {
 	background-color: var(--background-secondary-alt);
 }
 #app-mount .applicationName-16TISz {
@@ -3744,14 +3744,14 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .selectableItem__166c5:hover {
 	background-color: var(--background-accent);
 }
-#app-mount .popoutList-10IFAa {
+#app-mount .popoutList_db80c1 {
 	background: var(--background-primary);
 }
-#app-mount .popoutListEmpty-3MWXtE {
+#app-mount .popoutListEmpty_b9719c {
 	color: var(--header-primary);
 }
 #app-mount .quickSelectArrow__9853b {
-	-webkit-mask: url(https://discord.com/assets/f58cf3b8fc79e9d671ab649ab37651a9.svg) 50% no-repeat;
+	-webkit-mask: url(https://discord.com/assets/c4643b70509c385fcc83.svg) 50% no-repeat;
 	background: var(--interactive-normal);
 }
 #app-mount .quickSelectPopout_c0cf80 {
@@ -3789,7 +3789,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 #app-mount .krispLogo__461a0 {
-	-webkit-mask: url(https://discord.com/assets/c28317e203e00b2d7390d5ece2399228.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/ea67b1321e3d4154e476.svg) center/contain no-repeat;
 	background-color: var(--header-primary);
 }
 
@@ -3799,14 +3799,14 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-accent);
 	color: var(--header-primary);
 }
-#app-mount .phoneFieldPopout-h7c9mt .countryName-3dA1Xv {
+#app-mount .phoneFieldPopout__3e064 .countryName_eb9b14 {
 	color: var(--header-secondary);
 }
-#app-mount .phoneFieldPopout-h7c9mt .countryCode__7befd {
+#app-mount .phoneFieldPopout__3e064 .countryCode__14e5a {
 	color: var(--header-primary);
 }
 #app-mount .activityInviteEducationArrow_a24987 {
-	-webkit-mask: url(https://discord.com/assets/ba018cf9baa19824316dc4c2beb080a4.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/6f222b93b4b971e68613.svg) center/contain no-repeat;
 	background: var(--header-primary);
 }
 
@@ -3818,7 +3818,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .verification__82f71 .image__54a8d {
-	background-image: url(https://discord.com/assets/c290235278e128e94ae5ac37e58c5cbb.svg);
+	background-image: url(https://discord.com/assets/8f8162ee689b2d85996c.svg);
 	opacity: .5;
 }
 #app-mount .verification__82f71 .title__31b19 {
@@ -3835,11 +3835,11 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-tertiary);
 }
 #app-mount .verificationBlock_c45d0e .image__54a8d.email__44f2f {
-	background-image: url(https://discord.com/assets/cefc9c14adce616059f519c581331b32.svg);
+	background-image: url(https://discord.com/assets/9e9722bd5c8ec20fd746.svg);
 	opacity: .5;
 }
 #app-mount .verificationBlock_c45d0e .image__54a8d.phone__0b460 {
-	background-image: url(https://discord.com/assets/ca452f5271ebcc7132db59f60a2a9cfe.svg);
+	background-image: url(https://discord.com/assets/e9802d8cbd4efea22c7f.svg);
 	opacity: .5;
 }
 #app-mount .verificationBlock_c45d0e .body_cb675e {
