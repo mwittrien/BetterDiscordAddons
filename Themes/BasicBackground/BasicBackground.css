@@ -155,7 +155,7 @@ html {
 		16.	SCREENSHAREMODAL
 		17.	PHONEVERIFICATIONMODAL
 		18.	NOTIFICATIONSMODAL
-		19.	DISCOVERYENTRYMODAL
+		19.	PODIUMSSTARTMODAL
 		20.	NITROFEATUREMODAL
 		21.	DIRECTORYMODAL
 		22.	ACTIVITYSHAREMODAL
@@ -4698,19 +4698,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	border: 1px dashed var(--background-floating);
 }
 
-/* ----		13.19.	DISCOVERYENTRYMODAL				---- */
+/* ----		13.19.	PODIUMSTARTMODAL				---- */
 
-.checkboxWrapper-2fDzaA.row-31nALW {
-	background-color: rgba(var(--transparencycolor),.2);
-}
-.checkboxWrapper-2fDzaA.row-31nALW:hover:not(.checked__24ad6) {
-	background-color: rgba(var(--transparencycolor),.4);
-}
-.checkboxWrapper-2fDzaA.row-31nALW.checked__24ad6 {
-	background-color: rgb(var(--accentcolor));
-}
-.checkboxWrapper-2fDzaA.row-31nALW.checked__24ad6 .colorStandard-21JIj7 {
-	color: var(--header-primary);
+#app-mount .iconContainer__466ce {
+	background-color: rgba(var(--transparencycolor), .5);
 }
 
 /* ----		13.20.	NITROFEATUREMODAL				---- */
