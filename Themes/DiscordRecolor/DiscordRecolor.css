@@ -3585,7 +3585,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	-webkit-mask: url(https://discord.com/assets/7619529e87dad31fd2ae83d9b9583e49.svg) center/6px 12px no-repeat;
+	-webkit-mask: url(https://discord.com/assets/f03e2d8e19438cceaad7.svg) center/6px 12px no-repeat;
 	background-color: rgb(var(--textbrightest));
 }
 #app-mount .calendarPicker__5c474 .react-datepicker__navigation--previous {
@@ -3600,7 +3600,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .calendarPicker__5c474 .react-datepicker__navigation.react-datepicker__navigation--next,
 #app-mount .calendarPicker__5c474 .react-datepicker__navigation.react-datepicker__navigation--previous {
-	-webkit-mask: url(https://discord.com/assets/7619529e87dad31fd2ae83d9b9583e49.svg) 50%/6px 12px no-repeat;
+	-webkit-mask: url(https://discord.com/assets/f03e2d8e19438cceaad7.svg) 50%/6px 12px no-repeat;
 	background: var(--interactive-normal);
 	border-color: var(--background-floating);
 }
@@ -3646,39 +3646,20 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		12.4.	EVERYONEMENTION					---- */
 
-#app-mount .everyonePopout-nEbJY3 {
-	background-color: var(--background-primary);
-	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(var(--backgroundtertiary),.6);
+.contentWarningPopout__7d8c2 .animation__14012 {
+	opacity: 0.6;
 }
-#app-mount .header-3_S6dz {
-	color: var(--header-primary);
-}
-#app-mount .body-2iXqIL {
-	color: var(--header-secondary);
-}
-#app-mount .body-2iXqIL .animation-3GofIz {
-	opacity: .5;
-}
-#app-mount .buttonHint-2OxJB8 {
-	color: var(--text-muted);
-}
-#app-mount .buttonHint-2OxJB8 strong {
-	color: var(--header-secondary);
-}
-#app-mount .footer-2aTx0s {
+#app-mount .footer__36118 {
 	background-color: rgba(var(--backgroundtertiary),.4);
 	color: var(--text-muted);
-}
-#app-mount .footer-2aTx0s strong {
-	color: var(--header-secondary);
 }
 
 /* ----		12.5.	CHANNELFOLLOW					---- */
 
-#app-mount .header-13P3fr {
+#app-mount .header__4ef99 {
 	background: var(--background-tertiary);
 }
-#app-mount .header-13P3fr::before {
+#app-mount .header__4ef99::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -3686,12 +3667,12 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	bottom: 0;
 	left: 0;
 	background: var(--header-primary);
-	-webkit-mask: url(https://discord.com/assets/cb89c31c79a62ae99ec12351c1efb277.svg) center/cover no-repeat;
+	-webkit-mask: url(https://discord.com/assets/e9661fbf5e8e3a2e1ac9.svg) center/cover no-repeat;
 }
 
 /* ----		12.6.	CHANNELFOLLOWINFO				---- */
 
-#app-mount .guildPopout-G6M0fK {
+#app-mount .guildPopout_ea4d8c {
 	background-color: var(--background-tertiary);
 	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(var(--backgroundtertiary),.6);
 }
@@ -3880,17 +3861,17 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		12.14.	ADDROLE							---- */
 
-#app-mount .container-1YVRxo {
+#app-mount .container_e84cda {
 	width: 300px;
 }
 #app-mount .autocompleteArrow-2CRgr2,
-#app-mount .header-PfVfAO {
+#app-mount .header__02652 {
 	background-color: var(--background-tertiary);
 }
-#app-mount .container-1YVRxo .input-2Zg2X0 {
+#app-mount .container_e84cda .input_e396c0 {
 	color: var(--header-primary);
 }
-#app-mount .container-1YVRxo .sectionTag-euh3ZW {
+#app-mount .container_e84cda .sectionTag_b0df68 {
 	background-color: var(--background-secondary);
 	color: var(--header-secondary);
 }
