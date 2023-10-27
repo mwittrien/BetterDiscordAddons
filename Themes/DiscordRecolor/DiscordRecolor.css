@@ -2904,39 +2904,19 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 
-#app-mount .keybindShortcut-3zF1P9 {
+#app-mount .combo__57290 {
 	color: var(--header-primary);
 }
-#app-mount .keybindShortcut-3zF1P9 span {
+#app-mount .combo__57290 .key__06fe6 {
 	background-color: var(--text-muted);
-	border: 1px solid var(--background-tertiary);
-	box-shadow: inset 0 -4px 0 rgba(var(--backgroundtertiary),.6);
+	border: 1px solid rgba(0, 0, 0, .4);
+	box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .4);
 	color: var(--header-primary);
 }
-#app-mount .keybindShortcut-3zF1P9 span .bindArrow-EmK4SC g {
-	fill: var(--header-primary);
-}
-#app-mount .keybindShortcut-3zF1P9 span:active {
-	box-shadow: inset 0 -2px 0 var(--background-tertiary);
-	border: 1px solid #000;
+#app-mount .combo__57290 .key__06fe6:active {
+	box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .6);
+	border: 1px solid rgb(0, 0, 0);
 	color: var(--header-secondary);
-}
-#app-mount .keybindShortcut-3zF1P9 span:active .bindArrow-EmK4SC g {
-	fill: var(--header-secondary);
-}
-#app-mount .keybindShortcutTipsSelect-2FpxFp:last-of-type::before {
-	background-color: var(--interactive-muted);
-}
-#app-mount .tabButton-1hJ4oW {
-	background-color: var(--text-muted);
-	border: 1px solid var(--background-tertiary);
-	border-radius: 4px;
-	box-shadow: inset 0 -4px 0 rgba(var(--backgroundtertiary),.6);
-	color: var(--header-primary);
-}
-#app-mount .tabButton-1hJ4oW rect[fill="#4F545C"],
-#app-mount .tabButton-1hJ4oW path[fill="#36393F"] {
-	display: none;
 }
 
 /* ----		11.6.	QUICKSWITCHER					---- */
@@ -2961,12 +2941,12 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-primary);
 }
 #app-mount .friendSelected_f0db37,
-#app-mount .inviteRow-3vmB7i:hover {
+#app-mount .inviteRow_a25947:hover {
 	background-color: var(--background-accent);
 	color: var(--header-primary);
 }
 #app-mount .friend__05c43,
-#app-mount .inviteRowName-3H4s_c {
+#app-mount .inviteRowName_bc8b23 {
 	color: var(--header-secondary);
 }
 #app-mount .footer__274e8,
@@ -2980,70 +2960,39 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .subtitle__593cd,
 #app-mount .footerText_ae34c9,
-#app-mount .checkBoxLabel-16BK2g,
-#app-mount .footerText-2QLGHU,
-#app-mount .subText-1CcYgq {
+#app-mount .checkBoxLabel__29660,
+#app-mount .footerText__614f3,
+#app-mount .subText__9988c {
 	color: var(--header-secondary);
 }
 #app-mount .errorState_b806b1 {
 	color: var(--text-muted);
 }
 #app-mount .notFriends__778a1 .errorStateIcon__7edd8 {
-	background-image: url(https://discord.com/assets/4f86d7f58df32580164fc595377c0169.svg);
+	background-image: url(https://discord.com/assets/07aa1f325ebe8b8af5cb.svg);
 	opacity: .5;
 }
 #app-mount .noFriends_a7f7ca .errorStateIcon__7edd8 {
-	background-image: url(https://discord.com/assets/16bd6f7e8c2feedd7fa44d25013e687f.svg);
+	background-image: url(https://discord.com/assets/adfe130868d2bcf467b5.svg);
 	opacity: .5;
 }
 #app-mount .partyFull_c6b62b .errorStateIcon__7edd8 {
-	background-image: url(https://discord.com/assets/f690b8a9cd33cda18e431d4717fff5ab.svg);
+	background-image: url(https://discord.com/assets/53d74eda11a4185c1acd.svg);
 	opacity: .5;
 }
 #app-mount .noResults_c69767 .errorStateIcon__7edd8 {
-	background-image: url(https://discord.com/assets/1eed0d895df6e35f164d8ed5e84037d2.svg);
+	background-image: url(https://discord.com/assets/c8718df1382ba878f1fc.svg);
 	opacity: .5;
 }
 
 /* ----		11.8.	LOGINSCREEN						---- */
 
-.theme-dark.authBox__7196a,
-.theme-light.authBox__7196a {
-	background: var(--background-mobile-primary);
-	color: var(--text-muted);
-}
-.theme-dark.authBox__7196a::before,
-.theme-light.authBox__7196a::before {
-	background-image: url(https://discord.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg);
-}
-.theme-dark.navRow-dG-XX8,
-.theme-light.navRow-dG-XX8 {
+.theme-dark.navRow_bb8efc,
+.theme-light.navRow_bb8efc {
 	background: var(--background-secondary);
 }
 .subText_b19200 strong {
 	color: rgba(var(--textbright),.9);
-}
-#app-mount .authBoxWithMobileBanner-cYSkMm {
-	background: var(--background-primary);
-	color: var(--text-muted);
-}
-
-/* ----		11.9.	TERMACCEPTMODAL					---- */
-
-#app-mount .modal-DRZfgq {
-	background-color: var(--background-primary);
-	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.3), 0 2px 10px 0 rgba(0,0,0,.2);
-}
-#app-mount .modal-DRZfgq [style*="/assets/a13cfdd7220132fff399a76c3ed64519.svg"],
-#app-mount .modal-DRZfgq [src*="/assets/a13cfdd7220132fff399a76c3ed64519.svg"] {
-	filter: brightness(85%) invert(100%);
-	opacity: .7;
-}
-#app-mount .ack-3sCuAV {
-	color: var(--header-secondary);
-}
-#app-mount .buttonContainer-28osRq {
-	background-color: var(--background-secondary);
 }
 
 /* ----		11.10.	DOWNLOADAPPMODAL				---- */
@@ -3233,25 +3182,25 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		11.15.	NOTIFICATIONSMODAL				---- */
 
-#app-mount .channelName-IPB6B3 {
+#app-mount .channelName_a1ccf5 {
 	color: var(--header-primary);
 }
-#app-mount .guildName-1kreI8,
-#app-mount .override-1sK4r0,
-#app-mount .overrideHighlight-3f-yyO {
+#app-mount .guildName_b9dc9e,
+#app-mount .override_f2098b,
+#app-mount .overrideHighlight__6a2f1 {
 	color: var(--header-secondary);
 }
-#app-mount .override-1sK4r0:hover {
+#app-mount .override_f2098b:hover {
 	background-color: rgba(var(--backgroundtertiary),.1);
 }
-#app-mount .overrideHighlight-3f-yyO,
-#app-mount .overrideHighlight-3f-yyO:hover {
+#app-mount .overrideHighlight__6a2f1,
+#app-mount .overrideHighlight__6a2f1:hover {
 	background-color: rgba(var(--backgroundtertiary),.3);
 }
-#app-mount .checkboxContainer-1NbL2v::before {
+#app-mount .checkboxContainer__5a761::before {
 	background-color: rgba(var(--backgroundtertiary),.6);
 }
-#app-mount .overridePlaceholder-1nDEsX {
+#app-mount .overridePlaceholder__46353 {
 	border: 1px dashed var(--background-floating);
 }
 
