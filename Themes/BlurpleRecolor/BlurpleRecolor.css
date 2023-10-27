@@ -437,14 +437,15 @@
 	color: #fff;
 }
 
-.reactionMe__98f57 .reactionCount_b49901,					/* reaction				count me							*/
-.reactionMe__98f57:hover .reactionCount_b49901 {
+#app-mount .reactionMe__98f57 .reactionCount_b49901,		/* reaction				count me							*/
+#app-mount .reactionMe__98f57:hover .reactionCount_b49901 {
 	color: rgb(var(--accentcolor));
 }
-.reaction_fef95b.reactionMe__98f57 {						/* reaction				wrapper me							*/
+#app-mount .reaction_fef95b.reactionMe__98f57 {				/* reaction				wrapper me							*/
 	background-color: rgba(var(--accentcolor), .3);
+	border-color: rgb(var(--accentcolor));
 }
-.reaction_fef95b:hover,										/* reaction				add react							*/
+#app-mount .reaction_fef95b:hover,							/* reaction				add react							*/
 .addReactButton__59750:hover,								/* reaction				add new react						*/
 .buttonInner__2771e:hover {
 	border-color: rgba(var(--accentcolor), .5);
