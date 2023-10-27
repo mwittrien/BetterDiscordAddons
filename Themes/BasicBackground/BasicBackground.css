@@ -1015,9 +1015,6 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .repliedMessage_e2bf4a ~ * .avatar__08316 {
 	top: 24px;
 }
-#app-mount .container_aed774 .avatar__08316 {
-	left: calc(-10px * var(--usechatbubbles));
-}
 #app-mount .avatarDecoration__14b3c {						/* message				avatar decoration					*/
 	position: absolute;
 	top: 2px;
@@ -1026,9 +1023,6 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .messageItemBody_e13b10.hasReply_febd50 .avatarDecoration__14b3c,
 #app-mount .repliedMessage_e2bf4a ~ * .avatarDecoration__14b3c {
 	top: 24px;
-}
-#app-mount .container_aed774 .avatarDecoration__14b3c {
-	left: calc(-10px * var(--usechatbubbles) - (6.6666666px * var(--decoration-to-avatar-ratio)/2));
 }
 
 #app-mount .replyBadge__3d01e {								/* message				reply badge							*/
@@ -1155,9 +1149,6 @@ button.button__4f306.enabled__470f0:hover svg {
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--transparencycolor), var(--messagetransparency));
 }
-.cozy_f5c119 .container_aed774 .header__39b23::after {
-	left: 40px;
-}
 .messageGroupWrapper_f8c6e9 .messageGroupCozy__2dedd .header__39b23::after {
 	top: 2px;
 }
@@ -1214,10 +1205,6 @@ button.button__4f306.enabled__470f0:hover svg {
 .zalgo__39311.cozy_f5c119 .header__39b23,
 .wrapper__5c5cd,
 .cozy__32560 .header_c65767 {
-	overflow: visible;
-}
-.container_aed774 {											/* message				blocked								*/
-	padding: 0;
 	overflow: visible;
 }
 #app-mount .cozyMessage__64ce7,								/* message				container cozy						*/
