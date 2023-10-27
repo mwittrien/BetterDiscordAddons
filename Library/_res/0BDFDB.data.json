@@ -347,15 +347,15 @@
 			"Header": [".header", "heading"],
 			"Popout": ["renderHeader", "renderEmptyState"]
 		}},
-		"ModalComponents": {"strings": [".renderModal,", "onCloseRequest"], "exported": false, "value": "exports", "map": {
-			"Modal": [".renderModal"],
-			"ModalCloseButton": ["closeWithCircle"],
-			"ModalContent": [".content,"],
-			"ModalFooter": [".footer,"],
-			"ModalHeader": [".headerId"],
-			"ModalListContent": [".scrollerRef"],
-			"ModalRoot": [".transitionState", ".size"],
-			"ModalSize": ["DYNAMIC", "SMALL"]
+		"ModalComponents": {"props": ["Modal", "ModalCloseButton"], "exported": false, "value": "exports", "map": {
+			"Modal": ["Modal"],
+			"ModalCloseButton": ["ModalCloseButton"],
+			"ModalContent": ["ModalContent"],
+			"ModalFooter": ["ModalFooter"],
+			"ModalHeader": ["ModalHeader"],
+			"ModalListContent": ["ModalListContent"],
+			"ModalRoot": ["ModalRoot"],
+			"ModalSize": ["ModalSize"]
 		}},
 		"Paginator": {"strings": ["totalPageCount", "selectedPage"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"]},
@@ -378,7 +378,7 @@
 			"Types": ["\"online\"", "\"unknown\""]
 		}},
 		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"]},
-		"TextElement": {"strings": [".strong,", ".STANDARD"]},
+		"TextElement": {"strings": [".strong]", ".STANDARD"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
 		"UserBadgeComponents": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"], "exported": false, "value": "exports", "map": {
 			"UserBadges": [".PROFILE_USER_BADGES"],

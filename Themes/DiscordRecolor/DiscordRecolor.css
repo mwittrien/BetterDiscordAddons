@@ -2738,9 +2738,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .zoomedCarouselModalRoot__1e2da {
 	background: transparent !important;
 }
-#app-mount .separator-2lLxgC {
-	box-shadow: 0 1px 0 0 rgba(var(--backgroundtertiary),.3), 0 1px 2px 0 rgba(var(--backgroundtertiary),.3);
-}
 #app-mount .footer__89240,
 #app-mount .footer__09373 {
 	background-color: var(--background-secondary);
@@ -2754,15 +2751,15 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	flex: 1 0 auto;
 }
 
-#app-mount .modal-6GHvdM .tabBarContainer-sCZC4w {
+#app-mount .modal_6GHvdM .tabBarContainer__63f55 {
 	background: rgba(0,0,0,.2);
 	box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
 }
 
-#app-mount .separator-3TK_-B {
+#app-mount .separator_ff09cd {
 	box-shadow: 0 1px 0 0 rgba(var(--backgroundfloating),.3), 0 1px 2px 0 rgba(var(--backgroundfloating),.3);
 }
-#app-mount .divider-3APUjw {
+#app-mount .divider__1464c {
 	border-color: var(--background-secondary);
 }
 

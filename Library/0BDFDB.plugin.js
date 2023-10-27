@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.4.3
+ * @version 3.4.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1283,7 +1283,7 @@ module.exports = (_ => {
 					let all = typeof config.all != "boolean" ? false : config.all;
 					const req = Internal.getWebModuleReq();
 					const found = [];
-					if (!onlySearchUnloaded) for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+					if (!onlySearchUnloaded) for (let i in req.c) if (req.c.hasOwnProperty(i) && req.c[i].exports != window) {
 						let m = req.c[i].exports, r = null;
 						if (m && (typeof m == "object" || typeof m == "function")) {
 							if (!!(r = filter(m))) {
@@ -2462,9 +2462,8 @@ module.exports = (_ => {
 								if (dataStorage[item]._originalModule[item2]) return dataStorage[item]._originalModule[item2];
 								if (dataStorage[item]._mappedItems[item2]) return dataStorage[item]._originalModule[dataStorage[item]._mappedItems[item2]];
 								if (!dataStorage[item].map[item2]) return dataStorage[item]._originalModule[item2];
-								let foundFunc = Object.entries(dataStorage[item]._originalModule).find(n => {
+								let foundFunc = dataStorage[item].map[item2] && dataStorage[item].map[item2].length == 1 && dataStorage[item]._originalModule[dataStorage[item].map[item2][0]] ? [dataStorage[item].map[item2][0], dataStorage[item]._originalModule[dataStorage[item].map[item2][0]]] : Object.entries(dataStorage[item]._originalModule).find(n => {
 									if (!n || !n[1]) return;
-									if (dataStorage[item].map[item2] && Object.keys(dataStorage[item].map[item2].length) == 1 && BDFDB.StringUtils.charIsUpperCase(dataStorage[item].map[item2][0]) && dataStorage[item].map[item2][0] == n[0]) return true;
 									let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
 									let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
 									return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString && funcString.replace(/[\n\t\r]/g, "").indexOf(string) > -1 || renderFuncString && renderFuncString.replace(/[\n\t\r]/g, "").indexOf(string) > -1);

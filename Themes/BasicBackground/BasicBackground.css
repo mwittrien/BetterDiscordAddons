@@ -2428,11 +2428,6 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: transparent;
 	border-color: transparent;
 }
-.profileBannerPreview-3mLIdO .avatarUploaderInner_c81617 {	/* accountsettings		preview avatar						*/
-	background-color: transparent;
-	border: unset;
-	margin: 6px;
-}
 															/* accountsettings		container banner					*/
 .accountProfileCard__22589 *:not(foreignObject) > .banner__6d414 {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 20.576172 120 A 46 46 0 0 1 62 94 A 46 46 0 0 1 103.41992 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
@@ -3213,12 +3208,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .zoomedCarouselModalRoot__1e2da {
 	background: transparent !important;
 }
-.header-1zd7se > .wrapper-1HSdhi:first-child {
-	flex: 1 0 auto;
-}
-#app-mount .separator-2lLxgC {
-	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor), .3), 0 1px 2px 0 rgba(var(--transparencycolor), .3);
-}
 #app-mount .modalTextContainer_ddfc28 {						/* modal				text file						*/
 	background-color: rgba(var(--transparencycolor), .5);
 	border: none;
@@ -3231,31 +3220,20 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .footerSeparator__57d95 {
 	box-shadow: none;
 }
-#app-mount .footer-3Zgy_M {									/* modal				footer info						*/
-	background-color: rgba(var(--transparencycolor), .3);
-}
 
-.tabBarContainer-sCZC4w {									/* modal				tabbarcontainer					*/
+.tabBarContainer__63f55 {									/* modal				tabbarcontainer					*/
 	border-top-color: rgba(var(--transparencycolor), .3);
 }
-#app-mount .modal-6GHvdM .tabBarContainer-sCZC4w {
+#app-mount .modal_6GHvdM .tabBarContainer__63f55 {
 	background: rgba(var(--transparencycolor), .2);
 	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor), .1);
 }
 
-#app-mount .separator-3TK_-B {
+#app-mount .separator_ff09cd {
 	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor),.3), 0 1px 2px 0 rgba(var(--transparencycolor),.3);
 }
-#app-mount .divider-3APUjw {
+#app-mount .divider__1464c {
 	border-color: var(--background-modifier-accent);
-}
-
-#app-mount .subHeader-2z6h5Z {
-	color: var(--header-secondary);
-}
-#app-mount .sectionBody-7I2eAN,
-#app-mount .subHeader-1mr1LG {
-	color: var(--header-secondary);
 }
 
 #app-mount .message-1F58Gs {
