@@ -2726,13 +2726,13 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ~~~~		11.		MODALS							~~~~ */
 
-#app-mount .root_a28985,
+#app-mount .root_a28985:not(.noBackground_ebd8f7),
 #app-mount .modal__060da {
 	background-color: var(--background-primary);
 	border: none;
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.3), 0 2px 10px 0 rgba(0,0,0,.2);
 }
-#app-mount .rootWithShadow__073a7 {
+#app-mount .rootWithShadow__073a7:not(.noShadow__49254) {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.3), 0 2px 10px 0 rgba(0,0,0,.2);
 }
 #app-mount .zoomedCarouselModalRoot__1e2da {
@@ -2815,24 +2815,24 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		11.2.	GUILDADD/CREATION				---- */
 
-.container-x8Y1ix {
+.container__73245 {
 	background-color: var(--background-secondary);
 	border: none;
 }
-.container-x8Y1ix:hover {
+.container__73245:hover {
 	background-color: var(--background-secondary-alt);
 	border: none;
 }
-.arrow-2yY1Tm {
-	-webkit-mask: url(https://discord.com/assets/69a0ea5dbf79a129c81a0cb171b60b7a.svg) center/cover no-repeat;
+.arrow__5e540 {
+	-webkit-mask: url(https://discord.com/assets/ebd4163d89c2d849ec54.svg) center/cover no-repeat;
 	background: var(--text-normal);
 	object-position: -999999px -999999px;
 }
 
-.input-m1-Y7Q {
+.input__0c269 {
 	background: transparent;
 }
-.inputInner-1Z3Tui {
+.inputInner__2e566 {
 	border: 1px solid var(--deprecated-text-input-border);
 }
 

@@ -139,7 +139,6 @@ html {
 	13.	MODALS
 		1.	USERMODAL
 		2.	GUILDADD/CREATION
-		3.	REGIONSELECTMODAL
 		4.	UPLOADMODAL
 		5.	KEYBOARDSHORTCUTSMODAL
 		6.	QUICKSWITCHER
@@ -3155,7 +3154,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: 1011;
 }
 
-#app-mount .root_a28985,									/* modal				container (foldersettings)			*/
+#app-mount .root_a28985:not(.noBackground_ebd8f7),			/* modal				container (foldersettings)			*/
 #app-mount .modal__060da {									/* modal				container							*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
@@ -3163,7 +3162,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	border-radius: 5px;
 	transform: unset !important;
 }
-#app-mount .rootWithShadow__073a7 {
+#app-mount .rootWithShadow__073a7:not(.noShadow__49254) {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
 .root_a28985 > *,
@@ -3197,8 +3196,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	backdrop-filter: blur(var(--popoutblur));
 }
 .root_a28985 .modal__060da::before,
+.root_a28985.noBackground_ebd8f7::before,
 .modal_d2e7a7::before,
 .root_a28985 .modal__060da::after,
+.root_a28985.noBackground_ebd8f7::after,
 .modal_d2e7a7::after {
 	display: none;
 }
@@ -3278,103 +3279,38 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		13.2.	GUILDADD/CREATION				----- */
 
-.container-x8Y1ix,											/* create modal			item								*/
-.guildRow-3fJnG6 {											/* hub modal			item								*/
+.container__73245,											/* create modal			item								*/
+.guildRow_b1c31c {											/* hub modal			item								*/
 	background-color: rgb(var(--transparencycolor), .2);
 	border: none;
 }
-.container-x8Y1ix:hover,
-.guildRow-3fJnG6:hover {
+.container__73245:hover,
+.guildRow_b1c31c:hover {
 	background-color: rgb(var(--transparencycolor), .4);
 }
-.text-PdAsFQ,												/* create modal			text								*/
-.guildName-3RzJ_H {											/* hub modal			text								*/
+.text__43e5f,												/* create modal			text								*/
+.guildName_e8fc4b {											/* hub modal			text								*/
 	color: var(--header-secondary);
 }
-.container-x8Y1ix:hover .text-PdAsFQ,
-.guildRow-3fJnG6:hover .guildName-3RzJ_H {
+.container__73245:hover .text__43e5f,
+.guildRow_b1c31c:hover .guildName_e8fc4b {
 	color: var(--header-primary);
 }
-.arrow-2yY1Tm,												/* create modal			arrow								*/
-.guildName-3RzJ_H ~ img {									/* hub modal			arrow								*/
+.arrow__5e540,												/* create modal			arrow								*/
+.guildName_e8fc4b ~ img {									/* hub modal			arrow								*/
 	object-position: -999999px -999999px;
-	-webkit-mask: url(https://discord.com/assets/69a0ea5dbf79a129c81a0cb171b60b7a.svg) center/cover no-repeat;
+	-webkit-mask: url(https://discord.com/assets/ebd4163d89c2d849ec54.svg) center/cover no-repeat;
 	background: var(--header-secondary);
 }
-.container-x8Y1ix:hover .arrow-2yY1Tm,
-.guildRow-3fJnG6:hover .guildName-3RzJ_H ~ img {
+.container__73245:hover .arrow__5e540,
+.guildRow_b1c31c:hover .guildName_e8fc4b ~ img {
 	background: var(--header-primary);
 }
-.input-m1-Y7Q {												/* modal				invite input						*/
+.input__0c269 {												/* modal				invite input						*/
 	background: transparent;
 }
-.inputInner-1Z3Tui {										/* modal				invite input inner					*/
+.inputInner__2e566 {										/* modal				invite input inner					*/
 	border: 1px solid var(--deprecated-text-input-border);
-}
-
-/* ----		13.3.	REGIONSELECTMODAL				---- */
-
-#app-mount .regionSelectModal-12e-57 {						/* modal				container							*/
-	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
-	position: relative;
-	overflow: hidden;
-}
-.regionSelectModal-12e-57::before,
-.regionSelectModal-12e-57::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
-.regionSelectModal-12e-57::before {
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-}
-.regionSelectModal-12e-57::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
-	backdrop-filter: blur(var(--popoutblur));
-}
-#app-mount .regionSelectModal-12e-57 .regionSelectModalOption-2DSIZ3 {
-	background-color: rgba(var(--transparencycolor), .2);
-	border-color: rgba(var(--transparencycolor), .1);
-}
-#app-mount .regionSelectModal-12e-57 .regionSelectModalOption-2DSIZ3:hover {
-	background-color: rgba(var(--transparencycolor), .3);
-}
-
-#app-mount .regionSelect-3lf4eE.regionSelectLoading-34I21m {
-	border: 1px solid var(--header-secondary);
-}
-#app-mount .regionSelect-3lf4eE button {
-	border: 1px solid var(--header-secondary);
-}
-#app-mount .regionSelect-3lf4eE .regionSelectInner-24f4Ce {
-	border: 1px solid var(--header-secondary);
-}
-#app-mount .regionSelectModal-12e-57 .regionSelectModalFooter-20C5iA {
-	color: var(--text-muted);
-}
-#app-mount .regionSelectName-2-2FWh {
-	color: var(--text-muted);
-}
-#app-mount .regionSelectModal-12e-57 .regionSelectModalOption-2DSIZ3:hover .regionSelectName-2-2FWh {
-	color: var(--text-normal);
-}
-#app-mount .regionSelect-3lf4eE:hover button {
-	color: var(--header-primary);
-}
-#app-mount .container-1s4HBn.hover-2AGf5p {
-	border-color: var(--deprecated-text-input-border-hover);
-}
-#app-mount .flag-16iIBd.vip-3pFIN8::after {
-	border-color: rgba(var(--transparencycolor), .5);
 }
 
 /* ----		13.4.	UPLOADMODAL						---- */
@@ -3415,7 +3351,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .uploadModalIn_c0ca4b .uploadDropModal__73a36 .inner__7afe9 .instructions__9e259 {
 	text-shadow: 1px 1px var(--textshadow);
 }
-.uploadModal_eae2a0 .inner-zqa7da {							/* modal				channeltextarea						*/
+.uploadModal_eae2a0 .inner__7afe9 {							/* modal				channeltextarea						*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
 .uploadModal_eae2a0 .footer_ceda43 {						/* modal				footer								*/
@@ -4088,6 +4024,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .layer-2aCOJ3:nth-child(9) {
 	z-index: 1010;
+}
+
+.translate_c2f6c4 {
+	transform: unset !important;
 }
 
 #app-mount .loadingPopout-1feYe_,							/* loading popout											*/
@@ -5927,11 +5867,11 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		15.3.	INPUTS							---- */
 
-.input_d266e7 {												/* valueinput			bordered							*/
+input.input_d266e7 {										/* valueinput			bordered							*/
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
 }
-.input_d266e7:hover:not(:focus) {
+input.input_d266e7:hover:not(:focus) {
 	border-color: rgb(var(--transparencycolor));
 }
 .textInput-3g8y92 {											/* textinput												*/
