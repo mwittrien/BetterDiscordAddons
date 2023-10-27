@@ -139,24 +139,21 @@ html {
 	13.	MODALS
 		1.	USERMODAL
 		2.	GUILDADD/CREATION
-		4.	UPLOADMODAL
-		5.	KEYBOARDSHORTCUTSMODAL
-		6.	QUICKSWITCHER
-		7.	INVITEMODAL/GROUPCREATE
-		8.	LOGINSCREEN
-		10.	DOWNLOADAPPMODAL
-		11.	GUILDBOOSTMODAL
-		12.	REACTIONSMODAL
-		13.	GUILDWELCOMEMODAL
-		14.	GUILDRULESMODAL
-		15.	GUILDFEEDBACKMODAL
-		16.	SCREENSHAREMODAL
-		17.	PHONEVERIFICATIONMODAL
-		18.	NOTIFICATIONSMODAL
-		19.	PODIUMSTARTMODAL
-		20.	NITROFEATUREMODAL
-		21.	DIRECTORYMODAL
-		22.	ACTIVITYSHAREMODAL
+		3.	UPLOADMODAL
+		4.	KEYBOARDSHORTCUTSMODAL
+		5.	QUICKSWITCHER
+		6.	INVITEMODAL/GROUPCREATE
+		7.	LOGINSCREEN
+		8.	DOWNLOADAPPMODAL
+		9.	GUILDBOOSTMODAL
+		10.	REACTIONSMODAL
+		11.	GUILDWELCOMEMODAL
+		12.	GUILDRULESMODAL
+		13.	GUILDFEEDBACKMODAL
+		14.	SCREENSHAREMODAL
+		15.	PHONEVERIFICATIONMODAL
+		16.	NOTIFICATIONSMODAL
+		17.	PODIUMSTARTMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -3312,7 +3309,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	border: 1px solid var(--deprecated-text-input-border);
 }
 
-/* ----		13.4.	UPLOADMODAL						---- */
+/* ----		13.3.	UPLOADMODAL						---- */
 
 #app-mount .uploadModal_eae2a0 {							/* modal				container							*/
 	background-color: transparent;
@@ -3361,7 +3358,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 2px 8px rgba(var(--transparencycolor), .4);
 }
 
-/* ----		13.5.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		13.4.	KEYBOARDSHORTCUTSMODAL			---- */
 
 #app-mount .keyboardShortcutsModal__74c71 {					/* modal				container							*/
 	background-color: transparent;
@@ -3415,7 +3412,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--header-secondary);
 }
 
-/* ----		13.6.	QUICKSWITCHER					---- */
+/* ----		13.5.	QUICKSWITCHER					---- */
 
 #app-mount .quickswitcher_a3d29a {							/* modal				container							*/
 	background-color: transparent;
@@ -3460,7 +3457,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
-/* ----		13.7.	INVITEMODAL/GROUPCREATE			---- */
+/* ----		13.6.	INVITEMODAL/GROUPCREATE			---- */
 
 #app-mount .contentWrapper__85d37 {							/* modal				guildinvitemodal				*/
 	background-color: transparent;
@@ -3533,7 +3530,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	opacity: 0.6;
 }
 
-/* ----		13.8.	LOGINSCREEN						---- */
+/* ----		13.7.	LOGINSCREEN						---- */
 
 #app-mount .wrapper_eebc2d {								/* login				wrapper								*/
 	background: transparent;
@@ -3558,7 +3555,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
-/* ----		13.10.	DOWNLOADAPPMODAL				---- */
+/* ----		13.8.	DOWNLOADAPPMODAL				---- */
 
 #app-mount .downloadApps__30ed7 {							/* modal				container							*/
 	background-color: transparent;
@@ -3606,7 +3603,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	text-shadow: 1px 1px var(--textshadow);
 }
 
-/* ----		13.11.	GUILDBOOSTMODAL					---- */
+/* ----		13.9.	GUILDBOOSTMODAL					---- */
 
 #app-mount .subscriberCount__53026 {						/* modal				subcount							*/
 	color: var(--header-secondary);
@@ -3656,7 +3653,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: rgb(var(--accentcolor));
 }
 
-/* ----		13.12.	REACTIONSMODAL					---- */
+/* ----		13.10.	REACTIONSMODAL					---- */
 
 #app-mount .scroller__5fda0 {								/* modal				sidebar								*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -3681,7 +3678,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--text-muted);
 }
 
-/* ----		13.13.	GUILDWELCOMEMODAL				---- */
+/* ----		13.11.	GUILDWELCOMEMODAL				---- */
 
 .optionContainer__5d0b1 {									/* modal				option								*/
 	background-color: rgba(var(--transparencycolor), .2);
@@ -3690,7 +3687,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .4);
 }
 
-/* ----		13.14.	GUILDRULESMODAL					---- */
+/* ----		13.12.	GUILDRULESMODAL					---- */
 
 .guildSidebar__8763f {										/* modal				sidebar								*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -3702,7 +3699,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
-/* ----		13.15.	GUILDFEEDBACKMODAL				---- */
+/* ----		13.13.	GUILDFEEDBACKMODAL				---- */
 
 .root_b4f834 {												/* modal				items								*/
 	background-color: transparent;
@@ -3718,7 +3715,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgb(var(--transparencycolor), .4);
 }
 
-/* ----		13.16.	SCREENSHAREMODAL				---- */
+/* ----		13.14.	SCREENSHAREMODAL				---- */
 
 #app-mount .sourceThumbnail__21c87 {						/* modal				preview tiles						*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -3738,7 +3735,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: rgba(var(--transparencycolor), .5);
 }
 
-/* ----		13.17.	PHONEVERIFICATIONMODAL			---- */
+/* ----		13.15.	PHONEVERIFICATIONMODAL			---- */
 
 .phoneField__65729 {
 	background-color: rgba(var(--transparencycolor), .2);
@@ -3750,7 +3747,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: absolute !important;
 }
 
-/* ----		13.18.	NOTIFICATIONSMODAL				---- */
+/* ----		13.16.	NOTIFICATIONSMODAL				---- */
 
 #app-mount .channelName_a1ccf5 {
 	color: var(--header-primary);
@@ -3774,59 +3771,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	border: 1px dashed var(--background-floating);
 }
 
-/* ----		13.19.	PODIUMSTARTMODAL				---- */
+/* ----		13.17.	PODIUMSTARTMODAL				---- */
 
 #app-mount .iconContainer__466ce {
 	background-color: rgba(var(--transparencycolor), .5);
-}
-
-/* ----		13.20.	NITROFEATUREMODAL				---- */
-
-#app-mount .cardImageBackground-1zqQ8d {
-	background: #000;
-	opacity: 0.5;
-}
-#app-mount .cardInfo-62VDSb {
-	background: rgba(var(--transparencycolor),.4);
-}
-
-/* ----		13.21.	DIRECTORYMODAL					---- */
-
-#app-mount .directoryModal-YJsOMv {							/* modal				container							*/
-	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
-	position: relative;
-	overflow: hidden;
-}
-.directoryModal-YJsOMv::before,
-.directoryModal-YJsOMv::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
-.directoryModal-YJsOMv::before {
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-}
-.directoryModal-YJsOMv::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
-	backdrop-filter: blur(var(--popoutblur));
-}
-
-/* ----		13.22.	ACTIVITYSHAREMODAL				---- */
-
-.shelfTopBackground-R55ED9 {
-	z-index: 2;
-}
-.scrollTierBackgroundUpsell-2oh_9T {
-	background: rgba(var(--accentcolor), .1);
 }
 
 
