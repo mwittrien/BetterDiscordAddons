@@ -1514,10 +1514,14 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-top-color: var(--background-modifier-accent);
 }
 
-.container__08420 {											/* textarea				reply								*/
+.attachedBars_da3c74 {										/* textarea				reply								*/
 	background: rgba(var(--transparencycolor), .3);
 	border: none;
 	border-bottom: 1px solid var(--background-modifier-accent);
+}
+.replyBar_b64d74,
+.threadSuggestionBar_b633f7 {
+	background: transparent;
 }
 
 .scrollableContainer__33e06 {								/* textarea				container							*/
