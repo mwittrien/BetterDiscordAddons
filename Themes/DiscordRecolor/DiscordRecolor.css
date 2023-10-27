@@ -901,7 +901,7 @@ html .iconBadge-2wi9r4 {
 }
 
 #app-mount .imageUnverified-1QCPtJ {
-	background-image: url(https://discord.com/assets/e260177e5165e6789e30b9592df75424.svg);
+	background-image: url(https://discord.com/assets/f0cba42b6a6d3b2de4fd.svg);
 	opacity: .5;
 }
 
@@ -1712,7 +1712,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .cancelImage-T807tN {
-	background: url(https://discord.com/assets/03863b539aec443327ca2ffc51a89dac.svg);
+	background: url(https://discord.com/assets/d12b5c285831f85c5eee.svg);
 	opacity: .75;
 }
 
@@ -2771,34 +2771,34 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 
-#app-mount .message-1F58Gs {
+#app-mount .message__3ad07 {
 	color: var(--header-secondary);
 }
-#app-mount .secondaryButton-197mr8 {
+#app-mount .secondaryButton_e0812e {
 	color: var(--header-primary);
 }
-#app-mount .imageUpgrade-moI_hv {
-	background-image: url(https://discord.com/assets/81ded87ebac6f9d55e8624a3e5167c8f.svg);
+#app-mount .imageUpgrade__02fcc {
+	background-image: url(https://discord.com/assets/7e81dd54960672eabe78.svg);
 }
-#app-mount .imageCancel-2x4k_k {
-	background: url(https://discord.com/assets/03863b539aec443327ca2ffc51a89dac.svg);
+#app-mount .imageCancel_e3036f {
+	background: url(https://discord.com/assets/d12b5c285831f85c5eee.svg);
 }
-#app-mount .imageUnclaimed-5nJyYs {
-	background-image: url(https://discord.com/assets/3b65c741e596bc0979f7ba0c42de6fff.svg);
+#app-mount .imageUnclaimed__3f7ec {
+	background-image: url(https://discord.com/assets/41675689ca055858e137.svg);
 	opacity: .5;
 }
-#app-mount .imageUnverified-2NLnW6 {
-	background-image: url(https://discord.com/assets/e260177e5165e6789e30b9592df75424.svg);
+#app-mount .imageUnverified__6dc24 {
+	background-image: url(https://discord.com/assets/f0cba42b6a6d3b2de4fd.svg);
 	opacity: .5;
 }
 
-#app-mount .divider-MRAL1L {
+#app-mount .divider__17151 {
 	border-color: var(--background-secondary);
 }
-#app-mount .backButtonColor-5k5ViL {
+#app-mount .backButtonColor_ceeab9 {
 	color: var(--header-primary);
 }
-#app-mount .checkboxLabel-NbUiJx {
+#app-mount .checkboxLabel__56eeb {
 	color: var(--header-secondary);
 }
 

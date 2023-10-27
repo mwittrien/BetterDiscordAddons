@@ -2428,10 +2428,6 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: transparent;
 	border-color: transparent;
 }
-															/* accountsettings		container banner					*/
-.accountProfileCard__22589 *:not(foreignObject) > .banner__6d414 {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 20.576172 120 A 46 46 0 0 1 62 94 A 46 46 0 0 1 103.41992 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
-}
 .questionMark__8d22a svg {									/* accountsettings		questionmark						*/
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
@@ -3165,6 +3161,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	position: relative;
 	border-radius: 5px;
+	transform: unset !important;
 }
 #app-mount .rootWithShadow__073a7 {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
@@ -3236,80 +3233,39 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	border-color: var(--background-modifier-accent);
 }
 
-#app-mount .message-1F58Gs {
+#app-mount .message__3ad07 {
 	color: var(--header-secondary);
 }
-#app-mount .secondaryButton-197mr8 {
+#app-mount .secondaryButton_e0812e {
 	color: var(--header-primary);
 }
-#app-mount .imageUpgrade-moI_hv {
-	background-image: url(https://discord.com/assets/81ded87ebac6f9d55e8624a3e5167c8f.svg);
+#app-mount .imageUpgrade__02fcc {
+	background-image: url(https://discord.com/assets/7e81dd54960672eabe78.svg);
 }
-#app-mount .imageCancel-2x4k_k {
-	background: url(https://discord.com/assets/03863b539aec443327ca2ffc51a89dac.svg);
+#app-mount .imageCancel_e3036f {
+	background: url(https://discord.com/assets/d12b5c285831f85c5eee.svg);
 }
-#app-mount .imageUnclaimed-5nJyYs {
-	background-image: url(https://discord.com/assets/3b65c741e596bc0979f7ba0c42de6fff.svg);
+#app-mount .imageUnclaimed__3f7ec {
+	background-image: url(https://discord.com/assets/41675689ca055858e137.svg);
 	opacity: .5;
 }
-#app-mount .imageUnverified-2NLnW6 {
-	background-image: url(https://discord.com/assets/e260177e5165e6789e30b9592df75424.svg);
+#app-mount .imageUnverified__6dc24 {
+	background-image: url(https://discord.com/assets/f0cba42b6a6d3b2de4fd.svg);
 	opacity: .5;
 }
 
-#app-mount .divider-MRAL1L {
+#app-mount .divider__17151 {
 	border-color: var(--background-modifier-accent);
 }
-#app-mount .backButtonColor-5k5ViL {
+#app-mount .backButtonColor_ceeab9 {
 	color: var(--header-primary);
 }
-#app-mount .checkboxLabel-NbUiJx {
+#app-mount .checkboxLabel__56eeb {
 	color: var(--header-secondary);
 }
 
 /* ----		13.1.	USERMODAL						----- */
 
-#app-mount .root-8LYsGj {									/* modal				container							*/
-	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
-	position: relative;
-	overflow: hidden;
-}
-.root-8LYsGj::before,
-.root-8LYsGj::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
-.root-8LYsGj::before {
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-}
-.root-8LYsGj::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
-	backdrop-filter: blur(var(--popoutblur));
-}
-#app-mount .root-8LYsGj .topSection-13QKHs {				/* modal				topsection							*/
-	background-color: rgba(var(--transparencycolor), .2);
-}
-.root-8LYsGj *:not(foreignObject) > .banner__6d414 {		/* modal				banner								*/
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="240" viewBox="0 0 2400 240" fill="none"><path fill="black" d="M 0 0 L 0 240 L 16 240 A 69 69 0 0 1 85 172 A 69 69 0 0 1 152 240 L 2400 240 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
-}
-.root-8LYsGj .avatar-3QF_VA {								/* modal				avatar								*/
-	background-color: transparent;
-	border-color: transparent;
-	box-sizing: content-box;
-}
-#app-mount .body-1Ukv50 {									/* modal				body								*/
-	background-color: transparent;
-}
 .listRow__60937:hover {
 	background-color: rgba(var(--transparencycolor), .2);
 }
@@ -4181,7 +4137,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow);
 }
-#app-mount .divider-MRAL1L {								/* popout				divider								*/
+#app-mount .divider__17151 {								/* popout				divider								*/
 	border-color: var(--background-modifier-accent);
 }
 
