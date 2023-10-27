@@ -786,7 +786,6 @@
 
 /* ~~~~		8.		USERSETTINGS					~~~~ */
 
-
 .item__48dda .premiumLabel_f2cd55 svg[fill] {
 	fill: rgb(var(--accentcolor2));
 }
@@ -916,8 +915,13 @@
 	color: rgb(var(--accentcolor2));
 }
 
-.backgroundOptionRing__1f209 {								/* text and voice		selection ring						*/
+.backgroundOptionRing__1f209 {								/* voicesettings		selection ring						*/
 	border-color: rgb(var(--accentcolor));
+}
+.icon__596c8[src="/assets/ea67b1321e3d4154e476.png"] {		/* voicesettings		krisp								*/
+	-webkit-mask: url(https://discord.com/assets/ea67b1321e3d4154e476.png) center/contain no-repeat;
+	background-color: rgb(var(--accentcolor));
+	object-position: -999999px -999999px;
 }
 
 .icon_f28e38 {												/* hypesettings			perk icon							*/

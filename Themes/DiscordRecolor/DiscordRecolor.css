@@ -1739,11 +1739,11 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-image: url(https://discord.com/assets/00be7f6ca68f1915a80ae01f061718e5.svg);
 	opacity: .5;
 }
-#app-mount .tier1Banner-LvpkWu {
+#app-mount .tier1Banner__86229 {
 	background: var(--background-secondary);
 	color: var(--header-primary);
 }
-#app-mount .tier1Banner-LvpkWu::before {
+#app-mount .tier1Banner__86229::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -2106,7 +2106,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .closeButtonBold__30e2a:active path[fill] {
 	fill: var(--header-primary);
 }
-#app-mount .keybindBold-1U6HoA {
+#app-mount .keybind__57645 {
 	color: var(--header-secondary);
 }
 
@@ -2167,9 +2167,9 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .emptyStateSubtext-1nMe5m {
 	color: var(--header-secondary);
 }
-#app-mount .emptyStateImage-2qGUMK {
-	background: url(https://discord.com/assets/131dcaaa628405e6d0ebee7708111c7a.svg);
-	opacity: .5;
+#app-mount .emptyStateImage__3e0a5 {
+	background: url(https://discord.com/assets/b3dd9b1e282fff30af5b.svg);
+	opacity: 0.5;
 }
 
 #app-mount .codeRedemptionRedirect_bc7f36 {
@@ -2212,7 +2212,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 
-#app-mount .item-3eFBNF {
+#app-mount .item_b7fb7e {
 	box-shadow: inset 0 -1px 0 0 var(--background-accent);
 }
 #app-mount .gemIndicatorContainer_b03ca0 {
@@ -2289,7 +2289,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .overlayStatusText__61367 {
 	color: var(--text-muted);
 }
-#app-mount .overlayToggleIconOn-21NN2N .fill__80e66 {
+#app-mount .toggleIconOn_ca5bbe .fill__80e66 {
 	fill: var(--text-muted);
 }
 #app-mount .addGamePopout_e4ca8f {
@@ -2338,8 +2338,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .nowPlaying__353c3 .overlayStatusText__61367 {
 	color: var(--status-positive-text);
 }
-#app-mount .nowPlaying__353c3 .overlayToggleIconOff-ps4gGp .fill__80e66,
-#app-mount .nowPlaying__353c3 .overlayToggleIconOn-21NN2N .fill__80e66 {
+#app-mount .nowPlaying__353c3 .toggleIconOff_b79a58 .fill__80e66,
+#app-mount .nowPlaying__353c3 .toggleIconOn_ca5bbe .fill__80e66 {
 	fill: var(--status-positive-text);
 }
 #app-mount .notDetected__2a0c9 {
