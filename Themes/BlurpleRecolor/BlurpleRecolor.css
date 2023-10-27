@@ -1964,6 +1964,9 @@ a.metadataDownload__6b32d {
 	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--accentcolor)) 0, rgb(var(--accentcolor)) 2px, transparent 0);
 	color: rgb(var(--accentcolor));
 }
+#app-mount .lookLink__93965.colorLink_b651e5 svg [fill*="hsl"] {
+	fill: currentColor !important;
+}
 
 #app-mount .borderBrand__2de54,
 #app-mount .borderBrandNew__87b5a {
