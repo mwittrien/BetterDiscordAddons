@@ -366,6 +366,7 @@
 			"None": ["ScrollerNone"],
 			"Thin": ["ScrollerThin"]
 		}},
+		"SearchResultsPagination": {"strings": ["pageLength", "changePage", "maxVisiblePages"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
@@ -550,9 +551,9 @@
 		"SearchPopoutOption": {"strings": [".plusIcon", ".option,", ".filter"]},
 		"SearchResult": {"strings": [".onJump", "message:", "handleMessageClick"]},
 		"SearchResults": {"strings": ["SEARCH_ERROR", "emptyResultsText", "isSearching"]},
-		"SearchResultsHeader": {"strings": [".Messages.SEARCH_OLDEST_SHOR", ".Messages.SEARCH_MOST_RELEVANT_SHORT", ".searchByMode"]},
+		"SearchResultsHeader": {"strings": [".Messages.SEARCH_OLDEST_SHOR", ".Messages.SEARCH_MOST_RELEVANT_SHORT", "searchByMode"]},
 		"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "\"search-result-\""]},
-		"SearchResultsPagination": {"strings": [".pageLength", ".changePage", "maxVisiblePages"]},
+		"SearchResultsPagination": {"strings": ["pageLength", "changePage", "maxVisiblePages"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
 		"Spoiler": {"strings": [".removeObscurity", ".onReveal"]},
