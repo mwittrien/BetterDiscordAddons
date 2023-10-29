@@ -1971,6 +1971,10 @@ button.button__4f306.enabled__470f0:hover svg {
 
 /* ~~~~		7.		STORE/NITRO						~~~~ */
 
+#app-mount .loading__053e3 {								/* loading													*/
+	background: transparent;
+}
+
 .marketingHeader_c8e5cd {									/* marketingheader											*/
 	background-color: rgba(var(--transparencycolor), .3);
 }

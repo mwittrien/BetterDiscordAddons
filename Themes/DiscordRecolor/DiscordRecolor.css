@@ -1601,6 +1601,9 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ~~~~		6.		STORE/NITRO						~~~~ */
 
+#app-mount .loading__053e3 {
+	background: transparent;
+}
 #app-mount .header_d454ec {
 	color: var(--header-primary);
 }
