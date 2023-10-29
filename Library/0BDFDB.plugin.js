@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.4.6
+ * @version 3.4.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6989,7 +6989,9 @@ module.exports = (_ => {
 								autoFocus: this.props.autoFocus ? this.props.autoFocus : false,
 								maxVisibleItems: this.props.maxVisibleItems || 7,
 								renderOptionLabel: this.props.optionRenderer,
-								onChange: this.handleChange.bind(this)
+								select: this.handleChange.bind(this),
+								serialize: typeof this.props.serialize == "function" ? this.props.serialize : _ => {},
+								isSelected: typeof this.props.isSelected == "function" ? this.props.isSelected : (value => this.props.value == value)
 							}), "inputClassName", "optionRenderer"))
 						});
 					}

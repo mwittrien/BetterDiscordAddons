@@ -279,7 +279,7 @@
 		"PopoutContainer": {"props": ["Animation", "defaultProps"]},
 		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"]},
 		"SearchBar": {"strings": ["this.inputRef", ".containerRef", ".handleOnChange"]},
-		"SearchableSelect": {"strings": ["serialize", "haspopup", ".maxVisibleItems"]},
+		"SearchableSelect": {"strings": ["serialize", "haspopup", "maxVisibleItems"]},
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
