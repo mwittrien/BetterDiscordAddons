@@ -5897,6 +5897,32 @@ input.input_d266e7:hover:not(:focus) {
 	opacity: .5;
 }
 
+#app-mount .authenticationRequiredImage__92ba7 {
+	background-image: url(https://discord.com/assets/ac36a2fad758d64ffbfb.svg);
+	opacity: .5;
+}
+#app-mount .authenticationSuccessImage_b1a74c {
+	background-image: url(https://discord.com/assets/22a55a08151860da8500.svg);
+	opacity: .5;
+}
+#app-mount .authenticationFailImage-3DXXvB {
+	background-image: url(https://discord.com/assets/5fc4852a2acb3abf0a64.svg);
+	opacity: .5;
+}
+
+#app-mount .conflictUploadArt_c68c28 {
+	background-image: url(https://discord.com/assets/27f92332674f9dacc1e9.svg);
+	opacity: .5;
+}
+#app-mount .conflictDownloadArt__87c31 {
+	background-image: url(https://discord.com/assets/f6bc645aead00959a690.svg);
+	opacity: .5;
+}
+#app-mount .errorArt__7d1bf {
+	background-image: url(https://discord.com/assets/c00cfaed1382bf7f33d4.svg);
+	opacity: .5;
+}
+
 #app-mount .searchIndexBackground__14e66 {
 	background-image: url(https://discord.com/assets/1876c6a6db747137a124.svg);
 	opacity: .5;
