@@ -828,6 +828,16 @@ button.button__4f306.enabled__470f0:hover svg {
 .emptyChannelIcon__1a1ba {									/* welcomemessage		empty channelicon					*/
 	background-color: rgba(var(--transparencycolor), .4);
 }
+.emptyChannelIcon__1a1ba::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: var(--header-primary);
+	-webkit-mask: url(https://discord.com/assets/1b60cdb56c8c081495ac.svg) center no-repeat;
+}
 
 .button_fb39e8:hover {										/* welcomemessage		edit channel						*/
 	background-color: rgb(var(--accentcolor));
@@ -1382,24 +1392,24 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .spoilerContent__37bfa {							/* messageelement		spoiler								*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .spoilerContent__37bfa.hidden_f44e41 {				/* messageelement		hiddenspoiler						*/
+#app-mount .spoilerContent__37bfa.hidden_f44e41 {			/* messageelement		hiddenspoiler						*/
 	background-color: rgba(var(--transparencycolor), .6);
 }
 
-.icon__8c32c[style*="/assets/5da4cdab01d4d89c593c48c62ae0d937.svg"] {		/* systemmessage			pinicon									*/
-	-webkit-mask: url(https://discord.com/assets/5da4cdab01d4d89c593c48c62ae0d937.svg) center/cover no-repeat;
+.icon__8c32c[style*="/assets/7ed159b6acb6da5d9593.svg"] {	/* systemmessage			pinicon									*/
+	-webkit-mask: url(https://discord.com/assets/7ed159b6acb6da5d9593.svg) center/cover no-repeat;
 	background: var(--channels-default) !important;
 }
-.icon__8c32c[style*="/assets/d80d1fdc43a3c42134a31a39581160ac.svg"] {		/* systemmessage			missedcall								*/
-	-webkit-mask: url(https://discord.com/assets/d80d1fdc43a3c42134a31a39581160ac.svg) center/cover no-repeat;
+.icon__8c32c[style*="/assets/a1d461025204711133ec.svg"] {	/* systemmessage			missedcall								*/
+	-webkit-mask: url(https://discord.com/assets/a1d461025204711133ec.svg) center/cover no-repeat;
 	background: var(--channels-default) !important;
 }
-.icon__8c32c[style*="/assets/b8029fe196b8f1382e90bbe81dab50dc.svg"] {		/* systemmessage			joincallicon							*/
-	-webkit-mask: url(https://discord.com/assets/b8029fe196b8f1382e90bbe81dab50dc.svg) center/cover no-repeat;
+.icon__8c32c[style*="/assets/7378a83d74ce97d83380.svg"] {	/* systemmessage			joingroupicon							*/
+	-webkit-mask: url(https://discord.com/assets/7378a83d74ce97d83380.svg) center/cover no-repeat;
 	background: rgb(var(--accentcolor)) !important;
 }
-.icon__8c32c[style*="/assets/c30220457097b064286a8759a9b6c4af.svg"] {		/* systemmessage			recievecallicon							*/
-	-webkit-mask: url(https://discord.com/assets/c30220457097b064286a8759a9b6c4af.svg) center/cover no-repeat;
+.icon__8c32c[style*="/assets/9f3b9c1b6e5f77294951.svg"] {	/* systemmessage			recievecallicon							*/
+	-webkit-mask: url(https://discord.com/assets/9f3b9c1b6e5f77294951.svg) center/cover no-repeat;
 	background: rgb(var(--accentcolor)) !important;
 }
 
@@ -1474,6 +1484,10 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .invite__2a93b {									/* invite				group invite						*/
 	background-color: rgba(var(--transparencycolor), .3);
 	border-color: rgba(var(--transparencycolor), .1);
+}
+#app-mount .artworkSpotifySessionEnded__8272a {
+	background-image: url(https://discord.com/assets/a7d6af4279f16c27ae9b.svg);
+	opacity: .5;
 }
 #app-mount .header__8b673 {
 	color: rgb(var(--textdarker));
@@ -2177,11 +2191,6 @@ button.button__4f306.enabled__470f0:hover svg {
 	color: var(--text-muted);
 }
 
-#app-mount .emptyWumpus__67af4 {							/* library				no games							*/
-	background: url(https://discord.com/assets/131dcaaa628405e6d0ebee7708111c7a.svg);
-	opacity: 0.6;
-}
-
 
 /* ~~~~		10.		DISCOVERY/UNIHUB				~~~~ */
 
@@ -2325,6 +2334,11 @@ button.button__4f306.enabled__470f0:hover svg {
 .bd-social-link[title="BBD" i] .bd-social-logo > *,
 .bd-social-link[title="BandagedBD" i] .bd-social-logo > * {
 	display: none;
+}
+
+#app-mount .streamerModeEnabledImage_a0d94f {
+	background-image: url(https://discord.com/assets/c133c9df9ee4552c188a.svg);
+	opacity: .5;
 }
 
 .contentRegion__0bec1 div[role="tabpanel"] {				/* tabpanel													*/
@@ -2738,11 +2752,6 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 .container_d5f6d0:hover {
 	background-color: rgba(var(--transparencycolor), .4);
-}
-img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addrolebutton						*/
-	-webkit-mask: url(https://discord.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
-	background: currentColor;
-	object-position: -999999px -999999px;
 }
 .settingCard__00567 {										/* rolesettings			setting card						*/
 	background-color: rgba(var(--transparencycolor), .2);
@@ -4287,7 +4296,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	backdrop-filter: blur(var(--popoutblur));
 }
 .premiumPromoClose__11b8f {
-	-webkit-mask: url(https://discord.com/assets/f815a774c2b98d3109293a4e2afb733c.svg) 50% 50% no-repeat;
+	-webkit-mask: url(https://discord.com/assets/411dfecce0d7da63ea2b.svg) 50% 50% no-repeat;
 	background: var(--interactive-normal);
 }
 .premiumPromoClose__11b8f:hover {
@@ -4309,7 +4318,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: rgba(var(--textdarkest),.6);
 }
 #app-mount .endContainer__0c909::after {
-	background-image: url(https://discord.com/assets/be5f088125f778701a7e4fad471a45da.svg);
+	background-image: url(https://discord.com/assets/6836d88af9197cbd4cbb.svg);
 	opacity: 0.6;
 }
 #app-mount .endText__2c9a4 {
@@ -5884,6 +5893,11 @@ input.input_d266e7:hover:not(:focus) {
 #app-mount .invalidPoop__03aa3 {
 	background-color: rgba(var(--transparencycolor), .3);
 	background-image: url(https://discord.com/assets/baa5b6db50bb89d55668.svg);
+	opacity: .5;
+}
+
+#app-mount .sadImage_e4e5ab {
+	background-image: url(https://discord.com/assets/746284e4cfc7cd6c5e15.svg);
 	opacity: .5;
 }
 

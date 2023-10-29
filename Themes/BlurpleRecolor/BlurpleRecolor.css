@@ -633,17 +633,11 @@
 
 /* ----		3.6.	CALL							---- */
 
-.sparkleBlurple__556df {
-	background-image: url(https://discord.com/assets/c7539bb38577495f5021c8ea455c7145.png);
-}
-.popBlurple__2642d {
-	background-image: url(https://discord.com/assets/237a2f9325a83d230fb30b2cd63bbfe6.png);
-}
-.lightBlurple__1956c {
-	background-image: url(https://discord.com/assets/1c20f6ecd2d83c1844a3fd6da306d239.png);
-}
+.sparkleBlurple__556df,
+.popBlurple__2642d,
+.lightBlurple__1956c,
 .crossBlurple_b0f0f9 {
-	background-image: url(https://discord.com/assets/c13a0b03a798023c27155fad5f0c7a61.png);
+	filter: invert(1);
 }
 .background__3b30f[style*="background-color: rgb(92, 100, 244)"],
 .background__3b30f[style*="background-color: hsl(235, "],
@@ -698,7 +692,7 @@
 }
 #app-mount .tag_f71185::before {
 	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://discord.com/assets/04a2e1509ad72be575b1529b51ea3977.svg) top/cover no-repeat;
+	-webkit-mask: url(https://discord.com/assets/bed21bc77023cebd07a7.svg) top/cover no-repeat;
 }
 
 #app-mount .alternativeSkuSelected__35d70 {
