@@ -311,14 +311,15 @@
 		"Flex": {"props": ["Wrap", "Direction", "Child"]},
 		"FlowerStar": {"strings": ["flowerStarContainer", ".jsx)"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
-		"FormComponents": {"strings": ["INPUT_PLACEHOLDER", "LABEL_SELECTED"], "exported": false, "value": "exports", "map": {
-			"FormDivider": [".divider"],
-			"FormItem": [".titleClassName", "required"],
-			"FormNotice": [".iconClassName", ".imageData"],
-			"FormSection": ["sectionTitle", "titleId"],
-			"FormTags": ["\"H1\":\"h1\"", "\"H2\":\"h2\""],
-			"FormText": [".type", ".DEFAULT"],
-			"FormTitle": [".tag", ".errorSeparator"]
+		"FormComponents": {"props": ["FormText", "FormTitleTags", "FormDivider"], "exported": false, "value": "exports", "map": {
+			"FormDivider": ["FormDivider"],
+			"FormItem": ["FormItem"],
+			"FormNotice": ["FormNotice"],
+			"FormSection": ["FormSection"],
+			"FormTags": ["FormTitleTags"],
+			"FormText": ["FormText"],
+			"FormTextTypes": ["FormTextTypes"],
+			"FormTitle": ["FormTitle"]
 		}},
 		"GuildBadge": {"strings": ["VERIFIED_AND_PARTNERED", "renderBadge", "flowerStarClassName"]},
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
