@@ -2010,8 +2010,8 @@ module.exports = (_ => {
 										children: [
 											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildBadge, {
 												guild: config.guild,
-												size: BDFDB.StringUtils.cssValueToNumber(Internal.DiscordClassModules.TooltipGuild.iconSize),
-												className: BDFDB.disCN.tooltiprowicon
+												size: 16,
+												className: BDFDB.disCN.tooltiprowiconv2
 											}),
 											BDFDB.ReactUtils.createElement("span", {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext),

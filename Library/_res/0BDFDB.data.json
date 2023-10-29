@@ -12,7 +12,7 @@
 	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
-		"Guild": {"props": ["getIconURL", "getMaxEmojiSlots", "getRole"]},
+		"Guild": {"strings": ["hasCommunityInfoSubheader()", "publicUpdatesChannelId", ".GuildFeatures.NON_COMMUNITY_RAID_ALERTS"]},
 		"Invite": {"props": ["getExpiresAt", "isExpired"]},
 		"Message": {"props": ["getReaction", "isEdited", "getChannelId"]},
 		"Messages": {"props": ["jumpToMessage", "hasAfterCached", "forEach"]},
@@ -319,7 +319,7 @@
 			"FormTextTypes": ["FormTextTypes"],
 			"FormTitle": ["FormTitle"]
 		}},
-		"GuildBadge": {"strings": ["VERIFIED_AND_PARTNERED", "renderBadge", "flowerStarClassName"]},
+		"GuildBadge": {"strings": ["foregroundDarkColor", "getBadgeCategory"]},
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
 		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
@@ -3382,6 +3382,7 @@
 		"tooltiprowextra": ["BDFDB", "tooltipRowExtra"],
 		"tooltiprowguildname": ["TooltipGuild", "rowGuildName"],
 		"tooltiprowicon": ["TooltipGuild", "rowIcon"],
+		"tooltiprowiconv2": ["TooltipGuild", "rowIconV2"],
 		"tooltiptop": ["Tooltip", "tooltipTop"],
 		"tooltipyellow": ["Tooltip", "tooltipYellow"],
 		"typing": ["Typing", "typing"],
