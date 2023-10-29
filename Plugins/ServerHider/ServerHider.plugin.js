@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.7
+ * @version 6.2.8
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -238,10 +238,10 @@ module.exports = (_ => {
 								className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
-								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
+								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listavatar, folder && BDFDB.disCN.marginleft8),
 									guild: guild,
-									size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.MEDIUM
+									size: BDFDB.LibraryComponents.GuildIcon.Sizes.MEDIUM
 								}),
 								label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 									children: guild.name
