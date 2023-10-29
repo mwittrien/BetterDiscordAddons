@@ -1980,9 +1980,6 @@ a.metadataDownload__6b32d {
 
 /* ----		12.3.	INPUTS							---- */
 
-input.input_d266e7 {										/* textinput												*/
-	border: 1px solid var(--deprecated-text-input-border);
-}
 .input_d266e7:not(.error__18f19):not(.success_e04262):not(.focused_db7916):not(:focus):hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }

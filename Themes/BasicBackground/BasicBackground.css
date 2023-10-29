@@ -5581,7 +5581,6 @@ button.button__4f306.enabled__470f0:hover svg {
 
 input.input_d266e7 {										/* valueinput			bordered							*/
 	background-color: rgba(var(--transparencycolor), .1);
-	border-color: rgba(var(--transparencycolor), .3);
 }
 input.input_d266e7:hover:not(:focus) {
 	border-color: rgb(var(--transparencycolor));
