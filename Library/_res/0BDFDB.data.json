@@ -149,9 +149,7 @@
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
-		"DispatchUtils": {"strings": ["dispatchToLastSubscribed", "setMaxListeners"], "map": {
-			"ComponentDispatch": ["_eventsCount"]
-		}},
+		"DispatchUtils": {"props": ["ComponentDispatch", "ComponentDispatcher"]},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
@@ -557,7 +555,7 @@
 		"SearchResultsPagination": {"strings": ["pageLength", "changePage", "maxVisiblePages"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
-		"Spoiler": {"strings": [".removeObscurity", ".onReveal"]},
+		"Spoiler": {"strings": [".removeObscurity", "onReveal:"]},
 		"SpoilerWarning": {"strings": [".spoilerWarning", ".SPOILER"]},
 		"StandardSidebarView": {"strings": ["standardSidebarView", "sidebarTheme:", "mobileSidebarHeader"]},
 		"SystemMessageThreadCreated": {"strings": ["threadOnClick:", ".SYSTEM_MESSAGE_THREAD_CREATED", "viewThreadsOnClick:"]},
