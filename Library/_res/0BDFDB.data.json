@@ -289,7 +289,7 @@
 	},
 	"LibraryComponents": {
 		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
-		"Animations": {"props": ["Controller", "Spring"]},
+		"Animations": {"props": ["Controller", "Spring", "animated"]},
 		"AppReferencePositionLayer": {"strings": [".LayerProvider,", ".LayerContainer,", ".layerContext,"], "funcStrings": [",{children:(", "({ref:"]},
 		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\""], "exported": false, "value": "exports", "map": {
 			"Sizes": ["\"SIZE_20\"", "\"SIZE_32\""]
@@ -1425,7 +1425,7 @@
 		"AccountDetailsButtons": {"props": ["button", "enabled", "disabled"]},
 		"Anchor": {"props": ["anchor", "anchorUnderlineOnHover"]},
 		"AnimationContainer": {"props": ["animatorLeft", "didRender"]},
-		"AppBase": {"props": ["container", "base"]},
+		"AppBase": {"props": ["container", "base", "panels"]},
 		"AppInner": {"props": ["app", "layers"]},
 		"AppMount": {"props": ["appMount"]},
 		"ApplicationStore": {"props": ["applicationStore", "navigation"]},
@@ -1583,7 +1583,7 @@
 		"ModalDivider": {"props": ["divider"], "length": 1},
 		"ModalItems": {"props": ["guildName", "checkboxContainer"]},
 		"ModalLayer": {"props": ["layer", "hidden", "backdrop"]},
-		"ModalMiniContent": {"props": ["modal", "content", "maxModalWidth"]},
+		"ModalMiniContent": {"props": ["modal", "content"], "length": 2},
 		"ModalSub": {"props": ["modal", "sizeLarge"]},
 		"NameContainer": {"props": ["nameAndDecorators", "name"]},
 		"NameContainerState": {"props": ["interactive", "selected", "muted"]},
