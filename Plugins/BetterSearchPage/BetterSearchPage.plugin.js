@@ -2,7 +2,7 @@
  * @name BetterSearchPage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.3
+ * @version 1.2.4
  * @description Makes the Controls in the Search Results Page sticky
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -58,23 +58,9 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var stickySearchPagination, SearchResultsPaginationComponent;
-		const StickySearchPaginationComponent = class StickySearchPagination extends BdApi.React.Component {
-			componentDidMount() {
-				stickySearchPagination = this;
-			}
-			render() {
-				if (!SearchResultsPaginationComponent) return null;
-				return BDFDB.ReactUtils.createElement(SearchResultsPaginationComponent, this.props);
-			}
-		};
-		
 		return class BetterSearchPage extends Plugin {
 			onLoad () {
 				this.modulePatches = {
-					before: [
-						"SearchResultsPagination"
-					],
 					after: [
 						"SearchResults"
 					]
@@ -106,19 +92,12 @@ module.exports = (_ => {
 				if (!e.instance.props.search) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SearchResultsHeader"});
 				if (index == -1) return;
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(StickySearchPaginationComponent, {
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchResultsPagination, {
 					changePage: newPage => !e.instance.props.search.searching && BDFDB.LibraryModules.SearchPageUtils.changePage(e.instance.props.searchId, newPage - 1),
 					offset: e.instance.props.search.offset,
 					totalResults: e.instance.props.search.totalResults,
 					pageLength: BDFDB.DiscordConstants.SEARCH_PAGE_SIZE
 				}));
-			}
-			
-			processSearchResultsPagination (e) {
-				if (!SearchResultsPaginationComponent) {
-					SearchResultsPaginationComponent = e.component;
-					BDFDB.ReactUtils.forceUpdate(stickySearchPagination);
-				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

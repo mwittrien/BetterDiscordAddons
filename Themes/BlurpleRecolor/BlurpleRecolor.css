@@ -1622,10 +1622,10 @@ a.metadataDownload__6b32d {
 
 /* ----		10.12.	CHANGELOGMODAL					---- */
 
-#app-mount .improved_fd72d9 {								/* modal				improved category					*/
+#app-mount .improved_df526b {								/* modal				improved category					*/
 	color: rgb(var(--accentcolor));
 }
-#app-mount .improved_fd72d9::after {
+#app-mount .improved_df526b::after {
 	background-color: rgb(var(--accentcolor));
 }
 .premiumBanner_d2ce99 {
