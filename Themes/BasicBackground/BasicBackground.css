@@ -185,7 +185,7 @@ html {
 		3.	INPUTS
 		4.	SEARCHBARS
 		5.	TAGS
-		6.	ICONS
+		6.	IMAGES
 		7.	SCROLLBARS
 		8.	NOTIFICATIONBAR
 		9.	TOOLTIPS
@@ -2213,6 +2213,9 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .loading_e7a19f {								/* guildcard			loading								*/
 	background-color: rgba(var(--transparencycolor), .5);
 }
+.footerImage_b0b86b {
+	opacity: .5;
+}
 .actionButtonsContainer__16c43 {							/* guildcard			action button						*/
 	position: relative;
 	background: transparent;
@@ -2487,6 +2490,14 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 #app-mount .giftIcon__9d0ce {								/* boostsettings		past transactions gifticon			*/
 	color: var(--header-primary);
+}
+#app-mount .guildHeaderBackground__04920 {
+	background-image: url(https://discord.com/assets/467602d632b5f9c1ce4b.svg);
+	opacity: .75;
+}
+#app-mount .emptyGuilds-1cEt2M {
+	background-image: url(https://discord.com/assets/33de08d0b379a019874a.svg);
+	opacity: .75;
 }
 
 #app-mount .paymentPane__9cf01 {							/* boostsettings		past transactions					*/
@@ -2812,6 +2823,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .previewContainer_d2b616 {									/* rolesettings			preview								*/
 	border: none;
 }
+#app-mount .dragged__76dd2 {								/* rolesettings			dragged								*/
+	-webkit-mask: url(https://discord.com/assets/038a865e09c25dc13e30.svg) center/contain no-repeat;
+	background: var(--background-tertiary);
+}
 .messageContainer__18275 {									/* rolesettings			preview message						*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
@@ -2993,6 +3008,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .iconMask_c8b196 {								/* communitysettings	discovery	icon					*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
+.splashImage_bfd001[src="/assets/467602d632b5f9c1ce4b.svg"],
+.splashImage_bfd001[src="/assets/d4d9f2bff23beec65b1f.svg"] {
+	background: url(https://discord.com/assets/467602d632b5f9c1ce4b.svg) center/cover no-repeat;
+	opacity: .75;
+	object-position: -999999px -999999px;
+}
 .container__0d7bc {											/* communitysettings	discovery	checklist				*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
@@ -3086,6 +3107,24 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .overflowRolesPopoutHeaderText_dabff2 {
 	color: var(--header-secondary);
+}
+
+#app-mount .to_d0a2ea {										/* membersettings		transfer to							*/
+	background-color: rgba(var(--transparencycolor), .3);
+	box-shadow: 0 0 0 4px rgba(var(--transparencycolor), .3);
+}
+#app-mount .fromToWrapper__2c6f3 {
+	background: transparent;
+}
+#app-mount .fromToWrapper__2c6f3::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	-webkit-mask: url(https://discord.com/assets/a2e6c7df5d20d1aeaacb.svg) 50% 0 no-repeat;
+	background: var(--header-primary);
 }
 
 #app-mount .inviteSettingsInviteRow__0d747 {				/* invitesettings		invitecard							*/
@@ -5835,7 +5874,7 @@ input.input_d266e7:hover:not(:focus) {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 
-/* ----		15.6.	ICONS							---- */
+/* ----		15.6.	IMAGES							---- */
 
 #app-mount .image__0cdbe {
 	background-image: url(https://discord.com/assets/5420f8fd9d89897c6448.svg);
@@ -5845,6 +5884,16 @@ input.input_d266e7:hover:not(:focus) {
 #app-mount .invalidPoop__03aa3 {
 	background-color: rgba(var(--transparencycolor), .3);
 	background-image: url(https://discord.com/assets/baa5b6db50bb89d55668.svg);
+	opacity: .5;
+}
+
+#app-mount .cancelImage__688be {
+	background: url(https://discord.com/assets/d12b5c285831f85c5eee.svg);
+	opacity: .75;
+}
+
+#app-mount .emptyWumpus__67af4 {
+	background: url(https://discord.com/assets/b3dd9b1e282fff30af5b.svg);
 	opacity: .5;
 }
 
