@@ -1459,6 +1459,11 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .guildIconImage__93ae7 {							/* invite				icon								*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
+#app-mount .guildIconExpired__1d51f {						/* erroricon			expiredguild						*/
+	background-color: rgba(var(--transparencycolor), .3);
+	background-image: url(https://discord.com/assets/baa5b6db50bb89d55668.svg);
+	opacity: 0.7;
+}
 #app-mount .guildName__060cb {								/* invite				name								*/
 	color: var(--header-primary);
 }
@@ -2956,10 +2961,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .iconWrapper__8fbb1 {							/* integrationsettings	icon								*/
 	background-color: rgba(var(--transparencycolor), .4);
-}
-#app-mount .footerImage__21e33 {
-	background-image: url(https://discord.com/assets/a4bee30fe0b5a0f5b3c7.svg);
-	opacity: 0.6;
 }
 
 .guildDetails_fc2c63 {										/* communitysettings	intro		details					*/
@@ -5836,23 +5837,193 @@ input.input_d266e7:hover:not(:focus) {
 
 /* ----		15.6.	ICONS							---- */
 
-.emptySearchImage_e3b405,									/* empty search												*/
-.image__98a59 {												/* no peoples/webhooks/etc.									*/
-	opacity: 0.6;
+#app-mount .image__0cdbe {
+	background-image: url(https://discord.com/assets/5420f8fd9d89897c6448.svg);
+	opacity: .75;
 }
 
-#app-mount .gameIcon__90c32 {								/* activity icon											*/
+#app-mount .invalidPoop__03aa3 {
+	background-color: rgba(var(--transparencycolor), .3);
+	background-image: url(https://discord.com/assets/baa5b6db50bb89d55668.svg);
+	opacity: .5;
+}
+
+#app-mount .searchIndexBackground__14e66 {
+	background-image: url(https://discord.com/assets/1876c6a6db747137a124.svg);
+	opacity: .5;
+}
+#app-mount .resultsBlockedImage_e4bcd7 {
+	background-image: url(https://discord.com/assets/83720a1a3ec0963a1f71.svg);
+	opacity: .5;
+}
+#app-mount .noResultsImage__08760 {
+	background-image: url(https://discord.com/assets/45cd76fed34c8e398cc8.svg);
+	opacity: .5;
+}
+#app-mount .noResultsImage__08760.alt__77d89 {
+	background-image: url(https://discord.com/assets/99d35a435f00582ddf41.svg);
+	opacity: .5;
+}
+#app-mount .errorImage__416df {
+	background-image: url(https://discord.com/assets/8eeb59bba0a61cbffc41.svg);
+	opacity: .5;
+}
+
+#app-mount .emptyStateImage__3e0a5 {
+	background: url(https://discord.com/assets/b3dd9b1e282fff30af5b.svg);
+	opacity: .5;
+}
+
+#app-mount .wrapper__246a1 {								/* crash screen			background							*/
+	background-image: url(https://discord.com/assets/14223d22c9628be36fc0.svg);
+}
+#app-mount .image_dabcb8 {									/* crash screen			center image						*/
+	background-image: url(https://discord.com/assets/72eaa596042042be6259.svg);
+	opacity: .5;
+}
+
+#app-mount .gameIcon__90c32 {
 	background-color: rgba(var(--textbrightest), .1);
 	color: var(--header-primary);
 }
 
-#app-mount .invalidPoop__03aa3 {							/* erroricon			invalidpoop							*/
-	background-color: rgba(var(--transparencycolor), .3);
-	opacity: 0.7;
+#app-mount .noResults_c99c73 {
+	background-image: url(https://discord.com/assets/c586aac99de98cfb010d.svg);
+	opacity: .5;
 }
-#app-mount .guildIconExpired__1d51f {						/* erroricon			expiredguild						*/
-	background-color: rgba(var(--transparencycolor), .3);
-	opacity: 0.7;
+
+#app-mount .art_ba4492 {
+	background-image: url(https://discord.com/assets/1a8d1cce8efe66c22c6d.svg);
+	opacity: .5;
+}
+
+#app-mount .art__773bf {
+	background-image: url(https://discord.com/assets/29306de8953471954035.svg);
+	opacity: .5;
+}
+
+#app-mount .imageUnverified_fc0bf0 {
+	background-image: url(https://discord.com/assets/f0cba42b6a6d3b2de4fd.svg);
+	opacity: .5;
+}
+
+#app-mount .imageUpgrade__02fcc {
+	background-image: url(https://discord.com/assets/7e81dd54960672eabe78.svg);
+}
+#app-mount .imageCancel_e3036f {
+	background-image: url(https://discord.com/assets/d12b5c285831f85c5eee.svg);
+}
+#app-mount .imageUnclaimed__3f7ec {
+	background-image: url(https://discord.com/assets/41675689ca055858e137.svg);
+	opacity: .5;
+}
+#app-mount .imageUnverified__6dc24 {
+	background-image: url(https://discord.com/assets/f0cba42b6a6d3b2de4fd.svg);
+	opacity: .5;
+}
+
+#app-mount .emptyPreviewImage__86ba2 {
+	background-image: url(https://discord.com/assets/3a354aac283f909d403d.svg);
+	opacity: .5;
+}
+
+.fullArt_a1e55d,
+.fullArt_cba315 {
+	opacity: .5;
+}
+
+.image__0a0fc {
+	opacity: .5;
+}
+.image__0a0fc[style*='url("/assets/9e2f412156e2ac1f14e9.svg")'] {
+	background-image: url(https://discord.com/assets/64df6f04b850029d2e78.svg) !important;
+}
+
+.image__98a59 {
+	opacity: .5;
+}
+.image__98a59[style*='url("/assets/0629e34902ae58f8e4ca.svg")'] {
+	background-image: url(https://discord.com/assets/24aa06be5457e66bdd64.svg) !important;
+}
+.image__98a59[style*='url("/assets/5741692705ba077f4190.svg")'] {
+	background-image: url(https://discord.com/assets/bca918618b884a382ab5.svg) !important;
+}
+.image__98a59[style*='url("/assets/a72746e7108167af95c8.svg")'] {
+	background-image: url(https://discord.com/assets/01864c39871ce619d855.svg) !important;
+}
+.image__98a59[style*='url("/assets/ee4637f8627629dd0da5.svg")'] {
+	background-image: url(https://discord.com/assets/532f1d4582d881960783.svg) !important;
+}
+
+.image__98a59[style*='url("/assets/c8be48745cf680093019.svg")'] {
+	background-image: url(https://discord.com/assets/295da3fc92e2adb1b852.svg) !important;
+}
+.image__98a59[style*='url("/assets/5e3480eff150b1cb323e.svg")'] {
+	background-image: url(https://discord.com/assets/cf8f9096a9322f2ae0d7.svg) !important;
+}
+.emptyStateImage__36649 {
+	opacity: .5;
+}
+.emptyStateImage__36649[src='/assets/39e3f389716400ced39a.svg'] {
+	background-image: url(https://discord.com/assets/1bb2be01aece015602f7.svg);
+	object-position: -999999px -999999px;
+}
+.image__98a59[style*='url("/assets/c65431f185feb7b00749.svg")'] {
+	background-image: url(https://discord.com/assets/cdc3f4f6fbf3a0f0766f.svg) !important;
+}
+.image__98a59[style*='url("/assets/a1b0a14d2f22c155a2b3.svg")'] {
+	background-image: url(https://discord.com/assets/c7c4065874955761be3b.svg) !important;
+}
+
+img[src='/assets/73984240bd99493de947.svg'] {
+	background-image: url(https://discord.com/assets/c1875fc8a42a61903ba1.svg);
+	opacity: .5;
+	object-position: -999999px -999999px;
+}
+
+img[src='/assets/387a7c504c96b992872d.svg'] {
+	background-image: url(https://discord.com/assets/1964f50ca0220e98dc32.svg);
+	opacity: .5;
+	object-position: -999999px -999999px;
+}
+
+#app-mount .footerImage__21e33 {
+	background-image: url(https://discord.com/assets/a4bee30fe0b5a0f5b3c7.svg);
+	opacity: .5;
+}
+
+#app-mount .imageError__77b3e {
+	opacity: .5;
+}
+
+#app-mount .emptyImage__66bed {
+	background-image: url(https://discord.com/assets/1766a563ac224f0a403d.svg);
+	opacity: .5;
+}
+
+#app-mount .missingEntitlementImage_c06466 {
+	background-image: url(https://discord.com/assets/b3dd9b1e282fff30af5b.svg);
+	opacity: .5;
+}
+
+#app-mount .image__81490 {
+	background-image: url(https://discord.com/assets/a7d6af4279f16c27ae9b.svg);
+	opacity: .5;
+}
+
+#app-mount .image__25781 {
+	background-image: url(https://discord.com/assets/9e9722bd5c8ec20fd746.svg);
+	opacity: .5;
+}
+
+#app-mount .image__1990e {
+	background-image: url(https://discord.com/assets/c8718df1382ba878f1fc.svg);
+	opacity: .5;
+}
+
+#app-mount .image__88b66 {
+	background-image: url(https://discord.com/assets/1766a563ac224f0a403d.svg);
+	opacity: .5;
 }
 
 /* ----		15.7.	SCROLLBARS						---- */
