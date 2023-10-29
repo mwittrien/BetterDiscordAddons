@@ -1652,7 +1652,7 @@
 		"UserPopoutFooter": {"props": ["wumpusTooltip", "messageInputContainer"]},
 		"UserPopoutHeader": {"props": ["avatarHint", "profileBadges", "avatarWrapper"]},
 		"UserPopoutSection": {"props": ["section", "lastSection"]},
-		"UserPopoutSectionTitle": {"props": ["title", "body"], "length": 2},
+		"UserPopoutSectionTitle": {"props": ["title", "body", "clydeMoreInfo"]},
 		"UserPopoutUsernameSection": {"props": ["userTagNoNickname", "nickname", "headerBotTag"]},
 		"UserProfile": {"props": ["root", "tabBarContainer"]},
 		"UserProfileHeader": {"props": ["additionalActionsIcon", "header", "relationshipButtons"]},
