@@ -283,8 +283,8 @@
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
-		"TextArea": {"strings": ["onKeyDown=function", "defaultDirty"]},
-		"TextInput": {"strings": ["onFocus=function", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"]},
+		"TextArea": {"strings": ["onKeyDown", "defaultDirty"]},
+		"TextInput": {"strings": ["onFocus", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"]},
 		"TooltipContainer": {"strings": ["Tooltip cannot find DOM node", "shouldShowTooltip", "clickable"]}
 	},
 	"LibraryComponents": {
@@ -563,7 +563,7 @@
 		"SystemMessageWrapper": {"strings": ["unknown message type", "\"SystemMessage\""]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"TextChannelEmptyMessage": {"strings": ["MANAGE_CHANNELS", ".BEGINNING_CHANNEL_DESCRIPTION", "topicHook:"]},
-		"TextInput": {"strings": ["onFocus=function", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"], "noSearch": true},
+		"TextInput": {"strings": ["onFocus", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"], "noSearch": true},
 		"ThreadCard": {"strings": [".threadId", ".gotoThread", ".container", ".threadName"]},
 		"ThreadCardDescription": {"strings": [".Messages.THREAD_BROWSER_STARTED_BY", ".bullet", ".lastMessageId"]},
 		"ThreadEmptyMessage": {"strings": [",{channel:", ".name", "{channelId:", ".iconWrapper", ".icon}"]},
