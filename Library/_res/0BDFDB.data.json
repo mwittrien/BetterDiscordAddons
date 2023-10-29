@@ -883,8 +883,6 @@
 	"CustomClassModules": {
 		"BDFDB": {
 			"BDFDBundefined": "BDFDB_undefined",
-			"accountDetailsButtonDisabled": "disabled_GROwTe",
-			"accountDetailsButtonEnabled": "enabled_9OeuTA",
 			"avatarDisabled": "disabled_6G33EE",
 			"badge": "badge_7R_W3s",
 			"badgeAvatar": "avatar_hF52Er",
@@ -1356,7 +1354,6 @@
 		},
 		"NotFound": {
 			"_": "",
-			"accountDetailsButton": "button_12Fmur",
 			"emoji": "emoji",
 			"highlight": "highlight",
 			"hoverCardButton": "button_1yVL_7",
@@ -1901,9 +1898,9 @@
 		"accountinfo": ["AccountDetails", "container"],
 		"accountinfoavatar": ["AccountDetails", "avatar"],
 		"accountinfoavatarwrapper": ["AccountDetails", "avatarWrapper"],
-		"accountinfobutton": ["NotFound", "accountDetailsButton"],
-		"accountinfobuttondisabled": ["BDFDB", "accountDetailsButtonDisabled"],
-		"accountinfobuttonenabled": ["BDFDB", "accountDetailsButtonEnabled"],
+		"accountinfobutton": ["AccountDetailsButtons", "button"],
+		"accountinfobuttondisabled": ["AccountDetailsButtons", "disabled"],
+		"accountinfobuttonenabled": ["AccountDetailsButtons", "enabled"],
 		"accountinfobuttonstrikethrough": ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "usernameContainer"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
