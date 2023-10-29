@@ -133,12 +133,12 @@
 			"applyChatRestrictions": ["openWarningPopout", "userCanUsePremiumMessageLength"]
 		}},
 		"ConnectionMetadataUtils": {"strings": ["connectedAccountVanityMetadataTag", "CONNECTIONS_PROFILE_GENERIC_VANITY_METRIC"], "exported": false, "value": "exports", "map": {
-			"getEbay": ["PC.EBAY_TOP_RATED_SELLER"],
-			"getPaypal": ["PC.PAYPAL_VERIFIED"],
-			"getReddit": ["PC.REDDIT_GOLD"],
-			"getSteam": ["PC.STEAM_GAME_COUNT"],
-			"getTiktok": ["PC.TIKTOK_FOLLOWER_COUNT"],
-			"getTwitter": ["PC.TWITTER_STATUSES_COUNT"]
+			"getEbay": ["generateEbayMetadataItems"],
+			"getPaypal": ["generatePaypalMetadataItems"],
+			"getReddit": ["generateRedditMetadataItems"],
+			"getSteam": ["generateSteamMetadataItems"],
+			"getTiktok": ["generateTikTokMetadataItems"],
+			"getTwitter": ["generateTwitterMetadataItems"]
 		}},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
@@ -447,7 +447,7 @@
 		"DiscordTag": {"strings": ["hidePersonalInformation", "isVerifiedBot", "botType"]},
 		"Embed": {"strings": ["gridContainer", "renderEmbedContent", "hasThumbnail"]},
 		"EmojiPicker": {"strings": ["emojiSize", "disableEmojiTutorial", ",emojiPaddingHorizontal:"]},
-		"EmojiPickerHeader": {"strings": [".pickerIntention", ".headerClassName", ".Messages.BURST_REACTIONS_"]},
+		"EmojiPickerHeader": {"strings": ["pickerIntention", "headerClassName", ".EmojiIntention.REACTION"]},
 		"EmojiPickerListRow": {"strings": ["emojiSize", "surrogateCodePoint", "EMOJI_FAVORITE_TOOLTIP"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FolderHeader": {"strings": ["folderNode:", "expandedFolderIconWrapper", "forceCircular"]},

@@ -2,7 +2,7 @@
  * @name EmojiStatistics
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.1
+ * @version 3.0.2
  * @description Shows you an Overview of Emojis and Emoji Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -155,9 +155,9 @@ module.exports = (_ => {
 							cellClassName: BDFDB.disCN[`_emojistatistics${data.cell}cell`],
 							renderHeader: _ => this.labels[`modal_titles${data.key}`],
 							render: item => {
-								if (data.key == "icon") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
+								if (data.key == "icon") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
 									guild: item.guild,
-									size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.MEDIUM
+									size: BDFDB.LibraryComponents.GuildIcon.Sizes.MEDIUM
 								});
 								else if (data.key == "name") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 									children: item.guild.name
