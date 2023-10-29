@@ -3434,6 +3434,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	backdrop-filter: blur(var(--popoutblur));
 }
+#app-mount .emptyState_afda24 {
+	background: transparent;
+}
+#app-mount .emptyState_afda24::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: url(https://discord.com/assets/c586aac99de98cfb010d.svg) center/100px no-repeat;
+	opacity: .5;
+}
 .root_a28985 .quickswitcher_a3d29a::before,
 .root_a28985 .quickswitcher_a3d29a::after {
 	display: none;

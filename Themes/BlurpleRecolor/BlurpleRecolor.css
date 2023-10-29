@@ -829,11 +829,16 @@
 #app-mount .tier1UploadPerk__01029 {						/* nitropage			tier 1 upload icon					*/
 	color: rgb(var(--accentcolor));
 }
-
+		
 .marketingLogoImage__4820c {								/* boostsettings		boost header						*/
 	position: relative;
+}
+.fullArt_c24fa5,
+.marketingLogoImage__4820c {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_bg.svg) center/cover no-repeat;
 }
+.fullArt_c24fa5::before,
+.fullArt_c24fa5::after,
 .marketingLogoImage__4820c::before,
 .marketingLogoImage__4820c::after {
 	content: "";
@@ -844,10 +849,12 @@
 	left: 0;
 	pointer-events: none;
 }
+.fullArt_c24fa5::before,
 .marketingLogoImage__4820c::before {
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
+.fullArt_c24fa5::after,
 .marketingLogoImage__4820c::after {
 	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent2.svg) center/cover no-repeat;
