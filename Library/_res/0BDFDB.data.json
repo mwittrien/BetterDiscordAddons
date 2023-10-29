@@ -290,7 +290,7 @@
 	"LibraryComponents": {
 		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
 		"Animations": {"props": ["Controller", "Spring", "animated"]},
-		"AppReferencePositionLayer": {"strings": [".LayerProvider,", ".LayerContainer,", ".layerContext,"], "funcStrings": [",{children:(", "({ref:"]},
+		"AppReferencePositionLayer": {"props": ["AppReferencePositionLayer", "appLayerContext"], "funcStrings": ["{children:(", "{ref:"]},
 		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\""], "exported": false, "value": "exports", "map": {
 			"Sizes": ["\"SIZE_20\"", "\"SIZE_32\""]
 		}},
@@ -383,7 +383,7 @@
 			"UserBadges": [".PROFILE_USER_BADGES"],
 			"Sizes": ["\"SIZE_24\":"]
 		}},
-		"UserPopout": {"strings": ["\"userId\"", "\"Unexpected missing user\"", "getUser"]},
+		"UserPopout": {"strings": ["closePopout:", "\"Unexpected missing user\"", "getUser"]},
 		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
 		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
 		"VideoForwardRef": {"strings": ["HTMLSourceElement", "autoPlay"], "funcStrings": ["externalRef"]}
