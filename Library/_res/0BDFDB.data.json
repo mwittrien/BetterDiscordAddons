@@ -321,10 +321,7 @@
 			"FormTitle": [".tag", ".errorSeparator"]
 		}},
 		"GuildBadge": {"strings": ["VERIFIED_AND_PARTNERED", "renderBadge", "flowerStarClassName"]},
-		"GuildIconComponents": {"strings": ["SMOL", "badgeStrokeColor"], "map": {
-			"Icon": [".apply"],
-			"Sizes": ["\"SMOL\"", "\"SMALLER\""]
-		}},
+		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
 		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
@@ -373,9 +370,9 @@
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
 		}},
-		"StatusComponents": {"strings": ["().status}", ".isMobile", ".ONLINE"], "exported": false, "value": "exports", "map": {
-			"Status": ["().status}", ".isMobile", ".ONLINE"],
-			"Types": ["\"online\"", "\"unknown\""]
+		"StatusComponents": {"props": ["Status", "StatusTypes"], "exported": false, "value": "exports", "map": {
+			"Status": ["Status"],
+			"Types": ["StatusTypes"]
 		}},
 		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"]},
 		"TextElement": {"strings": [".strong]", ".STANDARD"]},

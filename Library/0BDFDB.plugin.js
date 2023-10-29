@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.4.5
+ * @version 3.4.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6232,12 +6232,12 @@ module.exports = (_ => {
 						if (!guild) return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildsummaryemptyguild
 						});
-						let icon = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildIconComponents.Icon, {
+						let icon = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildIcon, {
 							className: BDFDB.disCN.guildsummaryicon,
 							guild: guild,
 							showTooltip: this.props.showTooltip,
 							tooltipPosition: "top",
-							size: Internal.LibraryComponents.GuildIconComponents.Icon.Sizes.SMALLER
+							size: Internal.LibraryComponents.GuildIcon.Sizes.SMALLER
 						});
 						return this.props.switchOnClick ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.guildsummaryclickableicon,
@@ -7005,9 +7005,9 @@ module.exports = (_ => {
 								text: guild.name,
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.DOMUtils.formatClassName(this.props.guildClassName, BDFDB.disCN.settingsguild, this.props.disabled.includes(guild.id) && BDFDB.disCN.settingsguilddisabled),
-									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildIconComponents.Icon, {
+									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildIcon, {
 										guild: guild,
-										size: this.props.size || Internal.LibraryComponents.GuildIconComponents.Icon.Sizes.MEDIUM
+										size: this.props.size || Internal.LibraryComponents.GuildIcon.Sizes.MEDIUM
 									}),
 									onClick: e => {
 										let isDisabled = this.props.disabled.includes(guild.id);
