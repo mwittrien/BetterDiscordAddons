@@ -292,9 +292,9 @@
 		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\""], "exported": false, "value": "exports", "map": {
 			"Sizes": ["\"SIZE_20\"", "\"SIZE_32\""]
 		}},
-		"Avatars": {"strings": ["\"statusColor\"", "ONLINE", "isMobile"], "exported": false, "value": "exports", "map": {
-			"AnimatedAvatar": ["compare"],
-			"Avatar": ["statusColor"]
+		"Avatars": {"props": ["AnimatedAvatar", "Avatar"], "exported": false, "value": "exports", "map": {
+			"AnimatedAvatar": ["AnimatedAvatar"],
+			"Avatar": ["Avatar"]
 		}},
 		"Badges": {"strings": ["disableColor", "baseShapeRound", "textBadge"], "exported": false, "value": "exports", "map": {
 			"BadgeShapes": ["baseShapeRoundRight", "baseShapeRoundLeft"],
@@ -435,7 +435,7 @@
 		"ChannelTextAreaEditor": {"strings": ["onHideAutocomplete", "onMaybeShowAutocomplete", "uploadPromptCharacterCount", "_focusBlurQueue"]},
 		"ChannelTextAreaForm": {"strings": ["renderApplicationCommandIcon", "handleTextareaChange", "handleSendMessage"]},
 		"ChannelThreadItem": {"strings": [".typeThread", ".modeUnread", ".Messages.GUILD_SIDEBAR_THREAD"]},
-		"CircleIconButton": {"strings": [".circleIconButton", "lowerBadge", ".circleButtonMask"]},
+		"CircleIconButton": {"strings": ["circleIconButton", "lowerBadge", "circleButtonMask"]},
 		"Clickable": {"strings": [".ENTER", "preventDefault", ").handleKeyPress"]},
 		"CloseButton": {"strings": [".closeButton", ".closeIcon", "offset:{"]},
 		"ConnectedLazyImageZoomable": {"strings": ["{isWindowFocused", ",appContext:"]},
@@ -453,7 +453,7 @@
 		"FolderHeader": {"strings": ["folderNode:", "expandedFolderIconWrapper", "forceCircular"]},
 		"FolderIcon": {"strings": ["folderNode:", "folderIconWrapper", "closedFolderIconWrapper"]},
 		"FolderItem": {"strings": ["folderNode:", "expandedFolderBackground", "onExpandCollapse"]},
-		"FolderItemWrapper": {"strings": [".folderNode", "getCurrentUserActiveStream", "defaultFolderName:"]},
+		"FolderItemWrapper": {"strings": ["folderNode:", "getCurrentUserActiveStream", "defaultFolderName:"]},
 		"FolderSettingsModal": {"strings": [".handleNameChange=", ".handleSubmit", "folderName:"]},
 		"GuildBans": {"strings": [".Messages.BANS_NO_USERS_BANNED", ".Messages.BANS_SEARCH_PLACEHOLDER", ".getSortedBans"]},
 		"GuildChannelListContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "\"guild-context\",\"aria-label\""]},
