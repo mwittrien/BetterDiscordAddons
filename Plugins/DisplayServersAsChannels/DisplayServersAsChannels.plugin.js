@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -79,6 +79,7 @@ module.exports = (_ => {
 						"CircleIconButton",
 						"DirectMessage",
 						"FolderHeader",
+						"FolderIcon",
 						"FolderItemWrapper",
 						"GuildFavorites",
 						"GuildItem",
@@ -209,10 +210,10 @@ module.exports = (_ => {
 				e.returnvalue = this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 					badges: [
-						this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
+						this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
 							animate: e.instance.props.animatable && e.instance.state && e.instance.state.hovered,
 							guild: e.instance.props.guild,
-							size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.SMALLER
+							size: BDFDB.LibraryComponents.GuildIcon.Sizes.SMALLER
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildBadge, {
 							size: this.settings.amounts.serverElementHeight * 0.5,
@@ -228,17 +229,19 @@ module.exports = (_ => {
 			processFolderHeader (e) {
 				if (!e.instance.props.folderNode) return;
 				e.returnvalue = this.removeMask(e.returnvalue, true);
+			}
+			
+			processFolderIcon (e) {
+				if (!e.instance.props.folderNode) return;
 				let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB");
 				let folderSize = Math.round(this.settings.amounts.serverElementHeight * 0.725);
 				let badge = null;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.guildfoldericonwrapper]]});
 				if (index > -1 && children[index] && children[index].props && children[index].props.style && children[index].props.style.background) badge = children[index];
-				else {
-					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
-					if (index > -1) children[index] = null;
-				}
+				e.returnvalue = BDFDB.ReactUtils.createElement("div", {});
 				this.addElementName(e.returnvalue, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
 					wrap: true,
+					useReturn: true,
 					backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
 					badges: badge || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						color: folderColor,
@@ -259,25 +262,12 @@ module.exports = (_ => {
 			}
 			
 			processCircleIconButton (e) {
-				const child = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n.props && n.props.id && typeof n.props.children == "function"});
-				let process = returnvalue => {
-					this.removeTooltip(returnvalue);
-					returnvalue = this.removeMask(returnvalue);
-					this.addElementName(e.returnvalue, e.instance.props.tooltip, {
-						wrap: true,
-						backgroundColor: "transparent"
-					});
-					return returnvalue;
-				};
-				if (child) {
-					let renderChildren = child.props.children;
-					child.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let children = BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {children: renderChildren(...args)});
-						children = process(children);
-						return children;
-					});
-				}
-				else e.returnvalue = process(e.returnvalue);
+				this.removeTooltip(e.returnvalue);
+				e.returnvalue = this.removeMask(e.returnvalue);
+				this.addElementName(e.returnvalue, e.instance.props.tooltip, {
+					wrap: true,
+					backgroundColor: "transparent"
+				});
 			}
 			
 			processUnavailableGuildsButton (e) {
@@ -342,9 +332,10 @@ module.exports = (_ => {
 			}
 			
 			addElementName (parent, name, options = {}) {
-				let [children, index] = BDFDB.ReactUtils.findParent(parent, {
+				let [children, index] = options.useReturn ? [[parent], 0] : BDFDB.ReactUtils.findParent(parent, {
 					name: ["NavItem", "Clickable"],
-					props: [["className", BDFDB.disCN.guildserrorinner]],
+					someProps: true,
+					props: [["className", BDFDB.disCN.guildserrorinner], ["className", BDFDB.disCN.guildbuttoninner]],
 					filter: c => c && c.props && (c.props.id == "home" || !isNaN(parseInt(c.props.id)))
 				});
 				if (index == -1) return;
