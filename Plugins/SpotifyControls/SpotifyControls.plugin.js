@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.6
+ * @version 1.3.7
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -192,7 +192,7 @@ module.exports = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 											className: BDFDB.disCNS.subtext + BDFDB.disCN._spotifycontrolsinterpret,
-											color: BDFDB.LibraryComponents.TextElement.Colors.CUSTOM,
+											color: BDFDB.LibraryComponents.TextElement.Colors.Custom,
 											size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 												children: _this.settings.general.addBy ? BDFDB.LanguageUtils.LanguageStringsFormat("USER_ACTIVITY_LISTENING_ARTISTS", lastSong.state) : lastSong.state
