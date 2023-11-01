@@ -228,7 +228,6 @@ module.exports = (_ => {
 			}
 
 			processUserPopout (e) {
-				console.log(e);
 				currentPopout = e.instance;
 			}
 
