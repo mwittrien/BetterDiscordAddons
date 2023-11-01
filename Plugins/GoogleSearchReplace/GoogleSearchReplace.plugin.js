@@ -2,7 +2,7 @@
  * @name GoogleSearchReplace
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.5
+ * @version 1.3.6
  * @description Replaces the default Google Text Search with a custom Search Engine
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -63,27 +63,39 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					engines: {
-						_all: 				{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
-						Ask: 				{value: true, 	name: "Ask", 					url: "https://ask.com/web?q=" + textUrlReplaceString},
-						Bing: 				{value: true, 	name: "Bing", 					url: "https://www.bing.com/search?q=" + textUrlReplaceString},
-						Brave:				{value: true, 	name: "Brave",					url: "https://search.brave.com/search?q=" + textUrlReplaceString},
-						DogPile:			{value: false, 	name: "DogPile", 				url: "http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
-						DuckDuckGo:			{value: true, 	name: "DuckDuckGo", 			url: "https://duckduckgo.com/?q=" + textUrlReplaceString},
-						Ecosia:				{value: false, 	name: "Ecosia", 				url: "https://www.ecosia.org/search?q=" + textUrlReplaceString},
-						GitHub: 			{value: false, 	name: "GitHub", 				url: "https://github.com/search?q=" + textUrlReplaceString},
-						Google: 			{value: true, 	name: "Google", 				url: "https://www.google.com/search?q=" + textUrlReplaceString},
-						GoogleScholar: 		{value: false, 	name: "Google Scholar", 		url: "https://scholar.google.com/scholar?q=" + textUrlReplaceString},
-						Quora: 				{value: true, 	name: "Quora", 					url: "https://www.quora.com/search?q=" + textUrlReplaceString},
-						Qwant: 				{value: false, 	name: "Qwant", 					url: "https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
-						UrbanDictionary: 	{value: false, 	name: "Urban Dictionary", 		url: "https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
-						Searx: 				{value: false, 	name: "Searx", 					url: "https://searx.info/?q=" + textUrlReplaceString},
-						StackOverflow: 		{value: true, 	name: "Stack Overflow", 		url: "https://stackoverflow.com/search?q=" + textUrlReplaceString},
-						Startpage: 			{value: false, 	name: "Startpage", 				url: "https://www.startpage.com/sp/search?q=" + textUrlReplaceString},
-						Whoogle: 			{value: false, 	name: "Whoogle", 				url: "https://search.sethforprivacy.com/search?q=" + textUrlReplaceString},
-						WolframAlpha:		{value: false, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
-						Yandex: 			{value: true, 	name: "Yandex", 				url: "https://yandex.com/search/?text=" + textUrlReplaceString},
-						Yahoo: 				{value: true, 	name: "Yahoo", 					url: "https://search.yahoo.com/search?p=" + textUrlReplaceString},
-						YouTube: 			{value: false, 	name: "YouTube", 				url: "https://www.youtube.com/results?q=" + textUrlReplaceString}
+						_all: 			{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
+						Amazon: 		{value: true, 	name: "Amazon", 						url: "https://www.amazon.com/s?k=" + textUrlReplaceString},
+						Ask: 			{value: true, 	name: "Ask", 							url: "https://ask.com/web?q=" + textUrlReplaceString},
+						Bing: 			{value: true, 	name: "Bing", 							url: "https://www.bing.com/search?q=" + textUrlReplaceString},
+						Brave: 			{value: true, 	name: "Brave", 							url: "https://search.brave.com/search?q=" + textUrlReplaceString},
+						DnDBeyond: 		{value: true, 	name: "D&D Beyond", 						url: "https://www.dndbeyond.com/search?q=" + textUrlReplaceString},
+						DogPile: 		{value: false, 	name: "DogPile", 						url: "http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
+						DuckDuckGo: 		{value: true, 	name: "DuckDuckGo", 						url: "https://duckduckgo.com/?q=" + textUrlReplaceString},
+						Ecosia: 		{value: false, 	name: "Ecosia", 						url: "https://www.ecosia.org/search?q=" + textUrlReplaceString},
+						Facebook: 		{value: true, 	name: "Facebook", 						url: "https://www.facebook.com/search/top/?q=" + textUrlReplaceString},
+						Fandom: 		{value: true, 	name: "Fandom.com", 						url: "https://www.fandom.com/?s=" + textUrlReplaceString},
+						GitHub: 		{value: false, 	name: "GitHub", 						url: "https://github.com/search?q=" + textUrlReplaceString},
+						Google: 		{value: true, 	name: "Google", 						url: "https://www.google.com/search?q=" + textUrlReplaceString},
+						GoogleScholar: 		{value: false, 	name: "Google Scholar", 					url: "https://scholar.google.com/scholar?q=" + textUrlReplaceString},
+						KnowYourMeme: 		{value: true, 	name: "Know Your Meme", 					url: "https://knowyourmeme.com/search?q=" + textUrlReplaceString},
+						Linkedin: 		{value: true, 	name: "Linkedin", 						url: "https://www.linkedin.com/search/results/all/?keywords=" + textUrlReplaceString},
+						Pinterest: 		{value: true, 	name: "Pinterest", 						url: "https://www.pinterest.com/search/pins/?q=" + textUrlReplaceString},
+						Quora: 			{value: true, 	name: "Quora", 							url: "https://www.quora.com/search?q=" + textUrlReplaceString},
+						Qwant: 			{value: false, 	name: "Qwant", 							url: "https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
+						Reddit: 		{value: true, 	name: "Reddit", 						url: "https://www.reddit.com/search/?q=" + textUrlReplaceString},
+						SearchForJohn: 		{value: true, 	name: "SearchForJohn", 						url: "https://www.searchforjohn.com/?q=" + textUrlReplaceString},
+						Searx: 			{value: false, 	name: "Searx", 							url: "https://searx.info/?q=" + textUrlReplaceString},
+						StackOverflow: 		{value: true, 	name: "Stack Overflow", 					url: "https://stackoverflow.com/search?q=" + textUrlReplaceString},
+						Startpage: 		{value: false, 	name: "Startpage", 						url: "https://www.startpage.com/sp/search?q=" + textUrlReplaceString},
+						Trakt: 			{value: true, 	name: "Trakt.tv", 						url: "https://trakt.tv/search?query=" + textUrlReplaceString},
+						Tumblr: 		{value: true, 	name: "Tumblr", 						url: "https://www.tumblr.com/search/" + textUrlReplaceString},
+						UrbanDictionary: 	{value: false, 	name: "Urban Dictionary", 					url: "https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
+						Whoogle: 		{value: false, 	name: "Whoogle", 						url: "https://search.sethforprivacy.com/search?q=" + textUrlReplaceString},
+						Wikipedia: 		{value: true, 	name: "Wikipedia", 						url: "https://en.wikipedia.org/w/index.php?search=" + textUrlReplaceString},
+						WolframAlpha: 		{value: false, 	name: "Wolfram Alpha", 						url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
+						Yahoo: 			{value: true, 	name: "Yahoo", 							url: "https://search.yahoo.com/search?p=" + textUrlReplaceString},
+						Yandex: 		{value: true, 	name: "Yandex", 						url: "https://yandex.com/search/?text=" + textUrlReplaceString},
+						YouTube: 		{value: false, 	name: "YouTube", 						url: "https://www.youtube.com/results?q=" + textUrlReplaceString},
 					}
 				};
 			}
