@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.4.8
+ * @version 3.4.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8129,14 +8129,15 @@ module.exports = (_ => {
 					before: [
 						"BlobMask",
 						"EmojiPickerListRow",
+						"MemberListItem",
 						"Menu",
 						"MessageActionsContextMenu",
 						"MessageHeader",
+						"NameContainer",
 						"SearchBar"
 					],
 					after: [
 						"DiscordTag",
-						"MemberListItem",
 						"UseCopyIdItem",
 						"UserPopoutAvatar"
 					],
@@ -8331,8 +8332,23 @@ module.exports = (_ => {
 				Internal.processEmojiPickerListRow = function (e) {
 					if (e.instance.props.emojiDescriptors && Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) for (let i in e.instance.props.emojiDescriptors) e.instance.props.emojiDescriptors[i] = Object.assign({}, e.instance.props.emojiDescriptors[i], {isDisabled: false});
 				};
+				var memberStore = {};
 				Internal.processMemberListItem = function (e) {
-					e.returnvalue.props.avatar = Internal._processAvatarRender(e.instance.props.user, e.returnvalue.props.avatar) || e.returnvalue.props.avatar;
+					if (!memberStore || !memberStore.channel || memberStore.channel.id != e.instance.props.channel.id) memberStore = {channel: e.instance.props.channel, members: {}};
+					memberStore.members[BDFDB.UserUtils.getAvatar(e.instance.props.user.id).split(".com")[1] + " " + e.instance.props.user.username] = e.instance.props.user;
+				};
+				Internal.processNameContainer = function (e) {
+					if (e.instance.props.innerClassName != BDFDB.disCN.memberinner || !memberStore || !memberStore.members) return;
+					let avatar = BDFDB.ReactUtils.findChild(e.instance.props.avatar, {props: ["src"]});
+					if (!avatar) return;
+					let src = avatar.props._originalSrc || avatar.props.src;
+					if (!src) return;
+					src = (src.split(".com")[1] || src).split("?size")[0];
+					let username = avatar.props["aria-label"];
+					if (!memberStore.members[src + " " + username]) return;
+					e.instance.props.user = memberStore.members[src + " " + username];
+					e.instance.props.channel = memberStore.channel;
+					e.instance.props.avatar = Internal._processAvatarRender(e.instance.props.user, e.instance.props.avatar) || e.instance.props.avatar;
 				};
 				Internal.processMenu = function (e) {
 					if (e.instance.props && (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length)) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
