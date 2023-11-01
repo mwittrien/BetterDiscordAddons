@@ -4051,7 +4051,7 @@ module.exports = (_ => {
 							else if (BDFDB.ArrayUtils.is(children[i])) {
 								for (let j in children[i]) if (check(children[i][j])) return [children[i], parseInt(j)];
 							}
-							else if (children[i].props) {
+							else if (children[i].props && children[i].props.children) {
 								if (BDFDB.ArrayUtils.is(children[i].props.children) && children[i].props.children.length) {
 									let [possibleChildren, possibleIndex] = BDFDB.ContextMenuUtils.findItem(children[i].props.children, config);
 									if (possibleIndex > -1) return [possibleChildren, possibleIndex];
@@ -4061,6 +4061,19 @@ module.exports = (_ => {
 									else {
 										children[i].props.children = [children[i].props.children];
 										return [children[i].props.children, 0];
+									}
+								}
+								else if (children[i].props.children.props && children[i].props.children.props.children) {
+									if (BDFDB.ArrayUtils.is(children[i].props.children.props.children) && children[i].props.children.props.children.length) {
+										let [possibleChildren, possibleIndex] = BDFDB.ContextMenuUtils.findItem(children[i].props.children.props.children, config);
+										if (possibleIndex > -1) return [possibleChildren, possibleIndex];
+									}
+									else if (check(children[i].props.children.props.children)) {
+										if (config.group) return [children, parseInt(i)];
+										else {
+											children[i].props.children.props.children = [children[i].props.children.props.children];
+											return [children[i].props.children.props.children, 0];
+										}
 									}
 								}
 							}
