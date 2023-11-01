@@ -20,13 +20,6 @@
 		"User": {"props": ["addGuildAvatarHash", "isLocalBot"]}
 	},
 	"CustomDiscordConstants": {
-		"MAX_GUILD_FOLDER_NAME_LENGTH": 32,
-		"MAX_MESSAGE_LENGTH": 2000,
-		"MAX_MESSAGE_LENGTH_PREMIUM": 4000,
-		"MAX_MESSAGES_PER_CHANNEL": 50,
-		"MAX_VIDEO_HEIGHT": 720,
-		"MAX_VIDEO_WIDTH": 1280,
-		"ME": "@me",
 		"MenuItemColors": {
 			"BRAND": "brand",
 			"DANGER": "danger",
@@ -35,7 +28,6 @@
 			"PREMIUMGRADIENT": "premiumgradient",
 			"SUCCESS": "success"
 		},
-		"SEARCH_PAGE_SIZE": 25,
 		"ToastIcons": {
 			"info": "INFO",
 			"danger": "CLOSE_CIRCLE",
@@ -76,35 +68,13 @@
 		"UserPremiumLevels": {"1": 1, "2": 2, "3": 3, "4": 6, "5": 9, "6": 12, "7": 15, "8": 18, "9": 24}
 	},
 	"DiscordConstants": {
-		"ActivityTypes": ["STREAMING", "LISTENING", "CUSTOM_STATUS"],
-		"AnalyticsObjects": ["CONTEXT_MENU", "TOOLTIP", "CHANNEL"],
-		"AnalyticsPages": ["AUTH", "GUILD_CHANNEL", "CUSTOM_STATUS_MODAL"],
-		"AnalyticsSections": ["CHANNEL_LIST", "ACCOUNT_PANEL", "MEMBER_LIST"],
-		"AutocompleterQuerySymbols": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "APPLICATION"],
 		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTextAreaTypes": ["CREATE_FORUM_POST", "PROFILE_BIO_INPUT", "FORUM_CHANNEL_GUIDELINES"],
-		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
-		"ChannelTypeGroups": ["GUILD_TEXTUAL", "GUILD_VOCAL", "ALL_DMS"],
 		"Colors": ["SPOTIFY", "RED_100", "BLUE"],
-		"ColorVariables": ["status-danger", "background-primary"],
-		"ComponentActions": ["INSERT_TEXT", "TEXTAREA_FOCUS"],
-		"EmojiSprites": ["DiversityPerRow", "PickerPerRow"],
-		"Endpoints": ["CAPTCHA", "GUILD", "MESSAGES"],
-		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
-		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
-		"MenuItemColors": ["BRAND", "GREEN", "PREMIUM_GRADIENT"],
-		"MessageStates": ["SENT", "SENDING", "SEND_FAILED"],
 		"MessageTypeGroups": ["USER_MESSAGE", "DELETABLE"],
-		"MessageTypes": ["CHAT_INPUT_COMMAND", "CHANNEL_PINNED_MESSAGE"],
-		"Permissions": ["ADMINISTRATOR", "MANAGE_MESSAGES", "MANAGE_ROLES", "MANAGE_GUILD_EXPRESSIONS"],
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
-		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
-		"Routes": ["CHANNEL_THREAD_VIEW", "MESSAGE_REQUESTS"],
-		"UserFlags": ["MFA_SMS", "VERIFIED_BOT"],
-		"UserNotificationSettings": ["NULL", "NO_MESSAGES", "ALL_MESSAGES"],
-		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
-		"UserSettingsSections": ["ACCOUNT", "DEVELOPER_OPTIONS", "DISMISSIBLE_CONTENT_OPTIONS"]
+		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"]
 	},
 	"LibraryModules": {
 		"AckUtils": {"strings": ["type:\"BULK_ACK\""], "exported": false, "value": "exports", "map": {
@@ -167,11 +137,7 @@
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"InternalReactUtils": {"props": ["jsx", "jsxs", "Fragment"]},
-		"KeyCodeUtils": {"strings": ["Unrecognized DeviceType", "GAMEPAD"], "exported": false, "value": "exports", "assign": true, "map": {
-			"codeToKey": ["[\"\"+", "MACOS"],
-			"keyToCode": ["Unrecognized DeviceType"],
-			"toName": ["appVersion"]
-		}},
+		"KeyCodeUtils": {"props": ["codeToKey", "keyToCode"]},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LoginUtils": {"props": ["login", "logout"]},
 		"MediaComponentUtils": {"strings": ["renderAdjacentContent", "imageContent"], "exported": false, "value": "exports", "map": {
@@ -204,13 +170,7 @@
 		}},
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUsePremiumGuildMemberProfile"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
-		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports", "map": {
-			"isAndroid": ["\"android\""],
-			"isDarwin": ["\"darwin\""],
-			"isIOS": ["ios"],
-			"isLinux": ["\"linux\""],
-			"isWindows": ["return/^win/.test"]
-		}},
+		"PlatformUtils": {"props": ["isAndroid", "isWindows"]},
 		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
 		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"], "exported": false, "value": "exports", "map": {
 			"AccessibilityPreferencesContext": ["object Object"]
@@ -289,6 +249,7 @@
 		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
 		"Animations": {"props": ["Controller", "Spring", "animated"]},
 		"AppReferencePositionLayer": {"props": ["AppReferencePositionLayer", "appLayerContext"], "funcStrings": ["{children:(", "{ref:"]},
+		"AutocompleterComponents": {"props": ["AutocompleterQuerySymbols", "createHeaderResult"]},
 		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\""], "exported": false, "value": "exports", "map": {
 			"Sizes": ["\"SIZE_20\"", "\"SIZE_32\""]
 		}},

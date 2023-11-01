@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.4.7
+ * @version 3.4.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -336,6 +336,11 @@ module.exports = (_ => {
 					found = found[value];
 				}
 				return found;
+			};
+			BDFDB.ObjectUtils.invert = function (obj) {
+				let newObj = {};
+				if (BDFDB.ObjectUtils.is(obj)) for (let entry of Object.entries(obj)) newObj[entry[1]] = entry[0];
+				return newObj;
 			};
 			BDFDB.ObjectUtils.extract = function (obj, ...keys) {
 				let newObj = {};
@@ -1383,9 +1388,11 @@ module.exports = (_ => {
 					return BDFDB.ArrayUtils.removeCopies([firstReturn].concat(secondReturn).flat(10));
 				};
 				
+				const DiscordConstantsObject = BDFDB.ModuleUtils.findByProperties("AnalyticsSections", "ChannelTypes", "MessageTypes");
+				if (InternalData.CustomDiscordConstants) DiscordConstants = Object.assign(DiscordConstants, InternalData.CustomDiscordConstants);
+				if (DiscordConstantsObject) DiscordConstants = Object.assign(DiscordConstants, DiscordConstantsObject);
 				Internal.DiscordConstants = new Proxy(DiscordConstants, {
 					get: function (_, item) {
-						if (InternalData.CustomDiscordConstants && InternalData.CustomDiscordConstants[item]) return InternalData.CustomDiscordConstants[item];
 						if (DiscordConstants[item]) return DiscordConstants[item];
 						if (!InternalData.DiscordConstants[item]) {
 							BDFDB.LogUtils.warn([item, "Object not found in DiscordConstants"]);
@@ -2493,9 +2500,36 @@ module.exports = (_ => {
 				});
 				BDFDB.LibraryModules = Internal.LibraryModules;
 				
-				if (Internal.LibraryModules.KeyCodeUtils && InternalData.LibraryModules.KeyCodeUtils._originalModule) InternalData.LibraryModules.KeyCodeUtils._originalModule.getString = function (keyArray) {
-					return Internal.LibraryModules.KeyCodeUtils.toName([keyArray].flat(10).filter(n => n).map(keyCode => [Internal.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]), true);
-				};
+				if (Internal.LibraryModules.KeyCodeUtils) {
+					let originalModule = LibraryModules.KeyCodeUtils;
+					LibraryModules.KeyCodeUtils = new Proxy(originalModule, {
+						get: function (_, item) {
+							if (item == "getString") return getString;
+							else if (item == "_originalModule") return originalModule;
+							else if (originalModule[item]) return originalModule[item];
+							else return null;
+						}
+					});
+					
+					let codeMap = BDFDB.ObjectUtils.invert(Internal.LibraryModules.PlatformUtils.isLinux() ? Internal.DiscordConstants.LinuxKeyToCode : Internal.LibraryModules.PlatformUtils.isMac() ? Internal.DiscordConstants.MacosKeyToCode : Internal.LibraryModules.PlatformUtils.isWindows() ? Internal.DiscordConstants.WindowsKeyToCode : {});
+					let keyMap = [["META", "⌘"], ["RIGHT META", "RIGHT ⌘"], ["SHIFT", "⇧"], ["RIGHT SHIFT", "RIGHT ⇧"], ["ALT", "⌥"], ["RIGHT ALT", "RIGHT ⌥"], ["CTRL", "⌃"], ["RIGHT CTRL", "RIGHT ⌃"], ["ENTER", "↵"], ["BACKSPACE", "⌫"], ["DEL", "⌦"], ["ESC", "⎋"], ["PAGEUP", "⇞"], ["PAGEDOWN", "⇟"], ["UP", "↑"], ["DOWN", "↓"], ["LEFT", "←"], ["RIGHT", "→"], ["HOME", "↖"], ["END", "↘"], ["TAB", "⇥"], ["SPACE", "␣"]];
+					let mapKeys = key => {
+						let upperCaseKey = key.toUpperCase();
+						for (let [name, mappedKey] of mapKeys) if (name === upperCaseKey) return mappedKey;
+						return key;
+					};
+					const getString = function (keyArray, upperCase = true) {
+						let strings = [keyArray].flat(10).filter(n => n).map(keyCode => {
+							let code = Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode;
+							return codeMap[code] || "UNK".concat(code)
+						}).filter(n => n != null);
+						if (!upperCase) return strings.join("+"); 
+						else {
+							strings = window.navigator.appVersion.indexOf("Mac OS X") != -1 ? strings.map(mapKeys) : strings;
+							return strings.join(" + ").toUpperCase();
+						}
+					};
+				}
 				
 				const MyReact = {};
 				MyReact.childrenToArray = function (parent) {
@@ -2914,7 +2948,7 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.unmountComponentAtNode(tempNode);
 					return returnValue;
 				};
-				BDFDB.ReactUtils = new Proxy(LibraryModules, {
+				BDFDB.ReactUtils = new Proxy({}, {
 					get: function (_, item) {
 						if (MyReact[item]) return MyReact[item];
 						else if (LibraryModules.React[item]) return LibraryModules.React[item];
