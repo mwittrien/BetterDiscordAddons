@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.6
+ * @version 1.3.7
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -228,6 +228,7 @@ module.exports = (_ => {
 			}
 
 			processUserPopout (e) {
+				console.log(e);
 				currentPopout = e.instance;
 			}
 
@@ -258,9 +259,9 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserMemberSince"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
 					isInPopout: false,
-					guildId: currentPopout.props.guildId || BDFDB.DiscordConstants.ME,
-					channelId: currentPopout.props.channelId,
-					isGuild: !!currentPopout.props.guildId,
+					guildId: currentProfile.props.guildId || BDFDB.DiscordConstants.ME,
+					channelId: currentProfile.props.channelId,
+					isGuild: !!currentProfile.props.guildId,
 					user: user
 				}, true));
 			}
