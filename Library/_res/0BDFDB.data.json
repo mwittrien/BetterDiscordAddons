@@ -298,7 +298,7 @@
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
 		"Mask": {"props": "Masks"},
 		"Menu": {"strings": ["Menu API only allows Items and groups of Items as children"]},
-		"MessageGroup": {"strings": ["().ephemeral", ".animateAvatar,", "getMessageByReference"]},
+		"MessageGroup": {"strings": [".ephemeral", "animateAvatar:", "getMessageByReference"]},
 		"MessagesPopoutComponents": {"strings": ["canCloseAllMessages", "loadingMore"], "exported": false, "value": "exports", "map": {
 			"EmptyState": [".emptyPlaceholder", "backgroundImage"],
 			"Header": [".header", "heading"],
