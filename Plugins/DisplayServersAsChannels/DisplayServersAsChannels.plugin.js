@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.2
+ * @version 1.7.3
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -61,6 +61,7 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						showGuildIcon:					{value: true, 	description: "Adds the Server Icon"},
+						showGuildBadge:					{value: true, 	description: "Adds the Server Badge (partnered, verified, etc)"},
 						addFolderColor:					{value: true, 	description: "Recolors the Folder's Server List Background to the Folder Color"},
 					},
 					amounts: {
@@ -215,7 +216,7 @@ module.exports = (_ => {
 							guild: e.instance.props.guild,
 							size: BDFDB.LibraryComponents.GuildIcon.Sizes.SMALLER
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildBadge, {
+						this.settings.general.showGuildBadge && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildBadge, {
 							size: this.settings.amounts.serverElementHeight * 0.5,
 							badgeColor: BDFDB.DiscordConstants.Colors.PRIMARY_400,
 							tooltipColor: BDFDB.LibraryComponents.TooltipContainer.Colors.BLACK,
