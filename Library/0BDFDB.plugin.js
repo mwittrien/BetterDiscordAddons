@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.4.8
+ * @version 3.4.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8132,11 +8132,11 @@ module.exports = (_ => {
 						"Menu",
 						"MessageActionsContextMenu",
 						"MessageHeader",
+						"NameContainer",
 						"SearchBar"
 					],
 					after: [
 						"DiscordTag",
-						"MemberListItem",
 						"UseCopyIdItem",
 						"UserPopoutAvatar"
 					],
@@ -8331,8 +8331,15 @@ module.exports = (_ => {
 				Internal.processEmojiPickerListRow = function (e) {
 					if (e.instance.props.emojiDescriptors && Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) for (let i in e.instance.props.emojiDescriptors) e.instance.props.emojiDescriptors[i] = Object.assign({}, e.instance.props.emojiDescriptors[i], {isDisabled: false});
 				};
-				Internal.processMemberListItem = function (e) {
-					e.returnvalue.props.avatar = Internal._processAvatarRender(e.instance.props.user, e.returnvalue.props.avatar) || e.returnvalue.props.avatar;
+				Internal.processNameContainer = function (e) {
+					if (e.instance.props.innerClassName != BDFDB.disCN.memberinner) return;
+					let avatar = BDFDB.ReactUtils.findChild(e.instance.props.avatar, {props: ["src"]});
+					if (!avatar) return;
+					let src = avatar.props._originalSrc || avatar.props.src;
+					if (!src || src.startsWith("/assets/")) return;
+					let user = Internal.LibraryStores.UserStore.getUser((src.split(".com/avatars/")[1] || "").split("/")[0]);
+					if (!user) return;
+					e.instance.props.avatar = Internal._processAvatarRender(user, e.instance.props.avatar) || e.instance.props.avatar;
 				};
 				Internal.processMenu = function (e) {
 					if (e.instance.props && (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length)) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
