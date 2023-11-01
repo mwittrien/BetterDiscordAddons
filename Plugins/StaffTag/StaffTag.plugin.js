@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.6.0
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -91,11 +91,11 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"MessageHeader"
+						"MessageHeader",
+						"NameContainer"
 					],
 					after: [
-						"MemberListItem",
-						"NameTag",
+						"UserProfileUsername",
 						"UsernameSection",
 						"VoiceUser"
 					]
@@ -260,10 +260,11 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
-			processMemberListItem (e) {
+			processNameContainer (e) {
+				if (!e.instance.props.user) return;
 				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 				if (userType && this.settings.tagPlaces.memberList) {
-					this.injectStaffTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
+					this.injectStaffTag(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
 						channelId: e.instance.props.channel && e.instance.props.channel.id,
 						tagClass: BDFDB.disCN.bottagmember
 					});
@@ -286,50 +287,61 @@ module.exports = (_ => {
 			processVoiceUser (e) {
 				if (e.instance.props.user && this.settings.tagPlaces.voiceList) {
 					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
-					if (userType) {
-						let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
-						if (content) this.injectStaffTag(content.props.children, e.instance.props.user, userType, 3, {
-							channelId: e.instance.props.channel && e.instance.props.channel.id,
-						});
-					}
+					if (!userType) return;
+					let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
+					if (content) this.injectStaffTag(content.props.children, e.instance.props.user, userType, 3, {
+						channelId: e.instance.props.channel && e.instance.props.channel.id,
+					});
 				}
 			}
 
 			processNameTag (e) {
-				if (e.instance.props.user && e.instance.props.className) {
-					let userType = this.getUserType(e.instance.props.user);
-					if (userType) {
-						let inject = false, tagClass = "";
-						if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutheadertagnonickname) > -1) {
-							inject = this.settings.tagPlaces.userPopout;
-							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
-						}
-						else if (e.instance.props.className.indexOf(BDFDB.disCN.userprofilenametag) > -1) {
-							inject = this.settings.tagPlaces.userProfile;
-							tagClass = BDFDB.disCN.bottagnametag;
-						}
-						if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
-							tagClass: tagClass,
-							useRem: e.instance.props.useRemSizes,
-							inverted: e.instance.props.invertBotTagColor
-						});
-					}
+				if (!e.instance.props.user || !e.instance.props.className) return;
+				let userType = this.getUserType(e.instance.props.user);
+				if (!userType) return;
+				let inject = false, tagClass = "";
+				if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutheadertagwithnickname) > -1) {
+					inject = this.settings.tagPlaces.userPopout;
+					tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 				}
+				else if (e.instance.props.className.indexOf(BDFDB.disCN.userprofilenametag) > -1) {
+					inject = this.settings.tagPlaces.userProfile;
+					tagClass = BDFDB.disCN.bottagnametag;
+				}
+				if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
+					tagClass: tagClass,
+					useRem: e.instance.props.useRemSizes,
+					inverted: e.instance.props.invertBotTagColor
+				});
 			}
 			
 			processUsernameSection (e) {
 				if (e.instance.props.user && this.settings.tagPlaces.userPopout) {
 					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
-					if (userType) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-						if (index > -1) {
-							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-							this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
-								tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-							});
-						}
+					if (!userType) return;
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+					if (index > -1) {
+						if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+						this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
+							tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
+							inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
+						});
 					}
+				}
+			}
+			
+			processUserProfileUsername (e) {
+				if (e.instance.props.user && this.settings.tagPlaces.userProfile) {
+					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
+					if (!userType) return;
+					let username = BDFDB.ReactUtils.findChild(e.returnvalue, {props: ["children", "style", "variant"]});
+					if (!username) return;
+					username.props.children = [username.props.children];
+					this.injectStaffTag(username.props.children, e.instance.props.user, userType, 2, {
+						tagClass: BDFDB.disCN.bottagnametag,
+						useRem: e.instance.props.useRemSizes,
+						inverted: e.instance.props.invertBotTagColor
+					});
 				}
 			}
 

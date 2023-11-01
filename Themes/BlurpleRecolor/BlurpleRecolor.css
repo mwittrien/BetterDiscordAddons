@@ -799,6 +799,9 @@
 .background_b61fcc .lookLink__93965.colorLink_b651e5 {
 	color: rgb(var(--accentcolor));
 }
+.background_b61fcc .lookLink__93965.colorLink_b651e5:hover .contents_fb6220 {
+	--button--underline-color: rgb(var(--accentcolor));
+}
 .contentCircle_bc797d {										/* accountsettings		avatar upload						*/
 	background-color: rgb(var(--accentcolor));
 }
@@ -1707,6 +1710,9 @@ a.metadataDownload__6b32d {
 .reset__51b37.lookLink__93965.colorLink_b651e5 {
 	color: rgb(var(--accentcolor));
 }
+.reset__51b37.lookLink__93965.colorLink_b651e5:hover .contents_fb6220 {
+	--button--underline-color: rgb(var(--accentcolor));
+}
 
 
 /* ~~~~		11.		POPOUTS							~~~~ */
@@ -1962,8 +1968,7 @@ a.metadataDownload__6b32d {
 }
 #app-mount .lookLink__93965.hoverBrand__98583.hasHover__3ab8c:hover .contents_fb6220,
 #app-mount .lookLink__93965.hoverBrandNew_be3663.hasHover__3ab8c:hover .contents_fb6220 {
-	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--accentcolor)) 0, rgb(var(--accentcolor)) 2px, transparent 0);
-	color: rgb(var(--accentcolor));
+	--button--underline-color: rgb(var(--accentcolor));
 }
 #app-mount .lookLink__93965.colorLink_b651e5 svg [fill*="hsl"] {
 	fill: currentColor !important;

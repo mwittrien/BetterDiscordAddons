@@ -5505,7 +5505,7 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 #app-mount .lookLink__93965.colorPrimary__6ed40:hover .contents_fb6220,
 #app-mount .lookLink__93965.hoverPrimary__3e6c3.hasHover__3ab8c:hover .contents_fb6220 {
-	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--textdarkest)) 0, rgb(var(--textdarkest)) 2px, transparent 0);
+	--button--underline-color: rgb(var(--textdarkest));
 	color: rgb(var(--textdarkest));
 }
 
@@ -5569,7 +5569,7 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 #app-mount .lookLink__93965.colorTransparent__4c280:hover .contents_fb6220,
 #app-mount .lookLink__93965.hoverTransparent_a4eefd.hasHover__3ab8c:hover .contents_fb6220 {
-	background-image: linear-gradient(0deg, transparent,transparent 1px,rgb(var(--textbrighter)) 0,rgb(var(--textbrighter)) 2px,transparent 0);
+	--button--underline-color: rgb(var(--textbright));
 	color: rgb(var(--textbright));
 }
 

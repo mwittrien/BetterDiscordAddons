@@ -511,7 +511,7 @@ html .iconBadge__2abac {
 }
 #app-mount .lookLink__93965.colorPrimary__6ed40:hover .contents_fb6220,
 #app-mount .lookLink__93965.hoverPrimary__3e6c3.hasHover__3ab8c:hover .contents_fb6220 {
-	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--textbrightest)) 0, rgb(var(--textbrightest)) 2px, transparent 0);
+	--button--underline-color: var(--header-primary);
 	color: var(--header-primary);
 }
 
@@ -577,7 +577,7 @@ html .iconBadge__2abac {
 }
 #app-mount .lookLink__93965.colorTransparent__4c280:hover .contents_fb6220,
 #app-mount .lookLink__93965.hoverTransparent_a4eefd.hasHover__3ab8c:hover .contents_fb6220 {
-	background-image: linear-gradient(0deg, transparent,transparent 1px,rgb(var(--textbrighter)) 0,rgb(var(--textbrighter)) 2px,transparent 0);
+	--button--underline-color: var(--text-normal);
 	color: var(--text-normal);
 }
 
