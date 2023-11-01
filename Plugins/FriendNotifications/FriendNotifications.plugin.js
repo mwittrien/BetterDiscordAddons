@@ -903,7 +903,7 @@ module.exports = (_ => {
 										this.settings.general.showTimestamp && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 											className: BDFDB.disCN.margintop4,
 											size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
-											color: BDFDB.LibraryComponents.TextElement.Colors.MUTED,
+											color: BDFDB.LibraryComponents.TextElement.Colors.Muted,
 											children: BDFDB.LibraryComponents.DateInput.format(this.settings.dates.logDate, timestamp)
 										})
 									]
