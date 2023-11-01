@@ -2661,6 +2661,7 @@
 		"member": ["Member", "member"],
 		"memberactivity": ["Member", "activity"],
 		"membericon": ["Member", "icon"],
+		"memberinner": ["Member", "memberInner"],
 		"memberoffline": ["Member", "offline"],
 		"memberownericon": ["Member", "ownerIcon"],
 		"memberpremiumicon": ["Member", "premiumIcon"],
