@@ -1062,7 +1062,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	border-top: unset;
 	border-bottom: 1px solid hsla(0,0%,100%,.1);
 }
-[REPLACE_CLASS_modalwrapper] [REPLACE_CLASS_tabbarcontainer] {
+[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer] {
 	background: rgba(0, 0, 0, 0.1);
 	border: none;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
@@ -1070,7 +1070,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	margin: 0;
 	padding: 16px 16px 0 16px;
 }
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalwrapper] [REPLACE_CLASS_tabbarcontainer] {
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer] {
 	background: rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 }
