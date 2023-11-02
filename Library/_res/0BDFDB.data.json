@@ -433,7 +433,7 @@
 		"QuickSwitchGuildResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "guildIconContainer"]},
 		"QuickSwitchUserResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "getDisplayNickname"]},
 		"Reactions": {"strings": ["showImmediate:", ".BURST", "reactions:", ".emoji.name"], "noSearch": true},
-		"ReactionsModalEmojis": {"strings": [".BURST", ".reactions", ".emoji.name", "selectedReaction"], "noSearch": true},
+		"ReactionsModal": {"strings": [".BURST", ".reactions", ".emoji.name", "selectedReaction"], "noSearch": true},
 		"ReactionsModalUser": {"strings": ["currentUser cannot be undefined", "reactorDefault"]},
 		"ReactionsModalUsers": {"strings": ["hasMore", "emoji", "spinnerMore"], "noSearch": true},
 		"RecentMentions": {"strings": ["canCloseAllMessages", "RECENT_MENTIONS", "badgeState:"]},

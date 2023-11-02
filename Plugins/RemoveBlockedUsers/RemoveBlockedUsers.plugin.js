@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.6
+ * @version 1.6.7
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -93,24 +93,23 @@ module.exports = (_ => {
 						"Message",
 						"Messages",
 						"NowPlayingItem",
-						"Reactors",
+						"ReactionsModalUsers",
 						"RTCConnectionVoiceUsers",
 						"SearchResults",
 						"UserSummaryItem",
 						"VoiceUsers"
 					],
 					after: [
-						"ThreadCard",
 						"BlockedMessageGroup",
 						"ChannelPins",
 						"DirectMessage",
-						"MemberListItem",
 						"PrivateChannel",
 						"Reactions",
-						"ReactorsList",
+						"ReactionsModal",
 						"RecentMentions",
 						"RichUserMention",
 						"SearchResultsInner",
+						"ThreadCard",
 						"UserMention",
 						"VoiceUser",
 						"VoiceUsers"
@@ -330,7 +329,7 @@ module.exports = (_ => {
 				if (!e.returnvalue.props.children[emojiArrayIndex].filter(n => n).length) return null;
 			}
 		
-			processReactorsList (e) {
+			processReactionsModal (e) {
 				if (!this.settings.places.reactions) return;
 				let [reactionEntries, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children, {filter: n => n && n.props && n.props.emoji});
 				if (index == -1) return;
@@ -347,7 +346,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			processReactors (e) {
+			processReactionsModalUsers (e) {
 				if (this.settings.places.reactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) e.instance.props.reactors = e.instance.props.reactors.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
 			}
 			
@@ -402,10 +401,6 @@ module.exports = (_ => {
 					e.instance.props.rows = removeEmptyWithin(newRows, n => n);
 					e.instance.props.groups = removeEmptyWithin(newGroups, g => g && g.count > 0);
 				}
-			}
-			
-			processMemberListItem (e) {
-				if (this.settings.places.memberList && e.instance.props.user && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
 			}
 			
 			processPrivateChannelRecipients (e) {
