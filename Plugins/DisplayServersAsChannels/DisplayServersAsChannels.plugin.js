@@ -344,7 +344,6 @@ module.exports = (_ => {
 				if (index == -1) return;
 				let insertElements = returnvalue => {
 					if (BDFDB.ReactUtils.findChild(parent, {props: [["className", BDFDB.disCN._displayserversaschannelsname]]})) return;
-					if (options.index != null) console.log(returnvalue, parent);
 					let childEles = [
 						[
 							options.isDm && returnvalue.props.icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
