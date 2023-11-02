@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.1
+ * @version 2.4.2
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"Banners": "work again"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -333,8 +331,9 @@ module.exports = (_ => {
 				if (!guild) return new BDFDB.DiscordObjects.Guild({});
 				let data = change && changedGuilds[guild.id];
 				if (data) {
-					let newGuildObject = {}, nativeObject = new BDFDB.DiscordObjects.Guild(guild);
-					for (let key in nativeObject) newGuildObject[key] = nativeObject[key];
+					let nativeObject = new BDFDB.DiscordObjects.Guild(guild);
+					let newGuildObject = BDFDB.ObjectUtils.copy(nativeObject);
+					newGuildObject.toString = _ => newGuildObject.name;
 					newGuildObject.name = data.name || nativeObject.name;
 					newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.StringUtils.getAcronym(!data.ignoreCustomName && data.name || nativeObject.name);
 					if (data.removeIcon) {
