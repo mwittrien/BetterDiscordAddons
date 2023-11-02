@@ -145,8 +145,8 @@
 		}},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
 		"MemberDisplayUtils": {"strings": ["getUserProfile", "getGuildMemberProfile", ".getUser("], "exported": false, "value": "exports", "map": {
-			"getDisplayProfile": ["getUserProfile"],
-			"getUserProfile": ["function(){return"]
+			"getDisplayProfile": ["getDisplayProfile"],
+			"getUserProfile": ["default"]
 		}},
 		"MentionUtils": {"strings": ["rawMessage", "mention_everyone", "mentionUsers"], "exported": false, "value": "exports", "map": {
 			"isRawMessageMentioned": ["rawMessage", "mention_everyone", "mentionUsers"]

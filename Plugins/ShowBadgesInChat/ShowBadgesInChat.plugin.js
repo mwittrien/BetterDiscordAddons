@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.1
+ * @version 2.0.2
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -83,8 +83,10 @@ module.exports = (_ => {
 				_this = this;
 				
 				this.modulePatches = {
+					before: [
+						"NameContainer"
+					],
 					after: [
-						"MemberListItem",
 						"MessageUsername",
 						"PrivateChannel",
 						"UserBadges"
@@ -394,9 +396,9 @@ module.exports = (_ => {
 				this.injectBadges(children, author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 
-			processMemberListItem (e) {
+			processNameContainer (e) {
 				if (!e.instance.props.user) return;
-				this.injectBadges(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, e.instance.props.channel.guild_id, "memberList");
+				this.injectBadges(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user, e.instance.props.channel.guild_id, "memberList");
 			}
 
 			processPrivateChannel (e) {
@@ -421,30 +423,29 @@ module.exports = (_ => {
 			}
 			
 			processUserBadges (e) {
-				if (e.instance.props.custom) {
-					let filter = e.instance.props.place != "settings";
-					for (let i in e.returnvalue.props.children) if (e.returnvalue.props.children[i]) {
-						let keyName = filter && Object.keys(badges).find(n => badges[n].keys.includes(e.returnvalue.props.children[i].key));
-						if (keyName && badgeConfigs[keyName] && !badgeConfigs[keyName][e.instance.props.place]) e.returnvalue.props.children[i] = null;
-						else if (typeof e.returnvalue.props.children[i].props.children == "function" && e.returnvalue.props.children[i].props.text) {
-							e.returnvalue.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[i].props);
-						}
+				if (!e.instance.props.custom) return;
+				let filter = e.instance.props.place != "settings";
+				for (let i in e.returnvalue.props.children) if (e.returnvalue.props.children[i]) {
+					let keyName = filter && Object.keys(badges).find(n => badges[n].keys.includes(e.returnvalue.props.children[i].key));
+					if (keyName && badgeConfigs[keyName] && !badgeConfigs[keyName][e.instance.props.place]) e.returnvalue.props.children[i] = null;
+					else if (typeof e.returnvalue.props.children[i].props.children == "function" && e.returnvalue.props.children[i].props.text) {
+						e.returnvalue.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[i].props);
 					}
-					if (e.instance.props.premiumCurrentGuildSince && !(filter && badgeConfigs.CURRENT_GUILD_BOOST && !badgeConfigs.CURRENT_GUILD_BOOST[e.instance.props.place])) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", e.instance.props.premiumCurrentGuildSince),
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.userbadgeouter,
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCNS.userbadge + BDFDB.disCN._showbadgesinchatindicator,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.memberpremiumicon,
-									name: BDFDB.LibraryComponents.SvgIcon.Names.BOOST
-								})
+				}
+				if (e.instance.props.premiumCurrentGuildSince && !(filter && badgeConfigs.CURRENT_GUILD_BOOST && !badgeConfigs.CURRENT_GUILD_BOOST[e.instance.props.place])) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", e.instance.props.premiumCurrentGuildSince),
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+						className: BDFDB.disCN.userbadgeouter,
+						children: BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCNS.userbadge + BDFDB.disCN._showbadgesinchatindicator,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.memberpremiumicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.BOOST
 							})
 						})
-					}));
-					if (!e.returnvalue.props.children.filter(n => n).length) return null;
-				}
+					})
+				}));
+				if (!e.returnvalue.props.children.filter(n => n).length) return null;
 			}
 
 			injectBadges (children, user, guildId, place) {
