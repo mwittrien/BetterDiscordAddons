@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.6
+ * @version 1.9.7
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -186,9 +186,25 @@ module.exports = (_ => {
 							]
 						})
 					]
-				}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyState, {
-					msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-					image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+				}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					className: BDFDB.disCN.pageimagewrapper,
+					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+					children: [
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCNS.pageimage + BDFDB.disCNS.margintop20 + BDFDB.disCN.marginbottom20,
+							style: {
+								flex: "0 1 auto",
+								background: `url("${BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/a72746e7108167af95c8.svg" : "/assets/01864c39871ce619d855.svg"}") center/contain no-repeat`,
+								width: "415px",
+								height: "200px"
+							}
+						}),
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.pageimagetext,
+							children: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER
+						})
+					]
 				});
 			}
 		};
