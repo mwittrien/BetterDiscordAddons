@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.6
+ * @version 1.1.7
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -226,7 +226,7 @@ module.exports = (_ => {
 			processRichRoleMention (e) {
 				if (!e.instance.props.id || !changedRoles[e.instance.props.id]) return;
 				e.returnvalue.props.color = changedRoles[e.instance.props.id].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.id].color, "int") : e.returnvalue.props.color;
-				e.returnvalue.props.children[1] = changedRoles[e.instance.props.id].name || e.returnvalue.props.children[1];
+				e.returnvalue.props.children[2] = changedRoles[e.instance.props.id].name || e.returnvalue.props.children[1];
 			}
 			
 			processAutocompleteRoleResult (e) {
