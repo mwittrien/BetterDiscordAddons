@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.8
+ * @version 2.5.9
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1180,6 +1180,7 @@ module.exports = (_ => {
 				const credentials = (authKeys.baidu && authKeys.baidu.key || "20221009001380882 TOPnUKz8jJ32AZNOuUhX").split(" ");
 				const salt = BDFDB.NumberUtils.generateId();
 				BDFDB.LibraryRequires.request("https://fanyi-api.baidu.com/api/trans/vip/translate", {
+					bdVersion: true,
 					method: "post",
 					form: {
 						from: translationEngines.baidu.parser[data.input.id] || data.input.id,
@@ -1199,7 +1200,11 @@ module.exports = (_ => {
 								else {callback("");}
 							}
 							else {
-								BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${result.error_code} : ${result.error_msg}.`, {
+								if (result.error_code == 54004) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_monthlylimit}.`, {
+									type: "danger",
+									position: "center"
+								});
+								else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${result.error_code} : ${result.error_msg}.`, {
 									type: "danger",
 									position: "center"
 								});
