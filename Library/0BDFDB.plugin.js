@@ -208,6 +208,7 @@ module.exports = (_ => {
 							url: ""
 						}, null);
 					}).then(r => {
+						if (!r) return;
 						response = r;
 						response.statusCode = response.status;
 						if (response.headers) response.headers["content-type"] = response.headers.get("content-type");
