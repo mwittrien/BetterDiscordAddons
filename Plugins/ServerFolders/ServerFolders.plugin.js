@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.1.9
+ * @version 7.2.0
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -59,8 +59,6 @@ module.exports = (_ => {
 		var _this;
 		var folderStates, folderReads, guildStates, currentGuild, forceCloseTimeout;
 		var folderConfigs = {}, customIcons = {};
-		
-		var GuildItemWrapperComponent;
 
 		const folderIcons = [
 			{openicon: `<path d="M 200,390 H 955 L 795,770 H 200 Z" fill="REPLACE_FILL2"/><path d="M 176.6,811 C 163.9,811 155.1,802.6 155,784.7 V 212.9 C 157.9,190.5 169,179.8 195.9,176 h 246 c 20.3,3.2 34.5,18.7 41,28.6 C 494.9,228.3 492.9,240.4 494,266 l 313.6,1.3 c 17.6,0.4 23.3,3.7 23.3,3.7 8.6,4.2 14.8,10.7 19,19.5 C 856.3,319.5 854,360 854,360 h 108.9 c 4.4,2.4 13.7,1.2 11.8,23.5 L 815.8,789.4 c -2.1,5.2 -12.5,13.6 -18.7,16.1 -6.8,2.7 -18.5,5.5 -23.9,5.5 z M 767,759 897,430 H 360 L 230,759 Z" fill="REPLACE_FILL1"/>`,
@@ -90,7 +88,7 @@ module.exports = (_ => {
 				let folders = Array.from(BDFDB.LibraryStores.ExpandedGuildFolderStore.getExpandedFolders()).map(folderId => BDFDB.LibraryStores.SortedGuildStore.getGuildFolderById(folderId)).filter(folder => folder && folder.guildIds);
 				this.props.folders = folders.length || closing ? folders : (this.props.folders || []);
 				BDFDB.TimeUtils.clear(this._rerenderTimeout);
-				if (!GuildItemWrapperComponent && folders.length || !folders.length && this.props.folders.length && !closing) this._rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
+				if (!folders.length && this.props.folders.length && !closing) this._rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
 					this.props.closing = true;
 					BDFDB.ReactUtils.forceUpdate(this);
 				}, 300);
@@ -108,7 +106,7 @@ module.exports = (_ => {
 							className: BDFDB.disCN.guildsscroller,
 							children: BDFDB.ReactUtils.createElement("div", {
 								"aria-label": BDFDB.LanguageUtils.LanguageStrings.SERVERS,
-								children: GuildItemWrapperComponent && this.props.folders.map(folder => {
+								children: BDFDB.LibraryComponents.GuildItem && this.props.folders.map(folder => {
 									let data = _this.getFolderConfig(folder.folderId);
 									let folderIcon = null;
 									if (_this.settings.general.addFolderIcon) {
@@ -150,7 +148,7 @@ module.exports = (_ => {
 													return [
 														this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement("div", {
 															ref: instance => guildIstance = instance,
-															children: BDFDB.ReactUtils.createElement(GuildItemWrapperComponent, {
+															children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildItem, {
 																guildNode: {
 																	children: [],
 																	id: guildId,
@@ -461,8 +459,9 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"FolderItem",
-						"GuildItemWrapper",
+						"FolderSettingsModal",
 						"GuildsBar",
+						"ModalRoot",
 						"TooltipContainer"
 					],
 					after: [
@@ -825,10 +824,6 @@ module.exports = (_ => {
 				}), "Error in children Render of Guild Folder Tooltip!");
 			}
 			
-			processGuildItemWrapper (e) {
-				if (e.component) GuildItemWrapperComponent = e.component;
-			}
-			
 			processGuildItem (e) {
 				BDFDB.TimeUtils.clear(forceCloseTimeout);
 				forceCloseTimeout = BDFDB.TimeUtils.timeout(_ => {
@@ -867,172 +862,170 @@ module.exports = (_ => {
 				}
 			}
 			
+			processModalRoot (e) {
+				if (e.instance.props["aria-label"] != BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_SETTINGS) return;
+				e.instance.props.size = BDFDB.LibraryComponents.ModalComponents.ModalSize.LARGE;
+			}
+			
 			processFolderSettingsModal (e) {
-				if (e.node) {
-					let root = e.node.parentElement.querySelector(BDFDB.dotCN.modal);
-					BDFDB.DOMUtils.addClass(root, BDFDB.disCN.modalmedium, BDFDB.disCN.modalwrapper, `${this.name}-modal`);
-					BDFDB.DOMUtils.removeClass(root, BDFDB.disCN.modalsmall);
-				}
-				if (e.returnvalue) {
-					let folder = BDFDB.LibraryStores.SortedGuildStore.getGuildFolderById(e.instance.props.folderId);
-					let data = this.getFolderConfig(e.instance.props.folderId);
-					let newData = Object.assign({}, data, {folderName: folder.folderName});
-					
-					let tabs = {};
-					
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ModalHeader"});
-					if (index > -1) {
-						children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
-						children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							grow: 0,
-							shrink: 0,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								className: BDFDB.disCN.tabbarcontainer,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
-									className: BDFDB.disCN.tabbar,
-									itemClassName: BDFDB.disCN.tabbaritem,
-									type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-									items: [
-										{value: this.labels.modal_tabheader1},
-										{value: this.labels.modal_tabheader2},
-										{value: this.labels.modal_tabheader3},
-										{value: this.labels.modal_tabheader4}
-									],
-									onItemSelect: (value, instance) => {
-										let tabsArray = BDFDB.ObjectUtils.toArray(tabs);
-										for (let ins of tabsArray) {
-											if (ins.props.tab == value) ins.props.open = true;
-											else delete ins.props.open;
-										}
-										BDFDB.ReactUtils.forceUpdate(tabsArray);
+				let folder = BDFDB.LibraryStores.SortedGuildStore.getGuildFolderById(e.instance.props.folderId);
+				let data = this.getFolderConfig(e.instance.props.folderId);
+				let newData = Object.assign({}, data, {folderName: folder.folderName});
+				
+				let tabs = {};
+				
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ModalHeader"});
+				if (index > -1) {
+					children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
+					children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						grow: 0,
+						shrink: 0,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							className: BDFDB.disCN.tabbarcontainer,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+								className: BDFDB.disCN.tabbar,
+								itemClassName: BDFDB.disCN.tabbaritem,
+								type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+								items: [
+									{value: this.labels.modal_tabheader1},
+									{value: this.labels.modal_tabheader2},
+									{value: this.labels.modal_tabheader3},
+									{value: this.labels.modal_tabheader4}
+								],
+								onItemSelect: (value, instance) => {
+									let tabsArray = BDFDB.ObjectUtils.toArray(tabs);
+									for (let ins of tabsArray) {
+										if (ins.props.tab == value) ins.props.open = true;
+										else delete ins.props.open;
 									}
-								})
-							})
-						}));
-					}
-					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.children && n.props.children.type == "form"});
-					if (index > -1) children[index].props.children = [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader1,
-							open: true,
-							ref: instance => {if (instance) tabs[this.labels.modal_tabheader1] = instance;},
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME,
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										value: folder.folderName,
-										placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
-										autoFocus: true,
-										onChange: value => newData.folderName = value
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_iconpicker,
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(FolderIconPickerComponent, {
-										selectedIcon: data.iconID,
-										onSelect: value => newData.iconID = value
-									}, true)
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									type: "Switch",
-									margin: 20,
-									label: this.labels.modal_useclosedicon,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
-									value: data.useClosedIcon,
-									onChange: value => newData.useClosedIcon = value
-								})
-							]
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader2,
-							ref: instance => {if (instance) tabs[this.labels.modal_tabheader2] = instance;},
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker1,
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-										color: data.color1,
-										defaultFallback: !data.color1 && !data.swapColors,
-										onColorChange: value => newData.color1 = value
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker2,
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-										color: data.color2,
-										defaultFallback: !data.color2 && data.swapColors,
-										onColorChange: value => newData.color2 = value
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									type: "Switch",
-									margin: 20,
-									label: this.labels.modal_swapcolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
-									value: data.swapColors,
-									onChange: value => newData.swapColors = value
-								})
-							]
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader3,
-							ref: instance => {if (instance) tabs[this.labels.modal_tabheader3] = instance;},
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker3,
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-										color: data.color3,
-										onColorChange: value => newData.color3 = value
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker4,
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-										color: data.color4,
-										onColorChange: value => newData.color4 = value
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									type: "Switch",
-									margin: 20,
-									label: this.labels.modal_copytooltipcolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
-									value: data.copyTooltipColor,
-									onChange: value => newData.copyTooltipColor = value
-								})
-							]
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader4,
-							ref: instance => {if (instance) tabs[this.labels.modal_tabheader4] = instance;},
-							children: BDFDB.ReactUtils.createElement(FolderIconCustomPreviewComponent, {}, true)
-						})
-					];
-					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ModalFooter"});
-					if (index > -1) children[index].props.children = [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-							children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
-							onClick: _ => {								
-								let folderColor = newData[newData.swapColors ? "color2" : "color1"];
-								this.updateFolder({
-									folderId: e.instance.props.folderId,
-									folderName: newData.folderName,
-									folderColor: folderColor ? BDFDB.ColorUtils.convert(folderColor && BDFDB.ObjectUtils.is(folderColor) ? folderColor[Object.keys(folderColor)[0]] : folderColor, "INT") : null
-								});
-								if (!BDFDB.equals(newData, data)) {
-									BDFDB.DataUtils.save(newData, this, "folders", e.instance.props.folderId);
-									this.forceUpdateAll();
+									BDFDB.ReactUtils.forceUpdate(tabsArray);
 								}
-								e.instance.close();
-							}
+							})
 						})
-					]
+					}));
 				}
+				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.children && n.props.children.type == "form"});
+				if (index > -1) children[index].props.children = [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader1,
+						open: true,
+						ref: instance => {if (instance) tabs[this.labels.modal_tabheader1] = instance;},
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: folder.folderName,
+									placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
+									autoFocus: true,
+									onChange: value => newData.folderName = value
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_iconpicker,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(FolderIconPickerComponent, {
+									selectedIcon: data.iconID,
+									onSelect: value => newData.iconID = value
+								}, true)
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								margin: 20,
+								label: this.labels.modal_useclosedicon,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+								value: data.useClosedIcon,
+								onChange: value => newData.useClosedIcon = value
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader2,
+						ref: instance => {if (instance) tabs[this.labels.modal_tabheader2] = instance;},
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker1,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color1,
+									defaultFallback: !data.color1 && !data.swapColors,
+									onColorChange: value => newData.color1 = value
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker2,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color2,
+									defaultFallback: !data.color2 && data.swapColors,
+									onColorChange: value => newData.color2 = value
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								margin: 20,
+								label: this.labels.modal_swapcolor,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+								value: data.swapColors,
+								onChange: value => newData.swapColors = value
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader3,
+						ref: instance => {if (instance) tabs[this.labels.modal_tabheader3] = instance;},
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker3,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color3,
+									onColorChange: value => newData.color3 = value
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker4,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color4,
+									onColorChange: value => newData.color4 = value
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								margin: 20,
+								label: this.labels.modal_copytooltipcolor,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+								value: data.copyTooltipColor,
+								onChange: value => newData.copyTooltipColor = value
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader4,
+						ref: instance => {if (instance) tabs[this.labels.modal_tabheader4] = instance;},
+						children: BDFDB.ReactUtils.createElement(FolderIconCustomPreviewComponent, {}, true)
+					})
+				];
+				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ModalFooter"});
+				if (index > -1) children[index].props.children = [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+						children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
+						onClick: _ => {								
+							let folderColor = newData[newData.swapColors ? "color2" : "color1"];
+							this.updateFolder({
+								folderId: e.instance.props.folderId,
+								folderName: newData.folderName,
+								folderColor: folderColor ? BDFDB.ColorUtils.convert(folderColor && BDFDB.ObjectUtils.is(folderColor) ? folderColor[Object.keys(folderColor)[0]] : folderColor, "INT") : null
+							});
+							if (!BDFDB.equals(newData, data)) {
+								BDFDB.DataUtils.save(newData, this, "folders", e.instance.props.folderId);
+								this.forceUpdateAll();
+							}
+							e.instance.close();
+						}
+					})
+				];
 			}
 
 			loadAllIcons () {
@@ -1129,10 +1122,10 @@ module.exports = (_ => {
 								className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
-								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
+								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
 									className: BDFDB.disCN.listavatar,
 									guild: guild,
-									size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.MEDIUM
+									size: BDFDB.LibraryComponents.GuildIcon.Sizes.MEDIUM
 								}),
 								label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 									children: guild.name
