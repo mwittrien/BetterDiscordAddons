@@ -826,7 +826,9 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 
 .emptyChannelIcon__1a1ba {									/* welcomemessage		empty channelicon					*/
-	background-color: rgba(var(--transparencycolor), .4);
+	position: relative;
+	background: rgba(var(--transparencycolor), .4);
+	overflow: hidden;
 }
 .emptyChannelIcon__1a1ba::before {
 	content: "";
