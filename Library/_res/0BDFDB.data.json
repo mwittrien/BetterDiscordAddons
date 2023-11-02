@@ -77,27 +77,17 @@
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"]
 	},
 	"LibraryModules": {
-		"AckUtils": {"strings": ["type:\"BULK_ACK\""], "exported": false, "value": "exports", "map": {
-			"ack": ["type:\"CHANNEL_ACK\"", "messageId", "channelId"],
-			"bulkAck": ["type:\"BULK_ACK\""]
-		}},
+		"AckUtils": {"props": ["ack", "bulkAck", "localAck"]},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
 		"AnimationUtils": {"props": ["spring", "decay"]},
 		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"AppearanceSettingsUtils": {"props": ["updateLocale", "updateTheme"]},
-		"ApplicationAssetUtils": {"strings": ["ApplicationAssetUtils", "getAssetImage"], "exported": false, "value": "exports", "map": {
-			"getAssetImage": ["ApplicationAssetUtils", "getAssetImage"]
-		}},
+		"ApplicationAssetUtils": {"props": ["getAssetImage", "getAssetIds"]},
 		"AppUtils": {"props": ["clipboard", "os"]},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
-		"CategoryCollapseUtils": {"strings": ["type:\"CATEGORY_EXPAND_ALL", "type:\"CATEGORY_COLLAPSE_ALL", "dispatch"], "exported": false, "value": "exports", "map": {
-			"collapse": ["\"CATEGORY_COLLAPSE\""],
-			"collapseAll": ["\"CATEGORY_COLLAPSE_ALL\""],
-			"expand": ["\"CATEGORY_EXPAND\""],
-			"expandAll": ["\"CATEGORY_EXPAND_ALL\""]
-		}},
+		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryExpand"]},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChatRestrictionUtils": {"strings": ["openWarningPopout", "userCanUsePremiumMessageLength"], "exported": false, "value": "exports", "map": {
 			"applyChatRestrictions": ["openWarningPopout", "userCanUsePremiumMessageLength"]
@@ -200,11 +190,7 @@
 			"toTextValue": ["ignoreTrailingEmptyNodes"]
 		}},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
-		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonStrings": [".jsx)"], "exported": false, "value": "exports", "map": {
-			"createSound": ["return new"],
-			"createSoundpackSound": [");return"],
-			"playSound": ["getSoundpack"]
-		}},
+		"SoundUtils": {"props": ["createSound", "createSoundpackSound", "playSound"]},
 		"SpotifyUtils": {"strings": ["\"SPOTIFY_SET_ACTIVE_DEVICE\"", "deviceId", "accountId"], "exported": false, "value": "exports", "map": {
 			"getAccessToken": ["SPOTIFY_ACCOUNT_ACCESS_TOKEN_REVOKE", "CONNECTION_ACCESS_TOKEN"],
 			"pause": ["SPOTIFY_PLAYER_PAUSE"],
