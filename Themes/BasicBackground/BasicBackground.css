@@ -930,6 +930,7 @@ button.button__4f306.enabled__470f0:hover svg {
 .jumpToPresentBar__0ff7f {									/* bar					jumptopresent						*/
 	background-color: transparent;
 	overflow: hidden;
+	bottom: -8px;
 	opacity: 1;
 }
 .jumpToPresentBar__0ff7f::before,
@@ -950,6 +951,11 @@ button.button__4f306.enabled__470f0:hover svg {
 .jumpToPresentBar__0ff7f::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	backdrop-filter: blur(var(--backgroundblur));
+}
+.messagesWrapper_ea2b0b:has(.jumpToPresentBar__0ff7f) ~ .form__13a2c .channelTextArea__2e60f,
+.messagesWrapper_ea2b0b:has(.jumpToPresentBar__0ff7f) ~ .form__13a2c .scrollableContainer__33e06 {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
 }
 
 /* ====		6.2.1.	MESSAGE							==== */
