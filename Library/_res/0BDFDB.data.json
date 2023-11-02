@@ -144,7 +144,7 @@
 		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getAccessibleEmojiDisplayName"]},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
-		"RoleIconUtils": {"props": ["canGuildUseRoleIcon", "getRoleIconData"]},
+		"RoleIconUtils": {"props": ["canGuildUseRoleIcons", "getRoleIconData"]},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
 		"SearchPageUtils": {"props": ["changePage", "search", "clearHistory"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
