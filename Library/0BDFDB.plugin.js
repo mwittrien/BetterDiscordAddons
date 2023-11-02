@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.0
+ * @version 3.5.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -195,7 +195,19 @@ module.exports = (_ => {
 						}, null);
 					}, timeout);
 					let response = null;
-					return (config && config.bdVersion && BdApi && BdApi.Net && BdApi.Net.fetch ? BdApi.Net.fetch : fetch)(url, Object.assign({}, config, {timeout: 60000})).then(r => {
+					return (config && config.bdVersion && BdApi && BdApi.Net && BdApi.Net.fetch ? BdApi.Net.fetch : fetch)(url, Object.assign({}, config, {timeout: 60000})).catch(error => {
+						callback(new Error(error), {
+							aborted: false,
+							complete: true,
+							end: undefined,
+							headers: {},
+							method: null,
+							rawHeaders: [],
+							statusCode: 408,
+							statusMessage: "OK",
+							url: ""
+						}, null);
+					}).then(r => {
 						response = r;
 						response.statusCode = response.status;
 						if (response.headers) response.headers["content-type"] = response.headers.get("content-type");
