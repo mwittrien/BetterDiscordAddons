@@ -318,6 +318,7 @@
 		"ChannelCallGrid": {"strings": ["totalNumberOfParticipants:", "keyExtractor:", "channel_user_limit:"]},
 		"ChannelCallVideoParticipants": {"strings": [".tileSizer", "participantTileWidth:", ".COVER"]},
 		"ChannelEmptyMessages": {"strings": [".Messages.BEGINNING_CHANNEL_WELCOME", ".Messages.BEGINNING_GROUP_DM_MANAGED", "showingBanner:"]},
+		"ChannelFloatingSidebar": {"strings": ["messageRequestSidebarWidth", "floatingLayer:", "chatLayerWrapper"]},
 		"ChannelItem": {"strings": ["canHaveDot", "unreadRelevant", "UNREAD_HIGHLIGHT"]},
 		"ChannelItemIcon": {"strings": ["hasActiveThreads:", "locked:", ".iconContainer"]},
 		"ChannelMembers": {"strings": ["MEMBER_LIST_VIEWED", "getDimensions", "member-"]},
