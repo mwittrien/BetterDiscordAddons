@@ -461,7 +461,7 @@ body::after {
 #app-mount .folder__17546.hover__043de {
 	background-color: rgba(var(--transparencycolor), .4);
 }
-#app-mount .expandedFolderBackground__1bec6 {				/* folder				background							*/
+#.expandedFolderBackground__1bec6 {							/* folder				background							*/
 	background-color: rgba(var(--transparencycolor), .2);
 	border-radius: 15px 15px 24px 24px;
 	top: 0;
