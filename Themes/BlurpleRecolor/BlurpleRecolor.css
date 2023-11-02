@@ -255,7 +255,7 @@
 		2.	BUTTONS
 		3.	INPUTS
 		4.	TAGS
-		5.	ICONS
+		5.	IMAGES
 		6.	SCROLLBARS
 		7.	NOTIFICATIONBAR
 		8.	TOOLTIPS
@@ -2130,7 +2130,7 @@ a.metadataDownload__6b32d {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
-/* ----		12.5.	ICONS							---- */
+/* ----		12.5.	IMAGES							---- */
 
 .avatar__0d465 {
 	border-radius: 50%;
@@ -2181,6 +2181,10 @@ a.metadataDownload__6b32d {
 	pointer-events: none;
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/warning_lockedchannellink_accent.svg) center/cover no-repeat;
+}
+
+#app-mount .successImage__086d3 {
+	filter: hue-rotate(-85deg);
 }
 
 /* ----		12.6.	SCROLLBARS						---- */
