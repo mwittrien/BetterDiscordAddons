@@ -536,7 +536,7 @@ module.exports = (_ => {
 			
 			getBoostLevel (date) {
 				let level = 1;
-				let monthDifference = BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(date);
+				let monthDifference = BDFDB.LibraryModules.GuildBoostUtils.getAppliedGuildBoostMonths(date);
 				for (let i = 0, levels = Object.keys(BDFDB.DiscordConstants.UserPremiumLevels); i < levels.length; i++) if (BDFDB.DiscordConstants.UserPremiumLevels[levels[i]] < monthDifference) level = parseInt(levels[i]);
 				return level;
 			}

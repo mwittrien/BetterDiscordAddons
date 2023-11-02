@@ -89,10 +89,8 @@
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryExpand"]},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
-		"ChatRestrictionUtils": {"strings": ["openWarningPopout", "userCanUsePremiumMessageLength"], "exported": false, "value": "exports", "map": {
-			"applyChatRestrictions": ["openWarningPopout", "userCanUsePremiumMessageLength"]
-		}},
-		"ConnectionMetadataUtils": {"strings": ["connectedAccountVanityMetadataTag", "CONNECTIONS_PROFILE_GENERIC_VANITY_METRIC"], "exported": false, "value": "exports", "map": {
+		"ChatRestrictionUtils": {"props": ["applyChatRestrictions"]},
+		"ConnectionMetadataUtils": {"props": ["generateEbayMetadataItems", "generatePaypalMetadataItems"], "exported": false, "value": "exports", "map": {
 			"getEbay": ["generateEbayMetadataItems"],
 			"getPaypal": ["generatePaypalMetadataItems"],
 			"getReddit": ["generateRedditMetadataItems"],
@@ -102,10 +100,7 @@
 		}},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
-		"ContextMenuUtils": {"strings": ["renderLazy", "type:\"CONTEXT_MENU_CLOSE\""], "exported": false, "value": "exports", "map": {
-			"openContextMenu": ["renderLazy"],
-			"closeContextMenu": ["type:\"CONTEXT_MENU_CLOSE\""]
-		}},
+		"ContextMenuUtils": {"props": ["openContextMenu", "closeContextMenu"]},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
@@ -113,12 +108,8 @@
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
-		"FolderSettingsUtils": {"props": ["updateLocale", "updateTheme"], "exported": false, "value": "exports", "map": {
-			"saveGuildFolders": ["guildFolders"]
-		}},
-		"GuildBoostUtils": {"strings": ["getPremiumTypeSubscription", "PREMIUM_GUILD_TIER_1"], "exported": false, "value": "exports", "map": {
-			"getUserLevel": ["\"months\"", "diff"]
-		}},
+		"FolderSettingsUtils": {"props": ["saveGuildFolders", "saveClientTheme"]},
+		"GuildBoostUtils": {"props": ["getNextTier", "getAppliedGuildBoostMonths"]},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
 		"HistoryUtils": {"strings": ["transitionTo - Transitioning to "], "exported": false, "value": "exports", "map": {
