@@ -1253,6 +1253,7 @@
 		"NotFound": {
 			"_": "",
 			"emoji": "emoji",
+			"carouselModal": "carouselModal_c0d5b7",
 			"highlight": "highlight",
 			"hoverCardButton": "button_1yVL_7",
 			"loginScreen": "wrapper_eebc2d",
@@ -1277,12 +1278,6 @@
 			"themeLight": "theme-light",
 			"themeUndefined": "theme-undefined",
 			"userPopoutNote": "note_6O4w9y"
-		},
-		"ModalCarousel": {
-			"carouselModal": "carouselModal_1eUFoq",
-			"nav": "nav_3QIE8_",
-			"navNext": "navNext_1mR5ku nav_3QIE8_",
-			"navPrev": "navPrev_1L-o1J nav_3QIE8_"
 		},
 		"Toast": {
 			"avatar": "avatar_3xmbmC",
@@ -1471,6 +1466,7 @@
 		"MessageToolbar": {"props": ["container", "icon", "isHeader"]},
 		"MessageToolbarItems": {"props": ["wrapper", "button", "separator"]},
 		"Modal": {"props": ["root", "small", "medium"]},
+		"ModalCarouselNav": {"props": ["nav", "navNext"]},
 		"ModalCarouselWrapper": {"props": ["modalCarouselWrapper", "zoomedCarouselModalRoot"]},
 		"ModalDivider": {"props": ["divider"], "length": 1},
 		"ModalItems": {"props": ["guildName", "checkboxContainer"]},
@@ -2483,9 +2479,9 @@
 		"imageplaceholderoverlay": ["ImageWrapper", "imagePlaceholderOverlay"],
 		"imagemodal": ["ImageModal", "modal"],
 		"imagemodalimage": ["ImageModal", "image"],
-		"imagemodalnavbutton": ["ModalCarousel", "nav"],
-		"imagemodalnavbuttonprev": ["ModalCarousel", "navPrev"],
-		"imagemodalnavbuttonnext": ["ModalCarousel", "navNext"],
+		"imagemodalnavbutton": ["ModalCarouselNav", "nav"],
+		"imagemodalnavbuttonprev": ["ModalCarouselNav", "navPrev"],
+		"imagemodalnavbuttonnext": ["ModalCarouselNav", "navNext"],
 		"imagemosaicattachmentscontainer": ["ImageMosaic", "mediaAttachmentsContainer"],
 		"imagemosaiconebyonegridsingle": ["ImageMosaic", "oneByOneGridSingle"],
 		"imagesticker": ["ImageAssets", "stickerAsset"],
@@ -2829,8 +2825,7 @@
 		"messagezalgo": ["MessageBody", "zalgo"],
 		"modal": ["Modal", "root"],
 		"modalcancelbutton": ["CustomStatusModal", "cancelButton"],
-		"modalcarousel": ["ModalCarousel", "carousel"],
-		"modalcarouselmodal": ["ModalCarousel", "carouselModal"],
+		"modalcarouselmodal": ["NotFound", "carouselModal"],
 		"modalcarouselmodalzoomed": ["ModalCarouselWrapper", "modalCarouselWrapper"],
 		"modalcarouselwrapper": ["ModalCarouselWrapper", "modalCarouselWrapper"],
 		"modalclose": ["Modal", "close"],
