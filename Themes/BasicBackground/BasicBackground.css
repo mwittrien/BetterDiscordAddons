@@ -928,9 +928,10 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: rgba(var(--transparencycolor), .2);
 }
 .jumpToPresentBar__0ff7f {									/* bar					jumptopresent						*/
-	background-color: transparent;
-	overflow: hidden;
 	bottom: -8px;
+	background-color: transparent;
+	border-bottom: 1px solid var(--background-modifier-accent);
+	overflow: hidden;
 	opacity: 1;
 }
 .jumpToPresentBar__0ff7f::before,
