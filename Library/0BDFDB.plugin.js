@@ -8335,7 +8335,9 @@ module.exports = (_ => {
 				var memberStore = {};
 				Internal.processMemberListItem = function (e) {
 					if (!memberStore || !memberStore.channel || memberStore.channel.id != e.instance.props.channel.id) memberStore = {channel: e.instance.props.channel, members: {}};
-					memberStore.members[BDFDB.UserUtils.getAvatar(e.instance.props.user.id).split(".com")[1] + " " + e.instance.props.user.username] = e.instance.props.user;
+					let src = BDFDB.UserUtils.getAvatar(e.instance.props.user.id);
+					if (!src) return;
+					memberStore.members[(src.split(".com")[1] || src).split("/").slice(0, 3).join("/").split(".")[0] + " " + e.instance.props.user.username] = e.instance.props.user;
 				};
 				Internal.processNameContainer = function (e) {
 					if (e.instance.props.innerClassName != BDFDB.disCN.memberinner || !memberStore || !memberStore.members) return;
@@ -8343,7 +8345,7 @@ module.exports = (_ => {
 					if (!avatar) return;
 					let src = avatar.props._originalSrc || avatar.props.src;
 					if (!src) return;
-					src = (src.split(".com")[1] || src).split("?size")[0];
+					src = (src.split(".com")[1] || src).split("/").slice(0, 3).join("/").split(".")[0];
 					let username = avatar.props["aria-label"];
 					if (!memberStore.members[src + " " + username]) return;
 					e.instance.props.user = memberStore.members[src + " " + username];
