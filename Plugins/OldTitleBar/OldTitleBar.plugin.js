@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.9
+ * @version 1.8.0
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -167,10 +167,10 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.callcurrentchatsidebaropen} > *:first-child  ${BDFDB.dotCN._oldtitlebartoolbar} {
 						display: none !important;
 					}
-					${BDFDB.dotCNS.callscreensharevideocontrols}:has(${BDFDB.dotCNS.callscreensharetopcontrols + BDFDB.dotCN._oldtitlebartoolbar}) ~ div ${BDFDB.dotCN.callscreensharechatbutton} {
+					${BDFDB.dotCN.callscreensharevideocontrols}:has(${BDFDB.dotCNS.callscreensharetopcontrols + BDFDB.dotCN._oldtitlebartoolbar}) ~ div ${BDFDB.dotCN.callscreensharechatbutton} {
 						margin-right: 137px;
 					}
-					${BDFDB.dotCNS.callscreensharevideocontrols}:has(${BDFDB.dotCNS.callscreensharetopcontrols + BDFDB.dotCN._oldtitlebartoolbar} div:nth-child(6)) ~ div ${BDFDB.dotCN.callscreensharechatbutton} {
+					${BDFDB.dotCN.callscreensharevideocontrols}:has(${BDFDB.dotCNS.callscreensharetopcontrols + BDFDB.dotCN._oldtitlebartoolbar} div:nth-child(6)) ~ div ${BDFDB.dotCN.callscreensharechatbutton} {
 						margin-right: 194px;
 					}
 
