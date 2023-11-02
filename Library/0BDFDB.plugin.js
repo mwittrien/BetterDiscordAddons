@@ -208,14 +208,14 @@ module.exports = (_ => {
 							url: ""
 						}, null);
 					}).then(r => {
-						if (!r) return;
 						response = r;
+						if (!response) return;
 						response.statusCode = response.status;
 						if (response.headers) response.headers["content-type"] = response.headers.get("content-type");
 						BDFDB.TimeUtils.clear(timeoutObj);
 						return response.text();
 					}).then(body => {
-						if (!killed) callback(response.status != 200 ? new Error(response.statusText || "Fetch Failed") : null, response, body);
+						if (!killed && response) callback(response.status != 200 ? new Error(response.statusText || "Fetch Failed") : null, response, body);
 					});
 				}
 			};
