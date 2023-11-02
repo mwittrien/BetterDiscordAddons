@@ -222,10 +222,7 @@
 		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
-		"ImageComponents": {"strings": ["containerRef", "zoomable", "LOADING"], "exported": false, "value": "exports", "map": {
-			"Image": ["containerRef"],
-			"ImageReadyStates": ["LOADING", "ERROR"]
-		}},
+		"Image": {"strings": ["containerRef", "zoomable", "LOADING"]},
 		"ImageModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "animated"]},
 		"ImageVideoModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "videoWrapper"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
