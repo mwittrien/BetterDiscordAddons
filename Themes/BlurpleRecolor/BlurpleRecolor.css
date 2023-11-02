@@ -1460,28 +1460,31 @@ a.metadataDownload__6b32d {
 
 /* ----		10.6.	LOGINSCREEN						---- */
 
-.authBox__7196a a {											/* authobox				links								*/
+.authBox__7196a .lookLink__93965.colorLink_b651e5 {			/* authobox				links								*/
 	color: rgb(var(--accentcolor));
 }
-
-.authBox__7196a img[src="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] {
-	object-position: -999999px -999999px;
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_authbox_bg.svg) center/cover no-repeat;
+.authBox__7196a .lookLink__93965.colorLink_b651e5:hover .contents_fb6220 {
+	--button--underline-color: rgb(var(--accentcolor));
 }
-.authBox__7196a img[src="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * {
+
+.modal__1237a img[src="/assets/863db41a48a43395cd55.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_check_bg.svg) center/cover no-repeat;
+}
+.modal__1237a div:has(> img[src="/assets/863db41a48a43395cd55.svg"]) {
 	position: relative;
 	display: flex;
 	justify-content: center;
 }
-.authBox__7196a img[src="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + *::before {
+.modal__1237a div:has(> img[src="/assets/863db41a48a43395cd55.svg"])::before {
 	content: "";
 	position: absolute;
-	top: -107px;
-	width: 124px;
-	height: 84px;
+	top: 0;
+	width: 88px;
+	height: 85px;
 	pointer-events: none;
 	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_authbox_accent.svg) center/cover no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_check_accent.svg) center/cover no-repeat;
 }
 
 .startOverButton_b3ba6f {									/* authobox				startover								*/
