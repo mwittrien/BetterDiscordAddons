@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.3.0
+ * @version 5.3.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -843,7 +843,7 @@ module.exports = (_ => {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
-								let url = urlData.original.split("?width=")[0].split("?height=")[0].split("?size=")[0];
+								let url = this.removeSizeInUrl(urlData.original);
 								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
@@ -853,7 +853,7 @@ module.exports = (_ => {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_MEDIA_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-media-link"),
 							action: _ => {
-								let url = urlData.file.split("?width=")[0].split("?height=")[0].split("?size=")[0];
+								let url = this.removeSizeInUrl(urlData.file);
 								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
@@ -1105,7 +1105,7 @@ module.exports = (_ => {
 								className: BDFDB.disCN._imageutilitiesdetailswrapper,
 								children: [
 									e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
-									{label: "Source", text: url.split("?width=")[0].split("?height=")[0].split("?size=")[0]},
+									{label: "Source", text: this.removeSizeInUrl(url)},
 									{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
 									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? "Video" : "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
@@ -1217,6 +1217,11 @@ module.exports = (_ => {
 							ele.style.setProperty("max-width", e.instance.props.width + "px");
 							ele.style.setProperty("height", e.instance.props.height + "px");
 							ele.style.setProperty("max-height", e.instance.props.height + "px");
+						}
+						for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeSizeInUrl(ele.src);
+						if (e.instance.state.readyState != BDFDB.DiscordConstants.ImageReadyStates.READY) {
+							e.instance.state.readyState = BDFDB.DiscordConstants.ImageReadyStates.READY;
+							BDFDB.ReactUtils.forceUpdate(e.instance);
 						}
 					}
 					if (e.methodname == "componentWillUnmount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCN.modalcarouselmodal, e.node)) {
@@ -1490,7 +1495,7 @@ module.exports = (_ => {
 				if (!urls || typeof onLoad != "function") return typeof onError == "function" && onError();
 				let url = urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url;
 				let isResized = !config.orignalSizeChecked && (url.indexOf("?width=") > -1 || url.indexOf("?height=") > -1 || url.indexOf("?size=") > -1);
-				url = isResized ? url.split("?width=")[0].split("?height=")[0].split("?size=")[0] : url;
+				url = isResized ? this.removeSizeInUrl(url) : url;
 				url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 				if (!config.fallbackToRequest) BDFDB.DiscordUtils.requestFileData(url, (error, buffer) => {
 					if (error || !buffer) {
@@ -1688,6 +1693,10 @@ module.exports = (_ => {
 				let filtered = [];
 				for (let message of messages) if (!filtered.find(n => n.messageId == message.messageId && n.id == message.id)) filtered.push(message);
 				return filtered;
+			}
+			
+			removeSizeInUrl (url) {
+				return (url || "").split("?width=")[0].split("?height=")[0].split("?size=")[0].split("&width=")[0].split("&height=")[0].split("&size=")[0];
 			}
 			
 			addListener (eventType, type, callback) {
