@@ -488,7 +488,7 @@
 		"UsernameSection": {"strings": ["shouldCopyOnClick:", ".userTagDiscriminatorNoNickname"]},
 		"UserPopout": {"strings": ["{user:", "userId:", "\"Unexpected missing user\")", "getUser"]},
 		"UserPopoutAvatar": {"strings": [".avatarDecorationHint", ".VIEW_PROFILE"], "noSearch": true},
-		"UserPopoutBody": {"strings": [".customStatusActivity", ".canDM", ".hidePersonalInformation", ".showCopiableUsername"]},
+		"UserPopoutBody": {"strings": ["customStatusActivity:", "canDM:", "hidePersonalInformation:", "showCopiableUsername:"]},
 		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"]},
 		"UserProfileBody": {"strings": [".userInfoSectionHeader", "Messages.NOTE", "connectedAccounts:"]},
 		"UserProfileHeader": {"strings": [".friendToken", ".additionalActionsIcon", "onMessage"]},
