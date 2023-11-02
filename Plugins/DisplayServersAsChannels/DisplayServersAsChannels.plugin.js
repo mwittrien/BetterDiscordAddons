@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.3
+ * @version 1.7.4
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -80,7 +80,6 @@ module.exports = (_ => {
 						"CircleIconButton",
 						"DirectMessage",
 						"FolderHeader",
-						"FolderIcon",
 						"FolderItemWrapper",
 						"GuildFavorites",
 						"GuildItem",
@@ -230,19 +229,22 @@ module.exports = (_ => {
 			processFolderHeader (e) {
 				if (!e.instance.props.folderNode) return;
 				e.returnvalue = this.removeMask(e.returnvalue, true);
-			}
-			
-			processFolderIcon (e) {
-				if (!e.instance.props.folderNode) return;
 				let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB");
 				let folderSize = Math.round(this.settings.amounts.serverElementHeight * 0.725);
 				let badge = null;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.guildfoldericonwrapper]]});
 				if (index > -1 && children[index] && children[index].props && children[index].props.style && children[index].props.style.background) badge = children[index];
-				e.returnvalue = BDFDB.ReactUtils.createElement("div", {});
-				this.addElementName(e.returnvalue, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
+				else {
+					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
+					if (index > -1) children[index] = null;
+				}
+				e.returnvalue.props.children = [e.returnvalue.props.children].flat(10);
+				e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+					children: []
+				});
+				this.addElementName(e.returnvalue.props.children, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
 					wrap: true,
-					useReturn: true,
+					index: 0,
 					backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
 					badges: badge || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						color: folderColor,
@@ -327,13 +329,13 @@ module.exports = (_ => {
 						else insertBadges(children[index]);
 					}
 					children[index] = children[index].props.children;
-					if (parentIsMask) return children[index];
+					if (parentIsMask) return BDFDB.ArrayUtils.is(children[index]) && children[index].length == 1 ? children[index][0] : children[index];
 				}
-				return parent;
+				return BDFDB.ArrayUtils.is(parent) && parent.length == 1 ? parent[0] : parent;
 			}
 			
 			addElementName (parent, name, options = {}) {
-				let [children, index] = options.useReturn ? [[parent], 0] : BDFDB.ReactUtils.findParent(parent, {
+				let [children, index] = options.index != null ? [parent, options.index] : BDFDB.ReactUtils.findParent(parent, {
 					name: ["NavItem", "Clickable"],
 					someProps: true,
 					props: [["className", BDFDB.disCN.guildserrorinner], ["className", BDFDB.disCN.guildbuttoninner]],
@@ -342,6 +344,7 @@ module.exports = (_ => {
 				if (index == -1) return;
 				let insertElements = returnvalue => {
 					if (BDFDB.ReactUtils.findChild(parent, {props: [["className", BDFDB.disCN._displayserversaschannelsname]]})) return;
+					if (options.index != null) console.log(returnvalue, parent);
 					let childEles = [
 						[
 							options.isDm && returnvalue.props.icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
@@ -359,10 +362,11 @@ module.exports = (_ => {
 								children: name
 							})
 						}),
-						[returnvalue.props.children].flat(10).filter(n => !(n && (n.type && n.type.displayName ==  "FolderIcon" || n.props && n.props.className && n.props.className.indexOf(BDFDB.disCN.guildfoldericonwrapper) > -1)))
+						[returnvalue.props.children, options.wrap && children.slice(index + 1)].flat(10).filter(n => !(n && (n.type && n.type.displayName ==  "FolderIcon" || n.props && n.props.className && n.props.className.indexOf(BDFDB.disCN.guildfoldericonwrapper) > -1)))
 					].flat().filter(n => n);
 					delete returnvalue.props.icon;
 					delete returnvalue.props.name;
+					if (options.wrap) for (let i = children.slice(index + 1).length; i > 0; i--) children[index + i] = null;
 					returnvalue.props.children = options.wrap ? BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.guildiconchildwrapper,
 						style: {backgroundColor: options.backgroundColor},
