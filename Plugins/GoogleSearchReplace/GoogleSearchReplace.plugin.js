@@ -2,7 +2,7 @@
  * @name GoogleSearchReplace
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.5
+ * @version 1.3.6
  * @description Replaces the default Google Text Search with a custom Search Engine
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		improved: {
+			"Own Search Engines": "You can now add your own engines in the settings"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -56,7 +58,6 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		const textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACEURL";
 		var engines = {}, enabledEngines = {};
 	
 		return class GoogleSearchReplace extends Plugin {
@@ -64,26 +65,30 @@ module.exports = (_ => {
 				this.defaults = {
 					engines: {
 						_all: 				{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
-						Ask: 				{value: true, 	name: "Ask", 					url: "https://ask.com/web?q=" + textUrlReplaceString},
-						Bing: 				{value: true, 	name: "Bing", 					url: "https://www.bing.com/search?q=" + textUrlReplaceString},
-						Brave:				{value: true, 	name: "Brave",					url: "https://search.brave.com/search?q=" + textUrlReplaceString},
-						DogPile:			{value: false, 	name: "DogPile", 				url: "http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
-						DuckDuckGo:			{value: true, 	name: "DuckDuckGo", 			url: "https://duckduckgo.com/?q=" + textUrlReplaceString},
-						Ecosia:				{value: false, 	name: "Ecosia", 				url: "https://www.ecosia.org/search?q=" + textUrlReplaceString},
-						GitHub: 			{value: false, 	name: "GitHub", 				url: "https://github.com/search?q=" + textUrlReplaceString},
-						Google: 			{value: true, 	name: "Google", 				url: "https://www.google.com/search?q=" + textUrlReplaceString},
-						GoogleScholar: 		{value: false, 	name: "Google Scholar", 		url: "https://scholar.google.com/scholar?q=" + textUrlReplaceString},
-						Quora: 				{value: true, 	name: "Quora", 					url: "https://www.quora.com/search?q=" + textUrlReplaceString},
-						Qwant: 				{value: false, 	name: "Qwant", 					url: "https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
-						UrbanDictionary: 	{value: false, 	name: "Urban Dictionary", 		url: "https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
-						Searx: 				{value: false, 	name: "Searx", 					url: "https://searx.info/?q=" + textUrlReplaceString},
-						StackOverflow: 		{value: true, 	name: "Stack Overflow", 		url: "https://stackoverflow.com/search?q=" + textUrlReplaceString},
-						Startpage: 			{value: false, 	name: "Startpage", 				url: "https://www.startpage.com/sp/search?q=" + textUrlReplaceString},
-						Whoogle: 			{value: false, 	name: "Whoogle", 				url: "https://search.sethforprivacy.com/search?q=" + textUrlReplaceString},
-						WolframAlpha:		{value: false, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
-						Yandex: 			{value: true, 	name: "Yandex", 				url: "https://yandex.com/search/?text=" + textUrlReplaceString},
-						Yahoo: 				{value: true, 	name: "Yahoo", 					url: "https://search.yahoo.com/search?p=" + textUrlReplaceString},
-						YouTube: 			{value: false, 	name: "YouTube", 				url: "https://www.youtube.com/results?q=" + textUrlReplaceString}
+						Amazon: 			{value: false, 	name: "Amazon", 				url: "https://www.amazon.com/s?k="},
+						Ask: 				{value: true, 	name: "Ask", 					url: "https://ask.com/web?q="},
+						Bing: 				{value: true, 	name: "Bing", 					url: "https://www.bing.com/search?q="},
+						Brave:				{value: true, 	name: "Brave",					url: "https://search.brave.com/search?q="},
+						DogPile:			{value: false, 	name: "DogPile", 				url: "http://www.dogpile.com/search/web?q="},
+						DuckDuckGo:			{value: true, 	name: "DuckDuckGo", 			url: "https://duckduckgo.com/?q="},
+						Ecosia:				{value: false, 	name: "Ecosia", 				url: "https://www.ecosia.org/search?q="},
+						Facebook: 			{value: true, 	name: "Facebook", 				url: "https://www.facebook.com/search/top/?q="},
+						GitHub: 			{value: false, 	name: "GitHub", 				url: "https://github.com/search?q="},
+						Google: 			{value: true, 	name: "Google", 				url: "https://www.google.com/search?q="},
+						GoogleScholar: 		{value: false, 	name: "Google Scholar", 		url: "https://scholar.google.com/scholar?q="},
+						Linkedin: 			{value: false, 	name: "Linkedin", 				url: "https://www.linkedin.com/search/results/all/?keywords="},
+						Pinterest: 			{value: true, 	name: "Pinterest", 				url: "https://www.pinterest.com/search/pins/?q="},
+						Quora: 				{value: true, 	name: "Quora", 					url: "https://www.quora.com/search?q="},
+						Qwant: 				{value: false, 	name: "Qwant", 					url: "https://www.qwant.com/?t=all&q="},
+						Searx: 				{value: false, 	name: "Searx", 					url: "https://searx.info/?q="},
+						StackOverflow: 		{value: true, 	name: "Stack Overflow", 		url: "https://stackoverflow.com/search?q="},
+						Startpage: 			{value: false, 	name: "Startpage", 				url: "https://www.startpage.com/sp/search?q="},
+						UrbanDictionary: 	{value: false, 	name: "Urban Dictionary", 		url: "https://www.urbandictionary.com/define.php?term="},
+						Whoogle: 			{value: false, 	name: "Whoogle", 				url: "https://search.sethforprivacy.com/search?q="},
+						WolframAlpha:		{value: false, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i="},
+						Yahoo: 				{value: true, 	name: "Yahoo", 					url: "https://search.yahoo.com/search?p="},
+						Yandex: 			{value: true, 	name: "Yandex", 				url: "https://yandex.com/search/?text="},
+						YouTube: 			{value: false, 	name: "YouTube", 				url: "https://www.youtube.com/results?q="}
 					}
 				};
 			}
@@ -95,20 +100,132 @@ module.exports = (_ => {
 			onStop () {}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
+				let ownEngines = BDFDB.DataUtils.load(this, "ownEngines");
 				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Search Engines:",
-					children: Object.keys(engines).filter(n => n && n != "_all").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["engines", key],
-						label: this.defaults.engines[key].name,
-						value: engines[key]
-					}))
-				}));
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
 				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Search Engines",
+							collapseStates: collapseStates,
+							children: Object.keys(engines).filter(n => n && n != "_all").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["engines", key],
+								label: this.defaults.engines[key].name,
+								value: engines[key]
+							}))
+						}));
+						
+						let values = {engineName: "", engineUrl: ""};
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Add your own Search Engine",
+							collapseStates: collapseStates,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+									title: "Name:",
+									className: BDFDB.disCN.marginbottom8,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										value: values.engineName,
+										placeholder: values.engineName,
+										errorMessage: !values.engineName && "Enter a Name" || (ownEngines[values.engineName] || this.defaults.engines[values.engineName]) && "Engine already exists",
+										onChange: (value, instance) => {
+											values.engineName = value.trim();
+											if (!values.engineName) instance.props.errorMessage = "Enter a Name";
+											else if (ownEngines[values.engineName] || this.defaults.engines[values.engineName]) instance.props.errorMessage = "Engine already exists";
+											else delete instance.props.errorMessage;
+											values.addButton.props.disabled = !Object.keys(values).every(valueName => values[valueName]);
+											BDFDB.ReactUtils.forceUpdate(values.addButton);
+										},
+										inputChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+											disabled: !Object.keys(values).every(valueName => values[valueName]),
+											children: BDFDB.LanguageUtils.LanguageStrings.ADD,
+											ref: instance => {if (instance) values.addButton = instance;},
+											onClick: _ => {
+												ownEngines[values.engineName] = {url: values.engineUrl, enabled: true};
+												BDFDB.DataUtils.save(ownEngines, this, "ownEngines");
+												BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+											}
+										})
+									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+									title: "URL:",
+									className: BDFDB.disCN.marginbottom8,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										value: values.engineUrl,
+										placeholder: values.engineUrl,
+										errorMessage: !values.engineUrl && "Enter an URL",
+										onChange: (value, instance) => {
+											values.engineUrl = value.trim();
+											if (!values.engineUrl) instance.props.errorMessage = "Enter an URL";
+											else delete instance.props.errorMessage;
+											values.addButton.props.disabled = !Object.keys(values).every(valueName => values[valueName]);
+											BDFDB.ReactUtils.forceUpdate(values.addButton);
+										}
+									})
+								})
+							]
+						}));
+								
+						if (Object.keys(ownEngines).length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Your own Search Engines",
+							collapseStates: collapseStates,
+							children: Object.entries(ownEngines).map(engine => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									style: {width: "100%"},
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+											value: engine[0],
+											placeholder: engine[0],
+											size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+											maxLength: 100000000000000000000,
+											onChange: value => {
+												ownEngines[value] = ownEngines[engine[0]];
+												delete ownEngines[engine[0]];
+												engine[0] = value;
+												BDFDB.DataUtils.save(ownEngines, this, "ownEngines");
+											}
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											stretch: 1,
+											shrink: 0,
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+												value: engine[1].url,
+												placeholder: engine[1].url,
+												size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+												maxLength: 100000000000000000000,
+												onChange: value => {
+													ownEngines[engine[0]].url = value;
+													engine[1].url = value;
+													BDFDB.DataUtils.save(ownEngines, this, "ownEngines");
+												}
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+											value: engine[1].enabled,
+											onChange: value => {
+												ownEngines[engine[0]].enabled = value;
+												engine[1].enabled = value;
+												BDFDB.DataUtils.save(ownEngines, this, "ownEngines");
+											}
+										})
+									]
+								}),
+								onRemove: _ => {
+									delete ownEngines[engine[0]];
+									BDFDB.DataUtils.save(ownEngines, this, "ownEngines");
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
+								}
+							}))
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
@@ -136,7 +253,8 @@ module.exports = (_ => {
 				if (index > -1) {
 					let text = document.getSelection().toString();
 					let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
-					let engineKeys = Object.keys(enginesWithoutAll);
+					let ownEnabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.load(this, "ownEngines"), n => n.enabled);
+					let engineKeys = Object.keys(Object.assign({}, enginesWithoutAll, ownEnabledEngines)).sort();
 					if (engineKeys.length == 1) {
 						children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_googlesearchreplace.replace("...", this.defaults.engines[engineKeys[0]].name),
@@ -144,7 +262,7 @@ module.exports = (_ => {
 							persisting: true,
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), {
+								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url + encodeURIComponent(text), {
 									minimized: event.shiftKey
 								});
 							}
@@ -152,19 +270,19 @@ module.exports = (_ => {
 					}
 					else {
 						let items = [];
-						for (let key in enabledEngines) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.defaults.engines[key].name,
+						for (let key of engineKeys) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: this.defaults.engines[key] && this.defaults.engines[key].name || key,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
 							color: key == "_all" ? BDFDB.DiscordConstants.MenuItemColors.DANGER : BDFDB.DiscordConstants.MenuItemColors.DEFAULT,
 							persisting: true,
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 								if (key == "_all") {
-									for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(textUrlReplaceString, encodeURIComponent(text)), {
+									for (let key2 of engineKeys) BDFDB.DiscordUtils.openLink((this.defaults.engines[key2] || ownEnabledEngines[key2]).url + encodeURIComponent(text), {
 										minimized: event.shiftKey
 									});
 								}
-								else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(text)), {
+								else BDFDB.DiscordUtils.openLink((this.defaults.engines[key] || ownEnabledEngines[key]).url + encodeURIComponent(text), {
 									minimized: event.shiftKey
 								});
 							}
