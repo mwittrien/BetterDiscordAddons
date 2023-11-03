@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.0
+ * @version 1.8.1
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -133,7 +133,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"AuthWrapper",
-						"StandardSidebarView"
+						"SettingsView"
 					]
 				};
 				
@@ -180,8 +180,11 @@ module.exports = (_ => {
 						top: 0;
 						right: 0;
 						padding: 10px;
-						z-index: 2;
+						z-index: 103;
 						-webkit-app-region: drag !important;
+					}
+					.platform-win ${BDFDB.dotCN._oldtitlebarsettingstoolbar} {
+						top: 22px;
 					}
 					
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCNS.authboxcharacterbackground + BDFDB.dotCN._oldtitlebarsettingstoolbar},
@@ -266,11 +269,10 @@ module.exports = (_ => {
 				this.injectSettingsToolbar(e.returnvalue.props.children, true);
 			}
 
-			processStandardSidebarView (e) {
-				let sidebarView = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowstandardsidebarview]]});
-				if (!sidebarView) return;
-				if (!BDFDB.ArrayUtils.is(sidebarView.props.children)) sidebarView.props.children = [sidebarView.props.children];
-				this.injectSettingsToolbar(sidebarView.props.children);
+			processSettingsView (e) {
+				if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
+				console.log(e.returnvalue);
+				this.injectSettingsToolbar(e.returnvalue.props.children);
 			}
 			
 			injectSettingsToolbar (children, fixed) {
