@@ -127,11 +127,6 @@ module.exports = (_ => {
 				this.patchPriority = 9;
 				
 				this.css = `
-					${BDFDB.dotCN.messagespopoutchannelname}:hover > span[style*="color"],
-					${BDFDB.dotCN.recentmentionschannelname}:hover span[style*="color"],
-					${BDFDB.dotCN.searchresultschannelname}:hover > span[style*="color"] {
-						text-decoration: underline;
-					}
 					${BDFDB.dotCN.mention}[style*="--edited-mention-color"] {
 						background-color: rgba(var(--edited-mention-color), .1) !important;
 						color: rgb(var(--edited-mention-color)) !important;
