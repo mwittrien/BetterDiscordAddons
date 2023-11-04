@@ -145,7 +145,6 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._showbadgesinchatbadges},
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._showbadgesinchatbadges} {
-						margin-right: .25rem;
 						text-indent: 0;
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._showbadgesinchatbadges} {
@@ -390,10 +389,11 @@ module.exports = (_ => {
 
 			processMessageHeader (e) {
 				if (!e.instance.props.message) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (index == -1) return;
+				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
+				if (!username) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				this.injectBadges(children, author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
+				if (!BDFDB.ArrayUtils.is(username.props.decorations[1])) username.props.decorations[1] = [username.props.decorations[1]].filter(n => n);
+				this.injectBadges(username.props.decorations[1], author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 
 			processNameContainer (e) {
