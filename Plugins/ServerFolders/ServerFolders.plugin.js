@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.2.0
+ * @version 7.2.1
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -314,9 +314,9 @@ module.exports = (_ => {
 				BDFDB.TimeUtils.clear(this._previewInterval);
 			}
 			checkImage(base64OrUrl, callback) {
-				if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request(base64OrUrl.trim(), {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, body) => {
+				if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request(base64OrUrl.trim(), (error, response, body) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1 && response.headers["content-type"] != "image/gif") {
-						this.resizeImage("data:" + response.headers["content-type"] + ";base64," + btoa(BDFDB.DiscordUtils.bufferToString(body)), callback);
+						this.resizeImage("data:" + response.headers["content-type"] + ";base64," + btoa(body), callback);
 					}
 					else callback(base64OrUrl);
 				});
