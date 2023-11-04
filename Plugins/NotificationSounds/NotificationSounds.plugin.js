@@ -435,7 +435,7 @@ module.exports = (_ => {
 													}
 													BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
 												});
-												else BDFDB.LibraryRequires.fs.readFile(source, "utf8", (error, buffer) => {
+												else BDFDB.LibraryRequires.fs.readFile(source, "utf8", (error, body) => {
 													if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type: "danger"});
 													else return successSavedAudio({category, sound, source: `data:audio/mpeg;base64,${btoa(body)}`});
 												});
