@@ -110,8 +110,8 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._toproleseverywhererolestyle},
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN._toproleseverywhererolestyle} {
-						margin-right: 0.3rem;
-						margin-left: 0;
+						margin-right: 0;
+						margin-left: 0.3rem;
 						text-indent: 0;
 					}
 					${BDFDB.dotCN._toproleseverywhererolestyle} {
