@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.1
+ * @version 3.5.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,7 +27,9 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			
+			fixed: {
+				"Special Characters": "Fixed an Issue, which caused downloaded Files (for example Plugins downloaded via Plugin Repo) to have their special characters (polish, chinese, etc. letters) get corrupted"
+			}
 		}
 	};
 	
@@ -154,9 +156,9 @@ module.exports = (_ => {
 			};
 
 			const requestFunction = function (...args) {
-				let {url, uIndex} = args[0] && typeof args[0] == "string" ? {url: args[0], uIndex: 0} : (args[1] && typeof args[1] == "object" && typeof args[1].url == "string" ? {url: args[1], uIndex: 1} : {url: null, uIndex: -1});
-				if (!url || typeof url != "string") return;
-				let {callback, cIndex} = args[1] && typeof args[1] == "function" ? {callback: args[1], cIndex: 1} : (args[2] && typeof args[2] == "function" ? {callback: args[2], cIndex: 2} : {callback: null, cIndex: -1});
+				let url = typeof args[0] == "string" && args[0];
+				if (!url) return;
+				let callback = typeof args[1] == "function" && args[1] || typeof args[2] == "function" && args[2];
 				if (typeof callback != "function") return;
 				if (url.indexOf("data:") == 0) callback(null, {
 					aborted: false,
@@ -170,15 +172,14 @@ module.exports = (_ => {
 					url: ""
 				}, url);
 				else {
-					let config = args[0] && typeof args[0] == "object" ? args[0] : (args[1] && typeof args[1] == "object" && args[1]);
+					let config = args[1] && typeof args[1] == "object" ? args[1] : {};
 					let timeout = 600000;
-					if (config && config.url) delete config.url;
-					if (config && config.form && typeof config.form == "object") {
+					if (!isNaN(parseInt(config.timeout)) && config.timeout > 0) timeout = config.timeout;
+					if (config.form && typeof config.form == "object") {
 						let query = Object.entries(config.form).map(n => n[0] + "=" + n[1]).join("&");
 						if (query) url += `?${query}`;
 					}
-					if (config && !isNaN(parseInt(config.timeout)) && config.timeout > 0) timeout = config.timeout;
-					if (config && config.method) config.method = config.method.toUpperCase();
+					if (config.method) config.method = config.method.toUpperCase();
 					let killed = false, timeoutObj = BDFDB.TimeUtils.timeout(_ => {
 						killed = true;
 						BDFDB.TimeUtils.clear(timeoutObj);
@@ -194,9 +195,10 @@ module.exports = (_ => {
 							url: ""
 						}, null);
 					}, timeout);
-					let response = null;
-					return (config && config.bdVersion && BdApi && BdApi.Net && BdApi.Net.fetch ? BdApi.Net.fetch : fetch)(url, Object.assign({}, config, {timeout: 60000})).catch(error => {
-						callback(new Error(error), {
+					let response = null, isFallback = false;
+					return (config.bdVersion && BdApi && BdApi.Net && BdApi.Net.fetch ? BdApi.Net.fetch : fetch)(url, config).catch(error => {
+						if (!config.bdVersion) requestFunction(url, Object.assign({}, config, {bdVersion: true}), callback);
+						else callback(new Error(error), {
 							aborted: false,
 							complete: true,
 							end: undefined,
@@ -213,7 +215,7 @@ module.exports = (_ => {
 						response.statusCode = response.status;
 						if (response.headers) response.headers["content-type"] = response.headers.get("content-type");
 						BDFDB.TimeUtils.clear(timeoutObj);
-						return response.text();
+						return config.toBuffer ? response.arrayBuffer() : response.text();
 					}).then(body => {
 						if (!killed && response) callback(response.status != 200 ? new Error(response.statusText || "Fetch Failed") : null, response, body);
 					});
@@ -4261,151 +4263,6 @@ module.exports = (_ => {
 				};
 				
 				BDFDB.DiscordUtils = {};
-				var getFileData = (...args) => {
-					var p = function (e, t, n, r, i, o, a) {
-						try {
-							var s = e[o](a),
-							u = s.value;
-						} catch (e) {
-							n(e);
-							return;
-						}
-						s.done ? t(u) : Promise.resolve(u).then(r, i);
-					};
-					var E = function (e) {
-						return function () {
-							var t = this,
-							n = arguments;
-							return new Promise((function (r, i) {
-								var o = e.apply(t, n);
-								function a(e) {
-									p(o, r, i, a, s, "next", e);
-								}
-								function s(e) {
-									p(o, r, i, a, s, "throw", e);
-								}
-								a(void 0);
-							}));
-						};
-					};
-					return E(function (e) {
-						const v = function (e, t) {		
-							var s = function (o) {
-								return function (s) {
-									return function (o) {
-										if (n) throw new TypeError("Generator is already executing.");
-										for (; a; ) try {
-											if (n = 1, r && (i = 2 & o[0] ? r.return : o[0] ? r.throw || ((i = r.return) && i.call(r), 0) : r.next) && !(i = i.call(r, o[1])).done) return i;
-											(r = 0, i) && (o = [2 & o[0], i.value]);
-											switch (o[0]) {
-												case 0:
-												case 1:
-													i = o;
-													break;
-												case 4:
-													a.label++;
-													return {
-														value: o[1],
-														done: !1
-													};
-												case 5:
-													a.label++;
-													r = o[1];
-													o = [0];
-													continue;
-												case 7:
-													o = a.ops.pop();
-													a.trys.pop();
-													continue;
-												default:
-													if (!(i = a.trys, i = i.length > 0 && i[i.length - 1]) && (6 === o[0] || 2 === o[0])) {
-														a = 0;
-														continue;
-													}
-													if (3 === o[0] && (!i || o[1] > i[0] && o[1] < i[3])) {
-														a.label = o[1];
-														break;
-													}
-													if (6 === o[0] && a.label < i[1]) {
-														a.label = i[1];
-														i = o;
-														break;
-													}
-													if (i && a.label < i[2]) {
-														a.label = i[2];
-														a.ops.push(o);
-														break;
-													}
-													i[2] && a.ops.pop();
-													a.trys.pop();
-													continue;
-											}
-											o = t.call(e, a);
-										} catch (e) {
-											o = [6, e];
-											r = 0;
-										} finally {
-											n = i = 0;
-										}
-										if (5 & o[0]) throw o[1];
-										return {
-											value: o[0] ? o[1] : void 0,
-											done: !0
-										}
-									}([o, s])
-								}
-							}
-							
-							var n, r, i, o;
-							var a = {
-								label: 0,
-								sent: function () {
-									if (1 & i[0])
-										throw i[1];
-									return i[1]
-								},
-								trys: [],
-								ops: []
-							};
-							return o = {
-								next: s(0),
-								throw : s(1),
-								return : s(2)
-							}, "function" == typeof Symbol && (o[Symbol.iterator] = function () {
-								return this
-							}), o;
-						};
-						return v(this, (function (r) {
-							var t, n;
-							switch (r.label) {
-							case 0:
-								return [4, fetch(new Request(e, {
-									method: "GET",
-									mode: "cors"
-								}))];
-							case 1:
-								t = r.sent();
-								return [4, t.arrayBuffer()];
-							case 2:
-								n = r.sent();
-								return [2, n]
-							}
-						}));
-					}).apply(this, args);
-				};
-				BDFDB.DiscordUtils.requestFileData = function (...args) {
-					let {url, uIndex} = args[0] && typeof args[0] == "string" ? {url: args[0], uIndex: 0} : (args[1] && typeof args[1] == "object" && typeof args[1].url == "string" ? {url: args[1], uIndex: 1} : {url: null, uIndex: -1});
-					if (!url || typeof url != "string") return;
-					let {callback, cIndex} = args[1] && typeof args[1] == "function" ? {callback: args[1], cIndex: 1} : (args[2] && typeof args[2] == "function" ? {callback: args[2], cIndex: 2} : {callback: null, cIndex: -1});
-					if (typeof callback != "function") return;
-					getFileData(url).then(buffer => callback(null, buffer)).catch(error => callback(error, null));
-				};
-				BDFDB.DiscordUtils.bufferToString = function (u8a) {
-					u8a = new Uint8Array(u8a);
-					let CHUNK_SZ = 0x8000, c = [];
-					for (let i = 0; i < u8a.length; i += CHUNK_SZ) c.push(String.fromCharCode.apply(null, u8a.subarray(i, i + CHUNK_SZ)));
-					return c.join("");
-				};
 				BDFDB.DiscordUtils.getSetting = function (category, key) {
 					if (!category || !key) return;
 					return BDFDB.LibraryStores.UserSettingsProtoStore && BDFDB.LibraryStores.UserSettingsProtoStore.settings[category] && BDFDB.LibraryStores.UserSettingsProtoStore.settings[category][key] && BDFDB.LibraryStores.UserSettingsProtoStore.settings[category][key].value;

@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.2
+ * @version 2.5.4s
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -632,13 +632,13 @@ module.exports = (_ => {
 														this.props.downloading = true;
 														let loadingToast = BDFDB.NotificationUtils.toast(`${BDFDB.LanguageUtils.LibraryStringsFormat("loading", this.props.data.name)} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 														let autoloadKey = this.props.data.state == themeStates ? "startUpdated" : "startDownloaded";
-														BDFDB.DiscordUtils.requestFileData(this.props.data.rawSourceUrl, (error, buffer) => {
-															if (error || !buffer) {
+														BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
+															if (error || !body) {
 																delete this.props.downloading;
 																loadingToast.close();
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Theme "${this.props.data.name}"`), {type: "danger"});
 															}
-															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), BDFDB.DiscordUtils.bufferToString(buffer), autoloadKey).then(error2 => {
+															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), body, autoloadKey).then(error2 => {
 																delete this.props.downloading;
 																loadingToast.close();
 																if (!error2) {
@@ -885,16 +885,15 @@ module.exports = (_ => {
 								});
 							}
 							
-							BDFDB.DiscordUtils.requestFileData("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/GeneratorList.txt", (error, buffer) => {
-								let body = !error && buffer && BDFDB.DiscordUtils.bufferToString(buffer);
-								if (body) for (let id of body.replace(/[\r\t]/g, "").split(" ").map(n => parseInt(n)).filter(n => n != null)) {
+							BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/GeneratorList.txt", (error, response, body) => {
+								if (!error && body) for (let id of body.replace(/[\r\t]/g, "").split(" ").map(n => parseInt(n)).filter(n => n != null)) {
 									let theme = grabbedThemes.find(t => t.id == id);
 									if (theme) generatorThemes.push(theme);
 								}
 							});
 							
-							BDFDB.DiscordUtils.requestFileData(document.querySelector("head link[rel='stylesheet'][integrity]").href, (error, buffer) => {
-								let nativeCSS = !error && buffer && BDFDB.DiscordUtils.bufferToString(buffer);
+							BDFDB.LibraryRequires.request(document.querySelector("head link[rel='stylesheet'][href*='assets/app.'], body link[rel='stylesheet'][href*='assets/app.']").href, (error, response, body) => {
+								let nativeCSS = !error && body;
 								if (nativeCSS) {
 									let theme = BDFDB.DiscordUtils.getTheme();
 									let vars = (nativeCSS.split(`.${theme}{`)[1] || "").split("}")[0];
@@ -919,41 +918,38 @@ module.exports = (_ => {
 						delete theme.release_date;
 						delete theme.latest_source_url;
 						delete theme.thumbnail_url;
-						BDFDB.DiscordUtils.requestFileData(theme.rawSourceUrl, (error, buffer) => {
-							if (error || !buffer) theme.failed = true;
+						BDFDB.LibraryRequires.request(theme.rawSourceUrl, (error, response, body) => {
+							if (error || !body || body.indexOf("404: Not Found") == 0) theme.failed = true;
 							else {
-								let body = BDFDB.DiscordUtils.bufferToString(buffer);
-								if (body && body.indexOf("404: Not Found") != 0) {
-									const META = body.split("*/")[0];
-									theme.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || theme.name || "");
-									theme.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || theme.author.display_name || theme.author;
-									const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1];
-									if (version) theme.version = version;
-									if (theme.version) {
-										const installedTheme = this.getInstalledTheme(theme);
-										if (installedTheme && this.compareVersions(version, this.getString(installedTheme.version))) outdatedEntries++;
-									}
-									let text = body.trim();
-									let hasMETAline = text.replace(/\s/g, "").indexOf("//META{"), newMeta = "";
-									if (hasMETAline < 20 && hasMETAline > -1) {
-										let i = 0, j = 0, metaString = "";
-										try {
-											for (let c of `{${text.split("{").slice(1).join("{")}`) {
-												metaString += c;
-												if (c == "{") i++;
-												else if (c == "}") j++;
-												if (i > 0 && i == j) break;
-											}
-											let metaObj = JSON.parse(metaString);
-											newMeta = "/**\n";
-											for (let key in metaObj) newMeta += ` * @${key} ${metaObj[key]}\n`;
-											newMeta += "*/";
-										}
-										catch (err) {newMeta = "";}
-									}
-									theme.fullCSS = [newMeta, newMeta ? text.split("\n").slice(1).join("\n") : text].filter(n => n).join("\n");
-									theme.css = (hasMETAline < 20 && hasMETAline > -1 ? text.split("\n").slice(1).join("\n") : text).replace(/[\r|\n|\t]/g, "");
+								const META = body.split("*/")[0];
+								theme.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || theme.name || "");
+								theme.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || theme.author.display_name || theme.author;
+								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1];
+								if (version) theme.version = version;
+								if (theme.version) {
+									const installedTheme = this.getInstalledTheme(theme);
+									if (installedTheme && this.compareVersions(version, this.getString(installedTheme.version))) outdatedEntries++;
 								}
+								let text = body.trim();
+								let hasMETAline = text.replace(/\s/g, "").indexOf("//META{"), newMeta = "";
+								if (hasMETAline < 20 && hasMETAline > -1) {
+									let i = 0, j = 0, metaString = "";
+									try {
+										for (let c of `{${text.split("{").slice(1).join("{")}`) {
+											metaString += c;
+											if (c == "{") i++;
+											else if (c == "}") j++;
+											if (i > 0 && i == j) break;
+										}
+										let metaObj = JSON.parse(metaString);
+										newMeta = "/**\n";
+										for (let key in metaObj) newMeta += ` * @${key} ${metaObj[key]}\n`;
+										newMeta += "*/";
+									}
+									catch (err) {newMeta = "";}
+								}
+								theme.fullCSS = [newMeta, newMeta ? text.split("\n").slice(1).join("\n") : text].filter(n => n).join("\n");
+								theme.css = (hasMETAline < 20 && hasMETAline > -1 ? text.split("\n").slice(1).join("\n") : text).replace(/[\r|\n|\t]/g, "");
 								if (!cachedThemes.includes(theme.id)) newEntries++;
 							}
 							

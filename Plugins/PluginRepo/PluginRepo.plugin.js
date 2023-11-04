@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.3
+ * @version 2.5.4
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"Outdated for broken Plugins": "No longer shows broken Plugins as outdated"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -486,13 +484,13 @@ module.exports = (_ => {
 														this.props.downloading = true;
 														let loadingToast = BDFDB.NotificationUtils.toast(`${BDFDB.LanguageUtils.LibraryStringsFormat("loading", this.props.data.name)} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 														let autoloadKey = this.props.data.state == pluginStates.OUTDATED ? "startUpdated" : "startDownloaded";
-														BDFDB.DiscordUtils.requestFileData(this.props.data.rawSourceUrl, (error, buffer) => {
-															if (error || !buffer) {
+														BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
+															if (error || !body) {
 																delete this.props.downloading;
 																loadingToast.close();
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
 															}
-															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), BDFDB.DiscordUtils.bufferToString(buffer), error2 => {
+															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), body, error2 => {
 																delete this.props.downloading;
 																loadingToast.close();
 																if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
@@ -758,20 +756,17 @@ module.exports = (_ => {
 						delete plugin.release_date;
 						delete plugin.latest_source_url;
 						delete plugin.thumbnail_url;
-						BDFDB.DiscordUtils.requestFileData(plugin.rawSourceUrl, (error, buffer) => {
-							if (error || !buffer) plugin.failed = true;
+						BDFDB.LibraryRequires.request(plugin.rawSourceUrl, (error, response, body) => {
+							if (error || !body || body.indexOf("404: Not Found") == 0) plugin.failed = true;
 							else {
-								let body = BDFDB.DiscordUtils.bufferToString(buffer);
-								if (body && body.indexOf("404: Not Found") != 0) {
-									const META = body.split("*/")[0];
-									plugin.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.name || "");
-									plugin.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.author.display_name || plugin.author;
-									const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1];
-									if (version) {
-										plugin.version = version;
-										const installedPlugin = this.getInstalledPlugin(plugin);
-										if (installedPlugin && this.compareVersions(version, this.getString(installedPlugin.plugin && installedPlugin.plugin.version || installedPlugin.version))) outdatedEntries++;
-									}
+								const META = body.split("*/")[0];
+								plugin.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.name || "");
+								plugin.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.author.display_name || plugin.author;
+								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1];
+								if (version) {
+									plugin.version = version;
+									const installedPlugin = this.getInstalledPlugin(plugin);
+									if (installedPlugin && this.compareVersions(version, this.getString(installedPlugin.plugin && installedPlugin.plugin.version || installedPlugin.version))) outdatedEntries++;
 								}
 								if (!cachedPlugins.includes(plugin.id)) newEntries++;
 							}
