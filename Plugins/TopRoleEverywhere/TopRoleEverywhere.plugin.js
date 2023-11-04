@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.3
+ * @version 3.1.4
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -170,21 +170,27 @@ module.exports = (_ => {
 			}
 
 			processNameContainer (e) {
-				if (e.instance.props.user && this.settings.places.memberList) this.injectRoleTag(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user, "member", 2, {
+				if (e.instance.props.user && this.settings.places.memberList) this.injectRoleTag(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user, "member", 3, {
 					tagClass: BDFDB.disCN.bottagmember
 				});
 			}
 
 			processMessageHeader (e) {
 				if (!e.instance.props.message) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (index == -1) return;
+				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
+				if (!username) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				if (this.settings.places.chat) this.injectRoleTag(children, author, "chat", e.instance.props.compact ? index : (index + 2), {
+				let index = e.instance.props.compact ? 1 : 0;
+				if (!BDFDB.ArrayUtils.is(username.props.decorations[index])) username.props.decorations[index] = [username.props.decorations[index]].filter(n => n);
+				if (this.settings.general.addUserId && this.settings.general.userIdFirst) this.injectIdTag(username.props.decorations[index], author, "chat", {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
-				if (this.settings.general.addUserId) this.injectIdTag(children, author, "chat", (e.instance.props.compact ? index : (index + 2)) + (this.settings.general.userIdFirst ? 0 : 1), {
+				if (this.settings.places.chat) this.injectRoleTag(username.props.decorations[index], author, "chat", -1, {
+					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+					useRem: true
+				});
+				if (this.settings.general.addUserId && !this.settings.general.userIdFirst) this.injectIdTag(username.props.decorations[index], author, "chat", {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
@@ -210,12 +216,15 @@ module.exports = (_ => {
 						break;
 					}
 				}
-				if (role && (role.colorString || role.ownerRole || this.settings.general.includeColorless)) children.splice(insertIndex, 0, this.createTag(role, type, config));
+				if (role && (role.colorString || role.ownerRole || this.settings.general.includeColorless)) {
+					if (insertIndex == -1) children.push(this.createTag(role, type, config));
+					else children.splice(insertIndex, 0, this.createTag(role, type, config));
+				}
 			}
 
-			injectIdTag (children, user, type, insertIndex, config = {}) {
+			injectIdTag (children, user, type, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
-				children.splice(insertIndex, 0, this.createTag({
+				children.push(insertIndex, 0, this.createTag({
 					name: user.id
 				}, type, config));
 			}
