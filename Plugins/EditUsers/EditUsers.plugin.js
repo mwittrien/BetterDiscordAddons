@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.4
+ * @version 4.8.5
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -113,6 +113,7 @@ module.exports = (_ => {
 						"Message",
 						"MessageContent",
 						"MessageHeader",
+						"MessageUsername",
 						"NameContainer",
 						"NowPlayingItem",
 						"PictureInPictureVideo",
@@ -148,7 +149,7 @@ module.exports = (_ => {
 						"IncomingCallModal",
 						"Mention",
 						"MessageContent",
-						"MessageUsername",
+						"MessageReply",
 						"NameTag",
 						"ParticipantsForSelectedParticipant",
 						"PrivateChannel",
@@ -175,11 +176,6 @@ module.exports = (_ => {
 						background-size: cover;
 						object-fit: cover;
 					}
-					${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"],
-					${BDFDB.dotCN.voicedetailschannel}:hover > span[style*="color"],
-					${BDFDB.dotCN.messageswelcomethreadcreator}:hover > span[style*="color"] {
-						text-decoration: underline;
-					}
 					${BDFDB.dotCNS.userprofilemodal + BDFDB.dotCNS.linedefaultcolor + BDFDB.dotCN.bottag} {
 						display: inline-flex;
 						margin-top: 4px;
@@ -192,6 +188,12 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.peoplesuserhovered + BDFDB.dotCN.peoplesdiscriminator} {
 						display: block;
+					}
+					${BDFDB.dotCN.message} span[style*="--edited-user-color-gradient"] ${BDFDB.dotCN.messageusername} {
+						background-image: var(--edited-user-color-gradient) !important;
+						color: transparent !important;
+						text-decoration-color: var(--edited-user-color) !important;
+						-webkit-background-clip: text;
 					}
 					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] code.inline,
 					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] blockquote,
@@ -820,31 +822,53 @@ module.exports = (_ => {
 				let data = changedUsers[author.id];
 				if (!data) return;
 				let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryStores.GuildMemberStore.getMember((BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id) || {}).colorString || data.color1;
-				color1 = color1 && BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 				if (e.instance.props.userOverride) e.instance.props.userOverride = this.getUserData(author.id)
 				else {
 					let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(author.id, true, false, author)}));
-					if (color1) message.colorString = color1;
+					if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 					e.instance.props.message = message;
 				}
+				let fontGradient = BDFDB.ObjectUtils.is(color1);
+				if (!fontGradient) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
+				if (index == -1) return;
+				children[index] = BDFDB.ReactUtils.createElement("span", {
+					style: {
+						"--edited-user-color": fontGradient ? BDFDB.ColorUtils.convert(color1[0], "RGBA") : BDFDB.ColorUtils.convert(color1, "RGBA"),
+						[fontGradient ? "--edited-user-color-gradient" : ""]: fontGradient ? BDFDB.ColorUtils.createGradient(color1) : ""
+					},
+					children: children[index]
+				});
+			}
+			
+			processMessageReply (e) {
+				if (!this.settings.places.chatWindow || !e.instance.props.referencedMessage.message || !this.shouldChangeInChat(e.instance.props.referencedMessage.message.channel_id)) return;
+				const author = e.instance.props.referencedMessage.message.author;
+				let data = changedUsers[author.id];
+				if (!data) return;
+				let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryStores.GuildMemberStore.getMember((BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.referencedMessage.message.channel_id) || {}).guild_id, author.id) || {}).colorString || data.color1;
+				if (e.instance.props.userOverride) e.instance.props.userOverride = this.getUserData(author.id)
+				else {
+					let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.referencedMessage.message, {author: this.getUserData(author.id, true, false, author)}));
+					if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+					e.instance.props.referencedMessage.message = message;
+				}
+				let fontGradient = BDFDB.ObjectUtils.is(color1);
+				if (!fontGradient) return;
+				e.returnvalue = BDFDB.ReactUtils.createElement("span", {
+					style: {
+						"--edited-user-color": fontGradient ? BDFDB.ColorUtils.convert(color1[0], "RGBA") : BDFDB.ColorUtils.convert(color1, "RGBA"),
+						[fontGradient ? "--edited-user-color-gradient" : ""]: fontGradient ? BDFDB.ColorUtils.createGradient(color1) : ""
+					},
+					children: e.returnvalue
+				});
 			}
 			
 			processMessageUsername (e) {
-				if (!this.settings.places.chatWindow || !e.instance.props.author || !this.shouldChangeInChat(e.instance.props.channel.id)) return;
+				if (!this.settings.places.chatWindow || !e.instance.props.message || !this.shouldChangeInChat(e.instance.props.message.channel_id)) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				let data = changedUsers[author.id];
-				if (!data) return;
-				let username = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (username) {
-					let renderChildren = username.props.children;
-					username.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						const returnValue = renderChildren(...args);
-						this.changeUserColor(returnValue, author.id, {guildId: (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
-						return returnValue;
-					}, "Error in Children Render of MessageUsername!", this);
-				}
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (index > -1) this.injectBadge(children, author.id, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? index : (index + 1), {
+				if (!BDFDB.ArrayUtils.is(e.instance.props.decorations[0])) e.instance.props.decorations[0] = [e.instance.props.decorations[0]].filter(n => n);
+				this.injectBadge(e.instance.props.decorations[0], author.id, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 0, {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
