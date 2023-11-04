@@ -7593,6 +7593,7 @@ module.exports = (_ => {
 								if (ele) {
 									ele.style.setProperty("background-image", this.props.gradient, "important");
 									ele.style.setProperty("color", "transparent", "important");
+									ele.style.setProperty("text-decoration-color", BDFDB.ColorUtils.convert(this.props.gradient[0], "RGBA"), "important");
 									ele.style.setProperty("-webkit-background-clip", "text", "important");
 								}
 							}
