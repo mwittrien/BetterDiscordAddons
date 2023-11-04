@@ -91,7 +91,7 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"MessageHeader",
+						"MessageUsername",
 						"NameContainer"
 					],
 					after: [
@@ -271,15 +271,13 @@ module.exports = (_ => {
 				}
 			}
 
-			processMessageHeader (e) {
+			processMessageUsername (e) {
 				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
 				if (!userType) return;
-				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
-				if (!username) return;
-				if (!BDFDB.ArrayUtils.is(username.props.decorations[0])) username.props.decorations[0] = [username.props.decorations[0]].filter(n => n);
-				this.injectStaffTag(username.props.decorations[0], author, userType, 0, {
+				if (!BDFDB.ArrayUtils.is(e.instance.props.decorations[0])) e.instance.props.decorations[0] = [e.instance.props.decorations[0]].filter(n => n);
+				this.injectStaffTag(e.instance.props.decorations[0], author, userType, 0, {
 					channelId: e.instance.props.message.channel_id,
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true

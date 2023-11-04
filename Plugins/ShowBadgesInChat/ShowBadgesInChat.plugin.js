@@ -84,7 +84,7 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"MessageHeader",
+						"MessageUsername",
 						"NameContainer"
 					],
 					after: [
@@ -387,14 +387,12 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
-			processMessageHeader (e) {
+			processMessageUsername (e) {
 				if (!e.instance.props.message) return;
-				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
-				if (!username) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let index = e.instance.props.compact ? 1 : 0;
-				if (!BDFDB.ArrayUtils.is(username.props.decorations[index])) username.props.decorations[index] = [username.props.decorations[index]].filter(n => n);
-				this.injectBadges(username.props.decorations[index], author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
+				if (!BDFDB.ArrayUtils.is(e.instance.props.decorations[index])) e.instance.props.decorations[index] = [e.instance.props.decorations[index]].filter(n => n);
+				this.injectBadges(e.instance.props.decorations[index], author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 
 			processNameContainer (e) {

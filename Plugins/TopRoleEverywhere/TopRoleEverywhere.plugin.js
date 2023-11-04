@@ -77,7 +77,7 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"MessageHeader",
+						"MessageUsername",
 						"NameContainer"
 					],
 					after: [
@@ -175,22 +175,20 @@ module.exports = (_ => {
 				});
 			}
 
-			processMessageHeader (e) {
+			processMessageUsername (e) {
 				if (!e.instance.props.message) return;
-				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
-				if (!username) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let index = e.instance.props.compact ? 1 : 0;
-				if (!BDFDB.ArrayUtils.is(username.props.decorations[index])) username.props.decorations[index] = [username.props.decorations[index]].filter(n => n);
-				if (this.settings.general.addUserId && this.settings.general.userIdFirst) this.injectIdTag(username.props.decorations[index], author, "chat", {
+				if (!BDFDB.ArrayUtils.is(e.instance.props.decorations[index])) e.instance.props.decorations[index] = [e.instance.props.decorations[index]].filter(n => n);
+				if (this.settings.general.addUserId && this.settings.general.userIdFirst) this.injectIdTag(e.instance.props.decorations[index], author, "chat", {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
-				if (this.settings.places.chat) this.injectRoleTag(username.props.decorations[index], author, "chat", -1, {
+				if (this.settings.places.chat) this.injectRoleTag(e.instance.props.decorations[index], author, "chat", -1, {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
-				if (this.settings.general.addUserId && !this.settings.general.userIdFirst) this.injectIdTag(username.props.decorations[index], author, "chat", {
+				if (this.settings.general.addUserId && !this.settings.general.userIdFirst) this.injectIdTag(e.instance.props.decorations[index], author, "chat", {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
