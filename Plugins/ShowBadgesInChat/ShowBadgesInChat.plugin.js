@@ -392,7 +392,7 @@ module.exports = (_ => {
 				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
 				if (!username) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				let index = e.instance.props.cozy ? 0 : 1;
+				let index = e.instance.props.compact ? 1 : 0;
 				if (!BDFDB.ArrayUtils.is(username.props.decorations[index])) username.props.decorations[index] = [username.props.decorations[index]].filter(n => n);
 				this.injectBadges(username.props.decorations[index], author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
