@@ -392,8 +392,9 @@ module.exports = (_ => {
 				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
 				if (!username) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				if (!BDFDB.ArrayUtils.is(username.props.decorations[1])) username.props.decorations[1] = [username.props.decorations[1]].filter(n => n);
-				this.injectBadges(username.props.decorations[1], author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
+				let index = e.instance.props.cozy ? 0 : 1;
+				if (!BDFDB.ArrayUtils.is(username.props.decorations[index])) username.props.decorations[index] = [username.props.decorations[index]].filter(n => n);
+				this.injectBadges(username.props.decorations[index], author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 
 			processNameContainer (e) {

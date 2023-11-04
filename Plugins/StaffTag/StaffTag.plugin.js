@@ -273,11 +273,13 @@ module.exports = (_ => {
 
 			processMessageHeader (e) {
 				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
-				if (userType) this.injectStaffTag(children, author, userType, e.instance.props.compact ? index : (index + 2), {
+				if (!userType) return;
+				let username = BDFDB.ReactUtils.findChild(e.instance.props.username, {filter: n => n && n.props && n.props.decorations});
+				if (!username) return;
+				if (!BDFDB.ArrayUtils.is(username.props.decorations[0])) username.props.decorations[0] = [username.props.decorations[0]].filter(n => n);
+				this.injectStaffTag(username.props.decorations[0], author, userType, 0, {
 					channelId: e.instance.props.message.channel_id,
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
