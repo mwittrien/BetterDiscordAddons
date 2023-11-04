@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -342,15 +342,15 @@ module.exports = (_ => {
 					const folder = BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "dictionaries");
 					const filePath = BDFDB.LibraryRequires.path.join(folder, lang + ".dic");
 					
-					const parse = (error, response, body, download) => {
+					const parse = (error, body, download) => {
 						languageToasts[key].close();
-						if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
+						if (error || body.toLowerCase().indexOf("<!doctype html>") > -1) {
 							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {
 								type: "danger",
 								position: "center"
 							});
 						}
-						else if (response && languageToasts[key].lang == lang) {
+						else if (body && languageToasts[key].lang == lang) {
 							if (download) {
 								if (!BDFDB.LibraryRequires.fs.existsSync(folder)) BDFDB.LibraryRequires.fs.mkdirSync(folder);
 								BDFDB.LibraryRequires.fs.writeFile(filePath, body, _ => {});
@@ -364,11 +364,11 @@ module.exports = (_ => {
 						}
 					};
 					
-					if (this.settings.general.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, "", (error, buffer) => {
-						parse(error, buffer, BDFDB.DiscordUtils.bufferToString(buffer), false);
+					if (this.settings.general.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, "utf8", (error, body) => {
+						parse(error, body, false);
 					});
 					else BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
-						parse(error, response, body, this.settings.general.downloadDictionary);
+						parse(error, body, this.settings.general.downloadDictionary);
 					});
 				}
 				else {
