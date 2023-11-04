@@ -149,6 +149,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._showbadgesinchatbadges} {
 						margin-left: 0;
+						margin-right: .25rem;
 					}
 					
 					${BDFDB.dotCN._showbadgesinchatbadgessettings} {
