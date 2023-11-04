@@ -271,7 +271,6 @@ module.exports = (_ => {
 
 			processSettingsView (e) {
 				if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
-				console.log(e.returnvalue);
 				this.injectSettingsToolbar(e.returnvalue.props.children);
 			}
 			
