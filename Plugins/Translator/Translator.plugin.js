@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.0
+ * @version 2.6.1
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1010,7 +1010,7 @@ module.exports = (_ => {
 					method: "post",
 					headers: {
 						"Content-Type": "application/json",
-						"Ocp-Apim-Subscription-Key": authKeys.microsoft && authKeys.microsoft.key || "1ea861033a56s423f860fd6f5ff33e308"
+						"Ocp-Apim-Subscription-Key": authKeys.microsoft && authKeys.microsoft.key || "1ea861033a56423f860fd6f5ff33e308"
 					},
 					body: JSON.stringify([{"Text": data.text}]),
 					form: Object.assign({
