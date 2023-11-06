@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.8
+ * @version 6.2.9
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -67,6 +67,9 @@ module.exports = (_ => {
 				};
 				
 				this.modulePatches = {
+					before: [
+						"QuickSwitcher"
+					],
 					after: [
 						"GuildsBar"
 					]
@@ -78,6 +81,15 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
 					if (e.methodArguments[0].type == "STREAMER_MODE_UPDATE") BDFDB.DiscordUtils.rerenderAll(true);
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.HistoryUtils, "transitionTo", {instead: e => {
+					if (!e.methodArguments || this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return e.callOriginalMethod();
+					if (typeof e.methodArguments[0] == "string" && e.methodArguments[0].startsWith("/channels/")) {
+						let guildId = (e.methodArguments[0].split("/channels/")[1] || e.methodArguments[0].split("/channels/")[1]).split("/")[0];
+						if (guildId && ((hiddenEles.servers || []).includes(guildId) || (hiddenEles.folders || []).includes((BDFDB.GuildUtils.getFolder(guildId) || {}).folderId))) return;
+					}
+					return e.callOriginalMethod();
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.SortedGuildStore, "getGuildFolderById", {after: e => {
@@ -93,7 +105,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.GuildReadStateStore, "getMutableGuildStates", {after: e => {
 					if (!e.returnValue || this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
 					let hiddenGuildIds = hiddenEles && hiddenEles.servers || [];
-					if (hiddenGuildIds.length) for (let id in e.returnValue) if (hiddenGuildIds.includes(id)) e.returnValue[id] = Object.assign({}, e.returnValue[id], {mentionCount: 0, mentionCounts: {}});
+					if (hiddenGuildIds.length) for (let id in e.returnValue) if (hiddenGuildIds.includes(id)) e.returnValue[id] = Object.assign({}, e.returnValue[id], {ncMentionCount: 0, mentionCount: 0, mentionCounts: {}});
 				}});
 
 				BDFDB.DiscordUtils.rerenderAll();
@@ -186,6 +198,16 @@ module.exports = (_ => {
 					}
 					else if (children[i].props.guildNode && hiddenGuildIds.includes(children[i].props.guildNode.id)) children[i] = null;
 				}
+			}
+
+			processQuickSwitcher (e) {
+				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
+				e.instance.props.results = [].concat(e.instance.props.results).filter(n => {
+					if (!n) return true;
+					if (n.type == "GUILD" && n.record.id && ((hiddenEles.servers || []).includes(n.record.id) || (hiddenEles.folders || []).includes((BDFDB.GuildUtils.getFolder(n.record.id) || {}).folderId))) return false;
+					else if (n.record.guild_id && ((hiddenEles.servers || []).includes(n.record.guild_id) || (hiddenEles.folders || []).includes((BDFDB.GuildUtils.getFolder(n.record.guild_id) || {}).folderId))) return false;
+					return true;
+				});
 			}
 
 			showHideModal () {
