@@ -1679,7 +1679,8 @@ button.button__4f306.enabled__470f0:hover svg {
 
 #app-mount .option__32fd1 {									/* autocomplete			option								*/
 	background-color: rgba(var(--transparencycolor), .5);
-}															/* autocomplete			rowselected							*/
+}
+.clickable_f8437d[aria-selected=true] > .base__76a71,		/* autocomplete			rowselected							*/
 .clickable_f8437d[aria-disabled=false] > .base__76a71:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 }
