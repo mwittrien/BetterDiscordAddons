@@ -18,34 +18,34 @@
 	--blurple:						rgb(var(--accentcolor)) !important;
 }
 html:root {
-	--accentcolor:					var(--accentcolor_s, --accentcolor);
-	--accentcolor2:					var(--accentcolor2_s, --accentcolor2);
-	--linkcolor:					var(--linkcolor_s, --linkcolor);
+	--accentcolor_v:				var(--accentcolor_s, --accentcolor);
+	--accentcolor2_v:				var(--accentcolor2_s, --accentcolor2);
+	--linkcolor_v:					var(--linkcolor_s, --linkcolor);
 }
 .theme-light {
-	--logo-primary: rgb(var(--accentcolor));
+	--logo-primary: rgb(var(--accentcolor_v));
 }
 [data-popout-root], html, .theme-light, .theme-dark, .theme-amoled {
-	--text-brand: rgb(var(--accentcolor));
-	--text-link: rgb(var(--linkcolor));
-	--text-link-low-saturation: rgb(var(--linkcolor));
-	--info-help-background: rgba(var(--linkcolor),.1);
-	--info-help-foreground: rgb(var(--linkcolor));
+	--text-brand: rgb(var(--accentcolor_v));
+	--text-link: rgb(var(--linkcolor_v));
+	--text-link-low-saturation: rgb(var(--linkcolor_v));
+	--info-help-background: rgba(var(--linkcolor_v),.1);
+	--info-help-foreground: rgb(var(--linkcolor_v));
 	--info-help-text: #fff;
-	--focus-primary: rgb(var(--linkcolor));
-	--control-brand-foreground: rgb(var(--accentcolor)) !important;
-	--control-brand-foreground-new: rgb(var(--accentcolor)) !important;
-	--button-outline-brand-text: rgb(var(--accentcolor)) !important;
-	--button-outline-brand-text-hover: rgb(var(--accentcolor)) !important;
-	--button-outline-brand-text-active: rgb(var(--accentcolor)) !important;
+	--focus-primary: rgb(var(--linkcolor_v));
+	--control-brand-foreground: rgb(var(--accentcolor_v)) !important;
+	--control-brand-foreground-new: rgb(var(--accentcolor_v)) !important;
+	--button-outline-brand-text: rgb(var(--accentcolor_v)) !important;
+	--button-outline-brand-text-hover: rgb(var(--accentcolor_v)) !important;
+	--button-outline-brand-text-active: rgb(var(--accentcolor_v)) !important;
 	--button-outline-brand-background: transparent !important;
 	--button-outline-brand-background-hover: transparent !important;
-	--button-outline-brand-background-active: rgba(var(--accentcolor),.1) !important;
-	--button-outline-brand-border: rgba(var(--accentcolor),.1) !important;
-	--button-outline-brand-border-hover: rgba(var(--accentcolor),.6) !important;
-	--button-outline-brand-border-active: rgb(var(--accentcolor)) !important;
+	--button-outline-brand-background-active: rgba(var(--accentcolor_v),.1) !important;
+	--button-outline-brand-border: rgba(var(--accentcolor_v),.1) !important;
+	--button-outline-brand-border-hover: rgba(var(--accentcolor_v),.6) !important;
+	--button-outline-brand-border-active: rgb(var(--accentcolor_v)) !important;
 	
-	--mention-background: rgba(var(--accentcolor),.3) !important;
+	--mention-background: rgba(var(--accentcolor_v),.3) !important;
     --mention-foreground: var(--brand-experiment-200) !important;
 	
 	--brand-experiment-100: #fdfdfd !important;
@@ -55,18 +55,18 @@ html:root {
 	--brand-experiment-230: #dadada !important;
 	--brand-experiment-260: #d1d1d1 !important;
 	--brand-experiment-300: #c7c7c7 !important;
-	--brand-experiment-330: rgb(var(--accentcolor)) !important;
-	--brand-experiment-360: rgb(var(--accentcolor)) !important;
-	--brand-experiment-400: rgb(var(--accentcolor)) !important;
-	--brand-experiment-430: rgb(var(--accentcolor)) !important;
-	--brand-experiment-460: rgb(var(--accentcolor)) !important;
-	--brand-experiment: rgb(var(--accentcolor)) !important;
-	--brand-experiment-500: rgb(var(--accentcolor)) !important;
-	--brand-experiment-530: rgb(var(--accentcolor)) !important;
-	--brand-experiment-560: rgb(var(--accentcolor)) !important;
-	--brand-experiment-600: rgb(var(--accentcolor)) !important;
-	--brand-experiment-630: rgb(var(--accentcolor)) !important;
-	--brand-experiment-660: rgb(var(--accentcolor)) !important;
+	--brand-experiment-330: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-360: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-400: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-430: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-460: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-500: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-530: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-560: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-600: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-630: rgb(var(--accentcolor_v)) !important;
+	--brand-experiment-660: rgb(var(--accentcolor_v)) !important;
 	--brand-experiment-700: #323232 !important;
 	--brand-experiment-730: #2b2b2b !important;
 	--brand-experiment-760: #272727 !important;
@@ -74,25 +74,25 @@ html:root {
 	--brand-experiment-830: #1a1a1a !important;
 	--brand-experiment-860: #111111 !important;
 	--brand-experiment-900: #0b0b0b !important;
-	--brand-experiment-05a: rgba(var(--accentcolor),.05) !important;
-	--brand-experiment-10a: rgba(var(--accentcolor),.1) !important;
-	--brand-experiment-15a: rgba(var(--accentcolor),.15) !important;
-	--brand-experiment-20a: rgba(var(--accentcolor),.2) !important;
-	--brand-experiment-25a: rgba(var(--accentcolor),.25) !important;
-	--brand-experiment-30a: rgba(var(--accentcolor),.3) !important;
-	--brand-experiment-35a: rgba(var(--accentcolor),.35) !important;
-	--brand-experiment-40a: rgba(var(--accentcolor),.4) !important;
-	--brand-experiment-45a: rgba(var(--accentcolor),.45) !important;
-	--brand-experiment-50a: rgba(var(--accentcolor),.5) !important;
-	--brand-experiment-55a: rgba(var(--accentcolor),.55) !important;
-	--brand-experiment-60a: rgba(var(--accentcolor),.6) !important;
-	--brand-experiment-65a: rgba(var(--accentcolor),.65) !important;
-	--brand-experiment-70a: rgba(var(--accentcolor),.7) !important;
-	--brand-experiment-75a: rgba(var(--accentcolor),.75) !important;
-	--brand-experiment-80a: rgba(var(--accentcolor),.8) !important;
-	--brand-experiment-85a: rgba(var(--accentcolor),.85) !important;
-	--brand-experiment-90a: rgba(var(--accentcolor),.9) !important;
-	--brand-experiment-95a: rgba(var(--accentcolor),.95) !important;
+	--brand-experiment-05a: rgba(var(--accentcolor_v),.05) !important;
+	--brand-experiment-10a: rgba(var(--accentcolor_v),.1) !important;
+	--brand-experiment-15a: rgba(var(--accentcolor_v),.15) !important;
+	--brand-experiment-20a: rgba(var(--accentcolor_v),.2) !important;
+	--brand-experiment-25a: rgba(var(--accentcolor_v),.25) !important;
+	--brand-experiment-30a: rgba(var(--accentcolor_v),.3) !important;
+	--brand-experiment-35a: rgba(var(--accentcolor_v),.35) !important;
+	--brand-experiment-40a: rgba(var(--accentcolor_v),.4) !important;
+	--brand-experiment-45a: rgba(var(--accentcolor_v),.45) !important;
+	--brand-experiment-50a: rgba(var(--accentcolor_v),.5) !important;
+	--brand-experiment-55a: rgba(var(--accentcolor_v),.55) !important;
+	--brand-experiment-60a: rgba(var(--accentcolor_v),.6) !important;
+	--brand-experiment-65a: rgba(var(--accentcolor_v),.65) !important;
+	--brand-experiment-70a: rgba(var(--accentcolor_v),.7) !important;
+	--brand-experiment-75a: rgba(var(--accentcolor_v),.75) !important;
+	--brand-experiment-80a: rgba(var(--accentcolor_v),.8) !important;
+	--brand-experiment-85a: rgba(var(--accentcolor_v),.85) !important;
+	--brand-experiment-90a: rgba(var(--accentcolor_v),.9) !important;
+	--brand-experiment-95a: rgba(var(--accentcolor_v),.95) !important;
 	
 	--brand-100: #fdfdfd !important;
 	--brand-130: #f2f2f2 !important;
@@ -101,18 +101,18 @@ html:root {
 	--brand-230: #dadada !important;
 	--brand-260: #d1d1d1 !important;
 	--brand-300: #c7c7c7 !important;
-	--brand-330: rgb(var(--accentcolor)) !important;
-	--brand-360: rgb(var(--accentcolor)) !important;
-	--brand-400: rgb(var(--accentcolor)) !important;
-	--brand-430: rgb(var(--accentcolor)) !important;
-	--brand-460: rgb(var(--accentcolor)) !important;
-	--brand: rgb(var(--accentcolor)) !important;
-	--brand-500: rgb(var(--accentcolor)) !important;
-	--brand-530: rgb(var(--accentcolor)) !important;
-	--brand-560: rgb(var(--accentcolor)) !important;
-	--brand-600: rgb(var(--accentcolor)) !important;
-	--brand-630: rgb(var(--accentcolor)) !important;
-	--brand-660: rgb(var(--accentcolor)) !important;
+	--brand-330: rgb(var(--accentcolor_v)) !important;
+	--brand-360: rgb(var(--accentcolor_v)) !important;
+	--brand-400: rgb(var(--accentcolor_v)) !important;
+	--brand-430: rgb(var(--accentcolor_v)) !important;
+	--brand-460: rgb(var(--accentcolor_v)) !important;
+	--brand: rgb(var(--accentcolor_v)) !important;
+	--brand-500: rgb(var(--accentcolor_v)) !important;
+	--brand-530: rgb(var(--accentcolor_v)) !important;
+	--brand-560: rgb(var(--accentcolor_v)) !important;
+	--brand-600: rgb(var(--accentcolor_v)) !important;
+	--brand-630: rgb(var(--accentcolor_v)) !important;
+	--brand-660: rgb(var(--accentcolor_v)) !important;
 	--brand-700: #323232 !important;
 	--brand-730: #2b2b2b !important;
 	--brand-760: #272727 !important;
@@ -120,25 +120,25 @@ html:root {
 	--brand-830: #1a1a1a !important;
 	--brand-860: #111111 !important;
 	--brand-900: #0b0b0b !important;
-	--brand-05a: rgba(var(--accentcolor),.05) !important;
-	--brand-10a: rgba(var(--accentcolor),.1) !important;
-	--brand-15a: rgba(var(--accentcolor),.15) !important;
-	--brand-20a: rgba(var(--accentcolor),.2) !important;
-	--brand-25a: rgba(var(--accentcolor),.25) !important;
-	--brand-30a: rgba(var(--accentcolor),.3) !important;
-	--brand-35a: rgba(var(--accentcolor),.35) !important;
-	--brand-40a: rgba(var(--accentcolor),.4) !important;
-	--brand-45a: rgba(var(--accentcolor),.45) !important;
-	--brand-50a: rgba(var(--accentcolor),.5) !important;
-	--brand-55a: rgba(var(--accentcolor),.55) !important;
-	--brand-60a: rgba(var(--accentcolor),.6) !important;
-	--brand-65a: rgba(var(--accentcolor),.65) !important;
-	--brand-70a: rgba(var(--accentcolor),.7) !important;
-	--brand-75a: rgba(var(--accentcolor),.75) !important;
-	--brand-80a: rgba(var(--accentcolor),.8) !important;
-	--brand-85a: rgba(var(--accentcolor),.85) !important;
-	--brand-90a: rgba(var(--accentcolor),.9) !important;
-	--brand-95a: rgba(var(--accentcolor),.95) !important;
+	--brand-05a: rgba(var(--accentcolor_v),.05) !important;
+	--brand-10a: rgba(var(--accentcolor_v),.1) !important;
+	--brand-15a: rgba(var(--accentcolor_v),.15) !important;
+	--brand-20a: rgba(var(--accentcolor_v),.2) !important;
+	--brand-25a: rgba(var(--accentcolor_v),.25) !important;
+	--brand-30a: rgba(var(--accentcolor_v),.3) !important;
+	--brand-35a: rgba(var(--accentcolor_v),.35) !important;
+	--brand-40a: rgba(var(--accentcolor_v),.4) !important;
+	--brand-45a: rgba(var(--accentcolor_v),.45) !important;
+	--brand-50a: rgba(var(--accentcolor_v),.5) !important;
+	--brand-55a: rgba(var(--accentcolor_v),.55) !important;
+	--brand-60a: rgba(var(--accentcolor_v),.6) !important;
+	--brand-65a: rgba(var(--accentcolor_v),.65) !important;
+	--brand-70a: rgba(var(--accentcolor_v),.7) !important;
+	--brand-75a: rgba(var(--accentcolor_v),.75) !important;
+	--brand-80a: rgba(var(--accentcolor_v),.8) !important;
+	--brand-85a: rgba(var(--accentcolor_v),.85) !important;
+	--brand-90a: rgba(var(--accentcolor_v),.9) !important;
+	--brand-95a: rgba(var(--accentcolor_v),.95) !important;
 	--brand-new-100: #fdfdfd !important;
 	--brand-new-130: #f2f2f2 !important;
 	--brand-new-160: #ebebeb !important;
@@ -146,18 +146,18 @@ html:root {
 	--brand-new-230: #dadada !important;
 	--brand-new-260: #d1d1d1 !important;
 	--brand-new-300: #c7c7c7 !important;
-	--brand-new-330: rgb(var(--accentcolor)) !important;
-	--brand-new-360: rgb(var(--accentcolor)) !important;
-	--brand-new-400: rgb(var(--accentcolor)) !important;
-	--brand-new-430: rgb(var(--accentcolor)) !important;
-	--brand-new-460: rgb(var(--accentcolor)) !important;
-	--brand-new: rgb(var(--accentcolor)) !important;
-	--brand-new-500: rgb(var(--accentcolor)) !important;
-	--brand-new-530: rgb(var(--accentcolor)) !important;
-	--brand-new-560: rgb(var(--accentcolor)) !important;
-	--brand-new-600: rgb(var(--accentcolor)) !important;
-	--brand-new-630: rgb(var(--accentcolor)) !important;
-	--brand-new-660: rgb(var(--accentcolor)) !important;
+	--brand-new-330: rgb(var(--accentcolor_v)) !important;
+	--brand-new-360: rgb(var(--accentcolor_v)) !important;
+	--brand-new-400: rgb(var(--accentcolor_v)) !important;
+	--brand-new-430: rgb(var(--accentcolor_v)) !important;
+	--brand-new-460: rgb(var(--accentcolor_v)) !important;
+	--brand-new: rgb(var(--accentcolor_v)) !important;
+	--brand-new-500: rgb(var(--accentcolor_v)) !important;
+	--brand-new-530: rgb(var(--accentcolor_v)) !important;
+	--brand-new-560: rgb(var(--accentcolor_v)) !important;
+	--brand-new-600: rgb(var(--accentcolor_v)) !important;
+	--brand-new-630: rgb(var(--accentcolor_v)) !important;
+	--brand-new-660: rgb(var(--accentcolor_v)) !important;
 	--brand-new-700: #323232 !important;
 	--brand-new-730: #2b2b2b !important;
 	--brand-new-760: #272727 !important;
@@ -165,52 +165,52 @@ html:root {
 	--brand-new-830: #1a1a1a !important;
 	--brand-new-860: #111111 !important;
 	--brand-new-900: #0b0b0b !important;
-	--brand-new-05a: rgba(var(--accentcolor),.05) !important;
-	--brand-new-10a: rgba(var(--accentcolor),.1) !important;
-	--brand-new-15a: rgba(var(--accentcolor),.15) !important;
-	--brand-new-20a: rgba(var(--accentcolor),.2) !important;
-	--brand-new-25a: rgba(var(--accentcolor),.25) !important;
-	--brand-new-30a: rgba(var(--accentcolor),.3) !important;
-	--brand-new-35a: rgba(var(--accentcolor),.35) !important;
-	--brand-new-40a: rgba(var(--accentcolor),.4) !important;
-	--brand-new-45a: rgba(var(--accentcolor),.45) !important;
-	--brand-new-50a: rgba(var(--accentcolor),.5) !important;
-	--brand-new-55a: rgba(var(--accentcolor),.55) !important;
-	--brand-new-60a: rgba(var(--accentcolor),.6) !important;
-	--brand-new-65a: rgba(var(--accentcolor),.65) !important;
-	--brand-new-70a: rgba(var(--accentcolor),.7) !important;
-	--brand-new-75a: rgba(var(--accentcolor),.75) !important;
-	--brand-new-80a: rgba(var(--accentcolor),.8) !important;
-	--brand-new-85a: rgba(var(--accentcolor),.85) !important;
-	--brand-new-90a: rgba(var(--accentcolor),.9) !important;
-	--brand-new-95a: rgba(var(--accentcolor),.95) !important;
+	--brand-new-05a: rgba(var(--accentcolor_v),.05) !important;
+	--brand-new-10a: rgba(var(--accentcolor_v),.1) !important;
+	--brand-new-15a: rgba(var(--accentcolor_v),.15) !important;
+	--brand-new-20a: rgba(var(--accentcolor_v),.2) !important;
+	--brand-new-25a: rgba(var(--accentcolor_v),.25) !important;
+	--brand-new-30a: rgba(var(--accentcolor_v),.3) !important;
+	--brand-new-35a: rgba(var(--accentcolor_v),.35) !important;
+	--brand-new-40a: rgba(var(--accentcolor_v),.4) !important;
+	--brand-new-45a: rgba(var(--accentcolor_v),.45) !important;
+	--brand-new-50a: rgba(var(--accentcolor_v),.5) !important;
+	--brand-new-55a: rgba(var(--accentcolor_v),.55) !important;
+	--brand-new-60a: rgba(var(--accentcolor_v),.6) !important;
+	--brand-new-65a: rgba(var(--accentcolor_v),.65) !important;
+	--brand-new-70a: rgba(var(--accentcolor_v),.7) !important;
+	--brand-new-75a: rgba(var(--accentcolor_v),.75) !important;
+	--brand-new-80a: rgba(var(--accentcolor_v),.8) !important;
+	--brand-new-85a: rgba(var(--accentcolor_v),.85) !important;
+	--brand-new-90a: rgba(var(--accentcolor_v),.9) !important;
+	--brand-new-95a: rgba(var(--accentcolor_v),.95) !important;
 	
-	--premium-perk-blue: rgb(var(--accentcolor)) !important;
-	--premium-perk-pink: rgb(var(--accentcolor2)) !important;
-	--premium-tier-0-purple: rgb(var(--accentcolor2)) !important;
-	--premium-tier-0-purple-for-gradients: rgb(var(--accentcolor2)) !important;
-	--premium-tier-1-blue: rgb(var(--accentcolor)) !important;
-	--premium-tier-1-blue-for-gradients: rgb(var(--accentcolor)) !important;
-	--premium-tier-1-dark-blue: rgb(var(--accentcolor)) !important;
-	--premium-tier-1-dark-blue-for-gradients: rgb(var(--accentcolor)) !important;
-	--premium-tier-1-purple: rgb(var(--accentcolor2)) !important;
-	--premium-tier-1-purple-for-gradients: rgb(var(--accentcolor2)) !important;
-	--premium-tier-2-pink: rgb(var(--accentcolor)) !important;
-	--premium-tier-2-pink-for-gradients: rgb(var(--accentcolor)) !important;
-	--premium-tier-2-pink-for-gradients-2: rgb(var(--accentcolor)) !important;
-	--premium-tier-2-purple: rgb(var(--accentcolor2)) !important;
-	--premium-tier-2-purple-for-gradients: rgb(var(--accentcolor2)) !important;
-	--premium-tier-2-purple-for-gradients-2: rgb(var(--accentcolor2)) !important;
-	--guild-boosting-pink: rgb(var(--accentcolor2)) !important;
-	--guild-boosting-pink-rgb: var(--accentcolor2) !important;
-	--guild-boosting-purple: rgb(var(--accentcolor2)) !important;
-	--guild-boosting-purple-rgb: var(--accentcolor2) !important;
-	--guild-boosting-blue: rgb(var(--accentcolor2)) !important;
-	--guild-boosting-blue-rgb: var(--accentcolor2) !important;
-	--guild-boosting-blue-for-gradients: rgb(var(--accentcolor2)) !important;
-	--guild-boosting-blue-for-gradients-rgb: var(--accentcolor2) !important;
-	--guild-boosting-purple-for-gradients: rgb(var(--accentcolor2)) !important;
-	--guild-boosting-purple-for-gradients-rgb: var(--accentcolor2) !important;
+	--premium-perk-blue: rgb(var(--accentcolor_v)) !important;
+	--premium-perk-pink: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-0-purple: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-0-purple-for-gradients: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-1-blue: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-1-blue-for-gradients: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-1-dark-blue: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-1-dark-blue-for-gradients: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-1-purple: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-1-purple-for-gradients: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-2-pink: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-2-pink-for-gradients: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-2-pink-for-gradients-2: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-2-purple: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-2-purple-for-gradients: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-2-purple-for-gradients-2: rgb(var(--accentcolor2_v)) !important;
+	--guild-boosting-pink: rgb(var(--accentcolor2_v)) !important;
+	--guild-boosting-pink-rgb: var(--accentcolor2_v) !important;
+	--guild-boosting-purple: rgb(var(--accentcolor2_v)) !important;
+	--guild-boosting-purple-rgb: var(--accentcolor2_v) !important;
+	--guild-boosting-blue: rgb(var(--accentcolor2_v)) !important;
+	--guild-boosting-blue-rgb: var(--accentcolor2_v) !important;
+	--guild-boosting-blue-for-gradients: rgb(var(--accentcolor2_v)) !important;
+	--guild-boosting-blue-for-gradients-rgb: var(--accentcolor2_v) !important;
+	--guild-boosting-purple-for-gradients: rgb(var(--accentcolor2_v)) !important;
+	--guild-boosting-purple-for-gradients-rgb: var(--accentcolor2_v) !important;
 	
 	--search-popout-date-picker-hint-value-background: var(--brand-experiment-90a);
 	--search-popout-date-picker-hint-value-background-hover: var(--brand-experiment-430);
@@ -279,60 +279,60 @@ html:root {
 
 .wrapper_d281dd.selected_f5ec8e .childWrapper__01b9c,		/* home/acronym												*/
 .wrapper_d281dd:hover .childWrapper__01b9c {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .wrapper_d281dd rect[fill] {
 	fill: var(--background-primary);
 }
 .wrapper_d281dd rect[fill="#6370f4"] {
-	fill: rgb(var(--accentcolor));
+	fill: rgb(var(--accentcolor_v));
 }
 
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 1"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 1"] {
-	background-color: rgba(var(--accentcolor), 1) !important;
+	background-color: rgba(var(--accentcolor_v), 1) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.9"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.9"] {
-	background-color: rgba(var(--accentcolor), 0.9) !important;
+	background-color: rgba(var(--accentcolor_v), 0.9) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.8"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.8"] {
-	background-color: rgba(var(--accentcolor), 0.8) !important;
+	background-color: rgba(var(--accentcolor_v), 0.8) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.7"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.7"] {
-	background-color: rgba(var(--accentcolor), 0.7) !important;
+	background-color: rgba(var(--accentcolor_v), 0.7) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.6"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.6"] {
-	background-color: rgba(var(--accentcolor), 0.6) !important;
+	background-color: rgba(var(--accentcolor_v), 0.6) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.5"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.5"] {
-	background-color: rgba(var(--accentcolor), 0.5) !important;
+	background-color: rgba(var(--accentcolor_v), 0.5) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.4"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.4"] {
-	background-color: rgba(var(--accentcolor), 0.4) !important;
+	background-color: rgba(var(--accentcolor_v), 0.4) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.3"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.3"] {
-	background-color: rgba(var(--accentcolor), 0.3) !important;
+	background-color: rgba(var(--accentcolor_v), 0.3) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.2"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.2"] {
-	background-color: rgba(var(--accentcolor), 0.2) !important;
+	background-color: rgba(var(--accentcolor_v), 0.2) !important;
 }
 .folderIconWrapper__72239[style*="background-color: rgba(88, 101, 242, 0.1"],
 .folderIconWrapper__72239[style*="background-color: rgba(87, 100, 242, 0.1"] {
-	background-color: rgba(var(--accentcolor), 0.1) !important;
+	background-color: rgba(var(--accentcolor_v), 0.1) !important;
 }
 .folderIconWrapper__72239 svg[style^="color: rgb(88, 101, 242)"],
 .folderIconWrapper__72239 svg[style*=" color: rgb(88, 101, 242)"],
 .folderIconWrapper__72239 svg[style^="color: rgb(87, 100, 242)"],
 .folderIconWrapper__72239 svg[style*=" color: rgb(87, 100, 242)"] {
-	color: rgb(var(--accentcolor)) !important;
+	color: rgb(var(--accentcolor_v)) !important;
 }
 
 
@@ -343,11 +343,11 @@ html:root {
 /* ----		3.1.	MESSAGES						---- */
 
 .newMessagesBar__8b6d7 {									/* new messagesbar											*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .hasMore_b03f46 {											/* hasmore messagesbar										*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 .backgroundFlash_e5b9ad[style*="(148, 156, 247"] {
@@ -355,37 +355,37 @@ html:root {
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgb(148, 156, 247)"],
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 1"] {
-	--message-background-flash: rgba(var(--accentcolor), 1);
+	--message-background-flash: rgba(var(--accentcolor_v), 1);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.9"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.9);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.9);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.8"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.8);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.8);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.7"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.7);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.7);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.6"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.6);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.6);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.5"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.5);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.5);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.4"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.4);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.4);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.3"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.3);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.3);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.2"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.2);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.2);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.1"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.1);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.1);
 }
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0)"] {
-	--message-background-flash: rgba(var(--accentcolor), 0.05);
+	--message-background-flash: rgba(var(--accentcolor_v), 0.05);
 }
 
 .embedFull__8dc21[style*="border-color: hsl(216, "],
@@ -396,16 +396,16 @@ html:root {
 .embedFull__8dc21[style*="border-color: hsla(227, "],
 .embedFull__8dc21[style*="border-color: hsla(235, "],
 .embedFull__8dc21[style*="border-color: hsla(237, "] {
-	border-color: rgb(var(--accentcolor)) !important;
+	border-color: rgb(var(--accentcolor_v)) !important;
 }
 
 .ephemeral_c26b64,											/* localbot				container							*/
 .replying_d7b6ad {											/* replying				container							*/
-	background-color: rgba(var(--accentcolor), 0.05);
+	background-color: rgba(var(--accentcolor_v), 0.05);
 }
 .ephemeral_c26b64::before,									/* localbot				before								*/
 .replying_d7b6ad::before {									/* replying				before								*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .message__80c10.ephemeral_c26b64.selected_fd9051,
 .mouse-mode.full-motion .ephemeral_c26b64:hover,
@@ -413,18 +413,18 @@ html:root {
 .message__80c10.replying_d7b6ad.selected_fd9051,
 .mouse-mode.full-motion .replying_d7b6ad:hover,
 .mouse-mode .replying_d7b6ad:hover {
-	background-color: rgba(var(--accentcolor), 0.1);
+	background-color: rgba(var(--accentcolor_v), 0.1);
 }
 .ephemeralMessage__6a8ba a {								/* localbot				operations							*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 .operations__07224 > a {									/* message				operations							*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 .blockedSystemMessage_e58a4c:hover .blockedAction__27053 {	/* blocked message		operations							*/
-    color: rgb(var(--accentcolor));
+    color: rgb(var(--accentcolor_v));
 }
 
 .footerIcon__61cc7 path[fill*="hsl(197, "] {				/* automod				operations							*/
@@ -432,47 +432,47 @@ html:root {
 }
 
 .icon_bc432e {												/* systemmessage		guild sub easter egg icon			*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 
 .message__1a4b9 strong,										/* mention				in header							*/
 #app-mount .wrapper__2d9b1 {								/* mention													*/
-	background-color: rgba(var(--accentcolor),.3);
+	background-color: rgba(var(--accentcolor_v),.3);
 	color: var(--brand-experiment-200);
 }
 .message__1a4b9 strong:hover,
 #app-mount .interactive:hover {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 	color: #fff;
 }
 
 #app-mount .reactionMe__98f57 .reactionCount_b49901,		/* reaction				count me							*/
 #app-mount .reactionMe__98f57:hover .reactionCount_b49901 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 #app-mount .reaction_fef95b.reactionMe__98f57 {				/* reaction				wrapper me							*/
-	background-color: rgba(var(--accentcolor), .3);
-	border-color: rgb(var(--accentcolor));
+	background-color: rgba(var(--accentcolor_v), .3);
+	border-color: rgb(var(--accentcolor_v));
 }
 #app-mount .reaction_fef95b:hover,							/* reaction				add react							*/
 .addReactButton__59750:hover,								/* reaction				add new react						*/
 .buttonInner__2771e:hover {
-	border-color: rgba(var(--accentcolor), .5);
+	border-color: rgba(var(--accentcolor_v), .5);
 }
 															/* attachment			upload bar							*/
 .progressBar__47525[style*="background-color: hsl(227, "],
 .progressBar__47525[style*="background-color: hsl(235, "] {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
 /* ----		3.2.	TEXTAREA						---- */
 
 .channelTextAreaInnerFocused__8561c {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .selectedPill_f3e999 {
-	border-color: rgb(var(--accentcolor)) !important;
+	border-color: rgb(var(--accentcolor_v)) !important;
 }
 															/* textarea				follow channel icon					*/
 .image__04423[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] {
@@ -493,7 +493,7 @@ html:root {
 	width: 47px;
 	height: 60px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_accent.svg) center/contain no-repeat;
 }
 															/* textarea				verify email icon					*/
@@ -515,7 +515,7 @@ html:root {
 	width: 65px;
 	height: 60px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
 }
 															/* textarea				verify phone icon					*/
@@ -537,7 +537,7 @@ html:root {
 	width: 65px;
 	height: 60px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
 }
 
@@ -546,11 +546,11 @@ html:root {
 .animation__19784 path[stroke="rgb(123, 162, 255)"],
 .animation__918eb path[stroke="rgb(123,162,255)"],
 .animation__918eb path[stroke="rgb(123, 162, 255)"] {
-	stroke: rgb(var(--accentcolor)) !important;
+	stroke: rgb(var(--accentcolor_v)) !important;
 }
 
 .mentionButton_a470c4 {										/* textarea				reply mention						*/
-	--text-link: rgb(var(--accentcolor));
+	--text-link: rgb(var(--accentcolor_v));
 }
 
 .premium__296ca path[fill] {
@@ -561,21 +561,21 @@ html:root {
 .comboNameplate_b63756[style^="color: hsl(235, "],
 .comboNameplate_b63756[style*=" color: hsl(227, "],
 .comboNameplate_b63756[style*=" color: hsl(235, "] {
-	color: rgb(var(--accentcolor)) !important;
+	color: rgb(var(--accentcolor_v)) !important;
 }
 
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .active_cff9ad {									/* autocomplete			option active						*/
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
 #app-mount .searchSuggestion__1a6a7:hover {					/* gifpicker			suggestions							*/
-	border-color: rgb(var(--accentcolor));
-	background-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
+	background-color: rgb(var(--accentcolor_v));
 }
 .result_e1fc74[style*="background-color"] {					/* gifpicker			result loading						*/
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 .result_e1fc74[style*="background-color: hsl(228,"] {
 	background: var(--accentcolor-hover) !important;
@@ -585,47 +585,47 @@ html:root {
 }
 .theme-light .focused__036ed::after,						/* gifpicker			result hover						*/
 .theme-light .result_e1fc74:hover::after {
-	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px #dcddde;
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor_v)), inset 0 0 0 3px #dcddde;
 }
 .theme-dark .focused__036ed::after,							/* gifpicker			result hover						*/
 .theme-dark .result_e1fc74:hover::after {
-	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px #2f3136;
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor_v)), inset 0 0 0 3px #2f3136;
 }
 #app-mount .categoryFadeBlurple_e73c11 {					/* gifpicker			categoryfade						*/
-	background-color: rgba(var(--accentcolor), 0.8);
+	background-color: rgba(var(--accentcolor_v), 0.8);
 }
 #app-mount .categoryFadeBlurple_e73c11:hover {
-	background-color: rgba(var(--accentcolor), 0.95);
+	background-color: rgba(var(--accentcolor_v), 0.95);
 }
 .introductionAction__81937 {								/* gifpicker			introductionaction tooltip			*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .iconColorBlue__08dbe {										/* stickerpicker		icon blue							*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .iconColorLightBlue__74e09 {								/* stickerpicker		icon lightblue						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(150%);
 }
 .iconColorDarkBlue__0a65b {									/* stickerpicker		icon darkblue						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(75%);
 }
 .iconColorPink__1b50a {										/* stickerpicker		icon pink							*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 
 /* ----		3.4.	MEMBERLIST						---- */
 
 .premiumIcon_ab5d78 {
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 
 /* ----		3.5.	SEARCHPAGE						---- */
 
 #app-mount .activeButton__7a550,
 #app-mount .activeButton__7a550:hover {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .noResultsImage__08760.alt__77d89 {
 	display: flex;
@@ -636,7 +636,7 @@ html:root {
 	width: 160px;
 	height: 160px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/searchpage_noresults_accent.svg) center/cover no-repeat;
 }
 
@@ -651,16 +651,16 @@ html:root {
 .background__3b30f[style*="background-color: rgb(92, 100, 244)"],
 .background__3b30f[style*="background-color: hsl(235, "],
 .background__3b30f[style*="background-color: hsl(227, "] {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 .border_d9a17b.voiceChannelEffect__6a6f7 {
-	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px rgb(var(--accentcolor));
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor_v)), inset 0 0 0 3px rgb(var(--accentcolor_v));
 }
 
 /* ~~~~		4.		PEOPLES							~~~~ */
 
 .container__9305d {											/* stagelive			cover								*/
-	background: rgb(255, 255, 255) linear-gradient(rgba(var(--accentcolor),.8) 75%, rgb(var(--accentcolor)) 75%, rgb(var(--accentcolor)));
+	background: rgb(255, 255, 255) linear-gradient(rgba(var(--accentcolor_v),.8) 75%, rgb(var(--accentcolor_v)) 75%, rgb(var(--accentcolor_v)));
 }
 .container__9305d .illustration__9d719 {
 	opacity: .8;
@@ -671,99 +671,99 @@ html:root {
 /* ~~~~		5.		STORE/NITRO						~~~~ */
 
 #app-mount .premiumIndicator__41e19 {						/* premium				where?								*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .activeTransferGuildCardBorder__2eb21 {
-	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
 .theme-light .animationContainer__92094 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .theme-light .shine__0dd36 {
-	color: rgba(var(--accentcolor), 0.2);
+	color: rgba(var(--accentcolor_v), 0.2);
 }
 
 .grandfatheredMessage_b731ea {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
 .iconBackgroundTier1__715d9 {								/* tierlist				tier1 bg							*/
-	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 .iconBackgroundTier2_c37b9c {								/* tierlist				tier2 bg							*/
-	background: #ffcd4b linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: #ffcd4b linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
 #app-mount .tag_f71185 {									/* tag														*/
-	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 #app-mount .tag_f71185::before {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://discord.com/assets/bed21bc77023cebd07a7.svg) top/cover no-repeat;
 }
 
 #app-mount .alternativeSkuSelected__35d70 {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .overlappingBorder__5f3f7 {									/* store				preview image						*/
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .headerFancy__4a1d2 {							/* store				header fancy						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 #app-mount .premiumHeaderPrice_a3d92b {						/* store				price								*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .premiumCircle_bce940 {										/* store				premiumcircle						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 #app-mount .staffIcon__75ed2 {								/* store				stafficon							*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .nitroIcon__90a15 {								/* store				nitroicon							*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 .confirmPremiumIcon_ac48e0,									/* store				confirmpremiumicon					*/
 .gameIcon__90c32[style*="/assets/f6cbcdc9366fb8d31e03bdc6c9c50246.svg"] {
 	background-color: rgb(255, 255, 255) !important;
-	background-image: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/nitrobadge_details.svg), linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5)) !important;
+	background-image: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/nitrobadge_details.svg), linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5)) !important;
 }
 .pageWrapper__3bbe1 {										/* store				pagewrapper							*/
-	background: #fff linear-gradient(114deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.6));
+	background: #fff linear-gradient(114deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.6));
 }
 
 .tier0__2e127 {
-	background: rgb(100, 100, 100) linear-gradient(195deg, rgba(var(--accentcolor), 0.9), rgba(var(--accentcolor), 0.5));
+	background: rgb(100, 100, 100) linear-gradient(195deg, rgba(var(--accentcolor_v), 0.9), rgba(var(--accentcolor_v), 0.5));
 }
 .tier0__2e127.withTier0Rim_fb8112:before {
-	background: rgb(100, 100, 100) linear-gradient(195deg, rgba(var(--accentcolor), 0.9), rgba(var(--accentcolor), 0.5));
+	background: rgb(100, 100, 100) linear-gradient(195deg, rgba(var(--accentcolor_v), 0.9), rgba(var(--accentcolor_v), 0.5));
 }
 .tier2__1364f {
-	background: rgb(255, 255, 255) linear-gradient(195deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(195deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
 .tier2__1364f.withTier2Rim_c22b42:before {
-	background: rgb(255, 255, 255) linear-gradient(195deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(195deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
 #app-mount .tier2__1364f .lookInverted_ee4261.colorBrand_b2253e {
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .mostPopularPill__8c0b3,
 .mostPopularPill__0aaba {
-	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
 .tier2ColumnOuter__0b5e2 {
-	border-color: rgb(var(--accentcolor2));
+	border-color: rgb(var(--accentcolor2_v));
 }
 
 
 /* ~~~~		6.		LIBRARY							~~~~ */
 
 .foreground__26bd6 {										/* installationpath		fill								*/
-	stroke: rgb(var(--accentcolor));
+	stroke: rgb(var(--accentcolor_v));
 }
 
 
@@ -773,73 +773,73 @@ html:root {
 .searchBox_a63854:focus-within,
 .searchPage__9ceaf .search_e47903 .searchBox__88a98:focus,
 .searchPage__9ceaf .search_e47903 .searchBox__88a98:focus-within {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .search_e47903 .searchBox__88a98:focus,
 .search_e47903 .searchBox__88a98:focus-within {
-	box-shadow: 0 0 0 1px rgb(var(--accentcolor)), 0 0 0 2px rgba(var(--accentcolor), 0.6), 0 0 0 3px rgba(var(--accentcolor), 0.3);
+	box-shadow: 0 0 0 1px rgb(var(--accentcolor_v)), 0 0 0 2px rgba(var(--accentcolor_v), 0.6), 0 0 0 3px rgba(var(--accentcolor_v), 0.3);
 }
 
 #app-mount .activeButton__7a550,							/* pagination			button								*/
 #app-mount .activeButton__7a550:hover {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 															/* categorylist			selected item						*/
 .categoryItem_b1be5c.selectedCategoryItem__0bf4c .itemInner__9e755 {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .categoryPill_c95cea.selected__24846 {						/* categorylist			search categorypill					*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 
 /* ~~~~		8.		USERSETTINGS					~~~~ */
 
 .item__48dda .premiumLabel_f2cd55 svg[fill] {
-	fill: rgb(var(--accentcolor2));
+	fill: rgb(var(--accentcolor2_v));
 }
 
 .dot__99c90 {												/* settingsitems		dot									*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .cardBrand_c25152 {											/* settingsitems		card								*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .cardBrand_c25152 {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 
 .background_b61fcc .lookLink__93965.colorLink_b651e5 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .background_b61fcc .lookLink__93965.colorLink_b651e5:hover .contents_fb6220 {
-	--button--underline-color: rgb(var(--accentcolor));
+	--button--underline-color: rgb(var(--accentcolor_v));
 }
 .contentCircle_bc797d {										/* accountsettings		avatar upload						*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .questionMark__8d22a {							/* accountsettings		questionmark						*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .questionMark__8d22a:hover {
 	background: var(--accentcolor-hover);
 }
 
 .premiumFeatureBorder__9bbb3 {								/* profilesettings		premium border						*/
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .tier1ProfilePerk__81c23 {						/* nitropage			tier 1 profile icon					*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(75%);
 }
 #app-mount .tier1BoostPerk__07872 {							/* nitropage			tier 1 boost icon					*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 #app-mount .tier1UploadPerk__01029 {						/* nitropage			tier 1 upload icon					*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 		
 .marketingLogoImage__4820c {								/* boostsettings		boost header						*/
@@ -863,45 +863,45 @@ html:root {
 }
 .fullArt_c24fa5::before,
 .marketingLogoImage__4820c::before {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
 .fullArt_c24fa5::after,
 .marketingLogoImage__4820c::after {
-	background: rgb(var(--accentcolor2));
+	background: rgb(var(--accentcolor2_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent2.svg) center/cover no-repeat;
 }
 .tierUnlocked__01133 {										/* boostsettings		tierunlocked						*/
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
 .tierIcon__2ac8f:not(.tierIconLocked_c2f292) {				/* boostsettings		tiericon							*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .iconWrapper_e69235 {										/* boostsettings		uploadicon							*/
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
 #app-mount .tierAccomplished__77998,
 #app-mount .tierCurrent_fc87b4 {
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
 #app-mount .tierCloseHint_ec80c8 {							/* boostsettings		tierclosehint						*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .tierCloseHint_ec80c8::before {
-	border-right-color: rgb(var(--accentcolor));
+	border-right-color: rgb(var(--accentcolor_v));
 }
 #app-mount .tierHeaderUnlockedBackground__57afa {			/* boostsettings		tierheaderunlockedbg				*/
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 #app-mount .foreground__44f58 {								/* boostsettings		icon foreground						*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .emojiIcon__5cf57 {											/* boostsettings		perkicon emoji						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(75%);
 }
 .uploadSizeIcon__0af61 {									/* boostsettings		perkicon upload						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(150%);
 }
 .profileBadgeIcon__1ef75 {									/* boostsettings		perkicon badge						*/
@@ -916,31 +916,31 @@ html:root {
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor2));
+	background: rgb(var(--accentcolor2_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/usersettings_boostbadge_accent2.svg) center/contain no-repeat;
 }
 .guildBoostingIcon__86479 {									/* boostsettings		guild boost icon					*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .gemWithLabel_a554ca {										/* boostsettings		progress label						*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .gemIndicatorProgressCircle__671cc {						/* boostsettings		progress circle						*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .guildSubscriberCountIcon__6d3f4 {							/* boostsettings		sub count							*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .guildSubscriptionSlotIcon__17a0a {							/* boostsettings		slot icon							*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 
 .backgroundOptionRing__1f209 {								/* voicesettings		selection ring						*/
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .icon__596c8[src="/assets/ea67b1321e3d4154e476.png"] {		/* voicesettings		krisp								*/
 	-webkit-mask: url(https://discord.com/assets/ea67b1321e3d4154e476.png) center/contain no-repeat;
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 	object-position: -999999px -999999px;
 }
 
@@ -955,7 +955,7 @@ html:root {
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/empty.svg) center/cover no-repeat;
 }
 .perkNewsletter_c626ee {
@@ -978,14 +978,14 @@ html:root {
 }
 
 .wrapper__4beb8 {											/* overlaysettings		positionsettings wrapper			*/
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .option_a0c054:hover {										/* overlaysettings		positionoption						*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .selected_ea51d6.option_a0c054 {
-	background-color: rgb(var(--accentcolor));
-	border-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
+	border-color: rgb(var(--accentcolor_v));
 }
 															/* streamermodesettings	headerimage							*/
 .noticeIcon__3ffa8[src="/assets/8bc13200408a99819215.svg"] {
@@ -1006,7 +1006,7 @@ html:root {
 	pointer-events: none;
 }
 .noticeIcon__3ffa8[src="/assets/8bc13200408a99819215.svg"] + *::before {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_accent.svg) center/contain no-repeat;
 }
 .noticeIcon__3ffa8[src="/assets/8bc13200408a99819215.svg"] + *::after {
@@ -1017,16 +1017,16 @@ html:root {
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
 
 .avatarUploaderInnerSquare__72e9d {							/* mainsettings			uploadbanner 						*/
-	background-image: linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor2)));
+	background-image: linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor2_v)));
 }
 .unlockedIcon__9ab97 {										/* mainsettings			uploadbanner enabled				*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .banner__98955 {											/* rolesettings			intro banner 						*/
 	border-radius: 5px;
 }
 .bannerClubs__9368e {
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_details.svg) center/cover no-repeat;
 }
 .bannerClubs__9368e .avatarName__6d8c7 {
 	display: flex;
@@ -1037,27 +1037,27 @@ html:root {
 	font-size: 16px;
 }
 .bannerGaming__893b2 {
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_details.svg) center/cover no-repeat;
 }
 .bannerHobbies__4fe8d {
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
 }
 
 .infoItem__190eb[src="/assets/14ec46803da2a8bdcb2c.svg"] {	/* widgetsettings		widget placeholder image 			*/
 	object-position: -999999px -999999px;
 	border-radius: 5px;
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor_v)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));
 	flex: unset !important;
 }
 
 @-webkit-keyframes pulseBorder_ce34fb { 					/* intergrationsettings	new webhook							*/
 	0% {border-color: transparent;}
-	50% {border-color: rgb(var(--accentcolor));}
+	50% {border-color: rgb(var(--accentcolor_v));}
 	to {border-color: transparent;}
 }
 @keyframes pulseBorder_ce34fb { 
 	0% {border-color: transparent;}
-	50% {border-color: rgb(var(--accentcolor));}
+	50% {border-color: rgb(var(--accentcolor_v));}
 	to {border-color: transparent;}
 }
 
@@ -1073,12 +1073,12 @@ html:root {
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_insight_accent.svg) center/cover no-repeat;
 }
 
 .defaultIcon_cf867f {										/* discoverysettings	default guildicon					*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .headerIcon_eec0c0[src="/assets/860c39d4003b98a5ee9d.svg"] {/* discoverysettings	requirements icon					*/
@@ -1106,12 +1106,12 @@ html:root {
 	width: 40px;
 	height: 40px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_requirements_accent.svg) center/cover no-repeat;
 }
 
 .featureIcon__48a2c [fill*="hsl(235, "] {					/* communitysettings	intro		featureicon				*/
-	fill: rgb(var(--accentcolor));
+	fill: rgb(var(--accentcolor_v));
 }
 
 .educationUpsellRoot_a01074 .wumpus__659e8,					/* communitysettings	rules		wumpus					*/
@@ -1126,7 +1126,7 @@ html:root {
 	width: 82px;
 	height: 72px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_wumpus_accent.svg) center/cover no-repeat;
 }
 
@@ -1137,76 +1137,76 @@ html:root {
 
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/5e74e9b61934fc1f67c65515d1f7e60d.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/staffbadge_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/3f9748e53446a137a052f3454e2de41e.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/partnerbadge_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/6df5892e0f35b051f8b61eace34f4967.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/developerbadge_colors.svg) center/cover no-repeat;
 }
 
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/51040c70d4f20a921ad6674ff86fc95c.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl1_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl1_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl1_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/0e4080d1d333bc7ad29ef6528b6f2fb7.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl2_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl2_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl2_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/72bed924410c304dbe3d00a6e593ff59.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl3_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl3_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl3_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/df199d2050d3ed4ebf84d64ae83989f8.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl4_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl4_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl4_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/996b3e870e8a22ce519b3a50e6bdd52f.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl5_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl5_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl5_colors.svg) center/cover no-repeat;
 }
 .iconImage_e0a480[src="/assets/aeb0884e649be1418151.svg"],
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/991c9f39ee33d7537d9f408c3e53141e.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl6_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl6_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl6_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/cb3ae83c15e970e8f3d410bc62cb8b99.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl7_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl7_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl7_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/7142225d31238f6387d9f09efaa02759.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl8_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl8_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl8_colors.svg) center/cover no-repeat;
 }
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/ec92202290b48d0879b7413d2dde3bab.png"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl9_details.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor2_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl9_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl9_colors.svg) center/cover no-repeat;
 }
 
 .guildAvatarWithoutIcon__606ec {							/* modal				shared servers no icon				*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.2.	GUILDADD/CREATION				---- */
 															/* create guild			create own icon						*/
 .icon__6a8ca[src="/assets/4d526e1c61d719fd39a0.svg"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildcreate_createown_accent.svg) center/contain no-repeat;
 }
 .icon__6a8ca[src="/assets/4d526e1c61d719fd39a0.svg"] + * {
@@ -1227,27 +1227,27 @@ html:root {
 
 .uploadIcon__6efce [fill="#5865f2" i],
 .uploadIcon__6efce [fill="#7289da" i] {						/* create guild			upload icon							*/
-	fill: rgb(var(--accentcolor));
+	fill: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.3.	REGIONSELECTMODAL				---- */
 								
 .regionSelectFlag_a0e812 {									/* modal				regionselect flag					*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .check_a4721d {
 	-webkit-mask: url(https://discord.com/assets/336a8bdedb983df7fdbf.svg);
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.4.	UPLOADMODAL						---- */
 															/* modal				background							*/
 .uploadModalIn_c0ca4b .uploadDropModal__73a36 .bgScale_f3a2be {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .uploadModalIn_c0ca4b .uploadDropModal__73a36 .inner__7afe9 .icon__25b13.two_df01fc {
-	filter: drop-shadow(0 0 48px rgba(var(--accentcolor),.5));
+	filter: drop-shadow(0 0 48px rgba(var(--accentcolor_v),.5));
 }
 .uploadModalIn_c0ca4b .uploadDropModal__73a36.error_d2567f .inner__7afe9 .icon__25b13.two_df01fc {
 	filter: drop-shadow(0 0 48px rgba(216,60,63,.5));
@@ -1284,7 +1284,7 @@ html:root {
 	content: "";
 	position: absolute;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 }
 .audioMetadata_e546a8::before {
 	flex: 0 0 auto !important;
@@ -1435,7 +1435,7 @@ html:root {
 a.fileNameLink__995d3,
 a.metadataName__2ae3a,
 a.metadataDownload__6b32d {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
@@ -1459,7 +1459,7 @@ a.metadataDownload__6b32d {
 	top: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/keybinds_arrows_accent.svg) center/contain no-repeat;
 }
 .ddrArrows__352f9 .arrow__42cbf.down__005e9 {
@@ -1476,10 +1476,10 @@ a.metadataDownload__6b32d {
 /* ----		10.6.	LOGINSCREEN						---- */
 
 .authBox__7196a .lookLink__93965.colorLink_b651e5 {			/* authobox				links								*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .authBox__7196a .lookLink__93965.colorLink_b651e5:hover .contents_fb6220 {
-	--button--underline-color: rgb(var(--accentcolor));
+	--button--underline-color: rgb(var(--accentcolor_v));
 }
 
 .modal__1237a img[src="/assets/863db41a48a43395cd55.svg"] {
@@ -1498,30 +1498,30 @@ a.metadataDownload__6b32d {
 	width: 88px;
 	height: 85px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_check_accent.svg) center/cover no-repeat;
 }
 
 .startOverButton_b3ba6f {									/* authobox				startover								*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.7.	DOWNLOADAPPMODAL				---- */
 
 .downloadApps__30ed7 .footer__49ae9 a {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .downloadApps__30ed7 .platforms__86929 .platform__97f9e.active__8f9aa {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .downloadApps__30ed7 .platforms__86929 .platform__97f9e.active__8f9aa p {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .downloadApps__30ed7 .platforms__86929 .platform__97f9e.active__8f9aa .downloadButton__87489 {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .downloadApps__30ed7 .platforms__86929 .icon__1309b.active__8f9aa {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask-size: cover;
 }
 .downloadApps__30ed7 .platforms__86929 .icon__1309b.active__8f9aa.apple__3e4d0 {
@@ -1541,28 +1541,28 @@ a.metadataDownload__6b32d {
 }
 
 .browserItem__0ec4b:hover {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .browserItem__0ec4b:hover .btn__12c9a {
-	background-color: rgb(var(--accentcolor));
-	border-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
+	border-color: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.8.	GUILDBOOSTMODAL					---- */
 
 #app-mount .upload__5192e {									/* modal				perkicon upload						*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 #app-mount .animated__08b2b {								/* modal				perkicon animated					*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(75%);
 }
 #app-mount .stream_cfeace {									/* modal				perkicon stream						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(150%);
 }
 .wrapper_a24459 {											/* modal				boostaddwrapper						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor2_v), 0.5));
 }
 .wrapper_a24459::before,									/* modal				boostangel							*/
 .wrapper_a24459::after {
@@ -1578,21 +1578,21 @@ a.metadataDownload__6b32d {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_bg.svg) center/cover no-repeat;
 }
 .wrapper_a24459::after {
-	background: rgb(var(--accentcolor2));
+	background: rgb(var(--accentcolor2_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_accent2.svg) center/cover no-repeat;
 }
 #app-mount .wrapper_a24459 .lookInverted_ee4261.colorBrand_b2253e {
-	color: rgb(var(--accentcolor)) !important;
+	color: rgb(var(--accentcolor_v)) !important;
 }
 .perkIconGuild_d76388 {										/* prebuy popout		perkicon guild						*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .perkIconChatPerks__57cad {									/* prebuy popout		perkicon chat						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(120%);
 }
 .perkIconStream__2724a {									/* prebuy popout		perkicon stream						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 	filter: brightness(150%);
 }
 
@@ -1610,7 +1610,7 @@ a.metadataDownload__6b32d {
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/addboost_header_accent.svg) center/contain no-repeat;
 }
 #app-mount .transferConfirmImage__7046e {					/* add boost modal		transfer confirm					*/
@@ -1625,32 +1625,32 @@ a.metadataDownload__6b32d {
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor2));
+	background: rgb(var(--accentcolor2_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/transferboost_header_accent2.svg) center/contain no-repeat;
 }
 
 /* ----		10.10.	STREAMSETTINGSMODAL				---- */
 
 .badgeUpgrade__7e259 {										/* modal				badgeupgrade						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.11.	DISPATCHERRORMODAL				---- */
 
 .theme-light .closeLink_fc928e {							/* modal				closelink							*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.12.	CHANGELOGMODAL					---- */
 
 #app-mount .improved_df526b {								/* modal				improved category					*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 #app-mount .improved_df526b::after {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .premiumBanner_d2ce99 {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
 /* ----		10.13.	SCREENSHAREMODAL				---- */
@@ -1667,7 +1667,7 @@ a.metadataDownload__6b32d {
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/screenshare_header_accent.svg) center/contain no-repeat;
 }
 															/* unlock modal												*/
@@ -1678,7 +1678,7 @@ a.metadataDownload__6b32d {
 	content: "";
 	position: absolute;
 	top: 0;
-	border: 0px solid rgb(var(--accentcolor));
+	border: 0px solid rgb(var(--accentcolor_v));
 	border-width: 29px 26px;
 	border-radius: 7px;
 	width: 225px;
@@ -1688,22 +1688,22 @@ a.metadataDownload__6b32d {
 }
 
 .tile__46960:hover .sourceThumbnail__21c87 {
-	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor));
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor_v));
 }
 .sourceThumbnail__21c87.selected__26467 {
-	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor));
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor_v));
 }
 .selectorButton_c6ae93:not(.selectorButtonPremiumRequired_ce72d6):hover {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .selectorButtonSelected_fbe8fc {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.14.	PHONEVERIFICATIONMODAL			---- */
 
 .phoneVerificationModal__68f4b path[fill="rgb(118,134,177)"] {
-	fill: rgb(var(--accentcolor));
+	fill: rgb(var(--accentcolor_v));
 }
 
 /* ----		10.15.	CUSTOMSTATUSMODAL				---- */
@@ -1719,24 +1719,24 @@ a.metadataDownload__6b32d {
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/customstatus_header_accent.svg) center/contain no-repeat;
 }
 
 /* ----		10.16.	NICKNAMEMODAL					---- */
 
 .reset__51b37.lookLink__93965.colorLink_b651e5 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .reset__51b37.lookLink__93965.colorLink_b651e5:hover .contents_fb6220 {
-	--button--underline-color: rgb(var(--accentcolor));
+	--button--underline-color: rgb(var(--accentcolor_v));
 }
 
 
 /* ~~~~		11.		POPOUTS							~~~~ */
 
 .selectedBrand__37ae4 {										/* popout				combobox selected brand				*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .selectedBrand__37ae4.focused__2b1b2,
 .selectedBrand__37ae4:hover:not(.disabled__1c6ff) {
@@ -1746,62 +1746,62 @@ a.metadataDownload__6b32d {
 /* ----		11.1.	CONTEXTMENU						---- */
 
 .colorBrand__471df:not(.focused__27621):not(:active) {		/* contextmenu			brand								*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .menu__5cf7f .menuItemFocused__1490f,
 .colorBrand__471df.focused__27621,
 .colorBrand__471df:active:not(.hideInteraction__2790e),
 .colorDefault__0b482.focused__27621,
 .colorDefault__0b482:active:not(.hideInteraction__2790e) {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .colorBrand__471df:not(.focused__27621):not(:active) .radioSelection__5ed39,
 .colorDefault__0b482:not(.focused__27621):not(:active) .radioSelection__5ed39 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .colorBrand__471df:not(.focused__27621):not(:active) .checkbox__45366,
 .colorDefault__0b482:not(.focused__27621):not(:active) .checkbox__45366 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .colorBrand__471df.focused__27621 .check__8d1bd,
 .colorDefault__0b482.focused__27621 .check__8d1bd {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 .colorPremium__548bd:not(.focused__27621):not(:active) {	/* contextmenu			premium								*/
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .colorPremium__548bd.focused__27621,
 .colorPremium__548bd:active:not(.hideInteraction__2790e) {
-	background-color: rgb(var(--accentcolor2));
+	background-color: rgb(var(--accentcolor2_v));
 }
 .colorPremium__548bd:not(.focused__27621):not(:active) .radioSelection__5ed39 {
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .colorPremium__548bd:not(.focused__27621):not(:active) .checkbox__45366 {
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 .colorPremium__548bd.focused__27621 .check__8d1bd {
-	color: rgb(var(--accentcolor2));
+	color: rgb(var(--accentcolor2_v));
 }
 
 .colorPremiumGradient__45b85:not(.focused__27621):not(:active) {
-	background-image: linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor)));
+	background-image: linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor_v)));
 	color: transparent;
 	-webkit-background-clip: text;
 }
 .colorPremiumGradient__45b85.focused__27621,
 .colorPremiumGradient__45b85:active:not(.hideInteraction__2790e) {
-	background: linear-gradient(90deg, rgb(var(--accentcolor2)), rgb(var(--accentcolor)));
+	background: linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgb(var(--accentcolor_v)));
 }
 .colorPremiumGradient__45b85:not(.focused__27621):not(:active) .radioSelection__5ed39 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .colorPremiumGradient__45b85not(.focused__27621):not(:active) .checkbox__45366 {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .colorPremiumGradient__45b85.focused__27621 .check__8d1bd {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 .colorDanger_eec36d:not(.focused__27621):not(:active) {		/* contextmenu			danger								*/
@@ -1868,7 +1868,7 @@ a.metadataDownload__6b32d {
 
 .activeIcon_e452f7 path[fill*="hsl(234, "],
 .activeIcon_e452f7 path[fill*="hsl(235, "] {
-	fill: rgb(var(--accentcolor));
+	fill: rgb(var(--accentcolor_v));
 }
 
 /* ----		11.2.	USERPOPOUT						---- */
@@ -1877,35 +1877,35 @@ a.metadataDownload__6b32d {
 .banner__6d414[style*="background-color: hsl(227, "],
 .banner__6d414[style*="background-color: hsl(235, "],
 .banner__6d414[style*="background-color: hsl(237, "] {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
 /* ----		11.3.	SEARCHPOPOUT					---- */
 															/* datepicker			day hover							*/
 #app-mount .calendarPicker__5c474 .react-datepicker__day.react-datepicker__day--selected:hover,
 #app-mount .calendarPicker__5c474 .react-datepicker__day:not(.react-datepicker__day--disabled):hover {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 															/* datepicker			day selectd							*/
 #app-mount .calendarPicker__5c474 .react-datepicker__day.react-datepicker__day--selected::after {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 
 /* ~~~~		12.		GENERAL							~~~~ */
 
 ::selection {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	color: #fff;
 }
 .trophyIconContainer_e593e7 [fill="#3498DB"] {
-	fill: rgb(var(--accentcolor));
+	fill: rgb(var(--accentcolor_v));
 }
 
 /* ----		12.1.	TEXT							---- */
 
 .colorBrand__471df  {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 /* ----		12.2.	BUTTONS							---- */
@@ -1916,7 +1916,7 @@ a.metadataDownload__6b32d {
 #app-mount .lookInverted_ee4261.colorBrandNew_fd170a .spinnerItem_c07231,
 #app-mount .lookOutlined__46d54.colorBrandNew_fd170a .spinnerItem_c07231,
 #app-mount .lookLink__93965.colorBrandNew_fd170a .spinnerItem_c07231 {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .btn__51085.btnPrimary_e2a8df:hover:not(:disabled),
@@ -1937,7 +1937,7 @@ a.metadataDownload__6b32d {
 #app-mount .lookFilled__19298.colorBrand_b2253e:not(.buttonColor_a6eb73):disabled,
 #app-mount .lookFilled__19298.colorBrandNew_fd170a:not(.buttonColor_a6eb73),
 #app-mount .lookFilled__19298.colorBrandNew_fd170a:not(.buttonColor_a6eb73):disabled {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 }
 
 #app-mount .lookInverted_ee4261.colorBrand_b2253e:hover,
@@ -1956,37 +1956,37 @@ a.metadataDownload__6b32d {
 #app-mount .lookInverted_ee4261.colorBrand_b2253e:disabled,
 #app-mount .lookInverted_ee4261.colorBrandNew_fd170a,
 #app-mount .lookInverted_ee4261.colorBrand_b2253e:disabled {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .lookOutlined__46d54.colorBrand_b2253e:hover,
 #app-mount .lookOutlined__46d54.colorBrandNew_fd170a:hover,
 #app-mount .lookOutlined__46d54.hoverBrand__98583.hasHover__3ab8c:hover,
 #app-mount .lookOutlined__46d54.hoverBrandNew_be3663.hasHover__3ab8c:hover {
-	border-color: rgba(var(--accentcolor), 0.6);
+	border-color: rgba(var(--accentcolor_v), 0.6);
 }
 #app-mount .lookOutlined__46d54.colorBrand_b2253e:active,
 #app-mount .lookOutlined__46d54.colorBrandNew_fd170a:active,
 #app-mount .lookOutlined__46d54.hoverBrand__98583.hasHover__3ab8c:active,
 #app-mount .lookOutlined__46d54.hoverBrandNew_be3663.hasHover__3ab8c:active {
-	background-color: rgba(var(--accentcolor), 0.1);
-	border-color: rgb(var(--accentcolor));
+	background-color: rgba(var(--accentcolor_v), 0.1);
+	border-color: rgb(var(--accentcolor_v));
 }
 #app-mount .lookOutlined__46d54.colorBrand_b2253e,
 #app-mount .lookOutlined__46d54.colorBrand_b2253e:disabled,
 #app-mount .lookOutlined__46d54.colorBrandNew_fd170a,
 #app-mount .lookOutlined__46d54.colorBrandNew_fd170a:disabled {
-	border-color: rgba(var(--accentcolor), 0.1);
-	color: rgb(var(--accentcolor));
+	border-color: rgba(var(--accentcolor_v), 0.1);
+	color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .lookLink__93965.colorBrand_b2253e,
 #app-mount .lookLink__93965.colorBrandNew_fd170a {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 #app-mount .lookLink__93965.hoverBrand__98583.hasHover__3ab8c:hover .contents_fb6220,
 #app-mount .lookLink__93965.hoverBrandNew_be3663.hasHover__3ab8c:hover .contents_fb6220 {
-	--button--underline-color: rgb(var(--accentcolor));
+	--button--underline-color: rgb(var(--accentcolor_v));
 }
 #app-mount .lookLink__93965.colorLink_b651e5 svg [fill*="hsl"] {
 	fill: currentColor !important;
@@ -1994,7 +1994,7 @@ a.metadataDownload__6b32d {
 
 #app-mount .borderBrand__2de54,
 #app-mount .borderBrandNew__87b5a {
-	border-color: rgb(var(--accentcolor)) !important;
+	border-color: rgb(var(--accentcolor_v)) !important;
 }
 
 .guildBoostCtaBoostContent__06ba2 {
@@ -2008,16 +2008,16 @@ a.metadataDownload__6b32d {
 }
 .input_d266e7:not(.error__18f19):not(.success_e04262).focused_db7916,
 .input_d266e7:not(.error__18f19):not(.success_e04262):focus {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .focused_db7916 {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 #app-mount .prefixInput__38dcc:not(.error_cb5ca3).focused__88fb8 {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .addFriendInputWrapper__4bf8e:focus-within {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .addFriendInputWrapper__4bf8e .input_d266e7 {
 	background-color: transparent !important;
@@ -2026,15 +2026,15 @@ a.metadataDownload__6b32d {
 
 .checkbox_c7f690.checked__24ad6[style*="background-color: hsl(227, "],
 .checkbox_c7f690.checked__24ad6[style*="background-color: hsl(235, "] {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 .checkbox_c7f690.checked__24ad6[style*="border-color: hsl(227, "],
 .checkbox_c7f690.checked__24ad6[style*="border-color: hsl(235, "] {
-	border-color: rgb(var(--accentcolor)) !important;
+	border-color: rgb(var(--accentcolor_v)) !important;
 }
 .checkbox_c7f690 path[fill*="hsl(227, "],
 .checkbox_c7f690 path[fill*="hsl(235, "] {
-	fill: rgb(var(--accentcolor)) !important;
+	fill: rgb(var(--accentcolor_v)) !important;
 }
 
 .container__871ba {											/* switch				unchecked							*/
@@ -2049,7 +2049,7 @@ a.metadataDownload__6b32d {
 .container__871ba[style*="background-color: hsl(139, "],
 .container__871ba[style*="background-color: hsl(227, "],
 .container__871ba[style*="background-color: hsl(235, "] {
-	background-color: rgba(var(--accentcolor), 0.8) !important;
+	background-color: rgba(var(--accentcolor_v), 0.8) !important;
 }
 .container__871ba[style*="background-color: var(--green-"]:hover,
 .container__871ba[style*="background-color: rgb(35, "]:hover,
@@ -2076,21 +2076,21 @@ a.metadataDownload__6b32d {
 .container__871ba[style*="background-color: hsl(227, "] path[fill],
 .container__871ba[style*="background-color: hsl(235, "] path[fill],
 .container__871ba:active path[fill] {
-	fill: rgb(var(--accentcolor)) !important;
+	fill: rgb(var(--accentcolor_v)) !important;
 }
 
 .barFill__30e17 {											/* slider				barfill								*/
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 }
 .mediaBarGrabber_c64ff9,									/* progessbar			grabber								*/
 .mediaBarProgress__29db2,									/* progessbar			barfill								*/
 .mediaBarProgress__29db2::after,
 .mediaBarProgress__29db2::before {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .mediaBarInteraction__0633c:hover .mediaBarGrabber_c64ff9,
 .mediaBarInteractionDragging__0a2ee .mediaBarGrabber_c64ff9 {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 	filter: brightness(120%);
 }
 
@@ -2098,41 +2098,41 @@ a.metadataDownload__6b32d {
 .theme-light .lookFilled__3dba3.select__0eb48:focus,
 .theme-dark .select__0eb48:focus,
 .theme-dark .lookFilled__3dba3.select__0eb48:focus {
-	border-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor_v));
 }
 .theme-light .lookFilled__3dba3.select__0eb48:hover.open_cd27aa,
 .theme-light .lookFilled__3dba3.open_cd27aa,
 .theme-dark .lookFilled__3dba3.select__0eb48:hover.open_cd27aa,
 .theme-dark .lookFilled__3dba3.open_cd27aa {
-	border-color: rgb(var(--accentcolor)) rgb(var(--accentcolor)) rgba(0, 0, 0, 0.3);
+	border-color: rgb(var(--accentcolor_v)) rgb(var(--accentcolor_v)) rgba(0, 0, 0, 0.3);
 }
 
 /* ----		12.4.	TAGS							---- */
 
 .botTagRegular_c89c9a {										/* bottag				regular								*/
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .botTagInvert_c85692 {										/* bottag				inverted							*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .botTagOP_e48ddb {											/* bottag				op									*/
-	background: white linear-gradient(rgba(var(--accentcolor), .5), rgba(var(--accentcolor), .5));
-	color: rgb(var(--accentcolor));
+	background: white linear-gradient(rgba(var(--accentcolor_v), .5), rgba(var(--accentcolor_v), .5));
+	color: rgb(var(--accentcolor_v));
 }
 #app-mount .newBadge__359f1 {											/* bottag				new forum post						*/
-	background: white linear-gradient(rgba(var(--accentcolor), .5), rgba(var(--accentcolor), .5)) !important;
-	color: rgb(var(--accentcolor)) !important;
+	background: white linear-gradient(rgba(var(--accentcolor_v), .5), rgba(var(--accentcolor_v), .5)) !important;
+	color: rgb(var(--accentcolor_v)) !important;
 }
 
 #app-mount .tag_d31581 {
-	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
 .verified__8167d {											/* verifiedbadge											*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .partnered__77913 {											/* partneredbadge											*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .partnered__77913 .flowerStar_a9981e {
 	filter: brightness(75%);
@@ -2142,7 +2142,7 @@ a.metadataDownload__6b32d {
 .base__92a12[style*="background-color: rgb(87, 100, 242)"],
 .base__92a12[style*="background-color: hsl(227, "],
 .base__92a12[style*="background-color: hsl(235, "] {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
 /* ----		12.5.	IMAGES							---- */
@@ -2153,29 +2153,29 @@ a.metadataDownload__6b32d {
 [style*="/assets/e4f93ded986b1edf0780.png"],
 [src*="/assets/e4f93ded986b1edf0780.png"] {					/* avatars				clyde								*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/clydeicon_details.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/clydeicon_details.svg) center/contain no-repeat !important;
 }
 [style*="https://cdn.discordapp.com/embed/avatars/0.png"],
 [src*="https://cdn.discordapp.com/embed/avatars/0.png"],
 [style*="/assets/5d6a5e9d7d77ac29116e.png"],
 [src*="/assets/5d6a5e9d7d77ac29116e.png"] {					/* avatars				blue discord						*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_details.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_details.svg) center/contain no-repeat !important;
 }
 [style*="/assets/33c4908a99fe0a73e9f0.svg"],
 [src*="/assets/33c4908a99fe0a73e9f0.svg"] {					/* avatars				rolesettings intro avatar			*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_avatar.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_avatar.svg) center/contain no-repeat !important;
 }
 [style*="/assets/f1b802e72e04293e5734.svg"],
 [src*="/assets/f1b802e72e04293e5734.svg"] {					/* avatars				rolesettings intro avatar			*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_avatar.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_avatar.svg) center/contain no-repeat !important;
 }
 [style*="/assets/cb34f73199ef5f4eb1b7.svg"],
 [src*="/assets/cb34f73199ef5f4eb1b7.svg"] {					/* avatars				rolesettings intro avatar			*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_avatar.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_avatar.svg) center/contain no-repeat !important;
 }
 
 .image__195cc[src="/assets/26421523fdfaf469e28e.svg"] {		/* warnings				locked channel message jump			*/
@@ -2194,7 +2194,7 @@ a.metadataDownload__6b32d {
 	width: 120px;
 	height: 90px;
 	pointer-events: none;
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/warning_lockedchannellink_accent.svg) center/cover no-repeat;
 }
 
@@ -2212,76 +2212,76 @@ a.metadataDownload__6b32d {
 /* ----		12.7.	NOTIFICATIONBAR					---- */
 
 .colorPremiumTier1__43bcd {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.7));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.7));
 }
 .colorPremiumTier1__43bcd .button__57d93:hover {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .colorPremiumTier2_b5437b {
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 .colorPremiumTier2_b5437b .button__57d93:hover {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .colorBrand__1d940 {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .colorBrand__1d940 .button__57d93:hover {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 .notice__99c03 {											/* preview notice											*/
-	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.5), rgba(var(--accentcolor), 0.5));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor_v), 0.5), rgba(var(--accentcolor_v), 0.5));
 }
 .button__671cf:hover {										/* preview notice		button								*/
-	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.7), rgba(var(--accentcolor), 0.7));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor_v), 0.7), rgba(var(--accentcolor_v), 0.7));
 }
 .notice__0425f {											/* role notice												*/
-	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.5), rgba(var(--accentcolor), 0.5));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor_v), 0.5), rgba(var(--accentcolor_v), 0.5));
 }
 .button__587bd:hover {										/* role notice			button								*/
-	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.7), rgba(var(--accentcolor), 0.7));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor_v), 0.7), rgba(var(--accentcolor_v), 0.7));
 }
 .notice_a687ab {											/* rules notice												*/
-	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.5), rgba(var(--accentcolor), 0.5));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor_v), 0.5), rgba(var(--accentcolor_v), 0.5));
 }
 .button_d41223:hover {										/* rules notice			button								*/
-	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.7), rgba(var(--accentcolor), 0.7));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor_v), 0.7), rgba(var(--accentcolor_v), 0.7));
 }
 
 /* ----		12.8.	TOOLTIPS						---- */
 
 #app-mount .tooltipBrand__13fbc {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .tooltipBrand__13fbc a {
 	filter: brightness(50%);
 }
 #app-mount .tooltipBrand__13fbc .tooltipPointer_a79354 {
-	border-top-color: rgb(var(--accentcolor));
+	border-top-color: rgb(var(--accentcolor_v));
 }
 
 .contentPremium_d38e6e {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), .7))
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), .7))
 }
 .contentPremium_d38e6e .lookInverted_ee4261.colorBrand_b2253e {
-	color: rgb(var(--accentcolor2)) !important;
+	color: rgb(var(--accentcolor2_v)) !important;
 }
 
 /* ----		12.9.	TOASTS							---- */
 
 .toast-brand {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .colorBrand_WfDfzD .bg_8df5St {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 .colorCustom_WKsPgT .bg_8df5St[style*="background-color: hsl(235, "],
 .colorCustom_WKsPgT .bg_8df5St[style*="background-color: hsl(227, "] {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 .bar_95Sdw1.customBar_3RsUzs[style*="background-color: hsl(235, "],
 .bar_95Sdw1.customBar_3RsUzs[style*="background-color: hsl(227, "] {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
 
@@ -2351,17 +2351,17 @@ a.metadataDownload__6b32d {
 }
 
 .bd-switch input:checked + .bd-switch-body {
-	--switch-color: rgba(var(--accentcolor), 0.8);
-	background-color: rgba(var(--accentcolor), 0.8) !important;
+	--switch-color: rgba(var(--accentcolor_v), 0.8);
+	background-color: rgba(var(--accentcolor_v), 0.8) !important;
 }
 .bd-switch input:active + .bd-switch-body {
-	--switch-color: rgba(var(--accentcolor));
+	--switch-color: rgba(var(--accentcolor_v));
 }
 .bd-switch input:checked:hover + .bd-switch-body {
 	background: var(--accentcolor-hover) !important;
 }
 .bd-switch input:checked:active + .bd-switch-body {
-	--switch-color: rgb(var(--accentcolor));
+	--switch-color: rgb(var(--accentcolor_v));
 	background: var(--accentcolor-active) !important;
 }
 
@@ -2387,7 +2387,7 @@ a.metadataDownload__6b32d {
 	border: 1px solid var(--header-primary);
 }
 #bd-editor-controls .checkboxElement-1qV33p:checked + span {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor_v));
 }
 #bd-editor-controls .checkboxElement-1qV33p:checked + span:before {
 	content: "";
@@ -2403,20 +2403,20 @@ a.metadataDownload__6b32d {
 }
 
 html .monaco-editor .find-widget .monaco-inputbox.synthetic-focus {
-	outline-color: rgb(var(--accentcolor));
+	outline-color: rgb(var(--accentcolor_v));
 }
 html .monaco-editor .monaco-editor-hover a {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 html .monaco-editor [class*="arrow-decoration"] {
-	border-bottom-color: rgb(var(--accentcolor));
+	border-bottom-color: rgb(var(--accentcolor_v));
 }
 html .monaco-editor .focused .selected-text {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 html .monaco-tree[class*="monaco-tree-instance"].focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 	color: #ffffff;
 }
 html .monaco-tree[class*="monaco-tree-instance"].focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) .results-group {
@@ -2431,7 +2431,7 @@ html .monaco-editor [style*="background-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="background: rgb(14, 99, 156)"],
 html .monaco-editor [style*="background-color: rgb(9, 71, 113)"],
 html .monaco-editor [style*="background: rgb(9, 71, 113)"] {
-	background: rgb(var(--accentcolor)) !important;
+	background: rgb(var(--accentcolor_v)) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.9)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.9)"],
@@ -2441,7 +2441,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.9)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.9)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.9)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.9)"] {
-	background: rgba(var(--accentcolor), 0.9) !important;
+	background: rgba(var(--accentcolor_v), 0.9) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.8)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.8)"],
@@ -2451,7 +2451,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.8)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.8)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.8)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.8)"] {
-	background: rgba(var(--accentcolor), 0.8) !important;
+	background: rgba(var(--accentcolor_v), 0.8) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.7)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.7)"],
@@ -2461,7 +2461,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.7)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.7)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.7)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.7)"] {
-	background: rgba(var(--accentcolor), 0.7) !important;
+	background: rgba(var(--accentcolor_v), 0.7) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.6)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.6)"],
@@ -2471,7 +2471,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.6)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.6)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.6)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.6)"] {
-	background: rgba(var(--accentcolor), 0.6) !important;
+	background: rgba(var(--accentcolor_v), 0.6) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.5)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.5)"],
@@ -2481,7 +2481,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.5)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.5)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.5)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.5)"] {
-	background: rgba(var(--accentcolor), 0.5) !important;
+	background: rgba(var(--accentcolor_v), 0.5) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.4)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.4)"],
@@ -2491,7 +2491,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.4)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.4)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.4)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.4)"] {
-	background: rgba(var(--accentcolor), 0.4) !important;
+	background: rgba(var(--accentcolor_v), 0.4) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.3)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.3)"],
@@ -2501,7 +2501,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.3)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.3)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.3)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.3)"] {
-	background: rgba(var(--accentcolor), 0.3) !important;
+	background: rgba(var(--accentcolor_v), 0.3) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.2)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.2)"],
@@ -2511,7 +2511,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.2)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.2)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.2)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.2)"] {
-	background: rgba(var(--accentcolor), 0.2) !important;
+	background: rgba(var(--accentcolor_v), 0.2) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.1)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.1)"],
@@ -2521,56 +2521,56 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.1)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.1)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.1)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.1)"] {
-	background: rgba(var(--accentcolor), 0.1) !important;
+	background: rgba(var(--accentcolor_v), 0.1) !important;
 }
 html .monaco-editor [style*="border-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-color: rgb(9, 71, 113)"] {
-	border-color: rgb(var(--accentcolor)) !important;
+	border-color: rgb(var(--accentcolor_v)) !important;
 }
 html .monaco-editor [style*="border-top-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-top-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-top-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-top-color: rgb(9, 71, 113)"] {
-	border-top-color: rgb(var(--accentcolor)) !important;
+	border-top-color: rgb(var(--accentcolor_v)) !important;
 }
 html .monaco-editor [style*="border-right-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-right-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-right-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-right-color: rgb(9, 71, 113)"] {
-	border-right-color: rgb(var(--accentcolor)) !important;
+	border-right-color: rgb(var(--accentcolor_v)) !important;
 }
 html .monaco-editor [style*="border-bottom-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-bottom-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-bottom-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-bottom-color: rgb(9, 71, 113)"] {
-	border-bottom-color: rgb(var(--accentcolor)) !important;
+	border-bottom-color: rgb(var(--accentcolor_v)) !important;
 }
 html .monaco-editor [style*="border-left-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-left-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-left-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
-	border-left-color: rgb(var(--accentcolor)) !important;
+	border-left-color: rgb(var(--accentcolor_v)) !important;
 }
 
 .embedFull__8dc21[style*="border-color: rgb(62, 130, 229)"],
 .embedFull__8dc21[style*="border-color: rgb(62, 130, 226)"] {
-	border-color: rgb(var(--accentcolor)) !important;
+	border-color: rgb(var(--accentcolor_v)) !important;
 }
 
 
 /* ~~~~		14.		POWERCORDSUPPORT				~~~~ */
 
 html .powercord-toast[data-toast-type=info] .icon {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 html .powercord-toast .progressBar__47525 {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 html .powercord-updater .debug-info b {
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor_v));
 }
 
 
@@ -2580,7 +2580,7 @@ html .powercord-updater .debug-info b {
 /* ----		15.1.	HIDEUTILS						---- */
 
 #HideUtils-Settings button {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
 /* ----		15.2.	READALLNOTIFICATIONSBUTTON		---- */
@@ -2596,7 +2596,7 @@ html .powercord-updater .debug-info b {
 	transition: background-color .16s ease-out;
 }
 #server-search .wrapper-28eC3z:hover {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 #server-search .wrapper-28eC3z [fill="white"] {
 	fill: var(--header-primary);
@@ -2615,5 +2615,5 @@ html .powercord-updater .debug-info b {
 /* ----		15.4.	CHANNELTABS						---- */
 
 .channelTabs-unreadBadge:not(.channelTabs-noUnread) {
-	background-color: rgb(var(--accentcolor)) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
