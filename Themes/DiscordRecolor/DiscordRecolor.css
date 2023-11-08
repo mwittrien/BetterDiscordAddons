@@ -23,6 +23,28 @@
 	--backgroundtertiary: 			32,34,37;
 	--backgroundfloating: 			24,25,28;
 }
+html:root {
+	--font:							var(--font_s, --font);
+	
+	--mentioncolor:					var(--mentioncolor_s, --mentioncolor);
+	--successcolor:					var(--successcolor_s, --successcolor);
+	--warningcolor:					var(--warningcolor_s, --warningcolor);
+	--dangercolor:					var(--dangercolor_s, --dangercolor);
+	
+	--textbrightest:				var(--textbrightest_s, --textbrightest);
+	--textbrighter:					var(--textbrighter_s, --textbrighter);
+	--textbright:					var(--textbright_s, --textbright);
+	--textdark:						var(--textdark_s, --textdark);
+	--textdarker:					var(--textdarker_s, --textdarker);
+	--textdarkest:					var(--textdarkest_s, --textdarkest);
+	
+	--backgroundaccent:				var(--backgroundaccent_s, --backgroundaccent);
+	--backgroundprimary:			var(--backgroundprimary_s, --backgroundprimary);
+	--backgroundsecondary:			var(--backgroundsecondary_s, --backgroundsecondary);
+	--backgroundsecondaryalt:		var(--backgroundsecondaryalt_s, --backgroundsecondaryalt);
+	--backgroundtertiary:			var(--backgroundtertiary_s, --backgroundtertiary);
+	--backgroundfloating:			var(--backgroundfloating_s, --backgroundfloating);
+}
 
 .theme-light:not(.userProfileOuterThemed__6eb84),
 .theme-dark:not(.userProfileOuterThemed__6eb84),
