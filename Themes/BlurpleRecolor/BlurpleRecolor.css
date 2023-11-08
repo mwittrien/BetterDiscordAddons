@@ -418,6 +418,10 @@
 	color: rgb(var(--accentcolor));
 }
 
+.blockedSystemMessage_e58a4c:hover .blockedAction__27053 {	/* blocked message		operations							*/
+    color: rgb(var(--accentcolor));
+}
+
 .footerIcon__61cc7 path[fill*="hsl(197, "] {				/* automod				operations							*/
 	fill: var(--text-link);
 }
