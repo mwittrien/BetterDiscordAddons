@@ -45,39 +45,39 @@
 	--backdropblur:					unset;
 	
 	
-	--transparencycolor_v:			var(--transparencycolor_s, --transparencycolor);
-	--transparencyalpha_v:			var(--transparencyalpha_s, --transparencyalpha);
-	--messagetransparency_v:		var(--messagetransparency_s, --messagetransparency);
-	--guildchanneltransparency_v:	var(--guildchanneltransparency_s, --guildchanneltransparency);
-	--chatinputtransparency_v:		var(--chatinputtransparency_s, --chatinputtransparency);
-	--memberlisttransparency_v:		var(--memberlisttransparency_s, --memberlisttransparency);
-	--accentcolor_v:				var(--accentcolor_s, --accentcolor);
+	--transparencycolor_v:			var(--transparencycolor_s, var(--transparencycolor));
+	--transparencyalpha_v:			var(--transparencyalpha_s, var(--transparencyalpha));
+	--messagetransparency_v:		var(--messagetransparency_s, var(--messagetransparency));
+	--guildchanneltransparency_v:	var(--guildchanneltransparency_s, var(--guildchanneltransparency));
+	--chatinputtransparency_v:		var(--chatinputtransparency_s, var(--chatinputtransparency));
+	--memberlisttransparency_v:		var(--memberlisttransparency_s, var(--memberlisttransparency));
+	--accentcolor_v:				var(--accentcolor_s, var(--accentcolor));
 	
-	--font_v:						var(--font_s, --font);
-	--textshadow_v:					var(--textshadow_s, --textshadow);
-	--settingsicons_v:				var(--settingsicons_s, --settingsicons);
+	--font_v:						var(--font_s, var(--font));
+	--textshadow_v:					var(--textshadow_s, var(--textshadow));
+	--settingsicons_v:				var(--settingsicons_s, var(--settingsicons));
 	
-	--background_v:					var(--background_s, --background);
-	--backgroundposition_v:			var(--backgroundposition_s, --backgroundposition);
-	--backgroundsize_v:				var(--backgroundsize_s, --backgroundsize);
-	--backgroundblur_v:				var(--backgroundblur_s, --backgroundblur);
+	--background_v:					var(--background_s, var(--background));
+	--backgroundposition_v:			var(--backgroundposition_s, var(--backgroundposition));
+	--backgroundsize_v:				var(--backgroundsize_s, var(--backgroundsize));
+	--backgroundblur_v:				var(--backgroundblur_s, var(--backgroundblur));
 	
-	--popout_v:						var(--popout_s, --popout);
-	--popoutposition_v:				var(--popoutposition_s, --popoutposition);
-	--popoutsize_v:					var(--popoutsize_s, --popoutsize);
-	--popoutblur_v:					var(--popoutblur_s, --popoutblur);
+	--popout_v:						var(--popout_s, var(--popout));
+	--popoutposition_v:				var(--popoutposition_s, var(--popoutposition));
+	--popoutsize_v:					var(--popoutsize_s, var(--popoutsize));
+	--popoutblur_v:					var(--popoutblur_s, var(--popoutblur));
 	
-	--backdrop_v:					var(--backdrop_s, --backdrop);
-	--backdropposition_v:			var(--backdropposition_s, --backdropposition);
-	--backdropsize_v:				var(--backdropsize_s, --backdropsize);
-	--backdropblur_v:				var(--backdropblur_s, --backdropblur);
+	--backdrop_v:					var(--backdrop_s, var(--backdrop));
+	--backdropposition_v:			var(--backdropposition_s, var(--backdropposition));
+	--backdropsize_v:				var(--backdropsize_s, var(--backdropsize));
+	--backdropblur_v:				var(--backdropblur_s, var(--backdropblur));
 	
-	--textbrightest_v:				var(--textbrightest_s, --textbrightest);
-	--textbrighter_v:				var(--textbrighter_s, --textbrighter);
-	--textbright_v:					var(--textbright_s, --textbright);
-	--textdark_v:					var(--textdark_s, --textdark);
-	--textdarker_v:					var(--textdarker_s, --textdarker);
-	--textdarkest_v:				var(--textdarkest_s, --textdarkest);
+	--textbrightest_v:				var(--textbrightest_s, var(--textbrightest));
+	--textbrighter_v:				var(--textbrighter_s, var(--textbrighter));
+	--textbright_v:					var(--textbright_s, var(--textbright));
+	--textdark_v:					var(--textdark_s, var(--textdark));
+	--textdarker_v:					var(--textdarker_s, var(--textdarker));
+	--textdarkest_v:				var(--textdarkest_s, var(--textdarkest));
 }
 
 .theme-light, .theme-dark, .theme-amoled {

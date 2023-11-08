@@ -7,9 +7,9 @@
 	--linkcolor:					0,176,244;
 	
 	
-	--accentcolor_v:				var(--accentcolor_s, --accentcolor);
-	--accentcolor2_v:				var(--accentcolor2_s, --accentcolor2);
-	--linkcolor_v:					var(--linkcolor_s, --linkcolor);
+	--accentcolor_v:				var(--accentcolor_s, var(--accentcolor));
+	--accentcolor2_v:				var(--accentcolor2_s, var(--accentcolor2));
+	--linkcolor_v:					var(--linkcolor_s, var(--linkcolor));
 	
 	
 	--accentcolor-hover:			rgb(var(--accentcolor_v)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
