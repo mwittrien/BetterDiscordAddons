@@ -17,6 +17,11 @@
 	--bd-blue-active:				var(--accentcolor-active) !important;
 	--blurple:						rgb(var(--accentcolor)) !important;
 }
+html:root {
+	--accentcolor:					var(--accentcolor_s, --accentcolor);
+	--accentcolor2:					var(--accentcolor2_s, --accentcolor2);
+	--linkcolor:					var(--linkcolor_s, --linkcolor);
+}
 .theme-light {
 	--logo-primary: rgb(var(--accentcolor));
 }
