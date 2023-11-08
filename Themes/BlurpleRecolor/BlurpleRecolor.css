@@ -16,8 +16,8 @@
 	--bd-blue-hover:				var(--accentcolor-hover) !important;
 	--bd-blue-active:				var(--accentcolor-active) !important;
 	--blurple:						rgb(var(--accentcolor)) !important;
-}
-html:root {
+	
+	
 	--accentcolor_v:				var(--accentcolor_s, --accentcolor);
 	--accentcolor2_v:				var(--accentcolor2_s, --accentcolor2);
 	--linkcolor_v:					var(--linkcolor_s, --linkcolor);

@@ -22,8 +22,8 @@
 	--backgroundsecondaryalt: 		41,43,47;
 	--backgroundtertiary: 			32,34,37;
 	--backgroundfloating: 			24,25,28;
-}
-html:root {
+	
+	
 	--font_v:						var(--font_s, --font);
 	
 	--mentioncolor_v:				var(--mentioncolor_s, --mentioncolor);
