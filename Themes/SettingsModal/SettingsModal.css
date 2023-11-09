@@ -4,6 +4,11 @@
 	--settingsmodalbackground: transparent;
 	--settingsmodalwidth: 960px;
 	--settingsmodalheight: 80vh;
+
+	
+	--settingsmodalbackground_v: var(--settingsmodalbackground_s, var(--settingsmodalbackground));
+	--settingsmodalwidth_v: var(--settingsmodalwidth, var(--settingsmodalwidth));
+	--settingsmodalheight_v: var(--settingsmodalheight, var(--settingsmodalheight));
 }
 
 #app-mount .baseLayer__8fda3 {
@@ -36,11 +41,11 @@
 	right: 0 !important;
 	bottom: 0 !important;
 	left: 0 !important;
-	background: var(--settingsmodalbackground) !important;
+	background: var(--settingsmodalbackground_v) !important;
 	border-radius: 5px !important;
 	box-shadow: var(--elevation-high) !important;
-	width: var(--settingsmodalwidth) !important;
-	height: var(--settingsmodalheight) !important;
+	width: var(--settingsmodalwidth_v) !important;
+	height: var(--settingsmodalheight_v) !important;
 	margin: auto !important;
 	padding: 0 !important;
 	overflow: hidden !important;
@@ -70,10 +75,10 @@
 	padding: 20px 40px !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .wrapper__61220 {
-	width: calc(var(--settingsmodalwidth) - 420px - var(--settingsiconsadditionalsize)) !important;
+	width: calc(var(--settingsmodalwidth_v) - 420px - var(--settingsiconsadditionalsize)) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .repo_k8F4Sd {
-	max-width: calc(var(--settingsmodalwidth) - 226px - var(--settingsiconsadditionalsize)) !important;
+	max-width: calc(var(--settingsmodalwidth_v) - 226px - var(--settingsiconsadditionalsize)) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .repoHeader_2KfNvH {
 	padding-bottom: 0 !important;
@@ -88,10 +93,10 @@
 	padding-top: 0 !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .sidebar_bdf6b7 {
-	height: var(--settingsmodalheight) !important;
+	height: var(--settingsmodalheight_v) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .standardSidebarView__1129a .editor {
-	height: calc(var(--settingsmodalheight) - 120px) !important;
+	height: calc(var(--settingsmodalheight_v) - 120px) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .toolsContainer_f5d55d,
 #app-mount .layer__2efaa ~ .layer__2efaa .toolsContainer_f5d55d .tools_c0ff70,
@@ -124,7 +129,7 @@
 }
 
 #app-mount .layer__2efaa ~ .layer__2efaa .accountProfileCard__22589 {
-	max-width: calc(var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) !important;
+	max-width: calc(var(--settingsmodalwidth_v) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 {
 	gap: 30px !important;
@@ -133,21 +138,21 @@
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .sectionsContainer_a37883,
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .editor_bca4e3,
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .preview__0c5fe {
-	min-width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
-	max-width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
+	min-width: calc((var(--settingsmodalwidth_v) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
+	max-width: calc((var(--settingsmodalwidth_v) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .sectionsContainer_cce45e,
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .sectionsContainer_a37883,
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .editor_bca4e3,
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .preview__0c5fe {
-	min-width: calc((var(--settingsmodalwidth) - 344px - var(--settingsiconsadditionalsize)) / 2) !important;
-	max-width: calc((var(--settingsmodalwidth) - 344px - var(--settingsiconsadditionalsize)) / 2) !important;
+	min-width: calc((var(--settingsmodalwidth_v) - 344px - var(--settingsiconsadditionalsize)) / 2) !important;
+	max-width: calc((var(--settingsmodalwidth_v) - 344px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .preview__0c5fe .userPopoutOuter_d739b2 {
-	width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
+	width: calc((var(--settingsmodalwidth_v) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .baseLayout_b00434.tryItOutLayout__6026d .preview__0c5fe .userPopoutOuter_d739b2 {
-	width: calc((var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
+	width: calc((var(--settingsmodalwidth_v) - 332px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .preview__0c5fe .userPopoutOuter_d739b2,
 #app-mount .layer__2efaa ~ .layer__2efaa .baseLayout_b00434.tryItOutLayout__6026d .preview__0c5fe .userPopoutOuter_d739b2 {
@@ -158,7 +163,7 @@
 	overflow: hidden !important;
 }
 #app-mount .layer__2efaa ~ .layer__2efaa .guildsSection__337a8 {
-	max-width: calc(var(--settingsmodalwidth) - 332px - var(--settingsiconsadditionalsize)) !important;
+	max-width: calc(var(--settingsmodalwidth_v) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
 
 #app-mount .root__6d24f {
@@ -167,11 +172,11 @@
 	right: 0 !important;
 	bottom: 0 !important;
 	left: 0 !important;
-	background: var(--settingsmodalbackground) !important;
+	background: var(--settingsmodalbackground_v) !important;
 	border-radius: 5px !important;
 	box-shadow: var(--elevation-high) !important;
-	width: var(--settingsmodalwidth) !important;
-	height: var(--settingsmodalheight) !important;
+	width: var(--settingsmodalwidth_v) !important;
+	height: var(--settingsmodalheight_v) !important;
 	margin: auto !important;
 	padding: 0 !important;
 	overflow: hidden !important;
