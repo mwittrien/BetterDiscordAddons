@@ -7,8 +7,8 @@
 
 	
 	--settingsmodalbackground_v: var(--settingsmodalbackground_s, var(--settingsmodalbackground));
-	--settingsmodalwidth_v: var(--settingsmodalwidth, var(--settingsmodalwidth));
-	--settingsmodalheight_v: var(--settingsmodalheight, var(--settingsmodalheight));
+	--settingsmodalwidth_v: var(--settingsmodalwidth_s, var(--settingsmodalwidth));
+	--settingsmodalheight_v: var(--settingsmodalheight_s, var(--settingsmodalheight));
 }
 
 #app-mount .baseLayer__8fda3 {
