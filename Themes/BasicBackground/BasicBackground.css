@@ -5,22 +5,13 @@
 	--transparencycolor:			0,0,0;
 	--transparencyalpha:			0.15;
 	--messagetransparency:			0.5;
-	--usechatbubbles: 				calc(var(--messagetransparency) / (var(--messagetransparency) + 0.00000000000000000000001));
 	--guildchanneltransparency:		0.15;
 	--chatinputtransparency:		0.0;
 	--memberlisttransparency:		0.0;
+	--accentcolor:					190,78,180;
 	
 	--font:							"gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	--textshadow:					transparent;
-	
-	--accentcolor:					190,78,180;
-	--accentcolor2:					var(--accentcolor);
-	--mentioncolor:					var(--accentcolor);
-	--linkcolor:					var(--accentcolor);
-	
-	--successcolor: 				59,165,92;
-	--warningcolor: 				250,166,26;
-	--dangercolor: 					237,66,69;
 	
 	--textbrightest: 				255,255,255;
 	--textbrighter: 				222,222,222;
@@ -78,8 +69,16 @@
 	--textdark_v:					var(--textdark_s, var(--textdark));
 	--textdarker_v:					var(--textdarker_s, var(--textdarker));
 	--textdarkest_v:				var(--textdarkest_s, var(--textdarkest));
+	
+	--usechatbubbles: 				calc(var(--messagetransparency_v) / (var(--messagetransparency_v) + 0.00000000000000000000001));
+	--accentcolor2:					var(--accentcolor_v);
+	--mentioncolor:					var(--accentcolor_v);
+	--linkcolor:					var(--accentcolor_v);
+	
+	--successcolor: 				59,165,92;
+	--warningcolor: 				250,166,26;
+	--dangercolor: 					237,66,69;
 }
-
 .theme-light, .theme-dark, .theme-amoled {
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
