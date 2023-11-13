@@ -70,8 +70,10 @@
 	--textdark_v:					var(--textdark_s, var(--textdark));
 	--textdarker_v:					var(--textdarker_s, var(--textdarker));
 	--textdarkest_v:				var(--textdarkest_s, var(--textdarkest));
+
 	
 	--usechatbubbles: 				calc(var(--messagetransparency_v) / (var(--messagetransparency_v) + 0.00000000000000000000001));
+	
 	--accentcolor2:					var(--accentcolor_v);
 	--mentioncolor:					var(--accentcolor_v);
 	--linkcolor:					var(--accentcolor_v);
@@ -80,6 +82,7 @@
 	--warningcolor: 				250,166,26;
 	--dangercolor: 					237,66,69;
 }
+
 .theme-light, .theme-dark, .theme-amoled {
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
