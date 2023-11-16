@@ -1,14 +1,14 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
-	--settingsmodalbackground: transparent;
 	--settingsmodalwidth: 960px;
 	--settingsmodalheight: 80vh;
+	--settingsmodalbackground: transparent;
 
 	
-	--settingsmodalbackground_v: var(--settingsmodalbackground_s, var(--settingsmodalbackground));
 	--settingsmodalwidth_v: var(--settingsmodalwidth_s, var(--settingsmodalwidth));
 	--settingsmodalheight_v: var(--settingsmodalheight_s, var(--settingsmodalheight));
+	--settingsmodalbackground_v: var(--settingsmodalbackground_s, var(--settingsmodalbackground));
 }
 
 #app-mount .baseLayer__8fda3 {
