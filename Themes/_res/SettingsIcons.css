@@ -217,34 +217,34 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-settings-tab::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings::before {
-	--settingsicons-icon: var(--settingsicons-bd-settings) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-bd-settings) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-updates-tab::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-updater::before {
-	--settingsicons-icon: var(--settingsicons-bd-updates) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-bd-updates) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-customcss-tab::before {
-	--settingsicons-icon: var(--settingsicons-bd-customcss) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-bd-customcss) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-plugins-tab::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-plugins::before {
-	--settingsicons-icon: var(--settingsicons-bd-plugins) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-bd-plugins) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-themes-tab::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-themes::before {
-	--settingsicons-icon: var(--settingsicons-bd-themes) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-bd-themes) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-cloud::before {
-	--settingsicons-icon: var(--settingsicons-vc-cloud) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-vc-cloud) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-backup-restore::before {
-	--settingsicons-icon: var(--settingsicons-vc-backup-restore) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-vc-backup-restore) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab::before {
-	--settingsicons-icon: var(--settingsicons-bd-pluginrepo) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-bd-pluginrepo) !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab::before {
-	--settingsicons-icon: var(--settingsicons-bd-themerepo) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-bd-themerepo) !important;
 }
 
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(40)::before,
@@ -430,7 +430,7 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-last-child(4)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="logout-tab" i]::before {
-	--settingsicons-icon: var(--settingsicons-logout) center/contain no-repeat !important;
+	--settingsicons-icon: var(--settingsicons-logout) !important;
 }
 
 .bd-server-search ~ .item__48dda::before {
