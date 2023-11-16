@@ -34,7 +34,7 @@
 	--settingsicons-games: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/games.svg);
 	--settingsicons-overlay: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overlay.svg);
 	--settingsicons-bd-settings: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/settings.svg);
-	--settingsicons-bd-changelog: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.svg);
+	--settingsicons-bd-updates: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/updates.svg);
 	--settingsicons-bd-customcss: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/custom.svg);
 	--settingsicons-bd-plugins: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/plugins.svg);
 	--settingsicons-bd-themes: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themes.svg);
@@ -220,7 +220,7 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-updates-tab::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-updater::before {
-	-webkit-mask: var(--settingsicons-bd-changelog) center/contain no-repeat !important;
+	-webkit-mask: var(--settingsicons-bd-updates) center/contain no-repeat !important;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.bd-customcss-tab::before {
 	-webkit-mask: var(--settingsicons-bd-customcss) center/contain no-repeat !important;
