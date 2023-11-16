@@ -503,13 +503,17 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 	display: flex;
 	align-items: center;
 }
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 > *:first-child > .settingsTabBar__19aa3 {
+	margin-left: calc(var(--use-settingsicons) * 30px);
+}
 .standardSidebarView__1129a .contentColumn_dc7d36 {
 	--settingsicons-icon: var(--settingsicons-default);
 }
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 .sectionTitle_e32631:first-child .title__3e421::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 div:first-child > div:first-child > h2.title__3e421::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 div:first-child > .sectionTitle__1605a::before,
-.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 > h2:first-child::before {
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 > h2:first-child::before,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 > *:first-child > .settingsTabBar__19aa3::before {
 	content: "";
 	display: inline;
 	position: relative;
@@ -517,9 +521,13 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 	width: calc(var(--use-settingsicons) * 18px);
 	height: calc(var(--use-settingsicons) * 18px);
 	margin-right: calc(var(--use-settingsicons) * 8px);
+	left: 0;
 	background: currentColor;
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
+}
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 > *:first-child > .settingsTabBar__19aa3::before {
+	position: absolute;
 }
 
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 .title__3e421 .lockIcon__8edb9 {
