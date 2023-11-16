@@ -27,6 +27,7 @@
 	--settingsicons-keybinds: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/keybinds.svg);
 	--settingsicons-language: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/language.svg);
 	--settingsicons-windows: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/windows.svg);
+	--settingsicons-linux: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/linux.svg);
 	--settingsicons-streamermode: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/streamermode.svg);
 	--settingsicons-advanced: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/advanced.svg);
 	--settingsicons-activityprivacy: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/activityprivacy.svg);
@@ -49,7 +50,7 @@
 	--settingsicons-hotspots: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hotspots.svg);
 	--settingsicons-dismissable: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/dismissable.svg);
 	--settingsicons-paymentmodals: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/paymentmodals.svg);
-	--settingsicons-textplayground: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textcomponent.svg);
+	--settingsicons-textplayground: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textplayground.svg);
 	--settingsicons-textcomponent: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textcomponent.svg);
 	--settingsicons-logout: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/logout.svg);
 }
@@ -170,8 +171,13 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="windows-tab" i]::before {
 	-webkit-mask: var(--settingsicons-windows) center/contain no-repeat;
 }
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(26)::before,
+#app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="linux-tab" i]::before {
+	-webkit-mask: var(--settingsicons-linux) center/contain no-repeat;
+}
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(26)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(27)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(27)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="streamer-mode-tab" i]::before {
 	-webkit-mask: var(--settingsicons-streamermode) center/contain no-repeat;
 }
@@ -183,21 +189,27 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(30)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(31)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(31)::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(38)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(39)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(39)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="activity-privacy-tab" i]::before {
 	-webkit-mask: var(--settingsicons-activityprivacy) center/contain no-repeat;
 }
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(31)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(32)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(32)::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(39)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(40)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(40)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="game-activity-tab" i]::before {
 	-webkit-mask: var(--settingsicons-games) center/contain no-repeat;
 }
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(33)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(33)::before,
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(40)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(41)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(41)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="overlay-tab" i]::before {
 	-webkit-mask: var(--settingsicons-overlay) center/contain no-repeat;
 }
@@ -244,6 +256,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(43)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(43)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(42)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(43)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(43)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(43)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="changelog-tab" i]::before {
 	-webkit-mask: var(--settingsicons-changelog) center/contain no-repeat;
 }
@@ -257,6 +274,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(44)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(43)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(44)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(44)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(44)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="merchandise-tab" i]::before {
 	-webkit-mask: var(--settingsicons-merchandise) center/contain no-repeat;
 }
@@ -270,6 +292,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(45)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(44)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(45)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(45)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(45)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="hypesquad-online-tab" i]::before {
 	-webkit-mask: var(--settingsicons-hypesquad) center/contain no-repeat;
 }
@@ -283,6 +310,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(46)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(45)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(46)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(46)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(46)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="experiments-tab" i]::before {
 	-webkit-mask: var(--settingsicons-experiments) center/contain no-repeat;
 }
@@ -296,6 +328,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(47)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(46)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(47)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(47)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(47)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="developer-options-tab" i]::before {
 	-webkit-mask: var(--settingsicons-developer) center/contain no-repeat;
 }
@@ -309,6 +346,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(48)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(47)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(48)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(48)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(48)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="hotspot-options-tab" i]::before {
 	-webkit-mask: var(--settingsicons-hotspots) center/contain no-repeat;
 }
@@ -322,6 +364,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(49)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(48)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(49)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(49)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(49)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="dismissible-content-options-tab" i]::before {
 	-webkit-mask: var(--settingsicons-dismissable) center/contain no-repeat;
 }
@@ -335,6 +382,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(51)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(50)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(49)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(50)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(50)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(51)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(50)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="payment-flow-modals-tab" i]::before {
 	-webkit-mask: var(--settingsicons-paymentmodals) center/contain no-repeat;
 }
@@ -348,6 +400,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(51)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(52)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(51)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(50)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(51)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(51)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(52)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(51)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="text-playground-tab" i]::before {
 	-webkit-mask: var(--settingsicons-textplayground) center/contain no-repeat;
 }
@@ -361,6 +418,11 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(52)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(53)::before,
 .platform-win .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(52)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(51)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda:nth-child(52)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.themerepo-tab ~ .item__48dda:nth-child(52)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.pluginrepo-tab ~ .item__48dda.themerepo-tab ~ .item__48dda:nth-child(53)::before,
+.platform-linux .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda.vc-settings ~ .item__48dda:nth-child(52)::before,
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="text-component-tab" i]::before {
 	-webkit-mask: var(--settingsicons-textcomponent) center/contain no-repeat;
 }
