@@ -3352,6 +3352,17 @@ button.button__4f306.enabled__470f0:hover svg {
 	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor_v), .1);
 }
 
+#app-mount .content_ab56e9 + .videoContainer_a9d080 {
+	box-sizing: border-box;
+	height: 100%;
+}
+#app-mount .testimonialContainer__3e4a3 path[fill="#2B2D31"] {
+	fill: var(--background-secondary);
+}
+#app-mount .testimonialContainer__3e4a3 .quotes__35cf8 {
+	color: var(--header-secondary);
+}
+
 #app-mount .separator_ff09cd {
 	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor_v),.3), 0 1px 2px 0 rgba(var(--transparencycolor_v),.3);
 }
