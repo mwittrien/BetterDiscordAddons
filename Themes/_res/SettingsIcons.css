@@ -509,7 +509,7 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .standardSidebarView__1129a .contentColumn_dc7d36 {
 	--settingsicons-icon: var(--settingsicons-default);
 }
-.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 .sectionTitle_e32631:first-child .title__3e421::before,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 div:first-child > div:first-child > .sectionTitle_e32631:first-child .title__3e421::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 div:first-child > div:first-child > h2.title__3e421::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 div:first-child > .sectionTitle__1605a::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumn_dc7d36 > h2:first-child::before,
