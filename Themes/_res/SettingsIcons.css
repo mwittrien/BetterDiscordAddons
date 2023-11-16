@@ -1,6 +1,6 @@
 ﻿:root {
-	--settingsicons_v: var(--settingsicons_s, var(--settingsicons));
-	--use-settingsicons: calc(var(--settingsicons_v, 1) / (var(--settingsicons_v, 1) + 0.00000000000000000000001));
+	--settingsicons_v: var(--settingsicons_s, var(--settingsicons, 1));
+	--use-settingsicons: calc(var(--settingsicons_v) / (var(--settingsicons_v) + 0.00000000000000000000001));
 	--settingsicons-size: 18px;
 	--settingsicons-gap: 14px;
 	
