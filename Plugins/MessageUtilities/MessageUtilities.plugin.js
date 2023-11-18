@@ -69,22 +69,22 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						"addHints":			{value: true, 	description: "Add Key Combo hints to Context Menus"},
-						"clearOnEscape":		{value: true, 	description: "Clear Chat Input when Escape is pressed"}
+						"addHints":					{value: true, 	description: "Add Key Combo hints to Context Menus"},
+						"clearOnEscape":			{value: true, 	description: "Clear Chat Input when Escape is pressed"}
 					},
 					toasts: {},
 					bindingsState: {},
 					bindings: {
-						"Edit_Message":			{name: "Edit Message",			func: this.doEdit,						value: {click: 1, keycombo: []}},
-						"Delete_Message":		{name: "Delete Message",		func: this.doDelete,						value: {click: 0, keycombo: [46]}},
-						"Pin/Unpin_Message":		{name: "Pin/Unpin Message",		func: this.doPinUnPin,						value: {click: 0, keycombo: [17]}},
-						"Reply_to_Message":		{name: "Reply to Message",		func: this.doReply,						value: {click: 0, keycombo: [17,72]}},
-						"React_to_Message":		{name: "Open React Menu",		func: this.doOpenReact,						value: {click: 0, keycombo: [17,83]}},
-						"Copy_Raw":			{name: "Copy raw Message",		func: this.doCopyRaw,						value: {click: 0, keycombo: [17,68]}},
-						"Copy_Link":			{name: "Copy Message Link",		func: this.doCopyLink,						value: {click: 0, keycombo: [17,81]}},
-						"__Quote_Message":		{name: "Quote Message",			func: this.doQuote, 		plugin: "CustomQuoter",		value: {click: 0, keycombo: [17,87]}},
-						"__Note_Message":		{name: "Note Message",			func: this.doNote, 		plugin: "PersonalPins",		value: {click: 0, keycombo: [16]}},
-						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate, 	plugin: "Translator",		value: {click: 0, keycombo: [20]}}
+						"Edit_Message":				{name: "Edit Message",			func: this.doEdit,		value: {click: 1, 	keycombo: []}		},
+						"Delete_Message":			{name: "Delete Message",		func: this.doDelete,	value: {click: 0, 	keycombo: [46]}		},
+						"Pin/Unpin_Message":		{name: "Pin/Unpin Message",		func: this.doPinUnPin,	value: {click: 0, 	keycombo: [17]}		},
+						"Reply_to_Message":			{name: "Reply to Message",		func: this.doReply,		value: {click: 0, 	keycombo: [17,72]}	},
+						"React_to_Message":			{name: "Open React Menu",		func: this.doOpenReact,	value: {click: 0, 	keycombo: [17,83]}	},
+						"Copy_Raw":					{name: "Copy raw Message",		func: this.doCopyRaw,	value: {click: 0, 	keycombo: [17,68]}	},
+						"Copy_Link":				{name: "Copy Message Link",		func: this.doCopyLink,	value: {click: 0, 	keycombo: [17,81]}	},
+						"__Quote_Message":			{name: "Quote Message",			func: this.doQuote,		value: {click: 0, 	keycombo: [17,87]}, plugin: "CustomQuoter"},
+						"__Note_Message":			{name: "Note Message",			func: this.doNote,		value: {click: 0, 	keycombo: [16]}, 	plugin: "PersonalPins"},
+						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate,	value: {click: 0, 	keycombo: [20]}, 	plugin: "Translator"}
 					}
 				};
 				

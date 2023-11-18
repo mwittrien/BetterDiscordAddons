@@ -439,19 +439,19 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						addBy: 			{value: true,		description: "Adds the Word 'by' infront of the Author Name"},
+						addBy: 				{value: true,		description: "Adds the Word 'by' infront of the Author Name"},
 						addTimeline: 		{value: true,		description: "Shows the Song Timeline in the Controls"},
 						addActivityButton: 	{value: true,		description: "Shows the Activity Status Toggle Button in the Controls"},
 						doubleBack: 		{value: true,		description: "Requires the User to press the Back Button twice to go to previous Track"}
 					},
 					buttons: {
-						share: 			{value: {small: false, big: true},		icons: [""],						description: "Share"},
-						shuffle: 		{value: {small: false, big: true},		icons: [""],						description: "Shuffle"},
-						previous: 		{value: {small: true, big: true},		icons: [""],						description: "Previous"},
-						pauseplay: 		{value: {small: true, big: true},		icons: ["", ""],					description: "Pause/Play"},
-						next: 			{value: {small: true, big: true},		icons: [""],						description: "Next"},
-						repeat: 		{value: {small: false, big: true},		icons: ["", ""],					description: "Repeat"},
-						volume: 		{value: {small: false, big: true},		icons: ["", "", "", ""],				description: "Volume"}
+						share: 				{value: {small: false, big: true},		icons: [""],						description: "Share"},
+						shuffle: 			{value: {small: false, big: true},		icons: [""],						description: "Shuffle"},
+						previous: 			{value: {small: true, big: true},		icons: [""],						description: "Previous"},
+						pauseplay: 			{value: {small: true, big: true},		icons: ["", ""],					description: "Pause/Play"},
+						next: 				{value: {small: true, big: true},		icons: [""],						description: "Next"},
+						repeat: 			{value: {small: false, big: true},		icons: ["", ""],					description: "Repeat"},
+						volume: 			{value: {small: false, big: true},		icons: ["", "", "", ""],		description: "Volume"}
 					}
 				};
 				

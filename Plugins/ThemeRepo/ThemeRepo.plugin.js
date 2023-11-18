@@ -725,8 +725,8 @@ module.exports = (_ => {
 						startUpdated:		{value: false, 	autoload: true,		description: "Starts updated Themes after Download"}
 					},
 					filters: {
-						updated: 		{value: true,	description: "Updated"},
-						outdated:		{value: true, 	description: "Outdated"},
+						updated: 			{value: true,	description: "Updated"},
+						outdated:			{value: true, 	description: "Outdated"},
 						downloadable:		{value: true, 	description: "Downloadable"},
 					}
 				};

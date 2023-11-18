@@ -133,7 +133,7 @@ module.exports = (_ => {
 
 				this.defaults = {
 					places: {
-						userPopout:			{value: true, 			description: "User Popouts"},
+						userPopout:				{value: true, 			description: "User Popouts"},
 						userProfile:			{value: true, 			description: "User Profile Modal"}
 					},
 					dates: {

@@ -92,7 +92,7 @@ module.exports = (_ => {
 						normal:			{value: true, 			description: "Normal Message Textarea"},
 						edit:			{value: true, 			description: "Edit Message Textarea"},
 						form:			{value: true, 			description: "Upload Message Prompt"},
-						quickmessage:		{value: true, 			description: "Quick Message Textarea UserPopout"}
+						quickmessage:	{value: true, 			description: "Quick Message Textarea UserPopout"}
 					}
 				};
 				

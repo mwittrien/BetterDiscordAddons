@@ -69,14 +69,14 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						downloadDictionary:		{value: false, 						description: "Use local Dictionary File (downloads Dictionary on first Usage)"}
+						downloadDictionary:			{value: false, 								description: "Use local Dictionary File (downloads Dictionary on first Usage)"}
 					},
 					choices: {
-						dictionaryLanguage:		{value: "en", 	force: true,				description: "Primary Language"},
-						secondaryLanguage:		{value: "-", 	force: false,				description: "Secondary Language"}
+						dictionaryLanguage:			{value: "en", 	force: true,				description: "Primary Language"},
+						secondaryLanguage:			{value: "-", 	force: false,				description: "Secondary Language"}
 					},
 					amounts: {
-						maxSimilarAmount:		{value: 6, 	min: 1,		max: 30,		description: "Maximal Amount of suggested Words"}
+						maxSimilarAmount:			{value: 6, 		min: 1,		max: 30,		description: "Maximal Amount of suggested Words"}
 					}
 				};
 			

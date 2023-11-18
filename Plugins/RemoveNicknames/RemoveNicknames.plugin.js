@@ -60,18 +60,18 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						replaceOwn:		{value: false, 			description: "Replaces your own Name"},
+						replaceOwn:			{value: false, 			description: "Replaces your own Name"},
 						replaceBots:		{value: true, 			description: "Replaces the Nickname of Bots"},
 						removeGlobal:		{value: true, 			description: "Also removes global Displaynames"},
 						addNickname:		{value: false, 			description: "Adds Nickname as Parentheses"},
 						swapPositions:		{value: false, 			description: "Swaps the Position of Username and Nickname"},
 					},
 					places: {
-						chat:			{value: true, 			description: "Messages"},
-						mentions:		{value: true, 			description: "Mentions"},
-						voiceChat:		{value: true, 			description: "Voice Channels"},
-						memberList:		{value: true, 			description: "Member List"},
-						typing:			{value: true, 			description: "Typing List"},
+						chat:				{value: true, 			description: "Messages"},
+						mentions:			{value: true, 			description: "Mentions"},
+						voiceChat:			{value: true, 			description: "Voice Channels"},
+						memberList:			{value: true, 			description: "Member List"},
+						typing:				{value: true, 			description: "Typing List"},
 						autocompletes:		{value: true, 			description: "Autocomplete Menu"}
 					}
 				};

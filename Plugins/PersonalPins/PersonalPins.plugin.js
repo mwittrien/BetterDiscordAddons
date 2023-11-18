@@ -364,7 +364,7 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					choices: {
-						defaultFilter:		{value: filterKeys[0], 		options: filterKeys,		type: "filter",		description: "Default choice tab"},
+						defaultFilter:		{value: filterKeys[0], 		options: filterKeys,	type: "filter",		description: "Default choice tab"},
 						defaultSort:		{value: sortKeys[0], 		options: sortKeys,		type: "sort",		description: "Default sort choice"},
 						defaultOrder:		{value: orderKeys[0], 		options: orderKeys,		type: "order",		description: "Default order choice"},
 					}

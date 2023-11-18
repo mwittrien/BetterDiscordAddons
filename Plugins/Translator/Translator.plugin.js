@@ -385,17 +385,17 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						addTranslateButton:		{value: true, 	popout: false},
-						usePerChatTranslation:		{value: true, 	popout: false},
-						sendOriginalMessage:		{value: false, 	popout: true},
-						showOriginalMessage:		{value: false, 	popout: true}
+						usePerChatTranslation:	{value: true, 	popout: false},
+						sendOriginalMessage:	{value: false, 	popout: true},
+						showOriginalMessage:	{value: false, 	popout: true}
 					},
 					choices: {},
 					exceptions: {
-						wordStart:			{value: ["!"],	max: 1}
+						wordStart:				{value: ["!"],	max: 1}
 					},
 					engines: {
-						translator:			{value: "googleapi"},
-						backup:				{value: "----"}
+						translator:				{value: "googleapi"},
+						backup:					{value: "----"}
 					}
 				};
 				for (let m in messageTypes) this.defaults.choices[messageTypes[m]] = {value: Object.keys(languageTypes).reduce((newObj, l) => (newObj[languageTypes[l]] = defaultLanguages[l], newObj), {})};

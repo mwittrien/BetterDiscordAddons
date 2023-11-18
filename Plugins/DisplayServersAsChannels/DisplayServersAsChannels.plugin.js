@@ -66,7 +66,7 @@ module.exports = (_ => {
 					},
 					amounts: {
 						serverListWidth:				{value: 240, 	min: 45,		description: "Server List Width in px: "},
-						serverElementHeight:				{value: 32, 	min: 16,		description: "Server Element Height in px: "}
+						serverElementHeight:			{value: 32, 	min: 16,		description: "Server Element Height in px: "}
 					}
 				};
 				

@@ -63,11 +63,11 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						byNewlines:	{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
+						byNewlines:		{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",		note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
 					},
 					amounts: {
-						splitCounter:	{value: 0, 	description: "Messages will be split after roughly X Characters"},
-						maxPages:	{value:	0,	description: "Maximum number of split pages",				note: "(0 for unlimited) Pages beyond this count will be discarded"}
+						splitCounter:	{value: 0, 		description: "Messages will be split after roughly X Characters"},
+						maxPages:		{value:	0,		description: "Maximum number of split pages",							note: "(0 for unlimited) Pages beyond this count will be discarded"}
 					}
 				};
 				
