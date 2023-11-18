@@ -6,8 +6,8 @@
 	--settingsbackground: 		transparent;
 
 	
-	--settingswidth_v: 		min(calc(1px * var(--settingswidth_s, var(--settingswidth))), 95vw);
-	--settingsheight_v: 		min(calc(1px * var(--settingsheight_s, var(--settingsheight))), 95vh);
+	--settingswidth_v: 		min(calc(1px * var(--settingswidth_s, var(--settingswidth))), 99vw);
+	--settingsheight_v: 		min(calc(1px * var(--settingsheight_s, var(--settingsheight))), 99vh);
 	--settingsbackground_v: 	var(--settingsbackground_s, var(--settingsbackground));
 }
 
