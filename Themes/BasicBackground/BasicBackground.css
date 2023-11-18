@@ -1332,8 +1332,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-radius: 0;
 }
 
-											/* message				home message							*/
-.interactiveCard_d5a839.selected__715e8, .interactiveCard_d5a839:active,
+.interactiveCard_d5a839.selected__715e8, .interactiveCard_d5a839:active,		/* message				home message							*/
 .interactiveCard_d5a839:hover {
 	border-color: var(--background-secondary);
 }
@@ -4522,8 +4521,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-image: url(https://discord.com/assets/64df6f04b850029d2e78.svg) !important;
 }
 
-											/* popout				active tab							*/
-#app-mount .header__28ebb .tabBar__2aa8e .tab_a8a066.active__7e7af {
+#app-mount .header__28ebb .tabBar__2aa8e .tab_a8a066.active__7e7af {			/* popout				active tab							*/
 	background-color: rgb(var(--accentcolor_v));
 }
 .secondary_c96c46,									/* popout				header button							*/
