@@ -6463,12 +6463,17 @@ html .bd-toast.toast-warn.icon::before {
 .bd-addon-views .bd-view-button:not(.selected):active {
 	background: rgba(var(--accentcolor_v), .7);
 }
+.bd-addon-views .bd-view-button.selected svg {
+	filter: drop-shadow(1px 1px var(--textshadow_v));
+}
 
 .bd-button {
 	text-shadow: 1px 1px var(--textshadow_v);
+}
+.bd-button svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
-.bd-button.bd-button-danger {
+.bd-button.bd-button-danger svg {
 	filter: unset;
 }
 
