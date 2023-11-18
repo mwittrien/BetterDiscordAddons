@@ -11,9 +11,9 @@
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BlurpleRecolor/
  * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.theme.css
  *
- * @var text		accentcolor_s		"Blurple Color"			163, 47, 194
- * @var text		accentcolor2_s		"Boost Pink Color"		225, 115, 180
- * @var text		linkcolor_s			"Link Color"			190, 60, 220
+ * @var text			accentcolor_s		"Blurple Color"			163, 47, 194
+ * @var text			accentcolor2_s		"Boost Pink Color"		225, 115, 180
+ * @var text			linkcolor_s		"Link Color"			190, 60, 220
  */
 
 /* To change stuff like the colors, transparency and background image, change the variables inside the root {}, do NOT change the @import url() */
@@ -23,7 +23,7 @@
 /* All colors are in RGB format (red, green, blue) use: https://www.google.com/search?q=colorpicker	*/
 
 :root {
-	--accentcolor:			163, 47, 194;		/*	blurple		-	default:	88, 101, 242		*/
-	--accentcolor2:			225, 115, 180;		/*	boostpink	-	default:	255, 115, 250		*/
-	--linkcolor:			190, 60, 220;		/*	link		-	default:	0, 176, 244			*/
+	--accentcolor:		163, 47, 194;		/*	blurple		-	default:	88, 101, 242			*/
+	--accentcolor2:		225, 115, 180;		/*	boostpink	-	default:	255, 115, 250			*/
+	--linkcolor:		190, 60, 220;		/*	link		-	default:	0, 176, 244			*/
 }
