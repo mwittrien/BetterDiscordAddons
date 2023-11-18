@@ -276,7 +276,7 @@
 */
 
 
-/* ~~~~		1.		GUILDLIST						~~~~ */
+/* ~~~~		1.		GUILDLIST					~~~~ */
 
 .wrapper_d281dd.selected_f5ec8e .childWrapper__01b9c,		/* home/acronym												*/
 .wrapper_d281dd:hover .childWrapper__01b9c {
@@ -337,7 +337,7 @@
 }
 
 
-/* ~~~~		2.		CHANNELLIST						~~~~ */
+/* ~~~~		2.		CHANNELLIST					~~~~ */
 
 .channelNotice_bbc8e6 .imageContainer__0c476 {
 	position: relative;
@@ -373,9 +373,9 @@
 }
 
 
-/* ~~~~		3.		CHAT							~~~~ */
+/* ~~~~		3.		CHAT						~~~~ */
 
-/* ----		3.1.	MESSAGES						---- */
+/* ----		3.1.		MESSAGES					---- */
 
 .newMessagesBar__8b6d7 {									/* new messagesbar											*/
 	background-color: rgb(var(--accentcolor_v));
@@ -500,7 +500,7 @@
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
-/* ----		3.2.	TEXTAREA						---- */
+/* ----		3.2.		TEXTAREA					---- */
 
 .channelTextAreaInnerFocused__8561c {
 	border-color: rgb(var(--accentcolor_v));
@@ -599,7 +599,7 @@
 	color: rgb(var(--accentcolor_v)) !important;
 }
 
-/* ----		3.3.	AUTOCOMPLETEMENU				---- */
+/* ----		3.3.		AUTOCOMPLETEMENU				---- */
 
 #app-mount .active_cff9ad {									/* autocomplete			option active						*/
 	background-color: rgb(var(--accentcolor_v)) !important;
@@ -650,13 +650,13 @@
 	color: rgb(var(--accentcolor2_v));
 }
 
-/* ----		3.4.	MEMBERLIST						---- */
+/* ----		3.4.		MEMBERLIST					---- */
 
 .premiumIcon_ab5d78 {
 	color: rgb(var(--accentcolor2_v));
 }
 
-/* ----		3.5.	SEARCHPAGE						---- */
+/* ----		3.5.		SEARCHPAGE					---- */
 
 #app-mount .activeButton__7a550,
 #app-mount .activeButton__7a550:hover {
@@ -675,7 +675,7 @@
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/searchpage_noresults_accent.svg) center/cover no-repeat;
 }
 
-/* ----		3.6.	CALL							---- */
+/* ----		3.6.		CALL						---- */
 
 .sparkleBlurple__556df,
 .popBlurple__2642d,
@@ -692,7 +692,7 @@
 	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor_v)), inset 0 0 0 3px rgb(var(--accentcolor_v));
 }
 
-/* ~~~~		4.		PEOPLES							~~~~ */
+/* ~~~~		4.		PEOPLES						~~~~ */
 
 .container__9305d {											/* stagelive			cover								*/
 	background: rgb(255, 255, 255) linear-gradient(rgba(var(--accentcolor_v),.8) 75%, rgb(var(--accentcolor_v)) 75%, rgb(var(--accentcolor_v)));
@@ -703,7 +703,7 @@
 }
 
 
-/* ~~~~		5.		STORE/NITRO						~~~~ */
+/* ~~~~		5.		STORE/NITRO					~~~~ */
 
 #app-mount .premiumIndicator__41e19 {						/* premium				where?								*/
 	background-color: rgb(var(--accentcolor_v));
@@ -795,14 +795,14 @@
 }
 
 
-/* ~~~~		6.		LIBRARY							~~~~ */
+/* ~~~~		6.		LIBRARY						~~~~ */
 
 .foreground__26bd6 {										/* installationpath		fill								*/
 	stroke: rgb(var(--accentcolor_v));
 }
 
 
-/* ~~~~		7.		DISCOVERY						~~~~ */
+/* ~~~~		7.		DISCOVERY					~~~~ */
 
 .searchBox_a63854:focus,									/* searchbox			focus								*/
 .searchBox_a63854:focus-within,
@@ -1166,9 +1166,9 @@
 }
 
 
-/* ~~~~		10.		MODALS							~~~~ */
+/* ~~~~		10.		MODALS						~~~~ */
 
-/* ----		10.1.	USERMODAL						---- */
+/* ----		10.1.		USERMODAL					---- */
 
 .profileBadge__1d2d3[src="https://cdn.discordapp.com/badge-icons/5e74e9b61934fc1f67c65515d1f7e60d.png"] {
 	object-position: -999999px -999999px;
@@ -1237,7 +1237,7 @@
 	background-color: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.2.	GUILDADD/CREATION				---- */
+/* ----		10.2.		GUILDADD/CREATION				---- */
 															/* create guild			create own icon						*/
 .icon__6a8ca[src="/assets/4d526e1c61d719fd39a0.svg"] {
 	object-position: -999999px -999999px;
@@ -1265,7 +1265,7 @@
 	fill: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.3.	REGIONSELECTMODAL				---- */
+/* ----		10.3.		REGIONSELECTMODAL				---- */
 								
 .regionSelectFlag_a0e812 {									/* modal				regionselect flag					*/
 	background-color: rgb(var(--accentcolor_v));
@@ -1275,7 +1275,7 @@
 	background: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.4.	UPLOADMODAL						---- */
+/* ----		10.4.		UPLOADMODAL					---- */
 															/* modal				background							*/
 .uploadModalIn_c0ca4b .uploadDropModal__73a36 .bgScale_f3a2be {
 	background-color: rgb(var(--accentcolor_v));
@@ -1473,7 +1473,7 @@ a.metadataDownload__6b32d {
 	color: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		10.5.		KEYBOARDSHORTCUTSMODAL				---- */
 
 .ddrArrows__352f9 .arrow__42cbf,							/* modal				arrows								*/
 .ddrArrows__352f9 .arrow__42cbf::after {
@@ -1508,7 +1508,7 @@ a.metadataDownload__6b32d {
 }
 
 
-/* ----		10.6.	LOGINSCREEN						---- */
+/* ----		10.6.		LOGINSCREEN					---- */
 
 .authBox__7196a .lookLink__93965.colorLink_b651e5 {			/* authobox				links								*/
 	color: rgb(var(--accentcolor_v));
@@ -1541,7 +1541,7 @@ a.metadataDownload__6b32d {
 	color: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.7.	DOWNLOADAPPMODAL				---- */
+/* ----		10.7.		DOWNLOADAPPMODAL				---- */
 
 .downloadApps__30ed7 .footer__49ae9 a {
 	color: rgb(var(--accentcolor_v));
@@ -1583,7 +1583,7 @@ a.metadataDownload__6b32d {
 	border-color: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.8.	GUILDBOOSTMODAL					---- */
+/* ----		10.8.		GUILDBOOSTMODAL					---- */
 
 #app-mount .upload__5192e {									/* modal				perkicon upload						*/
 	color: rgb(var(--accentcolor2_v));
@@ -1631,7 +1631,7 @@ a.metadataDownload__6b32d {
 	filter: brightness(150%);
 }
 
-/* ----		10.9.	ADDGUILDBOOSTMODAL				---- */
+/* ----		10.9.		ADDGUILDBOOSTMODAL				---- */
 
 #app-mount .confirmImage_b2a2da {							/* add boost modal		add confirm							*/
 	position: relative;
@@ -1664,19 +1664,19 @@ a.metadataDownload__6b32d {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/transferboost_header_accent2.svg) center/contain no-repeat;
 }
 
-/* ----		10.10.	STREAMSETTINGSMODAL				---- */
+/* ----		10.10.		STREAMSETTINGSMODAL				---- */
 
 .badgeUpgrade__7e259 {										/* modal				badgeupgrade						*/
 	color: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.11.	DISPATCHERRORMODAL				---- */
+/* ----		10.11.		DISPATCHERRORMODAL				---- */
 
 .theme-light .closeLink_fc928e {							/* modal				closelink							*/
 	color: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.12.	CHANGELOGMODAL					---- */
+/* ----		10.12.		CHANGELOGMODAL					---- */
 
 #app-mount .improved_df526b {								/* modal				improved category					*/
 	color: rgb(var(--accentcolor_v));
@@ -1688,7 +1688,7 @@ a.metadataDownload__6b32d {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
-/* ----		10.13.	SCREENSHAREMODAL				---- */
+/* ----		10.13.		SCREENSHAREMODAL				---- */
 
 #app-mount .art_d9e8a6 {									/* settings modal											*/
 	position: relative;
@@ -1735,13 +1735,13 @@ a.metadataDownload__6b32d {
 	background-color: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.14.	PHONEVERIFICATIONMODAL			---- */
+/* ----		10.14.		PHONEVERIFICATIONMODAL				---- */
 
 .phoneVerificationModal__68f4b path[fill="rgb(118,134,177)"] {
 	fill: rgb(var(--accentcolor_v));
 }
 
-/* ----		10.15.	CUSTOMSTATUSMODAL				---- */
+/* ----		10.15.		CUSTOMSTATUSMODAL				---- */
 
 .art_b2132c {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/customstatus_header_bg.svg) center/contain no-repeat;
@@ -1758,7 +1758,7 @@ a.metadataDownload__6b32d {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/customstatus_header_accent.svg) center/contain no-repeat;
 }
 
-/* ----		10.16.	NICKNAMEMODAL					---- */
+/* ----		10.16.		NICKNAMEMODAL					---- */
 
 .reset__51b37.lookLink__93965.colorLink_b651e5 {
 	color: rgb(var(--accentcolor_v));
@@ -1768,7 +1768,7 @@ a.metadataDownload__6b32d {
 }
 
 
-/* ~~~~		11.		POPOUTS							~~~~ */
+/* ~~~~		11.		POPOUTS						~~~~ */
 
 .selectedBrand__37ae4 {										/* popout				combobox selected brand				*/
 	background-color: rgb(var(--accentcolor_v));
@@ -1778,7 +1778,7 @@ a.metadataDownload__6b32d {
 	background: var(--accentcolor-hover);
 }
 
-/* ----		11.1.	CONTEXTMENU						---- */
+/* ----		11.1.		CONTEXTMENU					---- */
 
 .colorBrand__471df:not(.focused__27621):not(:active) {		/* contextmenu			brand								*/
 	color: rgb(var(--accentcolor_v));
@@ -1906,7 +1906,7 @@ a.metadataDownload__6b32d {
 	fill: rgb(var(--accentcolor_v));
 }
 
-/* ----		11.2.	USERPOPOUT						---- */
+/* ----		11.2.		USERPOPOUT					---- */
 
 .banner__6d414[style*="background-color: rgb(92, 100, 244)"],
 .banner__6d414[style*="background-color: hsl(227, "],
@@ -1915,7 +1915,7 @@ a.metadataDownload__6b32d {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
-/* ----		11.3.	SEARCHPOPOUT					---- */
+/* ----		11.3.		SEARCHPOPOUT					---- */
 															/* datepicker			day hover							*/
 #app-mount .calendarPicker__5c474 .react-datepicker__day.react-datepicker__day--selected:hover,
 #app-mount .calendarPicker__5c474 .react-datepicker__day:not(.react-datepicker__day--disabled):hover {
@@ -1927,7 +1927,7 @@ a.metadataDownload__6b32d {
 }
 
 
-/* ~~~~		12.		GENERAL							~~~~ */
+/* ~~~~		12.		GENERAL						~~~~ */
 
 ::selection {
 	background: rgb(var(--accentcolor_v));
@@ -1937,13 +1937,13 @@ a.metadataDownload__6b32d {
 	fill: rgb(var(--accentcolor_v));
 }
 
-/* ----		12.1.	TEXT							---- */
+/* ----		12.1.		TEXT						---- */
 
 .colorBrand__471df  {
 	color: rgb(var(--accentcolor_v));
 }
 
-/* ----		12.2.	BUTTONS							---- */
+/* ----		12.2.		BUTTONS						---- */
 
 #app-mount .lookInverted_ee4261.colorBrand_b2253e .spinnerItem_c07231,
 #app-mount .lookOutlined__46d54.colorBrand_b2253e .spinnerItem_c07231,
@@ -2036,7 +2036,7 @@ a.metadataDownload__6b32d {
 	color: var(--guild-boosting-pink);
 }
 
-/* ----		12.3.	INPUTS							---- */
+/* ----		12.3.		INPUTS						---- */
 
 .input_d266e7:not(.error__18f19):not(.success_e04262):not(.focused_db7916):not(:focus):hover {
 	border-color: var(--deprecated-text-input-border-hover);
@@ -2142,7 +2142,7 @@ a.metadataDownload__6b32d {
 	border-color: rgb(var(--accentcolor_v)) rgb(var(--accentcolor_v)) rgba(0, 0, 0, 0.3);
 }
 
-/* ----		12.4.	TAGS							---- */
+/* ----		12.4.		TAGS						---- */
 
 .botTagRegular_c89c9a {										/* bottag				regular								*/
 	background-color: rgb(var(--accentcolor_v));
@@ -2180,7 +2180,7 @@ a.metadataDownload__6b32d {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
-/* ----		12.5.	IMAGES							---- */
+/* ----		12.5.		IMAGES						---- */
 
 .avatar__0d465 {
 	border-radius: 50%;
@@ -2237,14 +2237,14 @@ a.metadataDownload__6b32d {
 	filter: hue-rotate(-85deg);
 }
 
-/* ----		12.6.	SCROLLBARS						---- */
+/* ----		12.6.		SCROLLBARS					---- */
 
 ::-webkit-scrollbar-corner,
 #app-mount ::-webkit-scrollbar-corner {
 	background-color: transparent;
 }
 
-/* ----		12.7.	NOTIFICATIONBAR					---- */
+/* ----		12.7.		NOTIFICATIONBAR					---- */
 
 .colorPremiumTier1__43bcd {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.7));
@@ -2283,7 +2283,7 @@ a.metadataDownload__6b32d {
 	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor_v), 0.7), rgba(var(--accentcolor_v), 0.7));
 }
 
-/* ----		12.8.	TOOLTIPS						---- */
+/* ----		12.8.		TOOLTIPS					---- */
 
 #app-mount .tooltipBrand__13fbc {
 	background-color: rgb(var(--accentcolor_v));
@@ -2302,7 +2302,7 @@ a.metadataDownload__6b32d {
 	color: rgb(var(--accentcolor2_v)) !important;
 }
 
-/* ----		12.9.	TOASTS							---- */
+/* ----		12.9.		TOASTS						---- */
 
 .toast-brand {
 	background-color: rgb(var(--accentcolor_v));
@@ -2320,7 +2320,7 @@ a.metadataDownload__6b32d {
 }
 
 
-/* ~~~~		13.		BDSUPPORT						~~~~ */
+/* ~~~~		13.		BDSUPPORT					~~~~ */
 
 .bd-server-card.bd-server-card-pinned::after {
 	background: var(--bd-blue);
@@ -2612,19 +2612,19 @@ html .powercord-updater .debug-info b {
 /* ~~~~		15.		PLUGINSUPPORT					~~~~ */
 
 
-/* ----		15.1.	HIDEUTILS						---- */
+/* ----		15.1.		HIDEUTILS					---- */
 
 #HideUtils-Settings button {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
-/* ----		15.2.	READALLNOTIFICATIONSBUTTON		---- */
+/* ----		15.2.		READALLNOTIFICATIONSBUTTON			---- */
 
 .wrapper_d281dd:active .childWrapper__01b9c.button_Jt-tIg {
 	background: var(--accentcolor-hover);
 }
 
-/* ----		15.3.	SERVERSEARCH					---- */
+/* ----		15.3.		SERVERSEARCH					---- */
 
 #server-search .wrapper-28eC3z {
 	background-color: var(--background-primary) !important;
@@ -2647,7 +2647,7 @@ html .powercord-updater .debug-info b {
 	height: 48px;
 }
 
-/* ----		15.4.	CHANNELTABS						---- */
+/* ----		15.4.		CHANNELTABS					---- */
 
 .channelTabs-unreadBadge:not(.channelTabs-noUnread) {
 	background-color: rgb(var(--accentcolor_v)) !important;

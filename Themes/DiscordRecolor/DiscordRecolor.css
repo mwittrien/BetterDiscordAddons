@@ -306,7 +306,7 @@ html {
 */
 
 
-/* ~~~~		1.		GENERAL							~~~~ */
+/* ~~~~		1.		GENERAL						~~~~ */
 
 svg [style*="stroke: rgb(114, 118, 125)"],
 svg [style*="stroke: #72767d"],
@@ -388,7 +388,7 @@ svg [fill="#4F545C"] {
 	background: var(--header-primary);
 }
 
-#app-mount .scrollbarGhost__6f715::-webkit-scrollbar-thumb {/* scrollers			old scrollers						*/
+#app-mount .scrollbarGhost__6f715::-webkit-scrollbar-thumb {			/* scrollers			old scrollers						*/
 	background-color: var(--scrollbar-thin-thumb);
 	border-color: transparent;
 }
@@ -423,7 +423,7 @@ html .iconBadge__2abac {
 	color: var(--header-primary);
 }
 
-/* ----		1.1.	TEXT							---- */
+/* ----		1.1.		TEXT						---- */
 
 #app-mount h1.title__10613,
 #app-mount h2.title__10613 {
@@ -475,7 +475,7 @@ html .iconBadge__2abac {
 	color: var(--text-normal);
 }
 
-/* ----		1.2.	BUTTONS							---- */
+/* ----		1.2.		BUTTONS						---- */
 
 #app-mount .lookInverted_ee4261.colorPrimary__6ed40 .spinnerItem_c07231 {
 	background-color: var(--background-accent);
@@ -607,7 +607,7 @@ html .iconBadge__2abac {
 	border-color: var(--text-normal) !important;
 }
 
-/* ----		1.3.	INPUTS							---- */
+/* ----		1.3.		INPUTS						---- */
 
 .container__871ba {
 	background-color: var(--text-muted) !important;
@@ -773,7 +773,7 @@ html .iconBadge__2abac {
 	border-color: var(--background-tertiary);
 }
 
-/* ----		1.4.	SEARCHBARS						---- */
+/* ----		1.4.		SEARCHBARS					---- */
 
 #app-mount .searchBox_a63854 {
 	background-color: var(--background-accent);
@@ -789,7 +789,7 @@ html .iconBadge__2abac {
 	color: var(--header-secondary);
 }
 
-/* ----		1.5.	IMAGES							---- */
+/* ----		1.5.		IMAGES						---- */
 
 #app-mount .image__0cdbe {
 	background-image: url(https://discord.com/assets/5420f8fd9d89897c6448.svg);
@@ -1021,7 +1021,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	opacity: .5;
 }
 
-/* ~~~~		2.		GUIDLIST						~~~~ */
+/* ~~~~		2.		GUIDLIST					~~~~ */
 
 #app-mount .folder__17546.hover__043de,
 #app-mount .childWrapper__01b9c,
@@ -1040,11 +1040,11 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--green-360);
 }
 
-/* ~~~~		3.		CHANNELLIST						~~~~ */
+/* ~~~~		3.		CHANNELLIST					~~~~ */
 
-/* ----		3.1.	GUILDHEADER						---- */
+/* ----		3.1.		GUILDHEADER					---- */
 
-/* ----		3.2.	CHANNELS						---- */
+/* ----		3.2.		CHANNELS					---- */
 
 #app-mount .icon_d1127b {
 	color: var(--header-secondary);
@@ -1072,7 +1072,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		3.3.	DMCHANNELS						---- */
+/* ----		3.3.		DMCHANNELS					---- */
 
 .selected_d94cf9,
 .selected_d94cf9:focus-within,
@@ -1081,7 +1081,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		3.4.	ACCOUNT/VOICE/GOLIVE			---- */
+/* ----		3.4.		ACCOUNT/VOICE/GOLIVE				---- */
 
 #app-mount .userList_a7e652::before {
 	background-color: var(--background-secondary);
@@ -1102,13 +1102,13 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 
-/* ~~~~		4.		CHAT							~~~~ */
+/* ~~~~		4.		CHAT						~~~~ */
 
 .mainTableContainer__5ffe0 {
 	background: var(--background-secondary);
 }
 
-/* ----		4.1.	CHANNELHEADER					---- */
+/* ----		4.1.		CHANNELHEADER					---- */
 
 #app-mount .container__11d72.themed_b152d4 {
 	box-shadow: var(--elevation-low);
@@ -1131,7 +1131,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-muted);
 }
 
-/* ----		4.2.	MESSAGES						---- */
+/* ----		4.2.		MESSAGES					---- */
 
 .noChannel__7bbff {
 	background-color: var(--background-primary);
@@ -1220,7 +1220,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	-webkit-mask: url(https://discord.com/assets/1b60cdb56c8c081495ac.svg) center no-repeat;
 }
 
-/* ====		4.2.1.	MESSAGE							==== */
+/* ====		4.2.1.		MESSAGE						==== */
 
 #app-mount .message__04d9f {
 	background-color: var(--background-primary);
@@ -1264,7 +1264,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: rgba(var(--backgroundtertiary_v),.8);
 }
 
-/* ====		4.2.2.	EMBEDS							==== */
+/* ====		4.2.2.		EMBEDS						==== */
 
 #app-mount .description__883d4 {
 	color: var(--header-primary);
@@ -1330,9 +1330,9 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--background-tertiary) !important
 }
 
-/* ====		4.2.3.	NITROGIFT						==== */
+/* ====		4.2.3.		NITROGIFT					==== */
 
-/* ====		4.2.4.	INVITE							==== */
+/* ====		4.2.4.		INVITE						==== */
 
 #app-mount .guildIconImage__93ae7 {
 	background-color: var(--background-primary);
@@ -1378,7 +1378,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		4.3.	TEXTAREA						---- */
+/* ----		4.3.		TEXTAREA					---- */
 
 #app-mount .form__13a2c::before {
 	background: linear-gradient(180deg, transparent 0, var(--background-primary));
@@ -1411,7 +1411,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-muted) !important;
 }
 
-/* ----		4.4.	AUTOCOMPLETEMENU				---- */
+/* ----		4.4.		AUTOCOMPLETEMENU				---- */
 
 #app-mount .autocomplete_df266d {
 	background-color: var(--background-secondary);
@@ -1423,13 +1423,13 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--background-primary);
 }
 
-/* ----		4.5.	MEMBERLIST						---- */
+/* ----		4.5.		MEMBERLIST					---- */
 
 #app-mount .memberListItem_f1d144:not(.popoutDisabled__384f3):hover {
 	background-color: var(--background-tertiary);
 }
 
-/* ----		4.6.	CALL							---- */
+/* ----		4.6.		CALL						---- */
 
 .wrapper_bd2abe {
 	background-color: var(--background-primary);
@@ -1517,7 +1517,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 
-/* ~~~~		5.		PEOPLES							~~~~ */
+/* ~~~~		5.		PEOPLES						~~~~ */
 
 #app-mount .container__5c7e7 {
 	background-color: var(--background-primary);
@@ -1591,13 +1591,13 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--background-secondary-alt);
 }
 
-/* ----		5.1.	SHOP							---- */
+/* ----		5.1.		SHOP						---- */
 
 #app-mount .shop_b31ed2 {
 	background: var(--background-primary);
 }
 
-/* ----		5.2.	FAMILY CENTER					---- */
+/* ----		5.2.		FAMILY CENTER					---- */
 
 .contentPanel__2fdef::-webkit-scrollbar {
 	width: 16px;
@@ -1621,7 +1621,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 
-/* ~~~~		6.		STORE/NITRO						~~~~ */
+/* ~~~~		6.		STORE/NITRO					~~~~ */
 
 #app-mount .header_d454ec {
 	color: var(--header-primary);
@@ -1838,7 +1838,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		6.1.	BIRTHDAY PAGE					---- */
+/* ----		6.1.		BIRTHDAY PAGE					---- */
 
 #app-mount .outerContainer_d40897 {
 	background-color: var(--background-primary);
@@ -1855,7 +1855,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 
-/* ~~~~		7.		LIBRARY							~~~~ */
+/* ~~~~		7.		LIBRARY						~~~~ */
 
 #app-mount .headerCellSorted__41374 {
 	color: var(--header-primary);
@@ -2471,7 +2471,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 
-/* ~~~~		11.		MODALS							~~~~ */
+/* ~~~~		11.		MODALS						~~~~ */
 
 #app-mount .root_a28985:not(.noBackground_ebd8f7),
 #app-mount .modal__060da {
@@ -2539,13 +2539,13 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: rgb(0, 0, 0) !important;
 }
 
-/* ----		11.1.	USERMODAL						---- */
+/* ----		11.1.		USERMODAL					---- */
 
 .emptyIcon__655a1 {
 	opacity: .5;
 }
 
-/* ----		11.2.	GUILDADD/CREATION				---- */
+/* ----		11.2.		GUILDADD/CREATION				---- */
 
 .container__73245 {
 	background-color: var(--background-secondary);
@@ -2568,7 +2568,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	border: 1px solid var(--deprecated-text-input-border);
 }
 
-/* ----		11.3.	UPLOADMODAL						---- */
+/* ----		11.3.		UPLOADMODAL					---- */
 
 #app-mount .uploadModal_eae2a0 {
 	background-color: var(--background-primary);
@@ -2579,7 +2579,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: inset 0 1px 0 rgba(var(--backgroundsecondary_v),.6);
 }
 
-/* ----		11.4.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		11.4.		KEYBOARDSHORTCUTSMODAL				---- */
 
 #app-mount .keyboardShortcutsModal__74c71 {
 	background-color: var(--background-primary);
@@ -2611,7 +2611,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-secondary);
 }
 
-/* ----		11.5.	QUICKSWITCHER					---- */
+/* ----		11.5.		QUICKSWITCHER					---- */
 
 #app-mount .emptyState_afda24 {
 	background: transparent;
@@ -2627,7 +2627,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	opacity: .5;
 }
 
-/* ----		11.6.	INVITEMODAL/GROUPCREATE			---- */
+/* ----		11.6.		INVITEMODAL/GROUPCREATE				---- */
 
 #app-mount .contentWrapper__85d37 {
 	background-color: var(--background-primary);
@@ -2676,7 +2676,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	opacity: .5;
 }
 
-/* ----		11.7.	LOGINSCREEN						---- */
+/* ----		11.7.		LOGINSCREEN					---- */
 
 .theme-dark.navRow_bb8efc,
 .theme-light.navRow_bb8efc {
@@ -2686,7 +2686,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: rgba(var(--textbright_v),.9);
 }
 
-/* ----		11.8.	DOWNLOADAPPMODAL				---- */
+/* ----		11.8.		DOWNLOADAPPMODAL				---- */
 
 .downloadApps__30ed7 {
 	background-color: var(--background-primary);
@@ -2716,7 +2716,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--header-secondary);
 }
 
-/* ----		11.9.	GUILDBOOSTMODAL						---- */
+/* ----		11.9.		GUILDBOOSTMODAL					---- */
 
 #app-mount .subscriberCount__53026 {
 	color: var(--header-secondary);
@@ -2736,7 +2736,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-secondary);
 }
 
-/* ----		11.10.	REACTIONSMODAL					---- */
+/* ----		11.10.		REACTIONSMODAL					---- */
 
 #app-mount .container_dc03c3,
 #app-mount .reactors__20ab0 {
@@ -2768,7 +2768,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-muted);
 }
 
-/* ----		11.11.	CHANGELOG						---- */
+/* ----		11.11.		CHANGELOG					---- */
 
 #app-mount .date__21306 {
 	color: var(--header-secondary);
@@ -2798,7 +2798,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--interactive-active);
 }
 
-/* ----		11.12.	NOTIFICATIONSMODAL				---- */
+/* ----		11.12.		NOTIFICATIONSMODAL				---- */
 
 #app-mount .channelName_a1ccf5 {
 	color: var(--header-primary);
@@ -2822,7 +2822,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	border: 1px dashed var(--background-floating);
 }
 
-/* ----		11.13.	PAYMENTMODAL					---- */
+/* ----		11.13.		PAYMENTMODAL					---- */
 
 #app-mount .sectionHeader_a9d2bb {
 	color: var(--header-secondary);
@@ -2893,7 +2893,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-secondary);
 }
 
-/* ----		11.14.	CLOUDSYNCRESOLUTION				---- */
+/* ----		11.14.		CLOUDSYNCRESOLUTION				---- */
 
 #app-mount .modal__659a5 {
 	color: var(--text-normal);
@@ -2915,7 +2915,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: rgba(var(--textdarkest_v),.6);
 }
 
-/* ----		11.15.	APPLICATIONINSTALLATIONMODAL	---- */
+/* ----		11.15.		APPLICATIONINSTALLATIONMODAL			---- */
 
 #app-mount .gameName__29f6a {
 	color: var(--text-normal);
@@ -2931,7 +2931,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-normal);
 }
 
-/* ----		11.16.	DISPATCHERROR					---- */
+/* ----		11.16.		DISPATCHERROR					---- */
 
 #app-mount .body__23640 {
 	color: var(--text-normal);
@@ -2948,7 +2948,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		11.17.	HYPESQUADQUIZ					---- */
+/* ----		11.17.		HYPESQUADQUIZ					---- */
 
 #app-mount .prompt__7ad7f {
 	color: var(--header-primary);
@@ -2960,14 +2960,14 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--background-accent);
 }
 
-/* ----		11.18.	SERVERAPPMODAL					---- */
+/* ----		11.18.		SERVERAPPMODAL					---- */
 
 #app-mount .directoryContainer_d3edd9 {
 	background: var(--background-primary);
 }
 
 
-/* ~~~~		12.		POPOUTS							~~~~ */
+/* ~~~~		12.		POPOUTS						~~~~ */
 
 #app-mount .content_b06993 {
 	background-color: var(--background-floating) !important;
@@ -2990,7 +2990,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-image: linear-gradient(90deg, var(--background-tertiary),var(--background-accent),var(--background-tertiary));
 }
 
-/* ----		12.1.	USERPOPOUT						---- */
+/* ----		12.1.		USERPOPOUT					---- */
 
 #app-mount .userPopoutOuter_d739b2 {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v),.6), 0 2px 10px 0 rgba(0,0,0,.2);
@@ -3021,7 +3021,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	fill: rgb(var(--textdarkest_v)) !important;
 }
 
-/* ----		12.2.	EMOJIPICKER						---- */
+/* ----		12.2.		EMOJIPICKER					---- */
 
 #app-mount .wrapper_d951b6 {
 	color: var(--text-muted);
@@ -3087,7 +3087,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--interactive-active);
 }
 
-/* ----		12.3.	SEARCHPOPOUT					---- */
+/* ----		12.3.		SEARCHPOPOUT					---- */
 
 #app-mount .searchAnswer_b452e7,
 #app-mount .searchFilter__118cb {
@@ -3188,7 +3188,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: rgba(var(--textbrightest_v),.3);
 }
 
-/* ----		12.4.	EVERYONEMENTION					---- */
+/* ----		12.4.		EVERYONEMENTION					---- */
 
 .contentWarningPopout__7d8c2 .animation__14012 {
 	opacity: 0.6;
@@ -3198,7 +3198,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-muted);
 }
 
-/* ----		12.5.	CHANNELFOLLOW					---- */
+/* ----		12.5.		CHANNELFOLLOW					---- */
 
 #app-mount .header__4ef99 {
 	background: var(--background-tertiary);
@@ -3214,7 +3214,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	-webkit-mask: url(https://discord.com/assets/e9661fbf5e8e3a2e1ac9.svg) center/cover no-repeat;
 }
 
-/* ----		12.6.	CHANNELFOLLOWINFO				---- */
+/* ----		12.6.		CHANNELFOLLOWINFO				---- */
 
 #app-mount .guildPopout_ea4d8c {
 	background-color: var(--background-tertiary);
@@ -3230,7 +3230,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background: var(--text-muted);
 }
 
-/* ----		12.7.	STREAMPREVIEW					---- */
+/* ----		12.7.		STREAMPREVIEW					---- */
 
 #app-mount .streamPreview__1846c {
 	background-color: var(--background-tertiary);
@@ -3252,7 +3252,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background: rgba(0,0,0,.6);
 }
 
-/* ----		12.8.	ROLEOVERFLOW					---- */
+/* ----		12.8.		ROLEOVERFLOW					---- */
 
 #app-mount .overflowRolesPopoutHeaderText_dabff2 {
 	color: var(--text-muted);
@@ -3270,7 +3270,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(var(--backgroundtertiary_v),.6);
 }
 
-/* ----		12.9.	PUBLICGUILDANNOUNCEMENT			---- */
+/* ----		12.9.		PUBLICGUILDANNOUNCEMENT				---- */
 
 #app-mount .popout__8e314 {
 	background-color: var(--background-tertiary);
@@ -3280,7 +3280,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		12.10.	QUICKSELECTPOPOUT				---- */
+/* ----		12.10.		QUICKSELECTPOPOUT				---- */
 
 #app-mount .selectableItem__166c5 {
 	color: var(--header-primary);
@@ -3306,7 +3306,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--background-accent);
 }
 
-/* ----		12.11.	RTCSTATUSPOPOUT					---- */
+/* ----		12.11.		RTCSTATUSPOPOUT					---- */
 
 #app-mount .container__0810b {
 	width: 290px;
@@ -3333,7 +3333,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--header-primary);
 }
 
-/* ----		12.12.	PHONE-/EMAILVALIDATION			---- */
+/* ----		12.12.		PHONE-/EMAILVALIDATION				---- */
 
 #app-mount .input_d5a597 {
 	background-color: var(--background-accent);
@@ -3386,7 +3386,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-secondary);
 }
 
-/* ----		12.13.	WARNINGPOPOUT					---- */
+/* ----		12.13.		WARNINGPOPOUT					---- */
 
 #app-mount .contentWarningPopout__7d8c2 {
 	background-color: var(--background-primary);
@@ -3399,7 +3399,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		12.14.	ADDROLE							---- */
+/* ----		12.14.		ADDROLE						---- */
 
 #app-mount .container_e84cda {
 	width: 300px;
@@ -3417,7 +3417,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 
-/* ~~~~		13.		BDSUPPORT						~~~~ */
+/* ~~~~		13.		BDSUPPORT					~~~~ */
 
 html .toast,
 html .bd-toast {
@@ -3839,13 +3839,13 @@ html .powercord-pc-icon:active::before {
 
 /* ~~~~		15.		PLUGINSUPPORT					~~~~ */
 
-/* ----		15.1.	MEMBERCOUNT						---- */
+/* ----		15.1.		MEMBERCOUNT					---- */
 
 #app-mount #MemberCount {
 	background-color: var(--background-secondary);
 }
 
-/* ----		15.2.	CHANNELTABS						---- */
+/* ----		15.2.		CHANNELTABS					---- */
 
 html #channelTabs-settingsMenu,
 html .channelTabs-tabNav > div,
@@ -3862,7 +3862,7 @@ html .channelTabs-tabContainer .channelTabs-tabNav > .channelTabs-tabNavClose:ho
 	background: rgb(var(--dangercolor_v));
 }
 
-/* ----		15.3.	TYPINGINDICATOR					---- */
+/* ----		15.3.		TYPINGINDICATOR					---- */
 
 html .typingindicator-guild,
 html .typingindicator-dms,
@@ -3882,7 +3882,7 @@ html .typingindicator-folder {
 }
 
 
-/* ~~~~		16.		WATERMARK						~~~~ */
+/* ~~~~		16.		WATERMARK					~~~~ */
 
 html:only-child > head + body div.typeWindows__5fa63.titleBar__01af6 > div.wordmark__0d178 {
 	display: block !important;
