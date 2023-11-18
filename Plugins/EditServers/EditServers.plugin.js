@@ -65,10 +65,10 @@ module.exports = (_ => {
 						addOriginalTooltip:		{value: true, 			description: "Hovering over a changed Server Header shows the original Name as Tooltip"},
 					},
 					places: {
-						guildList:				{value: true, 			description: "Server List"},
+						guildList:			{value: true, 			description: "Server List"},
 						guildHeader:			{value: true, 			description: "Server Header"},
-						invites:				{value: true, 			description: "Server Invites"},
-						chat:					{value: true, 			description: "Chat (Welcome Message, etc.)"},
+						invites:			{value: true, 			description: "Server Invites"},
+						chat:				{value: true, 			description: "Chat (Welcome Message, etc.)"},
 						mutualGuilds:			{value: true, 			description: "Mutual Servers"},
 						recentMentions:			{value: true, 			description: "Recent Mentions Popout"},
 						quickSwitcher:			{value: true, 			description: "Quick Switcher"}
