@@ -71,15 +71,23 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 	flex: 1 1 auto;
 }
 
-.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda::before {
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda::before,
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda::after {
 	content: "";
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	height: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	margin-right: calc(var(--use-settingsicons) * var(--settingsicons-size)/2);
+}
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda::before {
 	background: currentColor;
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
+}
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda::after {
+	position: absolute;
+	z-index: 1;
+	background: var(--settingsicons-icon) center/contain no-repeat;
 }
 
 .sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(2),
