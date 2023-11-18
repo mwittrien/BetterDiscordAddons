@@ -132,6 +132,7 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 #app-mount .standardSidebarView__1129a .contentColumn_dc7d36[id="settings-clips-tab" i] {
 	--settingsicons-icon: var(--settingsicons-streamermode);
 }
+.sidebar__9e3e2:has(.socialLinks_c1fc99) .side_b4b3f6 .item__48dda:nth-child(9),
 .sidebar__9e3e2:has(.socialLinks_c1fc99):has(.separator_fdbcfd:nth-child(11)) .side_b4b3f6 .item__48dda:nth-child(10),
 #app-mount .sidebar__9e3e2 .side_b4b3f6 .item__48dda[aria-controls="friend-requests-tab" i],
 #app-mount .standardSidebarView__1129a .contentColumn_dc7d36[id="friend-requests-tab" i] {
