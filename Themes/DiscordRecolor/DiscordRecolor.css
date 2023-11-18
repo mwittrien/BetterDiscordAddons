@@ -3438,6 +3438,25 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	background-color: currentColor;
 }
 
+.bd-select {
+	border: 1px solid transparent;
+	padding: 8px 8px 8px 12px;
+	cursor: pointer;
+	box-sizing: border-box;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	border-radius: 4px;
+}
+
+.bd-slider-input {
+	background-color: var(--background-accent);
+}
+.bd-slider-input[type="range"]::-webkit-slider-thumb {
+	background-color: #fff;
+	border-color: var(--background-accent);
+}
+
 .bd-tab-item.selected:hover {
 	background-color: var(--background-modifier-selected);
 }
