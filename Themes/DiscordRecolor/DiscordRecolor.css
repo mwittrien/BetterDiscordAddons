@@ -388,7 +388,7 @@ svg [fill="#4F545C"] {
 	background: var(--header-primary);
 }
 
-#app-mount .scrollbarGhost__6f715::-webkit-scrollbar-thumb {			/* scrollers			old scrollers						*/
+#app-mount .scrollbarGhost__6f715::-webkit-scrollbar-thumb {
 	background-color: var(--scrollbar-thin-thumb);
 	border-color: transparent;
 }
@@ -411,10 +411,10 @@ svg [fill="#4F545C"] {
 	border-color: transparent;
 }
 
-#app-mount .breadcrumbWrapper__34bfa {						/* breadcrumbs			wrapper							*/
+#app-mount .breadcrumbWrapper__34bfa {
 	color: rgba(var(--textbrightest_v),.3);
 }
-#app-mount .activeBreadcrumb__7e753 {						/* breadcrumbs			active							*/
+#app-mount .activeBreadcrumb__7e753 {
 	color: rgba(var(--textbrightest_v),.6);
 }
 
@@ -869,10 +869,10 @@ html .iconBadge__2abac {
 	opacity: .5;
 }
 
-#app-mount .wrapper__246a1 {								/* crash screen			background							*/
+#app-mount .wrapper__246a1 {
 	background-image: url(https://discord.com/assets/14223d22c9628be36fc0.svg);
 }
-#app-mount .image_dabcb8 {									/* crash screen			center image						*/
+#app-mount .image_dabcb8 {
 	background-image: url(https://discord.com/assets/72eaa596042042be6259.svg);
 	opacity: .5;
 }
