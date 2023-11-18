@@ -188,15 +188,15 @@ module.exports = (_ => {
 						onlyShowOnShift:	{value: false,	description: "Only show the Details Tooltip, while holding 'Shift'"}
 					},
 					items: {
-						icon:				{value: true, 	description: "icon"},
-						owner:				{value: true, 	description: "GUILD_OWNER"},
+						icon:			{value: true, 	description: "icon"},
+						owner:			{value: true, 	description: "GUILD_OWNER"},
 						creationDate:		{value: true, 	description: "creation_date"},
-						joinDate:			{value: true, 	description: "join_date"},
-						members:			{value: true, 	description: "MEMBERS"},
-						channels:			{value: true, 	description: "CHANNELS"},
-						roles:				{value: true, 	description: "ROLES"},
-						boosts:				{value: true, 	description: "boosts"},
-						language:			{value: true, 	description: "LANGUAGE"}
+						joinDate:		{value: true, 	description: "join_date"},
+						members:		{value: true, 	description: "MEMBERS"},
+						channels:		{value: true, 	description: "CHANNELS"},
+						roles:			{value: true, 	description: "ROLES"},
+						boosts:			{value: true, 	description: "boosts"},
+						language:		{value: true, 	description: "LANGUAGE"}
 					},
 					dates: {
 						tooltipDates:		{value: {}, 	description: "Tooltip Dates"}
@@ -205,7 +205,7 @@ module.exports = (_ => {
 						tooltipColor:		{value: "", 	description: "Tooltip Color"}
 					},
 					amounts: {
-						tooltipDelay:		{value: 0,		min: 0,		max: 10,	digits: 1,	unit: "s",	description: "Tooltip Delay"},
+						tooltipDelay:		{value: 0,	min: 0,		max: 10,	digits: 1,	unit: "s",	description: "Tooltip Delay"},
 						tooltipWidth:		{value: 300,	min: 200,	max: 600,	digits: 0,	unit: "px",	description: "Tooltip Width"}
 					}
 				};

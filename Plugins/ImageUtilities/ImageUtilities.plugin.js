@@ -65,8 +65,6 @@ module.exports = (_ => {
 		var cachedImages;
 		var eventTypes = {};
 		
-		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
-		
 		const rescaleOptions = {
 			NONE: "No Resize",
 			ORIGINAL: "Resize to Original Size",
@@ -205,7 +203,7 @@ module.exports = (_ => {
 					},
 					viewerSettings: {
 						zoomMode: 				{value: true,	description: "Enables Zoom Mode to zoom into Images while holding down your Mouse"},
-						galleryMode: 			{value: true,	description: "Enables Gallery Mode to quick-switch between Images"},
+						galleryMode: 				{value: true,	description: "Enables Gallery Mode to quick-switch between Images"},
 						details: 				{value: true,	description: "Adds Image Details (Name, Size, Amount)"},
 						copyImage: 				{value: true,	description: "Adds a 'Copy Image' Option"},
 						saveImage: 				{value: true,	description: "Adds a 'Save Image as' Option"},
@@ -216,39 +214,39 @@ module.exports = (_ => {
 						pixelMode: 				{value: false,	label: "Uses Pixel Lens instead of a Blur Lens"},
 						clickMode: 				{value: false,	label: "Click Image to zoom instead of holding the Mouse Button"},
 						lensSize:				{value: 200,	digits: 0,	minValue: 50,	maxValue: 5000,	unit: "px",		label: "context_lenssize"},
-						zoomLevel:				{value: 2,		digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
+						zoomLevel:				{value: 2,	digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
 						zoomSpeed: 				{value: 0.1,	digits: 2,	minValue: 0.01,	maxValue: 1,	unit: "",		label: "context_zoomspeed"}
 					},
 					rescaleSettings: {
 						messages: 				{value: "NONE",	description: "Messages"},
-						imageViewer: 			{value: "NONE",	description: "Image Viewer"}
+						imageViewer: 				{value: "NONE",	description: "Image Viewer"}
 					},
 					detailsSettings: {
 						footnote:				{value: true, 	description: "in the Image Description"},
 						tooltip:				{value: false, 	description: "as a Hover Tooltip"},
-						tooltipDelay:			{value: 0, 		min: 0,			description: "Image Tooltip Delay (in ms)"}
+						tooltipDelay:				{value: 0, 	min: 0,		description: "Image Tooltip Delay (in ms)"}
 					},
 					places: {
-						userAvatars: 			{value: true, 	description: "User Avatars"},
-						groupIcons: 			{value: true, 	description: "Group Icons"},
-						guildIcons: 			{value: true, 	description: "Server Icons"},
-						streamPreviews: 		{value: true, 	description: "Stream Previews"},
+						userAvatars: 				{value: true, 	description: "User Avatars"},
+						groupIcons: 				{value: true, 	description: "Group Icons"},
+						guildIcons: 				{value: true, 	description: "Server Icons"},
+						streamPreviews: 			{value: true, 	description: "Stream Previews"},
 						emojis: 				{value: true, 	description: "Custom Emojis/Emotes"}
 					},
 					engines: {
 						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
-						Baidu: 		{value: true, 	name: "Baidu", 					url: "http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
-						Bing: 		{value: true, 	name: "Bing", 					url: "https://www.bing.com/images/search?q=imgurl:" + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
-						Google:		{value: true, 	name: "Google", 				url: "https://www.google.com/searchbyimage?sbisrc=cr_1&image_url=" + imgUrlReplaceString},
-						GoogleLens:	{value: true, 	name: "Google Lens",			url: "https://lens.google.com/uploadbyurl?url=" + imgUrlReplaceString},
-						ImgOps:		{value: true, 	name: "ImgOps",		raw: true, 	url: "https://imgops.com/specialized+reverse/" + imgUrlReplaceString},
-						IQDB:		{value: true, 	name: "IQDB", 					url: "https://iqdb.org/?url=" + imgUrlReplaceString},
-						Reddit: 	{value: true, 	name: "Reddit", 				url: "http://karmadecay.com/search?q=" + imgUrlReplaceString},
-						SauceNAO: 	{value: true, 	name: "SauceNAO", 				url: "https://saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
-						Sogou: 		{value: true, 	name: "Sogou", 					url: "http://pic.sogou.com/ris?flag=1&drag=0&query=" + imgUrlReplaceString + "&flag=1"},
-						TinEye:		{value: true, 	name: "TinEye", 				url: "https://tineye.com/search?url=" + imgUrlReplaceString},
-						WhatAnime:	{value: true,	name: "WhatAnime",				url: "https://trace.moe/?url=" + imgUrlReplaceString},
-						Yandex: 	{value: true, 	name: "Yandex", 				url: "https://yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
+						Baidu: 		{value: true, 	name: "Baidu", 						url: "http://image.baidu.com/pcdutu?queryImageUrl="},
+						Bing: 		{value: true, 	name: "Bing", 						url: "https://www.bing.com/images/search?view=detailv2&iss=sbi&FORM=IRSBIQ&q=imgurl:"},
+						Google:		{value: true, 	name: "Google", 					url: "https://www.google.com/searchbyimage?sbisrc=cr_1&image_url="},
+						GoogleLens:	{value: true, 	name: "Google Lens",					url: "https://lens.google.com/uploadbyurl?url="},
+						ImgOps:		{value: true, 	name: "ImgOps",			raw: true, 		url: "https://imgops.com/specialized+reverse/"},
+						IQDB:		{value: true, 	name: "IQDB", 						url: "https://iqdb.org/?url="},
+						Reddit: 	{value: true, 	name: "Reddit", 					url: "http://karmadecay.com/search?q="},
+						SauceNAO: 	{value: true, 	name: "SauceNAO", 					url: "https://saucenao.com/search.php?db=999&url="},
+						Sogou: 		{value: true, 	name: "Sogou", 						url: "http://pic.sogou.com/ris?flag=1&drag=0&flag=1&query="},
+						TinEye:		{value: true, 	name: "TinEye", 					url: "https://tineye.com/search?url="},
+						WhatAnime:	{value: true,	name: "WhatAnime",					url: "https://trace.moe/?url="},
+						Yandex: 	{value: true, 	name: "Yandex", 					url: "https://yandex.com/images/search?rpt=imageview&url="}
 					}
 				};
 				
@@ -922,7 +920,7 @@ module.exports = (_ => {
 							persisting: true,
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(instance);
-								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(urlData.original)), {
+								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url + encodeURIComponent(urlData.original), {
 									minimized: event.shiftKey
 								});
 							}

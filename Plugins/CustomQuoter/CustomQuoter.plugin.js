@@ -110,8 +110,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						autoAddNewLine:			{value: true, 			description: "Try to add New Lines before/after Quotes"},
-						holdShiftToolbar:		{value: false, 			description: "Need to hold Shift on a Message to show Quick Quote"},
+						autoAddNewLine:				{value: true, 			description: "Try to add New Lines before/after Quotes"},
+						holdShiftToolbar:			{value: false, 			description: "Need to hold Shift on a Message to show Quick Quote"},
 						alwaysCopy:				{value: false, 			description: "Always copy Quote to Clipboard without holding Shift"}
 					},
 					dates: {

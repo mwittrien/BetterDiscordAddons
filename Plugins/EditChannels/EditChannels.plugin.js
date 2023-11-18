@@ -67,20 +67,20 @@ module.exports = (_ => {
 					},
 					places: {
 						chatTextarea:		{value: true, 			description: "Chat Textarea"},
-						chatWindow:			{value: true, 			description: "Messages"},
-						mentions:			{value: true, 			description: "Mentions"},
+						chatWindow:		{value: true, 			description: "Messages"},
+						mentions:		{value: true, 			description: "Mentions"},
 						channelList:		{value: true, 			description: "Channel/Group List"},
 						channelHeader:		{value: true, 			description: "Channel/Group Header"},
-						recentDms:			{value: true, 			description: "Group Notifications"},
+						recentDms:		{value: true, 			description: "Group Notifications"},
 						recentMentions:		{value: true, 			description: "Recent Mentions Popout"},
-						threads:			{value: true, 			description: "Thread Overview"},
+						threads:		{value: true, 			description: "Thread Overview"},
 						autocompletes:		{value: true, 			description: "Autocomplete Menu"},
-						auditLog:			{value: true, 			description: "Audit Log"},
-						inviteLog:			{value: true, 			description: "Invite Log"},
+						auditLog:		{value: true, 			description: "Audit Log"},
+						inviteLog:		{value: true, 			description: "Invite Log"},
 						quickSwitcher:		{value: true, 			description: "Quick Switcher"},
 						searchResults:		{value: true, 			description: "Search Results"},
 						searchPopout:		{value: true, 			description: "Search Popout"},
-						appTitle:			{value: true, 			description: "Discord App Title (Channels)"}
+						appTitle:		{value: true, 			description: "Discord App Title (Channels)"}
 					}
 				};
 			

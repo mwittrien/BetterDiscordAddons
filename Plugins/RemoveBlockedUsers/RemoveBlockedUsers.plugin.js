@@ -73,12 +73,12 @@ module.exports = (_ => {
 						mentions:			{value: true, 	description: "Mentions"},
 						reactions:			{value: true, 	description: "Reactions"},
 						threads:			{value: true, 	description: "Threads"},
-						autocompletes:		{value: true, 	description: "Autocomplete Entries"},
+						autocompletes:			{value: true, 	description: "Autocomplete Entries"},
 						memberList:			{value: true, 	description: "Members in List"},
 						voiceList:			{value: true, 	description: "Members in Voice List"},
 						voiceChat:			{value: true, 	description: "Members in Voice Chat"},
 						activity:			{value: true, 	description: "Activity Page"},
-						channelList:		{value: true, 	description: "Channel/Group List"},
+						channelList:			{value: true, 	description: "Channel/Group List"},
 						recentDms:			{value: true, 	description: "Group Notifications"}
 					}
 				};

@@ -70,14 +70,14 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					replaces: {
-						blocked: 				{value: "~~BLOCKED~~",		description: "Default Replacement Value for blocked Messages: "},
-						censored:				{value: "$!%&%!&",			description: "Default Replacement Value for censored Messages: "}
+						blocked: 			{value: "~~BLOCKED~~",			description: "Default Replacement Value for blocked Messages: "},
+						censored:			{value: "$!%&%!&",			description: "Default Replacement Value for censored Messages: "}
 					},
 					general: {
 						addContextMenu:			{value: true,				description: "Adds a Context Menu Entry to faster add new blocked/censored Words"},
 						targetMessages:			{value: true,				description: "Checks Messages for blocked/censored Words"},
 						targetStatuses:			{value: true,				description: "Checks Custom Statuses for blocked/censored Words"},
-						targetOwn:				{value: true, 				description: "Filters/Blocks your own Messages/Custom Status"}
+						targetOwn:			{value: true, 				description: "Filters/Blocks your own Messages/Custom Status"}
 					}
 				};
 			

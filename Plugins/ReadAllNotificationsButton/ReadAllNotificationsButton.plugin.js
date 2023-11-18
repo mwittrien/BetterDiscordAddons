@@ -139,9 +139,9 @@ module.exports = (_ => {
 						confirmClear:		{value: false, 	description: "Asks for your confirmation before clearing reads"}
 					},
 					batch: {
-						guilds:				{value: true, 	description: "unread Servers"},
-						muted:				{value: false, 	description: "muted unread Servers"},
-						dms:				{value: false, 	description: "unread DMs"}
+						guilds:			{value: true, 	description: "unread Servers"},
+						muted:			{value: false, 	description: "muted unread Servers"},
+						dms:			{value: false, 	description: "unread DMs"}
 					}
 				};
 			

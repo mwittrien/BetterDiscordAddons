@@ -88,14 +88,14 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						showButton:			{value: true,					description: "Show Quick Toggle Button"},
-						showItem:			{value: false,					description: "Show Quick Toggle Item"},
-						playEnable:			{value: true,					description: "Play Enable Sound"},
-						playDisable:		{value: true,					description: "Play Disable Sound"}
+						showButton:			{value: true,				description: "Show Quick Toggle Button"},
+						showItem:			{value: false,				description: "Show Quick Toggle Item"},
+						playEnable:			{value: true,				description: "Play Enable Sound"},
+						playDisable:			{value: true,				description: "Play Disable Sound"}
 					},
 					selections: {
-						enableSound:		{value: "stream_started",		description: "Enable Sound"},
-						disableSound:		{value: "stream_ended",			description: "Disable Sound"}
+						enableSound:			{value: "stream_started",		description: "Enable Sound"},
+						disableSound:			{value: "stream_ended",			description: "Disable Sound"}
 					}
 				};
 				

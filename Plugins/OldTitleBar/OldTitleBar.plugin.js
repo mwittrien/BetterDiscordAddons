@@ -122,8 +122,8 @@ module.exports = (_ => {
 
 				this.defaults = {
 					general: {
-						addToSettings:		{value: true, 												description: "Adds a Titlebar to Settings Windows"},
-						reloadButton:		{value: true, 												description: "Adds a Reload Button to the Titlebar"}
+						addToSettings:		{value: true, 				description: "Adds a Titlebar to Settings Windows"},
+						reloadButton:		{value: true, 				description: "Adds a Reload Button to the Titlebar"}
 					}
 				};
 			

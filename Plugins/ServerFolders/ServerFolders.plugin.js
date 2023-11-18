@@ -452,7 +452,7 @@ module.exports = (_ => {
 						extraColumn:			{value: true, 	description: "Moves the Servers from opened Folders into an extra Column"},
 						addSeparators:			{value: true, 	description: "Adds Separators between Servers of different Folders in extra Column"},
 						addFolderIcon:			{value: false, 	description: "Adds the Folder Icon on the top of the Server List in the extra Column"},
-						addFolderBackground:	{value: false, 	description: "Adds a Folder Background behind a Group of Servers in the extra Column"}
+						addFolderBackground:		{value: false, 	description: "Adds a Folder Background behind a Group of Servers in the extra Column"}
 					}
 				};
 			

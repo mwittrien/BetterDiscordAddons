@@ -103,18 +103,18 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						useCrown:			{value: true,	description: "Uses the Crown Icon instead of the Bot Tag Style"},
+						useCrown:		{value: true,	description: "Uses the Crown Icon instead of the Bot Tag Style"},
 						useRoleColor:		{value: true, 	description: "Uses the Role Color instead of the default Blurple"},
 						useBlackFont:		{value: false,	description: "Uses black Font instead of darkening the Role Color on bright Colors"},
-						ignoreBots:			{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for Bots"},
+						ignoreBots:		{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for Bots"},
 						ignoreMyself:		{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for yourself"}
 					},
 					tagTypes: {
-						owners:				{value: true, 	description: "Server Owner Tag"},
+						owners:			{value: true, 	description: "Server Owner Tag"},
 						groupOwners:		{value: true, 	description: "Group Owner Tag"},
 						threadCreators:		{value: true, 	description: "Thread Creator Tag"},
 						forumCreators:		{value: true, 	description: "Forum Creator Tag"},
-						admins:				{value: true, 	description: "Admin Tag (Admin Permissions)"},
+						admins:			{value: true, 	description: "Admin Tag (Admin Permissions)"},
 						managementG:		{value: true, 	description: "Management Tag (Server Management)"},
 						managementC:		{value: true, 	description: "Management Tag (Channel Management)"},
 						managementT:		{value: true, 	description: "Management Tag (Threads Management)"},
@@ -125,19 +125,19 @@ module.exports = (_ => {
 						managementM:		{value: true, 	description: "Management Tag (Message Management)"}
 					},
 					tagPlaces: {
-						chat:				{value: true, 	description: "Messages"},
-						memberList:			{value: true, 	description: "Member List"},
-						voiceList:			{value: true, 	description: "Voice User List"},
-						userPopout:			{value: true, 	description: "User Popouts"},
+						chat:			{value: true, 	description: "Messages"},
+						memberList:		{value: true, 	description: "Member List"},
+						voiceList:		{value: true, 	description: "Voice User List"},
+						userPopout:		{value: true, 	description: "User Popouts"},
 						userProfile:		{value: true, 	description: "User Profile Modal"},
 					},
 					customTitles: {
-						owner:				{value: "",		placeholder: "Owner", 		description: "Server Owner Tags"},
-						groupOwner:			{value: "",		placeholder: "Group Owner",	description: "Group Owner Tags"},
-						forumCreator:		{value: "",		placeholder: "Creator", 	description: "Forum Creator Tags"},
-						threadCreator:		{value: "",		placeholder: "Creator", 	description: "Thread Creator Tags"},
-						admin:				{value: "",		placeholder: "Admin", 		description: "Admin Tags"},
-						management:			{value: "",		placeholder: "Management", 	description: "Management Tags"}
+						owner:			{value: "",	placeholder: "Owner", 		description: "Server Owner Tags"},
+						groupOwner:		{value: "",	placeholder: "Group Owner",	description: "Group Owner Tags"},
+						forumCreator:		{value: "",	placeholder: "Creator", 	description: "Forum Creator Tags"},
+						threadCreator:		{value: "",	placeholder: "Creator", 	description: "Thread Creator Tags"},
+						admin:			{value: "",	placeholder: "Admin", 		description: "Admin Tags"},
+						management:		{value: "",	placeholder: "Management", 	description: "Management Tags"}
 					}
 				};
 			

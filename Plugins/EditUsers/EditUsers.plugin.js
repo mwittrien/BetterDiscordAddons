@@ -67,8 +67,8 @@ module.exports = (_ => {
 						dms:				{value: true, 		description: "Direct Messages"},
 					},
 					places: {
-						contextMenu:		{value: true, 		description: "User ContextMenu"},
-						chatTextarea:		{value: true, 		description: "Chat Textarea"},
+						contextMenu:			{value: true, 		description: "User ContextMenu"},
+						chatTextarea:			{value: true, 		description: "Chat Textarea"},
 						chatWindow:			{value: true, 		description: "Messages"},
 						reactions:			{value: true, 		description: "Reactions"},
 						mentions:			{value: true, 		description: "Mentions"},
@@ -83,12 +83,12 @@ module.exports = (_ => {
 						inviteList:			{value: true, 		description: "Invite List"},
 						activity:			{value: true, 		description: "Activity Page"},
 						userPopout:			{value: true, 		description: "User Popouts"},
-						userProfile:		{value: true, 		description: "User Profile Modal"},
-						autocompletes:		{value: true, 		description: "Autocomplete Menu"},
-						guildSettings:		{value: true, 		description: "Server Settings"},
-						quickSwitcher:		{value: true, 		description: "Quick Switcher"},
-						searchPopout:		{value: true, 		description: "Search Popout"},
-						userAccount:		{value: true, 		description: "Your Account Information"},
+						userProfile:			{value: true, 		description: "User Profile Modal"},
+						autocompletes:			{value: true, 		description: "Autocomplete Menu"},
+						guildSettings:			{value: true, 		description: "Server Settings"},
+						quickSwitcher:			{value: true, 		description: "Quick Switcher"},
+						searchPopout:			{value: true, 		description: "Search Popout"},
+						userAccount:			{value: true, 		description: "Your Account Information"},
 						appTitle:			{value: true, 		description: "Discord App Title (DMs)"}
 					}
 				};

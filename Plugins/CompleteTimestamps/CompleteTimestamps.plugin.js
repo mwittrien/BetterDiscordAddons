@@ -74,8 +74,8 @@ module.exports = (_ => {
 						markup:					{value: true, 			description: "Markup Timestamp Tooltips"}
 					},
 					dates: {
-						timestampDate:			{value: {}, 			description: "Chat Timestamps"},
-						tooltipDate:			{value: {}, 			description: "Tooltip Timestamps"}
+						timestampDate:				{value: {}, 			description: "Chat Timestamps"},
+						tooltipDate:				{value: {}, 			description: "Tooltip Timestamps"}
 					}
 				};
 				

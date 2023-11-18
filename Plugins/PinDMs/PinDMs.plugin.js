@@ -65,19 +65,19 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						pinIcon:			{value: true, 									description: "Show a little 'Pin' Icon for pinned DMs in the Server List"},
-						unreadAmount:		{value: true, 									description: "Shows the Amount of unread Messages in a Category in the Channel List"},
-						channelAmount:		{value: true, 									description: "Shows the Amount of pinned DMs in a Category in the Channel List"}
+						pinIcon:		{value: true, 						description: "Show a little 'Pin' Icon for pinned DMs in the Server List"},
+						unreadAmount:		{value: true, 						description: "Shows the Amount of unread Messages in a Category in the Channel List"},
+						channelAmount:		{value: true, 						description: "Shows the Amount of pinned DMs in a Category in the Channel List"}
 					},
 					recentOrder: {
-						channelList:		{value: false, 									description: "Channel List"},
-						guildList:			{value: false, 									description: "Server List"},
+						channelList:		{value: false, 						description: "Channel List"},
+						guildList:		{value: false, 						description: "Server List"},
 					},
 					preCategories: {
-						friends:			{value: {enabled: false, collapsed: false},		description: "FRIENDS"},
-						blocked:			{value: {enabled: false, collapsed: false},		description: "BLOCKED"},
-						bots:				{value: {enabled: false, collapsed: false},		description: "Bots"},
-						groups:				{value: {enabled: false, collapsed: false},		description: "GROUPS"}
+						friends:		{value: {enabled: false, collapsed: false},		description: "FRIENDS"},
+						blocked:		{value: {enabled: false, collapsed: false},		description: "BLOCKED"},
+						bots:			{value: {enabled: false, collapsed: false},		description: "Bots"},
+						groups:			{value: {enabled: false, collapsed: false},		description: "GROUPS"}
 					}
 				};
 				
