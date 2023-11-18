@@ -11,19 +11,19 @@
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/ServerColumns/
  * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Themes/ServerColumns/ServerColumns.theme.css
  *
- * @var range		columns_s			"Column Amount: [default] = 3"										[3, 1, 10, 1]
- * @var range		guildsize_s			"Server Icon Size: [default] = 50px"								[50, 10, 200, 1]
- * @var range		guildgap_s			"Server Icon Gap: [default] = 3px"									[3, 0, 25, 1]
- * @var checkbox	aligndms_s			"DMs Align: should Direct Messages also get aligned in Columns"		1
+ * @var range			columns_s			"Column Amount: [default] = 3"						[3, 1, 10, 1]
+ * @var range			guildsize_s			"Server Icon Size: [default] = 50px"					[50, 10, 200, 1]
+ * @var range			guildgap_s			"Server Icon Gap: [default] = 3px"					[3, 0, 25, 1]
+ * @var checkbox		aligndms_s			"DMs Align: should Direct Messages also get aligned in Columns"		1
  */
 
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/ServerColumns/ServerColumns.css);
 
 :root {
-	--columns:			3;							/* default:	3					(amount of servercolumns)																		*/
+	--columns:		3;				/* default: 3	(amount of servercolumns)						*/
 	
-	--guildsize:		50;							/* default:	50					(serversize in pixel)																			*/
-	--guildgap:			3;							/* default:	3					(top/bottom gap between servers in pixel)														*/
+	--guildsize:		50;				/* default: 50	(serversize in pixel)							*/
+	--guildgap:		3;				/* default: 3	(top/bottom gap between servers in pixel)				*/
 	
-	--aligndms:			0;							/* default:	0					(should DMs be aligned in columns: 0 = no, 1 = yes)												*/
+	--aligndms:		1;				/* default: 0	(should DMs be aligned in columns: 0 = no, 1 = yes)			*/
 }
