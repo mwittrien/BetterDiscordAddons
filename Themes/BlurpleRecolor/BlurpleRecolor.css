@@ -339,6 +339,40 @@
 
 /* ~~~~		2.		CHANNELLIST						~~~~ */
 
+.channelNotice_bbc8e6 .imageContainer__0c476 {
+	position: relative;
+}
+.channelNotice_bbc8e6 .imageContainer__0c476::before,
+.channelNotice_bbc8e6 .imageContainer__0c476::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+}
+.channelNotice_bbc8e6:has(.image__9f4c2[src="/assets/148fd8378ac32a66783c.svg"]) .image__9f4c2,
+.channelNotice_bbc8e6:has(.image__9f4c2[src="/assets/7e724c5bbf29dd3598ea.svg"]) .image__9f4c2 {
+	visibility: hidden;
+}
+.channelNotice_bbc8e6:has(.image__9f4c2[src="/assets/148fd8378ac32a66783c.svg"]) .imageContainer__0c476 {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_bg.svg) center/cover no-repeat;
+}
+.channelNotice_bbc8e6:has(.image__9f4c2[src="/assets/148fd8378ac32a66783c.svg"]) .imageContainer__0c476::before {
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_accent.svg) center/cover no-repeat;
+}
+.channelNotice_bbc8e6:has(.image__9f4c2[src="/assets/148fd8378ac32a66783c.svg"]) .imageContainer__0c476::after {
+	background: rgb(var(--accentcolor2));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_accent2.svg) center/cover no-repeat;
+}
+.channelNotice_bbc8e6:has(.image__9f4c2[src="/assets/7e724c5bbf29dd3598ea.svg"]) .imageContainer__0c476::before {
+	filter: grayscale(0.5);
+	background: url(https://discord.com/assets/7e724c5bbf29dd3598ea.svg) center/cover no-repeat;
+}
+
+
 /* ~~~~		3.		CHAT							~~~~ */
 
 /* ----		3.1.	MESSAGES						---- */
