@@ -11,15 +11,15 @@
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/SettingsModal/
  * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Themes/SettingsModal/SettingsModal.theme.css
  *
- * @var range		settingswidth_s				"Settings Width: [default] = 960px"		[960, 540, 1920, 20]
- * @var range		settingsheight_s			"Settings Height: [default] = 80vh"		[80, 20, 100, 5]
- * @var text		settingsbackground_s		"Settings Background: lowest BG Color of changed Windows, change it in case another Theme turns them transparent [default] = transparent"	transparent
+ * @var range			settingswidth_s		"Settings Width: [default] = 960px"	[960, 540, 1920, 20]
+ * @var range			settingsheight_s	"Settings Height: [default] = 80vh"	[80, 20, 100, 5]
+ * @var text			settingsbackground_s	"Settings Background: lowest BG Color of changed Windows, change it in case another Theme turns them transparent [default] = transparent"	transparent
  */
 
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/SettingsModal/SettingsModal.css);
 
 :root {
-	--settingswidth: 		960;					/* default:	960px			(width of the settings modal, px)																*/
-	--settingsheight: 		80;						/* default:	80vh			(height of the settings modal, vh)																*/
-	--settingsbackground: 	transparent;			/* default:	transparent		(lowest BG Color of changed Windows, change it in case another Theme turns them transparent)	*/
+	--settingswidth: 	960;			/* default:	960px			(width of the settings modal, px)												*/
+	--settingsheight: 	80;			/* default:	80vh			(height of the settings modal, vh)												*/
+	--settingsbackground: 	transparent;		/* default:	transparent		(lowest BG Color of changed Windows, change it in case another Theme turns them transparent)					*/
 }
