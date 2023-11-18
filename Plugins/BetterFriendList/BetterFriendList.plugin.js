@@ -80,7 +80,7 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						addTotalAmount:			{value: true, 	description: "Adds total Amount for All/Requested/Blocked"},
-						addFavorizedCategory:	{value: true, 	description: "Adds Favorites Category"},
+						addFavorizedCategory:		{value: true, 	description: "Adds Favorites Category"},
 						addHiddenCategory:		{value: true, 	description: "Adds Hidden Category"},
 						addSortOptions:			{value: true, 	description: "Adds Sort Options"},
 						addMutualGuild:			{value: true, 	description: "Adds mutual Servers in Friend List"}

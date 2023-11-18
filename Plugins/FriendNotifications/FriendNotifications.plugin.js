@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -222,11 +227,11 @@ module.exports = (_ => {
 
 				this.defaults = {
 					general: {
-						addOnlineCount:		{value: true, 	description: "Adds an Online Friend Counter to the Server List (Click to open Time Log)"},
-						showDiscriminator:	{value: false, 	description: "Adds the User Discriminator"},
-						showTimestamp:		{value: false, 	description: "Adds the Timestamp"},
+						addOnlineCount:			{value: true, 	description: "Adds an Online Friend Counter to the Server List (Click to open Time Log)"},
+						showDiscriminator:		{value: false, 	description: "Adds the User Discriminator"},
+						showTimestamp:			{value: false, 	description: "Adds the Timestamp"},
 						muteOnDND:			{value: false, 	description: "Does not notify you when you are in DnD Status"},
-						openOnClick:		{value: false, 	description: "Opens the DM when you click a Notification"}
+						openOnClick:			{value: false, 	description: "Opens the DM when you click a Notification"}
 					},
 					notificationStrings: {
 						online: 			{value: "$user changed status to '$status'"},
@@ -235,18 +240,18 @@ module.exports = (_ => {
 						playing: 			{value: "$user started playing '$game'"},
 						listening: 			{value: "$user started listening to '$song'"},
 						streaming: 			{value: "$user started streaming '$game'"},
-						screensharing: 		{value: "$user started screensharing"},
+						screensharing: 			{value: "$user started screensharing"},
 						offline: 			{value: "$user changed status to '$status'"},
 						login: 				{value: "$user just logged in '$status'"},
 						custom: 			{value: "$user changed status to '$custom'"}
 					},
 					notificationSounds: {},
 					dates: {
-						logDate:			{value: {}, 				description: "Log Timestamp"},
+						logDate:			{value: {}, 			description: "Log Timestamp"},
 					},
 					amounts: {
-						toastTime:			{value: 5, 		min: 1,		description: "Amount of Seconds a Toast Notification stays on Screen: "},
-						checkInterval:		{value: 10, 	min: 5,		description: "Checks Users every X Seconds: "}
+						toastTime:			{value: 5, 	min: 1,		description: "Amount of Seconds a Toast Notification stays on Screen: "},
+						checkInterval:			{value: 10, 	min: 5,		description: "Checks Users every X Seconds: "}
 					}
 				};
 			

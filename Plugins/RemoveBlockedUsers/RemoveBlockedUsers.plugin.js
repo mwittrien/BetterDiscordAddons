@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -73,12 +78,12 @@ module.exports = (_ => {
 						mentions:			{value: true, 	description: "Mentions"},
 						reactions:			{value: true, 	description: "Reactions"},
 						threads:			{value: true, 	description: "Threads"},
-						autocompletes:		{value: true, 	description: "Autocomplete Entries"},
+						autocompletes:			{value: true, 	description: "Autocomplete Entries"},
 						memberList:			{value: true, 	description: "Members in List"},
 						voiceList:			{value: true, 	description: "Members in Voice List"},
 						voiceChat:			{value: true, 	description: "Members in Voice Chat"},
 						activity:			{value: true, 	description: "Activity Page"},
-						channelList:		{value: true, 	description: "Channel/Group List"},
+						channelList:			{value: true, 	description: "Channel/Group List"},
 						recentDms:			{value: true, 	description: "Group Notifications"}
 					}
 				};

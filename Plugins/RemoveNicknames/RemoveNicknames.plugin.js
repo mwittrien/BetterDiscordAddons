@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -60,18 +65,18 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						replaceOwn:			{value: false, 			description: "Replaces your own Name"},
+						replaceOwn:		{value: false, 			description: "Replaces your own Name"},
 						replaceBots:		{value: true, 			description: "Replaces the Nickname of Bots"},
 						removeGlobal:		{value: true, 			description: "Also removes global Displaynames"},
 						addNickname:		{value: false, 			description: "Adds Nickname as Parentheses"},
 						swapPositions:		{value: false, 			description: "Swaps the Position of Username and Nickname"},
 					},
 					places: {
-						chat:				{value: true, 			description: "Messages"},
-						mentions:			{value: true, 			description: "Mentions"},
-						voiceChat:			{value: true, 			description: "Voice Channels"},
-						memberList:			{value: true, 			description: "Member List"},
-						typing:				{value: true, 			description: "Typing List"},
+						chat:			{value: true, 			description: "Messages"},
+						mentions:		{value: true, 			description: "Mentions"},
+						voiceChat:		{value: true, 			description: "Voice Channels"},
+						memberList:		{value: true, 			description: "Member List"},
+						typing:			{value: true, 			description: "Typing List"},
 						autocompletes:		{value: true, 			description: "Autocomplete Menu"}
 					}
 				};

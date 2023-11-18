@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -69,14 +74,14 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						downloadDictionary:			{value: false, 								description: "Use local Dictionary File (downloads Dictionary on first Usage)"}
+						downloadDictionary:		{value: false, 						description: "Use local Dictionary File (downloads Dictionary on first Usage)"}
 					},
 					choices: {
-						dictionaryLanguage:			{value: "en", 	force: true,				description: "Primary Language"},
-						secondaryLanguage:			{value: "-", 	force: false,				description: "Secondary Language"}
+						dictionaryLanguage:		{value: "en", 	force: true,				description: "Primary Language"},
+						secondaryLanguage:		{value: "-", 	force: false,				description: "Secondary Language"}
 					},
 					amounts: {
-						maxSimilarAmount:			{value: 6, 		min: 1,		max: 30,		description: "Maximal Amount of suggested Words"}
+						maxSimilarAmount:		{value: 6, 	min: 1,		max: 30,		description: "Maximal Amount of suggested Words"}
 					}
 				};
 			

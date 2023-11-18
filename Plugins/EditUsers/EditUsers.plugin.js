@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -67,8 +72,8 @@ module.exports = (_ => {
 						dms:				{value: true, 		description: "Direct Messages"},
 					},
 					places: {
-						contextMenu:		{value: true, 		description: "User ContextMenu"},
-						chatTextarea:		{value: true, 		description: "Chat Textarea"},
+						contextMenu:			{value: true, 		description: "User ContextMenu"},
+						chatTextarea:			{value: true, 		description: "Chat Textarea"},
 						chatWindow:			{value: true, 		description: "Messages"},
 						reactions:			{value: true, 		description: "Reactions"},
 						mentions:			{value: true, 		description: "Mentions"},
@@ -83,12 +88,12 @@ module.exports = (_ => {
 						inviteList:			{value: true, 		description: "Invite List"},
 						activity:			{value: true, 		description: "Activity Page"},
 						userPopout:			{value: true, 		description: "User Popouts"},
-						userProfile:		{value: true, 		description: "User Profile Modal"},
-						autocompletes:		{value: true, 		description: "Autocomplete Menu"},
-						guildSettings:		{value: true, 		description: "Server Settings"},
-						quickSwitcher:		{value: true, 		description: "Quick Switcher"},
-						searchPopout:		{value: true, 		description: "Search Popout"},
-						userAccount:		{value: true, 		description: "Your Account Information"},
+						userProfile:			{value: true, 		description: "User Profile Modal"},
+						autocompletes:			{value: true, 		description: "Autocomplete Menu"},
+						guildSettings:			{value: true, 		description: "Server Settings"},
+						quickSwitcher:			{value: true, 		description: "Quick Switcher"},
+						searchPopout:			{value: true, 		description: "Search Popout"},
+						userAccount:			{value: true, 		description: "Your Account Information"},
 						appTitle:			{value: true, 		description: "Discord App Title (DMs)"}
 					}
 				};

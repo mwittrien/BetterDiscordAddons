@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -65,13 +70,13 @@ module.exports = (_ => {
 						includeColorless:	{value: false, 	description: "Includes colorless Roles"},
 						showOwnerRole:		{value: false, 	description: `Displays Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
 						disableForBots:		{value: false, 	description: "Disables Role Tag for Bots"},
-						addUserId:			{value: false, 	description: "Adds the User Id as a Tag to the Chat Window"},
+						addUserId:		{value: false, 	description: "Adds the User Id as a Tag to the Chat Window"},
 						userIdFirst:		{value: false, 	description: "Places the User Id before the Role Tag"}
 					},
 					places: {
-						chat:				{value: true, 	description: "Chat Window"},
-						memberList:			{value: true, 	description: "Member List"},
-						voiceList:			{value: true, 	description: "Voice User List"},
+						chat:			{value: true, 	description: "Chat Window"},
+						memberList:		{value: true, 	description: "Member List"},
+						voiceList:		{value: true, 	description: "Voice User List"},
 					}
 				};
 				

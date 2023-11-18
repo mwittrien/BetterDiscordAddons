@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -188,15 +193,15 @@ module.exports = (_ => {
 						onlyShowOnShift:	{value: false,	description: "Only show the Details Tooltip, while holding 'Shift'"}
 					},
 					items: {
-						icon:				{value: true, 	description: "icon"},
-						owner:				{value: true, 	description: "GUILD_OWNER"},
+						icon:			{value: true, 	description: "icon"},
+						owner:			{value: true, 	description: "GUILD_OWNER"},
 						creationDate:		{value: true, 	description: "creation_date"},
-						joinDate:			{value: true, 	description: "join_date"},
-						members:			{value: true, 	description: "MEMBERS"},
-						channels:			{value: true, 	description: "CHANNELS"},
-						roles:				{value: true, 	description: "ROLES"},
-						boosts:				{value: true, 	description: "boosts"},
-						language:			{value: true, 	description: "LANGUAGE"}
+						joinDate:		{value: true, 	description: "join_date"},
+						members:		{value: true, 	description: "MEMBERS"},
+						channels:		{value: true, 	description: "CHANNELS"},
+						roles:			{value: true, 	description: "ROLES"},
+						boosts:			{value: true, 	description: "boosts"},
+						language:		{value: true, 	description: "LANGUAGE"}
 					},
 					dates: {
 						tooltipDates:		{value: {}, 	description: "Tooltip Dates"}
@@ -205,7 +210,7 @@ module.exports = (_ => {
 						tooltipColor:		{value: "", 	description: "Tooltip Color"}
 					},
 					amounts: {
-						tooltipDelay:		{value: 0,		min: 0,		max: 10,	digits: 1,	unit: "s",	description: "Tooltip Delay"},
+						tooltipDelay:		{value: 0,	min: 0,		max: 10,	digits: 1,	unit: "s",	description: "Tooltip Delay"},
 						tooltipWidth:		{value: 300,	min: 200,	max: 600,	digits: 0,	unit: "px",	description: "Tooltip Width"}
 					}
 				};
