@@ -248,8 +248,8 @@ html {
 
 /* ~~~~		1.		TRANSPARENCY					~~~~ */
 
-body,											/* body														*/
-#app-mount .app_b1f720,									/* app					container								*/
+body,											/* body													*/
+#app-mount .app_b1f720,									/* app					container							*/
 #app-mount .app_de4237,									/* app					inner								*/
 #app-mount .loading__30066,								/* app					i18n loading							*/
 #app-mount .wrapper__246a1,								/* app					errorscreen							*/
@@ -3482,10 +3482,10 @@ button.button__4f306.enabled__470f0:hover svg {
 .uploadModalIn_c0ca4b .uploadDropModal__73a36 .inner__7afe9 .instructions__9e259 {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.uploadModal_eae2a0 .inner__7afe9 {							/* modal				channeltextarea						*/
+.uploadModal_eae2a0 .inner__7afe9 {							/* modal				channeltextarea							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-.uploadModal_eae2a0 .footer_ceda43 {						/* modal				footer								*/
+.uploadModal_eae2a0 .footer_ceda43 {							/* modal				footer								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	box-shadow: none;
 }
@@ -3493,9 +3493,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	box-shadow: 0 2px 8px rgba(var(--transparencycolor_v), .4);
 }
 
-/* ----		13.4.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		13.4.		KEYBOARDSHORTCUTSMODAL				---- */
 
-#app-mount .keyboardShortcutsModal__74c71 {					/* modal				container							*/
+#app-mount .keyboardShortcutsModal__74c71 {						/* modal				container							*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	position: relative;
@@ -3547,7 +3547,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	color: var(--header-secondary);
 }
 
-/* ----		13.5.	QUICKSWITCHER					---- */
+/* ----		13.5.		QUICKSWITCHER					---- */
 
 #app-mount .quickswitcher_a3d29a {							/* modal				container							*/
 	background-color: transparent;
@@ -3597,17 +3597,17 @@ button.button__4f306.enabled__470f0:hover svg {
 .scroller__52ae7 {
 	background-color: transparent;
 }
-#app-mount .input__848cd {									/* modal				input								*/
+#app-mount .input__848cd {								/* modal				input								*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .result__25f11[aria-selected=true] {				/* modal				resultselected						*/
+#app-mount .result__25f11[aria-selected=true] {						/* modal				resultselected							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-/* ----		13.6.	INVITEMODAL/GROUPCREATE			---- */
+/* ----		13.6.		INVITEMODAL/GROUPCREATE				---- */
 
-#app-mount .contentWrapper__85d37 {							/* modal				guildinvitemodal				*/
+#app-mount .contentWrapper__85d37 {							/* modal				guildinvitemodal						*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	position: relative;
@@ -3635,12 +3635,12 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-#app-mount .friendSelected_f0db37,							/* modal				groupdmrow						*/
-#app-mount .inviteRow_a25947:hover {						/* modal				guildrow						*/
+#app-mount .friendSelected_f0db37,							/* modal				groupdmrow							*/
+#app-mount .inviteRow_a25947:hover {							/* modal				guildrow							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-#app-mount .friend__05c43,									/* modal				groupdmrow						*/
-#app-mount .inviteRowName_bc8b23 {							/* modal				username						*/
+#app-mount .friend__05c43,								/* modal				groupdmrow							*/
+#app-mount .inviteRowName_bc8b23 {							/* modal				username							*/
 	color: var(--header-secondary);
 }
 #app-mount .friendSelected_f0db37,
@@ -3653,7 +3653,7 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .subText__9988c {
 	color: var(--header-secondary);
 }
-.tag__69d9d {												/* modal				added user						*/
+.tag__69d9d {										/* modal				added user							*/
 	background-color: rgb(var(--accentcolor_v));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow_v);
@@ -3678,14 +3678,14 @@ button.button__4f306.enabled__470f0:hover svg {
 	opacity: 0.6;
 }
 
-/* ----		13.7.	LOGINSCREEN						---- */
+/* ----		13.7.		LOGINSCREEN					---- */
 
 #app-mount .wrapper_eebc2d {								/* login				wrapper								*/
 	background: transparent;
 }
-.wrapper_eebc2d::before,									/* login				winbuttonshadow						*/
+.wrapper_eebc2d::before,								/* login				winbuttonshadow							*/
 .wrapper_eebc2d .rightSplit__46a42,							/* login				background							*/
-.wrapper_eebc2d .canvas_c398ff {							/* login				movingshadow						*/
+.wrapper_eebc2d .canvas_c398ff {							/* login				movingshadow							*/
 	display: none;
 }
 #app-mount .authBox__7196a {								/* login				modal body							*/
@@ -3695,15 +3695,15 @@ button.button__4f306.enabled__470f0:hover svg {
 	position: relative;
 	overflow: hidden;
 }
-#app-mount .authBox__7196a.authBoxExpanded_e57789 {			/* login				modal body expanded					*/
+#app-mount .authBox__7196a.authBoxExpanded_e57789 {					/* login				modal body expanded						*/
 	background-color: rgba(var(--transparencycolor_v), .5);
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .navRow_bb8efc {									/* modal				modal footer						*/
+#app-mount .navRow_bb8efc {								/* modal				modal footer							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-/* ----		13.8.	DOWNLOADAPPMODAL				---- */
+/* ----		13.8.		DOWNLOADAPPMODAL				---- */
 
 #app-mount .downloadApps__30ed7 {							/* modal				container							*/
 	background-color: transparent;
@@ -3751,20 +3751,20 @@ button.button__4f306.enabled__470f0:hover svg {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-/* ----		13.9.	GUILDBOOSTMODAL					---- */
+/* ----		13.9.		GUILDBOOSTMODAL					---- */
 
-#app-mount .subscriberCount__53026 {						/* modal				subcount							*/
+#app-mount .subscriberCount__53026 {							/* modal				subcount							*/
 	color: var(--header-secondary);
 }
 #app-mount .subscriberCount__53026 strong {
 	color: var(--text-normal);
 }
-#app-mount .moreSubscribers_a13ebc {						/* modal				suboverflow							*/
+#app-mount .moreSubscribers_a13ebc {							/* modal				suboverflow							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 	color: var(--header-primary)
 }
 
-#app-mount .subscribersPopout__1da1e {						/* subpopout			container							*/
+#app-mount .subscribersPopout__1da1e {							/* subpopout				container							*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px rgba(var(--transparencycolor_v), .2);
 	overflow: hidden;
@@ -3790,18 +3790,18 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.35));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
-#app-mount .subscribersPopoutUser_a790de {					/* subpopout			users								*/
+#app-mount .subscribersPopoutUser_a790de {						/* subpopout				users								*/
 	color: var(--header-secondary);
 }
 
-#app-mount .iconWrapper__9caa9 {							/* prebuy popout		amount icon wrapper					*/
+#app-mount .iconWrapper__9caa9 {							/* prebuy popout			amount icon wrapper						*/
 	background: rgba(var(--transparencycolor_v), .3);
 }
-.icon_ae3492:hover {										/* prebuy popout		amount icon							*/
+.icon_ae3492:hover {									/* prebuy popout			amount icon							*/
 	background: rgb(var(--accentcolor_v));
 }
 
-/* ----		13.10.	REACTIONSMODAL					---- */
+/* ----		13.10.		REACTIONSMODAL					---- */
 
 #app-mount .scroller__5fda0 {								/* modal				sidebar								*/
 	background-color: rgba(var(--transparencycolor_v), .4);
@@ -3809,51 +3809,51 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .reactors__20ab0 {								/* modal				list								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-#app-mount .reactionDefault__792ef:hover {					/* modal				reaction							*/
+#app-mount .reactionDefault__792ef:hover {						/* modal				reaction							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 #app-mount .reactionSelected__249a7 {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-#app-mount .remove__6bd0e {									/* modal				remove								*/
+#app-mount .remove__6bd0e {								/* modal				remove								*/
 	color: var(--interactive-normal);
 }
 #app-mount .remove__6bd0e:hover {
 	background-color: rgba(var(--transparencycolor_v), .4);
 	color: var(--interactive-hover);
 }
-#app-mount .discriminator__18879 {							/* modal				discriminator						*/
+#app-mount .discriminator__18879 {							/* modal				discriminator							*/
 	color: var(--text-muted);
 }
 
-/* ----		13.11.	GUILDWELCOMEMODAL				---- */
+/* ----		13.11.		GUILDWELCOMEMODAL				---- */
 
-.optionContainer__5d0b1 {									/* modal				option								*/
+.optionContainer__5d0b1 {								/* modal				option								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 .optionContainer__5d0b1:hover {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
-/* ----		13.12.	GUILDRULESMODAL					---- */
+/* ----		13.12.		GUILDRULESMODAL					---- */
 
-.guildSidebar__8763f {										/* modal				sidebar								*/
+.guildSidebar__8763f {									/* modal				sidebar								*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-.footer__2f589 {											/* modal				footer								*/
+.footer__2f589 {									/* modal				footer								*/
 	background: transparent;
 }
-.modal_b38209 {												/* modal				inner								*/
+.modal_b38209 {										/* modal				inner								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-/* ----		13.13.	GUILDFEEDBACKMODAL				---- */
+/* ----		13.13.		GUILDFEEDBACKMODAL				---- */
 
-.root_b4f834 {												/* modal				items								*/
+.root_b4f834 {										/* modal				items								*/
 	background-color: transparent;
 	border-radius: 0;
 }
-.option_f70eea {											/* modal				item								*/
+.option_f70eea {									/* modal				item								*/
 	background-color: rgb(var(--transparencycolor_v), .2);
 	border: none;
 	border-radius: 8px;
@@ -3863,9 +3863,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: rgb(var(--transparencycolor_v), .4);
 }
 
-/* ----		13.14.	SCREENSHAREMODAL				---- */
+/* ----		13.14.		SCREENSHAREMODAL				---- */
 
-#app-mount .sourceThumbnail__21c87 {						/* modal				preview tiles						*/
+#app-mount .sourceThumbnail__21c87 {							/* modal				preview tiles							*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 	box-shadow: 0 2px 5px rgba(var(--transparencycolor_v), .2), 0 0 0 1px rgba(var(--transparencycolor_v), .6);
 }
@@ -3880,7 +3880,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-/* ----		13.15.	PHONEVERIFICATIONMODAL			---- */
+/* ----		13.15.		PHONEVERIFICATIONMODAL				---- */
 
 .phoneField__65729 {
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -3892,7 +3892,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	position: absolute !important;
 }
 
-/* ----		13.16.	NOTIFICATIONSMODAL				---- */
+/* ----		13.16.		NOTIFICATIONSMODAL				---- */
 
 #app-mount .channelName_a1ccf5 {
 	color: var(--header-primary);
@@ -3916,14 +3916,14 @@ button.button__4f306.enabled__470f0:hover svg {
 	border: 1px dashed var(--background-floating);
 }
 
-/* ----		13.17.	PODIUMSTARTMODAL				---- */
+/* ----		13.17.		PODIUMSTARTMODAL				---- */
 
 #app-mount .iconContainer__466ce {
 	background-color: rgba(var(--transparencycolor_v), .5);
 }
 
 
-/* ~~~~		14.		POPOUTS							~~~~ */
+/* ~~~~		14.		POPOUTS						~~~~ */
 
 .layer_ec16dd:nth-child(1) {
 	z-index: 1012;
@@ -4001,10 +4001,10 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-color: var(--background-modifier-accent);
 }
 
-/* ----		14.1.	CONTEXTMENU						---- */
+/* ----		14.1.		CONTEXTMENU					---- */
 
-.menu_dc52c6,												/* contextmenu			fixed								*/
-.submenu_acf564 {											/* contextmenu			submenu								*/
+.menu_dc52c6,										/* contextmenu				fixed								*/
+.submenu_acf564 {									/* contextmenu				submenu								*/
 	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
@@ -4061,7 +4061,7 @@ button.button__4f306.enabled__470f0:hover svg {
 .item__183e8.colorPremiumGradient__45b85:hover:not(.hideInteraction__2790e) {
 	background: linear-gradient(90deg, rgba(var(--accentcolor2_v), .2), rgba(var(--accentcolor_v), .2)) !important;
 }
-#app-mount .item__183e8 .checkbox__45366 {					/* contextmenu			checkbox 							*/
+#app-mount .item__183e8 .checkbox__45366 {						/* contextmenu				checkbox 							*/
 	color: rgb(var(--accentcolor_v));
 }
 #app-mount .item__183e8.colorDanger_eec36d .checkbox__45366 {
@@ -4073,20 +4073,20 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .item__183e8.colorPremium__548bd .checkbox__45366 {
 	color: rgb(var(--accentcolor2_v));
 }
-#app-mount .item__183e8 .check__8d1bd {						/* contextmenu			checkmark 							*/
+#app-mount .item__183e8 .check__8d1bd {							/* contextmenu				checkmark 							*/
 	color: #fff;
 	stroke: var(--textshadow_v);
 }
-.button__3ecb4 {											/* contextmenu			quick reaction button				*/
+.button__3ecb4 {									/* contextmenu				quick reaction button						*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 .button__3ecb4:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
 
-/* ----		14.2.	USERPOPOUT						---- */
+/* ----		14.2.		USERPOPOUT					---- */
 
-.userPopoutOuter_d739b2 {									/* popout				container							*/
+.userPopoutOuter_d739b2 {								/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
 .userProfileOuterUnthemed__48723 {							/* popout				container							*/
@@ -4117,7 +4117,7 @@ button.button__4f306.enabled__470f0:hover svg {
 .accountProfilePopoutWrapper_af829a .overlayBackground__86b78 {
 	display: block !important;
 }
-.profileColors__2e2f0 {										/* popout				profilecolors						*/
+.profileColors__2e2f0 {									/* popout				profilecolors							*/
 	--profile-body-background-color: rgba(0,0,0,.4) !important;
 	--profile-body-divider-color: var(--background-modifier-accent) !important;
 	--profile-body-divider-opacity: 1 !important;
@@ -4145,17 +4145,17 @@ button.button__4f306.enabled__470f0:hover svg {
 .userProfileInnerThemedWithBanner_d5f991::after {
 	height: 120px;
 }
-.userProfileInner__8065b {									/* popout				inner								*/
+.userProfileInner__8065b {								/* popout				inner								*/
 	border-radius: 4px;
 }
-.userPopoutOuter_d739b2 .wrapper_edb6e0,					/* popout				avatar								*/
-.userPopoutOuter_d739b2 .avatarWrapper {					/* popout				status everywhere					*/
+.userPopoutOuter_d739b2 .wrapper_edb6e0,						/* popout				avatar								*/
+.userPopoutOuter_d739b2 .avatarWrapper {						/* popout				status everywhere						*/
 	background-color: transparent;
 	border-color: transparent;
 	box-sizing: content-box;
 }
 
-.root_a99273 {												/* body					roles								*/
+.root_a99273 {										/* body					roles								*/
 	max-height: 100px;
 	overflow-x: hidden;
 	overflow-y: scroll;
@@ -4163,7 +4163,7 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .root_a99273::-webkit-scrollbar {
 	width: 4px;
 }
-#app-mount .role__631a3 {									/* body					role								*/
+#app-mount .role__631a3 {								/* body					role								*/
 	border-color: rgba(var(--textbrighter_v), .6);
 	border-radius: 5px;
 	padding: 0 5px;
@@ -4175,7 +4175,7 @@ button.button__4f306.enabled__470f0:hover svg {
 #app-mount .rolePillBorder__00c58:not(.actionButton__81eaa) {
 	border-width: 0;
 }
-#app-mount .role__631a3 .roleName_d19d33 {					/* body					rolename							*/
+#app-mount .role__631a3 .roleName_d19d33 {						/* body					rolename							*/
 	position: relative;
 	color: rgb(var(--textbrightest_v));
 	height: 20px;
@@ -4192,7 +4192,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	bottom: 0;
 	left: 0;
 }
-#app-mount .role__631a3 .roleCircle_bae511 {				/* body					rolecircle							*/
+#app-mount .role__631a3 .roleCircle_bae511 {						/* body					rolecircle							*/
 	position: absolute;
 	background-color: rgb(var(--textbrighter_v));
 	border-radius: 3px;
@@ -4219,7 +4219,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	z-index: 1;
 }
 
-.textarea_c5a7a3:focus {									/* body					note 								*/
+.textarea_c5a7a3:focus {								/* body					note 								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
@@ -4232,11 +4232,11 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-color: transparent rgb(var(--accentcolor_v)) transparent transparent;
 }
 
-/* ----		14.3.	EMOJIPICKER						---- */
+/* ----		14.3.		EMOJIPICKER					---- */
 
-.contentWrapper__321ed,										/* picker				expression wrapper					*/
-.emojiPicker_b65ce9,										/* picker				inner								*/
-.diversitySelectorOptions__846c5 {							/* picker				diversityselector					*/
+.contentWrapper__321ed,									/* picker				expression wrapper						*/
+.emojiPicker_b65ce9,									/* picker				inner								*/
+.diversitySelectorOptions__846c5 {							/* picker				diversityselector						*/
 	background: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4276,21 +4276,21 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-radius: 5px;
 }
 
-.diversityEmojiItem__6505f:hover {							/* picker				diversityemoji						*/
+.diversityEmojiItem__6505f:hover {							/* picker				diversityemoji							*/
 	background-color: rgb(var(--accentcolor_v));
 }
 
-.navButtonActive__735cb {									/* picker				navbuttonactive						*/
+.navButtonActive__735cb {								/* picker				navbuttonactive							*/
 	background-color: rgb(var(--accentcolor_v));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.wrapper__4f229 {											/* picker				sidebar								*/
+.wrapper__4f229 {									/* picker				sidebar								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-.guildIcon__4d796 {											/* picker				guildicon							*/
+.guildIcon__4d796 {									/* picker				guildicon							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
@@ -4298,20 +4298,20 @@ button.button__4f306.enabled__470f0:hover svg {
 .categoryItemDefaultCategory__67fe7:first-child + .categoryItemDefaultCategory__67fe7 {
 	margin-bottom: 8px;
 }
-.categoryItemDefaultCategory__67fe7:hover,					/* picker				categoryitem						*/
-.stickerCategory__4891e:hover {								/* picker				stickercategoryitem					*/
+.categoryItemDefaultCategory__67fe7:hover,						/* picker				categoryitem							*/
+.stickerCategory__4891e:hover {								/* picker				stickercategoryitem						*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-.categoryItemDefaultCategorySelected__8245a,				/* picker				categoryitem selected				*/
+.categoryItemDefaultCategorySelected__8245a,						/* picker				categoryitem selected						*/
 .categoryItemDefaultCategorySelected__8245a:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
-.categoryItemDefaultCategorySelected__8245a svg,			/* picker				categoryitem selected				*/
+.categoryItemDefaultCategorySelected__8245a svg,					/* picker				categoryitem selected						*/
 .categoryItemDefaultCategorySelected__8245a:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
-.unicodeShortcut__1dd6b {									/* picker				unicodeemojis shortcut				*/
+.unicodeShortcut__1dd6b {								/* picker				unicodeemojis shortcut						*/
 	background-color: transparent;
 	border: none;
 	overflow: hidden;
@@ -4339,23 +4339,23 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-.inspector__993e1 {											/* picker				emojiinfowrapper					*/
+.inspector__993e1 {									/* picker				emojiinfowrapper						*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-#app-mount .wrapper__7a35f {								/* picker				categoryheader						*/
+#app-mount .wrapper__7a35f {								/* picker				categoryheader							*/
 	background: transparent;
 	position: static;
 }
 
-#app-mount .imageLoading__37d01 {							/* picker				emoji loading						*/
+#app-mount .imageLoading__37d01 {							/* picker				emoji loading							*/
 	background: rgba(var(--transparencycolor_v), .3);
 	border-radius: 10px;
 }
-.emojiItem_b15dee.emojiItemSelected__1a09a {				/* picker				emoji selected						*/
+.emojiItem_b15dee.emojiItemSelected__1a09a {						/* picker				emoji selected							*/
 	background-color: rgb(var(--accentcolor_v));
 }
-.emojiItemDisabled__36cbf {									/* picker				emoji disabled						*/
+.emojiItemDisabled__36cbf {								/* picker				emoji disabled							*/
 	filter: none;
 	cursor: no-drop;
 }
@@ -4363,7 +4363,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	filter: grayscale(1);
 }
 
-.premiumPromo__2d678 {										/* picker				premium warning						*/
+.premiumPromo__2d678 {									/* picker				premium warning							*/
 	background-color: transparent;
 	opacity: 1;
 }
@@ -4404,7 +4404,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	color: var(--interactive-active);
 }
 
-#app-mount .focused__036ed,									/* gifpicker			result								*/
+#app-mount .focused__036ed,								/* gifpicker				result								*/
 #app-mount .result_e1fc74:hover {
 	box-shadow: 0 11px 22px 1px rgba(var(--transparencycolor_v), .3);
 }
@@ -4422,7 +4422,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: rgba(var(--transparencycolor_v), .2);
 	color: var(--header-secondary);
 }
-#app-mount .backButton__6a1f0 {								/* gifpicker			backbutton							*/
+#app-mount .backButton__6a1f0 {								/* gifpicker				backbutton							*/
 	color: var(--interactive-normal);
 }
 #app-mount .backButton__6a1f0:hover {
@@ -4433,10 +4433,10 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 
 
-/* ----		14.4.	PINS/MENTIONS					---- */
+/* ----		14.4.		PINS/MENTIONS					---- */
 
 .messagesPopoutWrap_b3b384,								/* popout				wrapper								*/
-.container__20de0 {										/* popout				wrapper	(inbox)						*/
+.container__20de0 {									/* popout				wrapper	(inbox)							*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4475,12 +4475,12 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: transparent;
 }
 
-.header_f5cc88 {											/* popout				header								*/
+.header_f5cc88 {									/* popout				header								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor_v), .2);
 }
 
-.footer_a3029c {											/* popout				footer								*/
+.footer_a3029c {									/* popout				footer								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
@@ -4498,12 +4498,12 @@ button.button__4f306.enabled__470f0:hover svg {
 	left: 0;
 	width: 100%;
 }
-.actionButtons__0ac05 {										/* popout				actionbuttonscontainer				*/
+.actionButtons__0ac05 {									/* popout				actionbuttonscontainer						*/
 	top: 4px;
 	right: 14px;
 }
-.jumpButton_da1ebb,											/* popout				jumpbutton (mentions)				*/
-.jumpButton__0329d {										/* popout				jumpbutton (pins)					*/
+.jumpButton_da1ebb,									/* popout				jumpbutton (mentions)						*/
+.jumpButton__0329d {									/* popout				jumpbutton (pins)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 .jumpButton_da1ebb:hover,
@@ -4515,20 +4515,20 @@ button.button__4f306.enabled__470f0:hover svg {
 	margin-left: 2px;
 }
 
-.image__0a0fc {												/* popout				emptyimage							*/
+.image__0a0fc {										/* popout				emptyimage							*/
 	opacity: 0.6;
 }
 .image__0a0fc[style*='url("/assets/9e2f412156e2ac1f14e9.svg")'] {
 	background-image: url(https://discord.com/assets/64df6f04b850029d2e78.svg) !important;
 }
 
-															/* popout				active tab							*/
+											/* popout				active tab							*/
 #app-mount .header__28ebb .tabBar__2aa8e .tab_a8a066.active__7e7af {
 	background-color: rgb(var(--accentcolor_v));
 }
-.secondary_c96c46,											/* popout				header button						*/
-.tertiary_bc0225,											/* popout				message button						*/
-.collapseButton_b18eab {									/* popout				collapse button						*/
+.secondary_c96c46,									/* popout				header button							*/
+.tertiary_bc0225,									/* popout				message button							*/
+.collapseButton_b18eab {								/* popout				collapse button							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 .secondary_c96c46:hover,
@@ -4554,7 +4554,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	transform: rotate(-90deg);
 }
 
-.channelHeader__5d30c {										/* popout				channelheader						*/
+.channelHeader__5d30c {									/* popout				channelheader							*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 	padding-right: 16px;
 	border-radius: 5px 5px 0 0;
@@ -4563,8 +4563,8 @@ button.button__4f306.enabled__470f0:hover svg {
 .channelHeader__5d30c:only-child {
 	border-radius: 0;
 }
-.messageContainer_aa7d14,									/* popout				messagecontainer					*/
-.messages_f7999e {											/* popout				messagecontainer (inbox)			*/
+.messageContainer_aa7d14,								/* popout				messagecontainer						*/
+.messages_f7999e {									/* popout				messagecontainer (inbox)					*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border-radius: 0;
 }
@@ -4573,14 +4573,14 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-radius: 0 0 5px 5px;
 }
 
-.tutorial__7b875 {											/* popout				tutorial (inbox)					*/
+.tutorial__7b875 {									/* popout				tutorial (inbox)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-.tutorialIcon__5c63f {										/* popout				tutorial (inbox)					*/
+.tutorialIcon__5c63f {									/* popout				tutorial (inbox)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
-/* ----		14.5.	SEARCHPOPOUT					---- */
+/* ----		14.5.		SEARCHPOPOUT					---- */
 
 #app-mount .container_d6dad3 {								/* popout				wrapper								*/
 	background-color: transparent;
@@ -4751,9 +4751,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-/* ----		14.6.	COLORPICKER						---- */
+/* ----		14.6.		COLORPICKER					---- */
 
-#app-mount .customColorPicker__3cb6a {						/* popout				wrapper								*/
+#app-mount .customColorPicker__3cb6a {							/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4783,10 +4783,10 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.7.	ADDROLE							---- */
+/* ----		14.7.		ADDROLE						---- */
 
 #app-mount .container_d27846,								/* popout				userpopout							*/
-#app-mount .container_e84cda {								/* popout				channelsettings						*/
+#app-mount .container_e84cda {								/* popout				channelsettings							*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4843,7 +4843,7 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 
 
-/* ----		14.8.	EVERYONEMENTION					---- */
+/* ----		14.8.		EVERYONEMENTION					---- */
 
 .contentWarningPopout__7d8c2 .animation__14012 {
 	opacity: 0.6;
@@ -4853,7 +4853,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	color: var(--text-muted);
 }
 
-/* ----		14.9.	CHANNELFOLLOW					---- */
+/* ----		14.9.		CHANNELFOLLOW					---- */
 
 #app-mount .header__4ef99 {
 	background: rgba(var(--transparencycolor_v), .3);
@@ -4871,7 +4871,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: transparent;
 }
 
-/* ----		14.10.	CHANNELFOLLOWINFO				---- */
+/* ----		14.10.		CHANNELFOLLOWINFO				---- */
 
 #app-mount .guildPopout_ea4d8c {							/* popout				wrapper								*/
 	background-color: transparent;
@@ -4903,9 +4903,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.11.	EMOJIINFO						---- */
+/* ----		14.11.		EMOJIINFO					---- */
 
-#app-mount .popoutContainer__7b9a3 {						/* popout				wrapper								*/
+#app-mount .popoutContainer__7b9a3 {							/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4935,15 +4935,15 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-.emojiSection_a65b54 {										/* popout				emojisection						*/
+.emojiSection_a65b54 {									/* popout				emojisection							*/
 	background-color: transparent;
 }
 
-.guildSection_ebda04 {										/* popout				emojisection						*/
+.guildSection_ebda04 {									/* popout				emojisection							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-/* ----		14.12.	STREAMPREVIEW					---- */
+/* ----		14.12.		STREAMPREVIEW					---- */
 
 #app-mount .streamPreview__1846c {							/* popout				wrapper								*/
 	background-color: transparent;
@@ -4979,7 +4979,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-/* ----		14.13.	STREAMINFO						---- */
+/* ----		14.13.		STREAMINFO					---- */
 
 #app-mount .container__56cd1 {								/* modal				container							*/
 	background-color: transparent;
@@ -5009,9 +5009,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.14.	PUBLICGUILDANNOUNCEMENT			---- */
+/* ----		14.14.		PUBLICGUILDANNOUNCEMENT				---- */
 
-#app-mount .popout__8e314 {									/* popout				wrapper								*/
+#app-mount .popout__8e314 {								/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -5041,7 +5041,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.15.	RTCSTATUSPOPOUT					---- */
+/* ----		14.15.		RTCSTATUSPOPOUT					---- */
 
 #app-mount .container__0810b {								/* RTCpopout												*/
 	background-color: transparent;
@@ -5096,7 +5096,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	background-color: var(--header-primary);
 }
 
-/* ----		14.16.	PHONE-/EMAILVALIDATION			---- */
+/* ----		14.16.		PHONE-/EMAILVALIDATION				---- */
 
 #app-mount .input_d5a597 {
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -5151,9 +5151,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	color: var(--header-secondary);
 }
 
-/* ----		14.17.	QUICKSELECTPOPOUT				---- */
+/* ----		14.17.		QUICKSELECTPOPOUT				---- */
 
-#app-mount .quickSelectPopout_c0cf80,						/* quickselect												*/
+#app-mount .quickSelectPopout_c0cf80,							/* quickselect												*/
 #app-mount .popoutList_db80c1 {								/* listpopout												*/
 	background-color: transparent;
 	border: none;
@@ -5208,9 +5208,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	background: var(--interactive-normal);
 }
 
-/* ----		14.18.	WARNINGPOPOUT					---- */
+/* ----		14.18.		WARNINGPOPOUT					---- */
 
-#app-mount .contentWarningPopout__7d8c2 {					/* popout													*/
+#app-mount .contentWarningPopout__7d8c2 {						/* popout												*/
 	background-color: transparent;
 	border: none;
 	border-radius: 5px;
@@ -5246,9 +5246,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	color: var(--header-primary);
 }
 
-/* ----		14.19.	ACTIVETHREADLISTPOPOUT			---- */
+/* ----		14.19.		ACTIVETHREADLISTPOPOUT				---- */
 
-#app-mount .popout__24e32 {									/* popout													*/
+#app-mount .popout__24e32 {								/* popout												*/
 	background-color: transparent;
 	border: none;
 	border-radius: 5px;
@@ -5278,9 +5278,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.20.	ROLEMEMBERSPOPOUT				---- */
+/* ----		14.20.		ROLEMEMBERSPOPOUT				---- */
 
-#app-mount .rolePopout__73806 {								/* popout													*/
+#app-mount .rolePopout__73806 {								/* popout												*/
 	background-color: transparent;
 	border: none;
 	border-radius: 5px;
@@ -5310,9 +5310,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.21.	FORUMFILTERPOPOUT				---- */
+/* ----		14.21.		FORUMFILTERPOPOUT				---- */
 
-#app-mount .container_ae7412 {								/* popout													*/
+#app-mount .container_ae7412 {								/* popout												*/
 	background-color: transparent;
 	border: none;
 	border-radius: 5px;
@@ -5342,9 +5342,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.22.	ACTIVITYSHAREPOPOUT				---- */
+/* ----		14.22.		ACTIVITYSHAREPOPOUT				---- */
 
-#app-mount .container_c344de {								/* popout													*/
+#app-mount .container_c344de {								/* popout												*/
 	background-color: transparent;
 	border: none;
 	border-radius: 5px;
@@ -5374,9 +5374,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.23.	SOUNDBOARD						---- */
+/* ----		14.23.		SOUNDBOARD					---- */
 
-#app-mount .picker__6dca7 {								/* popout													*/
+#app-mount .picker__6dca7 {								/* popout												*/
 	background-color: transparent;
 	border: none;
 	border-radius: 5px;
@@ -5406,7 +5406,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		14.24.	SERVERSURVEY					---- */
+/* ----		14.24.		SERVERSURVEY					---- */
 
 .main__58b77 .prompt__671aa {
 	background: rgba(var(--transparencycolor_v), .3);
@@ -5419,7 +5419,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-color: rgb(var(--accentcolor_v));
 }
 
-/* ~~~~		15.		GENERAL							~~~~ */
+/* ~~~~		15.		GENERAL						~~~~ */
 
 .highlight {
 	background: rgba(var(--accentcolor_v), .3);
@@ -5463,14 +5463,14 @@ button.button__4f306.enabled__470f0:hover svg {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
 
-#app-mount .breadcrumbWrapper__34bfa {						/* breadcrumbs			wrapper							*/
+#app-mount .breadcrumbWrapper__34bfa {							/* breadcrumbs				wrapper								*/
 	color: rgba(var(--textbrightest_v),.3);
 }
-#app-mount .activeBreadcrumb__7e753 {						/* breadcrumbs			active							*/
+#app-mount .activeBreadcrumb__7e753 {							/* breadcrumbs				active								*/
 	color: rgba(var(--textbrightest_v),.6);
 }
 
-/* ----		15.1.	TEXT							---- */
+/* ----		15.1.		TEXT						---- */
 
 #app-mount h1.title__10613,
 #app-mount h2.title__10613 {
@@ -5522,7 +5522,7 @@ button.button__4f306.enabled__470f0:hover svg {
 	color: var(--text-normal);
 }
 
-/* ----		15.2.	BUTTONS							---- */
+/* ----		15.2.		BUTTONS						---- */
 
 .btn__51085.btnPrimary_e2a8df,
 .lookFilled__19298.hoverBrand__98583.hasHover__3ab8c:hover,
@@ -5667,9 +5667,9 @@ button.button__4f306.enabled__470f0:hover svg {
 	border-color: rgb(var(--textbrightest_v)) !important;
 }
 
-/* ----		15.3.	INPUTS							---- */
+/* ----		15.3.		INPUTS						---- */
 
-input.input_d266e7 {										/* valueinput			bordered							*/
+input.input_d266e7 {									/* valueinput				bordered							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
 }
 input.input_d266e7:hover:not(:focus) {
@@ -5715,7 +5715,7 @@ input.input_d266e7:hover:not(:focus) {
 	color: rgba(var(--textbrightest_v),.3);
 }
 
-.container__871ba {											/* checkboxswitch											*/
+.container__871ba {									/* checkboxswitch											*/
 	background-color: rgba(var(--transparencycolor_v), .3) !important;
 }
 .container__871ba rect[fill] {
@@ -5725,7 +5725,7 @@ input.input_d266e7:hover:not(:focus) {
 	fill: rgb(var(--transparencycolor_v)) !important;
 }
 
-#app-mount .item_b7fb7e {									/* radiogroup			container							*/
+#app-mount .item_b7fb7e {								/* radiogroup				container							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 #app-mount .item_b7fb7e:hover {
@@ -5746,7 +5746,7 @@ input.input_d266e7:hover:not(:focus) {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
 }
 
-#app-mount .checkboxContainer__5a761::before {				/* checkbox				container							*/
+#app-mount .checkboxContainer__5a761::before {						/* checkbox				container							*/
 	background-color: rgba(var(--textdarker_v), .3);
 }
 #app-mount .checkboxMute__6e269::before {
@@ -5755,11 +5755,11 @@ input.input_d266e7:hover:not(:focus) {
 #app-mount .checkbox_c7f690 {								/* checkbox				inner								*/
 	border-color: rgb(var(--textdark_v));
 }
-#app-mount .checkbox_c7f690.checked__24ad6 {				/* checkbox				checked								*/
+#app-mount .checkbox_c7f690.checked__24ad6 {						/* checkbox				checked								*/
 	background-color: rgb(var(--textbrightest_v));
 	border-color: rgb(var(--textbrightest_v));
 }
-#app-mount .checkbox_c7f690.checked__24ad6.round__67d8d {	/* checkbox				roundchecked						*/
+#app-mount .checkbox_c7f690.checked__24ad6.round__67d8d {				/* checkbox				roundchecked							*/
 	background-color: rgb(var(--accentcolor_v)) !important;
 	border-color: rgb(var(--accentcolor_v)) !important;
 }
@@ -5770,10 +5770,10 @@ input.input_d266e7:hover:not(:focus) {
 	fill: #fff;
 }
 
-#app-mount .bar_e58961 {									/* slider				backgroundbar						*/
+#app-mount .bar_e58961 {								/* slider				backgroundbar							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-.grabber_d2868c {											/* slider				grabber								*/
+.grabber_d2868c {									/* slider				grabber								*/
 	background-color: var(--header-primary);
 	border-color: var(--header-primary);
 	box-shadow: 0 3px 1px 0 rgba(var(--transparencycolor_v), .05), 0 2px 2px 0 rgba(var(--transparencycolor_v), .1), 0 3px 3px 0 rgba(var(--transparencycolor_v), .05);
@@ -5805,7 +5805,7 @@ input.input_d266e7:hover:not(:focus) {
 #app-mount .markDash_dc3ae9::after {
 	top: 30px;
 }
-#app-mount .bubble_f48089 {									/* slider				bubble								*/
+#app-mount .bubble_f48089 {								/* slider				bubble								*/
 	background-color: rgb(var(--accentcolor_v));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow_v);
@@ -5814,11 +5814,11 @@ input.input_d266e7:hover:not(:focus) {
 	border-top-color: rgb(var(--accentcolor_v));
 }
 
-#app-mount .container__0c807 {								/* hotkeyinput			container							*/
+#app-mount .container__0c807 {								/* hotkeyinput				container							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
 	border-color: rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .editIcon__29477 {								/* hotkeyinput			editicon							*/
+#app-mount .editIcon__29477 {								/* hotkeyinput				editicon							*/
 	-webkit-mask: url(https://discord.com/assets/c87be216431a35927431.svg) center/cover no-repeat;
 	background: var(--header-primary);
 }
@@ -5831,7 +5831,7 @@ input.input_d266e7:hover:not(:focus) {
 	color: rgb(var(--dangercolor)) !important;
 }
 
-.select__55f87 [class*="css-"][class*="-container"] {		/* select				container							*/
+.select__55f87 [class*="css-"][class*="-container"] {					/* select				container							*/
 	background-color: transparent;
 }
 .lookFilled__3dba3.select__0eb48,
@@ -5937,9 +5937,9 @@ input.input_d266e7:hover:not(:focus) {
 	display: none;
 }
 
-/* ----		15.4.	SEARCHBARS						---- */
+/* ----		15.4.		SEARCHBARS					---- */
 
-.container_e4c233,											/* searchbar			inner								*/
+.container_e4c233,									/* searchbar				inner								*/
 .container__7712a {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
@@ -5957,26 +5957,26 @@ input.input_d266e7:hover:not(:focus) {
 	box-shadow: 0 2px 5px 0 rgba(var(--transparencycolor_v), .2);
 }
 
-/* ----		15.5.	TAGS							---- */
+/* ----		15.5.		TAGS						---- */
 
-.botTagRegular_c89c9a:not([style]) {						/* bottag				regular								*/
+.botTagRegular_c89c9a:not([style]) {							/* bottag				regular								*/
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 .botTagRegular_c89c9a:not([style]) svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
-.base__92a12[style*="var(--bdfdb-blurple)"],				/* numberbadge												*/
+.base__92a12[style*="var(--bdfdb-blurple)"],						/* numberbadge												*/
 .base__92a12[style*="background-color: rgb(88, 101, 242)"],
 .base__92a12[style*="background-color: rgb(114, 137, 218)"] {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.iconBadge__2abac {											/* iconbadge												*/
+.iconBadge__2abac {									/* iconbadge												*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-/* ----		15.6.	IMAGES							---- */
+/* ----		15.6.		IMAGES						---- */
 
 #app-mount .image__0cdbe {
 	background-image: url(https://discord.com/assets/5420f8fd9d89897c6448.svg);
@@ -6056,10 +6056,10 @@ input.input_d266e7:hover:not(:focus) {
 	opacity: .5;
 }
 
-#app-mount .wrapper__246a1 {								/* crash screen			background							*/
+#app-mount .wrapper__246a1 {								/* crash screen				background							*/
 	background-image: url(https://discord.com/assets/14223d22c9628be36fc0.svg);
 }
-#app-mount .image_dabcb8 {									/* crash screen			center image						*/
+#app-mount .image_dabcb8 {								/* crash screen				center image							*/
 	background-image: url(https://discord.com/assets/72eaa596042042be6259.svg);
 	opacity: .5;
 }
@@ -6208,7 +6208,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	opacity: .5;
 }
 
-/* ----		15.7.	SCROLLBARS						---- */
+/* ----		15.7.		SCROLLBARS					---- */
 
 ::-webkit-scrollbar,
 #app-mount ::-webkit-scrollbar {
@@ -6247,7 +6247,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	display: none;
 }
 
-/* ----		15.8.	NOTIFICATIONBAR					---- */
+/* ----		15.8.		NOTIFICATIONBAR					---- */
 
 .base__3e6af .notice__5fd4c powercord-announcement {
 	border-radius: 0;
@@ -6259,7 +6259,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: rgba(var(--transparencycolor_v), .6);
 }
 
-/* ----		15.9.	TOOLTIPS						---- */
+/* ----		15.9.		TOOLTIPS					---- */
 
 #app-mount .guildNameText__16f3c {
 	color: #fff;
@@ -6297,7 +6297,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 
-/* ~~~~		16.		BDSUPPORT						~~~~ */
+/* ~~~~		16.		BDSUPPORT					~~~~ */
 
 html .bd-toast {
 	background-color: rgb(var(--accentcolor_v));
@@ -6357,10 +6357,10 @@ html .bd-toast.toast-warn.icon::before {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-#app-mount .bd-server-card {								/* pubslayer			guildcard							*/
+#app-mount .bd-server-card {								/* pubslayer				guildcard							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .bd-server-icon {								/* pubslayer			guildicon							*/
+#app-mount .bd-server-icon {								/* pubslayer				guildicon							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border-color: transparent;
 }
@@ -6369,17 +6369,17 @@ html .bd-toast.toast-warn.icon::before {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
-.bd-switch-body {									/* bd switch											*/
+.bd-switch-body {									/* bd switch												*/
 	--switch-color: rgb(var(--transparencycolor_v));
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-.bd-slider-label {									/* bd slider			label								*/
+.bd-slider-label {									/* bd slider				label								*/
 	background-color: rgb(var(--accentcolor_v));
 	color: var(--header-primary);
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.bd-slider-input {									/* bd slider			input								*/
+.bd-slider-input {									/* bd slider				input								*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 .bd-slider-input[type="range"]::-webkit-slider-thumb {
@@ -6401,7 +6401,7 @@ html .bd-toast.toast-warn.icon::before {
 	align-items: center;
 	border-radius: 4px;
 }
-.bd-select .bd-select-options {								/* bd select			popout								*/
+.bd-select .bd-select-options {								/* bd select				popout								*/
 	background-color: transparent;
 	border: none;
 	border-radius: 4px;
@@ -6431,7 +6431,7 @@ html .bd-toast.toast-warn.icon::before {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.3));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
-.bd-select .bd-select-option {								/* bd select			popout option						*/
+.bd-select .bd-select-option {								/* bd select				popout option							*/
 	display: flex;
 	align-items: center;
 	min-height: 32px;
@@ -6454,11 +6454,11 @@ html .bd-toast.toast-warn.icon::before {
 	color: var(--interactive-active);
 }
 
-.bd-pfbtn {													/* addonlist			folder button						*/
+.bd-pfbtn {										/* addonlist				folder button							*/
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.bd-server-tag {											/* addonlist			public list tag						*/
+.bd-server-tag {									/* addonlist				public list tag							*/
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
@@ -6495,7 +6495,7 @@ html .bd-toast.toast-warn.icon::before {
 	filter: unset;
 }
 
-.floating-window.resizable {								/* customcss editor		detached							*/
+.floating-window.resizable {								/* customcss editor			detached							*/
 	background: rgb(var(--transparencycolor_v));
 }
 html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
@@ -6547,7 +6547,7 @@ html .powercord-toast .contents .inner {
 
 /* ~~~~		18.		PLUGINSUPPORT					~~~~ */
 
-/* ----		18.1.	BDFDB							---- */
+/* ----		18.1.		BDFDB						---- */
 
 html .colorDefault_XdNdIp .bg_8df5St {
 	background: transparent;
@@ -6573,7 +6573,7 @@ html .colorDefault_XdNdIp .bg_8df5St::after {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-/* ----		18.2.	DATEVIEWER						---- */
+/* ----		18.2.		DATEVIEWER					---- */
 
 #app-mount #dv-mount {
 	background: transparent;
@@ -6607,7 +6607,7 @@ html .colorDefault_XdNdIp .bg_8df5St::after {
 	opacity: 1;
 }
 
-/* ----		18.3.	MEMBERCOUNT						---- */
+/* ----		18.3.		MEMBERCOUNT					---- */
 
 #app-mount #MemberCount {
 	background-color: transparent;
@@ -6636,7 +6636,7 @@ html .colorDefault_XdNdIp .bg_8df5St::after {
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 
-/* ----		18.4.	LINENUMBERS						---- */
+/* ----		18.4.		LINENUMBERS					---- */
 
 .hljs ol li {
 	border-left-color: var(--background-modifier-accent);
@@ -6645,12 +6645,12 @@ html .colorDefault_XdNdIp .bg_8df5St::after {
 	color: rgb(var(--textdarker_v));
 }
 
-/* ----		18.5.	PERMISSIONVIEWER				---- */
+/* ----		18.5.		PERMISSIONVIEWER				---- */
 
-html #permissions-modal-wrapper {								/* modal				wrapper							*/
+html #permissions-modal-wrapper {							/* modal				wrapper								*/
 	z-index: 1001;
 }
-html #permissions-modal-wrapper #permissions-modal {			/* modal				container							*/
+html #permissions-modal-wrapper #permissions-modal {					/* modal				container							*/
 	background-color: transparent;
 	border: none;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
@@ -6711,7 +6711,7 @@ html #permissions-modal-wrapper .perm-name {
 	color: var(--header-secondary);
 }
 
-/* ----		18.6.	DIRECTDOWNLOAD					---- */
+/* ----		18.6.		DIRECTDOWNLOAD					---- */
 
 #files_directDownload .file {
 	background-color: rgba(var(--transparencycolor_v), .4);
@@ -6732,7 +6732,7 @@ html #permissions-modal-wrapper .perm-name {
 	background-color: rgb(var(--accentcolor_v));
 }
 
-/* ----		18.7.	BETTERFORMATINGREDUX			---- */
+/* ----		18.7.		BETTERFORMATINGREDUX				---- */
 
 .innerDisabled-2mc-iF ~ .bf-toolbar {
 	display: none;
@@ -6790,14 +6790,14 @@ html #permissions-modal-wrapper .perm-name {
 	color: #fff;
 }
 
-/* ----		18.8	CHANNELHISTORY					---- */
+/* ----		18.8		CHANNELHISTORY					---- */
 
 .channelHistoryButtons {
 	top: 4px;
 	left: 310px;
 }
 
-/* ----		18.9	CHANNELTABS						---- */
+/* ----		18.9		CHANNELTABS					---- */
 
 html #channelTabs-container {
 	background: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
@@ -6827,7 +6827,7 @@ html .channelTabs-tabContainer .channelTabs-tabNav > .channelTabs-tabNavClose:ho
 	background: rgb(var(--dangercolor));
 }
 
-/* ----		18.10	TYPINGINDICATOR					---- */
+/* ----		18.10		TYPINGINDICATOR					---- */
 
 html .typingindicator-guild,
 html .typingindicator-dms,
@@ -6840,7 +6840,7 @@ html .typingindicator-folder {
 	padding: 2px 0;
 }
 
-/* ----		18.11	CHANNELDMS						---- */
+/* ----		18.11		CHANNELDMS					---- */
 
 .ChannelDms-channelmembers-wrap .ChannelDms-channelmembers-header {
 	background-color: rgba(var(--transparencycolor_v), var(--memberlisttransparency_v));
@@ -6883,7 +6883,7 @@ html:only-child > head + body div.app_b1f720 > div.app_de4237::before {
 }
 
 
-/* ~~~~		20.		WATERMARK						~~~~ */
+/* ~~~~		20.		WATERMARK					~~~~ */
 
 html:only-child > head + body div.typeWindows__5fa63.titleBar__01af6 > div.wordmark__0d178 {
 	display: block !important;
