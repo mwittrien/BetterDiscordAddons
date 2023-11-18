@@ -6457,14 +6457,15 @@ html .bd-toast.toast-warn.icon::before {
 	background-color: rgba(var(--transparencycolor_v), 0.3);
 }
 
-.bd-addon-views .bd-view-button:hover {
+.bd-addon-views .bd-view-button:not(.selected):hover {
 	background: rgba(var(--transparencycolor_v), .3);
 }
-.bd-addon-views .bd-view-button:active {
+.bd-addon-views .bd-view-button:not(.selected):active {
 	background: rgba(var(--accentcolor_v), .7);
 }
 
 .bd-button {
+	text-shadow: 1px 1px var(--textshadow_v);
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 .bd-button.bd-button-danger {
