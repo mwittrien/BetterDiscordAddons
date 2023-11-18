@@ -52,17 +52,17 @@
 	--background_v:				var(--background_s, var(--background));
 	--backgroundposition_v:			var(--backgroundposition_s, var(--backgroundposition));
 	--backgroundsize_v:			var(--backgroundsize_s, var(--backgroundsize));
-	--backgroundblur_v:			var(--backgroundblur_s, var(--backgroundblur));
+	--backgroundblur_v:			calc(1px * var(--backgroundblur_s, var(--backgroundblur)));
 	
 	--popout_v:				var(--popout_s, var(--popout));
 	--popoutposition_v:			var(--popoutposition_s, var(--popoutposition));
 	--popoutsize_v:				var(--popoutsize_s, var(--popoutsize));
-	--popoutblur_v:				var(--popoutblur_s, var(--popoutblur));
+	--popoutblur_v:				calc(1px * var(--popoutblur_s, var(--popoutblur)));
 	
 	--backdrop_v:				var(--backdrop_s, var(--backdrop));
 	--backdropposition_v:			var(--backdropposition_s, var(--backdropposition));
 	--backdropsize_v:			var(--backdropsize_s, var(--backdropsize));
-	--backdropblur_v:			var(--backdropblur_s, var(--backdropblur));
+	--backdropblur_v:			calc(1px * var(--backdropblur_s, var(--backdropblur)));
 	
 	--textbrightest_v:			var(--textbrightest_s, var(--textbrightest));
 	--textbrighter_v:			var(--textbrighter_s, var(--textbrighter));
