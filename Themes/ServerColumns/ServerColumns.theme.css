@@ -10,6 +10,11 @@
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/ServerColumns/
  * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Themes/ServerColumns/ServerColumns.theme.css
+ *
+ * @var range		columns_s			"Column Amount: [default] = 3"										[3, 1, 10, 1]
+ * @var range		guildsize_s			"Server Icon Size: [default] = 50px"								[50, 10, 200, 1]
+ * @var range		guildgap_s			"Server Icon Gap: [default] = 3px"									[3, 0, 25, 1]
+ * @var checkbox	aligndms_s			"DMs Align: should Direct Messages also get aligned in Columns"		1
  */
 
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/ServerColumns/ServerColumns.css);
