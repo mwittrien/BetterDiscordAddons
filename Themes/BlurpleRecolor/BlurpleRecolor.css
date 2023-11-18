@@ -2,26 +2,26 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
-	--accentcolor:					88,101,242;
-	--accentcolor2:					255,115,250;
-	--linkcolor:					0,176,244;
+	--accentcolor:				88, 101, 242;
+	--accentcolor2:				255, 115, 250;
+	--linkcolor:				0, 176, 244;
 	
 	
-	--accentcolor_v:				var(--accentcolor_s, var(--accentcolor));
-	--accentcolor2_v:				var(--accentcolor2_s, var(--accentcolor2));
-	--linkcolor_v:					var(--linkcolor_s, var(--linkcolor));
+	--accentcolor_v:			var(--accentcolor_s, var(--accentcolor));
+	--accentcolor2_v:			var(--accentcolor2_s, var(--accentcolor2));
+	--linkcolor_v:				var(--linkcolor_s, var(--linkcolor));
 	
 	
-	--accentcolor-hover:			rgb(var(--accentcolor_v)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
-	--accentcolor-active:			rgb(var(--accentcolor_v)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
-	--accentcolor2-hover:			rgb(var(--accentcolor2_v)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
-	--accentcolor2-active:			rgb(var(--accentcolor2_v)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
+	--accentcolor-hover:			rgb(var(--accentcolor_v)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
+	--accentcolor-active:			rgb(var(--accentcolor_v)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+	--accentcolor2-hover:			rgb(var(--accentcolor2_v)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
+	--accentcolor2-active:			rgb(var(--accentcolor2_v)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
 	
-	--bdfdb-blurple:				rgb(var(--accentcolor_v)) !important;
-	--bd-blue:						rgb(var(--accentcolor_v)) !important;
-	--bd-blue-hover:				var(--accentcolor-hover) !important;
-	--bd-blue-active:				var(--accentcolor-active) !important;
-	--blurple:						rgb(var(--accentcolor_v)) !important;
+	--bdfdb-blurple:			rgb(var(--accentcolor_v)) !important;
+	--bd-blue:				rgb(var(--accentcolor_v)) !important;
+	--bd-blue-hover:			var(--accentcolor-hover) !important;
+	--bd-blue-active:			var(--accentcolor-active) !important;
+	--blurple:				rgb(var(--accentcolor_v)) !important;
 }
 .theme-light {
 	--logo-primary: rgb(var(--accentcolor_v));

@@ -1,16 +1,15 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
-	--columns: 3;
-	--guildsize: 50;
-	--guildgap: 3;
-	--aligndms: 1;
+	--columns: 		3;
+	--guildsize: 		50;
+	--guildgap: 		3;
+	--aligndms: 		1;
 
-	
-	--columns_v: var(--columns_s, var(--columns));
-	--guildsize_v: var(--guildsize_s, var(--guildsize));
-	--guildgap_v: var(--guildgap_s, var(--guildgap));
-	--aligndms_v: var(--aligndms_s, var(--aligndms));
+	--columns_v: 		var(--columns_s, var(--columns));
+	--guildsize_v: 		var(--guildsize_s, var(--guildsize));
+	--guildgap_v: 		var(--guildgap_s, var(--guildgap));
+	--aligndms_v: 		var(--aligndms_s, var(--aligndms));
 }
 
 .titleBar__01af6.typeMacOS__496b0,

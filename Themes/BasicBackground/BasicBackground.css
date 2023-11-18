@@ -2,85 +2,85 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 
 :root {
-	--transparencycolor:			0,0,0;
+	--transparencycolor:			0, 0, 0;
 	--transparencyalpha:			0.15;
 	--messagetransparency:			0.5;
 	--guildchanneltransparency:		0.15;
 	--chatinputtransparency:		0.0;
 	--memberlisttransparency:		0.0;
-	--accentcolor:					190,78,180;
+	--accentcolor:				190, 78, 180;
 	
-	--font:							"gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	--textshadow:					transparent;
-	--settingsicons:				1;
+	--settingsicons:			1;
+	--font:					"gg sans", "Noto Sans";
+	--textshadow:				transparent;
 	
-	--textbrightest: 				255,255,255;
-	--textbrighter: 				222,222,222;
-	--textbright: 					200,200,200;
-	--textdark: 					160,160,160;
-	--textdarker: 					125,125,125;
-	--textdarkest: 					90,90,90;
+	--textbrightest: 			255, 255, 255;
+	--textbrighter: 			222, 222, 222;
+	--textbright: 				200, 200, 200;
+	--textdark: 				160, 160, 160;
+	--textdarker: 				125, 125, 125;
+	--textdarkest: 				90, 90, 90;
 	
-	--background:					url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/background.jpg);
+	--background:				url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/background.jpg);
 	--backgroundposition:			center;
-	--backgroundsize:				cover;
-	--backgroundblur:				unset;
+	--backgroundsize:			cover;
+	--backgroundblur:			unset;
 	
-	--popout:						var(--background);
-	--popoutposition:				var(--backgroundposition);
-	--popoutsize:					var(--backgroundsize);
-	--popoutblur:					var(--backgroundblur);
+	--popout:				var(--background);
+	--popoutposition:			var(--backgroundposition);
+	--popoutsize:				var(--backgroundsize);
+	--popoutblur:				var(--backgroundblur);
 	
-	--backdrop:						rgba(0,0,0,0.85);
-	--backdropposition:				center;
-	--backdropsize:					cover;
-	--backdropblur:					unset;
+	--backdrop:				rgba(0, 0, 0, 0.85);
+	--backdropposition:			center;
+	--backdropsize:				cover;
+	--backdropblur:				unset;
 	
 	
 	--transparencycolor_v:			var(--transparencycolor_s, var(--transparencycolor));
 	--transparencyalpha_v:			var(--transparencyalpha_s, var(--transparencyalpha));
 	--messagetransparency_v:		var(--messagetransparency_s, var(--messagetransparency));
-	--guildchanneltransparency_v:	var(--guildchanneltransparency_s, var(--guildchanneltransparency));
+	--guildchanneltransparency_v:		var(--guildchanneltransparency_s, var(--guildchanneltransparency));
 	--chatinputtransparency_v:		var(--chatinputtransparency_s, var(--chatinputtransparency));
 	--memberlisttransparency_v:		var(--memberlisttransparency_s, var(--memberlisttransparency));
-	--accentcolor_v:				var(--accentcolor_s, var(--accentcolor));
+	--accentcolor_v:			var(--accentcolor_s, var(--accentcolor));
 	
-	--font_v:						var(--font_s, var(--font));
-	--textshadow_v:					var(--textshadow_s, var(--textshadow));
-	--settingsicons_v:				var(--settingsicons_s, var(--settingsicons));
+	--font_v:				var(--font_s, var(--font));
+	--textshadow_v:				var(--textshadow_s, var(--textshadow));
+	--settingsicons_v:			var(--settingsicons_s, var(--settingsicons));
 	
-	--background_v:					var(--background_s, var(--background));
+	--background_v:				var(--background_s, var(--background));
 	--backgroundposition_v:			var(--backgroundposition_s, var(--backgroundposition));
-	--backgroundsize_v:				var(--backgroundsize_s, var(--backgroundsize));
-	--backgroundblur_v:				var(--backgroundblur_s, var(--backgroundblur));
+	--backgroundsize_v:			var(--backgroundsize_s, var(--backgroundsize));
+	--backgroundblur_v:			var(--backgroundblur_s, var(--backgroundblur));
 	
-	--popout_v:						var(--popout_s, var(--popout));
-	--popoutposition_v:				var(--popoutposition_s, var(--popoutposition));
-	--popoutsize_v:					var(--popoutsize_s, var(--popoutsize));
-	--popoutblur_v:					var(--popoutblur_s, var(--popoutblur));
+	--popout_v:				var(--popout_s, var(--popout));
+	--popoutposition_v:			var(--popoutposition_s, var(--popoutposition));
+	--popoutsize_v:				var(--popoutsize_s, var(--popoutsize));
+	--popoutblur_v:				var(--popoutblur_s, var(--popoutblur));
 	
-	--backdrop_v:					var(--backdrop_s, var(--backdrop));
+	--backdrop_v:				var(--backdrop_s, var(--backdrop));
 	--backdropposition_v:			var(--backdropposition_s, var(--backdropposition));
-	--backdropsize_v:				var(--backdropsize_s, var(--backdropsize));
-	--backdropblur_v:				var(--backdropblur_s, var(--backdropblur));
+	--backdropsize_v:			var(--backdropsize_s, var(--backdropsize));
+	--backdropblur_v:			var(--backdropblur_s, var(--backdropblur));
 	
-	--textbrightest_v:				var(--textbrightest_s, var(--textbrightest));
-	--textbrighter_v:				var(--textbrighter_s, var(--textbrighter));
-	--textbright_v:					var(--textbright_s, var(--textbright));
-	--textdark_v:					var(--textdark_s, var(--textdark));
-	--textdarker_v:					var(--textdarker_s, var(--textdarker));
-	--textdarkest_v:				var(--textdarkest_s, var(--textdarkest));
+	--textbrightest_v:			var(--textbrightest_s, var(--textbrightest));
+	--textbrighter_v:			var(--textbrighter_s, var(--textbrighter));
+	--textbright_v:				var(--textbright_s, var(--textbright));
+	--textdark_v:				var(--textdark_s, var(--textdark));
+	--textdarker_v:				var(--textdarker_s, var(--textdarker));
+	--textdarkest_v:			var(--textdarkest_s, var(--textdarkest));
 
 	
-	--usechatbubbles: 				calc(var(--messagetransparency_v) / (var(--messagetransparency_v) + 0.00000000000000000000001));
+	--usechatbubbles: 			calc(var(--messagetransparency_v) / (var(--messagetransparency_v) + 0.00000000000000000000001));
 	
-	--accentcolor2:					var(--accentcolor_v);
-	--mentioncolor:					var(--accentcolor_v);
-	--linkcolor:					var(--accentcolor_v);
+	--accentcolor2:				var(--accentcolor_v);
+	--mentioncolor:				var(--accentcolor_v);
+	--linkcolor:				var(--accentcolor_v);
 	
-	--successcolor: 				59,165,92;
-	--warningcolor: 				250,166,26;
-	--dangercolor: 					237,66,69;
+	--successcolor: 			59, 165, 92;
+	--warningcolor: 			250, 166, 26;
+	--dangercolor: 				237, 66, 69;
 }
 
 .theme-light, .theme-dark, .theme-amoled {
@@ -709,7 +709,7 @@ body::after {
 	color: var(--header-primary);
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.selected_d94cf9 svg {
+.selected_d94cf9 svg:not(.svg_f5b652) {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 

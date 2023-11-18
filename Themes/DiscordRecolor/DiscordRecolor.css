@@ -2,41 +2,41 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 
 :root {
-	--font:							"gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	--font:					"gg sans", "Noto Sans";
 	
-	--mentioncolor: 				250,166,26;
-	--successcolor: 				59,165,92;
-	--warningcolor: 				250,166,26;
-	--dangercolor: 					237,66,69;
+	--mentioncolor: 			250, 166, 26;
+	--successcolor: 			59, 165, 92;
+	--warningcolor: 			250, 166, 26;
+	--dangercolor: 				237, 66, 69;
 	
-	--textbrightest: 				255,255,255;
-	--textbrighter: 				220,221,222;
-	--textbright: 					185,187,190;
-	--textdark: 					142,146,151;
-	--textdarker: 					114,118,125;
-	--textdarkest: 					79,84,92;
+	--textbrightest: 			255, 255, 255;
+	--textbrighter: 			220, 221, 222;
+	--textbright: 				185, 187, 190;
+	--textdark: 				142, 146, 151;
+	--textdarker: 				114, 118, 125;
+	--textdarkest: 				79, 84, 92;
 	
-	--backgroundaccent: 			64,68,75;
-	--backgroundprimary: 			54,57,63;
-	--backgroundsecondary: 			47,49,54;
-	--backgroundsecondaryalt: 		41,43,47;
-	--backgroundtertiary: 			32,34,37;
-	--backgroundfloating: 			24,25,28;
+	--backgroundaccent: 			64, 68, 75;
+	--backgroundprimary: 			54, 57, 63;
+	--backgroundsecondary: 			47, 49, 54;
+	--backgroundsecondaryalt: 		41, 43, 47;
+	--backgroundtertiary: 			32, 34, 37;
+	--backgroundfloating: 			24, 25, 28;
 	
 	
-	--font_v:						var(--font_s, var(--font));
+	--font_v:				var(--font_s, var(--font));
 	
-	--mentioncolor_v:				var(--mentioncolor_s, var(--mentioncolor));
-	--successcolor_v:				var(--successcolor_s, var(--successcolor));
-	--warningcolor_v:				var(--warningcolor_s, var(--warningcolor));
-	--dangercolor_v:				var(--dangercolor_s, var(--dangercolor));
+	--mentioncolor_v:			var(--mentioncolor_s, var(--mentioncolor));
+	--successcolor_v:			var(--successcolor_s, var(--successcolor));
+	--warningcolor_v:			var(--warningcolor_s, var(--warningcolor));
+	--dangercolor_v:			var(--dangercolor_s, var(--dangercolor));
 	
-	--textbrightest_v:				var(--textbrightest_s, var(--textbrightest));
-	--textbrighter_v:				var(--textbrighter_s, var(--textbrighter));
-	--textbright_v:					var(--textbright_s, var(--textbright));
-	--textdark_v:					var(--textdark_s, var(--textdark));
-	--textdarker_v:					var(--textdarker_s, var(--textdarker));
-	--textdarkest_v:				var(--textdarkest_s, var(--textdarkest));
+	--textbrightest_v:			var(--textbrightest_s, var(--textbrightest));
+	--textbrighter_v:			var(--textbrighter_s, var(--textbrighter));
+	--textbright_v:				var(--textbright_s, var(--textbright));
+	--textdark_v:				var(--textdark_s, var(--textdark));
+	--textdarker_v:				var(--textdarker_s, var(--textdarker));
+	--textdarkest_v:			var(--textdarkest_s, var(--textdarkest));
 	
 	--backgroundaccent_v:			var(--backgroundaccent_s, var(--backgroundaccent));
 	--backgroundprimary_v:			var(--backgroundprimary_s, var(--backgroundprimary));

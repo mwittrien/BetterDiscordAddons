@@ -1,14 +1,14 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
-	--settingswidth: 960;
-	--settingsheight: 80;
-	--settingsbackground: transparent;
+	--settingswidth: 		960;
+	--settingsheight: 		80;
+	--settingsbackground: 		transparent;
 
 	
-	--settingswidth_v: calc(1px * var(--settingswidth_s, var(--settingswidth)));
-	--settingsheight_v: calc(1vh * var(--settingsheight_s, var(--settingsheight)));
-	--settingsbackground_v: var(--settingsbackground_s, var(--settingsbackground));
+	--settingswidth_v: 		calc(1px * var(--settingswidth_s, var(--settingswidth)));
+	--settingsheight_v: 		calc(1vh * var(--settingsheight_s, var(--settingsheight)));
+	--settingsbackground_v: 	var(--settingsbackground_s, var(--settingsbackground));
 }
 
 #app-mount .baseLayer__8fda3 {
