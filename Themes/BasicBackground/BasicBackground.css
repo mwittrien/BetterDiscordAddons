@@ -621,6 +621,8 @@ body::after {
 .modeSelected__487d6:hover .icon_eff5d4,
 .modeUnread_f74c03 .icon_eff5d4,
 .modeUnread_f74c03:hover .icon_eff5d4,
+.modeUnreadImportant_efb53e .icon_eff5d4,
+.modeUnreadImportant_efb53e:hover .icon_eff5d4,
 .notInteractive_a7d9fb.modeConnected__1c02e .icon_eff5d4,
 .notInteractive_a7d9fb.modeSelected__487d6 .icon_eff5d4 {
 	color: var(--interactive-active);
@@ -631,6 +633,8 @@ body::after {
 .modeSelected__487d6:hover .subtitle_bba2b7,
 .modeUnread_f74c03 .subtitle_bba2b7,
 .modeUnread_f74c03:hover .subtitle_bba2b7,
+.modeUnreadImportant_efb53e .subtitle_bba2b7,
+.modeUnreadImportant_efb53e:hover .subtitle_bba2b7,
 .notInteractive_a7d9fb.modeConnected__1c02e .subtitle_bba2b7,
 .notInteractive_a7d9fb.modeSelected__487d6 .subtitle_bba2b7 {
 	color: var(--interactive-normal);
