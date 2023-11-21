@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.8
+ * @version 1.3.9
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -460,12 +460,6 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.modulePatches = {
-					after: [
-						"ChannelSidebar"
-					]
-				};
-				
 				this.css = `
 					@font-face {
 						font-family: glue1-spoticon;
@@ -698,6 +692,17 @@ module.exports = (_ => {
 					return false;
 				}});
 				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.InternalReactUtils, ["jsx", "jsxs"], {before: e => {
+					if (e.methodArguments[0] == "section" && e.methodArguments[1].className && e.methodArguments[1].className.indexOf(BDFDB.disCN.channelpanels) > -1) e.methodArguments[1].children.unshift(BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
+						key: "SPOTIFY_CONTROLS",
+						song: BDFDB.LibraryStores.SpotifyStore.getActivity(false),
+						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
+						buttonStates: [],
+						timeline: this.settings.general.addTimeline,
+						activityToggle: this.settings.general.addActivityButton
+					}, true));
+				}});
+				
 				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
@@ -789,18 +794,6 @@ module.exports = (_ => {
 					delete this.SettingsUpdated;
 					BDFDB.DiscordUtils.rerenderAll();
 				}
-			}
-
-			processChannelSidebar (e) {
-				let panels = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelpanels]]});
-				if (panels) panels.props.children.unshift(BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
-					key: "SPOTIFY_CONTROLS",
-					song: BDFDB.LibraryStores.SpotifyStore.getActivity(false),
-					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-					buttonStates: [],
-					timeline: this.settings.general.addTimeline,
-					activityToggle: this.settings.general.addActivityButton
-				}, true));
 			}
 			
 			updatePlayer (song) {
