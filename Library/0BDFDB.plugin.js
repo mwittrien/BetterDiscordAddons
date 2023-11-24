@@ -6064,12 +6064,12 @@ module.exports = (_ => {
 					render() {
 						let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
-							className: BDFDB.disCN.pageimagewrapper,
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.pageimagewrapper, this.props.className),
 							direction: Internal.LibraryComponents.Flex.Direction.VERTICAL,
 							align: Internal.LibraryComponents.Flex.Align.CENTER,
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS.pageimage + BDFDB.disCNS.margintop20 + BDFDB.disCN.marginbottom20,
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.pageimage, BDFDB.disCN.margintop20, BDFDB.disCN.marginbottom20, this.props.imageClassName),
 									style: {
 										flex: "0 1 auto",
 										background: `url("${this.props.src || (isLightTheme ? this.props.lightSrc : this.props.darkSrc) || this.props.lightSrc || this.props.darkSrc || (isLightTheme ? "/assets/a72746e7108167af95c8.svg" : "/assets/01864c39871ce619d855.svg")}") center/contain no-repeat`,
