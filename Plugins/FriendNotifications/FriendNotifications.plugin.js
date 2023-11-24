@@ -191,26 +191,7 @@ module.exports = (_ => {
 							]
 						})
 					]
-				}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: BDFDB.disCN.pageimagewrapper,
-					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-					children: [
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCNS.pageimage + BDFDB.disCNS.margintop20 + BDFDB.disCN.marginbottom20,
-							style: {
-								flex: "0 1 auto",
-								background: `url("${BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/a72746e7108167af95c8.svg" : "/assets/01864c39871ce619d855.svg"}") center/contain no-repeat`,
-								width: "415px",
-								height: "200px"
-							}
-						}),
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.pageimagetext,
-							children: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER
-						})
-					]
-				});
+				}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmptyStateImage, {});
 			}
 		};
 	
