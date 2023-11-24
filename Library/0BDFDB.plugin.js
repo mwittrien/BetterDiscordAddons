@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.3
+ * @version 3.5.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,9 +27,7 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			fixed: {
-				"Special Characters": "Fixed an Issue, which caused downloaded Files (for example Plugins downloaded via Plugin Repo) to have their special characters (polish, chinese, etc. letters) get corrupted"
-			}
+			
 		}
 	};
 	
@@ -6061,6 +6059,32 @@ module.exports = (_ => {
 					}
 				};
 				Internal.setDefaultProps(CustomComponents.EmojiPickerButton, {allowManagedEmojis: false, allowManagedEmojisUsage: false});
+				
+				CustomComponents.EmptyStateImage = reactInitialized && class BDFDB_EmptyStateImage extends Internal.LibraryModules.React.Component {
+					render() {
+						let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+							className: BDFDB.disCN.pageimagewrapper,
+							direction: Internal.LibraryComponents.Flex.Direction.VERTICAL,
+							align: Internal.LibraryComponents.Flex.Align.CENTER,
+							children: [
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCNS.pageimage + BDFDB.disCNS.margintop20 + BDFDB.disCN.marginbottom20,
+									style: {
+										flex: "0 1 auto",
+										background: `url("${this.props.src || (isLightTheme ? this.props.lightSrc : this.props.darkSrc) || this.props.lightSrc || this.props.darkSrc || (isLightTheme ? "/assets/a72746e7108167af95c8.svg" : "/assets/01864c39871ce619d855.svg")}") center/contain no-repeat`,
+										width: this.props.width || "415px",
+										height: this.props.height || "200px"
+									}
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.pageimagetext,
+									children: this.props.text || BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER
+								})
+							]
+						});
+					}
+				};
 				
 				CustomComponents.FavButton = reactInitialized && class BDFDB_FavButton extends Internal.LibraryModules.React.Component {
 					handleClick() {
