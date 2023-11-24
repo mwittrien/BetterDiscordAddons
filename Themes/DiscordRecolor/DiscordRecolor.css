@@ -937,6 +937,13 @@ html .iconBadge__2abac {
 .image__98a59 {
 	opacity: .5;
 }
+.image__98a59[style*='url("/assets/d6dfb89ab06b62044dbb.svg")'] {
+	background-image: url(https://discord.com/assets/8eeb59bba0a61cbffc41.svg) !important;
+}
+.image__98a59[style*='url("/assets/75081bdaad2d359c1469.svg")'] {
+	background-image: url(https://discord.com/assets/45cd76fed34c8e398cc8.svg) !important;
+}
+
 .image__98a59[style*='url("/assets/0629e34902ae58f8e4ca.svg")'] {
 	background-image: url(https://discord.com/assets/24aa06be5457e66bdd64.svg) !important;
 }

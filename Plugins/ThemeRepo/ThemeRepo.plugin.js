@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.4s
+ * @version 2.5.5
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -65,7 +65,7 @@ module.exports = (_ => {
 		
 		var list;
 		
-		var loading, cachedThemes, grabbedThemes, generatorThemes, updateInterval;
+		var loading, cachedThemes, grabbedThemes, generatorThemes, updateInterval, errorState;
 		var searchString, searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
 		var updateGeneratorTimeout, forceRerenderGenerator, nativeCSS, nativeCSSvars;
 		
@@ -100,8 +100,8 @@ module.exports = (_ => {
 			NAME:			"Name",
 			AUTHORNAME:		"Author",
 			VERSION:		"Version",
-			DESCRIPTION:	"Description",
-			RELEASEDATE:	"Release Date",
+			DESCRIPTION:		"Description",
+			RELEASEDATE:		"Release Date",
 			STATE:			"Update State",
 			DOWNLOADS:		"Downloads",
 			LIKES:			"Likes",
@@ -139,10 +139,10 @@ module.exports = (_ => {
 						state: state
 					});
 				}).filter(n => n);
-				if (!this.props.updated)		themes = themes.filter(theme => theme.state != themeStates.INSTALLED);
-				if (!this.props.outdated)		themes = themes.filter(theme => theme.state != themeStates.OUTDATED);
-				if (!this.props.downloadable)	themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
-				if (searchString) 	{
+				if (!this.props.updated) themes = themes.filter(theme => theme.state != themeStates.INSTALLED);
+				if (!this.props.outdated) themes = themes.filter(theme => theme.state != themeStates.OUTDATED);
+				if (!this.props.downloadable) themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
+				if (searchString) {
 					let usedSearchString = searchString.toUpperCase();
 					let spacelessUsedSearchString = usedSearchString.replace(/\s/g, "");
 					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1 || theme.search.indexOf(spacelessUsedSearchString) > -1);
@@ -189,6 +189,17 @@ module.exports = (_ => {
 				if (!this.props.tab) this.props.tab = "Themes";
 				
 				const entries = (!loading.is && grabbedThemes.length ? this.filterThemes() : []);
+				
+				const emptyState = errorState ? {
+					lightSrc: "/assets/d6dfb89ab06b62044dbb.svg",
+					darkSrc: "/assets/8eeb59bba0a61cbffc41.svg",
+					text: "Could not load Theme Store due to an Issue with the BD Website"
+				} : !entries.length && !this.props.updated && !this.props.outdated && !this.props.downloadable ? {
+					text: `You disabled all Filter Options in the "${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}" Tab`
+				} : !entries.length && searchString ? {
+					lightSrc: "/assets/75081bdaad2d359c1469.svg",
+					darkSrc: "/assets/45cd76fed34c8e398cc8.svg"
+				} : !entries.length ? {} : null;
 				
 				if (forceRerenderGenerator && this.props.tab == "Generator") BDFDB.TimeUtils.timeout(_ => {
 					forceRerenderGenerator = false;
@@ -320,7 +331,7 @@ module.exports = (_ => {
 												children: `${BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Theme Repo")} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`
 											})
 										]
-									}) : BDFDB.ReactUtils.createElement("div", {
+									}) : emptyState ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmptyStateImage, emptyState) : BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.discoverycards,
 										children: entries.map(theme => BDFDB.ReactUtils.createElement(RepoCardComponent, {
 											data: theme
@@ -447,7 +458,7 @@ module.exports = (_ => {
 									render: false,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-											title: "Show following Themes",
+											title: "Shows following Themes",
 											children: Object.keys(_this.defaults.filters).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 												type: "Switch",
 												plugin: _this,
@@ -1000,8 +1011,15 @@ module.exports = (_ => {
 						for (let i = 0; i <= 20; i++) checkTheme();
 					}
 					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Theme Store", {type: "danger"});}
-					if (response && response.statusCode == 403) BDFDB.NotificationUtils.toast("Failed to fetch Theme Store from the Website Api due to DDoS Protection", {type: "danger"});
-					else if (response && response.statusCode == 404) BDFDB.NotificationUtils.toast("Failed to fetch Theme Store from the Website Api due to Connection Issue", {type: "danger"});
+					let status = {}; 
+					if (response && response.statusCode == 403) status = {code: response.statusCode, reason: " due to DDoS Protection"};
+					else if (response && response.statusCode == 404) status = {code: response.statusCode, reason: " due to DDoS Protection"};
+					else if (response && response.statusCode == 502) status = {code: response.statusCode, reason: ", because the API is down"};
+					if (status.code) {
+						BDFDB.NotificationUtils.toast("Failed to fetch Theme Store from the Website API" + status.reason, {type: "danger"});
+						errorState = status.code;
+					}
+					else errorState = null;
 				}), 10000);
 			}
 
