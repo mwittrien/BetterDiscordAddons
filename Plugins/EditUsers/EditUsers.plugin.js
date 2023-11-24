@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.5
+ * @version 4.8.6
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -187,6 +187,9 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
 						margin-left: 4px;
+					}
+					${BDFDB.dotCNS.voicename + BDFDB.dotCN.bottag} {
+						display: inline-flex;
 					}
 					${BDFDB.dotCNS.peoplesuser + BDFDB.dotCN.peoplesdiscriminator} {
 						display: none;
@@ -682,7 +685,12 @@ module.exports = (_ => {
 				}
 				else {
 					let username = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicename]]});
-					if (username) this.changeUserColor(username, e.instance.props.user.id, {modify: e.instance.props});
+					if (!username) return;
+					this.changeUserColor(username, e.instance.props.user.id, {modify: e.instance.props});
+					username.props.children = [username.props.children].flat(10);
+					this.injectBadge(username.props.children, e.instance.props.user.id, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), 1, {
+						tagClass: BDFDB.disCN.bottagnametag
+					});
 				}
 			}
 			
