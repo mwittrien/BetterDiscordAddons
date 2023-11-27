@@ -509,17 +509,17 @@
 	border-color: rgb(var(--accentcolor_v)) !important;
 }
 
-.image__04423[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] {			/* textarea				follow channel icon						*/
+.image__04423[src="/assets/e49c372705a84e02772c.svg"] {					/* textarea				follow channel icon						*/
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_bg.svg) center/contain no-repeat;
 	width: 47px;
 	height: 60px;
 	margin-bottom: -8px;
 }
-.image__04423[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] + * {
+.image__04423[src="/assets/e49c372705a84e02772c.svg"] + * {
 	overflow: visible;
 }
-.image__04423[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] + *::after {
+.image__04423[src="/assets/e49c372705a84e02772c.svg"] + *::after {
 	content: "";
 	position: absolute;
 	bottom: 8px;
