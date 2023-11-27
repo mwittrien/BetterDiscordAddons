@@ -213,9 +213,16 @@ module.exports = (_ => {
 						response.statusCode = response.status;
 						if (response.headers) response.headers["content-type"] = response.headers.get("content-type");
 						BDFDB.TimeUtils.clear(timeoutObj);
-						return config.toBuffer ? response.arrayBuffer() : response.text();
-					}).then(body => {
-						if (!killed && response) callback(response.status != 200 ? new Error(response.statusText || "Fetch Failed") : null, response, body);
+						return config.toBase64 ? response.blob() : config.toBuffer ? response.arrayBuffer() : response.text();
+					}).then(result => {
+						if (!killed && response) {
+							if (!config.toBase64 || response.status != 200) callback(response.status != 200 ? new Error(response.statusText || "Fetch Failed") : null, response, result);
+							else {
+								let reader = new FileReader();
+								reader.onload = _ => callback(null, response, reader.result);
+								reader.readAsDataURL(result);
+							}
+						}
 					});
 				}
 			};
