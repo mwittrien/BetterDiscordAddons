@@ -195,6 +195,7 @@ module.exports = (_ => {
 					}, timeout);
 					let response = null, isFallback = false;
 					return (config.bdVersion && BdApi && BdApi.Net && BdApi.Net.fetch ? BdApi.Net.fetch : fetch)(url, config).catch(error => {
+						BDFDB.TimeUtils.clear(timeoutObj);
 						if (!config.bdVersion) return requestFunction(url, Object.assign({}, config, {bdVersion: true}), callback);
 						else callback(new Error(error), {
 							aborted: false,
