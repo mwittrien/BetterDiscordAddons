@@ -71,6 +71,7 @@
 		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTextAreaTypes": ["CREATE_FORUM_POST", "PROFILE_BIO_INPUT", "FORUM_CHANNEL_GUIDELINES"],
 		"Colors": ["SPOTIFY", "RED_100", "BLUE"],
+		"EmojiSprites": ["DiversityPerRow", "PickerCount", "PickerPerRow"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
 		"MessageTypeGroups": ["USER_MESSAGE", "DELETABLE"],
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
