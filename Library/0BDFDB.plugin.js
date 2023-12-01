@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.4
+ * @version 3.5.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1192,7 +1192,8 @@ module.exports = (_ => {
 					Internal.getWebModuleReq = function () {
 						if (!Internal.getWebModuleReq.req) {
 							const id = "BDFDB-WebModules_" + Math.floor(Math.random() * 10000000000000000);
-							const req = webpackChunkdiscord_app.push([[id], {}, req => req]);
+							let req;
+							webpackChunkdiscord_app.push([[id], {}, r => {if (r.c) req = r;}]);
 							delete req.m[id];
 							delete req.c[id];
 							Internal.getWebModuleReq.req = req;
