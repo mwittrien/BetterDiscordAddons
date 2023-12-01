@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.3.3
+ * @version 5.3.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1040,7 +1040,7 @@ module.exports = (_ => {
 										children: this.labels.context_saveas.replace("{{var0}}", type),
 										onClick: event => {
 											BDFDB.ListenerUtils.stopEvent(event);
-											this.downloadFile({url: url});
+											this.downloadFile({url: e.instance.props.original, fallbackUrl: url});
 										},
 										onContextMenu: event => {
 											let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
@@ -1048,7 +1048,7 @@ module.exports = (_ => {
 												children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
 													label: name,
-													action: _ => this.downloadFile({url: url}, ownLocations[name].location)
+													action: _ => this.downloadFile({url: e.instance.props.original, fallbackUrl: url}, ownLocations[name].location)
 												}))
 											}));
 										}
@@ -1065,7 +1065,7 @@ module.exports = (_ => {
 										children: this.labels.context_copy.replace("{{var0}}", type),
 										onClick: event => {
 											BDFDB.ListenerUtils.stopEvent(event);
-											this.copyFile({url: url});
+											this.copyFile({url: e.instance.props.original, fallbackUrl: url});
 										}
 									})
 								],
@@ -1496,7 +1496,7 @@ module.exports = (_ => {
 			
 			requestFile (urls, onLoad, onError, config = {}) {
 				if (!urls || typeof onLoad != "function") return typeof onError == "function" && onError();
-				let url = urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url;
+				let url = (urls.url && urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url || "");
 				let isResized = !config.orignalSizeChecked && (url.indexOf("?width=") > -1 || url.indexOf("?height=") > -1 || url.indexOf("?size=") > -1);
 				url = isResized ? this.removeSizeInUrl(url) : url;
 				url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
@@ -1717,12 +1717,12 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							context_copy:						"Копирайте {{var0}}",
-							context_imageactions:				"Действия с изображения",
+							context_imageactions:						"Действия с изображения",
 							context_lenssize:					"Размер на обектива",
 							context_saveas:						"Запазете {{var0}} като ...",
 							context_searchwith:					"Търсете {{var0}} с ...",
-							context_streamactions:				"Действия за визуализация на потока",
-							context_videoactions:				"Видео действия",
+							context_streamactions:						"Действия за визуализация на потока",
+							context_videoactions:						"Видео действия",
 							context_view:						"Преглед {{var0}}",
 							context_zoomspeed:					"Скорост на мащабиране",
 							submenu_disabled:					"Всички инвалиди",
@@ -1734,12 +1734,12 @@ module.exports = (_ => {
 					case "cs":		// Czech
 						return {
 							context_copy:						"Zkopírovat {{var0}}",
-							context_imageactions:				"Akce s obrázky",
+							context_imageactions:					"Akce s obrázky",
 							context_lenssize:					"Velikost lupy",
 							context_saveas:						"Uložit {{var0}} jako...",
 							context_searchwith:					"Hledat {{var0}} pomocí...",
-							context_streamactions:				"Akce náhledu streamu",
-							context_videoactions:				"Video akce",
+							context_streamactions:					"Akce náhledu streamu",
+							context_videoactions:					"Video akce",
 							context_view:						"Zobrazit {{var0}}",
 							context_zoomspeed:					"Rychlost zoomu",
 							submenu_disabled:					"Vše zakázáno",
@@ -1751,12 +1751,12 @@ module.exports = (_ => {
 					case "da":		// Danish
 						return {
 							context_copy:						"Kopiér {{var0}}",
-							context_imageactions:				"Billedhandlinger",
+							context_imageactions:					"Billedhandlinger",
 							context_lenssize:					"Objektivstørrelse",
 							context_saveas:						"Gem {{var0}} som ...",
 							context_searchwith:					"Søg i {{var0}} med ...",
-							context_streamactions:				"Stream forhåndsvisningshandlinger",
-							context_videoactions:				"Videohandlinger",
+							context_streamactions:					"Stream forhåndsvisningshandlinger",
+							context_videoactions:					"Videohandlinger",
 							context_view:						"Se {{var0}}",
 							context_zoomspeed:					"Zoomhastighed",
 							submenu_disabled:					"Alle handicappede",
@@ -1768,12 +1768,12 @@ module.exports = (_ => {
 					case "de":		// German
 						return {
 							context_copy:						"{{var0}} kopieren",
-							context_imageactions:				"Bildaktionen",
+							context_imageactions:					"Bildaktionen",
 							context_lenssize:					"Linsengröße",
 							context_saveas:						"{{var0}} speichern als ...",
 							context_searchwith:					"{{var0}} suchen mit ...",
-							context_streamactions:				"Stream-Vorschau-Aktionen",
-							context_videoactions:				"Videoaktionen",
+							context_streamactions:					"Stream-Vorschau-Aktionen",
+							context_videoactions:					"Videoaktionen",
 							context_view:						"{{var0}} ansehen",
 							context_zoomspeed:					"Zoomgeschwindigkeit",
 							submenu_disabled:					"Alle deaktiviert",
@@ -1785,12 +1785,12 @@ module.exports = (_ => {
 					case "el":		// Greek
 						return {
 							context_copy:						"Αντιγραφή {{var0}}",
-							context_imageactions:				"Ενέργειες εικόνας",
+							context_imageactions:					"Ενέργειες εικόνας",
 							context_lenssize:					"Μέγεθος φακού",
 							context_saveas:						"Αποθήκευση {{var0}} ως ...",
 							context_searchwith:					"Αναζήτηση {{var0}} με ...",
-							context_streamactions:				"Ενέργειες προεπισκόπησης ροής",
-							context_videoactions:				"Ενέργειες βίντεο",
+							context_streamactions:					"Ενέργειες προεπισκόπησης ροής",
+							context_videoactions:					"Ενέργειες βίντεο",
 							context_view:						"Προβολή {{var0}}",
 							context_zoomspeed:					"Ταχύτητα ζουμ",
 							submenu_disabled:					"Όλα τα άτομα με ειδικές ανάγκες",
@@ -1802,12 +1802,12 @@ module.exports = (_ => {
 					case "es":		// Spanish
 						return {
 							context_copy:						"Copiar {{var0}}",
-							context_imageactions:				"Acciones de imagen",
+							context_imageactions:					"Acciones de imagen",
 							context_lenssize:					"Tamaño de la lente",
 							context_saveas:						"Guardar {{var0}} como ...",
 							context_searchwith:					"Buscar {{var0}} con ...",
-							context_streamactions:				"Acciones de vista previa de transmisión",
-							context_videoactions:				"Acciones de vídeo",
+							context_streamactions:					"Acciones de vista previa de transmisión",
+							context_videoactions:					"Acciones de vídeo",
 							context_view:						"Ver {{var0}}",
 							context_zoomspeed:					"Velocidad de zoom",
 							submenu_disabled:					"Todos discapacitados",
@@ -1819,12 +1819,12 @@ module.exports = (_ => {
 					case "fi":		// Finnish
 						return {
 							context_copy:						"Kopioi {{var0}}",
-							context_imageactions:				"Kuvatoiminnot",
+							context_imageactions:					"Kuvatoiminnot",
 							context_lenssize:					"Linssin koko",
 							context_saveas:						"Tallenna {{var0}} nimellä ...",
 							context_searchwith:					"Tee haku {{var0}} ...",
-							context_streamactions:				"Streamin esikatselutoiminnot",
-							context_videoactions:				"Videotoiminnot",
+							context_streamactions:					"Streamin esikatselutoiminnot",
+							context_videoactions:					"Videotoiminnot",
 							context_view:						"Näytä {{var0}}",
 							context_zoomspeed:					"Zoomausnopeus",
 							submenu_disabled:					"Kaikki vammaiset",
@@ -1836,12 +1836,12 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							context_copy:						"Copier {{var0}}",
-							context_imageactions:				"Actions sur les images",
+							context_imageactions:					"Actions sur les images",
 							context_lenssize:					"Taille de l'objectif",
 							context_saveas:						"Enregistrer {{var0}} sous ...",
 							context_searchwith:					"Rechercher {{var0}} avec ...",
-							context_streamactions:				"Actions d'aperçu de flux",
-							context_videoactions:				"Actions vidéo",
+							context_streamactions:					"Actions d'aperçu de flux",
+							context_videoactions:					"Actions vidéo",
 							context_view:						"Afficher {{var0}}",
 							context_zoomspeed:					"Vitesse de zoom",
 							submenu_disabled:					"Tout désactivé",
@@ -1853,12 +1853,12 @@ module.exports = (_ => {
 					case "hi":		// Hindi
 						return {
 							context_copy:						"कॉपी {{var0}}",
-							context_imageactions:				"छवि क्रियाएँ",
+							context_imageactions:					"छवि क्रियाएँ",
 							context_lenssize:					"लेंस का आकार",
 							context_saveas:						"{{var0}} को इस रूप में सेव करें...",
 							context_searchwith:					"इसके साथ {{var0}} खोजें ...",
-							context_streamactions:				"स्ट्रीम पूर्वावलोकन क्रियाएं",
-							context_videoactions:				"वीडियो क्रिया",
+							context_streamactions:					"स्ट्रीम पूर्वावलोकन क्रियाएं",
+							context_videoactions:					"वीडियो क्रिया",
 							context_view:						"देखें {{var0}}",
 							context_zoomspeed:					"ज़ूम गति",
 							submenu_disabled:					"सभी अक्षम",
@@ -1870,12 +1870,12 @@ module.exports = (_ => {
 					case "hr":		// Croatian
 						return {
 							context_copy:						"Kopiraj {{var0}}",
-							context_imageactions:				"Radnje slike",
+							context_imageactions:					"Radnje slike",
 							context_lenssize:					"Veličina leće",
 							context_saveas:						"Spremi {{var0}} kao ...",
 							context_searchwith:					"Traži {{var0}} sa ...",
-							context_streamactions:				"Radnje pregleda streama",
-							context_videoactions:				"Video radnje",
+							context_streamactions:					"Radnje pregleda streama",
+							context_videoactions:					"Video radnje",
 							context_view:						"Pogledajte {{var0}}",
 							context_zoomspeed:					"Brzina zumiranja",
 							submenu_disabled:					"Svi invalidi",
@@ -1887,12 +1887,12 @@ module.exports = (_ => {
 					case "hu":		// Hungarian
 						return {
 							context_copy:						"{{var0}} másolása",
-							context_imageactions:				"Képműveletek",
+							context_imageactions:					"Képműveletek",
 							context_lenssize:					"Lencse mérete",
 							context_saveas:						"{{var0}} mentése másként ...",
 							context_searchwith:					"Keresés a következőben: {{var0}} a következővel:",
-							context_streamactions:				"Stream előnézeti műveletek",
-							context_videoactions:				"Videóműveletek",
+							context_streamactions:					"Stream előnézeti műveletek",
+							context_videoactions:					"Videóműveletek",
 							context_view:						"Megtekintés: {{var0}}",
 							context_zoomspeed:					"Zoom sebesség",
 							submenu_disabled:					"Minden fogyatékkal él",
@@ -1904,12 +1904,12 @@ module.exports = (_ => {
 					case "it":		// Italian
 						return {
 							context_copy:						"Copia {{var0}}",
-							context_imageactions:				"Azioni immagine",
+							context_imageactions:					"Azioni immagine",
 							context_lenssize:					"Dimensione della lente",
 							context_saveas:						"Salva {{var0}} come ...",
 							context_searchwith:					"Cerca {{var0}} con ...",
-							context_streamactions:				"Azioni di anteprima del flusso",
-							context_videoactions:				"Azioni video",
+							context_streamactions:					"Azioni di anteprima del flusso",
+							context_videoactions:					"Azioni video",
 							context_view:						"Visualizza {{var0}}",
 							context_zoomspeed:					"Velocità dello zoom",
 							submenu_disabled:					"Tutti disabilitati",
@@ -1921,12 +1921,12 @@ module.exports = (_ => {
 					case "ja":		// Japanese
 						return {
 							context_copy:						"{{var0}} をコピーします",
-							context_imageactions:				"画像アクション",
+							context_imageactions:					"画像アクション",
 							context_lenssize:					"レンズサイズ",
 							context_saveas:						"{{var0}} を...として保存します",
 							context_searchwith:					"{{var0}} を...で検索",
-							context_streamactions:				"ストリーム プレビュー アクション",
-							context_videoactions:				"ビデオ アクション",
+							context_streamactions:					"ストリーム プレビュー アクション",
+							context_videoactions:					"ビデオ アクション",
 							context_view:						"{{var0}} を表示",
 							context_zoomspeed:					"ズーム速度",
 							submenu_disabled:					"すべて無効",
@@ -1938,12 +1938,12 @@ module.exports = (_ => {
 					case "ko":		// Korean
 						return {
 							context_copy:						"{{var0}} 복사",
-							context_imageactions:				"이미지 작업",
+							context_imageactions:					"이미지 작업",
 							context_lenssize:					"렌즈 크기",
 							context_saveas:						"{{var0}} 을 다른 이름으로 저장 ...",
 							context_searchwith:					"{{var0}} 검색 ...",
-							context_streamactions:				"스트림 미리보기 작업",
-							context_videoactions:				"비디오 작업",
+							context_streamactions:					"스트림 미리보기 작업",
+							context_videoactions:					"비디오 작업",
 							context_view:						"{{var0}} 보기",
 							context_zoomspeed:					"줌 속도",
 							submenu_disabled:					"모두 비활성화 됨",
@@ -1955,12 +1955,12 @@ module.exports = (_ => {
 					case "lt":		// Lithuanian
 						return {
 							context_copy:						"Kopijuoti {{var0}}",
-							context_imageactions:				"Vaizdo veiksmai",
+							context_imageactions:					"Vaizdo veiksmai",
 							context_lenssize:					"Objektyvo dydis",
 							context_saveas:						"Išsaugoti '{{var0}}' kaip ...",
 							context_searchwith:					"Ieškoti {{var0}} naudojant ...",
-							context_streamactions:				"Srauto peržiūros veiksmai",
-							context_videoactions:				"Vaizdo įrašų veiksmai",
+							context_streamactions:					"Srauto peržiūros veiksmai",
+							context_videoactions:					"Vaizdo įrašų veiksmai",
 							context_view:						"Žiūrėti {{var0}}",
 							context_zoomspeed:					"Priartinimo greitis",
 							submenu_disabled:					"Visi neįgalūs",
@@ -1972,12 +1972,12 @@ module.exports = (_ => {
 					case "nl":		// Dutch
 						return {
 							context_copy:						"Kopieer {{var0}}",
-							context_imageactions:				"Afbeeldingsacties",
+							context_imageactions:					"Afbeeldingsacties",
 							context_lenssize:					"Lens Maat",
 							context_saveas:						"Bewaar {{var0}} als ...",
 							context_searchwith:					"Zoek {{var0}} met ...",
-							context_streamactions:				"Stream Preview-acties",
-							context_videoactions:				"Video-acties",
+							context_streamactions:					"Stream Preview-acties",
+							context_videoactions:					"Video-acties",
 							context_view:						"Bekijk {{var0}}",
 							context_zoomspeed:					"Zoom snelheid",
 							submenu_disabled:					"Allemaal uitgeschakeld",
@@ -1989,12 +1989,12 @@ module.exports = (_ => {
 					case "no":		// Norwegian
 						return {
 							context_copy:						"Kopier {{var0}}",
-							context_imageactions:				"Bildehandlinger",
+							context_imageactions:					"Bildehandlinger",
 							context_lenssize:					"Linsestørrelse",
 							context_saveas:						"Lagre {{var0}} som ...",
 							context_searchwith:					"Søk på {{var0}} med ...",
-							context_streamactions:				"Strøm forhåndsvisningshandlinger",
-							context_videoactions:				"Videohandlinger",
+							context_streamactions:					"Strøm forhåndsvisningshandlinger",
+							context_videoactions:					"Videohandlinger",
 							context_view:						"Vis {{var0}}",
 							context_zoomspeed:					"Zoomhastighet",
 							submenu_disabled:					"Alle funksjonshemmede",
@@ -2006,12 +2006,12 @@ module.exports = (_ => {
 					case "pl":		// Polish
 						return {
 							context_copy:						"Kopiuj {{var0}}",
-							context_imageactions:				"Działania związane z obrazem",
+							context_imageactions:					"Działania związane z obrazem",
 							context_lenssize:					"Rozmiar soczewki",
 							context_saveas:						"Zapisz {{var0}} jako ...",
 							context_searchwith:					"Wyszukaj {{var0}} za pomocą ...",
-							context_streamactions:				"Akcje podglądu strumienia",
-							context_videoactions:				"Akcje wideo",
+							context_streamactions:					"Akcje podglądu strumienia",
+							context_videoactions:					"Akcje wideo",
 							context_view:						"Wyświetl {{var0}}",
 							context_zoomspeed:					"Szybkość zoomu",
 							submenu_disabled:					"Wszystkie wyłączone",
@@ -2023,12 +2023,12 @@ module.exports = (_ => {
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							context_copy:						"Copiar {{var0}}",
-							context_imageactions:				"Ações de imagem",
+							context_imageactions:					"Ações de imagem",
 							context_lenssize:					"Tamanho da lente",
 							context_saveas:						"Salvar {{var0}} como ...",
 							context_searchwith:					"Pesquisar {{var0}} com ...",
-							context_streamactions:				"Ações de visualização de fluxo",
-							context_videoactions:				"Ações de vídeo",
+							context_streamactions:					"Ações de visualização de fluxo",
+							context_videoactions:					"Ações de vídeo",
 							context_view:						"Visualizar {{var0}}",
 							context_zoomspeed:					"Velocidade do zoom",
 							submenu_disabled:					"Todos desativados",
@@ -2040,12 +2040,12 @@ module.exports = (_ => {
 					case "ro":		// Romanian
 						return {
 							context_copy:						"Copiați {{var0}}",
-							context_imageactions:				"Acțiuni de imagine",
+							context_imageactions:					"Acțiuni de imagine",
 							context_lenssize:					"Dimensiunea obiectivului",
 							context_saveas:						"Salvați {{var0}} ca ...",
 							context_searchwith:					"Căutați {{var0}} cu ...",
-							context_streamactions:				"Acțiuni de previzualizare în flux",
-							context_videoactions:				"Acțiuni video",
+							context_streamactions:					"Acțiuni de previzualizare în flux",
+							context_videoactions:					"Acțiuni video",
 							context_view:						"Vizualizați {{var0}}",
 							context_zoomspeed:					"Viteza de zoom",
 							submenu_disabled:					"Toate sunt dezactivate",
@@ -2057,12 +2057,12 @@ module.exports = (_ => {
 					case "ru":		// Russian
 						return {
 							context_copy:						"Скопируйте {{var0}}",
-							context_imageactions:				"Действия с изображением",
+							context_imageactions:					"Действия с изображением",
 							context_lenssize:					"Размер линзы",
 							context_saveas:						"Сохранить {{var0}} как ...",
 							context_searchwith:					"Искать {{var0}} с помощью ...",
-							context_streamactions:				"Действия предварительного просмотра трансляции",
-							context_videoactions:				"Действия с видео",
+							context_streamactions:					"Действия предварительного просмотра трансляции",
+							context_videoactions:					"Действия с видео",
 							context_view:						"Посмотреть {{var0}}",
 							context_zoomspeed:					"Скорость масштабирования",
 							submenu_disabled:					"Все отключены",
@@ -2074,12 +2074,12 @@ module.exports = (_ => {
 					case "sv":		// Swedish
 						return {
 							context_copy:						"Kopiera {{var0}}",
-							context_imageactions:				"Bildåtgärder",
+							context_imageactions:					"Bildåtgärder",
 							context_lenssize:					"Linsstorlek",
 							context_saveas:						"Spara {{var0}} som ...",
 							context_searchwith:					"Sök {{var0}} med ...",
-							context_streamactions:				"Streama förhandsgranskningsåtgärder",
-							context_videoactions:				"Videoåtgärder",
+							context_streamactions:					"Streama förhandsgranskningsåtgärder",
+							context_videoactions:					"Videoåtgärder",
 							context_view:						"Visa {{var0}}",
 							context_zoomspeed:					"Zoomhastighet",
 							submenu_disabled:					"Alla funktionshindrade",
@@ -2091,12 +2091,12 @@ module.exports = (_ => {
 					case "th":		// Thai
 						return {
 							context_copy:						"คัดลอก{{var0}}",
-							context_imageactions:				"การทำงานของรูปภาพ",
+							context_imageactions:					"การทำงานของรูปภาพ",
 							context_lenssize:					"ขนาดเลนส์",
 							context_saveas:						"บันทึก{{var0}}เป็น ...",
 							context_searchwith:					"ค้นหา{{var0}} ้วย ...",
-							context_streamactions:				"การดำเนินการแสดงตัวอย่างสตรีม",
-							context_videoactions:				"การกระทำของวิดีโอ",
+							context_streamactions:					"การดำเนินการแสดงตัวอย่างสตรีม",
+							context_videoactions:					"การกระทำของวิดีโอ",
 							context_view:						"ดู{{var0}}",
 							context_zoomspeed:					"ความเร็วในการซูม",
 							submenu_disabled:					"ปิดใช้งานทั้งหมด",
@@ -2108,12 +2108,12 @@ module.exports = (_ => {
 					case "tr":		// Turkish
 						return {
 							context_copy:						"{{var0}} kopyala",
-							context_imageactions:				"Görüntü Eylemleri",
+							context_imageactions:					"Görüntü Eylemleri",
 							context_lenssize:					"Lens Boyutu",
 							context_saveas:						"{{var0}} farklı kaydet ...",
 							context_searchwith:					"{{var0}} şununla ara ...",
-							context_streamactions:				"Akış Önizleme İşlemleri",
-							context_videoactions:				"Video Eylemleri",
+							context_streamactions:					"Akış Önizleme İşlemleri",
+							context_videoactions:					"Video Eylemleri",
 							context_view:						"{{var0}} görüntüle",
 							context_zoomspeed:					"yakınlaştırma hızı",
 							submenu_disabled:					"Hepsi devre dışı",
@@ -2125,12 +2125,12 @@ module.exports = (_ => {
 					case "uk":		// Ukrainian
 						return {
 							context_copy:						"Копіювати {{var0}}",
-							context_imageactions:				"Дії із зображеннями",
+							context_imageactions:					"Дії із зображеннями",
 							context_lenssize:					"Розмір лінзи",
 							context_saveas:						"Збережіть {{var0}} як ...",
 							context_searchwith:					"Шукати {{var0}} за допомогою ...",
-							context_streamactions:				"Дії попереднього перегляду потоку",
-							context_videoactions:				"Відео дії",
+							context_streamactions:					"Дії попереднього перегляду потоку",
+							context_videoactions:					"Відео дії",
 							context_view:						"Переглянути {{var0}}",
 							context_zoomspeed:					"Швидкість масштабування",
 							submenu_disabled:					"Всі інваліди",
@@ -2142,12 +2142,12 @@ module.exports = (_ => {
 					case "vi":		// Vietnamese
 						return {
 							context_copy:						"Sao chép {{var0}}",
-							context_imageactions:				"Hành động hình ảnh",
+							context_imageactions:					"Hành động hình ảnh",
 							context_lenssize:					"Kích thước ống kính",
 							context_saveas:						"Lưu {{var0}} dưới dạng ...",
 							context_searchwith:					"Tìm kiếm {{var0}} bằng ...",
-							context_streamactions:				"Tác vụ xem trước luồng",
-							context_videoactions:				"Hành động video",
+							context_streamactions:					"Tác vụ xem trước luồng",
+							context_videoactions:					"Hành động video",
 							context_view:						"Xem {{var0}}",
 							context_zoomspeed:					"tốc độ thu phóng",
 							submenu_disabled:					"Tất cả đã bị vô hiệu hóa",
@@ -2159,12 +2159,12 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							context_copy:						"复制 {{var0}}",
-							context_imageactions:				"图像动作",
+							context_imageactions:					"图像动作",
 							context_lenssize:					"缩放尺寸",
 							context_saveas:						"将 {{var0}} 另存到...",
 							context_searchwith:					"搜索 {{var0}} 使用...",
-							context_streamactions:				"流预览操作",
-							context_videoactions:				"视频动作",
+							context_streamactions:					"流预览操作",
+							context_videoactions:					"视频动作",
 							context_view:						"查看 {{var0}}",
 							context_zoomspeed:					"变焦速度",
 							submenu_disabled:					"全部禁用",
@@ -2176,12 +2176,12 @@ module.exports = (_ => {
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_copy:						"複製 {{var0}}",
-							context_imageactions:				"圖像動作",
+							context_imageactions:					"圖像動作",
 							context_lenssize:					"縮放尺寸",
 							context_saveas:						"將 {{var0}} 另存到...",
 							context_searchwith:					"搜尋 {{var0}} 使用...",
-							context_streamactions:				"流預覽操作",
-							context_videoactions:				"視頻動作",
+							context_streamactions:					"流預覽操作",
+							context_videoactions:					"視頻動作",
 							context_view:						"預覽 {{var0}}",
 							context_zoomspeed:					"变焦速度",
 							submenu_disabled:					"全部關閉",
@@ -2193,12 +2193,12 @@ module.exports = (_ => {
 					default:		// English
 						return {
 							context_copy:						"Copy {{var0}}",
-							context_imageactions:				"Image Actions",
-							context_lenssize:					"Lens Size",
+							context_imageactions:					"Image Actions",
+							context_lenssize:					"Lens size",
 							context_saveas:						"Save {{var0}} as ...",
 							context_searchwith:					"Search {{var0}} with ...",
-							context_streamactions:				"Stream Preview Actions",
-							context_videoactions:				"Video Actions",
+							context_streamactions:					"Stream Preview Actions",
+							context_videoactions:					"Video Actions",
 							context_view:						"View {{var0}}",
 							context_zoomspeed:					"Zoom speed",
 							submenu_disabled:					"All disabled",
