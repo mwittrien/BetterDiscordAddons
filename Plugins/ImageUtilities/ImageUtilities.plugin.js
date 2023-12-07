@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.3.4
+ * @version 5.3.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -847,6 +847,7 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
 								let url = this.removeSizeInUrl(urlData.original);
+								url = this.removeFormatInUrl(url);
 								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
@@ -857,6 +858,7 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-media-link"),
 							action: _ => {
 								let url = this.removeSizeInUrl(urlData.file);
+								url = this.removeFormatInUrl(url);
 								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
@@ -942,7 +944,7 @@ module.exports = (_ => {
 								color: key == "_all" ? BDFDB.DiscordConstants.MenuItemColors.DANGER : BDFDB.DiscordConstants.MenuItemColors.DEFAULT,
 								persisting: true,
 								action: event => {
-									const open = (url, k) => BDFDB.DiscordUtils.openLink(this.defaults.engines[k].url.replace(imgUrlReplaceString, this.defaults.engines[k].raw ? url : encodeURIComponent(url)), {minimized: event.shiftKey});
+									const open = (url, k) => BDFDB.DiscordUtils.openLink(this.defaults.engines[k].url + (this.defaults.engines[k].raw ? url : encodeURIComponent(url)), {minimized: event.shiftKey});
 									if (!event.shiftKey) BDFDB.ContextMenuUtils.close(instance);
 									if (key == "_all") {
 										for (let key2 in enginesWithoutAll) open(urlData.original, key2);
@@ -1108,7 +1110,7 @@ module.exports = (_ => {
 								className: BDFDB.disCN._imageutilitiesdetailswrapper,
 								children: [
 									e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
-									{label: "Source", text: this.removeSizeInUrl(url)},
+									{label: "Source", text: this.removeSizeInUrl(this.removeFormatInUrl(url))},
 									{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
 									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? "Video" : "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
@@ -1221,7 +1223,7 @@ module.exports = (_ => {
 							ele.style.setProperty("height", e.instance.props.height + "px");
 							ele.style.setProperty("max-height", e.instance.props.height + "px");
 						}
-						for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeSizeInUrl(ele.src);
+						for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeSizeInUrl(this.removeFormatInUrl(ele.src));
 						if (e.instance.state.readyState != BDFDB.DiscordConstants.ImageReadyStates.READY) {
 							e.instance.state.readyState = BDFDB.DiscordConstants.ImageReadyStates.READY;
 							BDFDB.ReactUtils.forceUpdate(e.instance);
@@ -1499,6 +1501,8 @@ module.exports = (_ => {
 				let url = (urls.url && urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url || "");
 				let isResized = !config.orignalSizeChecked && (url.indexOf("?width=") > -1 || url.indexOf("?height=") > -1 || url.indexOf("?size=") > -1);
 				url = isResized ? this.removeSizeInUrl(url) : url;
+				let isFormatted = (url.indexOf("?format=") > -1);
+				url = isFormatted ? this.removeFormatInUrl(url) : url;
 				url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 				BDFDB.LibraryRequires.request(url, {toBuffer: true}, (error, response, buffer) => {
 					if (error || response.statusCode != 200 || response.headers["content-type"].indexOf("text/html") > -1) {
@@ -1691,7 +1695,11 @@ module.exports = (_ => {
 			}
 			
 			removeSizeInUrl (url) {
-				return (url || "").split("?width=")[0].split("?height=")[0].split("?size=")[0].split("&width=")[0].split("&height=")[0].split("&size=")[0];
+				return (url || "").split(/[&?]width=/)[0].split(/[&?]height=/)[0].split(/[&?]size=/)[0].split(/[&?]width=/)[0].split(/[&?]height=/)[0].split(/[&?]size=/)[0];
+			}
+
+			removeFormatInUrl (url) {
+				return (url || "").split(/[&?]format=/)[0];
 			}
 			
 			addListener (eventType, type, callback) {
