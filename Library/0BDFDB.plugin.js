@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.5
+ * @version 3.5.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6004,7 +6004,7 @@ module.exports = (_ => {
 						.replace(/\$m/g, minutes)
 						.replace(/\$ss/g, seconds < 10 ? `0${seconds}` : seconds)
 						.replace(/\$s/g, seconds)
-						.replace(/\$uu/g, milli < 10 ? `00${seconds}` : milli < 100 ? `0${milli}` : milli)
+						.replace(/\$uu/g, milli < 10 ? `00${milli}` : milli < 100 ? `0${milli}` : milli)
 						.replace(/\$u/g, milli)
 						.trim();
 
