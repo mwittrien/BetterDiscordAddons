@@ -701,6 +701,7 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 	display: flex;
 	align-items: center;
 }
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > .settingsTabBar__17e8a:first-child,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar__19aa3 {
 	margin-left: calc(var(--use-settingsicons) * 30px);
 }
@@ -713,6 +714,7 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386.repoHeader_2KfNvH .title__3e421::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > h2:first-child::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnWide_f71d35:not(.repoScroller_9JnAPs) > h2:first-child::before,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > .settingsTabBar__17e8a:first-child::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar__19aa3::before {
 	content: "";
 	display: inline;
@@ -726,8 +728,18 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > .settingsTabBar__17e8a:first-child::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar__19aa3::before {
 	position: absolute;
+}
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > .settingsTabBar__17e8a:first-child::before {
+	left: 40px;
+}
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) .settingsTabBar__17e8a ~ * h2::before,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) .settingsTabBar__19aa3 ~ * h2::before,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) .settingsTabBar__17e8a ~ * .title__3e421::before,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) .settingsTabBar__19aa3 ~ * .title__3e421::before {
+	display: none !important;
 }
 
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) .title__3e421 .lockIcon__8edb9 {
