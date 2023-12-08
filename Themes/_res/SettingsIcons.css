@@ -696,7 +696,8 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) div:first-child > div:first-child > h2.title__3e421,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) div:first-child > .sectionTitle__1605a,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386.repoHeader_2KfNvH .title__3e421,
-.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > h2:first-child {
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > h2:first-child,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnWide_f71d35:not(.repoScroller_9JnAPs) > h2:first-child {
 	display: flex;
 	align-items: center;
 }
@@ -711,6 +712,7 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) div:first-child > .sectionTitle__1605a::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386.repoHeader_2KfNvH .title__3e421::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > h2:first-child::before,
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnWide_f71d35:not(.repoScroller_9JnAPs) > h2:first-child::before,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar__19aa3::before {
 	content: "";
 	display: inline;
