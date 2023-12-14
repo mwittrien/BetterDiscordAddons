@@ -376,7 +376,7 @@
 		"HeaderBarRecipient": {"strings": [".Messages.DIRECT_MESSAGE", "getRecipientId", ".avatar", "getName"]},
 		"HeaderBarTitle": {"strings": [".titleWrapper", ",onContextMenu", "forceLevel:"]},
 		"HeaderBarTitleIcon": {"strings": ["HEADER_BAR_BADGE", ".iconBadge", "iconClassName:"]},
-		"HomeButtonDefault": {"strings": ["BUTTON_HOME", ".homeIcon", ".DISCODO_ENABLED"]},
+		"HomeButtonDefault": {"strings": [".DISCODO_ENABLED", "home_button_no_track", "tutorialContainer"]},
 		"I18nLoader": {"strings": [".Messages.I18N_LOCALE_LOADING_ERROR", ".loading"]},
 		"ImageModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "animated"], "noSearch": true},
 		"ImageVideoModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "videoWrapper"], "noSearch": true},
