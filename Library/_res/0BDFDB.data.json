@@ -2249,6 +2249,7 @@
 		"emojibuttonhovered": ["EmojiButton", "emojiButtonHovered"],
 		"emojibuttonnormal": ["EmojiButton", "emojiButtonNormal"],
 		"emojibuttonsprite": ["EmojiButton", "sprite"],
+		"emojibuttonspritegreyscale": ["EmojiButton", "spriteGreyscale"],
 		"emojiinput": ["CustomStatusModal", "input"],
 		"emojiinputbutton": ["CustomStatusModal", "emojiButton"],
 		"emojiinputbuttoncontainer": ["CustomStatusModal", "emojiButtonContainer"],
