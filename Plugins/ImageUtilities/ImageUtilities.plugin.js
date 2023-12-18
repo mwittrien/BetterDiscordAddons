@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.3.7
+ * @version 5.3.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1211,7 +1211,7 @@ module.exports = (_ => {
 			
 			processLazyImage (e) {
 				if (e.node) {
-					for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeFormatInUrl(ele.src);
+					if (!e.instance.props.animated && !e.instance.props.children) for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeFormatInUrl(ele.src);
 					if (e.instance.props.resized) {
 						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"]) {
 							let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN[selector], e.node);
