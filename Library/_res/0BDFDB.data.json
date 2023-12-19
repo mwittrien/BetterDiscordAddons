@@ -346,7 +346,7 @@
 		"DiscordTag": {"strings": ["hidePersonalInformation", "isVerifiedBot", "botType"]},
 		"Embed": {"strings": ["gridContainer", "renderEmbedContent", "hasThumbnail"]},
 		"EmojiPicker": {"strings": ["emojiSize", "disableEmojiTutorial", ",emojiPaddingHorizontal:"]},
-		"EmojiPickerHeader": {"strings": ["pickerIntention", "headerClassName", ".EmojiIntention.REACTION"]},
+		"EmojiPickerHeader": {"strings": ["COMMUNITY_CONTENT_ONLY", "headerClassName", ".EmojiIntention.REACTION"]},
 		"EmojiPickerListRow": {"strings": ["emojiSize", "surrogateCodePoint", "showEmojiFavoriteTooltip"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FolderHeader": {"strings": ["folderNode:", "expandedFolderIconWrapper", "forceCircular"]},
