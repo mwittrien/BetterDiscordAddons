@@ -2,7 +2,7 @@
  * @name EmojiStatistics
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.2
+ * @version 3.0.3
  * @description Shows you an Overview of Emojis and Emoji Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -114,7 +114,7 @@ module.exports = (_ => {
 			
 			processEmojiPickerHeader (e) {
 				this.loadEmojiList();
-				e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 2, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				e.returnvalue.props.children.props.children.splice(e.returnvalue.props.children.props.children.length - 2, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: this.labels.modal_header,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 						className: BDFDB.disCN._emojistatisticsstatisticsbutton,
