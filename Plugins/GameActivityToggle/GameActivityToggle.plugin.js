@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.0
+ * @version 1.2.1
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -77,7 +77,7 @@ module.exports = (_ => {
 						nativeClass: true,
 						width: 20,
 						height: 20,
-						foreground: BDFDB.disCN.accountinfobuttonstrikethrough,
+						color: enabled ? "currentColor" : BDFDB.DiscordConstants.ColorsCSS.STATUS_DANGER,
 						name: enabled ? BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD : BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD_DISABLED
 					})),
 					onClick: _ => _this.toggle()
