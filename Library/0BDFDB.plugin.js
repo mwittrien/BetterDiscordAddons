@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.7
+ * @version 3.5.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7426,7 +7426,7 @@ module.exports = (_ => {
 					let mini = props.size == Internal.LibraryComponents.Switch.Sizes.MINI;
 					
 					return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.div, {
-						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch, props.value && BDFDB.disCN.switchchecked, mini && BDFDB.disCN.switchmini),
+						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch, mini && BDFDB.disCN.switchmini, "default-colors"),
 						onMouseDown: _ => {
 							return !props.disabled && state[1](true);
 						},
