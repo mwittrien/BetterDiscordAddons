@@ -3990,7 +3990,7 @@ module.exports = (_ => {
 									oldTransitionState = props.transitionState;
 								}
 								componentWillUnmount() {
-									if (props.transitionState == 3) {
+									if (props.transitionState == 2) {
 										for (let cancel of cancels) cancel(modalInstance);
 										config.onClose(modalInstance);
 									}
