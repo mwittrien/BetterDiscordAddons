@@ -84,7 +84,7 @@ module.exports = (_ => {
 							onClick: _ => location.reload(),
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.channelheadericon,
-								iconSVG: `<svg><path fill="currentColor" stroke="none" transform="translate(3,4)" d="M 17.061, 7.467 V 0 l -2.507, 2.507 C 13.013, 0.96, 10.885, 0, 8.528, 0 C 3.813, 0, 0.005, 3.819, 0.005, 8.533 s 3.808, 8.533, 8.523, 8.533 c 3.973, 0, 7.301 -2.72, 8.245 -6.4 h -2.219 c -0.88, 2.485 -3.237, 4.267 -6.027, 4.267 c -3.536, 0 -6.4 -2.864 -6.4 -6.4 s 2.864 -6.4, 6.4 -6.4 c 1.765, 0, 3.349, 0.736, 4.507, 1.893 l -3.44, 3.44 H 17.061 z"/></svg>`
+								iconSVG: `<svg width="24" height="24"><path fill="currentColor" d="M 21,10.875658 V 3 L 18.354245,5.6442048 C 16.727955,4.0125396 14.482176,3 11.994724,3 7.0187617,3 3,7.0280088 3,12 c 0,4.97199 4.0187617,9 8.994724,9 4.192893,0 7.705089,-2.868863 8.701336,-6.750263 h -2.341815 c -0.928705,2.621 -3.416159,4.500526 -6.360578,4.500526 -3.7317064,0 -6.7542205,-3.020742 -6.7542205,-6.750263 0,-3.7295207 3.0225141,-6.7502637 6.7542205,-6.7502637 1.862689,0 3.534359,0.7762803 4.75645,1.9966015 L 13.119724,10.874604 H 21 Z"/></svg>`
 							})
 						})
 					}));
@@ -95,7 +95,7 @@ module.exports = (_ => {
 					onClick: _ => BDFDB.LibraryModules.WindowUtils.minimize(),
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
-						iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 18 l13 0"/></svg>`
+						iconSVG: `<svg width="24" height="24"><path fill="currentColor" d="M 3.0000229,18.453 V 21 H 21.000023 v -2.547 z"/></svg>`
 					})
 				}));
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -103,7 +103,7 @@ module.exports = (_ => {
 					onClick: _ => _this.maximize(),
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
-						iconSVG: _this.isMaximized() ? `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/></svg>` : `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/></svg>`
+						iconSVG: _this.isMaximized() ? `<svg width="24" height="24"><path fill="currentColor" d="M 6.1764705,3 V 5.3968291 H 18.60317 c 0,0 -0.01092,12.5543579 0,12.4267009 H 21 V 3 Z M 3,6.1764705 V 21 H 17.82353 V 6.1764705 Z m 2.3968291,2.396829 H 15.4267 V 18.60317 H 5.3968291 Z"/></svg>` : `<svg width="24" height="24"><path fill="currentColor" d="m 3.0000225,3.0000002 c 0,0 0,18.0327688 0,17.9999548 H 20.999977 V 3.0000002 Z M 5.5466471,5.5466248 H 18.453353 V 18.453331 H 5.5466471 Z"/></svg>`
 					})
 				}));
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -111,7 +111,7 @@ module.exports = (_ => {
 					onClick: _ => BDFDB.LibraryModules.WindowUtils.close(),
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
-						iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 13 m0 -13 l-13 13"/></svg>`
+						iconSVG: `<svg width="24" height="24"><path fill="currentColor" d="M 19.2,3 12,10.2 4.8,3 3,4.8 10.2,12 3,19.2 4.8,21 12,13.8 19.2,21 21,19.2 13.8,12 21,4.8 Z"/></svg>`
 					})
 				}));
 				return BDFDB.ReactUtils.createElement("div", {
