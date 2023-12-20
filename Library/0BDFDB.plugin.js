@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.6
+ * @version 3.5.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8042,7 +8042,6 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
-						"UseCopyIdItem",
 						"UserPopoutAvatar"
 					],
 					componentDidMount: [
@@ -8257,7 +8256,10 @@ module.exports = (_ => {
 					e.instance.props.avatar = Internal._processAvatarRender(e.instance.props.user, e.instance.props.avatar) || e.instance.props.avatar;
 				};
 				Internal.processMenu = function (e) {
-					if (e.instance.props && (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length)) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
+					if (e.instance.props && (e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && e.instance.props.children.length)) {
+						let patchCancel = BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.ContextMenuUtils, "closeContextMenu", {instead: e => {}});
+						BDFDB.TimeUtils.timeout(_ => patchCancel(), 1000);
+					}
 				};
 				Internal.processMessageActionsContextMenu = function (e) {
 					e.instance.props.updatePosition = _ => {};
@@ -8275,9 +8277,6 @@ module.exports = (_ => {
 				};
 				Internal.processSearchBar = function (e) {
 					if (typeof e.instance.props.query != "string") e.instance.props.query = "";
-				};
-				Internal.processUseCopyIdItem = function (e) {
-					if (!e.returnvalue) e.returnvalue = false;
 				};
 				Internal.processUserPopoutAvatar = function (e) {
 					if (!e.instance.props.user) return;
