@@ -2071,26 +2071,10 @@ a.metadataDownload__6b32d {
 	background-color: rgb(114, 118, 125) !important;
 	transition: background-color .1s ease-out;
 }											/* switch				checked								*/
-.container__871ba[style*="background-color: var(--green-"],
-.container__871ba[style*="background-color: rgb(35, "],
-.container__871ba[style*="background-color: rgb(51, "],
-.container__871ba[style*="background-color: rgb(59, "],
-.container__871ba[style*="background-color: rgb(88, "],
-.container__871ba[style*="background-color: hsl(145, "],
-.container__871ba[style*="background-color: hsl(139, "],
-.container__871ba[style*="background-color: hsl(227, "],
-.container__871ba[style*="background-color: hsl(235, "] {
+.container__871ba.checked__6bdb0 {
 	background-color: rgba(var(--accentcolor_v), 0.8) !important;
 }
-.container__871ba[style*="background-color: var(--green-"]:hover,
-.container__871ba[style*="background-color: rgb(35, "]:hover,
-.container__871ba[style*="background-color: rgb(51, "]:hover,
-.container__871ba[style*="background-color: rgb(59, "]:hover,
-.container__871ba[style*="background-color: rgb(88, "]:hover,
-.container__871ba[style*="background-color: hsl(145, "]:hover,
-.container__871ba[style*="background-color: hsl(139, "]:hover,
-.container__871ba[style*="background-color: hsl(227, "]:hover,
-.container__871ba[style*="background-color: hsl(235, "]:hover {
+.container__871ba.checked__6bdb0:hover {
 	background: var(--accentcolor-hover) !important;
 }
 #app-mount .container__871ba:active {
@@ -2099,15 +2083,7 @@ a.metadataDownload__6b32d {
 .container__871ba path[fill] {
 	fill: rgb(114, 118, 125) !important;
 }
-.container__871ba[style*="background-color: var(--green-"] path[fill],
-.container__871ba[style*="background-color: rgb(35, "] path[fill],
-.container__871ba[style*="background-color: rgb(51, "] path[fill],
-.container__871ba[style*="background-color: rgb(59, "] path[fill],
-.container__871ba[style*="background-color: rgb(88, "] path[fill],
-.container__871ba[style*="background-color: hsl(145, "] path[fill],
-.container__871ba[style*="background-color: hsl(139, "] path[fill],
-.container__871ba[style*="background-color: hsl(227, "] path[fill],
-.container__871ba[style*="background-color: hsl(235, "] path[fill],
+.container__871ba.checked__6bdb0 path[fill],
 .container__871ba:active path[fill] {
 	fill: rgb(var(--accentcolor_v)) !important;
 }
