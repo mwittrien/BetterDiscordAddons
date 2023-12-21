@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.3.9
+ * @version 5.4.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1700,7 +1700,7 @@ module.exports = (_ => {
 			}
 
 			removeFormatInUrl (url) {
-				return (url || "").replace(/[\&\?]format\=[A-z]+/g, "");
+				return (url || "").replace(/\&format\=[A-z]+/g, "").replace(/\?format\=[A-z]+\&/g, "?").replace(/\?format\=[A-z]+/g, "");
 			}
 			
 			addListener (eventType, type, callback) {
