@@ -571,6 +571,7 @@ module.exports = (_ => {
 							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCNS.channelheadericon,
+								nativeClass: true,
 								iconSVG: pinIcon
 							})
 						})
