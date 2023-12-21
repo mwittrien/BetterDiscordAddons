@@ -1700,7 +1700,7 @@ module.exports = (_ => {
 			}
 
 			removeFormatInUrl (url) {
-				return (url || "").replace(/\&format\=[A-z]+/g, "").replace(/\?format\=[A-z]+\&/g, "?").replace(/\?format\=[A-z]+/g, "");
+				return (url || "").replace(/format\=[A-z]+(\&){0,1}/g, "");
 			}
 			
 			addListener (eventType, type, callback) {
