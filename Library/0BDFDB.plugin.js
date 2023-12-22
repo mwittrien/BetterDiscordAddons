@@ -6039,7 +6039,7 @@ module.exports = (_ => {
 							children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.EmojiButton, {
 								className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.emojiinputbutton),
 								renderButtonContents: this.props.emoji ? _ => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Emoji, {
-									className: BDFDB.disCN.emoji,
+									className: BDFDB.disCN.emojiinputbuttonemoji,
 									emojiId: this.props.emoji.id,
 									emojiName: this.props.emoji.name
 								}) : null
