@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.1
+ * @version 1.8.2
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -196,6 +196,7 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCNS.authboxsplashbackground + BDFDB.dotCN._oldtitlebarsettingstoolbar} {
 						background: rgba(0, 0, 0, 0.3);
 						border-radius: 0 0 0 5px;
+						top: 0;
 					}
 
 					${BDFDB.dotCN.channelheaderheaderbar},
