@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -66,6 +66,9 @@ module.exports = (_ => {
 		return class RemoveBlockedUsers extends Plugin {
 			onLoad () {
 				this.defaults = {
+					general: {
+						hideBlocked:			{value: false, 	description: "Hide 'Blocked' Tab in Friends List"}
+					},
 					notifications: {
 						messages:			{value: true, 	description: "Messages Notifications"},
 						voiceChat:			{value: true, 	description: "Voice Chat Notifications"},
@@ -101,6 +104,7 @@ module.exports = (_ => {
 						"ReactionsModalUsers",
 						"RTCConnectionVoiceUsers",
 						"SearchResults",
+						"TabBar",
 						"UserSummaryItem",
 						"VoiceUsers"
 					],
@@ -209,6 +213,14 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: _ => {
 						let settingsItems = [];
+				
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key]
+						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 							title: "Disable",
@@ -520,6 +532,12 @@ module.exports = (_ => {
 						if (children && children.props) children.props.children = "@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER;
 						return children;
 					}, "Error in Children Render of PrivateChannel!", this);
+				}
+			}
+			
+			processTabBar (e) {
+				if (this.settings.general.hideBlocked && e.instance.props.children && e.instance.props.children.some(c => c && c.props && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
+					e.instance.props.children = e.instance.props.children.filter(c => c && c.props.id != BDFDB.DiscordConstants.FriendsSections.BLOCKED);
 				}
 			}
 			
