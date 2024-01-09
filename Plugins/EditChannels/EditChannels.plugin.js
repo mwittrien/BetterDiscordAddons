@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.5
+ * @version 4.5.6
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -542,7 +542,7 @@ module.exports = (_ => {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args2) => {
 						let renderedChildren = childrenRender(...args2);
-						this.changeChannelIconColor(renderedChildren.props.children, e.instance.props.channel.id, modify);
+						this.changeChannelIconColor(renderedChildren.props.children[1] || renderedChildren.props.children, e.instance.props.channel.id, modify);
 						return renderedChildren;
 					}, "Error in Children Render of ChannelItem!", this);
 				}
@@ -763,7 +763,7 @@ module.exports = (_ => {
 			
 			changeChannelIconColor (child, channelId, modify) {
 				if (!this.settings.general.changeChannelIcon) return;
-				let color = child && this.getChannelDataColor(channelId);
+				let color = child && child.props && this.getChannelDataColor(channelId);
 				if (!color) return;
 				color = modify ? this.chooseColor(BDFDB.ObjectUtils.is(color) ? color[0] : color, modify) : BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color) ? color[0] : color, "RGBA");
 				if (!color) return;
