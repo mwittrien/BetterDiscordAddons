@@ -221,7 +221,7 @@
 		}},
 		"GuildBadge": {"strings": ["foregroundDarkColor", "getBadgeCategory"]},
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
-		"GuildItem": {"strings": ["guildNode:", "useShouldShowInvitesDisabledNotif", "clearGuildBurstPreview"]},
+		"GuildItem": {"strings": ["guildNode:", "useShouldShowInvitesDisabledNotif"]},
 		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
