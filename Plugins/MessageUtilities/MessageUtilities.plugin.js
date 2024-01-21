@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.7
+ * @version 1.9.8
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -366,7 +366,7 @@ module.exports = (_ => {
 			doDelete (execute, {messageDiv, message}, action, event) {
 				let deleteLink = messageDiv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
 				if (deleteLink) deleteLink.click();
-				else if (BDFDB.DiscordConstants.MessageTypeGroups.DELETABLE.has(message.type)) {
+				else if (!BDFDB.DiscordConstants.MessageTypeGroups.UNDELETABLE.has(message.type)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.UserUtils.can("MANAGE_MESSAGES") || message.author.id == BDFDB.UserUtils.me.id)) {
 						if (execute) {
