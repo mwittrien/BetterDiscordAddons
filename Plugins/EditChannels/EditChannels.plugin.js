@@ -116,7 +116,6 @@ module.exports = (_ => {
 						"DirectMessage",
 						"FocusRingScope",
 						"HeaderBarContainer",
-						"Mention",
 						"PrivateChannel",
 						"QuickSwitchChannelResult",
 						"RecentsChannelHeader",
@@ -455,13 +454,8 @@ module.exports = (_ => {
 			processFocusRingScope (e) {
 				if (!e.returnvalue || !e.returnvalue.props.className) return;
 				let change, hoveredEvents, channelId, nameClass, categoyClass, iconClass, modify = {};
-				if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1) {
-					change = true;
-					hoveredEvents = true;
-					channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("___").pop();
-					nameClass = BDFDB.disCN.categoryname;
-					iconClass = BDFDB.disCN.categoryicon;
-					modify = {muted: BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), channelId)};
+				if (this.settings.places.mentions && e.returnvalue.props.className.indexOf(BDFDB.disCN.mention) > -1 && e.instance.props["edited-mention-color"]) {
+					e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {"--edited-mention-color": e.instance.props["edited-mention-color"]});
 				}
 				if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.channeliconvisibility) > -1) {
 					change = true;
@@ -737,10 +731,6 @@ module.exports = (_ => {
 						wrapper.props.children.props["edited-mention-color"] = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "RGBCOMP").slice(0, 3).join(",");
 					}
 				}
-			}
-			
-			processMention (e) {
-				if (e.instance.props["edited-mention-color"]) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {"--edited-mention-color": e.instance.props["edited-mention-color"]});
 			}
 			
 			changeChannelColor (child, channelId, modify) {
