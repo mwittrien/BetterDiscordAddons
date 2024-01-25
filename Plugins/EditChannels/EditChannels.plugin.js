@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.6
+ * @version 4.5.7
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -542,7 +542,7 @@ module.exports = (_ => {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args2) => {
 						let renderedChildren = childrenRender(...args2);
-						this.changeChannelIconColor(renderedChildren.props.children[1] || renderedChildren.props.children, e.instance.props.channel.id, modify);
+						this.changeChannelIconColor(renderedChildren.props.children[2] || renderedChildren.props.children, e.instance.props.channel.id, modify);
 						return renderedChildren;
 					}, "Error in Children Render of ChannelItem!", this);
 				}
@@ -993,379 +993,379 @@ module.exports = (_ => {
 						return {
 							confirm_reset:						"Наистина ли искате да нулирате този канал?",
 							confirm_resetall:					"Наистина ли искате да нулирате всички канали?",
-							context_localchannelsettings:		"Настройки на местния канал",
+							context_localchannelsettings:				"Настройки на местния канал",
 							modal_channelname:					"Име на местния канал",
 							modal_channelicon:					"Икона",
 							modal_colorpicker1:					"Локален цвят на канала",
 							modal_header:						"Настройки на местния канал",
 							modal_inheritcolor:					"Наследете цвета на подканали",
 							modal_invalidurl:					"Невалиден адрес",
-							submenu_channelsettings:			"Промяна на настройките",
-							submenu_resetsettings:				"Нулиране на канала"
+							submenu_channelsettings:				"Промяна на настройките",
+							submenu_resetsettings:					"Нулиране на канала"
 						};
 					case "da":		// Danish
 						return {
 							confirm_reset:						"Er du sikker på, at du vil nulstille denne kanal?",
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle kanaler?",
-							context_localchannelsettings:		"Lokale kanalindstillinger",
+							context_localchannelsettings:				"Lokale kanalindstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfarve",
 							modal_header:						"Lokale kanalindstillinger",
 							modal_inheritcolor:					"Arv farve til underkanaler",
 							modal_invalidurl:					"Ugyldig URL",
-							submenu_channelsettings:			"Ændre indstillinger",
-							submenu_resetsettings:				"Nulstil kanal"
+							submenu_channelsettings:				"Ændre indstillinger",
+							submenu_resetsettings:					"Nulstil kanal"
 						};
 					case "de":		// German
 						return {
 							confirm_reset:						"Möchtest du diesen Kanal wirklich zurücksetzen?",
 							confirm_resetall:					"Möchtest du wirklich alle Kanäle zurücksetzen?",
-							context_localchannelsettings:		"Lokale Kanaleinstellungen",
+							context_localchannelsettings:				"Lokale Kanaleinstellungen",
 							modal_channelname:					"Lokaler Kanalname",
 							modal_channelicon:					"Symbol",
 							modal_colorpicker1:					"Lokale Kanalfarbe",
 							modal_header:						"Lokale Kanaleinstellungen",
 							modal_inheritcolor:					"Vererbung der Farbe an Unterkanäle",
 							modal_invalidurl:					"Ungültige URL",
-							submenu_channelsettings:			"Einstellungen ändern",
-							submenu_resetsettings:				"Kanal zurücksetzen"
+							submenu_channelsettings:				"Einstellungen ändern",
+							submenu_resetsettings:					"Kanal zurücksetzen"
 						};
 					case "el":		// Greek
 						return {
 							confirm_reset:						"Θέλετε την επαναφορά αυτού του καναλιού;",
 							confirm_resetall:					"Θέλετε την επαναφορά όλων των καναλιών;",
-							context_localchannelsettings:		"Ρυθμίσεις Τοπικού Καναλιού",
+							context_localchannelsettings:				"Ρυθμίσεις Τοπικού Καναλιού",
 							modal_channelname:					"Ονομασία Τοπικού Καναλιού",
 							modal_channelicon:					"Εικονίδιο",
 							modal_colorpicker1:					"Χρώμα Τοπικού Καναλιού",
 							modal_header:						"Ρυθμίσεις Τοπικού Καναλιού",
 							modal_inheritcolor:					"Εφαρμογή του χρώματος στα υπό-κανάλια",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
-							submenu_channelsettings:			"Αλλαγή Ρυθμίσεων",
-							submenu_resetsettings:				"Επαναφορά καναλιού"
+							submenu_channelsettings:				"Αλλαγή Ρυθμίσεων",
+							submenu_resetsettings:					"Επαναφορά καναλιού"
 						};
 					case "es":		// Spanish
 						return {
 							confirm_reset:						"¿Estás seguro de que deseas restablecer este canal?",
 							confirm_resetall:					"¿Está seguro de que desea restablecer todos los canales?",
-							context_localchannelsettings:		"Configuración de canal local",
+							context_localchannelsettings:				"Configuración de canal local",
 							modal_channelname:					"Nombre del canal local",
 							modal_channelicon:					"Icono",
 							modal_colorpicker1:					"Color del canal local",
 							modal_header:						"Configuración de canal local",
 							modal_inheritcolor:					"Heredar color a subcanales",
 							modal_invalidurl:					"URL invalida",
-							submenu_channelsettings:			"Cambiar ajustes",
-							submenu_resetsettings:				"Restablecer canal"
+							submenu_channelsettings:				"Cambiar ajustes",
+							submenu_resetsettings:					"Restablecer canal"
 						};
 					case "fi":		// Finnish
 						return {
 							confirm_reset:						"Haluatko varmasti nollata tämän kanavan?",
 							confirm_resetall:					"Haluatko varmasti nollata kaikki kanavat?",
-							context_localchannelsettings:		"Paikallisen kanavan asetukset",
+							context_localchannelsettings:				"Paikallisen kanavan asetukset",
 							modal_channelname:					"Paikallisen kanavan nimi",
 							modal_channelicon:					"Kuvake",
 							modal_colorpicker1:					"Paikallisen kanavan väri",
 							modal_header:						"Paikallisen kanavan asetukset",
 							modal_inheritcolor:					"Peri väri alikanaville",
 							modal_invalidurl:					"Virheellinen URL",
-							submenu_channelsettings:			"Vaihda asetuksia",
-							submenu_resetsettings:				"Nollaa kanava"
+							submenu_channelsettings:				"Vaihda asetuksia",
+							submenu_resetsettings:					"Nollaa kanava"
 						};
 					case "fr":		// French
 						return {
 							confirm_reset:						"Voulez-vous vraiment réinitialiser cette salon?",
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser toutes les salons?",
-							context_localchannelsettings:		"Paramètres  de la salon",
+							context_localchannelsettings:				"Paramètres  de la salon",
 							modal_channelname:					"Nom local de la salon",
 							modal_channelicon:					"Icône",
 							modal_colorpicker1:					"Couleur locale de la salon",
 							modal_header:						"Paramètres locaux de la salon",
 							modal_inheritcolor:					"Hériter de la couleur aux sous-canaux",
 							modal_invalidurl:					"URL invalide",
-							submenu_channelsettings:			"Modifier les paramètres",
-							submenu_resetsettings:				"Réinitialiser la salon"
+							submenu_channelsettings:				"Modifier les paramètres",
+							submenu_resetsettings:					"Réinitialiser la salon"
 						};
 					case "hr":		// Croatian
 						return {
 							confirm_reset:						"Jeste li sigurni da želite resetirati ovaj kanal?",
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve kanale?",
-							context_localchannelsettings:		"Postavke lokalnog kanala",
+							context_localchannelsettings:				"Postavke lokalnog kanala",
 							modal_channelname:					"Naziv lokalnog kanala",
 							modal_channelicon:					"Ikona",
 							modal_colorpicker1:					"Lokalna boja kanala",
 							modal_header:						"Postavke lokalnog kanala",
 							modal_inheritcolor:					"Naslijedi boju na podkanalima",
 							modal_invalidurl:					"Neispravna poveznica",
-							submenu_channelsettings:			"Promijeniti postavke",
-							submenu_resetsettings:				"Resetiraj kanal"
+							submenu_channelsettings:				"Promijeniti postavke",
+							submenu_resetsettings:					"Resetiraj kanal"
 						};
 					case "hu":		// Hungarian
 						return {
 							confirm_reset:						"Biztosan vissza akarja állítani ezt a csatornát?",
 							confirm_resetall:					"Biztosan visszaállítja az összes csatornát?",
-							context_localchannelsettings:		"Helyi csatorna beállításai",
+							context_localchannelsettings:				"Helyi csatorna beállításai",
 							modal_channelname:					"Helyi csatorna neve",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Helyi csatorna színe",
 							modal_header:						"Helyi csatorna beállításai",
 							modal_inheritcolor:					"Örökli a színt az alcsatornákra",
 							modal_invalidurl:					"Érvénytelen URL",
-							submenu_channelsettings:			"Beállítások megváltoztatása",
-							submenu_resetsettings:				"Csatorna visszaállítása"
+							submenu_channelsettings:				"Beállítások megváltoztatása",
+							submenu_resetsettings:					"Csatorna visszaállítása"
 						};
 					case "it":		// Italian
 						return {
 							confirm_reset:						"Sei sicuro di voler ripristinare questo canale?",
 							confirm_resetall:					"Sei sicuro di voler ripristinare tutti i canali?",
-							context_localchannelsettings:		"Impostazioni del canale locale",
+							context_localchannelsettings:				"Impostazioni del canale locale",
 							modal_channelname:					"Nome canale locale",
 							modal_channelicon:					"Icona",
 							modal_colorpicker1:					"Colore canale locale",
 							modal_header:						"Impostazioni del canale locale",
 							modal_inheritcolor:					"Eredita colore ai canali secondari",
 							modal_invalidurl:					"URL non valido",
-							submenu_channelsettings:			"Cambia impostazioni",
-							submenu_resetsettings:				"Reimposta canale"
+							submenu_channelsettings:				"Cambia impostazioni",
+							submenu_resetsettings:					"Reimposta canale"
 						};
 					case "ja":		// Japanese
 						return {
 							confirm_reset:						"このチャンネルをリセットしてもよろしいですか？",
 							confirm_resetall:					"すべてのチャンネルをリセットしてもよろしいですか？",
-							context_localchannelsettings:		"ローカルチャンネル設定",
+							context_localchannelsettings:				"ローカルチャンネル設定",
 							modal_channelname:					"ローカルチャネル名",
 							modal_channelicon:					"アイコン",
 							modal_colorpicker1:					"ローカルチャンネルの色",
 							modal_header:						"ローカルチャンネル設定",
 							modal_inheritcolor:					"サブチャネルに色を継承する",
 							modal_invalidurl:					"無効なURL",
-							submenu_channelsettings:			"設定を変更する",
-							submenu_resetsettings:				"チャネルをリセット"
+							submenu_channelsettings:				"設定を変更する",
+							submenu_resetsettings:					"チャネルをリセット"
 						};
 					case "ko":		// Korean
 						return {
 							confirm_reset:						"이 채널을 재설정 하시겠습니까?",
 							confirm_resetall:					"모든 채널을 재설정 하시겠습니까?",
-							context_localchannelsettings:		"로컬 채널 설정",
+							context_localchannelsettings:				"로컬 채널 설정",
 							modal_channelname:					"로컬 채널 이름",
 							modal_channelicon:					"상",
 							modal_colorpicker1:					"로컬 채널 색상",
 							modal_header:						"로컬 채널 설정",
 							modal_inheritcolor:					"하위 채널에 색상 상속",
 							modal_invalidurl:					"잘못된 URL",
-							submenu_channelsettings:			"설정 변경",
-							submenu_resetsettings:				"채널 재설정"
+							submenu_channelsettings:				"설정 변경",
+							submenu_resetsettings:					"채널 재설정"
 						};
 					case "lt":		// Lithuanian
 						return {
 							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį kanalą?",
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus kanalus?",
-							context_localchannelsettings:		"Vietinio kanalo nustatymai",
+							context_localchannelsettings:				"Vietinio kanalo nustatymai",
 							modal_channelname:					"Vietinio kanalo pavadinimas",
 							modal_channelicon:					"Piktograma",
 							modal_colorpicker1:					"Vietinio kanalo spalva",
 							modal_header:						"Vietinio kanalo nustatymai",
 							modal_inheritcolor:					"Paveldėkite spalvas subkanalams",
 							modal_invalidurl:					"Neteisingas URL",
-							submenu_channelsettings:			"Pakeisti nustatymus",
-							submenu_resetsettings:				"Iš naujo nustatyti kanalą"
+							submenu_channelsettings:				"Pakeisti nustatymus",
+							submenu_resetsettings:					"Iš naujo nustatyti kanalą"
 						};
 					case "nl":		// Dutch
 						return {
 							confirm_reset:						"Weet u zeker dat u dit kanaal opnieuw wilt instellen?",
 							confirm_resetall:					"Weet u zeker dat u alle kanalen opnieuw wilt instellen?",
-							context_localchannelsettings:		"Lokale kanaalinstellingen",
+							context_localchannelsettings:				"Lokale kanaalinstellingen",
 							modal_channelname:					"Lokale kanaalnaam",
 							modal_channelicon:					"Icoon",
 							modal_colorpicker1:					"Lokale kanaalkleur",
 							modal_header:						"Lokale kanaalinstellingen",
 							modal_inheritcolor:					"Overerf kleur naar subkanalen",
 							modal_invalidurl:					"Ongeldige URL",
-							submenu_channelsettings:			"Instellingen veranderen",
-							submenu_resetsettings:				"Kanaal resetten"
+							submenu_channelsettings:				"Instellingen veranderen",
+							submenu_resetsettings:					"Kanaal resetten"
 						};
 					case "no":		// Norwegian
 						return {
 							confirm_reset:						"Er du sikker på at du vil tilbakestille denne kanalen?",
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle kanaler?",
-							context_localchannelsettings:		"Lokale kanalinnstillinger",
+							context_localchannelsettings:				"Lokale kanalinnstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfarge",
 							modal_header:						"Lokale kanalinnstillinger",
 							modal_inheritcolor:					"Arv farge til underkanaler",
 							modal_invalidurl:					"Ugyldig URL",
-							submenu_channelsettings:			"Endre innstillinger",
-							submenu_resetsettings:				"Tilbakestill kanal"
+							submenu_channelsettings:				"Endre innstillinger",
+							submenu_resetsettings:					"Tilbakestill kanal"
 						};
 					case "pl":		// Polish
 						return {
 							confirm_reset:						"Czy na pewno chcesz zresetować ten kanał?",
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie kanały?",
-							context_localchannelsettings:		"Ustawienia kanału lokalnego",
+							context_localchannelsettings:				"Ustawienia kanału lokalnego",
 							modal_channelname:					"Nazwa kanału lokalnego",
 							modal_channelicon:					"Ikona",
 							modal_colorpicker1:					"Kolor kanału lokalnego",
 							modal_header:						"Ustawienia kanału lokalnego",
 							modal_inheritcolor:					"Dziedzicz kolor do kanałów podrzędnych",
 							modal_invalidurl:					"Nieprawidłowy URL",
-							submenu_channelsettings:			"Zmień ustawienia",
-							submenu_resetsettings:				"Resetuj kanał"
+							submenu_channelsettings:				"Zmień ustawienia",
+							submenu_resetsettings:					"Resetuj kanał"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							confirm_reset:						"Tem certeza que deseja redefinir este canal?",
 							confirm_resetall:					"Tem certeza de que deseja redefinir todos os canais?",
-							context_localchannelsettings:		"Configurações de canal local",
+							context_localchannelsettings:				"Configurações de canal local",
 							modal_channelname:					"Nome do canal local",
 							modal_channelicon:					"Ícone",
 							modal_colorpicker1:					"Cor do Canal Local",
 							modal_header:						"Configurações de canal local",
 							modal_inheritcolor:					"Herdar cor para subcanais",
 							modal_invalidurl:					"URL inválida",
-							submenu_channelsettings:			"Mudar configurações",
-							submenu_resetsettings:				"Reiniciar canal"
+							submenu_channelsettings:				"Mudar configurações",
+							submenu_resetsettings:					"Reiniciar canal"
 						};
 					case "ro":		// Romanian
 						return {
 							confirm_reset:						"Sigur doriți să resetați acest canal?",
 							confirm_resetall:					"Sigur doriți să resetați toate canalele?",
-							context_localchannelsettings:		"Setări canale locale",
+							context_localchannelsettings:				"Setări canale locale",
 							modal_channelname:					"Numele canalului local",
 							modal_channelicon:					"Pictogramă",
 							modal_colorpicker1:					"Culoare canal local",
 							modal_header:						"Setări canale locale",
 							modal_inheritcolor:					"Moșteniți culoarea la sub-canale",
 							modal_invalidurl:					"URL invalid",
-							submenu_channelsettings:			"Schimbă setările",
-							submenu_resetsettings:				"Resetați canalul"
+							submenu_channelsettings:				"Schimbă setările",
+							submenu_resetsettings:					"Resetați canalul"
 						};
 					case "ru":		// Russian
 						return {
 							confirm_reset:						"Вы уверены, что хотите сбросить этот канал?",
 							confirm_resetall:					"Вы уверены, что хотите сбросить все каналы?",
-							context_localchannelsettings:		"Настройки локального канала",
+							context_localchannelsettings:				"Настройки локального канала",
 							modal_channelname:					"Имя локального канала",
 							modal_channelicon:					"Икона",
 							modal_colorpicker1:					"Цвет локального канала",
 							modal_header:						"Настройки локального канала",
 							modal_inheritcolor:					"Наследовать цвет для субканалов",
 							modal_invalidurl:					"Неверная ссылка",
-							submenu_channelsettings:			"Изменить настройки",
-							submenu_resetsettings:				"Сбросить канал"
+							submenu_channelsettings:				"Изменить настройки",
+							submenu_resetsettings:					"Сбросить канал"
 						};
 					case "sv":		// Swedish
 						return {
 							confirm_reset:						"Är du säker på att du vill återställa den här kanalen?",
 							confirm_resetall:					"Är du säker på att du vill återställa alla kanaler?",
-							context_localchannelsettings:		"Lokala kanalinställningar",
+							context_localchannelsettings:				"Lokala kanalinställningar",
 							modal_channelname:					"Lokalt kanalnamn",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfärg",
 							modal_header:						"Lokala kanalinställningar",
 							modal_inheritcolor:					"Ärva färg till underkanaler",
 							modal_invalidurl:					"Ogiltig URL",
-							submenu_channelsettings:			"Ändra inställningar",
-							submenu_resetsettings:				"Återställ kanal"
+							submenu_channelsettings:				"Ändra inställningar",
+							submenu_resetsettings:					"Återställ kanal"
 						};
 					case "th":		// Thai
 						return {
 							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตช่องนี้",
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตช่องทั้งหมด",
-							context_localchannelsettings:		"การตั้งค่าช่องท้องถิ่น",
+							context_localchannelsettings:				"การตั้งค่าช่องท้องถิ่น",
 							modal_channelname:					"ชื่อช่องท้องถิ่น",
 							modal_channelicon:					"ไอคอน",
 							modal_colorpicker1:					"ช่องท้องถิ่นสี",
 							modal_header:						"การตั้งค่าช่องท้องถิ่น",
 							modal_inheritcolor:					"สืบทอดสีไปยังช่องย่อย",
 							modal_invalidurl:					"URL ไม่ถูกต้อง",
-							submenu_channelsettings:			"เปลี่ยนการตั้งค่า",
-							submenu_resetsettings:				"รีเซ็ตช่อง"
+							submenu_channelsettings:				"เปลี่ยนการตั้งค่า",
+							submenu_resetsettings:					"รีเซ็ตช่อง"
 						};
 					case "tr":		// Turkish
 						return {
 							confirm_reset:						"Bu kanalı sıfırlamak istediğinizden emin misiniz?",
 							confirm_resetall:					"Tüm kanalları sıfırlamak istediğinizden emin misiniz?",
-							context_localchannelsettings:		"Yerel Kanal Ayarları",
+							context_localchannelsettings:				"Yerel Kanal Ayarları",
 							modal_channelname:					"Yerel Kanal Adı",
 							modal_channelicon:					"Simge",
 							modal_colorpicker1:					"Yerel Kanal Rengi",
 							modal_header:						"Yerel Kanal Ayarları",
 							modal_inheritcolor:					"Renkleri Alt Kanallara Devral",
 							modal_invalidurl:					"Geçersiz URL",
-							submenu_channelsettings:			"Ayarları değiştir",
-							submenu_resetsettings:				"Kanalı Sıfırla"
+							submenu_channelsettings:				"Ayarları değiştir",
+							submenu_resetsettings:					"Kanalı Sıfırla"
 						};
 					case "uk":		// Ukrainian
 						return {
 							confirm_reset:						"Справді скинути цей канал?",
 							confirm_resetall:					"Ви впевнені, що хочете скинути всі канали?",
-							context_localchannelsettings:		"Налаштування локального каналу",
+							context_localchannelsettings:				"Налаштування локального каналу",
 							modal_channelname:					"Назва місцевого каналу",
 							modal_channelicon:					"Піктограма",
 							modal_colorpicker1:					"Колір локального каналу",
 							modal_header:						"Налаштування локального каналу",
 							modal_inheritcolor:					"Успадковувати колір для підканалів",
 							modal_invalidurl:					"Недійсна URL-адреса",
-							submenu_channelsettings:			"Змінити налаштування",
-							submenu_resetsettings:				"Скинути канал"
+							submenu_channelsettings:				"Змінити налаштування",
+							submenu_resetsettings:					"Скинути канал"
 						};
 					case "vi":		// Vietnamese
 						return {
 							confirm_reset:						"Bạn có chắc chắn muốn đặt lại kênh này không?",
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả các kênh không?",
-							context_localchannelsettings:		"Cài đặt kênh cục bộ",
+							context_localchannelsettings:				"Cài đặt kênh cục bộ",
 							modal_channelname:					"Tên kênh địa phương",
 							modal_channelicon:					"Biểu tượng",
 							modal_colorpicker1:					"Màu kênh địa phương",
 							modal_header:						"Cài đặt kênh cục bộ",
 							modal_inheritcolor:					"Kế thừa màu cho các kênh phụ",
 							modal_invalidurl:					"URL không hợp lệ",
-							submenu_channelsettings:			"Thay đổi cài đặt",
-							submenu_resetsettings:				"Đặt lại kênh"
+							submenu_channelsettings:				"Thay đổi cài đặt",
+							submenu_resetsettings:					"Đặt lại kênh"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此频道吗？",
 							confirm_resetall:					"您确定要重置所有频道吗？",
-							context_localchannelsettings:		"本地频道设置",
+							context_localchannelsettings:				"本地频道设置",
 							modal_channelname:					"本地频道名称",
 							modal_channelicon:					"图标",
 							modal_colorpicker1:					"本地频道颜色",
 							modal_header:						"本地频道设置",
 							modal_inheritcolor:					"继承颜色到子通道",
 							modal_invalidurl:					"无效的网址",
-							submenu_channelsettings:			"更改设置",
-							submenu_resetsettings:				"重置频道"
+							submenu_channelsettings:				"更改设置",
+							submenu_resetsettings:					"重置频道"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此頻道嗎？",
 							confirm_resetall:					"您確定要重置所有頻道嗎？",
-							context_localchannelsettings:		"本地頻道設置",
+							context_localchannelsettings:				"本地頻道設置",
 							modal_channelname:					"本地頻道名稱",
 							modal_channelicon:					"圖標",
 							modal_colorpicker1:					"本地頻道顏色",
 							modal_header:						"本地頻道設置",
 							modal_inheritcolor:					"繼承顏色到子通道",
 							modal_invalidurl:					"無效的網址",
-							submenu_channelsettings:			"更改設置",
-							submenu_resetsettings:				"重置頻道"
+							submenu_channelsettings:				"更改設置",
+							submenu_resetsettings:					"重置頻道"
 						};
 					default:		// English
 						return {
 							confirm_reset:						"Are you sure you want to reset this Channel?",
 							confirm_resetall:					"Are you sure you want to reset all Channels?",
-							context_localchannelsettings:		"Local Channel Settings",
+							context_localchannelsettings:				"Local Channel Settings",
 							modal_channelname:					"Local Channel Name",
 							modal_channelicon:					"Icon",
 							modal_colorpicker1:					"Local Channel Color",
 							modal_header:						"Local Channel Settings",
 							modal_inheritcolor:					"Inherit Color to Sub-Channels",
 							modal_invalidurl:					"Invalid URL",
-							submenu_channelsettings:			"Change Settings",
-							submenu_resetsettings:				"Reset Channel"
+							submenu_channelsettings:				"Change Settings",
+							submenu_resetsettings:					"Reset Channel"
 						};
 				}
 			}
