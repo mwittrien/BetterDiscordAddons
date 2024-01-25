@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.6
+ * @version 4.8.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -149,10 +149,10 @@ module.exports = (_ => {
 						"DirectMessage",
 						"DirectMessageAddPopoutRow",
 						"DiscordTag",
+						"FocusRingScope",
 						"GuildInvitationRow",
 						"HeaderBarRecipient",
 						"IncomingCallModal",
-						"Mention",
 						"MessageContent",
 						"MessageReply",
 						"NameTag",
@@ -999,8 +999,10 @@ module.exports = (_ => {
 				}
 			}
 			
-			processMention (e) {
-				if (e.instance.props["edited-mention-color"]) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {"--edited-mention-color": e.instance.props["edited-mention-color"]});
+			processFocusRingScope (e) {
+				if (this.settings.places.mentions && e.returnvalue.props.className.indexOf(BDFDB.disCN.mention) > -1 && e.instance.props["edited-mention-color"]) {
+					e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {"--edited-mention-color": e.instance.props["edited-mention-color"]});
+				}
 			}
 
 			processChannelReply (e) {
@@ -1851,16 +1853,16 @@ module.exports = (_ => {
 						return {
 							confirm_reset:						"Наистина ли искате да нулирате този потребител?",
 							confirm_resetall:					"Наистина ли искате да нулирате всички потребители?",
-							context_localusersettings:			"Локални потребителски настройки",
+							context_localusersettings:				"Локални потребителски настройки",
 							modal_colorpicker1:					"Име Цвят",
 							modal_colorpicker2:					"Цвят на съобщението",
 							modal_colorpicker3:					"Цвят на маркера",
 							modal_colorpicker4:					"Цвят на шрифта",
 							modal_header:						"Локални потребителски настройки",
-							modal_ignoretagcolor:				"Използвайте Цвят на ролята",
+							modal_ignoretagcolor:					"Използвайте Цвят на ролята",
 							modal_invalidurl:					"Невалиден адрес",
-							modal_showaccountname:				"Покажи име",
-							modal_showservernick:				"Показване на псевдонима",
+							modal_showaccountname:					"Покажи име",
+							modal_showservernick:					"Показване на псевдонима",
 							modal_tabheader1:					"Потребител",
 							modal_tabheader2:					"Име Цвят",
 							modal_tabheader3:					"Етикет",
@@ -1868,24 +1870,24 @@ module.exports = (_ => {
 							modal_username:						"Локално потребителско име",
 							modal_userolecolor:					"Не презаписвайте цвета на ролята",
 							modal_usertag:						"Етикет",
-							modal_useservernick:				"Не презаписвайте псевдонимите",
-							submenu_resetsettings:				"Нулиране на потребителя",
-							submenu_usersettings:				"Промяна на настройките"
+							modal_useservernick:					"Не презаписвайте псевдонимите",
+							submenu_resetsettings:					"Нулиране на потребителя",
+							submenu_usersettings:					"Промяна на настройките"
 						};
 					case "cs":		// Czech
 						return {
 							confirm_reset:						"Opravdu chcete tohoto uživatele resetovat?",
 							confirm_resetall:					"Opravdu chcete resetovat všechny uživatele?",
-							context_localusersettings:			"Místní nastavení uživatele",
+							context_localusersettings:				"Místní nastavení uživatele",
 							modal_colorpicker1:					"Název Barva",
 							modal_colorpicker2:					"Barva zprávy",
 							modal_colorpicker3:					"Barva značky",
 							modal_colorpicker4:					"Barva fontu",
 							modal_header:						"Místní nastavení uživatele",
-							modal_ignoretagcolor:				"Použijte barvu role",
+							modal_ignoretagcolor:					"Použijte barvu role",
 							modal_invalidurl:					"Neplatná URL",
-							modal_showaccountname:				"Zobrazit jméno",
-							modal_showservernick:				"Zobrazit přezdívku",
+							modal_showaccountname:					"Zobrazit jméno",
+							modal_showservernick:					"Zobrazit přezdívku",
 							modal_tabheader1:					"Uživatel",
 							modal_tabheader2:					"Název Barva",
 							modal_tabheader3:					"Štítek",
@@ -1893,24 +1895,24 @@ module.exports = (_ => {
 							modal_username:						"Místní uživatelské jméno",
 							modal_userolecolor:					"Nepřepisujte barvu role",
 							modal_usertag:						"Štítek",
-							modal_useservernick:				"Nepřepisujte přezdívky",
-							submenu_resetsettings:				"Obnovit uživatele",
-							submenu_usersettings:				"Změnit nastavení"
+							modal_useservernick:					"Nepřepisujte přezdívky",
+							submenu_resetsettings:					"Obnovit uživatele",
+							submenu_usersettings:					"Změnit nastavení"
 						};
 					case "da":		// Danish
 						return {
 							confirm_reset:						"Er du sikker på, at du vil nulstille denne bruger?",
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle brugere?",
-							context_localusersettings:			"Lokale brugerindstillinger",
+							context_localusersettings:				"Lokale brugerindstillinger",
 							modal_colorpicker1:					"Navnfarve",
 							modal_colorpicker2:					"Beskedfarve",
 							modal_colorpicker3:					"Tagfarve",
 							modal_colorpicker4:					"Skriftfarve",
 							modal_header:						"Lokale brugerindstillinger",
-							modal_ignoretagcolor:				"Brug rollefarve",
+							modal_ignoretagcolor:					"Brug rollefarve",
 							modal_invalidurl:					"Ugyldig URL",
-							modal_showaccountname:				"Vis navn",
-							modal_showservernick:				"Vis kaldenavn",
+							modal_showaccountname:					"Vis navn",
+							modal_showservernick:					"Vis kaldenavn",
 							modal_tabheader1:					"Bruger",
 							modal_tabheader2:					"Navnfarve",
 							modal_tabheader3:					"Tag",
@@ -1918,24 +1920,24 @@ module.exports = (_ => {
 							modal_username:						"Lokalt brugernavn",
 							modal_userolecolor:					"Overskriv ikke rollefarven",
 							modal_usertag:						"Tag",
-							modal_useservernick:				"Overskriv ikke kælenavne",
-							submenu_resetsettings:				"Nulstil bruger",
-							submenu_usersettings:				"Ændre indstillinger"
+							modal_useservernick:					"Overskriv ikke kælenavne",
+							submenu_resetsettings:					"Nulstil bruger",
+							submenu_usersettings:					"Ændre indstillinger"
 						};
 					case "de":		// German
 						return {
 							confirm_reset:						"Möchtest du diesen Benutzer wirklich zurücksetzen?",
 							confirm_resetall:					"Möchtest du wirklich alle Benutzer zurücksetzen?",
-							context_localusersettings:			"Lokale Benutzereinstellungen",
+							context_localusersettings:				"Lokale Benutzereinstellungen",
 							modal_colorpicker1:					"Namensfarbe",
 							modal_colorpicker2:					"Nachrichtenfarbe",
 							modal_colorpicker3:					"Abzeichenfarbe",
 							modal_colorpicker4:					"Schriftfarbe",
 							modal_header:						"Lokale Benutzereinstellungen",
-							modal_ignoretagcolor:				"Rollenfarbe verwenden",
+							modal_ignoretagcolor:					"Rollenfarbe verwenden",
 							modal_invalidurl:					"Ungültige URL",
-							modal_showaccountname:				"Namen anzeigen",
-							modal_showservernick:				"Nicknamen anzeigen",
+							modal_showaccountname:					"Namen anzeigen",
+							modal_showservernick:					"Nicknamen anzeigen",
 							modal_tabheader1:					"Benutzer",
 							modal_tabheader2:					"Namensfarbe",
 							modal_tabheader3:					"Abzeichen",
@@ -1943,24 +1945,24 @@ module.exports = (_ => {
 							modal_username:						"Lokaler Benutzername",
 							modal_userolecolor:					"Rollenfarbe nicht überschreiben",
 							modal_usertag:						"Abzeichen",
-							modal_useservernick:				"Nicknamen nicht überschreiben",
-							submenu_resetsettings:				"Benutzer zurücksetzen",
-							submenu_usersettings:				"Einstellungen ändern"
+							modal_useservernick:					"Nicknamen nicht überschreiben",
+							submenu_resetsettings:					"Benutzer zurücksetzen",
+							submenu_usersettings:					"Einstellungen ändern"
 						};
 					case "el":		// Greek
 						return {
 							confirm_reset:						"Θέλετε την επαναφορά αυτού του χρήστη;",
 							confirm_resetall:					"Θέλετε την επαναφορά όλων των χρηστών;",
-							context_localusersettings:			"Ρυθμίσεις χρήστη (τοπικά)",
+							context_localusersettings:				"Ρυθμίσεις χρήστη (τοπικά)",
 							modal_colorpicker1:					"Χρώμα ονόματος",
 							modal_colorpicker2:					"Χρώμα μηνύματος",
 							modal_colorpicker3:					"Χρώμα ετικέτας",
 							modal_colorpicker4:					"Χρώμα γραμματοσειράς",
 							modal_header:						"Ρυθμίσεις χρήστη (τοπικά)",
-							modal_ignoretagcolor:				"Χρήση του χρώματος του ρόλου",
+							modal_ignoretagcolor:					"Χρήση του χρώματος του ρόλου",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
-							modal_showaccountname:				"Εμφάνιση ονόματος",
-							modal_showservernick:				"Εμφάνιση ψευδωνύμου",
+							modal_showaccountname:					"Εμφάνιση ονόματος",
+							modal_showservernick:					"Εμφάνιση ψευδωνύμου",
 							modal_tabheader1:					"Χρήστης",
 							modal_tabheader2:					"Χρώμα ονόματος",
 							modal_tabheader3:					"Ετικέτα",
@@ -1968,24 +1970,24 @@ module.exports = (_ => {
 							modal_username:						"Όνομα χρήστη (τοπικά)",
 							modal_userolecolor:					"Χωρίς αντικατάσταση του χρώματος του ρόλου",
 							modal_usertag:						"Ετικέτα",
-							modal_useservernick:				"Χωρίς αντικατάσταση των ψευδωνύμων",
-							submenu_resetsettings:				"Επαναφορά χρήστη",
-							submenu_usersettings:				"Αλλαγή ρυθμίσεις"
+							modal_useservernick:					"Χωρίς αντικατάσταση των ψευδωνύμων",
+							submenu_resetsettings:					"Επαναφορά χρήστη",
+							submenu_usersettings:					"Αλλαγή ρυθμίσεις"
 						};
 					case "es":		// Spanish
 						return {
 							confirm_reset:						"¿Está seguro de que desea restablecer este usuario?",
 							confirm_resetall:					"¿Está seguro de que desea restablecer a todos los usuarios?",
-							context_localusersettings:			"Configuración de usuario local",
+							context_localusersettings:				"Configuración de usuario local",
 							modal_colorpicker1:					"Color del nombre",
 							modal_colorpicker2:					"Color del mensaje",
 							modal_colorpicker3:					"Color de etiqueta",
 							modal_colorpicker4:					"Color de fuente",
 							modal_header:						"Configuración de usuario local",
-							modal_ignoretagcolor:				"Usar color de rol",
+							modal_ignoretagcolor:					"Usar color de rol",
 							modal_invalidurl:					"URL invalida",
-							modal_showaccountname:				"Mostrar nombre",
-							modal_showservernick:				"Mostrar apodo",
+							modal_showaccountname:					"Mostrar nombre",
+							modal_showservernick:					"Mostrar apodo",
 							modal_tabheader1:					"Usuario",
 							modal_tabheader2:					"Color del nombre",
 							modal_tabheader3:					"Etiqueta",
@@ -1993,24 +1995,24 @@ module.exports = (_ => {
 							modal_username:						"Nombre de usuario local",
 							modal_userolecolor:					"No sobrescriba el color de la función",
 							modal_usertag:						"Etiqueta",
-							modal_useservernick:				"No sobrescriba los apodos",
-							submenu_resetsettings:				"Restablecer usuario",
-							submenu_usersettings:				"Cambiar ajustes"
+							modal_useservernick:					"No sobrescriba los apodos",
+							submenu_resetsettings:					"Restablecer usuario",
+							submenu_usersettings:					"Cambiar ajustes"
 						};
 					case "fi":		// Finnish
 						return {
 							confirm_reset:						"Haluatko varmasti nollata tämän käyttäjän?",
 							confirm_resetall:					"Haluatko varmasti nollata kaikki käyttäjät?",
-							context_localusersettings:			"Paikalliset käyttäjäasetukset",
+							context_localusersettings:				"Paikalliset käyttäjäasetukset",
 							modal_colorpicker1:					"Nimen väri",
 							modal_colorpicker2:					"Viestin väri",
 							modal_colorpicker3:					"Tagin väri",
 							modal_colorpicker4:					"Fontin väri",
 							modal_header:						"Paikalliset käyttäjäasetukset",
-							modal_ignoretagcolor:				"Käytä rooliväriä",
+							modal_ignoretagcolor:					"Käytä rooliväriä",
 							modal_invalidurl:					"Virheellinen URL",
-							modal_showaccountname:				"Näytä nimi",
-							modal_showservernick:				"Näytä lempinimi",
+							modal_showaccountname:					"Näytä nimi",
+							modal_showservernick:					"Näytä lempinimi",
 							modal_tabheader1:					"Käyttäjä",
 							modal_tabheader2:					"Nimen väri",
 							modal_tabheader3:					"Tag",
@@ -2018,24 +2020,24 @@ module.exports = (_ => {
 							modal_username:						"Paikallinen käyttäjätunnus",
 							modal_userolecolor:					"Älä korvaa roolin väriä",
 							modal_usertag:						"Tag",
-							modal_useservernick:				"Älä korvaa lempinimiä",
-							submenu_resetsettings:				"Nollaa käyttäjä",
-							submenu_usersettings:				"Vaihda asetuksia"
+							modal_useservernick:					"Älä korvaa lempinimiä",
+							submenu_resetsettings:					"Nollaa käyttäjä",
+							submenu_usersettings:					"Vaihda asetuksia"
 						};
 					case "fr":		// French
 						return {
 							confirm_reset:						"Êtes-vous sûr de vouloir réinitialiser cet utilisateur?",
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser tous les utilisateurs?",
-							context_localusersettings:			"Paramètres locaux de l'utilisateur",
+							context_localusersettings:				"Paramètres locaux de l'utilisateur",
 							modal_colorpicker1:					"Couleur du nom",
 							modal_colorpicker2:					"Couleur du message",
 							modal_colorpicker3:					"Couleur de l'étiquette",
 							modal_colorpicker4:					"Couleur de la police",
 							modal_header:						"Paramètres locaux de l'utilisateur",
-							modal_ignoretagcolor:				"Utiliser la couleur du rôle",
+							modal_ignoretagcolor:					"Utiliser la couleur du rôle",
 							modal_invalidurl:					"URL invalide",
-							modal_showaccountname:				"Afficher le nom",
-							modal_showservernick:				"Afficher le surnom",
+							modal_showaccountname:					"Afficher le nom",
+							modal_showservernick:					"Afficher le surnom",
 							modal_tabheader1:					"Utilisateur",
 							modal_tabheader2:					"Couleur du nom",
 							modal_tabheader3:					"Marque",
@@ -2043,24 +2045,24 @@ module.exports = (_ => {
 							modal_username:						"Nom local d'utilisateur",
 							modal_userolecolor:					"Ne pas écraser la couleur du rôle",
 							modal_usertag:						"Marque",
-							modal_useservernick:				"Ne pas écraser les surnoms",
-							submenu_resetsettings:				"Réinitialiser l'utilisateur",
-							submenu_usersettings:				"Modifier les paramètres"
+							modal_useservernick:					"Ne pas écraser les surnoms",
+							submenu_resetsettings:					"Réinitialiser l'utilisateur",
+							submenu_usersettings:					"Modifier les paramètres"
 						};
 					case "hi":		// Hindi
 						return {
 							confirm_reset:						"क्या आप वाकई इस उपयोगकर्ता को रीसेट करना चाहते हैं?",
 							confirm_resetall:					"क्या आप वाकई सभी उपयोगकर्ताओं को रीसेट करना चाहते हैं?",
-							context_localusersettings:			"स्थानीय उपयोगकर्ता सेटिंग्स",
+							context_localusersettings:				"स्थानीय उपयोगकर्ता सेटिंग्स",
 							modal_colorpicker1:					"नाम रंग",
 							modal_colorpicker2:					"संदेश रंग",
 							modal_colorpicker3:					"टैग रंग",
 							modal_colorpicker4:					"लिपि का रंग",
 							modal_header:						"स्थानीय उपयोगकर्ता सेटिंग्स",
-							modal_ignoretagcolor:				"भूमिका रंग का प्रयोग करें",
+							modal_ignoretagcolor:					"भूमिका रंग का प्रयोग करें",
 							modal_invalidurl:					"असामान्य यूआरएल",
-							modal_showaccountname:				"नाम दिखाएं",
-							modal_showservernick:				"उपनाम दिखाएं",
+							modal_showaccountname:					"नाम दिखाएं",
+							modal_showservernick:					"उपनाम दिखाएं",
 							modal_tabheader1:					"उपयोगकर्ता",
 							modal_tabheader2:					"नाम रंग",
 							modal_tabheader3:					"टैग",
@@ -2068,24 +2070,24 @@ module.exports = (_ => {
 							modal_username:						"स्थानीय उपयोगकर्ता नाम",
 							modal_userolecolor:					"भूमिका रंग को अधिलेखित न करें",
 							modal_usertag:						"टैग",
-							modal_useservernick:				"उपनामों को अधिलेखित न करें",
-							submenu_resetsettings:				"उपयोगकर्ता को रीसेट करें",
-							submenu_usersettings:				"सेटिंग्स परिवर्तित करना"
+							modal_useservernick:					"उपनामों को अधिलेखित न करें",
+							submenu_resetsettings:					"उपयोगकर्ता को रीसेट करें",
+							submenu_usersettings:					"सेटिंग्स परिवर्तित करना"
 						};
 					case "hr":		// Croatian
 						return {
 							confirm_reset:						"Jeste li sigurni da želite resetirati ovog korisnika?",
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve korisnike?",
-							context_localusersettings:			"Postavke lokalnog korisnika",
+							context_localusersettings:				"Postavke lokalnog korisnika",
 							modal_colorpicker1:					"Naziv Boja",
 							modal_colorpicker2:					"Boja poruke",
 							modal_colorpicker3:					"Oznaka u boji",
 							modal_colorpicker4:					"Boja fonta",
 							modal_header:						"Postavke lokalnog korisnika",
-							modal_ignoretagcolor:				"Koristite boju uloga",
+							modal_ignoretagcolor:					"Koristite boju uloga",
 							modal_invalidurl:					"Neispravna poveznica",
-							modal_showaccountname:				"Prikaži ime",
-							modal_showservernick:				"Prikaži nadimak",
+							modal_showaccountname:					"Prikaži ime",
+							modal_showservernick:					"Prikaži nadimak",
 							modal_tabheader1:					"Korisnik",
 							modal_tabheader2:					"Naziv Boja",
 							modal_tabheader3:					"Označiti",
@@ -2093,24 +2095,24 @@ module.exports = (_ => {
 							modal_username:						"Lokalno korisničko ime",
 							modal_userolecolor:					"Nemojte prebrisati boju uloge",
 							modal_usertag:						"Označiti",
-							modal_useservernick:				"Ne prepisujte nadimke",
-							submenu_resetsettings:				"Resetiraj korisnika",
-							submenu_usersettings:				"Promijeniti postavke"
+							modal_useservernick:					"Ne prepisujte nadimke",
+							submenu_resetsettings:					"Resetiraj korisnika",
+							submenu_usersettings:					"Promijeniti postavke"
 						};
 					case "hu":		// Hungarian
 						return {
 							confirm_reset:						"Biztosan vissza akarja állítani ezt a felhasználót?",
 							confirm_resetall:					"Biztosan vissza akarja állítani az összes felhasználót?",
-							context_localusersettings:			"Helyi felhasználói beállítások",
+							context_localusersettings:				"Helyi felhasználói beállítások",
 							modal_colorpicker1:					"Név színe",
 							modal_colorpicker2:					"Üzenet színe",
 							modal_colorpicker3:					"Címke színe",
 							modal_colorpicker4:					"Betű szín",
 							modal_header:						"Helyi felhasználói beállítások",
-							modal_ignoretagcolor:				"Használja a Szerepszínt",
+							modal_ignoretagcolor:					"Használja a Szerepszínt",
 							modal_invalidurl:					"Érvénytelen URL",
-							modal_showaccountname:				"Név megjelenítése",
-							modal_showservernick:				"Becenév megjelenítése",
+							modal_showaccountname:					"Név megjelenítése",
+							modal_showservernick:					"Becenév megjelenítése",
 							modal_tabheader1:					"Felhasználó",
 							modal_tabheader2:					"Név színe",
 							modal_tabheader3:					"Címke",
@@ -2118,24 +2120,24 @@ module.exports = (_ => {
 							modal_username:						"Helyi felhasználónév",
 							modal_userolecolor:					"Ne írja felül a Szerepszínt",
 							modal_usertag:						"Címke",
-							modal_useservernick:				"Ne írja felül a beceneveket",
-							submenu_resetsettings:				"Felhasználó visszaállítása",
-							submenu_usersettings:				"Beállítások megváltoztatása"
+							modal_useservernick:					"Ne írja felül a beceneveket",
+							submenu_resetsettings:					"Felhasználó visszaállítása",
+							submenu_usersettings:					"Beállítások megváltoztatása"
 						};
 					case "it":		// Italian
 						return {
 							confirm_reset:						"Sei sicuro di voler reimpostare questo utente?",
 							confirm_resetall:					"Sei sicuro di voler reimpostare tutti gli utenti?",
-							context_localusersettings:			"Impostazioni utente locale",
+							context_localusersettings:				"Impostazioni utente locale",
 							modal_colorpicker1:					"Colore nome",
 							modal_colorpicker2:					"Colore messaggio",
 							modal_colorpicker3:					"Colore tag",
 							modal_colorpicker4:					"Colore del carattere",
 							modal_header:						"Impostazioni utente locale",
-							modal_ignoretagcolor:				"Usa colore ruolo",
+							modal_ignoretagcolor:					"Usa colore ruolo",
 							modal_invalidurl:					"URL non valido",
-							modal_showaccountname:				"Mostra nome",
-							modal_showservernick:				"Mostra soprannome",
+							modal_showaccountname:					"Mostra nome",
+							modal_showservernick:					"Mostra soprannome",
 							modal_tabheader1:					"Utente",
 							modal_tabheader2:					"Nome Colore",
 							modal_tabheader3:					"Etichetta",
@@ -2143,24 +2145,24 @@ module.exports = (_ => {
 							modal_username:						"Nome utente locale",
 							modal_userolecolor:					"Non sovrascrivere il colore del ruolo",
 							modal_usertag:						"Etichetta",
-							modal_useservernick:				"Non sovrascrivere i soprannomi",
-							submenu_resetsettings:				"Reimposta utente",
-							submenu_usersettings:				"Cambia impostazioni"
+							modal_useservernick:					"Non sovrascrivere i soprannomi",
+							submenu_resetsettings:					"Reimposta utente",
+							submenu_usersettings:					"Cambia impostazioni"
 						};
 					case "ja":		// Japanese
 						return {
 							confirm_reset:						"このユーザーをリセットしてもよろしいですか？",
 							confirm_resetall:					"すべてのユーザーをリセットしてもよろしいですか？",
-							context_localusersettings:			"ローカルユーザー設定",
+							context_localusersettings:				"ローカルユーザー設定",
 							modal_colorpicker1:					"名前の色",
 							modal_colorpicker2:					"メッセージの色",
 							modal_colorpicker3:					"タグの色",
 							modal_colorpicker4:					"フォントの色",
 							modal_header:						"ローカルユーザー設定",
-							modal_ignoretagcolor:				"役割の色を使用する",
+							modal_ignoretagcolor:					"役割の色を使用する",
 							modal_invalidurl:					"無効なURL",
-							modal_showaccountname:				"名前を表示",
-							modal_showservernick:				"ニックネームを表示",
+							modal_showaccountname:					"名前を表示",
+							modal_showservernick:					"ニックネームを表示",
 							modal_tabheader1:					"ユーザー",
 							modal_tabheader2:					"名前の色",
 							modal_tabheader3:					"鬼ごっこ",
@@ -2168,24 +2170,24 @@ module.exports = (_ => {
 							modal_username:						"ローカルユーザー名",
 							modal_userolecolor:					"役割の色を上書きしないでください",
 							modal_usertag:						"鬼ごっこ",
-							modal_useservernick:				"ニックネームを上書きしないでください",
-							submenu_resetsettings:				"ユーザーのリセット",
-							submenu_usersettings:				"設定を変更する"
+							modal_useservernick:					"ニックネームを上書きしないでください",
+							submenu_resetsettings:					"ユーザーのリセット",
+							submenu_usersettings:					"設定を変更する"
 						};
 					case "ko":		// Korean
 						return {
 							confirm_reset:						"이 사용자를 재설정 하시겠습니까?",
 							confirm_resetall:					"모든 사용자를 재설정 하시겠습니까?",
-							context_localusersettings:			"로컬 사용자 설정",
+							context_localusersettings:				"로컬 사용자 설정",
 							modal_colorpicker1:					"이름 색상",
 							modal_colorpicker2:					"메시지 색상",
 							modal_colorpicker3:					"태그 색상",
 							modal_colorpicker4:					"글자 색",
 							modal_header:						"로컬 사용자 설정",
-							modal_ignoretagcolor:				"역할 색상 사용",
+							modal_ignoretagcolor:					"역할 색상 사용",
 							modal_invalidurl:					"잘못된 URL",
-							modal_showaccountname:				"이름 표시",
-							modal_showservernick:				"닉네임 표시",
+							modal_showaccountname:					"이름 표시",
+							modal_showservernick:					"닉네임 표시",
 							modal_tabheader1:					"사용자",
 							modal_tabheader2:					"이름 색상",
 							modal_tabheader3:					"꼬리표",
@@ -2193,24 +2195,24 @@ module.exports = (_ => {
 							modal_username:						"로컬 사용자 이름",
 							modal_userolecolor:					"역할 색상을 덮어 쓰지 마십시오.",
 							modal_usertag:						"꼬리표",
-							modal_useservernick:				"별명을 덮어 쓰지 마십시오",
-							submenu_resetsettings:				"사용자 재설정",
-							submenu_usersettings:				"설정 변경"
+							modal_useservernick:					"별명을 덮어 쓰지 마십시오",
+							submenu_resetsettings:					"사용자 재설정",
+							submenu_usersettings:					"설정 변경"
 						};
 					case "lt":		// Lithuanian
 						return {
 							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį naudotoją?",
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus naudotojus?",
-							context_localusersettings:			"Vietinio vartotojo nustatymai",
+							context_localusersettings:				"Vietinio vartotojo nustatymai",
 							modal_colorpicker1:					"Pavadinimo spalva",
 							modal_colorpicker2:					"Pranešimo spalva",
 							modal_colorpicker3:					"Žymos spalva",
 							modal_colorpicker4:					"Šrifto spalva",
 							modal_header:						"Vietinio vartotojo nustatymai",
-							modal_ignoretagcolor:				"Naudokite vaidmens spalvą",
+							modal_ignoretagcolor:					"Naudokite vaidmens spalvą",
 							modal_invalidurl:					"Neteisingas URL",
-							modal_showaccountname:				"Rodyti pavadinimą",
-							modal_showservernick:				"Rodyti slapyvardį",
+							modal_showaccountname:					"Rodyti pavadinimą",
+							modal_showservernick:					"Rodyti slapyvardį",
 							modal_tabheader1:					"Vartotojas",
 							modal_tabheader2:					"Pavadinimo spalva",
 							modal_tabheader3:					"Žyma",
@@ -2218,24 +2220,24 @@ module.exports = (_ => {
 							modal_username:						"Vietinis vartotojo vardas",
 							modal_userolecolor:					"Neperrašykite vaidmens spalvos",
 							modal_usertag:						"Žyma",
-							modal_useservernick:				"Neperrašykite slapyvardžių",
-							submenu_resetsettings:				"Iš naujo nustatyti vartotoją",
-							submenu_usersettings:				"Pakeisti nustatymus"
+							modal_useservernick:					"Neperrašykite slapyvardžių",
+							submenu_resetsettings:					"Iš naujo nustatyti vartotoją",
+							submenu_usersettings:					"Pakeisti nustatymus"
 						};
 					case "nl":		// Dutch
 						return {
 							confirm_reset:						"Weet u zeker dat u deze gebruiker wilt resetten?",
 							confirm_resetall:					"Weet u zeker dat u alle gebruikers wilt resetten?",
-							context_localusersettings:			"Lokale gebruikersinstellingen",
+							context_localusersettings:				"Lokale gebruikersinstellingen",
 							modal_colorpicker1:					"Naamkleur",
 							modal_colorpicker2:					"Berichtkleur",
 							modal_colorpicker3:					"Tagkleur",
 							modal_colorpicker4:					"Letterkleur",
 							modal_header:						"Lokale gebruikersinstellingen",
-							modal_ignoretagcolor:				"Gebruik rolkleur",
+							modal_ignoretagcolor:					"Gebruik rolkleur",
 							modal_invalidurl:					"Ongeldige URL",
-							modal_showaccountname:				"Toon naam",
-							modal_showservernick:				"Bijnaam weergeven",
+							modal_showaccountname:					"Toon naam",
+							modal_showservernick:					"Bijnaam weergeven",
 							modal_tabheader1:					"Gebruiker",
 							modal_tabheader2:					"Naamkleur",
 							modal_tabheader3:					"Label",
@@ -2243,24 +2245,24 @@ module.exports = (_ => {
 							modal_username:						"Lokale gebruikersnaam",
 							modal_userolecolor:					"Overschrijf de rolkleur niet",
 							modal_usertag:						"Label",
-							modal_useservernick:				"Overschrijf geen bijnamen",
-							submenu_resetsettings:				"Gebruiker resetten",
-							submenu_usersettings:				"Instellingen veranderen"
+							modal_useservernick:					"Overschrijf geen bijnamen",
+							submenu_resetsettings:					"Gebruiker resetten",
+							submenu_usersettings:					"Instellingen veranderen"
 						};
 					case "no":		// Norwegian
 						return {
 							confirm_reset:						"Er du sikker på at du vil tilbakestille denne brukeren?",
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle brukere?",
-							context_localusersettings:			"Lokale brukerinnstillinger",
+							context_localusersettings:				"Lokale brukerinnstillinger",
 							modal_colorpicker1:					"Navnfarge",
 							modal_colorpicker2:					"Meldingfarge",
 							modal_colorpicker3:					"Merkefarge",
 							modal_colorpicker4:					"Skriftfarge",
 							modal_header:						"Lokale brukerinnstillinger",
-							modal_ignoretagcolor:				"Bruk rollefarge",
+							modal_ignoretagcolor:					"Bruk rollefarge",
 							modal_invalidurl:					"Ugyldig URL",
-							modal_showaccountname:				"Vis navn",
-							modal_showservernick:				"Vis kallenavn",
+							modal_showaccountname:					"Vis navn",
+							modal_showservernick:					"Vis kallenavn",
 							modal_tabheader1:					"Bruker",
 							modal_tabheader2:					"Navnfarge",
 							modal_tabheader3:					"Stikkord",
@@ -2268,24 +2270,24 @@ module.exports = (_ => {
 							modal_username:						"Lokalt brukernavn",
 							modal_userolecolor:					"Ikke skriv rollefargen",
 							modal_usertag:						"Stikkord",
-							modal_useservernick:				"Ikke overskriv kallenavn",
-							submenu_resetsettings:				"Tilbakestill bruker",
-							submenu_usersettings:				"Endre innstillinger"
+							modal_useservernick:					"Ikke overskriv kallenavn",
+							submenu_resetsettings:					"Tilbakestill bruker",
+							submenu_usersettings:					"Endre innstillinger"
 						};
 					case "pl":		// Polish
 						return {
 							confirm_reset:						"Czy na pewno chcesz zresetować tego użytkownika?",
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkich użytkowników?",
-							context_localusersettings:			"Ustawienia użytkownika lokalnego",
+							context_localusersettings:				"Ustawienia użytkownika lokalnego",
 							modal_colorpicker1:					"Nazwa Kolor",
 							modal_colorpicker2:					"Kolor wiadomości",
 							modal_colorpicker3:					"Kolor tagu",
 							modal_colorpicker4:					"Kolor czcionki",
 							modal_header:						"Ustawienia użytkownika lokalnego",
-							modal_ignoretagcolor:				"Użyj koloru roli",
+							modal_ignoretagcolor:					"Użyj koloru roli",
 							modal_invalidurl:					"Nieprawidłowy URL",
-							modal_showaccountname:				"Pokaż nazwę",
-							modal_showservernick:				"Pokaż pseudonim",
+							modal_showaccountname:					"Pokaż nazwę",
+							modal_showservernick:					"Pokaż pseudonim",
 							modal_tabheader1:					"Użytkownik",
 							modal_tabheader2:					"Nazwa Kolor",
 							modal_tabheader3:					"Etykietka",
@@ -2293,24 +2295,24 @@ module.exports = (_ => {
 							modal_username:						"Lokalna nazwa użytkownika",
 							modal_userolecolor:					"Nie zastępuj koloru roli",
 							modal_usertag:						"Etykietka",
-							modal_useservernick:				"Nie nadpisuj pseudonimów",
-							submenu_resetsettings:				"Resetuj użytkownika",
-							submenu_usersettings:				"Zmień ustawienia"
+							modal_useservernick:					"Nie nadpisuj pseudonimów",
+							submenu_resetsettings:					"Resetuj użytkownika",
+							submenu_usersettings:					"Zmień ustawienia"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							confirm_reset:						"Tem certeza de que deseja redefinir este usuário?",
 							confirm_resetall:					"Tem certeza de que deseja redefinir todos os usuários?",
-							context_localusersettings:			"Configurações de usuário local",
+							context_localusersettings:				"Configurações de usuário local",
 							modal_colorpicker1:					"Cor do nome",
 							modal_colorpicker2:					"Cor da Mensagem",
 							modal_colorpicker3:					"Cor da tag",
 							modal_colorpicker4:					"Cor da fonte",
 							modal_header:						"Configurações de usuário local",
-							modal_ignoretagcolor:				"Use a cor da função",
+							modal_ignoretagcolor:					"Use a cor da função",
 							modal_invalidurl:					"URL inválida",
-							modal_showaccountname:				"Mostrar nome",
-							modal_showservernick:				"Mostrar apelido",
+							modal_showaccountname:					"Mostrar nome",
+							modal_showservernick:					"Mostrar apelido",
 							modal_tabheader1:					"Do utilizador",
 							modal_tabheader2:					"Cor do Nome",
 							modal_tabheader3:					"Tag",
@@ -2318,24 +2320,24 @@ module.exports = (_ => {
 							modal_username:						"Nome de usuário local",
 							modal_userolecolor:					"Não sobrescreva a Cor da Função",
 							modal_usertag:						"Tag",
-							modal_useservernick:				"Não sobrescrever apelidos",
-							submenu_resetsettings:				"Reiniciar usuário",
-							submenu_usersettings:				"Mudar configurações"
+							modal_useservernick:					"Não sobrescrever apelidos",
+							submenu_resetsettings:					"Reiniciar usuário",
+							submenu_usersettings:					"Mudar configurações"
 						};
 					case "ro":		// Romanian
 						return {
 							confirm_reset:						"Sigur doriți să resetați acest utilizator?",
 							confirm_resetall:					"Sigur doriți să resetați toți utilizatorii?",
-							context_localusersettings:			"Setări locale ale utilizatorului",
+							context_localusersettings:				"Setări locale ale utilizatorului",
 							modal_colorpicker1:					"Culoare nume",
 							modal_colorpicker2:					"Culoarea mesajului",
 							modal_colorpicker3:					"Culoare etichetă",
 							modal_colorpicker4:					"Culoarea fontului",
 							modal_header:						"Setări locale ale utilizatorului",
-							modal_ignoretagcolor:				"Utilizați culoarea rolului",
+							modal_ignoretagcolor:					"Utilizați culoarea rolului",
 							modal_invalidurl:					"URL invalid",
-							modal_showaccountname:				"Afișează numele",
-							modal_showservernick:				"Afișează porecla",
+							modal_showaccountname:					"Afișează numele",
+							modal_showservernick:					"Afișează porecla",
 							modal_tabheader1:					"Utilizator",
 							modal_tabheader2:					"Culoare nume",
 							modal_tabheader3:					"Etichetă",
@@ -2343,24 +2345,24 @@ module.exports = (_ => {
 							modal_username:						"Nume utilizator local",
 							modal_userolecolor:					"Nu suprascrieți culoarea rolului",
 							modal_usertag:						"Etichetă",
-							modal_useservernick:				"Nu suprascrieți porecle",
-							submenu_resetsettings:				"Resetați utilizatorul",
-							submenu_usersettings:				"Schimbă setările"
+							modal_useservernick:					"Nu suprascrieți porecle",
+							submenu_resetsettings:					"Resetați utilizatorul",
+							submenu_usersettings:					"Schimbă setările"
 						};
 					case "ru":		// Russian
 						return {
 							confirm_reset:						"Вы уверены, что хотите сбросить этого пользователя?",
 							confirm_resetall:					"Вы уверены, что хотите сбросить всех пользователей?",
-							context_localusersettings:			"Настройки локального пользователя",
+							context_localusersettings:				"Настройки локального пользователя",
 							modal_colorpicker1:					"Цвет имени",
 							modal_colorpicker2:					"Цвет сообщения",
 							modal_colorpicker3:					"Цвет метки",
 							modal_colorpicker4:					"Цвет шрифта",
 							modal_header:						"Настройки локального пользователя",
-							modal_ignoretagcolor:				"Использовать цвет роли",
+							modal_ignoretagcolor:					"Использовать цвет роли",
 							modal_invalidurl:					"Неверная ссылка",
-							modal_showaccountname:				"Показать имя",
-							modal_showservernick:				"Показать ник",
+							modal_showaccountname:					"Показать имя",
+							modal_showservernick:					"Показать ник",
 							modal_tabheader1:					"Пользователь",
 							modal_tabheader2:					"Цвет имени",
 							modal_tabheader3:					"Тег",
@@ -2368,24 +2370,24 @@ module.exports = (_ => {
 							modal_username:						"Локальное имя пользователя",
 							modal_userolecolor:					"Не перезаписывайте цвет роли",
 							modal_usertag:						"Тег",
-							modal_useservernick:				"Не перезаписывать никнеймы",
-							submenu_resetsettings:				"Сбросить пользователя",
-							submenu_usersettings:				"Изменить настройки"
+							modal_useservernick:					"Не перезаписывать никнеймы",
+							submenu_resetsettings:					"Сбросить пользователя",
+							submenu_usersettings:					"Изменить настройки"
 						};
 					case "sv":		// Swedish
 						return {
 							confirm_reset:						"Är du säker på att du vill återställa den här användaren?",
 							confirm_resetall:					"Är du säker på att du vill återställa alla användare?",
-							context_localusersettings:			"Lokala användarinställningar",
+							context_localusersettings:				"Lokala användarinställningar",
 							modal_colorpicker1:					"Namnfärg",
 							modal_colorpicker2:					"Meddelandefärg",
 							modal_colorpicker3:					"Taggfärg",
 							modal_colorpicker4:					"Fontfärg",
 							modal_header:						"Lokala användarinställningar",
-							modal_ignoretagcolor:				"Använd rollfärg",
+							modal_ignoretagcolor:					"Använd rollfärg",
 							modal_invalidurl:					"Ogiltig URL",
-							modal_showaccountname:				"Visa namn",
-							modal_showservernick:				"Visa smeknamn",
+							modal_showaccountname:					"Visa namn",
+							modal_showservernick:					"Visa smeknamn",
 							modal_tabheader1:					"Användare",
 							modal_tabheader2:					"Namnfärg",
 							modal_tabheader3:					"Märka",
@@ -2393,24 +2395,24 @@ module.exports = (_ => {
 							modal_username:						"Lokalt användarnamn",
 							modal_userolecolor:					"Skriv inte över rollfärgen",
 							modal_usertag:						"Märka",
-							modal_useservernick:				"Skriv inte över smeknamn",
-							submenu_resetsettings:				"Återställ användare",
-							submenu_usersettings:				"Ändra inställningar"
+							modal_useservernick:					"Skriv inte över smeknamn",
+							submenu_resetsettings:					"Återställ användare",
+							submenu_usersettings:					"Ändra inställningar"
 						};
 					case "th":		// Thai
 						return {
 							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตผู้ใช้นี้",
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตผู้ใช้ทั้งหมด",
-							context_localusersettings:			"การตั้งค่าผู้ใช้ภายใน",
+							context_localusersettings:				"การตั้งค่าผู้ใช้ภายใน",
 							modal_colorpicker1:					"ชื่อสี",
 							modal_colorpicker2:					"สีข้อความ",
 							modal_colorpicker3:					"สีแท็ก",
 							modal_colorpicker4:					"สีตัวอักษร",
 							modal_header:						"การตั้งค่าผู้ใช้ภายใน",
-							modal_ignoretagcolor:				"ใช้สีของบทบาท",
+							modal_ignoretagcolor:					"ใช้สีของบทบาท",
 							modal_invalidurl:					"URL ไม่ถูกต้อง",
-							modal_showaccountname:				"แสดงชื่อ",
-							modal_showservernick:				"แสดงชื่อเล่น",
+							modal_showaccountname:					"แสดงชื่อ",
+							modal_showservernick:					"แสดงชื่อเล่น",
 							modal_tabheader1:					"ผู้ใช้",
 							modal_tabheader2:					"ชื่อสี",
 							modal_tabheader3:					"แท็ก",
@@ -2418,24 +2420,24 @@ module.exports = (_ => {
 							modal_username:						"ชื่อผู้ใช้ท้องถิ่น",
 							modal_userolecolor:					"อย่าเขียนทับสีของบทบาท",
 							modal_usertag:						"แท็ก",
-							modal_useservernick:				"อย่าเขียนทับชื่อเล่น",
-							submenu_resetsettings:				"รีเซ็ตผู้ใช้",
-							submenu_usersettings:				"เปลี่ยนการตั้งค่า"
+							modal_useservernick:					"อย่าเขียนทับชื่อเล่น",
+							submenu_resetsettings:					"รีเซ็ตผู้ใช้",
+							submenu_usersettings:					"เปลี่ยนการตั้งค่า"
 						};
 					case "tr":		// Turkish
 						return {
 							confirm_reset:						"Bu Kullanıcıyı sıfırlamak istediğinizden emin misiniz?",
 							confirm_resetall:					"Tüm Kullanıcıları sıfırlamak istediğinizden emin misiniz?",
-							context_localusersettings:			"Yerel Kullanıcı Ayarları",
+							context_localusersettings:				"Yerel Kullanıcı Ayarları",
 							modal_colorpicker1:					"İsim Rengi",
 							modal_colorpicker2:					"Mesaj Rengi",
 							modal_colorpicker3:					"Etiket Rengi",
 							modal_colorpicker4:					"Yazı rengi",
 							modal_header:						"Yerel Kullanıcı Ayarları",
-							modal_ignoretagcolor:				"Rol Rengini Kullan",
+							modal_ignoretagcolor:					"Rol Rengini Kullan",
 							modal_invalidurl:					"Geçersiz URL",
-							modal_showaccountname:				"İsim göster",
-							modal_showservernick:				"Takma adı göster",
+							modal_showaccountname:					"İsim göster",
+							modal_showservernick:					"Takma adı göster",
 							modal_tabheader1:					"Kullanıcı",
 							modal_tabheader2:					"İsim Rengi",
 							modal_tabheader3:					"Etiket",
@@ -2443,24 +2445,24 @@ module.exports = (_ => {
 							modal_username:						"Yerel Kullanıcı Adı",
 							modal_userolecolor:					"Rol Renginin üzerine yazmayın",
 							modal_usertag:						"Etiket",
-							modal_useservernick:				"Takma adların üzerine yazmayın",
-							submenu_resetsettings:				"Kullanıcıyı Sıfırla",
-							submenu_usersettings:				"Ayarları değiştir"
+							modal_useservernick:					"Takma adların üzerine yazmayın",
+							submenu_resetsettings:					"Kullanıcıyı Sıfırla",
+							submenu_usersettings:					"Ayarları değiştir"
 						};
 					case "uk":		// Ukrainian
 						return {
 							confirm_reset:						"Ви впевнені, що хочете скинути налаштування цього користувача?",
 							confirm_resetall:					"Ви впевнені, що хочете скинути налаштування всіх користувачів?",
-							context_localusersettings:			"Налаштування локального користувача",
+							context_localusersettings:				"Налаштування локального користувача",
 							modal_colorpicker1:					"Назва Колір",
 							modal_colorpicker2:					"Колір повідомлення",
 							modal_colorpicker3:					"Колір тегу",
 							modal_colorpicker4:					"Колір шрифту",
 							modal_header:						"Налаштування локального користувача",
-							modal_ignoretagcolor:				"Використовуйте колір ролі",
+							modal_ignoretagcolor:					"Використовуйте колір ролі",
 							modal_invalidurl:					"Недійсна URL-адреса",
-							modal_showaccountname:				"Показати ім'я",
-							modal_showservernick:				"Показати псевдонім",
+							modal_showaccountname:					"Показати ім'я",
+							modal_showservernick:					"Показати псевдонім",
 							modal_tabheader1:					"Користувач",
 							modal_tabheader2:					"Назва Колір",
 							modal_tabheader3:					"Позначка",
@@ -2468,24 +2470,24 @@ module.exports = (_ => {
 							modal_username:						"Локальне ім’я користувача",
 							modal_userolecolor:					"Не перезаписуйте колір ролі",
 							modal_usertag:						"Позначка",
-							modal_useservernick:				"Не перезаписуйте псевдоніми",
-							submenu_resetsettings:				"Скинути налаштування користувача",
-							submenu_usersettings:				"Змінити налаштування"
+							modal_useservernick:					"Не перезаписуйте псевдоніми",
+							submenu_resetsettings:					"Скинути налаштування користувача",
+							submenu_usersettings:					"Змінити налаштування"
 						};
 					case "vi":		// Vietnamese
 						return {
 							confirm_reset:						"Bạn có chắc chắn muốn đặt lại Người dùng này không?",
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả Người dùng không?",
-							context_localusersettings:			"Cài đặt người dùng cục bộ",
+							context_localusersettings:				"Cài đặt người dùng cục bộ",
 							modal_colorpicker1:					"Tên màu",
 							modal_colorpicker2:					"Màu tin nhắn",
 							modal_colorpicker3:					"Màu thẻ",
 							modal_colorpicker4:					"Màu phông chữ",
 							modal_header:						"Cài đặt người dùng cục bộ",
-							modal_ignoretagcolor:				"Sử dụng màu vai trò",
+							modal_ignoretagcolor:					"Sử dụng màu vai trò",
 							modal_invalidurl:					"URL không hợp lệ",
-							modal_showaccountname:				"Hiện tên",
-							modal_showservernick:				"Hiển thị biệt hiệu",
+							modal_showaccountname:					"Hiện tên",
+							modal_showservernick:					"Hiển thị biệt hiệu",
 							modal_tabheader1:					"Người dùng",
 							modal_tabheader2:					"Tên màu",
 							modal_tabheader3:					"Nhãn",
@@ -2493,24 +2495,24 @@ module.exports = (_ => {
 							modal_username:						"Tên người dùng cục bộ",
 							modal_userolecolor:					"Không ghi đè Màu vai trò",
 							modal_usertag:						"Nhãn",
-							modal_useservernick:				"Không ghi đè biệt hiệu",
-							submenu_resetsettings:				"Đặt lại người dùng",
-							submenu_usersettings:				"Thay đổi cài đặt"
+							modal_useservernick:					"Không ghi đè biệt hiệu",
+							submenu_resetsettings:					"Đặt lại người dùng",
+							submenu_usersettings:					"Thay đổi cài đặt"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此用户吗？",
 							confirm_resetall:					"您确定要重置所有用户吗？",
-							context_localusersettings:			"本地用户设置",
+							context_localusersettings:				"本地用户设置",
 							modal_colorpicker1:					"名称颜色",
 							modal_colorpicker2:					"讯息颜色",
 							modal_colorpicker3:					"标签颜色",
 							modal_colorpicker4:					"字体颜色",
 							modal_header:						"本地用户设置",
-							modal_ignoretagcolor:				"使用角色颜色",
+							modal_ignoretagcolor:					"使用角色颜色",
 							modal_invalidurl:					"无效的网址",
-							modal_showaccountname:				"显示名称",
-							modal_showservernick:				"显示昵称",
+							modal_showaccountname:					"显示名称",
+							modal_showservernick:					"显示昵称",
 							modal_tabheader1:					"用户",
 							modal_tabheader2:					"名称颜色",
 							modal_tabheader3:					"标签",
@@ -2518,24 +2520,24 @@ module.exports = (_ => {
 							modal_username:						"本地用户名",
 							modal_userolecolor:					"不要覆盖角色颜色",
 							modal_usertag:						"标签",
-							modal_useservernick:				"不要覆盖昵称",
-							submenu_resetsettings:				"重置用户",
-							submenu_usersettings:				"更改设置"
+							modal_useservernick:					"不要覆盖昵称",
+							submenu_resetsettings:					"重置用户",
+							submenu_usersettings:					"更改设置"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此用戶嗎？",
 							confirm_resetall:					"您確定要重置所有用戶嗎？",
-							context_localusersettings:			"本地用戶設置",
+							context_localusersettings:				"本地用戶設置",
 							modal_colorpicker1:					"名稱顏色",
 							modal_colorpicker2:					"訊息顏色",
 							modal_colorpicker3:					"標籤顏色",
 							modal_colorpicker4:					"字體顏色",
 							modal_header:						"本地用戶設置",
-							modal_ignoretagcolor:				"使用角色顏色",
+							modal_ignoretagcolor:					"使用角色顏色",
 							modal_invalidurl:					"無效的網址",
-							modal_showaccountname:				"顯示名稱",
-							modal_showservernick:				"顯示暱稱",
+							modal_showaccountname:					"顯示名稱",
+							modal_showservernick:					"顯示暱稱",
 							modal_tabheader1:					"用戶",
 							modal_tabheader2:					"名稱顏色",
 							modal_tabheader3:					"標籤",
@@ -2543,24 +2545,24 @@ module.exports = (_ => {
 							modal_username:						"本地用戶名",
 							modal_userolecolor:					"不要覆蓋角色顏色",
 							modal_usertag:						"標籤",
-							modal_useservernick:				"不要覆蓋暱稱",
-							submenu_resetsettings:				"重置用戶",
-							submenu_usersettings:				"更改設置"
+							modal_useservernick:					"不要覆蓋暱稱",
+							submenu_resetsettings:					"重置用戶",
+							submenu_usersettings:					"更改設置"
 						};
 					default:		// English
 						return {
 							confirm_reset:						"Are you sure you want to reset this User?",
 							confirm_resetall:					"Are you sure you want to reset all Users?",
-							context_localusersettings:			"Local User Settings",
+							context_localusersettings:				"Local User Settings",
 							modal_colorpicker1:					"Name Color",
 							modal_colorpicker2:					"Message Color",
 							modal_colorpicker3:					"Tag Color",
 							modal_colorpicker4:					"Font Color",
 							modal_header:						"Local User Settings",
-							modal_ignoretagcolor:				"Use Role Color",
+							modal_ignoretagcolor:					"Use Role Color",
 							modal_invalidurl:					"Invalid URL",
-							modal_showaccountname:				"Show Name",
-							modal_showservernick:				"Show Nickname",
+							modal_showaccountname:					"Show Name",
+							modal_showservernick:					"Show Nickname",
 							modal_tabheader1:					"User",
 							modal_tabheader2:					"Name Color",
 							modal_tabheader3:					"Tag",
@@ -2568,9 +2570,9 @@ module.exports = (_ => {
 							modal_username:						"Local Username",
 							modal_userolecolor:					"Do not overwrite the Role Color",
 							modal_usertag:						"Tag",
-							modal_useservernick:				"Do not overwrite Nicknames",
-							submenu_resetsettings:				"Reset User",
-							submenu_usersettings:				"Change Settings"
+							modal_useservernick:					"Do not overwrite Nicknames",
+							submenu_resetsettings:					"Reset User",
+							submenu_usersettings:					"Change Settings"
 						};
 				}
 			}
