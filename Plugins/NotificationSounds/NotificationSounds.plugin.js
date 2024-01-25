@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.9
+ * @version 3.9.0
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -257,6 +257,8 @@ module.exports = (_ => {
 						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryStores.RelationshipStore.isBlocked(message.author.id) && (BDFDB.LibraryStores.SelectedChannelStore.getChannelId() != message.channel_id || !BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel())) {
 							const channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 							const isGroupDM = channel.isGroupDM();
+							const isThread = BDFDB.ChannelUtils.isThread(channel);
+							if (isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id) || !isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id)) return;
 							if (!guildId) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
 								this.playAudio(isGroupDM ? "groupdm" : "dm");
@@ -297,7 +299,7 @@ module.exports = (_ => {
 										}
 									}
 								}
-								if (BDFDB.LibraryStores.UserGuildSettingsStore.allowAllMessages(channel) && !((channel.type == BDFDB.DiscordConstants.ChannelTypes.PUBLIC_THREAD || channel.type == BDFDB.DiscordConstants.ChannelTypes.PRIVATE_THREAD) && !BDFDB.LibraryStores.JoinedThreadsStore.hasJoined(BDFDB.UserUtils.me.id))) {
+								if (BDFDB.LibraryStores.UserGuildSettingsStore.allowAllMessages(channel) && !(isThread && !BDFDB.LibraryStores.JoinedThreadsStore.hasJoined(channel.id))) {
 									console.log(channel);
 									this.fireEvent("message1");
 									this.playAudio("message1");
