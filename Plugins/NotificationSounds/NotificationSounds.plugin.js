@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.0
+ * @version 3.9.1
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -18,7 +18,7 @@ module.exports = (_ => {
 			"Current Channel": "Added Option to change the sound for the current channel notification, (note: Discord added an option in the THEIR notification settings to play a different sound when a message is sent in the current channel, you need to have this enabled in order to be able to change the sound in the plugin settings"
 		},
 		"fixed": {
-			"Threads": "No longer plays notification sounds for threads, that you did not join"
+			"Current Channel": "No longer plays notification sounds for current channels, if the option is disabled"
 		}
 	};
 
@@ -254,14 +254,15 @@ module.exports = (_ => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "MESSAGE_CREATE" && e.methodArguments[0].message) {
 						const message = e.methodArguments[0].message;
 						const guildId = message.guild_id || null;
-						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryStores.RelationshipStore.isBlocked(message.author.id) && (BDFDB.LibraryStores.SelectedChannelStore.getChannelId() != message.channel_id || !BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel())) {
+						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryStores.RelationshipStore.isBlocked(message.author.id)) {
+							const isCurrent = BDFDB.LibraryStores.SelectedChannelStore.getChannelId() == message.channel_id;
 							const channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 							const isGroupDM = channel.isGroupDM();
 							const isThread = BDFDB.ChannelUtils.isThread(channel);
 							if (isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id) || !isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id)) return;
 							if (!guildId) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
-								this.playAudio(isGroupDM ? "groupdm" : "dm");
+								!BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel() && this.playAudio(isGroupDM ? "groupdm" : "dm");
 								return;
 							}
 							else if (guildId) {
@@ -269,12 +270,12 @@ module.exports = (_ => {
 									if (message.mentions.length && !this.isSuppressMentionsEnabled(guildId, channel.id)) for (const mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
 										if (message.message_reference && !message.interaction) {
 											this.fireEvent("reply");
-											this.playAudio("reply");
+											!isCurrent && this.playAudio("reply");
 											return;
 										}
 										if (!message.message_reference) {
 											this.fireEvent("mentioned");
-											this.playAudio("mentioned");
+											!isCurrent && this.playAudio("mentioned");
 											return;
 										}
 									}
@@ -282,27 +283,26 @@ module.exports = (_ => {
 										const member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, BDFDB.UserUtils.me.id);
 										if (member && member.roles.length) for (const roleId of message.mention_roles) if (member.roles.includes(roleId)) {
 											this.fireEvent("role");
-											this.playAudio("role");
+											!isCurrent && this.playAudio("role");
 											return;
 										}
 									}
 									if (message.mention_everyone && !BDFDB.LibraryStores.UserGuildSettingsStore.isSuppressEveryoneEnabled(guildId, channel.id)) {
 										if (message.content.indexOf("@everyone") > -1) {
 											this.fireEvent("everyone");
-											this.playAudio("everyone");
+											!isCurrent && this.playAudio("everyone");
 											return;
 										}
 										if (message.content.indexOf("@here") > -1) {
 											this.fireEvent("here");
-											this.playAudio("here");
+											!isCurrent && this.playAudio("here");
 											return;
 										}
 									}
 								}
 								if (BDFDB.LibraryStores.UserGuildSettingsStore.allowAllMessages(channel) && !(isThread && !BDFDB.LibraryStores.JoinedThreadsStore.hasJoined(channel.id))) {
-									console.log(channel);
 									this.fireEvent("message1");
-									this.playAudio("message1");
+									!isCurrent && this.playAudio("message1");
 									return;
 								}
 							}
