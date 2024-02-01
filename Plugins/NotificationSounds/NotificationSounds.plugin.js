@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.1
+ * @version 3.9.2
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -262,7 +262,7 @@ module.exports = (_ => {
 							if (isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id) || !isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id)) return;
 							if (!guildId) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
-								!BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel() && this.playAudio(isGroupDM ? "groupdm" : "dm");
+								!BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel()  && !document.hasFocus() && this.playAudio(isGroupDM ? "groupdm" : "dm");
 								return;
 							}
 							else if (guildId) {
