@@ -2541,11 +2541,6 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--header-secondary);
 }
 
-#app-mount .backdrop__3ff7b,
-#app-mount .backdrop__7e89b {
-	background-color: rgb(0, 0, 0) !important;
-}
-
 /* ----		11.1.		USERMODAL					---- */
 
 .emptyIcon__655a1 {
