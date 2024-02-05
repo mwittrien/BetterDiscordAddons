@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.4
+ * @version 2.0.5
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -541,7 +541,7 @@ module.exports = (_ => {
 			
 			getBoostLevel (date) {
 				let level = 1;
-				let monthDifference = BDFDB.LibraryModules.GuildBoostUtils.getAppliedGuildBoostMonths(date);
+				let monthDifference = BDFDB.DiscordObjects.Timestamp().diff(BDFDB.DiscordObjects.Timestamp(date), "months");
 				for (let i = 0, levels = Object.keys(BDFDB.DiscordConstants.UserPremiumLevels); i < levels.length; i++) if (BDFDB.DiscordConstants.UserPremiumLevels[levels[i]] < monthDifference) level = parseInt(levels[i]);
 				return level;
 			}

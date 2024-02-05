@@ -111,7 +111,6 @@
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
 		"FolderSettingsUtils": {"props": ["saveGuildFolders", "saveClientTheme"]},
-		"GuildBoostUtils": {"props": ["getNextTier", "getAppliedGuildBoostMonths"]},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
 		"HistoryUtils": {"props": ["transitionTo", "transitionToGuild"]},
