@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.1
+ * @version 1.8.2
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -72,7 +72,7 @@ module.exports = (_ => {
 					},
 					amounts: {
 						splitCounter:	{value: 0, 	description: "Messages will be split after roughly X Characters"},
-						maxPages:	{value:	0,	description: "Maximum number of split pages",				note: "(0 for unlimited) Pages beyond this count will be discarded"}
+						maxMessages:	{value:	0,	description: "Maximum Number of split Messages",			note: "(0 for unlimited) Messages beyond this count will be discarded"}
 					}
 				};
 				
@@ -143,12 +143,12 @@ module.exports = (_ => {
 								type: "number"
 							},
 							plugin: this,
-							keys: ["amounts", "maxPages"],
-							label: this.defaults.amounts.maxPages.description,
-							note: this.defaults.amounts.maxPages.note,
+							keys: ["amounts", "maxMessages"],
+							label: this.defaults.amounts.maxMessages.description,
+							note: this.defaults.amounts.maxMessages.note,
 							min: 0,
 							max: 20,
-							value: this.settings.amounts.splitCounter
+							value: this.settings.amounts.maxMessages
 						}));
 						
 						return settingsItems;
@@ -207,9 +207,8 @@ module.exports = (_ => {
 			}
 
 			formatText (text) {
-				const separator = !this.settings.general.byNewlines ? "\n" : " ";
+				const separator = this.settings.general.byNewlines ? "\n" : " ";
 				const splitMessageLength = this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter;
-				const maxPages = this.settings.amounts.maxPages || Infinity;
 				
 				text = text.replace(/\t/g, "    ");
 				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${splitMessageLength * (19/20)},}`, "gm"));
@@ -252,7 +251,7 @@ module.exports = (_ => {
 						messages[j] = messages[j] + insertCodeLine;
 					}
 				}
-				return messages.slice(0, maxPages);
+				return this.settings.amounts.maxMessages ? messages.slice(0, this.settings.amounts.maxMessages) : messages;
 			}
 
 			setLabelsByLanguage () {
