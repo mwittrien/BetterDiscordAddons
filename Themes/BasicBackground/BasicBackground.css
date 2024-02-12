@@ -116,6 +116,7 @@
 	--interactive-active: rgb(var(--textbrightest_v));
 	--interactive-muted: rgb(var(--textdarkest_v));
 	--logo-primary: rgb(var(--textbrightest_v));
+	--focus-primary: rgb(var(--focuscolor, var(--accentcolor_v))) !important;
 	--modal-background: rgba(var(--transparencycolor_v), .2);
 	--modal-footer-background: rgba(var(--transparencycolor_v), .2);
 	--home-background: transparent;

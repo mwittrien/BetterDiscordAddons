@@ -183,7 +183,7 @@
 	
 	--logo-primary: rgb(var(--accentcolor_v));
 	
-	--focus-primary: rgb(var(--linkcolor_v));
+	--focus-primary: rgb(var(--focuscolor, var(--linkcolor_v))) !important;
 	
 	--guild-header-text-shadow: 0 1px 1px rgba(var(--backgroundfloating_v),.5);
 	
