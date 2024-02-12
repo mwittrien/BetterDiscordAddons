@@ -419,8 +419,11 @@
 .backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.1"] {
 	--message-background-flash: rgba(var(--accentcolor_v), 0.1);
 }
-.backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0)"] {
+.backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0.0"] {
 	--message-background-flash: rgba(var(--accentcolor_v), 0.05);
+}
+.backgroundFlash_e5b9ad[style*="background-color: rgba(148, 156, 247, 0)"] {
+	--message-background-flash: rgba(var(--accentcolor_v), 0);
 }
 
 .embedFull__8dc21[style*="border-color: hsl(216, "],
