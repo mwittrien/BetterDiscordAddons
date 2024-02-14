@@ -33,8 +33,10 @@ body.folderContentIsOpen_zz6FgW .titleBar__01af6.typeMacOS__496b0 .macButtons__7
 	margin-top: 0 !important;
 	margin-right: 0 !important;
 }
-.wrapper_a7e7a8 {
+.wrapper_a7e7a8,
+.wrapper_a7e7a8 .tree__7a511 {
 	padding: 0 !important;
+	border: 0 !important;
 }
 .wrapper_a7e7a8.hidden__7c832,
 .wrapper_a7e7a8[style*="width: 0px"] {
@@ -42,6 +44,7 @@ body.folderContentIsOpen_zz6FgW .titleBar__01af6.typeMacOS__496b0 .macButtons__7
 }
 .wrapper_a7e7a8 .scroller__3d071 {
 	padding: 0 0 calc(10px * var(--guildsize_v)/50) calc(10px * var(--guildsize_v)/50) !important;
+	border: 0 !important;
 }
 .wrapper_a7e7a8 .scroller__3d071.none__51a8f::-webkit-scrollbar {
 	width: 0 !important;
