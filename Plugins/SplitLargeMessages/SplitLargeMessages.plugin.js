@@ -17,12 +17,97 @@ module.exports = (_ => {
 		
 	};
 
+	// setup in a way that works if any more messages are added later
+	const translations = {
+		"bg": {
+			toast_allsent: "Всички изпратени съобщения",
+		},
+		"da": {
+			toast_allsent: "Alle beskeder sendt",
+		},
+		"de": {
+			toast_allsent: "Alle Nachrichten gesendet",
+		},
+		"el": {
+			toast_allsent: "Όλα τα μηνύματα εστάλησαν",
+		},
+		"es": {
+			toast_allsent: "Todos los mensajes enviados",
+		},
+		"fi": {
+			toast_allsent: "Kaikki viestit lähetetty",
+		},
+		"fr": {
+			toast_allsent: "Tous les messages envoyés",
+		},
+		"hr": {
+			toast_allsent: "Sve poruke poslane",
+		},
+		"hu": {
+			toast_allsent: "Minden üzenet elküldve",
+		},
+		"it": {
+			toast_allsent: "Tutti i messaggi inviati",
+		},
+		"ja": {
+			toast_allsent: "送信されたすべてのメッセージ",
+		},
+		"ko": {
+			toast_allsent: "보낸 모든 메시지",
+		},
+		"lt": {
+			toast_allsent: "Visi pranešimai išsiųsti",
+		},
+		"nl": {
+			toast_allsent: "Alle berichten zijn verzonden",
+		},
+		"no": {
+			toast_allsent: "Alle meldinger sendt",
+		},
+		"pl": {
+			toast_allsent: "Wszystkie wiadomości wysłane",
+		},
+		"pt-BR": {
+			toast_allsent: "Todas as mensagens enviadas",
+		},
+		"ro": {
+			toast_allsent: "Toate mesajele trimise",
+		},
+		"ru": {
+			toast_allsent: "Все сообщения отправлены",
+		},
+		"sv": {
+			toast_allsent: "Alla meddelanden skickade",
+		},
+		"th": {
+			toast_allsent: "ส่งข้อความทั้งหมดแล้ว",
+		},
+		"tr": {
+			toast_allsent: "Tüm mesajlar gönderildi",
+		},
+		"uk": {
+			toast_allsent: "Усі повідомлення надіслано",
+		},
+		"vi": {
+			toast_allsent: "Tất cả tin nhắn đã gửi",
+		},
+		"zh-CN": {
+			toast_allsent: "已发送所有消息",
+		},
+		"zh-TW": {
+			toast_allsent: "已發送所有消息",
+		},
+		"default": {
+			toast_allsent: "All Messages sent",
+		},
+	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		constructor (meta) {for (let key in meta) this[key] = meta[key];}
-		getName () {return this.name;}
-		getAuthor () {return this.author;}
-		getVersion () {return this.version;}
-		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
+		getName () { return this.name; }
+		getAuthor () { return this.author; }
+		getVersion () { return this.version; }
+		getDescription () { return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`; }
 		
 		downloadLibrary () {
 			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
@@ -43,7 +128,7 @@ module.exports = (_ => {
 				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
-					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
+					onCancel: _ => { delete window.BDFDB_Global.downloadModal; },
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
 						this.downloadLibrary();
@@ -52,10 +137,10 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(this.name)) window.BDFDB_Global.pluginQueue.push(this.name);
 		}
-		start () {this.load();}
+		start () { this.load(); }
 		stop () {}
 		getSettingsPanel () {
-			let template = document.createElement("template");
+			const template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
@@ -68,11 +153,11 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						byNewlines:	{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
+						byNewlines:	{ value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might result in more Messages being sent" },
 					},
 					amounts: {
-						splitCounter:	{value: 0, 	description: "Messages will be split after roughly X Characters"},
-						maxMessages:	{value:	0,	description: "Maximum Number of split Messages",			note: "(0 for unlimited) Messages beyond this count will be discarded"}
+						splitCounter: { value: 0, 	description: "Messages will be split after roughly X Characters" },
+						maxMessages: { value: 0,	description: "Maximum Number of split Messages", note: "(0 for unlimited) Messages beyond this count will be discarded" }
 					}
 				};
 				
@@ -108,11 +193,10 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel;
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
 					collapseStates: collapseStates,
 					children: _ => {
-						let settingsItems = [];
+						const settingsItems = [];
 				
 						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
@@ -170,7 +254,7 @@ module.exports = (_ => {
 					BDFDB.PatchUtils.patch(this, e.instance.props, "onSubmit", {instead: e2 => {
 						if (e2.methodArguments[0].value.length > splitMessageLength && !this.isSlowDowned(e.instance.props.channel)) {
 							e2.stopOriginalMethodCall();
-							let messages = this.formatText(e2.methodArguments[0].value).filter(n => n);
+							const messages = this.formatText(e2.methodArguments[0].value).filter(n => n);
 							for (let i in messages) BDFDB.TimeUtils.timeout(_ => {
 								let last = i >= messages.length-1;
 								e2.originalMethod(last ? Object.assign({}, e2.methodArguments[0], {value: messages[i]}) : {stickers: [], uploads: [], value: messages[i]});
@@ -185,7 +269,7 @@ module.exports = (_ => {
 					}}, {noCache: true});
 				}
 				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelTextAreaCounter"});
+					const [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelTextAreaCounter"});
 					if (index > -1 && children[index].props.textValue && children[index].props.textValue.length > splitMessageLength && !this.isSlowDowned(e.instance.props.channel)) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -211,17 +295,17 @@ module.exports = (_ => {
 				const splitMessageLength = this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter;
 				
 				text = text.replace(/\t/g, "    ");
-				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${splitMessageLength * (19/20)},}`, "gm"));
-				if (longWords) for (let longWord of longWords) {
+				const longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${splitMessageLength * (19/20)},}`, "gm"));
+				if (longWords) for (const longWord of longWords) {
 					let count1 = 0;
-					let shortWords = [];
+					const shortWords = [];
 					longWord.split("").forEach(c => {
 						if (shortWords[count1] && (shortWords[count1].length >= splitMessageLength * (19/20) || (c == "\n" && shortWords[count1].length >= splitMessageLength * (19/20) - 100))) count1++;
 						shortWords[count1] = shortWords[count1] ? shortWords[count1] + c : c;
 					});
 					text = text.replace(longWord, shortWords.join(separator));
 				}
-				let messages = [];
+				const messages = [];
 				let count2 = 0;
 				text.split(separator).forEach((word) => {
 					if (messages[count2] && (messages[count2] + "" + word).length > splitMessageLength * (39/40)) count2++;
@@ -239,8 +323,8 @@ module.exports = (_ => {
 						insertCodeLine = null;
 					}
 
-					let codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
-					let codeLines = messages[j].match(/[^`]{0,1}`{1,2}[^`]|[^`]`{1,2}[^`]{0,1}/gm);
+					const codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
+					const codeLines = messages[j].match(/[^`]{0,1}`{1,2}[^`]|[^`]`{1,2}[^`]{0,1}/gm);
 
 					if (codeBlocks && codeBlocks.length % 2 == 1) {
 						messages[j] = messages[j] + "```";
@@ -255,116 +339,7 @@ module.exports = (_ => {
 			}
 
 			setLabelsByLanguage () {
-				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "bg":		// Bulgarian
-						return {
-							toast_allsent:						"Всички изпратени съобщения"
-						};
-					case "da":		// Danish
-						return {
-							toast_allsent:						"Alle beskeder sendt"
-						};
-					case "de":		// German
-						return {
-							toast_allsent:						"Alle Nachrichten gesendet"
-						};
-					case "el":		// Greek
-						return {
-							toast_allsent:						"Όλα τα μηνύματα εστάλησαν"
-						};
-					case "es":		// Spanish
-						return {
-							toast_allsent:						"Todos los mensajes enviados"
-						};
-					case "fi":		// Finnish
-						return {
-							toast_allsent:						"Kaikki viestit lähetetty"
-						};
-					case "fr":		// French
-						return {
-							toast_allsent:						"Tous les messages envoyés"
-						};
-					case "hr":		// Croatian
-						return {
-							toast_allsent:						"Sve poruke poslane"
-						};
-					case "hu":		// Hungarian
-						return {
-							toast_allsent:						"Minden üzenet elküldve"
-						};
-					case "it":		// Italian
-						return {
-							toast_allsent:						"Tutti i messaggi inviati"
-						};
-					case "ja":		// Japanese
-						return {
-							toast_allsent:						"送信されたすべてのメッセージ"
-						};
-					case "ko":		// Korean
-						return {
-							toast_allsent:						"보낸 모든 메시지"
-						};
-					case "lt":		// Lithuanian
-						return {
-							toast_allsent:						"Visi pranešimai išsiųsti"
-						};
-					case "nl":		// Dutch
-						return {
-							toast_allsent:						"Alle berichten zijn verzonden"
-						};
-					case "no":		// Norwegian
-						return {
-							toast_allsent:						"Alle meldinger sendt"
-						};
-					case "pl":		// Polish
-						return {
-							toast_allsent:						"Wszystkie wiadomości wysłane"
-						};
-					case "pt-BR":	// Portuguese (Brazil)
-						return {
-							toast_allsent:						"Todas as mensagens enviadas"
-						};
-					case "ro":		// Romanian
-						return {
-							toast_allsent:						"Toate mesajele trimise"
-						};
-					case "ru":		// Russian
-						return {
-							toast_allsent:						"Все сообщения отправлены"
-						};
-					case "sv":		// Swedish
-						return {
-							toast_allsent:						"Alla meddelanden skickade"
-						};
-					case "th":		// Thai
-						return {
-							toast_allsent:						"ส่งข้อความทั้งหมดแล้ว"
-						};
-					case "tr":		// Turkish
-						return {
-							toast_allsent:						"Tüm mesajlar gönderildi"
-						};
-					case "uk":		// Ukrainian
-						return {
-							toast_allsent:						"Усі повідомлення надіслано"
-						};
-					case "vi":		// Vietnamese
-						return {
-							toast_allsent:						"Tất cả tin nhắn đã gửi"
-						};
-					case "zh-CN":	// Chinese (China)
-						return {
-							toast_allsent:						"已发送所有消息"
-						};
-					case "zh-TW":	// Chinese (Taiwan)
-						return {
-							toast_allsent:						"已發送所有消息"
-						};
-					default:		// English
-						return {
-							toast_allsent:						"All Messages sent"
-						};
-				}
+				return { toast_allsent: translations[BDFDB.LanguageUtils.getLanguage().id] || translations["default"] };
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
