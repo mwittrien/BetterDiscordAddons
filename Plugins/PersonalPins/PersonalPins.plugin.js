@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.8
+ * @version 2.1.9
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -88,11 +88,14 @@ module.exports = (_ => {
 					message.author = new BDFDB.DiscordObjects.User(message.author);
 					if (message.interaction && message.interaction.user) message.interaction.user = new BDFDB.DiscordObjects.User(message.interaction.user);
 					message.timestamp = new BDFDB.DiscordObjects.Timestamp(message.timestamp);
+					message.timestamp = message.timestamp && message.timestamp._d || message.timestamp;
 					message.editedTimestamp = message.editedTimestamp && new BDFDB.DiscordObjects.Timestamp(message.editedTimestamp);
+					message.editedTimestamp = message.editedTimestamp && message.editedTimestamp._d || message.editedTimestamp;
 					if (message.customRenderedContent && message.customRenderedContent.content.length) message.customRenderedContent.content = BDFDB.ReactUtils.objectToReact(message.customRenderedContent.content);
 					for (let embed of message.embeds) {
 						embed.color = typeof embed.color != "string" ? null : embed.color;
 						embed.timestamp = embed.timestamp && new BDFDB.DiscordObjects.Timestamp(embed.timestamp);
+						embed.timestamp = embed.timestamp && embed.timestamp._d || embed.timestamp;
 					}
 					message.embeds = message.embeds.filter(n => !(n && n.type == "gifv"));
 					message.reactions = [];
@@ -613,7 +616,7 @@ module.exports = (_ => {
 						channel: JSON.stringify(channel),
 						id: message.id,
 						message: JSON.stringify(message),
-						timestamp: message.timestamp._i.getTime()
+						timestamp: (message.timestamp._i || message.timestamp).getTime()
 					};
 					BDFDB.DataUtils.save(notes, this, "notes");
 					BDFDB.NotificationUtils.toast(this.labels.toast_noteadd, {type: "success"});
@@ -663,15 +666,15 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							context_pinoption:					"Запишете съобщението",
-							context_unpinoption:				"Премахване на бележката",
-							context_updateoption:				"Бележката за актуализация",
+							context_unpinoption:					"Премахване на бележката",
+							context_updateoption:					"Бележката за актуализация",
 							popout_filter_all:					"Всички сървъри",
-							popout_filter_channel:				"Канал",
-							popout_filter_server:				"Сървър",
+							popout_filter_channel:					"Канал",
+							popout_filter_server:					"Сървър",
 							popout_note:						"Бележки",
 							popout_pinoption:					"Забележка",
-							popout_sort_messagetime:			"Дата на съобщението",
-							popout_sort_notetime:				"Дата на бележка",
+							popout_sort_messagetime:				"Дата на съобщението",
+							popout_sort_notetime:					"Дата на бележка",
 							toast_noteadd:						"Съобщението е добавено към бележника",
 							toast_noteremove:					"Съобщението е премахнато от бележника",
 							toast_noteupdate:					"Актуализира съобщението в бележника"
@@ -679,15 +682,15 @@ module.exports = (_ => {
 					case "cs":		// Czech
 						return {
 							context_pinoption:					"Poznamenat zprávu",
-							context_unpinoption:				"Odebrat poznámku",
-							context_updateoption:				"Aktualizovat poznámku",
+							context_unpinoption:					"Odebrat poznámku",
+							context_updateoption:					"Aktualizovat poznámku",
 							popout_filter_all:					"Všechny servery",
-							popout_filter_channel:				"Kanál",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Kanál",
+							popout_filter_server:					"Server",
 							popout_note:						"Poznámky",
 							popout_pinoption:					"Poznámka",
-							popout_sort_messagetime:			"Datum zprávy",
-							popout_sort_notetime:				"Datum poznámky",
+							popout_sort_messagetime:				"Datum zprávy",
+							popout_sort_notetime:					"Datum poznámky",
 							toast_noteadd:						"Zpráva přidána do poznámek",
 							toast_noteremove:					"Zpráva odebrána z poznámek",
 							toast_noteupdate:					"Zpráva v poznámkách aktualizována"
@@ -695,15 +698,15 @@ module.exports = (_ => {
 					case "da":		// Danish
 						return {
 							context_pinoption:					"Skriv beskeden ned",
-							context_unpinoption:				"Fjern noten",
-							context_updateoption:				"Opdater noten",
+							context_unpinoption:					"Fjern noten",
+							context_updateoption:					"Opdater noten",
 							popout_filter_all:					"Alle servere",
-							popout_filter_channel:				"Kanal",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Kanal",
+							popout_filter_server:					"Server",
 							popout_note:						"Noter",
 							popout_pinoption:					"Bemærk",
-							popout_sort_messagetime:			"Meddelelsesdato",
-							popout_sort_notetime:				"Bemærkdato",
+							popout_sort_messagetime:				"Meddelelsesdato",
+							popout_sort_notetime:					"Bemærkdato",
 							toast_noteadd:						"Besked føjet til notesbog",
 							toast_noteremove:					"Besked fjernet fra notesbog",
 							toast_noteupdate:					"Opdateret meddelelsen i notesbogen"
@@ -711,15 +714,15 @@ module.exports = (_ => {
 					case "de":		// German
 						return {
 							context_pinoption:					"Nachricht notieren",
-							context_unpinoption:				"Notiz entfernen",
-							context_updateoption:				"Notiz aktualisieren",
+							context_unpinoption:					"Notiz entfernen",
+							context_updateoption:					"Notiz aktualisieren",
 							popout_filter_all:					"Alle Server",
-							popout_filter_channel:				"Kanal",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Kanal",
+							popout_filter_server:					"Server",
 							popout_note:						"Notizen",
 							popout_pinoption:					"Notieren",
-							popout_sort_messagetime:			"Nachrichtendatum",
-							popout_sort_notetime:				"Notizdatum",
+							popout_sort_messagetime:				"Nachrichtendatum",
+							popout_sort_notetime:					"Notizdatum",
 							toast_noteadd:						"Nachricht zum Notizbuch hinzugefügt",
 							toast_noteremove:					"Nachricht aus dem Notizbuch entfernt",
 							toast_noteupdate:					"Nachricht im Notizbuch aktualisiert"
@@ -727,15 +730,15 @@ module.exports = (_ => {
 					case "el":		// Greek
 						return {
 							context_pinoption:					"Γράψτε το μήνυμα",
-							context_unpinoption:				"Αφαιρέστε τη σημείωση",
-							context_updateoption:				"Ενημέρωση τη σημείωση",
+							context_unpinoption:					"Αφαιρέστε τη σημείωση",
+							context_updateoption:					"Ενημέρωση τη σημείωση",
 							popout_filter_all:					"Όλοι οι διακομιστές",
-							popout_filter_channel:				"Κανάλι",
-							popout_filter_server:				"Υπηρέτης",
+							popout_filter_channel:					"Κανάλι",
+							popout_filter_server:					"Υπηρέτης",
 							popout_note:						"Σημειώσεις",
 							popout_pinoption:					"Σημείωση",
-							popout_sort_messagetime:			"Ημερομηνία μηνύματος",
-							popout_sort_notetime:				"Σημείωση ημερομηνίας",
+							popout_sort_messagetime:				"Ημερομηνία μηνύματος",
+							popout_sort_notetime:					"Σημείωση ημερομηνίας",
 							toast_noteadd:						"Το μήνυμα προστέθηκε στο σημειωματάριο",
 							toast_noteremove:					"Το μήνυμα καταργήθηκε από το σημειωματάριο",
 							toast_noteupdate:					"Ενημερώθηκε το μήνυμα στο σημειωματάριο"
@@ -743,15 +746,15 @@ module.exports = (_ => {
 					case "es":		// Spanish
 						return {
 							context_pinoption:					"Escribe el mensaje",
-							context_unpinoption:				"Eliminar la nota",
-							context_updateoption:				"Actualiza la nota",
+							context_unpinoption:					"Eliminar la nota",
+							context_updateoption:					"Actualiza la nota",
 							popout_filter_all:					"Todos los servidores",
-							popout_filter_channel:				"Canal",
-							popout_filter_server:				"Servidor",
+							popout_filter_channel:					"Canal",
+							popout_filter_server:					"Servidor",
 							popout_note:						"Notas",
 							popout_pinoption:					"Nota",
-							popout_sort_messagetime:			"Fecha del mensaje",
-							popout_sort_notetime:				"Fecha della nota",
+							popout_sort_messagetime:				"Fecha del mensaje",
+							popout_sort_notetime:					"Fecha della nota",
 							toast_noteadd:						"Mensaje agregado al cuaderno",
 							toast_noteremove:					"Mensaje eliminado de la libreta",
 							toast_noteupdate:					"Se actualizó el mensaje en el cuaderno."
@@ -759,15 +762,15 @@ module.exports = (_ => {
 					case "fi":		// Finnish
 						return {
 							context_pinoption:					"Kirjoita viesti muistiin",
-							context_unpinoption:				"Poista muistiinpano",
-							context_updateoption:				"Päivitä muistiinpano",
+							context_unpinoption:					"Poista muistiinpano",
+							context_updateoption:					"Päivitä muistiinpano",
 							popout_filter_all:					"Kaikki palvelimet",
-							popout_filter_channel:				"Kanava",
-							popout_filter_server:				"Palvelin",
+							popout_filter_channel:					"Kanava",
+							popout_filter_server:					"Palvelin",
 							popout_note:						"Muistiinpanoja",
 							popout_pinoption:					"Merkintä",
-							popout_sort_messagetime:			"Viestin päivämäärä",
-							popout_sort_notetime:				"Muistiinpanon päivämäärä",
+							popout_sort_messagetime:				"Viestin päivämäärä",
+							popout_sort_notetime:					"Muistiinpanon päivämäärä",
 							toast_noteadd:						"Viesti lisättiin muistikirjaan",
 							toast_noteremove:					"Viesti poistettu muistikirjasta",
 							toast_noteupdate:					"Päivitetty muistikirjan viesti"
@@ -775,15 +778,15 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							context_pinoption:					"Noter le message",
-							context_unpinoption:				"Supprimer la note",
-							context_updateoption:				"Mettre à jour la note",
+							context_unpinoption:					"Supprimer la note",
+							context_updateoption:					"Mettre à jour la note",
 							popout_filter_all:					"Tous les serveurs",
-							popout_filter_channel:				"Salon",
-							popout_filter_server:				"Serveur",
+							popout_filter_channel:					"Salon",
+							popout_filter_server:					"Serveur",
 							popout_note:						"Notes",
 							popout_pinoption:					"Note",
-							popout_sort_messagetime:			"Date du message",
-							popout_sort_notetime:				"Date de la note",
+							popout_sort_messagetime:				"Date du message",
+							popout_sort_notetime:					"Date de la note",
 							toast_noteadd:						"Message ajouté au carnet",
 							toast_noteremove:					"Message supprimé du carnet",
 							toast_noteupdate:					"Mise à jour du message dans le carnet"
@@ -791,15 +794,15 @@ module.exports = (_ => {
 					case "hi":		// Hindi
 						return {
 							context_pinoption:					"नोट संदेश",
-							context_unpinoption:				"नोट हटाएं",
-							context_updateoption:				"अद्यतन नोट",
+							context_unpinoption:					"नोट हटाएं",
+							context_updateoption:					"अद्यतन नोट",
 							popout_filter_all:					"सभी सर्वर",
-							popout_filter_channel:				"चैनल",
-							popout_filter_server:				"सर्वर",
+							popout_filter_channel:					"चैनल",
+							popout_filter_server:					"सर्वर",
 							popout_note:						"टिप्पणियाँ",
 							popout_pinoption:					"ध्यान दें",
-							popout_sort_messagetime:			"संदेश दिनांक",
-							popout_sort_notetime:				"नोट दिनांक",
+							popout_sort_messagetime:				"संदेश दिनांक",
+							popout_sort_notetime:					"नोट दिनांक",
 							toast_noteadd:						"संदेश नोटबुक में जोड़ा गया",
 							toast_noteremove:					"नोटबुक से संदेश हटाया गया",
 							toast_noteupdate:					"नोटबुक में संदेश अपडेट किया गया"
@@ -807,15 +810,15 @@ module.exports = (_ => {
 					case "hr":		// Croatian
 						return {
 							context_pinoption:					"Zapišite poruku",
-							context_unpinoption:				"Izbriši bilješku",
-							context_updateoption:				"Ažurirajte bilješku",
+							context_unpinoption:					"Izbriši bilješku",
+							context_updateoption:					"Ažurirajte bilješku",
 							popout_filter_all:					"Svi poslužitelji",
-							popout_filter_channel:				"Kanal",
-							popout_filter_server:				"Poslužitelju",
+							popout_filter_channel:					"Kanal",
+							popout_filter_server:					"Poslužitelju",
 							popout_note:						"Bilješke",
 							popout_pinoption:					"Bilješka",
-							popout_sort_messagetime:			"Datum poruke",
-							popout_sort_notetime:				"Datum bilješke",
+							popout_sort_messagetime:				"Datum poruke",
+							popout_sort_notetime:					"Datum bilješke",
 							toast_noteadd:						"Poruka dodana u bilježnicu",
 							toast_noteremove:					"Poruka uklonjena iz bilježnice",
 							toast_noteupdate:					"Ažurirana je poruka u bilježnici"
@@ -823,15 +826,15 @@ module.exports = (_ => {
 					case "hu":		// Hungarian
 						return {
 							context_pinoption:					"Írja le az üzenetet",
-							context_unpinoption:				"Törölje a jegyzetet",
-							context_updateoption:				"Frissítse a jegyzetet",
+							context_unpinoption:					"Törölje a jegyzetet",
+							context_updateoption:					"Frissítse a jegyzetet",
 							popout_filter_all:					"Minden szerver",
-							popout_filter_channel:				"Csatorna",
-							popout_filter_server:				"Szerver",
+							popout_filter_channel:					"Csatorna",
+							popout_filter_server:					"Szerver",
 							popout_note:						"Jegyzetek",
 							popout_pinoption:					"Jegyzet",
-							popout_sort_messagetime:			"Üzenet dátuma",
-							popout_sort_notetime:				"Jegyzet dátuma",
+							popout_sort_messagetime:				"Üzenet dátuma",
+							popout_sort_notetime:					"Jegyzet dátuma",
 							toast_noteadd:						"Üzenet hozzáadva a jegyzetfüzethez",
 							toast_noteremove:					"Üzenet eltávolítva a jegyzetfüzetből",
 							toast_noteupdate:					"Frissítette az üzenetet a jegyzetfüzetben"
@@ -839,15 +842,15 @@ module.exports = (_ => {
 					case "it":		// Italian
 						return {
 							context_pinoption:					"Annota il messaggio",
-							context_unpinoption:				"Elimina la nota",
-							context_updateoption:				"Aggiorna la nota",
+							context_unpinoption:					"Elimina la nota",
+							context_updateoption:					"Aggiorna la nota",
 							popout_filter_all:					"Tutti i server",
-							popout_filter_channel:				"Canale",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Canale",
+							popout_filter_server:					"Server",
 							popout_note:						"Appunti",
 							popout_pinoption:					"Nota",
-							popout_sort_messagetime:			"Messaggio data",
-							popout_sort_notetime:				"Nota data",
+							popout_sort_messagetime:				"Messaggio data",
+							popout_sort_notetime:					"Nota data",
 							toast_noteadd:						"Messaggio aggiunto al taccuino",
 							toast_noteremove:					"Messaggio rimosso dal taccuino",
 							toast_noteupdate:					"Aggiornato il messaggio nel taccuino"
@@ -855,15 +858,15 @@ module.exports = (_ => {
 					case "ja":		// Japanese
 						return {
 							context_pinoption:					"メッセージを書き留めます",
-							context_unpinoption:				"メモを削除します",
-							context_updateoption:				"メモを更新する",
+							context_unpinoption:					"メモを削除します",
+							context_updateoption:					"メモを更新する",
 							popout_filter_all:					"すべてのサーバー",
-							popout_filter_channel:				"チャネル",
-							popout_filter_server:				"サーバ",
+							popout_filter_channel:					"チャネル",
+							popout_filter_server:					"サーバ",
 							popout_note:						"ノート",
 							popout_pinoption:					"注意",
-							popout_sort_messagetime:			"メッセージの日付",
-							popout_sort_notetime:				"メモ日",
+							popout_sort_messagetime:				"メッセージの日付",
+							popout_sort_notetime:					"メモ日",
 							toast_noteadd:						"ノートブックにメッセージを追加",
 							toast_noteremove:					"ノートブックからメッセージが削除されました",
 							toast_noteupdate:					"ノートブックのメッセージを更新しました"
@@ -871,15 +874,15 @@ module.exports = (_ => {
 					case "ko":		// Korean
 						return {
 							context_pinoption:					"메시지를 적어",
-							context_unpinoption:				"메모 삭제",
-							context_updateoption:				"메모 업데이트",
+							context_unpinoption:					"메모 삭제",
+							context_updateoption:					"메모 업데이트",
 							popout_filter_all:					"모든 서버",
-							popout_filter_channel:				"채널",
-							popout_filter_server:				"섬기는 사람",
+							popout_filter_channel:					"채널",
+							popout_filter_server:					"섬기는 사람",
 							popout_note:						"메모",
 							popout_pinoption:					"노트",
-							popout_sort_messagetime:			"메시지 날짜",
-							popout_sort_notetime:				"메모 날짜",
+							popout_sort_messagetime:				"메시지 날짜",
+							popout_sort_notetime:					"메모 날짜",
 							toast_noteadd:						"노트북에 추가 된 메시지",
 							toast_noteremove:					"노트북에서 메시지가 제거되었습니다.",
 							toast_noteupdate:					"노트북의 메시지를 업데이트했습니다."
@@ -887,15 +890,15 @@ module.exports = (_ => {
 					case "lt":		// Lithuanian
 						return {
 							context_pinoption:					"Užrašykite žinutę",
-							context_unpinoption:				"Ištrinkite užrašą",
-							context_updateoption:				"Atnaujinkite užrašą",
+							context_unpinoption:					"Ištrinkite užrašą",
+							context_updateoption:					"Atnaujinkite užrašą",
 							popout_filter_all:					"Visi serveriai",
-							popout_filter_channel:				"Kanalą",
-							popout_filter_server:				"Serverio",
+							popout_filter_channel:					"Kanalą",
+							popout_filter_server:					"Serverio",
 							popout_note:						"Pastabos",
 							popout_pinoption:					"Pastaba",
-							popout_sort_messagetime:			"Pranešimo data",
-							popout_sort_notetime:				"Užrašo data",
+							popout_sort_messagetime:				"Pranešimo data",
+							popout_sort_notetime:					"Užrašo data",
 							toast_noteadd:						"Pranešimas pridėtas prie užrašų knygelės",
 							toast_noteremove:					"Pranešimas pašalintas iš užrašų knygelės",
 							toast_noteupdate:					"Atnaujino pranešimą užrašų knygutėje"
@@ -903,15 +906,15 @@ module.exports = (_ => {
 					case "nl":		// Dutch
 						return {
 							context_pinoption:					"Schrijf het bericht op",
-							context_unpinoption:				"Verwijder de notitie",
-							context_updateoption:				"Werk de notitie bij",
+							context_unpinoption:					"Verwijder de notitie",
+							context_updateoption:					"Werk de notitie bij",
 							popout_filter_all:					"Alle servers",
-							popout_filter_channel:				"Kanaal",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Kanaal",
+							popout_filter_server:					"Server",
 							popout_note:						"Notities",
 							popout_pinoption:					"Notitie",
-							popout_sort_messagetime:			"Datum bericht",
-							popout_sort_notetime:				"Datum notitie",
+							popout_sort_messagetime:				"Datum bericht",
+							popout_sort_notetime:					"Datum notitie",
 							toast_noteadd:						"Bericht toegevoegd aan notitieblok",
 							toast_noteremove:					"Bericht verwijderd uit notitieblok",
 							toast_noteupdate:					"Het bericht in het notitieblok bijgewerkt"
@@ -919,15 +922,15 @@ module.exports = (_ => {
 					case "no":		// Norwegian
 						return {
 							context_pinoption:					"Skriv ned meldingen",
-							context_unpinoption:				"Slett notatet",
-							context_updateoption:				"Oppdater notatet",
+							context_unpinoption:					"Slett notatet",
+							context_updateoption:					"Oppdater notatet",
 							popout_filter_all:					"Alle servere",
-							popout_filter_channel:				"Kanal",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Kanal",
+							popout_filter_server:					"Server",
 							popout_note:						"Notater",
 							popout_pinoption:					"Merk",
-							popout_sort_messagetime:			"Meldingsdato",
-							popout_sort_notetime:				"Merkdato",
+							popout_sort_messagetime:				"Meldingsdato",
+							popout_sort_notetime:					"Merkdato",
 							toast_noteadd:						"Melding lagt til notatbok",
 							toast_noteremove:					"Melding fjernet fra notatblokken",
 							toast_noteupdate:					"Oppdaterte meldingen i notatboken"
@@ -935,15 +938,15 @@ module.exports = (_ => {
 					case "pl":		// Polish
 						return {
 							context_pinoption:					"Zapisz wiadomość",
-							context_unpinoption:				"Usuń notatkę",
-							context_updateoption:				"Zaktualizuj notatkę",
+							context_unpinoption:					"Usuń notatkę",
+							context_updateoption:					"Zaktualizuj notatkę",
 							popout_filter_all:					"Wszystkie serwery",
-							popout_filter_channel:				"Kanał",
-							popout_filter_server:				"Serwer",
+							popout_filter_channel:					"Kanał",
+							popout_filter_server:					"Serwer",
 							popout_note:						"Notatki",
 							popout_pinoption:					"Uwaga",
-							popout_sort_messagetime:			"Data wiadomości",
-							popout_sort_notetime:				"Data notatki",
+							popout_sort_messagetime:				"Data wiadomości",
+							popout_sort_notetime:					"Data notatki",
 							toast_noteadd:						"Wiadomość dodana do notatnika",
 							toast_noteremove:					"Wiadomość została usunięta z notatnika",
 							toast_noteupdate:					"Zaktualizowano wiadomość w notatniku"
@@ -951,15 +954,15 @@ module.exports = (_ => {
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							context_pinoption:					"Anotar mensagem",
-							context_unpinoption:				"Desanotar mensagem",
-							context_updateoption:				"Atualizar nota",
+							context_unpinoption:					"Desanotar mensagem",
+							context_updateoption:					"Atualizar nota",
 							popout_filter_all:					"Todos os servidores",
-							popout_filter_channel:				"Canal",
-							popout_filter_server:				"Servidor",
+							popout_filter_channel:					"Canal",
+							popout_filter_server:					"Servidor",
 							popout_note:						"Notas",
 							popout_pinoption:					"Nota",
-							popout_sort_messagetime:			"Data da mensagem",
-							popout_sort_notetime:				"Data da nota",
+							popout_sort_messagetime:				"Data da mensagem",
+							popout_sort_notetime:					"Data da nota",
 							toast_noteadd:						"Mensagem adicionada ao caderno",
 							toast_noteremove:					"Mensagem removida do caderno",
 							toast_noteupdate:					"Atualizou a mensagem no caderno"
@@ -967,15 +970,15 @@ module.exports = (_ => {
 					case "ro":		// Romanian
 						return {
 							context_pinoption:					"Notează mesajul",
-							context_unpinoption:				"Ștergeți nota",
-							context_updateoption:				"Actualizați nota",
+							context_unpinoption:					"Ștergeți nota",
+							context_updateoption:					"Actualizați nota",
 							popout_filter_all:					"Toate serverele",
-							popout_filter_channel:				"Canal",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Canal",
+							popout_filter_server:					"Server",
 							popout_note:						"Note",
 							popout_pinoption:					"Notă",
-							popout_sort_messagetime:			"Mesajului data",
-							popout_sort_notetime:				"Notați data",
+							popout_sort_messagetime:				"Mesajului data",
+							popout_sort_notetime:					"Notați data",
 							toast_noteadd:						"Mesaj adăugat în caiet",
 							toast_noteremove:					"Mesaj eliminat din caiet",
 							toast_noteupdate:					"Am actualizat mesajul din caiet"
@@ -983,15 +986,15 @@ module.exports = (_ => {
 					case "ru":		// Russian
 						return {
 							context_pinoption:					"Сохранить сообщение",
-							context_unpinoption:				"Удалить из сохранённых",
-							context_updateoption:				"Обновить в сохранённых",
+							context_unpinoption:					"Удалить из сохранённых",
+							context_updateoption:					"Обновить в сохранённых",
 							popout_filter_all:					"Все сервера",
-							popout_filter_channel:				"Канал",
-							popout_filter_server:				"Сервер",
+							popout_filter_channel:					"Канал",
+							popout_filter_server:					"Сервер",
 							popout_note:						"Сохранённые сообщения",
 							popout_pinoption:					"Запись",
-							popout_sort_messagetime:			"Дата отправки",
-							popout_sort_notetime:				"Дата сохранения",
+							popout_sort_messagetime:				"Дата отправки",
+							popout_sort_notetime:					"Дата сохранения",
 							toast_noteadd:						"Сообщение сохранено",
 							toast_noteremove:					"Сообщение удалено из сохранённых",
 							toast_noteupdate:					"Сообщение обновлено в сохранённых"
@@ -999,15 +1002,15 @@ module.exports = (_ => {
 					case "sv":		// Swedish
 						return {
 							context_pinoption:					"Skriv ner meddelandet",
-							context_unpinoption:				"Radera anteckningen",
-							context_updateoption:				"Uppdatera anteckningen",
+							context_unpinoption:					"Radera anteckningen",
+							context_updateoption:					"Uppdatera anteckningen",
 							popout_filter_all:					"Alla servrar",
-							popout_filter_channel:				"Kanal",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Kanal",
+							popout_filter_server:					"Server",
 							popout_note:						"Anteckningar",
 							popout_pinoption:					"Notera",
-							popout_sort_messagetime:			"Meddelandedatum",
-							popout_sort_notetime:				"Noteradatum",
+							popout_sort_messagetime:				"Meddelandedatum",
+							popout_sort_notetime:					"Noteradatum",
 							toast_noteadd:						"Meddelande tillagt anteckningsbok",
 							toast_noteremove:					"Meddelandet har tagits bort från anteckningsboken",
 							toast_noteupdate:					"Uppdaterat meddelandet i anteckningsboken"
@@ -1015,15 +1018,15 @@ module.exports = (_ => {
 					case "th":		// Thai
 						return {
 							context_pinoption:					"จดข้อความ",
-							context_unpinoption:				"ลบบันทึก",
-							context_updateoption:				"อัปเดตบันทึก",
+							context_unpinoption:					"ลบบันทึก",
+							context_updateoption:					"อัปเดตบันทึก",
 							popout_filter_all:					"เซิร์ฟเวอร์ทั้งหมด",
-							popout_filter_channel:				"ช่อง",
-							popout_filter_server:				"เซิร์ฟเวอร์",
+							popout_filter_channel:					"ช่อง",
+							popout_filter_server:					"เซิร์ฟเวอร์",
 							popout_note:						"หมายเหตุ",
 							popout_pinoption:					"บันทึก",
-							popout_sort_messagetime:			"วันที่ส่งข้อความ",
-							popout_sort_notetime:				"วันที่หมายเหตุ",
+							popout_sort_messagetime:				"วันที่ส่งข้อความ",
+							popout_sort_notetime:					"วันที่หมายเหตุ",
 							toast_noteadd:						"เพิ่มข้อความในสมุดบันทึกแล้ว",
 							toast_noteremove:					"ข้อความถูกลบออกจากสมุดบันทึก",
 							toast_noteupdate:					"อัปเดตข้อความในสมุดบันทึก"
@@ -1031,15 +1034,15 @@ module.exports = (_ => {
 					case "tr":		// Turkish
 						return {
 							context_pinoption:					"Mesajı yazın",
-							context_unpinoption:				"Notu silin",
-							context_updateoption:				"Notu güncelleyin",
+							context_unpinoption:					"Notu silin",
+							context_updateoption:					"Notu güncelleyin",
 							popout_filter_all:					"Tüm sunucular",
-							popout_filter_channel:				"Kanal",
-							popout_filter_server:				"Sunucu",
+							popout_filter_channel:					"Kanal",
+							popout_filter_server:					"Sunucu",
 							popout_note:						"Notlar",
 							popout_pinoption:					"Not",
-							popout_sort_messagetime:			"Mesaj tarihi",
-							popout_sort_notetime:				"Not tarihi",
+							popout_sort_messagetime:				"Mesaj tarihi",
+							popout_sort_notetime:					"Not tarihi",
 							toast_noteadd:						"Not defterine mesaj eklendi",
 							toast_noteremove:					"Mesaj not defterinden kaldırıldı",
 							toast_noteupdate:					"Defterdeki mesaj güncellendi"
@@ -1047,15 +1050,15 @@ module.exports = (_ => {
 					case "uk":		// Ukrainian
 						return {
 							context_pinoption:					"Запишіть повідомлення",
-							context_unpinoption:				"Видаліть нотатку",
-							context_updateoption:				"Оновіть нотатку",
+							context_unpinoption:					"Видаліть нотатку",
+							context_updateoption:					"Оновіть нотатку",
 							popout_filter_all:					"Усі сервери",
-							popout_filter_channel:				"Каналу",
-							popout_filter_server:				"Сервер",
+							popout_filter_channel:					"Каналу",
+							popout_filter_server:					"Сервер",
 							popout_note:						"Нотатки",
 							popout_pinoption:					"Примітка",
-							popout_sort_messagetime:			"Дата повідомлення",
-							popout_sort_notetime:				"Дата примітки",
+							popout_sort_messagetime:				"Дата повідомлення",
+							popout_sort_notetime:					"Дата примітки",
 							toast_noteadd:						"Повідомлення додано до блокнота",
 							toast_noteremove:					"Повідомлення видалено з блокнота",
 							toast_noteupdate:					"Оновлено повідомлення в блокноті"
@@ -1063,15 +1066,15 @@ module.exports = (_ => {
 					case "vi":		// Vietnamese
 						return {
 							context_pinoption:					"Viết lại tin nhắn",
-							context_unpinoption:				"Xóa ghi chú",
-							context_updateoption:				"Cập nhật ghi chú",
+							context_unpinoption:					"Xóa ghi chú",
+							context_updateoption:					"Cập nhật ghi chú",
 							popout_filter_all:					"Tất cả các máy chủ",
-							popout_filter_channel:				"Kênh",
-							popout_filter_server:				"Người phục vụ",
+							popout_filter_channel:					"Kênh",
+							popout_filter_server:					"Người phục vụ",
 							popout_note:						"Ghi chú",
 							popout_pinoption:					"Ghi chú",
-							popout_sort_messagetime:			"Ngày nhắn tin",
-							popout_sort_notetime:				"Ghi chú ngày",
+							popout_sort_messagetime:				"Ngày nhắn tin",
+							popout_sort_notetime:					"Ghi chú ngày",
 							toast_noteadd:						"Đã thêm tin nhắn vào sổ tay",
 							toast_noteremove:					"Đã xóa tin nhắn khỏi sổ ghi chép",
 							toast_noteupdate:					"Đã cập nhật tin nhắn trong sổ tay"
@@ -1079,15 +1082,15 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							context_pinoption:					"写下消息",
-							context_unpinoption:				"删除笔记",
-							context_updateoption:				"更新笔记",
+							context_unpinoption:					"删除笔记",
+							context_updateoption:					"更新笔记",
 							popout_filter_all:					"所有服务器",
-							popout_filter_channel:				"渠道",
-							popout_filter_server:				"服务器",
+							popout_filter_channel:					"渠道",
+							popout_filter_server:					"服务器",
 							popout_note:						"笔记",
 							popout_pinoption:					"注意",
-							popout_sort_messagetime:			"留言日期",
-							popout_sort_notetime:				"备注日期",
+							popout_sort_messagetime:				"留言日期",
+							popout_sort_notetime:					"备注日期",
 							toast_noteadd:						"邮件已添加到笔记本",
 							toast_noteremove:					"邮件已从笔记本中删除",
 							toast_noteupdate:					"更新了笔记本中的消息"
@@ -1095,15 +1098,15 @@ module.exports = (_ => {
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_pinoption:					"寫下消息",
-							context_unpinoption:				"刪除筆記",
-							context_updateoption:				"更新筆記",
+							context_unpinoption:					"刪除筆記",
+							context_updateoption:					"更新筆記",
 							popout_filter_all:					"所有服務器",
-							popout_filter_channel:				"渠道",
-							popout_filter_server:				"服務器",
+							popout_filter_channel:					"渠道",
+							popout_filter_server:					"服務器",
 							popout_note:						"筆記",
 							popout_pinoption:					"注意",
-							popout_sort_messagetime:			"留言日期",
-							popout_sort_notetime:				"備註日期",
+							popout_sort_messagetime:				"留言日期",
+							popout_sort_notetime:					"備註日期",
 							toast_noteadd:						"郵件已添加到筆記本",
 							toast_noteremove:					"郵件已從筆記本中刪除",
 							toast_noteupdate:					"更新了筆記本中的消息"
@@ -1111,15 +1114,15 @@ module.exports = (_ => {
 					default:		// English
 						return {
 							context_pinoption:					"Note Message",
-							context_unpinoption:				"Remove Note",
-							context_updateoption:				"Update Note",
+							context_unpinoption:					"Remove Note",
+							context_updateoption:					"Update Note",
 							popout_filter_all:					"All Servers",
-							popout_filter_channel:				"Channel",
-							popout_filter_server:				"Server",
+							popout_filter_channel:					"Channel",
+							popout_filter_server:					"Server",
 							popout_note:						"Notes",
 							popout_pinoption:					"Note",
-							popout_sort_messagetime:			"Message Date",
-							popout_sort_notetime:				"Note Date",
+							popout_sort_messagetime:				"Message Date",
+							popout_sort_notetime:					"Note Date",
 							toast_noteadd:						"Message added to Notebook",
 							toast_noteremove:					"Message removed from Notebook",
 							toast_noteupdate:					"Updated the Message in the Notebook"
