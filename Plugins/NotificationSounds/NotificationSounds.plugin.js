@@ -14,12 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"added": {
-			"Current Channel": "Added Option to change the sound for the current channel notification, (note: Discord added an option in the THEIR notification settings to play a different sound when a message is sent in the current channel, you need to have this enabled in order to be able to change the sound in the plugin settings"
-		},
-		"fixed": {
-			"Current Channel": "No longer plays notification sounds for current channels, if the option is disabled"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
