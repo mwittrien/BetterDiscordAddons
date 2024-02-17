@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.2
+ * @version 3.9.3
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -212,11 +212,11 @@ module.exports = (_ => {
 							streamMute: false,
 							invisibleMute: false
 						};
-						if (id == "message1") {
+						if (id == "message1" || id == "message3") {
 							types[id].mute = true;
 							types[id].streamMute = false;
 							types[id].invisibleMute = false;
-							for (let subType in message1Types) types[subType] = {
+							if (id == "message1") for (let subType in message1Types) types[subType] = {
 								name: message1Types[subType].name,
 								src: BDFDB.LibraryModules.SoundParser(message1Types[subType].src),
 								mute: true,
@@ -255,14 +255,22 @@ module.exports = (_ => {
 						const message = e.methodArguments[0].message;
 						const guildId = message.guild_id || null;
 						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryStores.RelationshipStore.isBlocked(message.author.id)) {
-							const isCurrent = BDFDB.LibraryStores.SelectedChannelStore.getChannelId() == message.channel_id;
 							const channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
+							
+							const isCurrent = BDFDB.LibraryStores.SelectedChannelStore.getChannelId() == channel.id;
 							const isGroupDM = channel.isGroupDM();
 							const isThread = BDFDB.ChannelUtils.isThread(channel);
+							
 							if (isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id) || !isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id)) return;
-							if (!guildId) {
+							
+							if (isCurrent && BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel()) {
+								this.fireEvent("message3");
+								this.playAudio("message3");
+								return;
+							}
+							else if (!guildId) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
-								!BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel()  && !document.hasFocus() && this.playAudio(isGroupDM ? "groupdm" : "dm");
+								this.playAudio(isGroupDM ? "groupdm" : "dm");
 								return;
 							}
 							else if (guildId) {
@@ -322,7 +330,7 @@ module.exports = (_ => {
 								let type = e2.instance && e2.instance.name;
 								if (type && choices[type]) {
 									e2.stopOriginalMethodCall();
-									if (type == "message1") BDFDB.TimeUtils.timeout(_ => {
+									if (type == "message1" || type == "message3") BDFDB.TimeUtils.timeout(_ => {
 										let called = false;
 										for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
 											delete firedEvents[subType];

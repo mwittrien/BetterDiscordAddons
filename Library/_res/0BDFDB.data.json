@@ -503,7 +503,7 @@
 		"UserTheme": {"strings": [".profileColors", "useDefaultClientTheme:"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
 		"VoiceUser": {"protos": ["renderPrioritySpeaker", "renderIcons", "renderAvatar"]},
-		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "previewUserIdAfterDelay"]}
+		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "Permissions.MOVE_MEMBERS"]}
 	},
 	"ModuleUtilsConfig": {
 		"QueuedComponents": [],
