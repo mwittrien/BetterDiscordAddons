@@ -2330,23 +2330,20 @@ a.metadataDownload__6b32d {
 	background: var(--accentcolor-active);
 }
 
-.bd-button,
+.bd-button:not(.bd-button-blank),
 .bd-addon-modal-footer .bd-button,
 .bd-button-filled.bd-button-color-brand {
 	background: var(--bd-blue);
 }
-.bd-button:hover,
+.bd-button:not(.bd-button-blank):hover,
 .bd-addon-modal-footer .bd-button:hover,
 .bd-button-filled.bd-button-color-brand:hover {
 	background: var(--accentcolor-hover);
 }
-.bd-button:active,
+.bd-button:not(.bd-button-blank):active,
 .bd-addon-modal-footer .bd-button:active,
 .bd-button-filled.bd-button-color-brand:active {
 	background: var(--accentcolor-active);
-}
-.bd-button-blank {
-	background: transparent !important;
 }
 
 .bd-description-wrap .banner {
