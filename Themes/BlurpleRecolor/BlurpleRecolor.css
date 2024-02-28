@@ -1937,6 +1937,10 @@ a.metadataDownload__6b32d {
 
 /* ----		12.1.		TEXT						---- */
 
+.headerText__94c22 {
+	overflow-y: hidden;
+}
+
 .colorBrand__471df  {
 	color: rgb(var(--accentcolor_v));
 }
