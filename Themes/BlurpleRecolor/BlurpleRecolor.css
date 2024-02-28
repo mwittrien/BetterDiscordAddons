@@ -2331,15 +2331,18 @@ a.metadataDownload__6b32d {
 }
 
 .bd-button,
-.bd-addon-modal-footer .bd-button {
+.bd-addon-modal-footer .bd-button,
+.bd-button-filled.bd-button-color-brand {
 	background: var(--bd-blue);
 }
 .bd-button:hover,
-.bd-addon-modal-footer .bd-button:hover {
+.bd-addon-modal-footer .bd-button:hover,
+.bd-button-filled.bd-button-color-brand:hover {
 	background: var(--accentcolor-hover);
 }
 .bd-button:active,
-.bd-addon-modal-footer .bd-button:active {
+.bd-addon-modal-footer .bd-button:active,
+.bd-button-filled.bd-button-color-brand:active {
 	background: var(--accentcolor-active);
 }
 .bd-button-blank {
