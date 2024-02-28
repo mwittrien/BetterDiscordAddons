@@ -702,6 +702,12 @@ body #app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2:has(.socialLinks_c
 	display: flex;
 	align-items: center;
 }
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) .bd-settings-title {
+	justify-content: flex-start;
+}
+.standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) .bd-settings-title > *:last-child {
+	margin-left: auto;
+}
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > .settingsTabBar__17e8a:first-child,
 .standardSidebarView__1129a:has(.socialLinks_c1fc99) .contentColumnDefault_c66386:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar__19aa3 {
 	margin-left: calc(var(--use-settingsicons) * 30px);
