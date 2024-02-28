@@ -2338,6 +2338,9 @@ a.metadataDownload__6b32d {
 .bd-addon-modal-footer .bd-button:active {
 	background: var(--accentcolor-active);
 }
+.bd-button-blank {
+	background: transparent !important;
+}
 
 .bd-description-wrap .banner {
 	background: var(--background-primary);
