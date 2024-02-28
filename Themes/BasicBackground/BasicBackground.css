@@ -6485,10 +6485,14 @@ html .bd-toast.toast-warn.icon::before {
 	background-color: rgba(var(--transparencycolor_v), 0.3);
 }
 
-.bd-addon-views .bd-view-button:not(.selected):hover {
+.bd-addon-views .bd-view-button:not(.selected):hover,
+.bd-addon-controls .bd-button:hover,
+.bd-controls-basic .bd-button:hover {
 	background: rgba(var(--transparencycolor_v), .3);
 }
-.bd-addon-views .bd-view-button:not(.selected):active {
+.bd-addon-views .bd-view-button:not(.selected):active,
+.bd-addon-controls .bd-button:active,
+.bd-controls-basic .bd-button:active {
 	background: rgba(var(--accentcolor_v), .7);
 }
 .bd-addon-views .bd-view-button.selected svg {
