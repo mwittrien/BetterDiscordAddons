@@ -3961,6 +3961,10 @@ button.button__4f306.enabled__470f0:hover svg {
 .layer_ec16dd:nth-child(9) {
 	z-index: 1020;
 }
+.layer_ec16dd ~ .layer_ad604d,
+.layer_ec16dd ~ .backdrop__7e89b.withLayer__1fe9d {
+	z-index: 1021;
+}
 
 .translate_c2f6c4 {
 	transform: unset !important;
