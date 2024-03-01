@@ -6262,7 +6262,11 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 .none__51a8f::-webkit-scrollbar-corner,
 .none__51a8f::-webkit-scrollbar-thumb,
 .none__51a8f::-webkit-scrollbar-track,
-.none__51a8f::-webkit-scrollbar {
+.none__51a8f::-webkit-scrollbar,
+.none__3919e::-webkit-scrollbar-corner,
+.none__3919e::-webkit-scrollbar-thumb,
+.none__3919e::-webkit-scrollbar-track,
+.none__3919e::-webkit-scrollbar {
 	display: none;
 }
 
