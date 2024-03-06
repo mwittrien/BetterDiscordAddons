@@ -2339,6 +2339,7 @@ a.metadataDownload__6b32d {
 	background: var(--accentcolor-hover);
 }
 .bd-addon-modal-footer .bd-button:active,
+
 .bd-button-filled.bd-button-color-brand:active {
 	background: var(--accentcolor-active);
 }
@@ -2358,6 +2359,7 @@ a.metadataDownload__6b32d {
 	fill: var(--status-danger);
 }
 
+.bd-controls-basic .bd-button:active,
 .bd-addon-views .bd-view-button.selected {
 	background: var(--bd-blue);
 }
