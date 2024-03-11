@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.7
+ * @version 1.1.8
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -61,7 +61,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var changedRoles = {}, cachedRoles = {};
+		var changedRoles = {};
 		
 		return class EditRoles extends Plugin {
 			onLoad () {
@@ -70,8 +70,7 @@ module.exports = (_ => {
 						"AutocompleteRoleResult",
 						"ChannelMembers",
 						"MemberListItem",
-						"MessageContent",
-						"UserPopoutBody"
+						"MessageContent"
 					],
 					after: [
 						"RichRoleMention"
@@ -96,13 +95,31 @@ module.exports = (_ => {
 						if (guild) {
 							let colorRole, iconRole;
 							for (let id of e.returnValue.roles) {
-								if (guild.roles[id] && (guild.roles[id].colorString || changedRoles[id] && changedRoles[id].color) && (!colorRole || colorRole.position < guild.roles[id].position)) colorRole = guild.roles[id];
-								if (guild.roles[id] && (guild.roles[id].icon || changedRoles[id] && changedRoles[id].icon) && (!iconRole || iconRole.position < guild.roles[id].position)) iconRole = guild.roles[id];
+								let roles = guild.roles || BDFDB.LibraryStores.GuildStore.getRoles(guild.id);
+								if (roles && [id] && (roles[id].colorString || changedRoles[id] && changedRoles[id].color) && (!colorRole || colorRole.position < roles[id].position)) colorRole = roles[id];
+								if (roles && roles[id] && (roles[id].icon || changedRoles[id] && changedRoles[id].icon) && (!iconRole || iconRole.position < roles[id].position)) iconRole = roles[id];
 							}
 							let color = colorRole && changedRoles[colorRole.id] && changedRoles[colorRole.id].color;
 							if (color) e.returnValue = Object.assign({}, e.returnValue, {colorString: BDFDB.ColorUtils.convert(color, "HEX")});
 							if (iconRole && changedRoles[iconRole.id] && changedRoles[iconRole.id].icon) e.returnValue = Object.assign({}, e.returnValue, {iconRoleId: iconRole.id});
 						}
+					}
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.GuildStore, "getRoles", {after: e => {
+					if (e.returnValue) {
+						let roles = Object.assign({}, e.returnValue);
+						for (let id in roles) {
+							let data = changedRoles[id];
+							if (data) {
+								roles[id] = Object.assign({}, roles[id], {
+									name: data.name || roles[id].name,
+									icon: data.icon || roles[id].icon,
+									color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : roles[id].color,
+									colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : roles[id].colorString
+								});
+							}
+						}
+						e.returnValue = roles;
 					}
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "getRoleIconData", {after: e => {
@@ -112,7 +129,9 @@ module.exports = (_ => {
 					}
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "canGuildUseRoleIcons", {after: e => {
-					if (e.returnValue === false && Object.keys(e.methodArguments[0].roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) return true;
+					if (e.returnValue !== false) return e.returnValue;
+					let roles = e.methodArguments[0].roles || BDFDB.LibraryStores.GuildStore.getRoles(e.methodArguments[0].id);
+					if (Object.keys(roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) return true;
 				}});
 				
 				this.forceUpdateAll();
@@ -176,10 +195,6 @@ module.exports = (_ => {
 					}
 				}
 			}
-			
-			onGuildContextMenu (e) {
-				if (e.instance.props.guild) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
-			}
 
 			onDeveloperContextMenu (e) {
 				if (e.instance.props.label != BDFDB.LanguageUtils.LanguageStrings.COPY_ID_ROLE) return;
@@ -194,9 +209,7 @@ module.exports = (_ => {
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_rolesettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
-										action: _ => {
-											this.openRoleSettingsModal(guild.roles[e.instance.props.id]);
-										}
+										action: _ => this.openRoleSettingsModal((guild.roles || BDFDB.LibraryStores.GuildStore.getRoles(guild.id) || [])[e.instance.props.id])
 									}),
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_resetsettings,
@@ -261,44 +274,13 @@ module.exports = (_ => {
 				if (member) e.instance.props.colorString = member.colorString;
 			}
 			
-			processUserPopoutBody (e) {
-				if (e.instance.props.guild) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
-			}
-			
 			getGuildFromRoleId (roleId) {
 				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.GuildStore.getGuild).find(g => g.roles[roleId]);
 			}
 			
-			changeRolesInGuild (guild, useNative) {
-				let changed = false, roles = Object.assign({}, guild.roles);
-				for (let id in guild.roles) {
-					let data = changedRoles[id];
-					if (data) {
-						changed = true;
-						roles[id] = Object.assign({}, roles[id], {
-							name: data.name || roles[id].name,
-							icon: data.icon || roles[id].icon,
-							color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : roles[id].color,
-							colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : roles[id].colorString
-						});
-					}
-				}
-				if (useNative && changed && !cachedRoles[guild.id]) cachedRoles[guild.id] = guild.roles;
-				if (useNative) guild.roles = roles;
-				return !changed || useNative ? guild : (new BDFDB.DiscordObjects.Guild(Object.assign({}, guild, {roles})));
-			}
-			
 			resetRoles (id) {
-				if (id) {
-					let guild = this.getGuildFromRoleId(id);
-					if (guild && cachedRoles[guild.id]) guild.roles = Object.assign({}, guild.roles, {[id]: cachedRoles[guild.id][id]});
-					BDFDB.DataUtils.remove(this, "roles", id);
-				}
-				else {
-					for (let guild of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.GuildStore.getGuild)) if (cachedRoles[guild.id]) guild.roles = cachedRoles[guild.id];
-					cachedRoles = {};
-					BDFDB.DataUtils.remove(this, "roles");
-				}
+				if (id) BDFDB.DataUtils.remove(this, "roles", id);
+				else BDFDB.DataUtils.remove(this, "roles");
 			}
 
 			openRoleSettingsModal (role) {
@@ -458,244 +440,244 @@ module.exports = (_ => {
 						return {
 							confirm_reset:						"Наистина ли искате да нулирате тази роля?",
 							confirm_resetall:					"Наистина ли искате да нулирате всички роли?",
-							context_localrolesettings:			"Настройки на местната роля",
+							context_localrolesettings:				"Настройки на местната роля",
 							modal_header:						"Настройки на местната роля",
-							submenu_resetsettings:				"Нулиране на ролята",
-							submenu_rolesettings:				"Промяна на настройките"
+							submenu_resetsettings:					"Нулиране на ролята",
+							submenu_rolesettings:					"Промяна на настройките"
 						};
 					case "da":		// Danish
 						return {
 							confirm_reset:						"Er du sikker på, at du vil nulstille denne rolle?",
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle roller?",
-							context_localrolesettings:			"Lokale rolleindstillinger",
+							context_localrolesettings:				"Lokale rolleindstillinger",
 							modal_header:						"Lokale rolleindstillinger",
-							submenu_resetsettings:				"Nulstil rolle",
-							submenu_rolesettings:				"Ændre indstillinger"
+							submenu_resetsettings:					"Nulstil rolle",
+							submenu_rolesettings:					"Ændre indstillinger"
 						};
 					case "de":		// German
 						return {
 							confirm_reset:						"Möchtest du diese Rolle wirklich zurücksetzen?",
 							confirm_resetall:					"Möchtest du wirklich alle Rollen zurücksetzen?",
-							context_localrolesettings:			"Lokale Rolleneinstellungen",
+							context_localrolesettings:				"Lokale Rolleneinstellungen",
 							modal_header:						"Lokale Rolleneinstellungen",
-							submenu_resetsettings:				"Rolle zurücksetzen",
-							submenu_rolesettings:				"Einstellungen ändern"
+							submenu_resetsettings:					"Rolle zurücksetzen",
+							submenu_rolesettings:					"Einstellungen ändern"
 						};
 					case "el":		// Greek
 						return {
 							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον ρόλο;",
 							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους ρόλους;",
-							context_localrolesettings:			"Ρυθμίσεις ρόλου {τοπικά)",
+							context_localrolesettings:				"Ρυθμίσεις ρόλου {τοπικά)",
 							modal_header:						"Ρυθμίσεις ρόλου (τοπικά)",
-							submenu_resetsettings:				"Επαναφορά ρόλου",
-							submenu_rolesettings:				"Αλλαγή ρυθμίσεων"
+							submenu_resetsettings:					"Επαναφορά ρόλου",
+							submenu_rolesettings:					"Αλλαγή ρυθμίσεων"
 						};
 					case "es":		// Spanish
 						return {
 							confirm_reset:						"¿Está seguro de que desea restablecer este rol?",
 							confirm_resetall:					"¿Está seguro de que desea restablecer todos los roles?",
-							context_localrolesettings:			"Configuración de roles locales",
+							context_localrolesettings:				"Configuración de roles locales",
 							modal_header:						"Configuración de roles locales",
-							submenu_resetsettings:				"Restablecer rol",
-							submenu_rolesettings:				"Cambiar ajustes"
+							submenu_resetsettings:					"Restablecer rol",
+							submenu_rolesettings:					"Cambiar ajustes"
 						};
 					case "fi":		// Finnish
 						return {
 							confirm_reset:						"Haluatko varmasti nollata tämän roolin?",
 							confirm_resetall:					"Haluatko varmasti nollata kaikki roolit?",
-							context_localrolesettings:			"Paikalliset rooliasetukset",
+							context_localrolesettings:				"Paikalliset rooliasetukset",
 							modal_header:						"Paikalliset rooliasetukset",
-							submenu_resetsettings:				"Nollaa rooli",
-							submenu_rolesettings:				"Vaihda asetuksia"
+							submenu_resetsettings:					"Nollaa rooli",
+							submenu_rolesettings:					"Vaihda asetuksia"
 						};
 					case "fr":		// French
 						return {
 							confirm_reset:						"Voulez-vous vraiment réinitialiser ce rôle?",
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser tous les rôles?",
-							context_localrolesettings:			"Paramètres de rôle locaux",
+							context_localrolesettings:				"Paramètres de rôle locaux",
 							modal_header:						"Paramètres de rôle locaux",
-							submenu_resetsettings:				"Réinitialiser le rôle",
-							submenu_rolesettings:				"Modifier les paramètres"
+							submenu_resetsettings:					"Réinitialiser le rôle",
+							submenu_rolesettings:					"Modifier les paramètres"
 						};
 					case "hr":		// Croatian
 						return {
 							confirm_reset:						"Jeste li sigurni da želite resetirati ovu ulogu?",
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve uloge?",
-							context_localrolesettings:			"Postavke lokalne uloge",
+							context_localrolesettings:				"Postavke lokalne uloge",
 							modal_header:						"Postavke lokalne uloge",
-							submenu_resetsettings:				"Resetiraj ulogu",
-							submenu_rolesettings:				"Promijeniti postavke"
+							submenu_resetsettings:					"Resetiraj ulogu",
+							submenu_rolesettings:					"Promijeniti postavke"
 						};
 					case "hu":		// Hungarian
 						return {
 							confirm_reset:						"Biztosan vissza akarja állítani ezt a szerepet?",
 							confirm_resetall:					"Biztosan vissza akarja állítani az összes szerepet?",
-							context_localrolesettings:			"Helyi szerepbeállítások",
+							context_localrolesettings:				"Helyi szerepbeállítások",
 							modal_header:						"Helyi szerepbeállítások",
-							submenu_resetsettings:				"A szerepkör visszaállítása",
-							submenu_rolesettings:				"Beállítások megváltoztatása"
+							submenu_resetsettings:					"A szerepkör visszaállítása",
+							submenu_rolesettings:					"Beállítások megváltoztatása"
 						};
 					case "it":		// Italian
 						return {
 							confirm_reset:						"Sei sicuro di voler reimpostare questo ruolo?",
 							confirm_resetall:					"Sei sicuro di voler reimpostare tutti i ruoli?",
-							context_localrolesettings:			"Impostazioni ruolo locale",
+							context_localrolesettings:				"Impostazioni ruolo locale",
 							modal_header:						"Impostazioni ruolo locale",
-							submenu_resetsettings:				"Reimposta ruolo",
-							submenu_rolesettings:				"Cambia impostazioni"
+							submenu_resetsettings:					"Reimposta ruolo",
+							submenu_rolesettings:					"Cambia impostazioni"
 						};
 					case "ja":		// Japanese
 						return {
 							confirm_reset:						"この役割をリセットしてもよろしいですか？",
 							confirm_resetall:					"すべての役割をリセットしてもよろしいですか？",
-							context_localrolesettings:			"ローカルロール設定",
+							context_localrolesettings:				"ローカルロール設定",
 							modal_header:						"ローカルロール設定",
-							submenu_resetsettings:				"役割をリセット",
-							submenu_rolesettings:				"設定を変更する"
+							submenu_resetsettings:					"役割をリセット",
+							submenu_rolesettings:					"設定を変更する"
 						};
 					case "ko":		// Korean
 						return {
 							confirm_reset:						"이 역할을 재설정 하시겠습니까?",
 							confirm_resetall:					"모든 역할을 재설정 하시겠습니까?",
-							context_localrolesettings:			"로컬 역할 설정",
+							context_localrolesettings:				"로컬 역할 설정",
 							modal_header:						"로컬 역할 설정",
-							submenu_resetsettings:				"역할 재설정",
-							submenu_rolesettings:				"설정 변경"
+							submenu_resetsettings:					"역할 재설정",
+							submenu_rolesettings:					"설정 변경"
 						};
 					case "lt":		// Lithuanian
 						return {
 							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį vaidmenį?",
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus vaidmenis?",
-							context_localrolesettings:			"Vietos vaidmens nustatymai",
+							context_localrolesettings:				"Vietos vaidmens nustatymai",
 							modal_header:						"Vietos vaidmens nustatymai",
-							submenu_resetsettings:				"Iš naujo nustatyti vaidmenį",
-							submenu_rolesettings:				"Pakeisti nustatymus"
+							submenu_resetsettings:					"Iš naujo nustatyti vaidmenį",
+							submenu_rolesettings:					"Pakeisti nustatymus"
 						};
 					case "nl":		// Dutch
 						return {
 							confirm_reset:						"Weet u zeker dat u deze rol wilt resetten?",
 							confirm_resetall:					"Weet u zeker dat u alle rollen opnieuw wilt instellen?",
-							context_localrolesettings:			"Lokale rolinstellingen",
+							context_localrolesettings:				"Lokale rolinstellingen",
 							modal_header:						"Lokale rolinstellingen",
-							submenu_resetsettings:				"Rol opnieuw instellen",
-							submenu_rolesettings:				"Instellingen veranderen"
+							submenu_resetsettings:					"Rol opnieuw instellen",
+							submenu_rolesettings:					"Instellingen veranderen"
 						};
 					case "no":		// Norwegian
 						return {
 							confirm_reset:						"Er du sikker på at du vil tilbakestille denne rollen?",
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle rollene?",
-							context_localrolesettings:			"Lokale rolleinnstillinger",
+							context_localrolesettings:				"Lokale rolleinnstillinger",
 							modal_header:						"Lokale rolleinnstillinger",
-							submenu_resetsettings:				"Tilbakestill rolle",
-							submenu_rolesettings:				"Endre innstillinger"
+							submenu_resetsettings:					"Tilbakestill rolle",
+							submenu_rolesettings:					"Endre innstillinger"
 						};
 					case "pl":		// Polish
 						return {
 							confirm_reset:						"Czy na pewno chcesz zresetować tę rolę?",
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie role?",
-							context_localrolesettings:			"Ustawienia roli lokalnej",
+							context_localrolesettings:				"Ustawienia roli lokalnej",
 							modal_header:						"Ustawienia roli lokalnej",
-							submenu_resetsettings:				"Zresetuj rolę",
-							submenu_rolesettings:				"Zmień ustawienia"
+							submenu_resetsettings:					"Zresetuj rolę",
+							submenu_rolesettings:					"Zmień ustawienia"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							confirm_reset:						"Tem certeza de que deseja redefinir esta função?",
 							confirm_resetall:					"Tem certeza de que deseja redefinir todas as funções?",
-							context_localrolesettings:			"Configurações de função local",
+							context_localrolesettings:				"Configurações de função local",
 							modal_header:						"Configurações de função local",
-							submenu_resetsettings:				"Redefinir função",
-							submenu_rolesettings:				"Mudar configurações"
+							submenu_resetsettings:					"Redefinir função",
+							submenu_rolesettings:					"Mudar configurações"
 						};
 					case "ro":		// Romanian
 						return {
 							confirm_reset:						"Sigur doriți să resetați acest rol?",
 							confirm_resetall:					"Sigur doriți să resetați toate rolurile?",
-							context_localrolesettings:			"Setări rol local",
+							context_localrolesettings:				"Setări rol local",
 							modal_header:						"Setări rol local",
-							submenu_resetsettings:				"Resetați rolul",
-							submenu_rolesettings:				"Schimbă setările"
+							submenu_resetsettings:					"Resetați rolul",
+							submenu_rolesettings:					"Schimbă setările"
 						};
 					case "ru":		// Russian
 						return {
 							confirm_reset:						"Вы уверены, что хотите сбросить эту роль?",
 							confirm_resetall:					"Вы уверены, что хотите сбросить все роли?",
-							context_localrolesettings:			"Настройки локальной роли",
+							context_localrolesettings:				"Настройки локальной роли",
 							modal_header:						"Настройки локальной роли",
-							submenu_resetsettings:				"Сбросить роль",
-							submenu_rolesettings:				"Изменить настройки"
+							submenu_resetsettings:					"Сбросить роль",
+							submenu_rolesettings:					"Изменить настройки"
 						};
 					case "sv":		// Swedish
 						return {
 							confirm_reset:						"Är du säker på att du vill återställa denna roll?",
 							confirm_resetall:					"Är du säker på att du vill återställa alla roller?",
-							context_localrolesettings:			"Lokala rollinställningar",
+							context_localrolesettings:				"Lokala rollinställningar",
 							modal_header:						"Lokala rollinställningar",
-							submenu_resetsettings:				"Återställ roll",
-							submenu_rolesettings:				"Ändra inställningar"
+							submenu_resetsettings:					"Återställ roll",
+							submenu_rolesettings:					"Ändra inställningar"
 						};
 					case "th":		// Thai
 						return {
 							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตบทบาทนี้",
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตบทบาททั้งหมด",
-							context_localrolesettings:			"การตั้งค่าบทบาทท้องถิ่น",
+							context_localrolesettings:				"การตั้งค่าบทบาทท้องถิ่น",
 							modal_header:						"การตั้งค่าบทบาทท้องถิ่น",
-							submenu_resetsettings:				"รีเซ็ตบทบาท",
-							submenu_rolesettings:				"เปลี่ยนการตั้งค่า"
+							submenu_resetsettings:					"รีเซ็ตบทบาท",
+							submenu_rolesettings:					"เปลี่ยนการตั้งค่า"
 						};
 					case "tr":		// Turkish
 						return {
 							confirm_reset:						"Bu Rolü sıfırlamak istediğinizden emin misiniz?",
 							confirm_resetall:					"Tüm Rolleri sıfırlamak istediğinizden emin misiniz?",
-							context_localrolesettings:			"Yerel Rol Ayarları",
+							context_localrolesettings:				"Yerel Rol Ayarları",
 							modal_header:						"Yerel Rol Ayarları",
-							submenu_resetsettings:				"Rolü Sıfırla",
-							submenu_rolesettings:				"Ayarları değiştir"
+							submenu_resetsettings:					"Rolü Sıfırla",
+							submenu_rolesettings:					"Ayarları değiştir"
 						};
 					case "uk":		// Ukrainian
 						return {
 							confirm_reset:						"Ви впевнені, що хочете скинути цю роль?",
 							confirm_resetall:					"Ви впевнені, що хочете скинути всі ролі?",
-							context_localrolesettings:			"Налаштування локальної ролі",
+							context_localrolesettings:				"Налаштування локальної ролі",
 							modal_header:						"Налаштування локальної ролі",
-							submenu_resetsettings:				"Скинути роль",
-							submenu_rolesettings:				"Змінити налаштування"
+							submenu_resetsettings:					"Скинути роль",
+							submenu_rolesettings:					"Змінити налаштування"
 						};
 					case "vi":		// Vietnamese
 						return {
 							confirm_reset:						"Bạn có chắc chắn muốn đặt lại Vai trò này không?",
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả các Vai trò không?",
-							context_localrolesettings:			"Cài đặt vai trò cục bộ",
+							context_localrolesettings:				"Cài đặt vai trò cục bộ",
 							modal_header:						"Cài đặt vai trò cục bộ",
-							submenu_resetsettings:				"Đặt lại vai trò",
-							submenu_rolesettings:				"Thay đổi cài đặt"
+							submenu_resetsettings:					"Đặt lại vai trò",
+							submenu_rolesettings:					"Thay đổi cài đặt"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此角色吗？",
 							confirm_resetall:					"您确定要重置所有角色吗？",
-							context_localrolesettings:			"本地角色设置",
+							context_localrolesettings:				"本地角色设置",
 							modal_header:						"本地角色设置",
-							submenu_resetsettings:				"重置角色",
-							submenu_rolesettings:				"更改设置"
+							submenu_resetsettings:					"重置角色",
+							submenu_rolesettings:					"更改设置"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此角色嗎？",
 							confirm_resetall:					"您確定要重置所有角色嗎？",
-							context_localrolesettings:			"本地角色設置",
+							context_localrolesettings:				"本地角色設置",
 							modal_header:						"本地角色設置",
-							submenu_resetsettings:				"重置角色",
-							submenu_rolesettings:				"更改設置"
+							submenu_resetsettings:					"重置角色",
+							submenu_rolesettings:					"更改設置"
 						};
 					default:		// English
 						return {
 							confirm_reset:						"Are you sure you want to reset this Role?",
 							confirm_resetall:					"Are you sure you want to reset all Roles?",
-							context_localrolesettings:			"Local Role Settings",
+							context_localrolesettings:				"Local Role Settings",
 							modal_header:						"Local Role Settings",
-							submenu_resetsettings:				"Reset Role",
-							submenu_rolesettings:				"Change Settings"
+							submenu_resetsettings:					"Reset Role",
+							submenu_rolesettings:					"Change Settings"
 						};
 				}
 			}
