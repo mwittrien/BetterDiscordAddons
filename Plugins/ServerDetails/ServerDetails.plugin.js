@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.8
+ * @version 1.1.9
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -120,6 +120,7 @@ module.exports = (_ => {
 				}
 				else {
 					let src = this.props.guild.getIconURL(4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
+					let roles = this.props.guild.roles || BDFDB.LibraryStores.GuildStore.getRoles(this.props.guild.id);
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
@@ -155,9 +156,9 @@ module.exports = (_ => {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 								string: BDFDB.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id).count
 							}),
-							_this.settings.items.roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+							_this.settings.items.roles && roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
-								string: Object.keys(this.props.guild.roles).length
+								string: Object.keys(BDFDB.ObjectUtils.filter(roles, n => n.id != this.props.guild.id)).length
 							}),
 							_this.settings.items.language && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.LANGUAGE,
@@ -382,189 +383,189 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							boosts:								"Бустери",
-							creation_date:						"Дата на създаване",
+							creation_date:							"Дата на създаване",
 							icon:								"Икона",
 							join_date:							"Дата на присъединяване"
 						};
 					case "da":		// Danish
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Oprettelsesdato",
+							creation_date:							"Oprettelsesdato",
 							icon:								"Ikon",
 							join_date:							"Deltag i dato"
 						};
 					case "de":		// German
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Erstellungsdatum",
+							creation_date:							"Erstellungsdatum",
 							icon:								"Symbol",
 							join_date:							"Beitrittsdatum"
 						};
 					case "el":		// Greek
 						return {
 							boosts:								"Ενισχυτές",
-							creation_date:						"Ημερομηνία δημιουργίας",
+							creation_date:							"Ημερομηνία δημιουργίας",
 							icon:								"Εικονίδιο",
 							join_date:							"Ημερομηνία προσχώρησης"
 						};
 					case "es":		// Spanish
 						return {
 							boosts:								"Impulsores",
-							creation_date:						"Fecha de creación",
+							creation_date:							"Fecha de creación",
 							icon:								"Icono",
 							join_date:							"Fecha de Ingreso"
 						};
 					case "fi":		// Finnish
 						return {
 							boosts:								"Tehostimet",
-							creation_date:						"Luomispäivä",
+							creation_date:							"Luomispäivä",
 							icon:								"Kuvake",
 							join_date:							"Liittymispäivä"
 						};
 					case "fr":		// French
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Date de création",
+							creation_date:							"Date de création",
 							icon:								"Icône",
 							join_date:							"Date d'inscription"
 						};
 					case "hr":		// Croatian
 						return {
 							boosts:								"Pojačala",
-							creation_date:						"Datum stvaranja",
+							creation_date:							"Datum stvaranja",
 							icon:								"Ikona",
 							join_date:							"Datum pridruživanja"
 						};
 					case "hu":		// Hungarian
 						return {
 							boosts:								"Emlékeztetők",
-							creation_date:						"Létrehozás dátuma",
+							creation_date:							"Létrehozás dátuma",
 							icon:								"Ikon",
 							join_date:							"Csatlakozás dátuma"
 						};
 					case "it":		// Italian
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Data di creazione",
+							creation_date:							"Data di creazione",
 							icon:								"Icona",
 							join_date:							"Data di iscrizione"
 						};
 					case "ja":		// Japanese
 						return {
 							boosts:								"ブースター",
-							creation_date:						"作成日",
+							creation_date:							"作成日",
 							icon:								"アイコン",
 							join_date:							"参加日"
 						};
 					case "ko":		// Korean
 						return {
 							boosts:								"부스터",
-							creation_date:						"제작 일",
+							creation_date:							"제작 일",
 							icon:								"상",
 							join_date:							"가입 날짜"
 						};
 					case "lt":		// Lithuanian
 						return {
 							boosts:								"Stiprintuvai",
-							creation_date:						"Sukūrimo data",
+							creation_date:							"Sukūrimo data",
 							icon:								"Piktograma",
 							join_date:							"Įstojimo data"
 						};
 					case "nl":		// Dutch
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Aanmaakdatum",
+							creation_date:							"Aanmaakdatum",
 							icon:								"Icoon",
 							join_date:							"Toetredingsdatum"
 						};
 					case "no":		// Norwegian
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Opprettelsesdato",
+							creation_date:							"Opprettelsesdato",
 							icon:								"Ikon",
 							join_date:							"Bli med på dato"
 						};
 					case "pl":		// Polish
 						return {
 							boosts:								"Boosty",
-							creation_date:						"Data utworzenia",
+							creation_date:							"Data utworzenia",
 							icon:								"Ikona",
 							join_date:							"Data dołączenia"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Data de criação",
+							creation_date:							"Data de criação",
 							icon:								"Ícone",
 							join_date:							"Data de afiliação"
 						};
 					case "ro":		// Romanian
 						return {
 							boosts:								"Amplificatoare",
-							creation_date:						"Data crearii",
+							creation_date:							"Data crearii",
 							icon:								"Pictogramă",
 							join_date:							"Data înscrierii"
 						};
 					case "ru":		// Russian
 						return {
 							boosts:								"Бустеры",
-							creation_date:						"Дата создания",
+							creation_date:							"Дата создания",
 							icon:								"Икона",
 							join_date:							"Дате вступления"
 						};
 					case "sv":		// Swedish
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Skapelsedagen",
+							creation_date:							"Skapelsedagen",
 							icon:								"Ikon",
 							join_date:							"Gå med datum"
 						};
 					case "th":		// Thai
 						return {
 							boosts:								"บูสเตอร์",
-							creation_date:						"วันที่สร้าง",
+							creation_date:							"วันที่สร้าง",
 							icon:								"ไอคอน",
 							join_date:							"วันที่เข้าร่วม"
 						};
 					case "tr":		// Turkish
 						return {
 							boosts:								"Güçlendiriciler",
-							creation_date:						"Oluşturulma tarihi",
+							creation_date:							"Oluşturulma tarihi",
 							icon:								"Simge",
 							join_date:							"Üyelik Tarihi"
 						};
 					case "uk":		// Ukrainian
 						return {
 							boosts:								"Підсилювачі",
-							creation_date:						"Дата створення",
+							creation_date:							"Дата створення",
 							icon:								"Піктограма",
 							join_date:							"Дата приєднання"
 						};
 					case "vi":		// Vietnamese
 						return {
 							boosts:								"Bộ tăng tốc",
-							creation_date:						"Ngày thành lập",
+							creation_date:							"Ngày thành lập",
 							icon:								"Biểu tượng",
 							join_date:							"Ngày tham gia"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
 							boosts:								"助推器",
-							creation_date:						"创建日期",
+							creation_date:							"创建日期",
 							icon:								"图标",
 							join_date:							"参加日期"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							boosts:								"助推器",
-							creation_date:						"創建日期",
+							creation_date:							"創建日期",
 							icon:								"圖示",
 							join_date:							"參加日期"
 						};
 					default:		// English
 						return {
 							boosts:								"Boosts",
-							creation_date:						"Creation Date",
+							creation_date:							"Creation Date",
 							icon:								"Icon",
 							join_date:							"Join Date"
 						};
