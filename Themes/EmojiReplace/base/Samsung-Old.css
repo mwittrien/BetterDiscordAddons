@@ -1,0 +1,20 @@
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/spritesheets.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/people.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/nature.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/food.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/activity.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/travel.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/objects.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/symbols.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/flags.css);
+@namespace xlink 'http://www.w3.org/1999/xlink';
+.sprite__294b3 {
+	-webkit-mask: none !important;
+	background-color: transparent !important;
+	background-position: var(--custom-emoji-sprite-bg-position) !important;
+	background-size: var(--custom-emoji-sprite-bg-size) !important;
+}
+.spriteGreyscale__7b70f {
+	filter: grayscale(1) !important;
+}
