@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.8
+ * @version 1.1.9
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -275,7 +275,10 @@ module.exports = (_ => {
 			}
 			
 			getGuildFromRoleId (roleId) {
-				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.GuildStore.getGuild).find(g => g.roles[roleId]);
+				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.GuildStore.getGuild).find(guild => {
+					let roles = guild.roles || BDFDB.LibraryStores.GuildStore.getRoles(guild.id);
+					return roles && roles[roleId];
+				});
 			}
 			
 			resetRoles (id) {
