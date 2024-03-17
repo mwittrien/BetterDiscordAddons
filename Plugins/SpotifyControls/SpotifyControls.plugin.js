@@ -323,7 +323,7 @@ module.exports = (_ => {
 															changeTimeout = BDFDB.TimeUtils.timeout(_ => this.props.draggingVolume && this.request(socketDevice.socket, socketDevice.device, "volume", {
 																volume_percent: currentVolume
 															}), 500);
-															return value + "%";
+															return value;
 														},
 														onValueChange: value => {
 															if (currentVolume == value) return;
