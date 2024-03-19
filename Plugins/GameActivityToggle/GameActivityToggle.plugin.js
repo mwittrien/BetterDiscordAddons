@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.1
+ * @version 1.2.2
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -235,8 +235,8 @@ module.exports = (_ => {
 			
 			processAccount (e) {
 				if (!this.settings.general.showButton) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "PanelButton"});
-				if (index > -1) {
+				let children = BDFDB.ObjectUtils.get(e.returnvalue, "props.children.1.props.children");
+				if (children && children.length && BDFDB.ArrayUtils.is(children)) {
 					e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._gameactivitytoggleadded);
 					children.unshift(BDFDB.ReactUtils.createElement(ActivityToggleComponent, {}));
 				}
