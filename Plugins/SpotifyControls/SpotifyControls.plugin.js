@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.9
+ * @version 1.4.0
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -316,7 +316,7 @@ module.exports = (_ => {
 														barStyles: {height: 6, top: 3},
 														fillStyles: {backgroundColor: "var(--SC-spotify-green)"},
 														onValueRender: value => {
-															if (currentVolume == value) return;
+															if (currentVolume == value) return value + "%";
 															this.props.draggingVolume = true;
 															currentVolume = value;
 															BDFDB.TimeUtils.clear(changeTimeout);
