@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.5
+ * @version 3.9.6
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -265,7 +265,7 @@ module.exports = (_ => {
 							}
 							else if (!guildId) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
-								!document.hasFocus() && this.playAudio(isGroupDM ? "groupdm" : "dm");
+								(!isCurrent || !document.hasFocus()) && this.playAudio(isGroupDM ? "groupdm" : "dm");
 								return;
 							}
 							else if (guildId) {
