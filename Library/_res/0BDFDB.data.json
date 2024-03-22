@@ -138,7 +138,7 @@
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUsePremiumGuildMemberProfile"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"props": ["isAndroid", "isWindows"]},
-		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
+		"PermissionRoleUtils": {"props": ["can", "makeEveryoneOverwrite"]},
 		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"]},
 		"PrivateChannelUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"QuerySearchUtils": {"props": ["queryGuilds", "queryGroupDMs"]},
