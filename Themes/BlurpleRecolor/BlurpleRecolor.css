@@ -1798,7 +1798,7 @@ a.metadataDownload__6b32d {
 }
 .colorBrand__471df.focused__27621 .check__8d1bd,
 .colorDefault__0b482.focused__27621 .check__8d1bd {
-	color: rgb(var(--accentcolor_v));
+	fill: rgb(var(--accentcolor_v));
 }
 
 .colorPremium__548bd:not(.focused__27621):not(:active) {				/* contextmenu				premium								*/
@@ -1815,7 +1815,7 @@ a.metadataDownload__6b32d {
 	color: rgb(var(--accentcolor2_v));
 }
 .colorPremium__548bd.focused__27621 .check__8d1bd {
-	color: rgb(var(--accentcolor2_v));
+	fill: rgb(var(--accentcolor2_v));
 }
 
 .colorPremiumGradient__45b85:not(.focused__27621):not(:active) {
@@ -1834,7 +1834,7 @@ a.metadataDownload__6b32d {
 	color: rgb(var(--accentcolor_v));
 }
 .colorPremiumGradient__45b85.focused__27621 .check__8d1bd {
-	color: rgb(var(--accentcolor_v));
+	fill: rgb(var(--accentcolor_v));
 }
 
 .colorDanger_eec36d:not(.focused__27621):not(:active) {					/* contextmenu				danger								*/
@@ -1851,7 +1851,7 @@ a.metadataDownload__6b32d {
 	color: var(--status-danger);
 }
 .colorDanger_eec36d.focused__27621 .check__8d1bd {
-	color: var(--status-danger);
+	fill: var(--status-danger);
 }
 
 .colorSuccess__6b952:not(.focused__27621):not(:active) {				/* contextmenu				success								*/
@@ -1868,7 +1868,7 @@ a.metadataDownload__6b32d {
 	color: var(--status-success);
 }
 .colorSuccess__6b952.focused__27621 .check__8d1bd {
-	color: var(--status-success);
+	fill: var(--status-success);
 }
 
 .colorDefault__0b482[id="account-status-picker--online"].focused__27621,

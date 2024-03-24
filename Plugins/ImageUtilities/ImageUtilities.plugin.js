@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.4.1
+ * @version 5.4.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1130,7 +1130,7 @@ module.exports = (_ => {
 						if (!cachedImages || cachedImages.channelId != viewedImage.channelId || cachedImages.amount && this.getImageIndex(cachedImages.all, viewedImage) == -1) {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
 							let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-							BDFDB.LibraryModules.APIUtils.get({
+							BDFDB.LibraryModules.APIUtils.HTTP.get({
 								url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 								query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 									channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
@@ -1610,7 +1610,7 @@ module.exports = (_ => {
 				
 				if (offset > 0 && !cachedImages.lastReached && cachedImages.index == (cachedImages.amount - 1)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-					BDFDB.LibraryModules.APIUtils.get({
+					BDFDB.LibraryModules.APIUtils.HTTP.get({
 						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
@@ -1637,7 +1637,7 @@ module.exports = (_ => {
 				}
 				if (offset < 0 && !cachedImages.firstReached && cachedImages.index == 0) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-					BDFDB.LibraryModules.APIUtils.get({
+					BDFDB.LibraryModules.APIUtils.HTTP.get({
 						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
