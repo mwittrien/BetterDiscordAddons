@@ -2252,6 +2252,8 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .emojiAliasInput_dd55f7 .emojiInput__4fe54 {
 	background-color: var(--deprecated-text-input-bg);
 	border: 1px solid var(--deprecated-text-input-border);
+	margin-top: -1px;
+	margin-left: -8px;
 }
 #app-mount .emojiAliasInput_dd55f7 .emojiInput__4fe54:hover {
 	border-color: var(--deprecated-text-input-border-hover);
@@ -2259,11 +2261,13 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .emojiAliasInput_dd55f7 .emojiInput__4fe54:focus {
 	border-color: rgb(var(--accentcolor_v));
 }
+#app-mount .emojiRow__4661c:hover .emojiAliasPlaceholderContent_ea7491,
+#app-mount .emojiRow__4661c:focus-within .emojiAliasPlaceholderContent_ea7491 {
+	visibility: hidden !important;
+	color: transparent !important;
+}
 #app-mount .emojiAliasPlaceholder__71733 {
 	color: var(--header-primary);
-}
-#app-mount .emojiRow__4661c {
-	box-shadow: 0 1px 0 0 rgba(var(--textbrightest_v),.04);
 }
 
 #app-mount .auditLog__6c805 {

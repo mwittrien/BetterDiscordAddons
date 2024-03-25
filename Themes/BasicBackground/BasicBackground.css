@@ -2941,6 +2941,8 @@ button.button__4f306.enabled__470f0:hover svg {
 }
 #app-mount .emojiAliasInput_dd55f7 .emojiInput__4fe54 {					/* emojisettings			nameinput							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
+	margin-top: -1px;
+	margin-left: -8px;
 }
 
 #app-mount .auditLog__6c805 {								/* auditlogs				logitem								*/
