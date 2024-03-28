@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.4
+ * @version 1.7.5
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -353,7 +353,7 @@ module.exports = (_ => {
 						[
 							options.isDm && returnvalue.props.icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 								src: returnvalue.props.icon,
-								size: BDFDB.LibraryComponents.AvatarConstants.Sizes.SIZE_24
+								size: BDFDB.LibraryComponents.AvatarConstants.AvatarSizes.SIZE_24
 							}),
 							options.badges,
 						].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {

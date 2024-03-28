@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.9
+ * @version 2.0.0
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -176,7 +176,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 									className: BDFDB.disCN._friendnotificationslogavatar,
 									src: log.avatar,
-									size: BDFDB.LibraryComponents.AvatarConstants.Sizes.SIZE_40
+									size: BDFDB.LibraryComponents.AvatarConstants.AvatarSizes.SIZE_40
 								}),
 								_this.createStatusDot(log.status, log.mobile, {marginRight: 6}),
 								BDFDB.ReactUtils.createElement("div", {
@@ -424,7 +424,7 @@ module.exports = (_ => {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listavatar, cardData.disabled && BDFDB.disCN.avatardisabled),
 								src: BDFDB.UserUtils.getAvatar(cardData.id),
 								status: BDFDB.UserUtils.getStatus(cardData.id),
-								size: BDFDB.LibraryComponents.AvatarConstants.Sizes.SIZE_40,
+								size: BDFDB.LibraryComponents.AvatarConstants.AvatarSizes.SIZE_40,
 								onClick: _ => {
 									let observed = this.getObservedData();
 									let data = observed[type][cardData.id] || Object.assign({}, defaultSettings);
@@ -476,7 +476,7 @@ module.exports = (_ => {
 							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 							this.SettingsUpdated = true;
 						}
-					}));
+					}, true));
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 						title: title,
 						collapseStates: collapseStates,

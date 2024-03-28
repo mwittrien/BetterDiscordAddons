@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.7
+ * @version 4.8.8
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -367,7 +367,7 @@ module.exports = (_ => {
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 											className: BDFDB.disCN.listavatar,
 											src: this.getUserAvatar(id),
-											size: BDFDB.LibraryComponents.AvatarConstants.Sizes.SIZE_32,
+											size: BDFDB.LibraryComponents.AvatarConstants.AvatarSizes.SIZE_32,
 											onClick: _ => this.openUserSettingsModal(BDFDB.LibraryStores.UserStore.getUser(id))
 										})
 									});
