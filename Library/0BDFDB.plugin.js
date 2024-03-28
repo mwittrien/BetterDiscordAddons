@@ -1420,7 +1420,9 @@ module.exports = (_ => {
 							BDFDB.LogUtils.warn([item, "Object not found in DiscordConstants"]);
 							return {};
 						}
-						DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
+						if (InternalData.DiscordConstants[item].strings) DiscordConstants[item] = BDFDB.ModuleUtils.findByString(InternalData.DiscordConstants[item]);
+						else DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
+						if (InternalData.DiscordConstants[item].value) DiscordConstants[item] = DiscordConstants[item][value] || DiscordConstants[item];
 						return DiscordConstants[item] ? DiscordConstants[item] : {};
 					}
 				});
