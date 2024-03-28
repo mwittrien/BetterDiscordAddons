@@ -71,7 +71,7 @@
 		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTextAreaTypes": ["CREATE_FORUM_POST", "PROFILE_BIO_INPUT", "FORUM_CHANNEL_GUIDELINES"],
 		"Colors": ["SPOTIFY", "RED_100", "BLUE"],
-		"ColorsCSS": ["BUTTON_DANGER_BACKGROUND", "STATUS_DANGER", "HEADER_PRIMARY"],
+		"ColorsCSS": {"strings": ["var(--status-positive", "var(--bg-brand)"], "value": "default"},
 		"EmojiSprites": ["DiversityPerRow", "PickerCount", "PickerPerRow"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
 		"MessageTypeGroups": ["USER_MESSAGE", "UNDELETABLE"],
