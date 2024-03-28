@@ -11,7 +11,7 @@
 	--settingsbackground_v: 	var(--settingsbackground_s, var(--settingsbackground));
 }
 
-#app-mount .baseLayer__8fda3 {
+#app-mount .baseLayer__2b890 {
 	opacity: 1 !important;
 	transform: unset !important;
 	will-change: unset !important;
@@ -20,7 +20,7 @@
 	transition-property: inherit !important;
 	animation: inherit !important;
 }
-#app-mount .layer__2efaa.stop-animations:first-child::after {
+#app-mount .layer_f7d46a.stop-animations:first-child::after {
 	content: "" !important;
 	position: fixed !important;
 	background: rgb(0, 0, 0) !important;
@@ -35,7 +35,7 @@
 	pointer-events: none !important;
 }
 
-#app-mount .layer__2efaa ~ .layer__2efaa {
+#app-mount .layer_f7d46a ~ .layer_f7d46a {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -53,8 +53,8 @@
 	z-index: 1000 !important;
 	--settingsiconsadditionalsize: var(--use-settingsicons, 0) * (var(--settingsicons-size, 0px) + var(--settingsicons-gap, 0px));
 }
-#app-mount .layer__2efaa ~ .layer__2efaa > div,
-#app-mount .layer__2efaa ~ .layer__2efaa .standardSidebarView__1129a {
+#app-mount .layer_f7d46a ~ .layer_f7d46a > div,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .standardSidebarView__12528 {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -63,46 +63,46 @@
 	padding: unset !important;
 	overflow: hidden !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .sidebarRegion__60457,
-#app-mount .layer__2efaa ~ .layer__2efaa .sidebarRegionScroller__1fa7e {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebarRegion__36437,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebarRegionScroller__8113e {
 	flex: 0 0 auto !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .sidebar__9e3e2 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebar__02e8d {
 	width: 218px !important;
 	padding: 20px 6px 20px 20px !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .contentColumnDefault_c66386,
-#app-mount .layer__2efaa ~ .layer__2efaa .contentColumnWide_f71d35 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .contentColumnDefault__78de3,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .contentColumnWide__146ec {
 	padding: 20px 40px !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .wrapper__61220 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .wrapper_e5073f {
 	width: calc(var(--settingswidth_v) - 420px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .repo_k8F4Sd {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .repo_k8F4Sd {
 	max-width: calc(var(--settingswidth_v) - 226px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .repoHeader_2KfNvH {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .repoHeader_2KfNvH {
 	padding-bottom: 0 !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .repoHeader_2KfNvH .tabBar__35f81 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .repoHeader_2KfNvH .tabBar__35f81 {
 	gap: 30px !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .repoHeader_2KfNvH .quickSelectLabel_cf5c1b {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .repoHeader_2KfNvH .quickSelectLabel__79774 {
 	font-size: 12px !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .repoScroller_9JnAPs {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .repoScroller_9JnAPs {
 	padding-top: 0 !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .sidebar_bdf6b7 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebar__37984 {
 	height: var(--settingsheight_v) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .standardSidebarView__1129a .editor {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .standardSidebarView__12528 .editor {
 	height: calc(var(--settingsheight_v) - 120px) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .toolsContainer_f5d55d,
-#app-mount .layer__2efaa ~ .layer__2efaa .toolsContainer_f5d55d .tools_c0ff70,
-#app-mount .layer__2efaa ~ .layer__2efaa .toolsContainer_f5d55d .container_bb0c52,
-#app-mount .layer__2efaa ~ .layer__2efaa .toolsContainer_f5d55d .closeButton__34341 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad .tools_c0ff70,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad .container__3529f,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad .closeButton__8177f {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -120,50 +120,50 @@
 	opacity: 0 !important;
 	cursor: default !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .toolsContainer_f5d55d {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad {
 	position: fixed !important;
 	top: 22px !important;
 	z-index: -1 !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .settingsToolbar_wu4yfQ {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .settingsToolbar_wu4yfQ {
 	display: none !important;
 }
 
-#app-mount .layer__2efaa ~ .layer__2efaa .accountProfileCard__22589 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .accountProfileCard__744d8 {
 	max-width: calc(var(--settingswidth_v) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd {
 	gap: 30px !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .sectionsContainer_cce45e,
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .sectionsContainer_a37883,
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .editor_bca4e3,
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .preview__0c5fe {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .sectionsContainer_d2a766,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .sectionsContainer__45b62,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .editor_bca4e3,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 {
 	min-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .sectionsContainer_cce45e,
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .sectionsContainer_a37883,
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .editor_bca4e3,
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434.tryItOutLayout__6026d .preview__0c5fe {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .sectionsContainer_d2a766,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .sectionsContainer__45b62,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .editor_bca4e3,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 {
 	min-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .preview__0c5fe .userPopoutOuter_d739b2 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter__3884e {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .baseLayout_b00434.tryItOutLayout__6026d .preview__0c5fe .userPopoutOuter_d739b2 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter__3884e {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .preview__0c5fe .userPopoutOuter_d739b2,
-#app-mount .layer__2efaa ~ .layer__2efaa .baseLayout_b00434.tryItOutLayout__6026d .preview__0c5fe .userPopoutOuter_d739b2 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter__3884e,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter__3884e {
 	min-width: unset !important;
 	max-width: 340px !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .profileCustomizationSection__88eff .baseLayout_b00434 .preview__0c5fe .userPopoutInner_f545a3 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutInner_e90432 {
 	overflow: hidden !important;
 }
-#app-mount .layer__2efaa ~ .layer__2efaa .guildsSection__337a8 {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .guildsSection__337a8 {
 	max-width: calc(var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) !important;
 }
 
@@ -184,14 +184,14 @@
 	contain: unset !important;
 	z-index: 1000 !important;
 }
-#app-mount .root__6d24f.enterDone_a21e0b {
+#app-mount .root__6d24f.enterDone__88d24 {
 	transform: unset !important;
 }
-#app-mount .root__6d24f .closeIconWrapper_e5c34c,
-#app-mount .root__6d24f .closeIconWrapper_e5c34c .container_bb0c52,
-#app-mount .root__6d24f .closeIconWrapper_e5c34c .closeButton__34341,
-#app-mount .shop_b31ed2 .container_bb0c52,
-#app-mount .shop_b31ed2 .closeButton__34341 {
+#app-mount .root__6d24f .closeIconWrapper_bf90ba,
+#app-mount .root__6d24f .closeIconWrapper_bf90ba .container__3529f,
+#app-mount .root__6d24f .closeIconWrapper_bf90ba .closeButton__8177f,
+#app-mount .shop_b31ed2 .container__3529f,
+#app-mount .shop_b31ed2 .closeButton__8177f {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -210,6 +210,6 @@
 	opacity: 0 !important;
 	cursor: default !important;
 }
-#app-mount .root__6d24f .closeIconWrapper_e5c34c {
+#app-mount .root__6d24f .closeIconWrapper_bf90ba {
 	top: 22px !important;
 }
