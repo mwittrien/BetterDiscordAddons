@@ -147,7 +147,6 @@ body.folderContentIsOpen_zz6FgW .titleBar__710b0.typeMacOS_cacc59 .macButtons__4
 .wrapper__216eb .frame_oXWS21 .button_Jt-tIg {
 	height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
 }
-.wrapper__216eb .friendsOnline_2JkivW,
 .wrapper__216eb .label_2wRs_g {
 	display: flex !important;
 	justify-content: center !important;
@@ -164,6 +163,7 @@ body.folderContentIsOpen_zz6FgW .titleBar__710b0.typeMacOS_cacc59 .macButtons__4
 	margin: calc(1px * var(--guildgap_v)) calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1) - ((var(--guildsize_v)*4/5) + 12 * var(--guildsize_v)/50) + var(--guildsize_v))/2)) calc(1px * var(--guildgap_v)) calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1) - ((var(--guildsize_v)*4/5) + 12 * var(--guildsize_v)/50) + var(--guildsize_v))/2)) !important;
 }
 .wrapper__216eb #sort-button > div,
+.wrapper__216eb .label_2wRs_g,
 .wrapper__216eb .frame_oXWS21 .innerFrame_8Hg64E,
 .wrapper__216eb .frame_oXWS21 .button_Jt-tIg {
 	white-space: pre !important;
