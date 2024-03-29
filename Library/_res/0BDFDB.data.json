@@ -353,7 +353,7 @@
 		"FolderIcon": {"strings": ["folderNode:", "folderIconWrapper", "closedFolderIconWrapper"]},
 		"FolderItem": {"strings": ["folderNode:", "expandedFolderBackground", "onExpandCollapse"]},
 		"FolderItemWrapper": {"strings": ["folderNode:", "isFolderExpanded", "defaultFolderName:"]},
-		"FolderSettingsModal": {"strings": [".handleNameChange=", ".handleSubmit", "folderName:"], "noSearch": true},
+		"FolderSettingsModal": {"strings": [".handleNameChange", ".handleSubmit", "folderName:"], "noSearch": true},
 		"GuildBans": {"strings": [".Messages.BANS_NO_USERS_BANNED", ".Messages.BANS_SEARCH_PLACEHOLDER", ".getSortedBans"]},
 		"GuildChannelListContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "\"guild-context\",\"aria-label\""], "noSearch": true},
 		"GuildContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "navId:\"guild", "GuildContextMenu"], "noSearch": true},
