@@ -2307,6 +2307,13 @@ a.metadataDownload__9673d {
 	background: var(--bd-blue);
 }
 
+html #bd-modal-container {
+	color: transparent;
+}
+html #bd-modal-container > * {
+	color: var(--header-secondary);
+}
+
 .bd-modal-wrapper .footer button {
 	background: var(--bd-blue);
 }
