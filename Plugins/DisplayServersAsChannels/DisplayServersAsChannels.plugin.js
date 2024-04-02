@@ -261,7 +261,7 @@ module.exports = (_ => {
 			}
 			
 			processFolderItemWrapper (e) {
-				if (!e.instance.props.folderNode) return;
+				if (!e.instance.props.folderNode && e.returnvalue.props.style["--folder-color"]) return;
 				let folderColor = this.settings.general.addFolderColor && BDFDB.LibraryStores.ExpandedGuildFolderStore.isFolderExpanded(e.instance.props.folderNode.id) && (BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB"));
 				if (folderColor) e.returnvalue = BDFDB.ReactUtils.createElement("div", {
 					style: {"--folder-color": folderColor},
@@ -535,10 +535,6 @@ module.exports = (_ => {
 						left: 6px;
 						width: auto;
 						border-radius: 4px;
-					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper} [style*="--folder-color"] ${BDFDB.dotCN.guildfolderexpandedbackground} {
-						background: var(--folder-color) !important;
-						opacity: 0.2 !important;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] {
 						height: auto !important;
