@@ -8239,6 +8239,7 @@ module.exports = (_ => {
 				};
 				var memberStore = {};
 				Internal.processMemberListItem = function (e) {
+					if (!e.instance.props.channel || !e.instance.props.user) return;
 					if (!memberStore || !memberStore.channel || memberStore.channel.id != e.instance.props.channel.id) memberStore = {channel: e.instance.props.channel, members: {}};
 					let src = BDFDB.UserUtils.getAvatar(e.instance.props.user.id);
 					if (!src) return;
