@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.5
+ * @version 2.5.6
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -730,7 +730,6 @@ module.exports = (_ => {
 
 				cachedThemes = [];
 				grabbedThemes = [];
-				generatorThemes = [];
 				searchString = "";
 
 				this.defaults = {
@@ -759,6 +758,8 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				generatorThemes = [];
+				
 				this.forceUpdateAll();
 
 				this.loadThemes();
