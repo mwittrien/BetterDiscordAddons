@@ -528,10 +528,10 @@ body::after {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
-.wrapper__216eb .wrapper__832f2 [role="group"] {					/* folder				guildwrap							*/
+.wrapper__216eb:not(.content_Pph8t6) .wrapper__832f2 [role="group"] {			/* folder				guildwrap							*/
 	margin-bottom: -8px;
 }
-.wrapper__216eb .wrapper__832f2 [role="group"] > .listItem__48528:last-child {
+.wrapper__216eb:not(.content_Pph8t6) .wrapper__832f2 [role="group"] .listItem__48528:last-child {
 	margin-bottom: 0;
 }
 
