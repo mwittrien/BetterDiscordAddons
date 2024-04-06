@@ -149,6 +149,10 @@
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	--font-primary: var(--font_v) !important;
 	--font-display: var(--font_v) !important;
+	
+	--deprecated-text-input-bg: rgba(var(--transparencycolor_v), .1);
+	--deprecated-text-input-border: rgba(var(--transparencycolor_v), .1);
+	--deprecated-text-input-border-hover: rgba(var(--transparencycolor_v), .3);
 }
 
 html {
