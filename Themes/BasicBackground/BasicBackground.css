@@ -4253,6 +4253,7 @@ button.button_ae40a4.enabled__214db:hover svg {
 /* ----		14.3.		EMOJIPICKER					---- */
 
 .contentWrapper_e0bb2c,									/* picker				expression wrapper						*/
+.container_ad6d5c,									/* picker				expandable							*/
 .emojiPicker__5e2e2,									/* picker				inner								*/
 .diversitySelectorOptions_daea2d {							/* picker				diversityselector						*/
 	background: transparent;
@@ -4260,12 +4261,20 @@ button.button_ae40a4.enabled__214db:hover svg {
 	border: none;
 	overflow: hidden;
 }
+.contentWrapper_e0bb2c .emojiPicker__5e2e2,
+.container_ad6d5c .emojiPicker__5e2e2 {
+	box-shadow: none;
+}
 .contentWrapper_e0bb2c::before,
+.container_ad6d5c::before,
 .emojiPicker__5e2e2::before,
 .diversitySelectorOptions_daea2d::before,
+.upsellWrapper_c600a6::before,
 .contentWrapper_e0bb2c::after,
+.container_ad6d5c::after,
 .emojiPicker__5e2e2::after,
-.diversitySelectorOptions_daea2d::after {
+.diversitySelectorOptions_daea2d::after,
+.upsellWrapper_c600a6::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4274,18 +4283,23 @@ button.button_ae40a4.enabled__214db:hover svg {
 	left: 0;
 	width: unset;
 	height: unset;
+	border-radius: var(--custom-emoji-picker-border-radius);
 	pointer-events: none;
 	z-index: -1;
 }
 .contentWrapper_e0bb2c::before,
+.container_ad6d5c::before,
 .emojiPicker__5e2e2::before,
-.diversitySelectorOptions_daea2d::before {
+.diversitySelectorOptions_daea2d::before,
+.upsellWrapper_c600a6::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
 .contentWrapper_e0bb2c::after,
+.container_ad6d5c::after,
 .emojiPicker__5e2e2::after,
-.diversitySelectorOptions_daea2d::after {
+.diversitySelectorOptions_daea2d::after,
+.upsellWrapper_c600a6::after {
 	background: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
@@ -4294,7 +4308,9 @@ button.button_ae40a4.enabled__214db:hover svg {
 	border-radius: 5px;
 }
 .contentWrapper_e0bb2c .emojiPicker__5e2e2::before,
-.contentWrapper_e0bb2c .emojiPicker__5e2e2::after {
+.container_ad6d5c .emojiPicker__5e2e2::before,
+.contentWrapper_e0bb2c .emojiPicker__5e2e2::after,
+.container_ad6d5c .emojiPicker__5e2e2::after {
 	display: none;
 }
 
@@ -4308,7 +4324,13 @@ button.button_ae40a4.enabled__214db:hover svg {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
+.emojiPickerHeader_e5f6a0 {								/* picker				header								*/
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
 .wrapper__45980 {									/* picker				sidebar								*/
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+.slotsContainer_fdf76f {								/* picker				slots								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
