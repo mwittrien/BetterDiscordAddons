@@ -5892,6 +5892,9 @@ input.input_f27786:hover:not(:focus) {
 	background-color: rgba(var(--transparencycolor_v), .3);
 	color: var(--interactive-hover);
 }
+.option_eb83e4:focus,
+.option_eb83e4.focused_d14fa7,
+.option_eb83e4.focused_d14fa7:hover,
 .option_eb83e4[aria-selected=true]:not(.option_eb83e4.multi__8d15f),
 .css-1gxgi19-option,
 .css-1ba14n5-option,
