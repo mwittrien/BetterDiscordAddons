@@ -2338,7 +2338,8 @@ html #bd-modal-container > * {
 }
 
 .bd-addon-modal-footer .bd-button,
-.bd-button-filled.bd-button-color-brand {
+.bd-button-filled.bd-button-color-brand,
+.bd-button-filled.bd-button-color-brand:disabled {
 	background: var(--bd-blue);
 }
 .bd-addon-modal-footer .bd-button:hover,
