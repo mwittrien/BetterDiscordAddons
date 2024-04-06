@@ -1638,10 +1638,22 @@ button.button_ae40a4.enabled__214db:hover svg {
 	background-color: transparent;
 }
 
+.container__3b581 .banner_f13f1e,							/* textarea				say hi, etc.							*/
 .attachedBars_c1606a {									/* textarea				reply								*/
 	background: rgba(var(--transparencycolor_v), .3);
 	border: none;
 	border-bottom: 1px solid var(--background-modifier-accent);
+}
+.container__3b581 + .form_d8a4a1 {
+	padding-top: 0;
+}
+.container__3b581 + .form_d8a4a1 .attachedBars_c1606a {
+	padding-top: 1px;
+}
+.container__3b581 + .form_d8a4a1 .attachedBars_c1606a,
+.container__3b581 + .form_d8a4a1 .scrollableContainer_ff917f {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 .replyBar_ed6afc,
 .threadSuggestionBar__717a3 {
