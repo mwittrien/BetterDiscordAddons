@@ -4293,6 +4293,10 @@ button.button_ae40a4.enabled__214db:hover svg {
 .diversitySelectorOptions_daea2d::after {
 	border-radius: 5px;
 }
+.contentWrapper_e0bb2c .emojiPicker__5e2e2::before,
+.contentWrapper_e0bb2c .emojiPicker__5e2e2::after {
+	display: none;
+}
 
 .diversityEmojiItem__48e39:hover {							/* picker				diversityemoji							*/
 	background-color: rgb(var(--accentcolor_v));
@@ -4304,7 +4308,7 @@ button.button_ae40a4.enabled__214db:hover svg {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.wrapper__85934 {									/* picker				sidebar								*/
+.wrapper__45980 {									/* picker				sidebar								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
