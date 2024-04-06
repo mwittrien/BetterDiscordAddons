@@ -750,7 +750,10 @@ button.button_ae40a4.enabled__214db:hover svg {
 .button_b82d53.buttonColor__7bad9 {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-.button_b82d53.buttonColor__7bad9:hover {
+.button_b82d53.buttonColor__7bad9.disabledButtonWrapper_b04230 {
+	background-color: rgba(var(--transparencycolor_v), .15);
+}
+.button_b82d53.buttonColor__7bad9:not(.disabledButtonWrapper_b04230):hover {
 	background-color: rgb(var(--accentcolor_v));
 }
 .button_b82d53.buttonColor__7bad9.buttonActive_ae686f,
