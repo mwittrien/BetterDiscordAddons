@@ -2338,8 +2338,7 @@ html #bd-modal-container > * {
 }
 
 .bd-addon-modal-footer .bd-button,
-.bd-button-filled.bd-button-color-brand,
-.bd-button-filled.bd-button-color-brand:disabled {
+.bd-button-filled.bd-button-color-brand {
 	background: var(--bd-blue);
 }
 .bd-addon-modal-footer .bd-button:hover,
@@ -2347,9 +2346,11 @@ html #bd-modal-container > * {
 	background: var(--accentcolor-hover);
 }
 .bd-addon-modal-footer .bd-button:active,
-
 .bd-button-filled.bd-button-color-brand:active {
 	background: var(--accentcolor-active);
+}
+.bd-button-filled.bd-button-color-brand:disabled {
+	background: var(--bd-blue) !important;
 }
 
 .bd-description-wrap .banner {
