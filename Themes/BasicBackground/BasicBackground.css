@@ -515,7 +515,7 @@ body::after {
 .wrapper__216eb .wrapper__832f2 [role="group"] {					/* folder				guildwrap							*/
 	margin-bottom: -8px;
 }
-.wrapper__216eb .wrapper__832f2 [role="group"] .listItem__48528:last-child {
+.wrapper__216eb .wrapper__832f2 [role="group"] > .listItem__48528:last-child {
 	margin-bottom: 0;
 }
 
