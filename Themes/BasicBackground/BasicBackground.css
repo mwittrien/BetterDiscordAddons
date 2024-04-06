@@ -128,9 +128,21 @@
 	--background-floating: rgba(var(--transparencycolor_v), .5);
 	--background-mobile-primary: rgba(var(--transparencycolor_v), .2);
 	--background-mobile-secondary: rgba(var(--transparencycolor_v), .3);
-	--background-modifier-accent: rgba(var(--textbrightest_v),.1);
-	--background-message-automod: rgba(var(--dangercolor),.05);
-	--background-message-automod-hover: rgba(var(--dangercolor),.1);
+	--background-modifier-accent: rgba(var(--textbrightest_v), .15);
+	--background-modifier-accent-2: rgba(var(--textbrightest_v), .15);
+	--background-modifier-active: rgba(var(--textbrightest_v), .15);
+	--background-modifier-hover: rgba(var(--textbrightest_v), .1);
+	--background-modifier-selected: rgba(var(--textbrightest_v), .2);
+	--bg-backdrop: rgba(var(--transparencycolor_v), .7);
+	--bg-backdrop-no-opacity: rgb(var(--transparencycolor_v));
+	--bg-base-primary: rgba(var(--transparencycolor_v), .2);
+	--bg-base-secondary: rgba(var(--transparencycolor_v), .3);
+	--bg-base-tertiary: rgba(var(--transparencycolor_v), .4);
+	--bg-mod-faint:rgba(var(--transparencycolor_v), .3);
+	--bg-mod-strong:rgba(var(--transparencycolor_v), .54);
+	--bg-mod-subtle:rgba(var(--transparencycolor_v), .48);
+	--background-message-automod: rgba(var(--dangercolor), .05);
+	--background-message-automod-hover: rgba(var(--dangercolor), .1);
 	--channeltextarea-background: rgba(var(--transparencycolor_v), .3);
 	--input-background: rgba(var(--transparencycolor_v), .1);
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor_v), .3);
@@ -1620,7 +1632,6 @@ button.button_ae40a4.enabled__214db:hover svg {
 
 .channelTextArea_c2094b {								/* textarea				channeltextarea							*/
 	background-color: transparent;
-	border-top-color: var(--background-modifier-accent);
 }
 
 .attachedBars_c1606a {									/* textarea				reply								*/
