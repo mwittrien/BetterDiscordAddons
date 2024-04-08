@@ -754,7 +754,7 @@ module.exports = (_ => {
 				}));
 			}
 
-			processEmbed(e) {
+			processEmbed (e) {
 				if (!e.instance.props.embed || !e.instance.props.embed.message_id) return;
 				let translation = translatedMessages[e.instance.props.embed.message_id];
 				if (translation && Object.keys(translation.embeds).length) {
@@ -905,13 +905,12 @@ module.exports = (_ => {
 								fields: embed.fields ? embed.fields.map(field => ({ name: field.rawName, value: field.rawValue })) : []
 							}))
 						};
-						// Concatenate all texts to be translated
 						let allTextsToTranslate = originalContentData.content;
 						originalContentData.embeds.forEach(embed => {
 							allTextsToTranslate += `\n__________________ __________________ __________________\n`;
 							allTextsToTranslate += embed.title + "\n" + embed.description;
 							embed.fields.forEach(field => {
-								allTextsToTranslate += "\n" + field.name + "__________________ " + field.value;
+								allTextsToTranslate += "\n\n" + field.name + "__________________" + field.value;
 							});
 							if (embed.footerText) allTextsToTranslate += "\n" + embed.footerText;
 						});
@@ -919,6 +918,7 @@ module.exports = (_ => {
 						let embedIds = message.embeds.map(embed => embed.id);
 						this.translateText(allTextsToTranslate, messageTypes.RECEIVED, (translatedText, input, output) => {
 							if (translatedText) {
+								console.log(translatedText);
 								// Split the translated text back into components
 								let translatedSegments = translatedText.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
 								let translatedContent = translatedSegments.shift();
@@ -931,9 +931,11 @@ module.exports = (_ => {
 									let title = segmentLines.shift();
 									let description = segmentLines.shift();
 									let footerText = segmentLines.pop();
-									// Split remaining lines assuming they are fields separated by "__________________ " into name and value
-									let fields = segmentLines.map(line => {
-										let [name, value] = line.split("__________________ ");
+									// Split remaining lines assuming they are fields separated by \n\n
+									// and field is separated by "__________________ " into name and value
+									let fieldsSegment = segmentLines.join("\n").split("\n\n");
+									let fields = fieldsSegment.map(line => {
+										let [name, value] = line.split("__________________");
 										return { name, value };
 									});
 
