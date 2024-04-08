@@ -918,7 +918,6 @@ module.exports = (_ => {
 						let embedIds = message.embeds.map(embed => embed.id);
 						this.translateText(allTextsToTranslate, messageTypes.RECEIVED, (translatedText, input, output) => {
 							if (translatedText) {
-								console.log(translatedText);
 								// Split the translated text back into components
 								let translatedSegments = translatedText.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
 								let translatedContent = translatedSegments.shift();
