@@ -754,32 +754,58 @@ module.exports = (_ => {
 				}));
 			}
 
-			processEmbed (e) {
+			processEmbed(e) {
 				if (!e.instance.props.embed || !e.instance.props.embed.message_id) return;
 				let translation = translatedMessages[e.instance.props.embed.message_id];
 				if (translation && Object.keys(translation.embeds).length) {
 					if (!e.returnvalue) e.instance.props.embed = Object.assign({}, e.instance.props.embed, {
-						rawDescription: translation.embeds[e.instance.props.embed.id],
-						originalDescription: e.instance.props.embed.originalDescription || e.instance.props.embed.rawDescription
+						rawDescription: translation.embeds[e.instance.props.embed.id].description,
+						rawTitle: translation.embeds[e.instance.props.embed.id].title,
+						footer: Object.assign({}, e.instance.props.embed.footer || {}, {
+							text: translation.embeds[e.instance.props.embed.id].footerText || ""
+						}),
+						fields: translation.embeds[e.instance.props.embed.id].fields.map(n => ({ rawName: n.name, rawValue: n.value })),
+						originalDescription: e.instance.props.embed.originalDescription || e.instance.props.embed.rawDescription,
+						originalTitle: e.instance.props.embed.originalTitle || e.instance.props.embed.rawTitle,
+						originalFields: e.instance.props.embed.originalFields || e.instance.props.embed.fields,
+						originalFooter: e.instance.props.embed.originalFooter || Object.assign({}, e.instance.props.embed.footer)
 					});
 					else {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.embeddescription]]});
-						if (index > -1) children[index].props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.getName(translation.output)}`,
-							tooltipConfig: {style: "max-width: 400px"},
-							children: BDFDB.ReactUtils.createElement("span", {
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messagetimestamp, BDFDB.disCN.messagetimestampinline, BDFDB.disCN._translatortranslated),
-								children: BDFDB.ReactUtils.createElement("span", {
-									className: BDFDB.disCN.messageedited,
-									children: `(${this.labels.translated_watermark})`
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, { props: [["className", BDFDB.disCN.embeddescription]] });
+						if (index > -1) {
+							// Ensure children[index].props.children is an array before attempting to push
+							// Fix for errors on multiple embeds in single messages
+							if (!Array.isArray(children[index].props.children)) {
+								children[index].props.children = [children[index].props.children];
+							}
+
+							children[index].props.children.push(
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+									text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.getName(translation.output)}`,
+									tooltipConfig: { style: "max-width: 400px" },
+									children: BDFDB.ReactUtils.createElement("span", {
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messagetimestamp, BDFDB.disCN.messagetimestampinline, BDFDB.disCN._translatortranslated),
+										children: BDFDB.ReactUtils.createElement("span", {
+											className: BDFDB.disCN.messageedited,
+											children: `(${this.labels.translated_watermark})`
+										})
+									})
 								})
-							})
-						}));
+							);
+						}
 					}
 				}
 				else if (!e.returnvalue && e.instance.props.embed.originalDescription) {
-					e.instance.props.embed = Object.assign({}, e.instance.props.embed, {rawDescription: e.instance.props.embed.originalDescription});
+					e.instance.props.embed = Object.assign({}, e.instance.props.embed, {
+						rawDescription: e.instance.props.embed.originalDescription,
+						rawTitle: e.instance.props.embed.originalTitle,
+						fields: e.instance.props.embed.originalFields,
+						footer: e.instance.props.embed.originalFooter
+					});
 					delete e.instance.props.embed.originalDescription;
+					delete e.instance.props.embed.originalTitle;
+					delete e.instance.props.embed.originalFields;
+					delete e.instance.props.embed.originalFooter;
 				}
 			}
 			
@@ -862,31 +888,66 @@ module.exports = (_ => {
 				}
 			}
 
-			translateMessage (message, channel) {
+			translateMessage(message, channel) {
 				return new Promise(callback => {
 					if (!message) return callback(null);
 					if (translatedMessages[message.id]) {
 						delete translatedMessages[message.id];
 						BDFDB.MessageUtils.rerenderAll(true);
 						callback(false);
-					}
-					else {
-						let orignalContent = message.content || "";
-						for (let embed of message.embeds) orignalContent += ("\n__________________ __________________ __________________\n" + embed.rawDescription);
-						this.translateText(orignalContent, messageTypes.RECEIVED, (translation, input, output) => {
-							if (translation) {
+					} else {
+						let originalContentData = {
+							content: message.content || "",
+							embeds: message.embeds.map(embed => ({
+								description: embed.rawDescription || "",
+								title: embed.rawTitle || "",
+								footerText: embed.footer ? embed.footer.text : "",
+								fields: embed.fields ? embed.fields.map(field => ({ name: field.rawName, value: field.rawValue })) : []
+							}))
+						};
+						// Concatenate all texts to be translated
+						let allTextsToTranslate = originalContentData.content;
+						originalContentData.embeds.forEach(embed => {
+							allTextsToTranslate += `\n__________________ __________________ __________________\n`;
+							allTextsToTranslate += embed.title + "\n" + embed.description;
+							embed.fields.forEach(field => {
+								allTextsToTranslate += "\n" + field.name + "__________________ " + field.value;
+							});
+							if (embed.footerText) allTextsToTranslate += "\n" + embed.footerText;
+						});
+						message.embeds.forEach(embed => embed.message_id = message.id);
+						let embedIds = message.embeds.map(embed => embed.id);
+						this.translateText(allTextsToTranslate, messageTypes.RECEIVED, (translatedText, input, output) => {
+							if (translatedText) {
+								// Split the translated text back into components
+								let translatedSegments = translatedText.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
+								let translatedContent = translatedSegments.shift();
+								// The first segment is the message content
+								// For each embed segment set id from embedIds
+								// Prepare the translated embeds based on the remaining segments
+								let translatedEmbeds = translatedSegments.reduce((dict, segment, index) => {
+									let embedId = embedIds[index];
+									let segmentLines = segment.split("\n");
+									let title = segmentLines.shift();
+									let description = segmentLines.shift();
+									let footerText = segmentLines.pop();
+									// Split remaining lines assuming they are fields separated by "__________________ " into name and value
+									let fields = segmentLines.map(line => {
+										let [name, value] = line.split("__________________ ");
+										return { name, value };
+									});
+
+									dict[embedId] = { title, description, fields, footerText };
+									return dict;
+								}, {});
 								oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
-								let oldStrings = orignalContent.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
-								let strings = translation.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
-								let oldContent = this.settings.general.showOriginalMessage && (oldStrings.shift() || "").trim();
-								let content = (strings.shift() || "").trim() + (oldContent ? (!this.settings.general.useSpoilerInOriginal ? ("\n\n> *" + oldContent.split("\n").join("*\n> *") + "*").replace(/> \*\*\n/g, "> \n") : `\n\n||${oldContent}||`) : "");
-								let embeds = {};
-								for (let i in message.embeds) {
-									message.embeds[i].message_id = message.id;
-									let oldEmbedString = this.settings.general.showOriginalMessage && (oldStrings.shift() || "").trim();
-									embeds[message.embeds[i].id] = (strings.shift() || message.embeds[i].rawDescription).trim() + (oldEmbedString ? (!this.settings.general.useSpoilerInOriginal ? ("\n\n> *" + oldEmbedString.split("\n").join("*\n> *") + "*").replace(/> \*\*\n/g, "> \n") : `\n\n||${oldEmbedString}||`) : "");
-								}
-								translatedMessages[message.id] = {content, embeds, input, output};
+								oldMessages[message.id].originalContentData = originalContentData;
+								translatedMessages[message.id] = {
+									content: translatedContent,
+									embeds: translatedEmbeds,
+									input,
+									output
+								};
 								BDFDB.MessageUtils.rerenderAll(true);
 							}
 							callback(true);
