@@ -123,6 +123,11 @@ module.exports = (_ => {
 						margin-left: 0;
 						text-indent: 0;
 					}
+     					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._toproleseverywherebadgestyle} {
+						margin-right: 0.3rem !important;
+						margin-left: 0;
+						flex: 0 0 auto;
+					}
 					${BDFDB.dotCN._toproleseverywhererolestyle} {
 						display: inline-flex;
 						margin: 0 0 0 0.3rem;
