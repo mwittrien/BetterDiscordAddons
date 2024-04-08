@@ -888,7 +888,7 @@ module.exports = (_ => {
 				}
 			}
 
-			translateMessage(message, channel) {
+			translateMessage (message, channel) {
 				return new Promise(callback => {
 					if (!message) return callback(null);
 					if (translatedMessages[message.id]) {
