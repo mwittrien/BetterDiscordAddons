@@ -231,7 +231,7 @@ module.exports = (_ => {
 
 			injectIdTag (children, user, type, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
-				children.push(insertIndex, 0, this.createTag({
+				children.push(this.createTag({
 					name: user.id
 				}, type, config));
 			}
