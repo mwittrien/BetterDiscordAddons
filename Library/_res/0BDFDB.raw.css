@@ -485,6 +485,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-right: 0;
 	margin-left: .25rem;
 }
+[REPLACE_CLASS_messagerepliedmessage] [REPLACE_CLASS_messageusername] ~ [REPLACE_CLASS_messagebottagcompact] {
+	margin-right: .25rem;
+	margin-left: 0;
+}
 
 [REPLACE_CLASS_messageavatar][REPLACE_CLASS_bdfdbbadgeavatar] > :not([REPLACE_CLASS_bdfdbbadge]),
 [REPLACE_CLASS_messageavatar][REPLACE_CLASS_bdfdbbadgeavatar] [REPLACE_CLASS_avatarwrapper] {
