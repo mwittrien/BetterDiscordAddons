@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.3
+ * @version 3.6.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1455,7 +1455,7 @@ module.exports = (_ => {
 				Internal.LibraryStores = new Proxy(LibraryStores, {
 					get: function (_, item) {
 						if (LibraryStores[item]) return LibraryStores[item];
-						LibraryStores[item] = BDFDB.ModuleUtils.find(m => m && typeof m.getName == "function" && m.getName() == item && m);
+						LibraryStores[item] = BDFDB.ModuleUtils.find(m => m && m.constructor && typeof m.constructor.displayName == "string" && m.constructor.displayName == item && m);
 						if (!LibraryStores[item]) BDFDB.LogUtils.warn([item, "could not be found in Webmodule Stores"]);
 						return LibraryStores[item] ? LibraryStores[item] : null;
 					}
