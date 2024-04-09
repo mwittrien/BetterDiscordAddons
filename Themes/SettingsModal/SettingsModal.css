@@ -209,6 +209,8 @@
 	padding: 0 !important;
 	opacity: 0 !important;
 	cursor: default !important;
+	animation: unset !important;
+	transition: unset !important;
 }
 #app-mount .root__6d24f .closeIconWrapper_bf90ba {
 	top: 22px !important;
