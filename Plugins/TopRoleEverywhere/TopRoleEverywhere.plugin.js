@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.4
+ * @version 3.1.5
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -65,13 +65,13 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						useOtherStyle:		{value: false, 	description: "Uses BotTag Style instead of the Role Style"},
-						useBlackFont:		{value: false, 	description: "Uses black Font instead of darkening the Color for BotTag Style on bright Colors"},
-						includeColorless:	{value: false, 	description: "Includes colorless Roles"},
-						showOwnerRole:		{value: false, 	description: `Displays Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
-						disableForBots:		{value: false, 	description: "Disables Role Tag for Bots"},
-						addUserId:		{value: false, 	description: "Adds the User Id as a Tag to the Chat Window"},
-						userIdFirst:		{value: false, 	description: "Places the User Id before the Role Tag"}
+						useOtherStyle:		{value: false, 	description: "Use BotTag Style instead of the Role Style"},
+						useBlackFont:		{value: false, 	description: "Use black Font instead of darkening the Color for BotTag Style on bright Colors"},
+						includeColorless:	{value: false, 	description: "Include colorless Roles"},
+						showOwnerRole:		{value: false, 	description: `Display Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
+						disableForBots:		{value: false, 	description: "Disable Role Tag for Bots"},
+						addUserId:		{value: false, 	description: "Add the User Id as a Tag to the Chat Window"},
+						userIdFirst:		{value: false, 	description: "Place the User Id before the Role Tag"}
 					},
 					places: {
 						chat:			{value: true, 	description: "Chat Window"},
@@ -107,25 +107,20 @@ module.exports = (_ => {
 					${BDFDB.dotCN._toproleseverywheremembertag} {
 						max-width: 50%;
 					}
-					${BDFDB.dotCNS.themelight + BDFDB.dotCN._toproleseverywhererolestyle} {
-						color: rgba(79, 84, 92, 0.8);
-					}
-					${BDFDB.dotCNS.themedark + BDFDB.dotCN._toproleseverywhererolestyle} {
-						color: hsla(0, 0%, 100%, 0.8);
-					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN._toproleseverywhererolestyle} {
 						margin-right: 0;
-						margin-left: 0.3rem;
+						margin-left: .3rem;
 						text-indent: 0;
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._toproleseverywhererolestyle} {
-						margin-right: 0.3rem;
+						margin-right: .3rem;
 						margin-left: 0;
 						text-indent: 0;
 					}
 					${BDFDB.dotCN._toproleseverywhererolestyle} {
 						display: inline-flex;
 						margin: 0 0 0 0.3rem;
+						color: var(--text-normal)
 					}
 					${BDFDB.dotCNS._toproleseverywhererolestyle + BDFDB.dotCN.userrolecircle} {
 						flex: 0 0 auto;
@@ -218,7 +213,7 @@ module.exports = (_ => {
 				if (this.settings.general.showOwnerRole && user.id == guild.ownerId) role = Object.assign({}, role, {name: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER, ownerRole: true});
 				if (role && !role.colorString && !this.settings.general.includeColorless && !role.ownerRole) {
 					let member = BDFDB.LibraryStores.GuildMemberStore.getMember(guild.id, user.id);
-					if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => guild.getRole(roleId)), "position").reverse()) if (sortedRole.colorString) {
+					if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => BDFDB.LibraryStores.GuildStore.getRole(guild.id, roleId)), "position").reverse()) if (sortedRole.colorString) {
 						role = sortedRole;
 						break;
 					}
@@ -231,7 +226,7 @@ module.exports = (_ => {
 
 			injectIdTag (children, user, type, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
-				children.push(insertIndex, 0, this.createTag({
+				children.push(this.createTag({
 					name: user.id
 				}, type, config));
 			}
