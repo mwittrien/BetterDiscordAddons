@@ -97,10 +97,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				let init = false;
-				BDFDB.TimeUtils.timeout(_ => init = true, 3000);
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UserNameUtils, "getName", {after: e => {
-					if (!init) return;
 					return this.getNewName(e.methodArguments[2], e.methodArguments[0]);
 				}});
 				
