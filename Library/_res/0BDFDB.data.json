@@ -412,7 +412,7 @@
 		"ModalRoot": {"strings": ["rootWithShadow", "ImpressionTypes.MODAL", "ModalTransitionState"]},
 		"NameContainer": {"strings": ["\"listitem\"", "wrappedName", "innerClassName"]},
 		"NameTag": {"strings": ["invertColor:", "usernameClass", "discriminatorClass"]},
-		"NavItem": {"strings": [".selected", ".childWrapper", "fontSize:"]},
+		"NavItem": {"strings": [".selected", ".acronym", "fontSize:"]},
 		"Note": {"strings": [".noteRef", "handleBlur", ".SPACE"]},
 		"NowPlayingHeader": {"strings": ["ACTIVITY_FEED_NOW_PLAYING_HEADER", "partiedMembers"]},
 		"NowPlayingItem": {"strings": [".wrapper", "padded:"]},
