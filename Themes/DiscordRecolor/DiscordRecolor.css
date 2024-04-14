@@ -46,9 +46,9 @@
 	--backgroundfloating_v:			var(--backgroundfloating_s, var(--backgroundfloating));
 }
 
-.theme-light:not(.userProfileOuterThemed__1fbd7),
-.theme-dark:not(.userProfileOuterThemed__1fbd7),
-.theme-amoled:not(.userProfileOuterThemed__1fbd7) {
+.theme-light:not(.userProfileOuterThemed_a425f3),
+.theme-dark:not(.userProfileOuterThemed_a425f3),
+.theme-amoled:not(.userProfileOuterThemed_a425f3) {
 	--text-positive: rgb(var(--successcolor_v));
 	--text-warning: rgb(var(--warningcolor_v));
 	--text-danger: rgb(var(--dangercolor_v));
@@ -2998,14 +2998,14 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		12.1.		USERPOPOUT					---- */
 
-#app-mount .userPopoutOuter__3884e {
+#app-mount .userPopoutOuter_d67f56 {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v),.6), 0 2px 10px 0 rgba(0,0,0,.2);
 }
 
 .profileColors_ac6ab4 .mask_d5067d circle {
 	fill: transparent;
 }
-#app-mount .userProfileOuterThemed__1fbd7 ::-webkit-scrollbar-thumb {
+#app-mount .userProfileOuterThemed_a425f3 ::-webkit-scrollbar-thumb {
 	background-color: var(--profile-gradient-secondary-color) !important;
 }
 

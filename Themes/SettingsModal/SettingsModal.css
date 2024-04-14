@@ -149,14 +149,14 @@
 	min-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter__3884e {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter_d67f56 {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter__3884e {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter_d67f56 {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter__3884e,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter__3884e {
+#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter_d67f56,
+#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter_d67f56 {
 	min-width: unset !important;
 	max-width: 340px !important;
 }

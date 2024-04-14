@@ -396,6 +396,7 @@ body::after {
 	background: transparent !important;
 	opacity: 1 !important;
 	animation: none !important;
+	backdrop-filter: unset !important;
 }
 .uploadArea_c7493d::before,
 .backdrop__7b2e0::before,
@@ -636,8 +637,8 @@ body::after {
 .modeConnected__52a8f:hover .icon__67ab4,
 .modeSelected__473f1 .icon__67ab4,
 .modeSelected__473f1:hover .icon__67ab4,
-.modeUnread_f74c03 .icon__67ab4,
-.modeUnread_f74c03:hover .icon__67ab4,
+.modeUnreadImportant__35358 .icon__67ab4,
+.modeUnreadImportant__35358:hover .icon__67ab4,
 .modeUnreadImportant__35358 .icon__67ab4,
 .modeUnreadImportant__35358:hover .icon__67ab4,
 .notInteractive_e31551.modeConnected__52a8f .icon__67ab4,
@@ -648,8 +649,8 @@ body::after {
 .modeConnected__52a8f:hover .subtitle_eb6026,
 .modeSelected__473f1 .subtitle_eb6026,
 .modeSelected__473f1:hover .subtitle_eb6026,
-.modeUnread_f74c03 .subtitle_eb6026,
-.modeUnread_f74c03:hover .subtitle_eb6026,
+.modeUnreadImportant__35358 .subtitle_eb6026,
+.modeUnreadImportant__35358:hover .subtitle_eb6026,
 .modeUnreadImportant__35358 .subtitle_eb6026,
 .modeUnreadImportant__35358:hover .subtitle_eb6026,
 .notInteractive_e31551.modeConnected__52a8f .subtitle_eb6026,
@@ -4131,14 +4132,14 @@ button.button_ae40a4.enabled__214db:hover svg {
 
 /* ----		14.2.		USERPOPOUT					---- */
 
-.userPopoutOuter__3884e {								/* popout				container							*/
+.userPopoutOuter_d67f56 {								/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
-.userProfileOuterUnthemed_e14365 {							/* popout				container							*/
+.userProfileOuterUnthemed__9741c {							/* popout				container							*/
 	background: transparent;
 }
-.userProfileOuterUnthemed_e14365::before,
-.userProfileOuterUnthemed_e14365::after {
+.userProfileOuterUnthemed__9741c::before,
+.userProfileOuterUnthemed__9741c::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4151,15 +4152,15 @@ button.button_ae40a4.enabled__214db:hover svg {
 	pointer-events: none;
 	z-index: -1;
 }
-.userProfileOuterUnthemed_e14365::before {
+.userProfileOuterUnthemed__9741c::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
-.userProfileOuterUnthemed_e14365::after {
+.userProfileOuterUnthemed__9741c::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
-.accountProfilePopoutWrapper_d4887f .overlayBackground__2666e {
+.accountProfilePopoutWrapper_d4887f .overlayBackground__345c9 {
 	display: block !important;
 }
 .profileColors_ac6ab4 {									/* popout				profilecolors							*/
@@ -4167,10 +4168,10 @@ button.button_ae40a4.enabled__214db:hover svg {
 	--profile-body-divider-color: var(--background-modifier-accent) !important;
 	--profile-body-divider-opacity: 1 !important;
 }
-#app-mount .userProfileOuterThemed__1fbd7 ::-webkit-scrollbar-thumb {
+#app-mount .userProfileOuterThemed_a425f3 ::-webkit-scrollbar-thumb {
 	background-color: var(--profile-gradient-secondary-color) !important;
 }
-.userProfileInnerThemed__5ab6a::after {
+.userProfileInnerThemed__126d9::after {
 	content: "";
 	position: absolute;
 	display: block;
@@ -4181,20 +4182,20 @@ button.button_ae40a4.enabled__214db:hover svg {
 	height: 60px;
 	z-index: 1;
 }
-.userProfileInnerThemed__5ab6a::before {
+.userProfileInnerThemed__126d9::before {
 	z-index: 2;
 }
-.userProfileInnerThemed__5ab6a > * {
+.userProfileInnerThemed__126d9 > * {
 	z-index: 3;
 }
-.userProfileInnerThemedWithBanner__2152d::after {
+.userProfileInnerThemedWithBanner_e9e7c5::after {
 	height: 120px;
 }
-.userProfileInner__61cc1 {								/* popout				inner								*/
+.userProfileInner__8ff35 {								/* popout				inner								*/
 	border-radius: 4px;
 }
-.userPopoutOuter__3884e .wrapper__3ed10,						/* popout				avatar								*/
-.userPopoutOuter__3884e .avatarWrapper {						/* popout				status everywhere						*/
+.userPopoutOuter_d67f56 .wrapper__3ed10,						/* popout				avatar								*/
+.userPopoutOuter_d67f56 .avatarWrapper {						/* popout				status everywhere						*/
 	background-color: transparent;
 	border-color: transparent;
 	box-sizing: content-box;
