@@ -96,6 +96,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex: 1 1 auto;
 }
 
+[REPLACE_CLASS_settingspanel] [REPLACE_CLASS_slidermark] {
+	line-height: 10px;
+}
+
 [REPLACE_CLASS_switch][REPLACE_CLASS_switchmini] {
 	width: 26px;
 	height: 16px;
