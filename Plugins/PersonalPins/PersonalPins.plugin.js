@@ -625,7 +625,7 @@ module.exports = (_ => {
 			}
 			
 			isNoteOutdated (note, message) {
-				let noteMessage = note && JSON.parse(note.message), keys = ["content", "embeds", "attachment"];
+				let noteMessage = note && JSON.parse(note.message), keys = ["content", "embeds", "attachment", "item"];
 				return noteMessage && !BDFDB.equals(BDFDB.ObjectUtils.extract(noteMessage, keys), BDFDB.ObjectUtils.extract(message, keys));
 			}
 

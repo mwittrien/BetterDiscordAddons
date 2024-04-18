@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.4.2
+ * @version 5.4.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -137,14 +137,20 @@ module.exports = (_ => {
 		const ImageDetailsComponent = class ImageDetails extends BdApi.React.Component {
 			componentDidMount() {
 				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemosaiconebyonegridsingle, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._imageutilitiesimagedetailsadded);
-				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
-				BDFDB.ReactUtils.forceUpdate(this);
+				let item = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "item", {up: true});
+				if (item && item.originalItem) {
+					this.props.attachment = item.originalItem;
+					BDFDB.ReactUtils.forceUpdate(this);
+				}
 			}
 			componentDidUpdate() {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
 					this.props.loaded = true;
-					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
-					BDFDB.ReactUtils.forceUpdate(this);
+					let item = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "item", {up: true});
+					if (item && item.originalItem) {
+						this.props.attachment = item.originalItem;
+						BDFDB.ReactUtils.forceUpdate(this);
+					}
 				}
 			}
 			render() {
@@ -1393,14 +1399,14 @@ module.exports = (_ => {
 			processLazyImageZoomable (e) {
 				if (!e.instance.props.original || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
 				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length > 1) {
-					const attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
-					if (attachment) {
+					const item = BDFDB.ReactUtils.findValue(e.instance, "item", {up: true});
+					if (item && item.originalItem) {
 						const onMouseEnter = e.returnvalue.props.onMouseEnter;
 						e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
 							BDFDB.TooltipUtils.create(args[0].target, [
-								attachment.filename,
-								BDFDB.NumberUtils.formatBytes(attachment.size),
-								`${attachment.width}x${attachment.height}px`
+								item.originalItem.filename,
+								BDFDB.NumberUtils.formatBytes(item.originalItem.size),
+								`${item.originalItem.width}x${item.originalItem.height}px`
 							].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
 								type: "right",
 								delay: this.settings.detailsSettings.tooltipDelay
@@ -1441,14 +1447,14 @@ module.exports = (_ => {
 					if (this.settings.rescaleSettings.messages != "NONE" && !e.instance.props.inline && e.instance.props.type == "attachment" && e.instance.props.containerStyles) e.instance.props.containerStyles.maxWidth = "100%";
 				}
 				else {
+					if (e.instance.state && e.instance.state.visible) return;
 					if (this.settings.general.nsfwMode && typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
 						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let returnedChildren = childrenRender(...args);
-							let attachment = BDFDB.ReactUtils.findValue(returnedChildren, "attachment");
-							if (attachment && attachment.nsfw) {
-								let [children, index] = BDFDB.ReactUtils.findParent(returnedChildren, {name: "SpoilerWarning"});
-								if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
+							let item = BDFDB.ReactUtils.findValue(returnedChildren, "item");
+							if (item && item.originalItem && item.originalItem.nsfw) {
+								returnedChildren.props.children[0] = BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.spoilerwarning,
 									children: "NSFW"
 								});
