@@ -1755,7 +1755,7 @@ button.button_ae40a4.enabled__214db:hover svg {
 }
 .clickable__0b25f[aria-selected=true] > .base__87e58,					/* autocomplete				rowselected							*/
 .clickable__0b25f[aria-disabled=false] > .base__87e58:hover {
-	background-color: rgba(var(--transparencycolor_v), .3);
+	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + .15));
 }
 
 #app-mount .wrapper__35c78 {								/* autocomplete				categories							*/
