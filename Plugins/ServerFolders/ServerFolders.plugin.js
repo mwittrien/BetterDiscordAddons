@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.2.2
+ * @version 7.2.3
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -798,10 +798,13 @@ module.exports = (_ => {
 					else if (e.instance.props.expanded || data.useClosedIcon) {
 						let folderIcons = this.loadAllIcons(), iconType = e.instance.props.expanded ? "openicon" : "closedicon";
 						let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][iconType], data.color1, data.color2) : folderIcons[data.iconID][iconType]) : null;
-						if (icon) children[index] = BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.guildfoldericonwrapper,
-							style: {background: `url(${icon}) center/cover no-repeat`}
-						});
+						if (icon) {
+							children[index] = BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.guildfoldericonwrapper,
+								style: {background: `url(${icon}) center/cover no-repeat`}
+							});
+							BDFDB.ReactUtils.forceStyle(children[index], ["background"]);
+						}
 					}
 					if (this.settings.general.showCountBadge) {
 						let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
