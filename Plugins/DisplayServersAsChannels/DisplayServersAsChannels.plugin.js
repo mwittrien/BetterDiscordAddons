@@ -86,10 +86,12 @@ module.exports = (_ => {
 						"DirectMessage",
 						"FolderHeader",
 						"FolderItemWrapper",
+						"GuildBadge",
 						"GuildFavorites",
 						"GuildItem",
 						"GuildsBar",
 						"HomeButtonDefault",
+						"IconBadge",
 						"UnavailableGuildsButton"
 					]
 				};
@@ -230,6 +232,20 @@ module.exports = (_ => {
 						})
 					]
 				});
+			}
+			
+			processGuildBadge (e) {
+				this.processIconBadge(e, "Guild");
+			}
+			
+			processIconBadge (e, type = "Icon") {
+				if (!e.returnvalue) return;
+				let ref = e.returnvalue.ref;
+				e.returnvalue.ref = BDFDB.TimeUtils.suppress(instance => {
+					if (typeof ref == "function") ref(instance);
+					let node = BDFDB.ReactUtils.findDOMNode(instance);
+					if (node) for (let path of node.querySelectorAll("path")) path.style.setProperty("d", `path("${path.getAttribute("d")}")`, "important");
+				}, `Error in Ref of ${type} Badge`, this);
 			}
 			
 			processFolderHeader (e) {
