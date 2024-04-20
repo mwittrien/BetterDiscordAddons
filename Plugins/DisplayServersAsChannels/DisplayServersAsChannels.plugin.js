@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.6
+ * @version 1.7.7
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,7 +86,6 @@ module.exports = (_ => {
 						"DirectMessage",
 						"FolderHeader",
 						"FolderItemWrapper",
-						"GuildChild",
 						"GuildFavorites",
 						"GuildItem",
 						"GuildsBar",
@@ -231,11 +230,6 @@ module.exports = (_ => {
 						})
 					]
 				});
-			}
-			
-			processGuildChild (e) {
-				let guildchild = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildiconchildwrapper]]});
-				if (guildchild) guildchild.props.className = BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym;
 			}
 			
 			processFolderHeader (e) {
