@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.8
+ * @version 1.3.9
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -102,7 +102,8 @@ module.exports = (_ => {
 					nativeClass: false,
 					name: BDFDB.LibraryComponents.SvgIcon.Names.NUMPAD
 				});
-				return BDFDB.ReactUtils.createElement(this.props.isInPopout ? BDFDB.LibraryComponents.UserPopoutSection : BDFDB.ReactUtils.Fragment, {
+				return BDFDB.ReactUtils.createElement(this.props.isInPopout ? "div" : BDFDB.ReactUtils.Fragment, {
+					className: this.props.isInPopout && BDFDB.disCN.marginbottom8,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
 							className: !this.props.isInPopout ? BDFDB.disCN.userprofileinfosectionheader : BDFDB.disCN.userpopoutsectiontitle,
@@ -148,11 +149,10 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					before: [
-						"UserPopout",
-						"UserProfile"
+						"UserThemeContainer"
 					],
 					after: [
-						"UserMemberSinceSection",
+						"UserMemberSince",
 						"UserProfileBody"
 					]
 				};
@@ -232,11 +232,12 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				currentPopout = e.instance;
+			processUserThemeContainer (e) {
+				if (e.instance.props.layout == "POPOUT") currentPopout = e.instance;
+				if (e.instance.props.layout == "MODAL") currentProfile = e.instance;
 			}
 
-			processUserMemberSinceSection (e) {
+			processUserMemberSince (e) {
 				if (!currentPopout) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
@@ -250,10 +251,6 @@ module.exports = (_ => {
 					}, true),
 					e.returnvalue
 				];
-			}
-
-			processUserProfile (e) {
-				currentProfile = e.instance;
 			}
 
 			processUserProfileBody (e) {
