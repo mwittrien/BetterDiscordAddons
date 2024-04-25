@@ -2487,7 +2487,7 @@
 		"imagemodalnavbutton": ["ModalCarouselNav", "nav"],
 		"imagemodalnavbuttonprev": ["ModalCarouselNav", "navPrev"],
 		"imagemodalnavbuttonnext": ["ModalCarouselNav", "navNext"],
-		"imagemosaicattachmentscontainer": ["ImageMosaic", "mediaAttachmentsContainer"],
+		"imagemosaicattachmentscontainer": ["ImageMosaic", "visualMediaItemContainer"],
 		"imagemosaiconebyonegridsingle": ["ImageMosaic", "oneByOneGridSingle"],
 		"imagesticker": ["ImageAssets", "stickerAsset"],
 		"imagewrapper": ["ImageWrapper", "imageWrapper"],
