@@ -83,7 +83,9 @@
 	--dangercolor: 				237, 66, 69;
 }
 
-.theme-light, .theme-dark, .theme-amoled {
+.theme-light:not(.userProfileOuterThemed_a425f3),
+.theme-dark:not(.userProfileOuterThemed_a425f3),
+.theme-amoled:not(.userProfileOuterThemed_a425f3) {
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
 	--text-danger: rgb(var(--dangercolor));
