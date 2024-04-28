@@ -1308,7 +1308,7 @@
 		}
 	},
 	"DiscordClassModules": {
-		"AccountDetails": {"props": ["usernameContainer", "container"]},
+		"AccountDetails": {"props": ["usernameContainer", "withTagAsButton"]},
 		"AccountDetailsButtons": {"props": ["button", "enabled", "disabled"]},
 		"Anchor": {"props": ["anchor", "anchorUnderlineOnHover"]},
 		"AnimationContainer": {"props": ["animatorLeft", "didRender"]},
@@ -1442,7 +1442,7 @@
 		"MembersWrapper": {"props": ["membersWrap", "membersGroup"]},
 		"Message": {"props": ["message", "mentioned"]},
 		"MessageAccessory": {"props": ["embedWrapper", "gifFavoriteButton"]},
-		"MessageAttachment": {"props": ["removeAttachmentButton", "inline"]},
+		"MessageAttachment": {"props": ["removeMosaicItemButton", "inline"]},
 		"MessageBlocked": {"props": ["blockedMessageText", "expanded"]},
 		"MessageBody": {"props": ["markupRtl", "edited"]},
 		"MessageDivider": {"props": ["isUnread", "divider"]},
@@ -2656,7 +2656,7 @@
 		"message": ["Message", "message"],
 		"messageaccessory": ["MessageAccessory", "container"],
 		"messageattachment": ["MessageAttachment", "messageAttachment"],
-		"messageattachmentremovebutton": ["MessageAttachment", "removeAttachmentButton"],
+		"messageattachmentremovebutton": ["MessageAttachment", "removeMosaicItemButton"],
 		"messageavatar": ["MessageBody", "avatar"],
 		"messageavatarclickable": ["MessageBody", "clickable"],
 		"messagebackgroundflash": ["Message", "backgroundFlash"],
