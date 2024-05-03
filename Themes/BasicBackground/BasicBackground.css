@@ -4978,7 +4978,8 @@ button.button_ae40a4.enabled__214db:hover svg {
 
 /* ----		14.11.		EMOJIINFO					---- */
 
-#app-mount .popoutContainer__66068 {							/* popout				wrapper								*/
+#app-mount .popoutContainer__66068,							/* popout				wrapper								*/
+#app-mount .reactionTooltip__20d0b {							/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4987,7 +4988,9 @@ button.button_ae40a4.enabled__214db:hover svg {
 	position: relative;
 }
 .popoutContainer__66068::before,
-.popoutContainer__66068::after {
+.reactionTooltip__20d0b::before,
+.popoutContainer__66068::after,
+.reactionTooltip__20d0b::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4999,11 +5002,13 @@ button.button_ae40a4.enabled__214db:hover svg {
 	pointer-events: none;
 	z-index: -1;
 }
-.popoutContainer__66068::before {
+.popoutContainer__66068::before,
+.reactionTooltip__20d0b::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
-.popoutContainer__66068::after {
+.popoutContainer__66068::after,
+.reactionTooltip__20d0b::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.2));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
