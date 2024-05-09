@@ -217,6 +217,7 @@ html {
 		15.	PHONEVERIFICATIONMODAL
 		16.	NOTIFICATIONSMODAL
 		17.	PODIUMSTARTMODAL
+		18.	POLLMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -3970,6 +3971,18 @@ button.button_ae40a4.enabled__214db:hover svg {
 
 #app-mount .iconContainer__91d80 {
 	background-color: rgba(var(--transparencycolor_v), .5);
+}
+
+/* ----		13.18.		POLLMODAL					---- */
+
+.voteDefault__164eb:hover {
+	background: rgba(var(--transparencycolor_v), .4);
+}
+.voteSelected_f19a44 {
+	background: rgb(var(--accentcolor_v));
+}
+.voteSelected_f19a44 [style*="color: var(--text-secondary)"] {
+	color: rgb(var(--textbrightest_v)) !important;
 }
 
 
