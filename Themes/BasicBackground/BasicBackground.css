@@ -135,6 +135,12 @@
 	--background-modifier-active: rgba(var(--textbrightest_v), .15);
 	--background-modifier-hover: rgba(var(--textbrightest_v), .1);
 	--background-modifier-selected: rgba(var(--textbrightest_v), .2);
+	--card-gradient-bg: var(--background-tertiary);
+	--card-primary-bg: var(--background-primary);
+	--card-secondary-bg: var(--background-secondary);
+	--card-gradient-pressed-bg: var(--background-floating);
+	--card-primary-pressed-bg: var(--background-secondary);
+	--card-secondary-pressed-bg: var(--background-tertiary);
 	--bg-backdrop: rgba(var(--transparencycolor_v), .7);
 	--bg-backdrop-no-opacity: rgb(var(--transparencycolor_v));
 	--bg-base-primary: rgba(var(--transparencycolor_v), .2);

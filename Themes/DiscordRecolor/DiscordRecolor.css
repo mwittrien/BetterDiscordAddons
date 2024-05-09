@@ -169,6 +169,13 @@
 	--background-message-automod: rgba(var(--dangercolor_v),.05);
 	--background-message-automod-hover: rgba(var(--dangercolor_v),.1);
 	
+	--card-gradient-bg: var(--background-tertiary);
+	--card-primary-bg: var(--background-primary);
+	--card-secondary-bg: var(--background-secondary);
+	--card-gradient-pressed-bg: var(--background-floating);
+	--card-primary-pressed-bg: var(--background-secondary);
+	--card-secondary-pressed-bg: var(--background-tertiary);
+	
 	--scrollbar-thin-thumb: rgb(var(--backgroundtertiary_v));
 	--scrollbar-thin-track: transparent;
 	--scrollbar-auto-thumb: rgb(var(--backgroundtertiary_v));
