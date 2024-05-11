@@ -16,6 +16,15 @@ module.exports = (_ => {
 	const changeLog = {
 		
 	};
+	var _this;
+    const languageTypes = {
+        INPUT: "input",
+        OUTPUT: "output"
+    };
+    const messageTypes = {
+        RECEIVED: "received",
+        SENT: "sent",
+    };
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		constructor (meta) {for (let key in meta) this[key] = meta[key];}
@@ -832,33 +841,41 @@ module.exports = (_ => {
 				languages = BDFDB.ObjectUtils.sort(languages, "fav");
 			}
 
-			getLanguageChoice (direction, place, channelId) {
+			getLanguageChoice(direction, place, channelId) {
 				this.setLanguages();
 				let choice;
 				let channel = channelId && BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
-				let guildId = channel ? (channel.guild_id ? channel.guild_id : "@me") : null;
-				if (channelLanguages[channelId] && channelLanguages[channelId][place]) choice = channelLanguages[channelId][place][direction];
-				else if (guildId && guildLanguages[guildId] && guildLanguages[guildId][place]) choice = guildLanguages[guildId][place][direction];
-				else choice = this.settings.choices[place] && this.settings.choices[place][direction];
+				let isPrivate = channel && (channel.type === BDFDB.DiscordConstants.ChannelTypes.DM || channel.type === BDFDB.DiscordConstants.ChannelTypes.GROUP_DM);
+				let guildId = channel ? (isPrivate ? "@me" : channel.guild_id) : null;
+				
+				if (isPrivate && channelLanguages[channelId] && channelLanguages[channelId][place]) {
+					choice = channelLanguages[channelId][place][direction];
+				} else if (!isPrivate && guildLanguages[guildId] && guildLanguages[guildId][place]) {
+					choice = guildLanguages[guildId][place][direction];
+				} else {
+					choice = this.settings.choices[place] && this.settings.choices[place][direction];
+				}
+				
 				choice = languages[choice] ? choice : Object.keys(languages)[0];
 				choice = direction == languageTypes.OUTPUT && choice == "auto" ? "en" : choice;
 				return choice;
 			}
 
-			saveLanguageChoice (choice, direction, place, channelId) {
+			saveLanguageChoice(choice, direction, place, channelId) {
 				let channel = channelId && BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
-				let guildId = channel ? (channel.guild_id ? channel.guild_id : "@me") : null;
-				if (channelLanguages[channelId] && channelLanguages[channelId][place]) {
+				let isPrivate = channel && (channel.type === BDFDB.DiscordConstants.ChannelTypes.DM || channel.type === BDFDB.DiscordConstants.ChannelTypes.GROUP_DM);
+				let guildId = channel ? (isPrivate ? "@me" : channel.guild_id) : null;
+				
+				if (isPrivate) {
+					if (!channelLanguages[channelId]) channelLanguages[channelId] = {};
+					if (!channelLanguages[channelId][place]) channelLanguages[channelId][place] = {};
 					channelLanguages[channelId][place][direction] = choice;
 					BDFDB.DataUtils.save(channelLanguages, this, "channelLanguages");
-				}
-				else if (guildLanguages[guildId] && guildLanguages[guildId][place]) {
+				} else {
+					if (!guildLanguages[guildId]) guildLanguages[guildId] = {};
+					if (!guildLanguages[guildId][place]) guildLanguages[guildId][place] = {};
 					guildLanguages[guildId][place][direction] = choice;
 					BDFDB.DataUtils.save(guildLanguages, this, "guildLanguages");
-				}
-				else {
-					this.settings.choices[place][direction] = choice;
-					BDFDB.DataUtils.save(this.settings.choices, this, "choices");
 				}
 			}
 
