@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.8
+ * @version 4.8.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1027,8 +1027,15 @@ module.exports = (_ => {
 				e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				let data = changedUsers[e.instance.props.user.id];
 				if (data) {
+					let member = BDFDB.LibraryStores.GuildMemberStore.getMember(e.instance.props.channel.guild_id, e.instance.props.user.id);
+					if (data.color1) {
+						if (BDFDB.LibraryStores.AccessibilityStore.roleStyle != "dot") e.instance.props.colorString = null;
+						else {
+							let color1 = data.color1 && data.useRoleColor && (member || {}).colorString || data.color1;
+							if (color1) e.instance.props.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+						}
+					}
 					if (data.name) {
-						let member = BDFDB.LibraryStores.GuildMemberStore.getMember(e.instance.props.channel.guild_id, e.instance.props.user.id);
 						e.instance.props.nick = this.getUserNick(e.instance.props.user.id, member && member.nick || e.instance.props.user.globalName);
 					}
 					if (data.removeStatus || data.status || data.statusEmoji) {

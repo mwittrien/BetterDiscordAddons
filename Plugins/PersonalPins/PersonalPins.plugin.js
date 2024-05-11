@@ -745,18 +745,34 @@ module.exports = (_ => {
 						};
 					case "es":		// Spanish
 						return {
-							context_pinoption:					"Escribe el mensaje",
-							context_unpinoption:					"Eliminar la nota",
-							context_updateoption:					"Actualiza la nota",
+							context_pinoption:					"Guardar nota",
+							context_unpinoption:					"Eliminar nota",
+							context_updateoption:					"Actualizar nota",
 							popout_filter_all:					"Todos los servidores",
 							popout_filter_channel:					"Canal",
 							popout_filter_server:					"Servidor",
 							popout_note:						"Notas",
 							popout_pinoption:					"Nota",
 							popout_sort_messagetime:				"Fecha del mensaje",
-							popout_sort_notetime:					"Fecha della nota",
-							toast_noteadd:						"Mensaje agregado al cuaderno",
+							popout_sort_notetime:					"Fecha de la nota",
+							toast_noteadd:						"Mensaje guardado en la libreta",
 							toast_noteremove:					"Mensaje eliminado de la libreta",
+							toast_noteupdate:					"Se actualizó el mensaje en la libreta."
+						};
+					case "es-419":		// Latin Spanish
+						return {
+							context_pinoption:					"Guardar nota",
+							context_unpinoption:					"Eliminar nota",
+							context_updateoption:					"Actualizar nota",
+							popout_filter_all:					"Todos los servidores",
+							popout_filter_channel:					"Canal",
+							popout_filter_server:					"Servidor",
+							popout_note:						"Notas",
+							popout_pinoption:					"Nota",
+							popout_sort_messagetime:				"Fecha del mensaje",
+							popout_sort_notetime:					"Fecha de la nota",
+							toast_noteadd:						"Mensaje agregado al cuaderno",
+							toast_noteremove:					"Mensaje eliminado del cuaderno",
 							toast_noteupdate:					"Se actualizó el mensaje en el cuaderno."
 						};
 					case "fi":		// Finnish
