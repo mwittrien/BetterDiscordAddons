@@ -102,8 +102,8 @@ module.exports = (_ => {
 					nativeClass: false,
 					name: BDFDB.LibraryComponents.SvgIcon.Names.NUMPAD
 				});
-				return BDFDB.ReactUtils.createElement(this.props.isInPopout ? "div" : BDFDB.ReactUtils.Fragment, {
-					className: this.props.isInPopout && BDFDB.disCN.marginbottom8,
+				return BDFDB.ReactUtils.createElement("div", {
+					className: this.props.isInPopout && BDFDB.disCN.userpopoutsection,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
 							className: !this.props.isInPopout ? BDFDB.disCN.userprofileinfosectionheader : BDFDB.disCN.userpopoutsectiontitle,
