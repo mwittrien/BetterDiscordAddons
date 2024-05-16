@@ -2,7 +2,7 @@
  * @name HideMutedCategories
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.2
+ * @version 1.1.3
  * @description Hides muted Categories, if muted Channels are hidden
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -101,6 +101,7 @@ module.exports = (_ => {
 							n.renderLevel = renderLevels.CAN_NOT_SHOW;
 							BDFDB.ArrayUtils.remove(e.instance.props.guildChannels.categories[id].shownChannelIds, n.id, true);
 						}
+						if (!channelArray.length) e.instance.props.guildChannels.categories[id].channels = {"placeholder": {}};
 					}
 				}
 				else {
