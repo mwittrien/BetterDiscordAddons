@@ -3368,9 +3368,11 @@ button.button_ae40a4.enabled__214db:hover svg {
 }
 .root_a28985 .modal__060da::before,
 .root_a28985.noBackground__96ddb::before,
+.root_a28985.carouselModal__7e22f::before,
 .modal_d2e7a7::before,
 .root_a28985 .modal__060da::after,
 .root_a28985.noBackground__96ddb::after,
+.root_a28985.carouselModal__7e22f::after,
 .modal_d2e7a7::after {
 	display: none;
 }
