@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.9
+ * @version 1.4.0
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -152,8 +152,8 @@ module.exports = (_ => {
 						"UserThemeContainer"
 					],
 					after: [
-						"UserMemberSince",
-						"UserProfileBody"
+						"UserPopoutMemberSince",
+						"UserProfileInfoSection"
 					]
 				};
 				
@@ -237,7 +237,7 @@ module.exports = (_ => {
 				if (e.instance.props.layout == "MODAL") currentProfile = e.instance;
 			}
 
-			processUserMemberSince (e) {
+			processUserPopoutMemberSince (e) {
 				if (!currentPopout) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
@@ -253,12 +253,12 @@ module.exports = (_ => {
 				];
 			}
 
-			processUserProfileBody (e) {
+			processUserProfileInfoSection (e) {
 				if (!currentProfile) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserMemberSince"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
+				let infoSection = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userprofileinfosection]]});
+				if (infoSection) infoSection.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
 					isInPopout: false,
 					guildId: currentProfile.props.guildId || BDFDB.DiscordConstants.ME,
 					channelId: currentProfile.props.channelId,
