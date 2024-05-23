@@ -168,7 +168,7 @@
 		"WindowUtils": {"props": ["minimize", "maximize", "close"]}
 	},
 	"NativeSubComponents": {
-		"Button": {"props": ["Colors", "Hovers", "Looks"]},
+		"Button": {"props": ["Colors", "Link", "Looks"]},
 		"Checkbox": {"props": ["Aligns", "Shapes", "Types"]},
 		"Clickable": {"strings": [".ENTER", "renderNonInteractive", ".handleKeyPress"]},
 		"KeybindRecorder": {"strings": [".RECORDING", ".DEFAULT", "toggleRecordMode"]},
