@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.5
+ * @version 3.6.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7949,25 +7949,49 @@ module.exports = (_ => {
 
 				const DiscordComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("Avatar", "Popout", "Button"));
 				Internal.LibraryComponents = new Proxy(LibraryComponents, {
-					get: function (_, item) {
+					get: function(_, item) {
 						if (LibraryComponents[item]) return LibraryComponents[item];
 						if (!InternalData.LibraryComponents[item] && !CustomComponents[item]) return "div";
-						
+
 						Internal.findModuleViaData(LibraryComponents, InternalData.LibraryComponents, item);
-						
+
 						if (CustomComponents[item]) LibraryComponents[item] = LibraryComponents[item] ? Object.assign({}, LibraryComponents[item], CustomComponents[item]) : CustomComponents[item];
-						
+
 						const NativeComponent = LibraryComponents[item] && Internal.NativeSubComponents[item];
 						if (NativeComponent && typeof NativeComponent != "string") {
-							for (let key in NativeComponent) if (key != "displayName" && key != "name" && (typeof NativeComponent[key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
-								if (key == "defaultProps") LibraryComponents[item][key] = Object.assign({}, LibraryComponents[item][key], NativeComponent[key]);
-								else if (!LibraryComponents[item][key]) LibraryComponents[item][key] = NativeComponent[key];
-							}
-							if (LibraryComponents[item].ObjectProperties) for (let key of LibraryComponents[item].ObjectProperties) if (!LibraryComponents[item][key]) LibraryComponents[item][key] = {};
+							for (let key in NativeComponent)
+								if (key != "displayName" && key != "name" && (typeof NativeComponent[key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
+									if (key == "defaultProps") LibraryComponents[item][key] = Object.assign({}, LibraryComponents[item][key], NativeComponent[key]);
+									else if (!LibraryComponents[item][key]) LibraryComponents[item][key] = NativeComponent[key];
+								}
+							if (LibraryComponents[item].ObjectProperties)
+								for (let key of LibraryComponents[item].ObjectProperties)
+									if (!LibraryComponents[item][key]) LibraryComponents[item][key] = {};
 						}
 						return LibraryComponents[item] ? LibraryComponents[item] : DiscordComponents[item] ? DiscordComponents[item] : "div";
 					}
 				});
+
+				function isClass(obj) {
+					const isCtorClass = obj.constructor &&
+						obj.constructor.toString().substring(0, 5) === 'class'
+
+					if (obj.prototype === undefined) {
+						return isCtorClass
+					}
+
+					const isPrototypeCtorClass = obj.prototype.constructor &&
+						obj.prototype.constructor.toString &&
+						obj.prototype.constructor.toString().substring(0, 5) === 'class'
+						
+					return isCtorClass || isPrototypeCtorClass
+				}
+
+				for (const key of Object.keys(DiscordComponents)) {
+					if (Internal.LibraryComponents[key] && isClass(Internal.LibraryComponents[key])) {
+						Object.assign(Internal.LibraryComponents[key], DiscordComponents[key])
+					}
+				}
 				
 				const RealFilteredMenuItems = Object.keys(RealMenuItems).filter(type => typeof RealMenuItems[type] == "function" && RealMenuItems[type].toString().replace(/[\n\t\r]/g, "").endsWith("{return null}"));
 				for (let type of RealFilteredMenuItems) {
