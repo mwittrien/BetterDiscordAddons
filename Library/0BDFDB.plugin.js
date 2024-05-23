@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.5
+ * @version 3.6.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8269,9 +8269,10 @@ module.exports = (_ => {
 				};
 				Internal.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {
-						if (e.instance.props.avatar && e.instance.props.avatar.props && typeof e.instance.props.avatar.props.children == "function") {
-							let renderChildren = e.instance.props.avatar.props.children;
-							e.instance.props.avatar.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						if (e.instance.props.avatar && e.instance.props.avatar.props) {
+							let child = BDFDB.ReactUtils.findChild(e.instance.props.avatar, {filter: n => n && n.props && typeof n.props.children == "function"});
+							let renderChildren = child.props.children;
+							if (renderChildren) child.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let renderedChildren = renderChildren(...args);
 								return Internal._processAvatarRender(e.instance.props.message.author, renderedChildren, BDFDB.disCN.messageavatar) || renderedChildren;
 							}, "Error in Avatar Render of MessageHeader!");
