@@ -7946,7 +7946,8 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement(VideoInner, this.props);
 					}
 				};
-				
+
+				const DiscordComponents = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("Avatar", "Popout", "Button"));
 				Internal.LibraryComponents = new Proxy(LibraryComponents, {
 					get: function (_, item) {
 						if (LibraryComponents[item]) return LibraryComponents[item];
@@ -7964,7 +7965,7 @@ module.exports = (_ => {
 							}
 							if (LibraryComponents[item].ObjectProperties) for (let key of LibraryComponents[item].ObjectProperties) if (!LibraryComponents[item][key]) LibraryComponents[item][key] = {};
 						}
-						return LibraryComponents[item] ? LibraryComponents[item] : "div";
+						return LibraryComponents[item] ? LibraryComponents[item] : DiscordComponents[item] ? DiscordComponents[item] : "div";
 					}
 				});
 				
