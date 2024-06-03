@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		improved: {
-			"Own Search Engines": "You can now add your own engines in the settings"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
