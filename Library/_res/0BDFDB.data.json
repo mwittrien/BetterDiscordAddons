@@ -296,6 +296,7 @@
 		"ImageContextMenu": "image-context",
 		"MessageContextMenu": "message",
 		"TextAreaContextMenu": "textarea-context",
+		"TextContextMenu": "text-context",
 		"ThreadContextMenu": "thread-context",
 		"UserContextMenu": "user-context",
 		"UserSettingsCogContextMenu": "user-settings-cog"
