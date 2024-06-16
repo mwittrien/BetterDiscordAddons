@@ -279,7 +279,7 @@
 			"UserBadges": [".PROFILE_USER_BADGES"],
 			"Sizes": ["\"SIZE_24\":"]
 		}},
-		"UserPopout": {"strings": ["{user:", "userId:", "\"Unexpected missing user\")", "getUser"], "value": "default"},
+		"UserPopout": {"strings": ["location:", "userId", "user:", "isNonUserBot", "Unexpected missing user"]},
 		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
 		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
 		"VideoForwardRef": {"strings": ["HTMLSourceElement", "autoPlay"], "funcStrings": ["externalRef"]}

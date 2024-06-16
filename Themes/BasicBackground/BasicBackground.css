@@ -829,6 +829,14 @@ button.button_ae40a4.enabled__214db:hover svg {
 #app-mount .container__03ec9 .channelRow__538ef:hover {
 	background: var(--background-tertiary);
 }
+#app-mount .scrollerContainer_dda72c,
+#app-mount .emptyPage_feb902 {
+	background: var(--bg-overlay-chat,var(--background-primary));
+}
+#app-mount .scrollerContainer_dda72c .prompt__1b100 {
+	background: var(--background-secondary);
+}
+
 .contentPreview__122fc {								/* forum list				item								*/
 	border-color: rgb(var(--transparencycolor_v));
 }

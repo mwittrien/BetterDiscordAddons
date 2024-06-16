@@ -1122,6 +1122,14 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background: var(--background-secondary);
 }
 
+#app-mount .scrollerContainer_dda72c,
+#app-mount .emptyPage_feb902 {
+	background: var(--bg-overlay-chat,var(--background-primary));
+}
+#app-mount .scrollerContainer_dda72c .prompt__1b100 {
+	background: var(--background-secondary);
+}
+
 /* ----		4.1.		CHANNELHEADER					---- */
 
 #app-mount .container__26baa.themed_b152d4 {
