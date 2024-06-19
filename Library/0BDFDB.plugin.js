@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.6
+ * @version 3.6.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1402,7 +1402,7 @@ module.exports = (_ => {
 					let secondReturn = BDFDB.ModuleUtils.find(m => {
 						if (typeof m != "function") return false;
 						let stringified = m.toString().replace(/\s/g, "");
-						if (stringified.indexOf(".exports={") == -1 || !(/function\([A-z],[A-z],[A-z]\)\{"usestrict";[A-z]\.exports=\{/.test(stringified) || /function\([A-z]\)\{"usestrict";[A-z]\.exports=\{/.test(stringified))) return false;
+						if (stringified.indexOf(".exports={") == -1 || !(/function\([A-z],[A-z],[A-z]\)\{[A-z]\.exports=\{/.test(stringified) || /function\([A-z]\)\{[A-z]\.exports=\{/.test(stringified))) return false;
 						let amount = stringified.split(":\"").length - 1;
 						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(string => stringified.indexOf(`${string}:`) > -1) && m;
 					}, {onlySearchUnloaded: true, all: config.all, defaultExport: config.defaultExport});
@@ -1426,6 +1426,23 @@ module.exports = (_ => {
 						return DiscordConstants[item] ? DiscordConstants[item] : {};
 					}
 				});
+				const DiscordColors = BDFDB.ModuleUtils.findByProperties("spotify", "guild-boosting-blue");
+				Internal.DiscordConstants.Colors = new Proxy(DiscordConstants, {
+					get: function (_, item) {
+						const color = DiscordColors[item] || DiscordColors[item.toLowerCase()] || DiscordColors[item.toUpperCase()];
+						if (color) return color && color.hex || color || "";
+						else {
+							const item2 = item.replace(/-/g, "_");
+							const color2 = DiscordColors[item2] || DiscordColors[item2.toLowerCase()] || DiscordColors[item2.toUpperCase()];
+							if (color2) return color2 && color2.hex || color2 || "";
+							else {
+								const item3 = item.replace(/_/g, "-");
+								const color3 = DiscordColors[item3] || DiscordColors[item3.toLowerCase()] || DiscordColors[item3.toUpperCase()];
+								return color3 && color3.hex || color3 || "";
+							}
+						}
+					}
+				})
 				BDFDB.DiscordConstants = Internal.DiscordConstants;
 				
 				Internal.DiscordObjects = new Proxy(DiscordObjects, {
