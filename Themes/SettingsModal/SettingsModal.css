@@ -11,7 +11,7 @@
 	--settingsbackground_v: 	var(--settingsbackground_s, var(--settingsbackground));
 }
 
-#app-mount .baseLayer__2b890 {
+#app-mount .baseLayer_d4b6c5 {
 	opacity: 1 !important;
 	transform: unset !important;
 	will-change: unset !important;
@@ -20,7 +20,7 @@
 	transition-property: inherit !important;
 	animation: inherit !important;
 }
-#app-mount .layer_f7d46a.stop-animations:first-child::after {
+#app-mount .layer_d4b6c5.stop-animations:first-child::after {
 	content: "" !important;
 	position: fixed !important;
 	background: rgb(0, 0, 0) !important;
@@ -35,7 +35,7 @@
 	pointer-events: none !important;
 }
 
-#app-mount .layer_f7d46a ~ .layer_f7d46a {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -53,8 +53,8 @@
 	z-index: 1000 !important;
 	--settingsiconsadditionalsize: var(--use-settingsicons, 0) * (var(--settingsicons-size, 0px) + var(--settingsicons-gap, 0px));
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a > div,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .standardSidebarView__12528 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 > div,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .standardSidebarView_c25c6d {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -63,46 +63,46 @@
 	padding: unset !important;
 	overflow: hidden !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebarRegion__36437,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebarRegionScroller__8113e {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebarRegion_c25c6d,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebarRegionScroller_c25c6d {
 	flex: 0 0 auto !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebar__02e8d {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar_c25c6d {
 	width: 218px !important;
 	padding: 20px 6px 20px 20px !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .contentColumnDefault__78de3,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .contentColumnWide__146ec {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .contentColumnDefault_c25c6d,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .contentColumnWide_c25c6d {
 	padding: 20px 40px !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .wrapper_e5073f {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .wrapper_e5cdf3 {
 	width: calc(var(--settingswidth_v) - 420px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .repo_k8F4Sd {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .repo_k8F4Sd {
 	max-width: calc(var(--settingswidth_v) - 226px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .repoHeader_2KfNvH {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .repoHeader_2KfNvH {
 	padding-bottom: 0 !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .repoHeader_2KfNvH .tabBar__35f81 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .repoHeader_2KfNvH .tabBar_b9fccc {
 	gap: 30px !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .repoHeader_2KfNvH .quickSelectLabel__79774 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .repoHeader_2KfNvH .quickSelectLabel__79774 {
 	font-size: 12px !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .repoScroller_9JnAPs {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .repoScroller_9JnAPs {
 	padding-top: 0 !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .sidebar__37984 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar_e87574 {
 	height: var(--settingsheight_v) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .standardSidebarView__12528 .editor {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .standardSidebarView_c25c6d .editor {
 	height: calc(var(--settingsheight_v) - 120px) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad .tools_c0ff70,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad .container__3529f,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad .closeButton__8177f {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .tools_c25c6d,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .container_df5532,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .closeButton_df5532 {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -120,54 +120,54 @@
 	opacity: 0 !important;
 	cursor: default !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .toolsContainer__4e6ad {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d {
 	position: fixed !important;
 	top: 22px !important;
 	z-index: -1 !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .settingsToolbar_wu4yfQ {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .settingsToolbar_wu4yfQ {
 	display: none !important;
 }
 
-#app-mount .layer_f7d46a ~ .layer_f7d46a .accountProfileCard__744d8 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .accountProfileCard_b69b77 {
 	max-width: calc(var(--settingswidth_v) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 {
 	gap: 30px !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .sectionsContainer_d2a766,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .sectionsContainer__45b62,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .editor_bca4e3,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 .sectionsContainer_e466c8,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 .sectionsContainer_b45d91,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 .editor_eb2d2c,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 .preview_bad983 {
 	min-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .sectionsContainer_d2a766,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .sectionsContainer__45b62,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .editor_bca4e3,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983.tryItOutLayout_eb2d2c .sectionsContainer_e466c8,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983.tryItOutLayout_eb2d2c .sectionsContainer_b45d91,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983.tryItOutLayout_eb2d2c .editor_eb2d2c,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983.tryItOutLayout_eb2d2c .preview_bad983 {
 	min-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter_d67f56 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 .preview_bad983 .userPopoutOuter_c69a7b {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter_d67f56 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .baseLayout_bad983.tryItOutLayout_eb2d2c .preview_bad983 .userPopoutOuter_c69a7b {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutOuter_d67f56,
-#app-mount .layer_f7d46a ~ .layer_f7d46a .baseLayout_a5adfd.tryItOutLayout_f54a16 .preview_de6062 .userPopoutOuter_d67f56 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 .preview_bad983 .userPopoutOuter_c69a7b,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .baseLayout_bad983.tryItOutLayout_eb2d2c .preview_bad983 .userPopoutOuter_c69a7b {
 	min-width: unset !important;
 	max-width: 340px !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .profileCustomizationSection_c4a87a .baseLayout_a5adfd .preview_de6062 .userPopoutInner_e90432 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .profileCustomizationSection_bad983 .baseLayout_bad983 .preview_bad983 .userPopoutInner_c69a7b {
 	overflow: hidden !important;
 }
-#app-mount .layer_f7d46a ~ .layer_f7d46a .guildsSection__337a8 {
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .guildsSection__337a8 {
 	max-width: calc(var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) !important;
 }
 
-#app-mount .root__6d24f {
+#app-mount .root_f906dd {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -184,14 +184,14 @@
 	contain: unset !important;
 	z-index: 1000 !important;
 }
-#app-mount .root__6d24f.enterDone__88d24 {
+#app-mount .root_f906dd.enterDone_f906dd {
 	transform: unset !important;
 }
-#app-mount .root__6d24f .closeIconWrapper_bf90ba,
-#app-mount .root__6d24f .closeIconWrapper_bf90ba .container__3529f,
-#app-mount .root__6d24f .closeIconWrapper_bf90ba .closeButton__8177f,
-#app-mount .shop_b31ed2 .container__3529f,
-#app-mount .shop_b31ed2 .closeButton__8177f {
+#app-mount .root_f906dd .closeIconWrapper_a50853,
+#app-mount .root_f906dd .closeIconWrapper_a50853 .container_df5532,
+#app-mount .root_f906dd .closeIconWrapper_a50853 .closeButton_df5532,
+#app-mount .shop_e77fa3 .container_df5532,
+#app-mount .shop_e77fa3 .closeButton_df5532 {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -212,6 +212,6 @@
 	animation: unset !important;
 	transition: unset !important;
 }
-#app-mount .root__6d24f .closeIconWrapper_bf90ba {
+#app-mount .root_f906dd .closeIconWrapper_a50853 {
 	top: 22px !important;
 }
