@@ -9,12 +9,12 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Google/symbols.css);
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Google/flags.css);
 @namespace xlink 'http://www.w3.org/1999/xlink';
-.sprite__294b3 {
+.sprite_af14ca {
 	-webkit-mask: none !important;
 	background-color: transparent !important;
 	background-position: var(--custom-emoji-sprite-bg-position) !important;
 	background-size: var(--custom-emoji-sprite-bg-size) !important;
 }
-.spriteGreyscale__750f4 {
+.spriteGreyscale_af14ca {
 	filter: grayscale(1) !important;
 }
