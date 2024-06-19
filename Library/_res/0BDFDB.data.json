@@ -68,13 +68,16 @@
 		"UserPremiumLevels": {"1": 1, "2": 2, "3": 3, "4": 6, "5": 9, "6": 12, "7": 15, "8": 18, "9": 24}
 	},
 	"DiscordConstants": {
+		"ActivityTypes": ["CUSTOM_STATUS", "STREAMING", "WATCHING"],
+		"AnalyticsSections": ["FRIENDS_LIST", "PROFILE_POPOUT", "ACCOUNT_PANEL"],
 		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTextAreaTypes": ["CREATE_FORUM_POST", "PROFILE_BIO_INPUT", "FORUM_CHANNEL_GUIDELINES"],
-		"Colors": ["SPOTIFY", "RED_100", "BLUE"],
 		"ColorsCSS": {"strings": ["var(--status-positive", "var(--bg-brand)"], "value": "Z"},
 		"EmojiSprites": ["DiversityPerRow", "PickerCount", "PickerPerRow"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
+		"MessageTypes": ["THREAD_CREATED", "CHAT_INPUT_COMMAND"],
 		"MessageTypeGroups": ["USER_MESSAGE", "UNDELETABLE"],
+		"Permissions": ["MOVE_MEMBERS", "ADD_REACTIONS", "USE_EXTERNAL_APPS", "VIEW_CREATOR_MONETIZATION_ANALYTICS"],
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"]
 	},

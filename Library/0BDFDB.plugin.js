@@ -1410,7 +1410,14 @@ module.exports = (_ => {
 					return BDFDB.ArrayUtils.removeCopies([firstReturn].concat(secondReturn).flat(10));
 				};
 				
-				const DiscordConstantsObject = BDFDB.ModuleUtils.findByProperties("AnalyticsSections", "ChannelTypes", "MessageTypes");
+				const DiscordConstantsObject = BDFDB.ModuleUtils.find(m => {try {
+				    if (!m || !Object.keys(m)) return;
+				    if ([["CUSTOM_STATUS", "STREAMING", "WATCHING"], ["GUILD_TEXT", "GUILD_FORUM", "GUILD_STORE"], ["THREAD_CREATED", "CHAT_INPUT_COMMAND"]].every(array => Object.keys(m).some(k => {
+					if (!m[k]) return false;
+					let keys = Object.keys(m[k]);
+					if (keys && array.every(n => keys.indexOf(n) > -1)) return true;
+				    }))) return m;
+				} catch (err) {}});
 				if (InternalData.CustomDiscordConstants) DiscordConstants = Object.assign(DiscordConstants, InternalData.CustomDiscordConstants);
 				if (DiscordConstantsObject) DiscordConstants = Object.assign(DiscordConstants, DiscordConstantsObject);
 				Internal.DiscordConstants = new Proxy(DiscordConstants, {
@@ -1421,7 +1428,13 @@ module.exports = (_ => {
 							return {};
 						}
 						if (InternalData.DiscordConstants[item].strings) DiscordConstants[item] = BDFDB.ModuleUtils.findByString(InternalData.DiscordConstants[item].strings);
-						else DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
+						else {
+							if (DiscordConstantsObject) DiscordConstants[item] = DiscordConstantsObject[Object.keys(DiscordConstantsObject).find(n => {
+								let keys = Object.keys(DiscordConstantsObject[n]);
+								if (keys && InternalData.DiscordConstants[item].every(k => keys.indexOf(n) > -1)) return true;
+							})];
+							if (!DiscordConstants[item]) DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
+						}
 						if (InternalData.DiscordConstants[item].value) DiscordConstants[item] = DiscordConstants[item][InternalData.DiscordConstants[item].value] || DiscordConstants[item];
 						return DiscordConstants[item] ? DiscordConstants[item] : {};
 					}
