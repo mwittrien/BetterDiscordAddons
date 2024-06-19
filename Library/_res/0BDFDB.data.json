@@ -1334,7 +1334,7 @@
 		"AvatarIcon": {"props": ["iconActiveLarge", "iconActiveMedium"]},
 		"Backdrop": {"props": ["backdrop", "withLayer"]},
 		"Badge": {"props": ["numberBadge", "textBadge", "iconBadge"]},
-		"BotTag": {"props": ["botTag", "botTagInvert"]},
+		"BotTag": {"props": ["botTagRegular", "botTagInvert"]},
 		"Button": {"props": ["colorBrand", "lookBlank"]},
 		"CallCurrent": {"props": ["wrapper", "fullScreen"]},
 		"CallDetails": {"props": ["container", "hotspot"]},
