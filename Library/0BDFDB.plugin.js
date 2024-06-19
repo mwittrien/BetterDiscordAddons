@@ -1402,7 +1402,7 @@ module.exports = (_ => {
 					let secondReturn = BDFDB.ModuleUtils.find(m => {
 						if (typeof m != "function") return false;
 						let stringified = m.toString().replace(/\s/g, "");
-						if (stringified.indexOf(".exports={") == -1 || !(/function\([A-z],[A-z],[A-z]\)\{[A-z]\.exports=\{/.test(stringified) || /function\([A-z]\)\{[A-z]\.exports=\{/.test(stringified))) return false;
+						if (stringified.indexOf(".exports={") == -1 || !(/function\([A-z],[A-z],[A-z]\)\{[A-z]\.[A-z]\([A-z]\.exports=\{/.test(stringified) || /function\([A-z],[A-z],[A-z]\)\{[A-z]\.exports=\{/.test(stringified) || /function\([A-z]\)\{[A-z]\.exports=\{/.test(stringified))) return false;
 						let amount = stringified.split(":\"").length - 1;
 						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(string => stringified.indexOf(`${string}:`) > -1) && m;
 					}, {onlySearchUnloaded: true, all: config.all, defaultExport: config.defaultExport});
