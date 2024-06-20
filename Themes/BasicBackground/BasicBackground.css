@@ -2529,18 +2529,8 @@ button.button_f67531.enabled_f67531:hover svg {
 	color: var(--header-secondary);
 }
 
-.cardPrimary_cb7a0e,
-.cardPrimaryEditable__25559 {								/* settingsitems			card								*/
+.cardPrimary_cb7a0e {									/* settingsitems			card								*/
 	border-color: rgba(var(--transparencycolor_v), .1);
-}
-.cardPrimary_cb7a0e {
-	background-color: rgba(var(--transparencycolor_v), .2);
-}
-.cardPrimaryEditable__25559 {
-	background-color: rgba(var(--transparencycolor_v), .1);
-}
-.cardPrimaryOutline__9df8a {
-	border-color: rgba(var(--transparencycolor_v), .2);
 }
 
 .accountProfileCard_b69b77 {								/* accountsettings			container							*/
