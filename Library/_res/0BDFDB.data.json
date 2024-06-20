@@ -1386,7 +1386,6 @@
 		"ColorPicker": {"props": ["customColorPicker", "colorPickerDropper"]},
 		"ColorPickerInner": {"props": ["hue", "saturation"]},
 		"Combobox": {"props": ["combobox", "itemLabel"]},
-		"Cursor": {"props": ["cursorDefault", "userSelectNone"]},
 		"CustomStatus": {"props": ["customStatusSoloEmoji", "customStatusText", "customStatus"]},
 		"CustomStatusIcon": {"props": ["textRuler", "emoji", "icon"]},
 		"CustomStatusModal": {"props": ["inputContainer", "emojiButton", "modalRoot"]},
