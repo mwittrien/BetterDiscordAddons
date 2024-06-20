@@ -285,7 +285,7 @@ module.exports = (_ => {
 			}
 			
 			shouldInject (type) {
-				return this.settings.places.normal && (type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || type == BDFDB.DiscordConstants.ChannelTextAreaTypes.SIDEBAR) || this.settings.places.edit && type == BDFDB.DiscordConstants.ChannelTextAreaTypes.EDIT;
+				return this.settings.places.normal && (type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || type == BDFDB.DiscordConstants.ChannelTextAreaTypes.SIDEBAR) || this.settings.places.edit && type == BDFDB.DiscordConstants.ChannelTextAreaTypes.EDIT;
 			}
 
 			formatText (text) {

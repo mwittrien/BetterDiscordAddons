@@ -20,6 +20,13 @@
 		"User": {"props": ["addGuildAvatarHash", "isLocalBot"]}
 	},
 	"CustomDiscordConstants": {
+		"MAX_GUILD_FOLDER_NAME_LENGTH": 32,
+		"MAX_MESSAGE_LENGTH": 2000,
+		"MAX_MESSAGE_LENGTH_PREMIUM": 4000,
+		"MAX_MESSAGES_PER_CHANNEL": 50,
+		"MAX_VIDEO_WIDTH": 1024,
+		"MAX_VIDEO_HEIGHT": 640,
+		"ME": "@me",
 		"MenuItemColors": {
 			"BRAND": "brand",
 			"DANGER": "danger",
@@ -28,6 +35,7 @@
 			"PREMIUMGRADIENT": "premiumgradient",
 			"SUCCESS": "success"
 		},
+		"SEARCH_PAGE_SIZE": 25,
 		"ToastIcons": {
 			"info": "INFO",
 			"danger": "CLOSE_CIRCLE",
@@ -72,14 +80,25 @@
 		"AnalyticsSections": ["FRIENDS_LIST", "PROFILE_POPOUT", "ACCOUNT_PANEL"],
 		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTextAreaTypes": ["CREATE_FORUM_POST", "PROFILE_BIO_INPUT", "FORUM_CHANNEL_GUIDELINES"],
+		"ChannelTypes": ["GUILD_STORE", "GUILD_TEXT", "GUILD_FORUM"],
 		"ColorsCSS": {"strings": ["var(--status-positive", "var(--bg-brand)"], "value": "Z"},
+		"ComponentActions": ["INSERT_TEXT", "PREPEND_TEXT", "SHAKE_APP"],
 		"EmojiSprites": ["DiversityPerRow", "PickerCount", "PickerPerRow"],
+		"Endpoints": ["MESSAGES", "CHANNEL", "GUILD", "SEARCH_CHANNEL"],
+		"FriendsSections": ["ADD_FRIEND", "SUGGESTIONS", "BLOCKED"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
+		"KeyboardDeviceTypes": ["GAMEPAD_BUTTON", "KEYBOARD_KEY", "MOUSE_BUTTON"],
+		"MessageStates": ["SEND_FAILED", "SENDING", "SENT"],
 		"MessageTypes": ["THREAD_CREATED", "CHAT_INPUT_COMMAND"],
 		"MessageTypeGroups": ["USER_MESSAGE", "UNDELETABLE"],
 		"Permissions": ["MOVE_MEMBERS", "ADD_REACTIONS", "USE_EXTERNAL_APPS", "VIEW_CREATOR_MONETIZATION_ANALYTICS"],
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
-		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"]
+		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "SUGGESTION"],
+		"Routes": ["CHANNEL", "APP", "QUESTS"],
+		"UserFlags": ["BOT_HTTP_INTERACTIONS", "PARTNER", "SPAMMER"],
+		"UserNotificationSettings": ["ONLY_MENTIONS", "NO_MESSAGES", "ALL_MESSAGES"],
+		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
+		"UserSettingsSections": ["CHANGE_LOG", "DEVELOPER_OPTIONS"]
 	},
 	"LibraryModules": {
 		"AckUtils": {"props": ["ack", "bulkAck", "localAck"]},

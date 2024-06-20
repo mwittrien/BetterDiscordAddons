@@ -367,7 +367,7 @@ module.exports = (_ => {
 			}
 		
 			processChannelTextAreaContainer (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY) ChannelTextAreaContainer = e.instance
+				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL) ChannelTextAreaContainer = e.instance
 			}
 			
 			quote (channel, message, shift) {

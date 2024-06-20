@@ -199,7 +199,7 @@ module.exports = (_ => {
 			}
 
 			processChannelTextAreaEditor (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.uploadPromptCharacterCount = 100000;
+				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.uploadPromptCharacterCount = 100000;
 			}
 			
 			isSlowDowned (channel) {

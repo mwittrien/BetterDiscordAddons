@@ -465,7 +465,7 @@ module.exports = (_ => {
 			}
 			
 			processChannelTextAreaEditor (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.isDM() && (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY) && this.settings.places.chatTextarea) {
+				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.isDM() && (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL) && this.settings.places.chatTextarea) {
 					let user = BDFDB.LibraryStores.UserStore.getUser(e.instance.props.channel.recipients[0]);
 					if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.globalName || user.username}`);
 				}
