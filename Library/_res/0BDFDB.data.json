@@ -88,6 +88,8 @@
 		"FriendsSections": ["ADD_FRIEND", "SUGGESTIONS", "BLOCKED"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
 		"KeyboardDeviceTypes": ["GAMEPAD_BUTTON", "KEYBOARD_KEY", "MOUSE_BUTTON"],
+		"LinuxKeyToCode": ["meta", "track back"],
+		"MacosKeyToCode": ["right command", "command"],
 		"MessageStates": ["SEND_FAILED", "SENDING", "SENT"],
 		"MessageTypes": ["THREAD_CREATED", "CHAT_INPUT_COMMAND"],
 		"MessageTypeGroups": ["USER_MESSAGE", "UNDELETABLE"],
@@ -98,7 +100,8 @@
 		"UserFlags": ["BOT_HTTP_INTERACTIONS", "PARTNER", "SPAMMER"],
 		"UserNotificationSettings": ["ONLY_MENTIONS", "NO_MESSAGES", "ALL_MESSAGES"],
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
-		"UserSettingsSections": ["CHANGE_LOG", "DEVELOPER_OPTIONS"]
+		"UserSettingsSections": ["CHANGE_LOG", "DEVELOPER_OPTIONS"],
+		"WindowsKeyToCode": ["fast forward", "play", "print screen"]
 	},
 	"LibraryModules": {
 		"AckUtils": {"strings": ["type:\"CHANNEL_ACK\",channelId", "type:\"BULK_ACK\",channels:"], "exported": false, "value": "exports", "map": {
@@ -130,11 +133,17 @@
 		}},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
-		"ContextMenuUtils": {"props": ["openContextMenu", "closeContextMenu"]},
+		"ContextMenuUtils": {"strings": ["renderLazy:", ".enableSpellCheck", "type:\"CONTEXT_MENU_CLOSE\""], "exported": false, "value": "exports", "map": {
+			"closeContextMenu": ["type:\"CONTEXT_MENU_CLOSE\""],
+			"openContextMenu": ["renderLazy:", ".enableSpellCheck"]
+		}},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
-		"DispatchUtils": {"props": ["ComponentDispatch", "ComponentDispatcher"]},
+		"DispatchUtils": {"strings": ["ComponentDispatchUtils", "this.emitter.setMaxListeners(100)"], "exported": false, "value": "exports", "map": {
+			"ComponentDispatch": ["this.emitter.setMaxListeners(100)"],
+			"ComponentDispatcher": ["[object Object]"]
+		}},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
@@ -145,7 +154,10 @@
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"InternalReactUtils": {"props": ["jsx", "jsxs", "Fragment"]},
-		"KeyCodeUtils": {"props": ["codeToKey", "keyToCode"]},
+		"KeyCodeUtils": {"strings": [".KEYBOARD_MODIFIER_KEY", "Unrecognized DeviceType", "[\"\"+"], "exported": false, "value": "exports", "map": {
+			"codeToKey": ["[\"\"+", "default:return"],
+			"keyToCode": ["\"meta\",\"command\"", "return parseInt("]
+		}},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LoginUtils": {"props": ["login", "logout"]},
 		"MediaComponentUtils": {"props": ["renderImageComponent", "renderVideoComponent"]},
@@ -169,6 +181,10 @@
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"props": ["isAndroid", "isWindows"]},
 		"PermissionRoleUtils": {"props": ["can", "makeEveryoneOverwrite"]},
+		"PermissionRoleUtils": {"strings": [".roles.indexOf(", ".getMember", "excludeGuildPermissions"], "exported": false, "value": "exports", "map": {
+			"can": ["excludeGuildPermissions", "permission:"],
+			"getHighestRole": [".roles.indexOf(", ".getMember"]
+		}},
 		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"], "exported": false, "value": "exports", "map": {
 			"AccessibilityPreferencesContext": ["[object Object]"]
 		}},
@@ -1370,7 +1386,7 @@
 		"CallCurrent": {"props": ["wrapper", "fullScreen"]},
 		"CallDetails": {"props": ["container", "hotspot"]},
 		"CallIncoming": {"props": ["wrapper", "mainChannelInfo"]},
-		"CallScreenshare": {"props": ["videoControls", "topControls", "screenMessage"]},
+		"CallScreenshare": {"props": ["videoControls", "topControls", "gradientTop"]},
 		"Card": {"props": ["card", "cardBrand"]},
 		"Category": {"props": ["wrapper", "children", "addButtonIcon"]},
 		"CategoryArrow": {"props": ["arrow", "open"]},
@@ -1484,7 +1500,7 @@
 		"MessageBlocked": {"props": ["blockedMessageText", "expanded"]},
 		"MessageBody": {"props": ["markupRtl", "edited"]},
 		"MessageDivider": {"props": ["isUnread", "divider"]},
-		"MessageElements": {"props": ["messageGroupBlockedBtn", "dividerRed"]},
+		"MessageElements": {"props": ["jumpToPresentBar", "summariesBetaTag"]},
 		"MessageFile": {"props": ["cancelButton", "filenameLinkWrapper"]},
 		"MessageLocalBot": {"props": ["ephemeralMessage", "icon"]},
 		"MessageMarkup": {"props": ["markup"]},
@@ -1506,7 +1522,7 @@
 		"MessageToolbar": {"props": ["container", "icon", "isHeader"]},
 		"MessageToolbarItems": {"props": ["wrapper", "button", "separator"]},
 		"Modal": {"props": ["root", "small", "medium"]},
-		"ModalCarouselNav": {"props": ["nav", "navNext"]},
+		"ModalCarouselNav": {"props": ["navPrev", "navNext", "slide"]},
 		"ModalCarouselWrapper": {"props": ["modalCarouselWrapper", "zoomedCarouselModalRoot"]},
 		"ModalDivider": {"props": ["divider"], "length": 1},
 		"ModalItems": {"props": ["guildName", "checkboxContainer"]},
@@ -1582,9 +1598,9 @@
 		"Typing": {"props": ["cooldownWrapper", "typing"]},
 		"UnreadBar": {"props": ["active", "bar", "unread"]},
 		"UploadModal": {"props": ["uploadModal", "bgScale"]},
-		"UserBadges": {"props": ["profileBadge", "container"]},
+		"UserBadges": {"props": ["profileBadge18", "container"]},
 		"UserBanner": {"props": ["popoutBanner", "popoutBannerPremium"]},
-		"UserPopoutFooter": {"props": ["wumpusTooltip", "messageInputContainer"]},
+		"UserPopoutFooter": {"props": ["wumpusWrapper", "messageInputContainer"]},
 		"UserPopoutHeader": {"props": ["avatarHint", "profileBadges", "avatarWrapperNormal"]},
 		"UserPopoutSection": {"props": ["section", "lastSection"]},
 		"UserPopoutSectionTitle": {"props": ["title", "body", "clydeMoreInfo"]},
@@ -2693,9 +2709,7 @@
 		"messagebarbuttonbase": ["MessageElements", "barButtonBase"],
 		"messagebarbuttonicon": ["MessageElements", "barButtonIcon"],
 		"messagebarbuttonmain": ["MessageElements", "barButtonMain"],
-		"messagebarhasmore": ["MessageElements", "hasMore"],
 		"messagebarjumptopresentbar": ["MessageElements", "jumpToPresentBar"],
-		"messagebarloadingmore": ["MessageElements", "loadingMore"],
 		"messagebarnewmessagesbar": ["MessageElements", "newMessagesBar"],
 		"messagebarspan": ["MessageElements", "span"],
 		"messagebarspinner": ["MessageElements", "spinner"],
@@ -2724,9 +2738,6 @@
 		"messagedividerhascontent": ["Message", "hasContent"],
 		"messageedited": ["MessageBody", "edited"],
 		"messagegroupstart": ["Message", "groupStart"],
-		"messagegroupblocked": ["MessageElements", "messageGroupBlocked"],
-		"messagegroupblockedbtn": ["MessageElements", "messageGroupBlockedBtn"],
-		"messagegroupblockedrevealed": ["MessageElements", "revealed"],
 		"messageheader": ["MessageBody", "header"],
 		"messageheadertext": ["MessageBody", "headerText"],
 		"messagelistitem": ["Message", "messageListItem"],
