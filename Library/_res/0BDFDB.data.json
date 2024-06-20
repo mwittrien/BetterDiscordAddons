@@ -180,7 +180,6 @@
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUsePremiumGuildMemberProfile"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"props": ["isAndroid", "isWindows"]},
-		"PermissionRoleUtils": {"props": ["can", "makeEveryoneOverwrite"]},
 		"PermissionRoleUtils": {"strings": [".roles.indexOf(", ".getMember", "excludeGuildPermissions"], "exported": false, "value": "exports", "map": {
 			"can": ["excludeGuildPermissions", "permission:"],
 			"getHighestRole": [".roles.indexOf(", ".getMember"]
@@ -200,7 +199,10 @@
 		"SlateRichUtils": {"props": ["createState", "toRichValue"]},
 		"SlateTextUtils": {"props": ["serializeDescendant", "toTextValue"]},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
-		"SoundUtils": {"props": ["createSound", "createSoundForPack", "playSound"]},
+		"SoundUtils": {"strings": [".disableSounds)", ".getSoundpack()", "Unable to find sound for pack name"], "exported": false, "value": "exports", "map": {
+			"createSound": [";return new "],
+			"playSound": [")&&void 0!==", "&&void 0!==n?n:e"]
+		}},
 		"SpotifyUtils": {"props": ["getAccessToken", "pause", "play"]},
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
 		"TimeoutUtils": {"strings": ["_timeout.isStarted()"]},
