@@ -1514,7 +1514,7 @@
 		"NameTag": {"props": ["bot", "nameTag"]},
 		"NitroStore": {"props": ["applicationStore", "marketingHeader"]},
 		"NoteTextarea": {"props": ["textarea"], "length": 1},
-		"Notice": {"props": ["notice", "platformIcon"]},
+		"Notice": {"props": ["notice", "colorStreamerMode"]},
 		"NoticePlatform": {"props": ["iconAndroid", "textLink"]},
 		"PageImage": {"props": ["title", "image", "wrapper", "text"], "length": 5, "smaller": true},
 		"Pagination": {"props": ["activeButton", "pageControl"]},
