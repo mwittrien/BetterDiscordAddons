@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.9
+ * @version 2.2.0
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -293,11 +293,17 @@ module.exports = (_ => {
 										className: BDFDB.disCN.marginbottom4,
 										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 										children: [
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
 												className: BDFDB.disCN.messagespopouttitle,
+												variant: "heading-md/semibold",
 												children: `${_this.labels.popout_note} - ${messages.length}/${allCount}`
 											}),
+											BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.messagespopoutheaderdivider
+											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+												className: BDFDB.disCN.messagespopoutsearchbox,
+												style: {marginRight: 0},
 												query: popoutProps.searchKey,
 												onChange: value => {
 													BDFDB.TimeUtils.clear(searchTimeout);
