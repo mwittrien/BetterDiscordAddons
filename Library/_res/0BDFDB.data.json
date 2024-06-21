@@ -272,7 +272,7 @@
 		"Animations": {"props": ["Controller", "Spring", "animated"]},
 		"AppReferencePositionLayer": {"strings": ["\"App\"", "layerContext:"], "funcStrings": ["{children:(", "{ref:"]},
 		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\""], "exported": false, "value": "exports", "map": {
-			"Sizes": ["\"SIZE_20\"", "\"SIZE_32\""]
+			"AvatarSizes": ["\"SIZE_20\"", "\"SIZE_32\""]
 		}},
 		"Avatars": {"props": ["AnimatedAvatar", "Avatar"], "exported": false, "value": "exports", "map": {
 			"AnimatedAvatar": ["AnimatedAvatar"],
