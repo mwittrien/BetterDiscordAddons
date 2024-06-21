@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.9
+ * @version 3.7.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,7 +27,9 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			
+			"fixed": {
+				"A lot of Plugin Issues": "Library should be stable again and Plugins should be running again, there will be some Issues with Plugins not working properly yet, let me know if you catch a bug"
+			}
 		}
 	};
 	
@@ -2552,7 +2554,11 @@ module.exports = (_ => {
 						if (LibraryModules[item]) return LibraryModules[item];
 						if (!InternalData.LibraryModules[item]) return null;
 						
-						Internal.findModuleViaData(LibraryModules, InternalData.LibraryModules, item);
+						if (item == "HTTPUtils") {
+							const APIUtils = Internal.LibraryModules.APIUtils;
+							if (APIUtils && InternalData.LibraryModules.HTTPUtils.props) LibraryModules[item] = (Object.entries(APIUtils).find(entry => InternalData.LibraryModules.HTTPUtils.props.every(prop => entry[1][prop] !== undefined)) || [])[1];
+						}
+						else Internal.findModuleViaData(LibraryModules, InternalData.LibraryModules, item);
 						
 						return LibraryModules[item] ? LibraryModules[item] : null;
 					}

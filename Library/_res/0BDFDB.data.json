@@ -160,6 +160,7 @@
 		"HistoryUtils": {"strings": ["transitionTo - Transitioning to", ",channelId:"], "exported": false, "value": "exports", "map": {
 			"transitionTo": ["transitionTo - Transitioning to"]
 		}},
+		"HTTPUtils": {"props": ["get", "patch", "del"]},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"InternalReactUtils": {"props": ["jsx", "jsxs", "Fragment"]},
@@ -587,7 +588,7 @@
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
 		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},
 		"UserTheme": {"strings": [".UserProfileThemeContextProvider", "pendingThemeColors:"], "noSearch": true},
-		"UserThemeContainer": {"strings": [".trackUserProfileAction", "guildId:", ".Provider"], "noSearch": true},
+		"UserThemeContainer": {"strings": ["shouldTrackView", "guildId:", ".Provider"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
 		"VoiceUser": {"protos": ["renderPrioritySpeaker", "renderIcons", "renderAvatar"]},
 		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "Permissions.MOVE_MEMBERS"]}
