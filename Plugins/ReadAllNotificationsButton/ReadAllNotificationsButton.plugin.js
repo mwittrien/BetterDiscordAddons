@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.6
+ * @version 1.7.7
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -93,7 +93,7 @@ module.exports = (_ => {
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildiconwrapper + BDFDB.disCN._readallnotificationsbuttoninner,
 							children: BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttonbutton,
+							className: BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCNS.guildiconchildwrappernohoverbg + BDFDB.disCN._readallnotificationsbuttonbutton,
 							children: "read all",
 							onClick: _ => {
 								if (!_this.settings.general.confirmClear) this.clearClick();
@@ -308,7 +308,7 @@ module.exports = (_ => {
 										clearing = true;
 										let toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_clearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 										for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
-											BDFDB.LibraryModules.APIUtils.HTTP.del({
+											BDFDB.LibraryModules.HTTPUtils.del({
 												url: BDFDB.DiscordConstants.Endpoints.MENTIONS_MESSAGE_ID(messages[i].id),
 												retries: 2,
 												oldFormErrors: true

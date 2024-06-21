@@ -2441,6 +2441,7 @@
 		"guildiconacronym": ["GuildIcon", "acronym"],
 		"guildiconbadge": ["GuildItem", "iconBadge"],
 		"guildiconchildwrapper": ["GuildIcon", "childWrapper"],
+		"guildiconchildwrappernohoverbg": ["GuildIcon", "childWrapperNoHoverBg"],
 		"guildiconselected": ["GuildIcon", "selected"],
 		"guildiconwrapper": ["GuildIcon", "wrapper"],
 		"guildinner": ["Guild", "wrapper"],
