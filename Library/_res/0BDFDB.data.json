@@ -304,7 +304,7 @@
 		"GuildChild": {"strings": ["selected", ",fontSize:", ".acronym"]},
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
 		"GuildItem": {"strings": ["guildNode:", "lowerBadge:", "isUnavailable"]},
-		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
+		"GuildTooltipMutedText": {"strings": ["muteConfig:", "color:\"text-muted\""]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["containerRef", "zoomable", "LOADING"]},
