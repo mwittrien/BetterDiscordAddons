@@ -2786,7 +2786,7 @@
 		"messagespopoutloadingmore": ["MessagesPopout", "loadingMore"],
 		"messagespopoutloadingplaceholder": ["MessagesPopout", "loadingPlaceholder"],
 		"messagespopoutscrollingfooterwrap": ["MessagesPopout", "scrollingFooterWrap"],
-		"messagespopoutsearchBox": ["MessagesPopoutHeader", "searchBox"],
+		"messagespopoutsearchbox": ["MessagesPopoutHeader", "searchBox"],
 		"messagespopoutspinner": ["MessagesPopout", "spinner"],
 		"messagespopouttabbar": ["MessagesPopoutTabBar", "tabBar"],
 		"messagespopouttabbarheader": ["MessagesPopoutTabBar", "header"],
