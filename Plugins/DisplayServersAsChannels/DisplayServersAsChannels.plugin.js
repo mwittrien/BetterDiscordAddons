@@ -426,7 +426,6 @@ module.exports = (_ => {
 						margin-bottom: 8px;
 						margin-left: 8px;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinnerwrapper},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinner} {
 						width: ${this.settings.amounts.serverListWidth - 20}px;
 						height: ${this.settings.amounts.serverElementHeight}px;
