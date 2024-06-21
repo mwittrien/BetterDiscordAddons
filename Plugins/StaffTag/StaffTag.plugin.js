@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.0
+ * @version 1.6.1
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -277,7 +277,7 @@ module.exports = (_ => {
 			}
 
 			processMessageUsername (e) {
-				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
+				if (!e.instance.props.message || !this.settings.tagPlaces.chat || !e.instance.props.decorations) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
 				if (!userType) return;
