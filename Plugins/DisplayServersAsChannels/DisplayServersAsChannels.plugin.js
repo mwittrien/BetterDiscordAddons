@@ -496,12 +496,6 @@ module.exports = (_ => {
 						width: ${this.settings.amounts.serverElementHeight/32 * 30}px !important;
 					}
 
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.homebuttonicon} {
-						width: ${this.settings.amounts.serverElementHeight/32 * 28}px;
-						height: ${this.settings.amounts.serverElementHeight/32 * 20}px;
-						transform: unset;
-					}
-
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.avatarwrapper} {
 						width: ${this.settings.amounts.serverElementHeight/32 * 24}px !important;
 						height: ${this.settings.amounts.serverElementHeight/32 * 24}px !important;

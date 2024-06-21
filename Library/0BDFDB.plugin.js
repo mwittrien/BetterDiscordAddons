@@ -7402,19 +7402,13 @@ module.exports = (_ => {
 				CustomComponents.SvgIcon = reactInitialized && class BDFDB_Icon extends Internal.LibraryModules.React.Component {
 					render() {
 						if (BDFDB.ObjectUtils.is(this.props.name)) {
-							let calcClassName = [];
-							if (BDFDB.ObjectUtils.is(this.props.name.getClassName)) for (let path in this.props.name.getClassName) {
-								if (!path || BDFDB.ObjectUtils.get(this, path)) calcClassName.push(BDFDB.disCN[this.props.name.getClassName[path]]);
-							}
-							if (calcClassName.length || this.props.className) this.props.nativeClass = true;
+							if (this.props.className) this.props.nativeClass = true;
 							this.props.iconSVG = this.props.name.icon;
 							let props = Object.assign({
 								width: 24,
 								height: 24,
 								color: "currentColor"
-							}, this.props.name.defaultProps, this.props, {
-								className: BDFDB.DOMUtils.formatClassName(calcClassName, this.props.className)
-							});
+							}, this.props.name.defaultProps, this.props);
 							for (let key in props) this.props.iconSVG = this.props.iconSVG.replace(new RegExp(`%%${key}`, "g"), props[key]);
 						}
 						if (this.props.iconSVG) {

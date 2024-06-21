@@ -113,7 +113,6 @@ module.exports = (_ => {
 						"GuildEmojis",
 						"GuildInvitationRow",
 						"GuildInvites",
-						"GuildMemberEntry",
 						"MemberListItem",
 						"Message",
 						"MessageContent",
@@ -1084,10 +1083,6 @@ module.exports = (_ => {
 					e.instance.props.animatedEmojis = [].concat(e.instance.props.animatedEmojis);
 					for (let i in e.instance.props.animatedEmojis) e.instance.props.animatedEmojis[i] = Object.assign({}, e.instance.props.animatedEmojis[i], {user: this.getUserData(e.instance.props.animatedEmojis[i].user.id)});
 				}
-			}
-
-			processGuildMemberEntry (e) {
-				if (this.settings.places.guildSettings && e.instance.props.user) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 			}
 
 			processGuildInvites (e) {
