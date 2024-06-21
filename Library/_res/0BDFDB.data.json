@@ -269,8 +269,7 @@
 	"LibraryComponents": {
 		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
 		"Animations": {"props": ["Controller", "Spring", "animated"]},
-		"AppReferencePositionLayer": {"props": ["AppReferencePositionLayer", "appLayerContext"], "funcStrings": ["{children:(", "{ref:"]},
-		"AutocompleterComponents": {"props": ["AutocompleterQuerySymbols", "createHeaderResult"]},
+		"AppReferencePositionLayer": {"strings": ["\"App\"", "layerContext:"], "funcStrings": ["{children:(", "{ref:"]},
 		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\""], "exported": false, "value": "exports", "map": {
 			"Sizes": ["\"SIZE_20\"", "\"SIZE_32\""]
 		}},
@@ -284,7 +283,7 @@
 			"NumberBadge": [".numberBadge"],
 			"TextBadge": [".textBadge"]
 		}},
-		"Checkmark": {"strings": ["d:\"M8.99991 16.17L4.82991"], "funcStrings": ["foreground:"]},
+		"Checkmark": {"strings": ["d:\"M9.58473 14.8636L6.04944 11.4051L4.50003 12.9978L9.58473 18L19.5 8.26174L17.9656 6.64795L9.58473 14.8636Z"], "funcStrings": ["foreground:"]},
 		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["autoplay"]},
 		"EmojiButton": {"strings": ["renderButtonContents", "\"emojiButton\"", "SELECT_EMOJI"]},
 		"EmojiPicker": {"strings": ["emojiSize", "inspectedExpressionPosition", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
@@ -301,10 +300,10 @@
 			"FormTextTypes": ["FormTextTypes"],
 			"FormTitle": ["FormTitle"]
 		}},
-		"GuildBadge": {"strings": ["foregroundDarkColor", "getBadgeCategory"]},
-		"GuildChild": {"strings": [".getAcronym", ",fontSize:", ".acronym"]},
+		"GuildBadge": {"strings": ["foregroundDarkColor", ".tooltipRemovePadding"]},
+		"GuildChild": {"strings": ["selected", ",fontSize:", ".acronym"]},
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
-		"GuildItem": {"strings": ["guildNode:", "useShouldShowInvitesDisabledNotif"]},
+		"GuildItem": {"strings": ["guildNode:", "lowerBadge:", "isUnavailable"]},
 		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
@@ -451,7 +450,7 @@
 		"GuildIconWrapper": {"strings": ["badgeStrokeColor:", "textScale:"]},
 		"GuildInvitationRow": {"strings": [".getSelectedInviteMetadata", ".getSuggestedProps", "inviteKey:"], "noSearch": true},
 		"GuildInvites": {"strings": [".NO_INVITES_BODY", ".DISABLE_INVITES", "submitting"]},
-		"GuildItem": {"strings": ["guildNode:", "guildJoinRequestStatus", "lowerBadgeWidth"]},
+		"GuildItem": {"strings": ["guildNode:", "lowerBadge:", "isUnavailable"]},
 		"GuildItemWrapper": {"strings": [".pauseBackground", ".isUnavailable", "guildJoinRequestStatus"]},
 		"GuildMemberEntry": {"strings": [".renderOwnerHelpIcon(", ".overflowButton", ".roleWrapper"]},
 		"GuildsBar": {"strings": ["unreadMentionsIndicatorTop", "disableAppDownload", ".GUILD_MEMBER_VERIFICATION"]},
