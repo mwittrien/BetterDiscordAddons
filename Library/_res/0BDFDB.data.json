@@ -112,7 +112,6 @@
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
 		"AnimationUtils": {"props": ["spring", "decay"]},
 		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
-		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"APIUtils": {"strings": ["window.GLOBAL_ENV.API_ENDPOINT+", "GLOBAL_ENV.API_VERSION"], "exported": false, "value": "exports", "map": {
 			"getAPIBaseURL": ["window.GLOBAL_ENV.API_ENDPOINT+"]
 		}},
@@ -120,16 +119,21 @@
 		"ApplicationAssetUtils": {"props": ["getAssetImage", "getAssetIds"]},
 		"AppUtils": {"props": ["clipboard", "os"]},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
-		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryExpand"]},
+		"CategoryCollapseUtils": {"strings": [".dispatch({type:\"CATEGORY_EXPAND\"", ".dispatch({type:\"CATEGORY_COLLAPSE\""], "exported": false, "value": "exports", "map": {
+			"categoryCollapse": [".dispatch({type:\"CATEGORY_COLLAPSE\""],
+			"categoryExpand": [".dispatch({type:\"CATEGORY_EXPAND\""]
+		}},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
-		"ChatRestrictionUtils": {"props": ["applyChatRestrictions"]},
-		"ConnectionMetadataUtils": {"props": ["generateEbayMetadataItems", "generatePaypalMetadataItems"], "exported": false, "value": "exports", "map": {
-			"getEbay": ["generateEbayMetadataItems"],
-			"getPaypal": ["generatePaypalMetadataItems"],
-			"getReddit": ["generateRedditMetadataItems"],
-			"getSteam": ["generateSteamMetadataItems"],
-			"getTiktok": ["generateTikTokMetadataItems"],
-			"getTwitter": ["generateTwitterMetadataItems"]
+		"ChatRestrictionUtils": {"strings": ["dispatch({type:\"MESSAGE_LENGTH_UPSELL\"", "Message Too Long Alert"], "exported": false, "value": "exports", "map": {
+			"applyChatRestrictions": ["Message Too Long Alert"]
+		}},
+		"ConnectionMetadataUtils": {"strings": ["EBAY_POSITIVE_FEEDBACK_PERCENTAGE", "Messages.CONNECTIONS_PAYPAL_VERIFIED"], "exported": false, "value": "exports", "map": {
+			"getEbay": ["EBAY_POSITIVE_FEEDBACK_PERCENTAGE"],
+			"getPaypal": ["Messages.CONNECTIONS_PAYPAL_VERIFIED"],
+			"getReddit": ["REDDIT_TOTAL_KARMA"],
+			"getSteam": ["STEAM_GAME_COUNT"],
+			"getTiktok": ["TIKTOK_FOLLOWING_COUNT"],
+			"getTwitter": ["TWITTER_STATUSES_COUNT"]
 		}},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
@@ -147,10 +151,15 @@
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
-		"FolderSettingsUtils": {"props": ["saveGuildFolders", "saveClientTheme"]},
+		"FolderSettingsUtils": {"strings": [".create", ".folderColor", "clientThemeSettings:"], "exported": false, "value": "exports", "map": {
+			"saveClientTheme": ["\"meta\",\"command\"", "return parseInt("],
+			"saveGuildFolders": ["clientThemeSettings:"]
+		}},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
-		"HistoryUtils": {"props": ["transitionTo", "transitionToGuild"]},
+		"HistoryUtils": {"strings": ["transitionTo - Transitioning to", ",channelId:"], "exported": false, "value": "exports", "map": {
+			"transitionTo": ["transitionTo - Transitioning to"]
+		}},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"InternalReactUtils": {"props": ["jsx", "jsxs", "Fragment"]},
@@ -160,17 +169,24 @@
 		}},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LoginUtils": {"props": ["login", "logout"]},
-		"MediaComponentUtils": {"props": ["renderImageComponent", "renderVideoComponent"]},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
-		"MemberDisplayUtils": {"props": ["getDisplayProfile", "default"], "exported": false, "value": "exports", "map": {
-			"getUserProfile": ["default"]
+		"MemberDisplayUtils": {"strings": [".getGuildMemberProfile", ".getUser("], "exported": false, "value": "exports", "map": {
+			"getDisplayProfile": [".getGuildMemberProfile"],
+			"getUserProfile": [".default,", "()=>"]
 		}},
-		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
-		"MessageAuthorUtils": {"props": ["getMessageAuthor", "getUserAuthor"], "exported": false, "value": "exports", "map": {
-			"getAuthor": ["default"]
+		"MentionUtils": {"strings": [",mentionEveryone:", ",suppressEveryone:", ".getGuildId()"], "exported": false, "value": "exports", "map": {
+			"isMentioned": [".getGuildId()"],
+			"isRawMessageMentioned": ["rawMessage", ",suppressEveryone:"]
 		}},
-		"MessageComponentUtils": {"props": ["useClickReply", "useHoveredMessage"]},
-		"MessageManageUtils": {"props": ["copyLink", "replyToMessage"]},
+		"MessageAuthorUtils": {"strings": [".channel_id);return", "Result cannot be null because the message is not null"], "exported": false, "value": "exports", "map": {
+			"getAuthor": ["Result cannot be null because the message is not null"],
+			"getMessageAuthor": [".channel_id);return"]
+		}},
+		"MessageComponentUtils": {"strings": [".UNBLOCK_TO_JUMP_BODY", ".altKey"]},
+		"MessageManageUtils": {"strings": ["showMentionToggle", ".TEXTAREA_FOCUS", "message-actions"], "exported": false, "value": "exports", "map": {
+			"copyLink": ["MESSAGE_LINK_COPIED"],
+			"replyToMessage": ["showMentionToggle", ".TEXTAREA_FOCUS"]
+		}},
 		"MessageParser": {"props": ["parseEmbedTitle", "defaultRules"]},
 		"MessagePinUtils": {"props": ["pinMessage", "unpinMessage"]},
 		"MessageUtils": {"props": ["receiveMessage", "editMessage"]},
@@ -192,7 +208,10 @@
 		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getAccessibleEmojiDisplayName"]},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
-		"RoleIconUtils": {"props": ["canGuildUseRoleIcons", "getRoleIconData"]},
+		"RoleIconUtils": {"strings": [".subscription_listing_id", ".ROLE_ICONS", "customIconSrc:"], "exported": false, "value": "exports", "map": {
+			"canGuildUseRoleIcons": [".subscription_listing_id", ".ROLE_ICONS"],
+			"getRoleIconData": ["customIconSrc:"]
+		}},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
 		"SearchPageUtils": {"props": ["changePage", "search", "clearHistory"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
