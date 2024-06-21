@@ -213,25 +213,36 @@
 			"getRoleIconData": ["customIconSrc:"]
 		}},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
-		"SearchPageUtils": {"props": ["changePage", "search", "clearHistory"]},
+		"SearchPageUtils": {"strings": ["dispatch({type:\"SEARCH_CLEAR_HISTORY\"", "*"], "exported": false, "value": "exports", "map": {
+			"changePage": ["*"],
+			"clearHistory": ["dispatch({type:\"SEARCH_CLEAR_HISTORY\""]
+		}},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
 		"SlateRichUtils": {"props": ["createState", "toRichValue"]},
 		"SlateTextUtils": {"props": ["serializeDescendant", "toTextValue"]},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
 		"SoundUtils": {"strings": [".disableSounds)", ".getSoundpack()", "Unable to find sound for pack name"], "exported": false, "value": "exports", "map": {
 			"createSound": [";return new "],
-			"playSound": [")&&void 0!==", "&&void 0!==n?n:e"]
+			"playSound": ["playWithListener"]
 		}},
-		"SpotifyUtils": {"props": ["getAccessToken", "pause", "play"]},
+		"SpotifyUtils": {"strings": [".CONNECTION_ACCESS_TOKEN", "SPOTIFY_PLAYER_PAUSE"], "exported": false, "value": "exports", "map": {
+			"getAccessToken": [".CONNECTION_ACCESS_TOKEN", "SPOTIFY"],
+			"pause": ["SPOTIFY_PLAYER_PAUSE"],
+			"play": ["SPOTIFY_PLAYER_PLAY"]
+		}},
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
 		"TimeoutUtils": {"strings": ["_timeout.isStarted()"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
 		"UserNameUtils": {"props": ["getNickname", "getName", "useName"]},
-		"UserPopoutUtils": {"props": ["openUserContextMenu", "openModerateRoleContextMenu"]},
+		"UserPopoutUtils": {"strings": ["Cannot moderate user in DM or group DM", "onCloseContext"]},
 		"UserProfileUtils": {"props": ["fetchProfile", "getUser"]},
-		"UserSettingsProtoUtils": {"props": ["addDismissedContent", "updateUserChannelSettings"]},
+		"UserProfileUtils": {"strings": ["dispatch({type:\"USER_UPDATE\"", ".USER(", "user cannot"], "exported": false, "value": "exports", "map": {
+			"fetchProfile": ["fetchProfile error", "USER_PROFILE_FETCH_FAILURE"],
+			"getUser": ["dispatch({type:\"USER_UPDATE\"", ".USER("]
+		}},
+		"UserSettingsProtoUtils": {"strings": [".updateAsync(\"guilds\"", "INFREQUENT_USER_ACTION"]},
 		"UserSettingsUtils": {"props": ["open", "updateAccount"]},
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
 		"WindowUtils": {"props": ["minimize", "maximize", "close"]}
