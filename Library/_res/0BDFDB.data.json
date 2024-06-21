@@ -306,7 +306,7 @@
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
 		"GuildItem": {"strings": ["guildNode:", "lowerBadge:", "isUnavailable"]},
 		"GuildTooltipMutedText": {"strings": ["muteConfig:", "color:\"text-muted\""]},
-		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
+		"Heading": {"strings": ["data-excessive", ".defaultColor"], "funcStrings": ["defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["containerRef", "zoomable", "LOADING"]},
 		"ImageModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "animated"]},
@@ -355,7 +355,7 @@
 			"Status": ["Status"],
 			"Types": ["StatusTypes"]
 		}},
-		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"]},
+		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"], "funcStrings": ["defaultColor"]},
 		"TextElement": {"strings": [".strong]", ".STANDARD"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
 		"UserBadgeComponents": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"], "exported": false, "value": "exports", "map": {
