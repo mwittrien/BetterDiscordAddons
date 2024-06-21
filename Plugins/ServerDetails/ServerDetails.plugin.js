@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.9
+ * @version 1.2.0
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -243,6 +243,10 @@ module.exports = (_ => {
 						background-color: var(--background-primary);
 						color: var(--text-normal);
 						font-size: 40px;
+					}
+					${BDFDB.dotCNS.tooltiplistitem + BDFDB.dotCN.flowerstarchild} > svg {
+						width: 10px;
+						height: 10px;
 					}
 				`;
 			}
