@@ -85,7 +85,7 @@
 		"ComponentActions": ["INSERT_TEXT", "PREPEND_TEXT", "SHAKE_APP"],
 		"EmojiSprites": ["DiversityPerRow", "PickerCount", "PickerPerRow"],
 		"Endpoints": ["MESSAGES", "CHANNEL", "GUILD", "SEARCH_CHANNEL"],
-		"FriendsSections": ["ADD_FRIEND", "SUGGESTIONS", "BLOCKED"],
+		"FriendsSections": ["ADD_FRIEND", "SUGGESTIONS", "ONLINE"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
 		"KeyboardDeviceTypes": ["GAMEPAD_BUTTON", "KEYBOARD_KEY", "MOUSE_BUTTON"],
 		"LinuxKeyToCode": ["meta", "track back"],
