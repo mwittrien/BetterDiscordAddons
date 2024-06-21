@@ -12,7 +12,7 @@
 	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
-		"Guild": {"strings": ["hasCommunityInfoSubheader()", "publicUpdatesChannelId", ".GuildFeatures.NON_COMMUNITY_RAID_ALERTS"]},
+		"Guild": {"strings": ["hasCommunityInfoSubheader()", "publicUpdatesChannelId", ".NON_COMMUNITY_RAID_ALERTS"]},
 		"Invite": {"props": ["getExpiresAt", "isExpired"]},
 		"Message": {"props": ["getReaction", "isEdited", "getChannelId"]},
 		"Messages": {"props": ["jumpToMessage", "hasAfterCached", "forEach"]},
