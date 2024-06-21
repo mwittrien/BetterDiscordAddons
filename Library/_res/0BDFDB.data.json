@@ -205,7 +205,6 @@
 		}},
 		"PrivateChannelUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"QuerySearchUtils": {"props": ["queryGuilds", "queryGroupDMs"]},
-		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getAccessibleEmojiDisplayName"]},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
 		"RoleIconUtils": {"strings": [".subscription_listing_id", ".ROLE_ICONS", "customIconSrc:"], "exported": false, "value": "exports", "map": {
@@ -218,8 +217,12 @@
 			"clearHistory": ["dispatch({type:\"SEARCH_CLEAR_HISTORY\""]
 		}},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
-		"SlateRichUtils": {"props": ["createState", "toRichValue"]},
-		"SlateTextUtils": {"props": ["serializeDescendant", "toTextValue"]},
+		"SlateRichUtils": {"strings": ["{type:\"line\",children", "textValue:", "richValue:", "map"], "exported": false, "value": "exports", "map": {
+			"toRichValue": ["{type:\"line\",children", "map"]
+		}},
+		"SlateTextUtils": {"strings": ["preventEmojiSurrogates", "ignoreTrailingEmptyNodes", "allowBlock"], "exported": false, "value": "exports", "map": {
+			"toTextValue": ["ignoreTrailingEmptyNodes"]
+		}},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
 		"SoundUtils": {"strings": [".disableSounds)", ".getSoundpack()", "Unable to find sound for pack name"], "exported": false, "value": "exports", "map": {
 			"createSound": [";return new "],
