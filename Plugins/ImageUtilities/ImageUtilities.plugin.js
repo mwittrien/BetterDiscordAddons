@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.4.4
+ * @version 5.4.5
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -438,11 +438,16 @@ module.exports = (_ => {
 						position: absolute;
 						display: flex;
 					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.downloadlink} {
+					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.imagemodalimageoptionscontainer} {
+						position: static !important;
+						display: flex !important;
+						flex-wrap: unset !important;
+					}
+					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.imagemodalimagedownloadlink} {
 						position: relative !important;
 						white-space: nowrap !important;
 					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.anchor + BDFDB.dotCN.downloadlink} {
+					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.anchor + BDFDB.dotCN.imagemodalimagedownloadlink} {
 						margin: 0 !important;
 					}
 				`;
@@ -900,6 +905,7 @@ module.exports = (_ => {
 												naturalWidth: this.videoWidth,
 												height: this.videoHeight,
 												naturalHeight: this.videoHeight,
+												renderForwardComponent: _ => {},
 												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
 											}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
 												src: imageThrowaway.src,
@@ -907,6 +913,7 @@ module.exports = (_ => {
 												width: this.width,
 												height: this.height,
 												className: BDFDB.disCN.imagemodalimage,
+												renderForwardComponent: _ => {},
 												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
 											})
 										}), true);
@@ -987,8 +994,8 @@ module.exports = (_ => {
 				}
 				else {
 					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})).props.src || e.instance.props.src);
-				
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
+					
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["renderForwardComponent"]});
 					if (index > -1) {
 						let type = filterForVideos ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 						let openContext = event => BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
@@ -1037,77 +1044,89 @@ module.exports = (_ => {
 							className: BDFDB.disCN._imageutilitiesoperations,
 							children: [
 								children[index],
-								this.settings.viewerSettings.saveImage && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: this.labels.context_saveas.replace("{{var0}}", type),
-										onClick: event => {
-											BDFDB.ListenerUtils.stopEvent(event);
-											this.downloadFile({url: e.instance.props.original, fallbackUrl: url});
-										},
-										onContextMenu: event => {
-											let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
-											if (locations.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-												children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-													id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
-													label: name,
-													action: _ => this.downloadFile({url: e.instance.props.original, fallbackUrl: url}, ownLocations[name].location)
-												}))
-											}));
-										}
-									})
-								],
-								this.settings.viewerSettings.copyImage && this.isValid(url, "copyable") && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: this.labels.context_copy.replace("{{var0}}", type),
-										onClick: event => {
-											BDFDB.ListenerUtils.stopEvent(event);
-											this.copyFile({url: e.instance.props.original, fallbackUrl: url});
-										}
-									})
-								],
-								this.settings.viewerSettings.galleryMode && viewedImage && this.settings.viewerSettings.jumpTo && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: BDFDB.LanguageUtils.LanguageStrings.JUMP,
-										onClick: event => {
-											let layerContainer = !event.shiftKey && BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayercontainer, event.currentTarget)
-											let backdrop = layerContainer && layerContainer.querySelector(BDFDB.dotCN.backdrop);
-											if (backdrop) backdrop.click();
-											let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-											if (channel) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, viewedImage.messageId));
-										}
-									})
-								],
-								this.settings.viewerSettings.zoomMode && !filterForVideos && !this.isValid(e.instance.props.src, "gif") && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-										onClick: openContext,
-										onContextMenu: openContext
-									})
-								]
+								this.settings.viewerSettings.saveImage && BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.imagemodalimageoptionscontainer,
+									children: [
+										BDFDB.ReactUtils.createElement("span", {
+											className: BDFDB.disCN.imagemodalimagedownloadlink,
+											children: "|",
+											style: {margin: "0 5px"}
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+											className: BDFDB.disCN.imagemodalimagedownloadlink, 
+											children: this.labels.context_saveas.replace("{{var0}}", type),
+											onClick: event => {
+												BDFDB.ListenerUtils.stopEvent(event);
+												this.downloadFile({url: e.instance.props.original, fallbackUrl: url});
+											},
+											onContextMenu: event => {
+												let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
+												if (locations.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+													children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+														id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
+														label: name,
+														action: _ => this.downloadFile({url: e.instance.props.original, fallbackUrl: url}, ownLocations[name].location)
+													}))
+												}));
+											}
+										})
+									]
+								}),
+								this.settings.viewerSettings.copyImage && this.isValid(url, "copyable") && BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.imagemodalimageoptionscontainer,
+									children: [
+										BDFDB.ReactUtils.createElement("span", {
+											className: BDFDB.disCN.imagemodalimagedownloadlink,
+											children: "|",
+											style: {margin: "0 5px"}
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+											className: BDFDB.disCN.imagemodalimagedownloadlink, 
+											children: this.labels.context_copy.replace("{{var0}}", type),
+											onClick: event => {
+												BDFDB.ListenerUtils.stopEvent(event);
+												this.copyFile({url: e.instance.props.original, fallbackUrl: url});
+											}
+										})
+									]
+								}),
+								this.settings.viewerSettings.galleryMode && viewedImage && this.settings.viewerSettings.jumpTo && BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.imagemodalimageoptionscontainer,
+									children: [
+										BDFDB.ReactUtils.createElement("span", {
+											className: BDFDB.disCN.imagemodalimagedownloadlink,
+											children: "|",
+											style: {margin: "0 5px"}
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+											className: BDFDB.disCN.imagemodalimagedownloadlink, 
+											children: BDFDB.LanguageUtils.LanguageStrings.JUMP,
+											onClick: event => {
+												let layerContainer = !event.shiftKey && BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayercontainer, event.currentTarget)
+												let backdrop = layerContainer && layerContainer.querySelector(BDFDB.dotCN.backdrop);
+												if (backdrop) backdrop.click();
+												let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
+												if (channel) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, viewedImage.messageId));
+											}
+										})
+									]
+								}),
+								this.settings.viewerSettings.zoomMode && !filterForVideos && !this.isValid(e.instance.props.src, "gif") && BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.imagemodalimageoptionscontainer,
+									children: [
+										BDFDB.ReactUtils.createElement("span", {
+											className: BDFDB.disCN.imagemodalimagedownloadlink,
+											children: "|",
+											style: {margin: "0 5px"}
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+											className: BDFDB.disCN.imagemodalimagedownloadlink, 
+											children: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+											onClick: openContext,
+											onContextMenu: openContext
+										})
+									]
+								})
 							].flat(10).filter(n => n)
 						});
 						
