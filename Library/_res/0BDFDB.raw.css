@@ -986,6 +986,12 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	opacity: 0.2 !important;
 }
 
+
+[REPLACE_CLASS_tooltiplistitem] [REPLACE_CLASS_flowerstarchild] > svg {
+	width: 10px;
+	height: 10px;
+}
+
 [REPLACE_CLASS_svgiconwrapper] {
 	display: flex;
 	justify-content: center;
