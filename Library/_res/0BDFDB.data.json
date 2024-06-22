@@ -153,8 +153,8 @@
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
 		"FolderSettingsUtils": {"strings": [".create", ".folderColor", "clientThemeSettings:"], "exported": false, "value": "exports", "map": {
-			"saveClientTheme": ["\"meta\",\"command\"", "return parseInt("],
-			"saveGuildFolders": ["clientThemeSettings:"]
+			"saveClientTheme": ["clientThemeSettings:"],
+			"saveGuildFolders": [".create", ".folderColor"]
 		}},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
