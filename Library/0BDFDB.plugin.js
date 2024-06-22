@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.1
+ * @version 3.7.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4416,21 +4416,15 @@ module.exports = (_ => {
 						let LayersProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.layers), {name: "LayersProvider", unlimited: true, up: true});
 						let LayersProviderType = LayersProviderIns && BDFDB.ObjectUtils.get(LayersProviderIns, `${BDFDB.ReactUtils.instanceKey}.type`);
 						if (!LayersProviderType) return;
-						let parentSelector = "", notices = document.querySelector("#bd-notices");
-						if (notices) {
-							let parentClasses = []
-							for (let i = 0, parent = notices.parentElement; i < 3; i++, parent = parent.parentElement) parentClasses.push(parent.className);
-							parentSelector = parentClasses.reverse().map(n => !n ? "*" : `.${n.split(" ").join(".")}`).join(" > ");
-						}
+						let notices = document.querySelector("#bd-notices:has(#outdated-plugins)");
 						BDFDB.PatchUtils.patch({name: "BDFDB DiscordUtils"}, LayersProviderType.prototype, "render", {after: e => {
 							e.returnValue = BDFDB.ReactUtils.createElement(LayersProviderType, LayersProviderIns.props);
 							BDFDB.ReactUtils.forceUpdate(LayersProviderIns);
-							if (parentSelector) BDFDB.TimeUtils.timeout(_ => {
-								if (!document.contains(notices)) {
-									let parent = document.querySelector(parentSelector) || document.querySelector(BDFDB.dotCN.app).parentElement;
-									if (parent) parent.insertBefore(notices, parent.firstElementChild);
-								}
-							}, 1000);
+							if (notices) BDFDB.TimeUtils.timeout(_ => {if (!document.contains(notices)) {
+								let ZeresPluginLibrary = BDFDB.BDUtils.getPlugin("ZeresPluginLibrary");
+								let updateChecker = ZeresPluginLibrary && ZeresPluginLibrary?.Library?.PluginUpdater?.checkAllPlugins;
+								if (typeof updateChecker == "function") updateChecker.apply(ZeresPluginLibrary.Library.PluginUpdater);
+							}}, 1000);
 						}}, {once: true});
 						BDFDB.ReactUtils.forceUpdate(LayersProviderIns);
 					}, instant ? 0 : 1000);
