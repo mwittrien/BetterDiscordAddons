@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.5
+ * @version 1.1.6
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -259,30 +259,6 @@ module.exports = (_ => {
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.menulabel} {
 						overflow: visible;
 						white-space: unset;
-					}
-					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitem} {
-						grid-template-rows: minmax(24px, auto) 1fr;
-					}
-					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemcustom},
-					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemcustomwithemoji} {
-						display: flex;
-						padding-right: 0;
-						padding-left: 0;
-					}
-					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCNS.customstatusitemcustomwithemoji + BDFDB.dotCN.customstatusitememoji} {
-						margin-left: 4px;
-						order: 3;
-					}
-					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemcustomtext} {
-						flex: 1 1 auto;
-						max-width: 126px;
-						overflow: hidden;
-						order: 2;
-					}
-					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemclearbutton} {
-						margin-right: 10px;
-						margin-left: 2px;
-						order: 1;
 					}
 					${BDFDB.dotCN._customstatuspresetscustomstatusitem} {
 						display: flex;

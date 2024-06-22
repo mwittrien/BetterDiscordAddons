@@ -386,7 +386,7 @@
 		"UserSettingsCogContextMenu": "user-settings-cog"
 	},
 	"PatchModules": {
-		"Account": {"protos": ["renderAvatarWithPopout", "renderCopiableNameTag", "renderCopiedSuccess"]},
+		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "renderSettingsGear"]},
 		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
 		"AuditLogEntry": {"protos": ["renderRoleUpdate", "renderChangeDetails", "getActionTypeColor", "renderPermissionUpdate"]},
 		"AuditLogs": {"strings": ["Messages.SEARCH_MEMBERS", "._lastExpandedRef", ".handleActionFilterQueryClear"]},
@@ -1389,7 +1389,7 @@
 		}
 	},
 	"DiscordClassModules": {
-		"AccountDetails": {"props": ["accountProfilePopoutWrapper", "withTagAsButton"]},
+		"AccountDetails": {"props": ["accountProfilePopoutWrapper", "redIcon"]},
 		"AccountDetailsButtons": {"props": ["button", "enabled", "disabled"]},
 		"Anchor": {"props": ["anchor", "anchorUnderlineOnHover"]},
 		"AnimationContainer": {"props": ["animatorLeft", "didRender"]},
@@ -1434,7 +1434,6 @@
 		"CustomStatus": {"props": ["customStatusSoloEmoji", "customStatusText", "customStatus"]},
 		"CustomStatusIcon": {"props": ["textRuler", "emoji", "icon"]},
 		"CustomStatusModal": {"props": ["inputContainer", "emojiButton", "modalRoot"]},
-		"CustomStatusPopout": {"props": ["customStatusItem", "customEmoji"]},
 		"DmAddPopout": {"props": ["popout", "searchBarComponent"]},
 		"DmAddPopoutItems": {"props": ["friendSelected", "friendWrapper"]},
 		"DefaultChannelWelcome": {"props": ["titleName", "card", "cardWrapper"]},
@@ -1883,8 +1882,6 @@
 		"accountinfobuttonstrikethrough": ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "panelTitleContainer"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
-		"accountinfowithtagasbutton": ["AccountDetails", "withTagAsButton"],
-		"accountinfowithtagless": ["AccountDetails", "withTagless"],
 		"aliasautocomplete": ["AutocompleteAliases", "autocomplete"],
 		"anchor": ["Anchor", "anchor"],
 		"anchorunderlineonhover": ["Anchor", "anchorUnderlineOnHover"],
@@ -2185,13 +2182,6 @@
 		"cursorpointer": ["BDFDB", "cursorPointer"],
 		"customstatusemoji": ["CustomStatusIcon", "emoji"],
 		"customstatusicon": ["CustomStatusIcon", "icon"],
-		"customstatusitem": ["CustomStatusPopout", "statusItem"],
-		"customstatusitemclearbutton": ["CustomStatusPopout", "clearStatusButton"],
-		"customstatusitemclearicon": ["CustomStatusPopout", "clearStatusIcon"],
-		"customstatusitemcustom": ["CustomStatusPopout", "customStatusItem"],
-		"customstatusitemcustomtext": ["CustomStatusPopout", "customText"],
-		"customstatusitemcustomwithemoji": ["CustomStatusPopout", "customStatusWithEmoji"],
-		"customstatusitememoji": ["CustomStatusPopout", "customEmoji"],
 		"customstatusmodal": ["CustomStatusModal", "modalRoot"],
 		"dateinputbutton": ["BDFDB", "dateInputButton"],
 		"dateinputbuttonselected": ["BDFDB", "dateInputButtonSelected"],
