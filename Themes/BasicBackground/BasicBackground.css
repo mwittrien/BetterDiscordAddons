@@ -1142,6 +1142,11 @@ button.button_f67531.enabled_f67531:hover svg {
 	top: 2px;
 	left: calc(-70px * var(--usechatbubbles) + 16px);
 }
+#app-mount .compact_ec86aa .avatar_ec86aa {						/* message				compact avatar							*/
+	position: relative;
+	top: .18em;
+	left: nsetcalc(-70px * var(--usechatbubbles) + 16px);
+}
 #app-mount .messageItemBody__8fd54.hasReply_ec86aa .avatar_ec86aa,
 #app-mount .repliedMessage_ec86aa ~ * .avatar_ec86aa {
 	top: 24px;
