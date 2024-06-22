@@ -695,7 +695,7 @@ html .iconBadge__0c126 {
 	color: var(--text-muted);
 }
 
-#app-mount .copyInput_f549fd {
+#app-mount .copyInput_d7e343 {
 	background-color: var(--deprecated-text-input-bg);
 }
 #app-mount .copyInputDefault_e19ebf {
@@ -3131,19 +3131,19 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--background-modifier-active);
 }
 
-#app-mount .calendarPicker__47c85 .react-datepicker {
+#app-mount .calendarPicker_be05cd .react-datepicker {
 	background: transparent;
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__header {
+#app-mount .calendarPicker_be05cd .react-datepicker__header {
 	background-color: var(--background-floating);
 	border-color: rgba(var(--backgroundfloating_v),.2);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation {
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation {
 	background: transparent;
 	border-color: rgba(var(--textbrightest_v), .5);
 	top: 30px;
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation::before {
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -3153,58 +3153,58 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	-webkit-mask: url(https://discord.com/assets/f03e2d8e19438cceaad7.svg) center/6px 12px no-repeat;
 	background-color: rgb(var(--textbrightest_v));
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation--previous {
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation--previous {
 	left: 30px;
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation--next {
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation--next {
 	right: 30px;
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__current-month {
+#app-mount .calendarPicker_be05cd .react-datepicker__current-month {
 	border-bottom-color: rgba(var(--backgroundfloating_v),.3);
 	color: var(--header-primary);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation.react-datepicker__navigation--next,
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation.react-datepicker__navigation--previous {
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation.react-datepicker__navigation--next,
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation.react-datepicker__navigation--previous {
 	-webkit-mask: url(https://discord.com/assets/f03e2d8e19438cceaad7.svg) 50%/6px 12px no-repeat;
 	background: var(--interactive-normal);
 	border-color: var(--background-floating);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation.react-datepicker__navigation--next:hover,
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation.react-datepicker__navigation--previous:hover {
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation.react-datepicker__navigation--next:hover,
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation.react-datepicker__navigation--previous:hover {
 	background: var(--interactive-hover);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation.react-datepicker__navigation--next:active,
-#app-mount .calendarPicker__47c85 .react-datepicker__navigation.react-datepicker__navigation--previous:active {
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation.react-datepicker__navigation--next:active,
+#app-mount .calendarPicker_be05cd .react-datepicker__navigation.react-datepicker__navigation--previous:active {
 	background: var(--interactive-active);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__week:last-of-type .react-datepicker__day {
+#app-mount .calendarPicker_be05cd .react-datepicker__week:last-of-type .react-datepicker__day {
 	border-bottom-color: var(--background-floating);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__week .react-datepicker__day:last-of-type {
+#app-mount .calendarPicker_be05cd .react-datepicker__week .react-datepicker__day:last-of-type {
 	border-right-color: var(--background-floating);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__day-name {
+#app-mount .calendarPicker_be05cd .react-datepicker__day-name {
 	color: rgba(var(--textbrightest_v),.6);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__day {
+#app-mount .calendarPicker_be05cd .react-datepicker__day {
 	border-top-color: var(--background-floating);
 	border-left-color: var(--background-floating);
 	color: var(--header-primary);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__day.react-datepicker__day--selected:hover,
-#app-mount .calendarPicker__47c85 .react-datepicker__day:hover {
+#app-mount .calendarPicker_be05cd .react-datepicker__day.react-datepicker__day--selected:hover,
+#app-mount .calendarPicker_be05cd .react-datepicker__day:hover {
 	color: var(--header-primary);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__day {
+#app-mount .calendarPicker_be05cd .react-datepicker__day {
 	background-color: var(--background-secondary);
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__day.react-datepicker__day--disabled,
-#app-mount .calendarPicker__47c85 .react-datepicker__day.react-datepicker__day--disabled:hover {
+#app-mount .calendarPicker_be05cd .react-datepicker__day.react-datepicker__day--disabled,
+#app-mount .calendarPicker_be05cd .react-datepicker__day.react-datepicker__day--disabled:hover {
 	background-color: var(--background-floating);
 	color: rgba(var(--textbrightest_v),.3);
 	cursor: no-drop;
 }
-#app-mount .calendarPicker__47c85 .react-datepicker__day--outside-month {
+#app-mount .calendarPicker_be05cd .react-datepicker__day--outside-month {
 	background-color: var(--background-tertiary);
 	color: rgba(var(--textbrightest_v),.3);
 }
@@ -3303,10 +3303,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		12.10.		QUICKSELECTPOPOUT				---- */
 
-#app-mount .selectableItem__5e076 {
+#app-mount .selectableItem_d40acf {
 	color: var(--header-primary);
 }
-#app-mount .selectableItem__5e076:hover {
+#app-mount .selectableItem_d40acf:hover {
 	background-color: var(--background-accent);
 }
 #app-mount .popoutList_da8701 {
@@ -3319,7 +3319,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	-webkit-mask: url(https://discord.com/assets/c4643b70509c385fcc83.svg) 50% no-repeat;
 	background: var(--interactive-normal);
 }
-#app-mount .quickSelectPopout__56a98 {
+#app-mount .quickSelectPopout_abbf45 {
 	background: var(--background-secondary);
 	color: var(--header-primary);
 }
