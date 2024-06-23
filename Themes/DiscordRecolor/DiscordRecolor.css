@@ -3028,11 +3028,11 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	--border-faint: var(--background-floating);
 }
 
-#app-mount .container_e5a42d,
-#app-mount .statusBubble_d0a252,
-#app-mount .statusBubbleOuter_d0a252,
-#app-mount .statusBubbleOuter_d0a252:before,
-#app-mount .statusBubbleOuter_d0a252:after {
+.userPopoutOuter_c69a7bNot(.custom-profile-theme) .container_e5a42d,
+.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubble_d0a252,
+.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubbleOuter_d0a252,
+.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubbleOuter_d0a252:before,
+.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubbleOuter_d0a252:after {
 	background: var(--background-primary);
 	border-color: var(--background-primary);
 }
