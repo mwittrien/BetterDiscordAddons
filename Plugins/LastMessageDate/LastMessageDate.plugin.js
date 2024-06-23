@@ -263,7 +263,6 @@ module.exports = (_ => {
 			}
 
 			processUserPopoutBodySimplified (e) {
-				console.log(e);
 				if (!currentPopout) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
