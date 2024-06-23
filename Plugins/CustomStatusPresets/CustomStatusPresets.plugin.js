@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.6
+ * @version 1.1.7
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -316,7 +316,7 @@ module.exports = (_ => {
 			}
 			
 			processMenu (e) {
-				if (e.instance.props.navId != "status-picker" && e.instance.props.navId != "account") return;
+				if (e.instance.props.navId != "account" && e.instance.props.navId != "status") return;
 				let enabledPresets = BDFDB.ObjectUtils.filter(presets, id => !presets[id].disabled, true);
 				if (!Object.keys(enabledPresets).length) return;
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status"]});
@@ -324,6 +324,8 @@ module.exports = (_ => {
 					let render = children[index].props.render || children[index].props.label;
 					delete children[index].props.render;
 					delete children[index].props.label;
+					children[index].props.icon = children[index].props.icon || children[index].props.hint;
+					delete children[index].props.hint;
 					children[index] = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, Object.assign({}, children[index].props, {
 						label: typeof render == "function" ? render() : render,
 						children: Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
