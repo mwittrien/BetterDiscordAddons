@@ -766,8 +766,7 @@ button.button_f67531.enabled_f67531:hover {
 	opacity: 1;
 	background-color: rgb(var(--accentcolor_v));
 }
-.withTagAsButton_b2ca13:hover,
-.withTagless_b2ca13:hover {
+.avatarWrapper_b2ca13:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
 button.button_f67531.enabled_f67531:hover svg {
