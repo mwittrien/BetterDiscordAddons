@@ -1125,8 +1125,8 @@
 			"editCounter": "editCounter_pNT1Xe",
 			"popoutNoteCounter": "popoutNoteCounter_62U4Rh",
 			"profileNoteCounter": "profileNoteCounter_p0fWA_",
-			"threadCreation": "threadCreation_p0fWA_",
-			"uploadCounter": "uploadCounter_iEGQQk"
+			"threadCreationCounter": "threadCreationCounter_p0fWA_",
+			"userProfileCounter": "userProfileCounter_iEGQQk"
 		},
 		"CustomStatusPresets": {
 			"customStatusItem": "customStatusItem_f5Trsa",
@@ -1675,8 +1675,8 @@
 		"_charcountereditcounter": ["CharCounter", "editCounter"],
 		"_charcounterpopoutnotecounter": ["CharCounter", "popoutNoteCounter"],
 		"_charcounterprofilenotecounter": ["CharCounter", "profileNoteCounter"],
-		"_charcounterthreadcreationcounter": ["CharCounter", "threadCreation"],
-		"_charcounteruploadcounter": ["CharCounter", "uploadCounter"],
+		"_charcounterthreadcreationcounter": ["CharCounter", "threadCreationCounter"],
+		"_charcounteruserprofilecounter": ["CharCounter", "userProfileCounter"],
 		"_customstatuspresetscustomstatusitem": ["CustomStatusPresets", "customStatusItem"],
 		"_customstatuspresetsdeletebutton": ["CustomStatusPresets", "deleteButton"],
 		"_customstatuspresetsdeleteicon": ["CustomStatusPresets", "deleteIcon"],
