@@ -3022,7 +3022,8 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	--bg-surface-overlay: var(--background-secondary-alt);
 }
 #app-mount .biteSizeOverlayBackground_c69a7b,
-#app-mount .fullSizeOverlayBackground_c69a7b {
+#app-mount .fullSizeOverlayBackground_c69a7b,
+#app-mount .menu_d4e7c2 {
 	--bg-mod-faint: var(--background-floating);
 	--border-faint: var(--background-floating);
 }
