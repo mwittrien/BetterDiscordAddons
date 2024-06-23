@@ -3017,6 +3017,16 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v),.6), 0 2px 10px 0 rgba(0,0,0,.2);
 }
 
+#app-mount .biteSizeInnerThemed_c69a7b,
+#app-mount .fullSizeInnerThemed_c69a7b {
+	--bg-surface-overlay: var(--background-secondary-alt);
+}
+#app-mount .biteSizeOverlayBackground_c69a7b,
+#app-mount .fullSizeOverlayBackground_c69a7b {
+	--bg-mod-faint: var(--background-floating);
+	--border-faint: var(--background-floating);
+}
+
 .profileColors_ac6ab4 .mask_c51b4e circle {
 	fill: transparent;
 }
