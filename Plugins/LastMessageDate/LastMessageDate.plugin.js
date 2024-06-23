@@ -266,7 +266,7 @@ module.exports = (_ => {
 				if (!currentPopout) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
-				e.returnvalue.props.children.splice(2, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
+				e.returnvalue.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
 					isInPopout: true,
 					isSimplified: true,
 					guildId: currentPopout.props.guildId || BDFDB.DiscordConstants.ME,
