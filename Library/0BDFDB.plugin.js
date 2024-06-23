@@ -300,7 +300,7 @@ module.exports = (_ => {
 			};
 			BDFDB.TimeUtils.suppress = function (callback, strings, config) {return function (...args) {
 				try {return callback(...args);}
-				catch (err) {BDFDB.LogUtils.error([strings, err], config);}
+				catch (err) {!config.ignoreErrors && BDFDB.LogUtils.error([strings, err], config);}
 			}};
 
 			BDFDB.LogUtils.log("Loading Library");
@@ -752,7 +752,7 @@ module.exports = (_ => {
 				if (!updateNotice) {
 					let vanishObserver = new MutationObserver(changes => {
 						if (!document.contains(updateNotice)) {
-							if (updateNotice.querySelector(BDFDB.dotCN.noticeupdateentry)) {
+							if (updateNotice && updateNotice.querySelector(BDFDB.dotCN.noticeupdateentry)) {
 								let layers = document.querySelector(BDFDB.dotCN.layers) || document.querySelector(BDFDB.dotCN.appmount);
 								if (layers) layers.parentElement.insertBefore(updateNotice, layers);
 							}
@@ -2353,10 +2353,10 @@ module.exports = (_ => {
 										}
 										if (args[0] != module) data.instance = args[0] || {props: args[1][0]};
 										for (let priority in patches[type].plugins) for (let id in BDFDB.ObjectUtils.sort(patches[type].plugins[priority])) {
-											let tempReturn = BDFDB.TimeUtils.suppress(patches[type].plugins[priority][id], `"${type}" callback of ${methodName} in ${name}`, {name: patches[type].plugins[priority][id].pluginName, version: patches[type].plugins[priority][id].pluginVersion})(data);
+											let tempReturn = BDFDB.TimeUtils.suppress(patches[type].plugins[priority][id], `"${type}" callback of ${methodName} in ${name}`, {name: patches[type].plugins[priority][id].pluginName, version: patches[type].plugins[priority][id].pluginVersion, ignoreErrors: config.ignoreErrors})(data);
 											if (type != "before" && tempReturn !== undefined) data.returnValue = tempReturn;
 										}
-										if (type == "instead" && callInsteadAfterwards && !stopInsteadCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${name}`, {name: "Discord"})();
+										if (type == "instead" && callInsteadAfterwards && !stopInsteadCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${name}`, {name: "Discord", ignoreErrors: config.ignoreErrors})();
 										
 										if (type != "before") return (methodName == "render" || methodName == "type") && data.returnValue === undefined ? null : data.returnValue;
 									});
@@ -8430,7 +8430,7 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.React, "createElement", createElementPatches);
-				if (Internal.LibraryModules.InternalReactUtils) for (let key in Internal.LibraryModules.InternalReactUtils) if (typeof Internal.LibraryModules.InternalReactUtils[key] == "function" && Internal.LibraryModules.InternalReactUtils[key].toString().indexOf("return{$$typeof:") > -1) BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.InternalReactUtils, key, createElementPatches);
+				if (Internal.LibraryModules.InternalReactUtils) for (let key in Internal.LibraryModules.InternalReactUtils) if (typeof Internal.LibraryModules.InternalReactUtils[key] == "function" && Internal.LibraryModules.InternalReactUtils[key].toString().indexOf("return{$$typeof:") > -1) BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.InternalReactUtils, key, createElementPatches, {ignoreErrors: true});
 				
 				let languageChangeTimeout;
 				BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.AppearanceSettingsUtils, "updateLocale", {after: e => {
