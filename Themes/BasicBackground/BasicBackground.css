@@ -4191,6 +4191,19 @@ button.button_f67531.enabled_f67531:hover svg {
 .userProfileOuterUnthemed_c69a7b .menus_d4e7c2 > .menu_d90b3d::after {
 	display: none;
 }
+
+#app-mount .statusBubbleOuter_d0a252,
+#app-mount .statusBubbleOuter_d0a252:before,
+#app-mount .statusBubbleOuter_d0a252:after {
+	background: var(--background-floating);
+	border-color: transparent;
+}
+#app-mount .container_e5a42d,
+#app-mount .statusBubble_d0a252 {
+	background-color: transparent;
+	border-color: transparent;
+}
+
 .accountProfilePopoutWrapper_b2ca13 .overlayBackground_c69a7b {
 	display: block !important;
 }
