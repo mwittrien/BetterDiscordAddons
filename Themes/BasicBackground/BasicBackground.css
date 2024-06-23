@@ -1077,12 +1077,12 @@ button.button_f67531.enabled_f67531:hover svg {
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 }
-.messageListItem_d5deea > .message_d5deea.groupStart_d5deea:before {
+.messageListItem_d5deea > .message_d5deea.groupStart_d5deea::before {
 	top: 2px;
 	border-top-left-radius: 5px;
 }
-.messageListItem_d5deea:has(+ .messageListItem_d5deea > .message_d5deea.groupStart_d5deea) > .message_d5deea:before,
-.messageListItem_d5deea:has(+ :not(.messageListItem_d5deea)) > .message_d5deea:before {
+.messageListItem_d5deea:has(+ .messageListItem_d5deea > .message_d5deea.groupStart_d5deea) > .message_d5deea::before,
+.messageListItem_d5deea:has(+ :not(.messageListItem_d5deea)) > .message_d5deea::before {
 	bottom: 2px;
 	border-bottom-left-radius: 5px;
 }
@@ -1114,11 +1114,11 @@ button.button_f67531.enabled_f67531:hover svg {
 .message_d5deea.automodMessage_d5deea {							/* message				automodMessage							*/
 	background-image: linear-gradient(rgba(var(--dangercolor), calc(0.2 * (1 - var(--usechatbubbles)))), rgba(var(--dangercolor), calc(0.2 * (1 - var(--usechatbubbles)))));
 }
-.message_d5deea.mentioned_d5deea:before,
-.message_d5deea.ephemeral_d5deea:before,
-.message_d5deea.automodMessage_d5deea:before,
-.message_d5deea.replying_d5deea:before,
-.message_d5deea.highlighted_fc800f:before {
+.message_d5deea.mentioned_d5deea::before,
+.message_d5deea.ephemeral_d5deea::before,
+.message_d5deea.automodMessage_d5deea::before,
+.message_d5deea.replying_d5deea::before,
+.message_d5deea.highlighted_fc800f::before {
 }
 .message_d5deea.ephemeral_d5deea::before,
 .message_d5deea.replying_d5deea::before,
@@ -2943,8 +2943,8 @@ button.button_f67531.enabled_f67531:hover svg {
 .roleRow_a930f1:hover:not(.roleRowDisableHover_a930f1) .circleButton_a930f1:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
-.roleRow_a930f1:before,
-.roleRow_a930f1:last-child:after {
+.roleRow_a930f1::before,
+.roleRow_a930f1:last-child::after {
 	background-color: var(--background-modifier-accent);
 }
 .memberRow_fe3229:hover {								/* rolesettings				member row							*/
