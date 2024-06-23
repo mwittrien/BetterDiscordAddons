@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.3
+ * @version 1.6.4
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -68,9 +68,10 @@ module.exports = (_ => {
 		};
 		const typeMap = {
 			normal: "chat",
+			form: "upload",
 			sidebar: "chat",
 			thread_creation: "threadcreation",
-			form: "upload"
+			user_profile: "userprofile"
 		};
 		const nativeCounters = ["profile_bio_input"];
 	
@@ -113,9 +114,10 @@ module.exports = (_ => {
 						right: 16px;
 						bottom: 0.3em;
 					}
-					${BDFDB.dotCN._charcounteruploadcounter} {
+					${BDFDB.dotCN._charcounteruserprofilecounter} {
 						right: 0;
-						bottom: -1.0em;
+						bottom: -1.3em;
+						font-size: 12px;
 					}
 					${BDFDB.dotCN._charcountercustomstatuscounter} {
 						right: 0 !important;
@@ -131,7 +133,8 @@ module.exports = (_ => {
 						bottom: -10px !important;
 						font-size: 12px !important;
 					}
-					${BDFDB.dotCN.usernotetextarea}:not(:focus) ~ ${BDFDB.dotCN._charcountercounter} {
+					${BDFDB.dotCN.usernotetextarea}:not(:focus) ~ ${BDFDB.dotCN._charcountercounter},
+					${BDFDB.dotCNS.userpopoutouter + BDFDB.dotCN.textareacontainer}:not(:focus-within) ~ ${BDFDB.dotCN._charcountercounter} {
 						display: none;
 					}
 				`;
