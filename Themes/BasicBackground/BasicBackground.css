@@ -4162,7 +4162,8 @@ button.button_f67531.enabled_f67531:hover svg {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
 .userProfileOuterUnthemed_c69a7b,							/* popout				container							*/
-.userProfileOuterUnthemed_c69a7b .biteSizeInnerThemed_c69a7b {				/* popout				simplified							*/
+.biteSizeInnerThemed_c69a7b,								/* popout				simplified							*/
+.fullSizeInnerThemed_c69a7b {								/* popout				simplified full							*/
 	background: transparent;
 }
 .userProfileOuterUnthemed_c69a7b::before,
