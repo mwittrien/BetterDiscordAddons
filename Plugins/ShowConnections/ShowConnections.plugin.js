@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.9
+ * @version 1.2.0
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -78,7 +78,8 @@ module.exports = (_ => {
 				let connections = loadedUsers[this.props.user.id].filter(c => _this.settings.connections[c.type]);
 				if (!connections.length) return null;
 				let isLightTheme = (!this.props.theme || this.props.theme == "light") && BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutSection, {
+				return BDFDB.ReactUtils.createElement("div", {
+					className: !this.props.isSimplified && BDFDB.disCN.userpopoutsection,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
 							className: BDFDB.disCN.userpopoutsectiontitle,
@@ -164,7 +165,8 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					after: [
-						"UserConnectionsSection"
+						"UserConnectionsSection",
+						"UserPopoutBodySimplified"
 					]
 				};
 				
@@ -264,6 +266,16 @@ module.exports = (_ => {
 						theme: e.instance.props.theme
 					}, true)
 				];
+			}
+
+			processUserPopoutBodySimplified (e) {
+				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
+				if (!user || user.isNonUserBot()) return;
+				e.returnvalue.props.children.splice(2, 0, BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
+					user: user,
+					isSimplified: true,
+					theme: e.instance.props.theme
+				}, true));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
