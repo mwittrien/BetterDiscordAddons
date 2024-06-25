@@ -4277,12 +4277,14 @@ button.button_f67531.enabled_f67531:hover svg {
 	z-index: 1000;
 	pointer-events: none;
 }
-#app-mount .role_f9575e .roleRemoveButton_f9575e {
+#app-mount .role_f9575e .roleRemoveButton_f9575e,
+#app-mount .role_f9575e div:not([className]):has(> .roleRemoveButton_f9575e) {
 	position: absolute;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
+	margin: 0;
 }
 #app-mount .role_f9575e .roleCircle_a26d7b {						/* body					rolecircle							*/
 	position: absolute;
@@ -4303,7 +4305,7 @@ button.button_f67531.enabled_f67531:hover svg {
 	z-index: 2000;
 	cursor: pointer;
 }
-#app-mount .role_f9575e .roleRemoveIcon_e4010c {
+#app-mount .role_f9575e .roleRemoveIcon_f9575e {
 	z-index: 2001;
 	pointer-events: none;
 }
