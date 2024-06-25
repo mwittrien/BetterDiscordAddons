@@ -4187,6 +4187,8 @@ button.button_f67531.enabled_f67531:hover svg {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
+.userPopoutOverlayBackground_c69a7b > .menu_d90b3d::before,
+.userPopoutOverlayBackground_c69a7b > .menu_d90b3d::after,
 .userProfileOuterUnthemed_c69a7b .menus_d4e7c2 > .menu_d90b3d::before,
 .userProfileOuterUnthemed_c69a7b .menus_d4e7c2 > .menu_d90b3d::after {
 	display: none;
