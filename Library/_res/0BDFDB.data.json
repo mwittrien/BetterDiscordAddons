@@ -577,7 +577,7 @@
 		"UserPopout": {"strings": ["{user:", "userId:", "\"Unexpected missing user\")", "getUser"], "noSearch": true},
 		"UserPopoutAvatar": {"strings": [".avatarDecorationHint", ".VIEW_PROFILE"], "noSearch": true},
 		"UserPopoutBody": {"strings": ["customStatusActivity:", "canDM:", "hidePersonalInformation:", "showCopiableUsername:"]},
-		"UserPopoutBodySimplified": {"strings": [".BITE_SIZE", "hidePersonalInformation", "onOpenProfile:", "getRelationshipType"]},
+		"UserPopoutBodySimplified": {"strings": [".BITE_SIZE", "hidePersonalInformation", "onOpenProfile:", "getRelationshipType"], "noSearch": true},
 		"UserPopoutMemberSince": {"strings": [".title,", "textClassName:", ".USER_PROFILE_MEMBER_SINCE"]},
 		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"], "noSearch": true},
 		"UserProfileBody": {"strings": [".userInfoSectionHeader", "Messages.NOTE", "connectedAccounts:"], "noSearch": true},
@@ -1259,6 +1259,7 @@
 			"connection": "connection_9Gh4sa",
 			"connectionIcon": "connectionIcon_888F4s",
 			"connections": "connections_pPr4as",
+			"connectionsWrapper": "connectionsWrapper_kU5cYa",
 			"verifiedBadge": "verifiedBadge_mH2YpO"
 		},
 		"SpotifyControls": {
@@ -1771,6 +1772,7 @@
 		"_showbadgesinchatindicator": ["ShowBadgesInChat", "indicator"],
 		"_showconnectionsconnection": ["ShowConnections", "connection"],
 		"_showconnectionsconnections": ["ShowConnections", "connections"],
+		"_showconnectionsconnectionswrapper": ["ShowConnections", "connectionsWrapper"],
 		"_showconnectionsicon": ["ShowConnections", "connectionIcon"],
 		"_showconnectionsverifiedbadge": ["ShowConnections", "verifiedBadge"],
 		"_spellcheckerror": ["SpellCheck", "error"],
