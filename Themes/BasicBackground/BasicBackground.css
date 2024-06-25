@@ -4192,14 +4192,14 @@ button.button_f67531.enabled_f67531:hover svg {
 	display: none;
 }
 
-.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubbleOuter_d0a252,
-.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubbleOuter_d0a252:before,
-.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubbleOuter_d0a252:after {
+.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252,
+.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252:before,
+.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252:after {
 	background: var(--background-floating);
 	border-color: transparent;
 }
-.userPopoutOuter_c69a7bNot(.custom-profile-theme) .container_e5a42d,
-.userPopoutOuter_c69a7bNot(.custom-profile-theme) .statusBubble_d0a252 {
+.userPopoutOuter_c69a7b:not(.custom-profile-theme) .container_e5a42d,
+.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubble_d0a252 {
 	background-color: transparent;
 	border-color: transparent;
 }
