@@ -146,8 +146,8 @@
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
 		"DispatchUtils": {"strings": ["ComponentDispatchUtils", "this.emitter.setMaxListeners(100)"], "exported": false, "value": "exports", "map": {
-			"ComponentDispatch": ["this.emitter.setMaxListeners(100)"],
-			"ComponentDispatcher": ["[object Object]"]
+			"ComponentDispatch": ["\"_maxListeners\":100"],
+			"ComponentDispatcher": ["this.emitter.setMaxListeners(100)"]
 		}},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
