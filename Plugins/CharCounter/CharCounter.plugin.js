@@ -94,6 +94,7 @@ module.exports = (_ => {
 				this.css = `
 					${BDFDB.dotCN._charcountercounteradded} {
 						position: relative !important;
+      						width: 100%;
 					}
 					${BDFDB.dotCN._charcountercounter} {
 						display: block;
