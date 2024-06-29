@@ -372,6 +372,10 @@
 	background: url(https://discord.com/assets/7e724c5bbf29dd3598ea.svg) center/cover no-repeat;
 }
 
+.eventStatusContainer_d6a475 [fill="#949cf7" i] {
+	fill: rgb(var(--accentcolor_v));
+}
+
 
 /* ~~~~		3.		CHAT						~~~~ */
 
