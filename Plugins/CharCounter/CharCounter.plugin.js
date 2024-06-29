@@ -135,7 +135,7 @@ module.exports = (_ => {
 						font-size: 12px !important;
 					}
 					${BDFDB.dotCN.usernotetextarea}:not(:focus) ~ ${BDFDB.dotCN._charcountercounter},
-					${BDFDB.dotCNS.userpopoutouter + BDFDB.dotCN.textareacontainer}:not(:focus-within) ~ ${BDFDB.dotCN._charcountercounter} {
+					${BDFDB.dotCNS.userpopoutouter + BDFDB.dotCN.textareawrapall}:not(:focus-within) ~ ${BDFDB.dotCN._charcountercounter} {
 						display: none;
 					}
 				`;
