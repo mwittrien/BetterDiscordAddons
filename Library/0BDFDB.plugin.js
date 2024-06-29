@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.2
+ * @version 3.7.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,9 +27,7 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			"fixed": {
-				"A lot of Plugin Issues": "Library should be stable again and Plugins should be running again, there will be some Issues with Plugins not working properly yet, let me know if you catch a bug"
-			}
+			
 		}
 	};
 	
@@ -4416,7 +4414,7 @@ module.exports = (_ => {
 						let LayersProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.layers), {name: "LayersProvider", unlimited: true, up: true});
 						let LayersProviderType = LayersProviderIns && BDFDB.ObjectUtils.get(LayersProviderIns, `${BDFDB.ReactUtils.instanceKey}.type`);
 						if (!LayersProviderType) return;
-						let parentSelector = "", notices = document.querySelector("#bd-notices:has(#outdated-plugins)");
+						let parentSelector = "", notices = document.querySelector("#bd-notices");
 						if (notices) {
 							let parentClasses = []
 							for (let i = 0, parent = notices.parentElement; i < 3; i++, parent = parent.parentElement) parentClasses.push(parent.className);
@@ -4430,7 +4428,7 @@ module.exports = (_ => {
 									let parent = document.querySelector(parentSelector) || document.querySelector(BDFDB.dotCN.app).parentElement;
 									if (parent) {
 										parent.insertBefore(notices, parent.firstElementChild);
-										let ZeresPluginLibrary = BDFDB.BDUtils.getPlugin("ZeresPluginLibrary");
+										let ZeresPluginLibrary = notices.querySelector("#outdated-plugins") && BDFDB.BDUtils.getPlugin("ZeresPluginLibrary");
 										let updateChecker = ZeresPluginLibrary && ZeresPluginLibrary?.Library?.PluginUpdater?.checkAllPlugins;
 										if (typeof updateChecker == "function") updateChecker.apply(ZeresPluginLibrary.Library.PluginUpdater);
 									}
@@ -4456,7 +4454,7 @@ module.exports = (_ => {
 				const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
 				BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 				Internal.getDiscordClass = function (item, selector) {
-					let className, fallbackClassName;
+					let className, fallbackClassName, notFoundAndLazyloaded = false;
 					className = fallbackClassName = Internal.DiscordClassModules.BDFDB.BDFDBundefined + "_" + Internal.generateClassId();
 					if (DiscordClasses[item] === undefined) {
 						BDFDB.LogUtils.warn([item, "not found in DiscordClasses"]);
@@ -4467,25 +4465,27 @@ module.exports = (_ => {
 						return className;
 					}
 					else if (Internal.DiscordClassModules[DiscordClasses[item][0]] === undefined) {
-						BDFDB.LogUtils.warn([DiscordClasses[item][0], "not found in DiscordClassModules"]);
-						return className;
+						if (!InternalData.LazyloadedClassModules || !InternalData.LazyloadedClassModules[DiscordClasses[item][0]]) {
+							BDFDB.LogUtils.warn([DiscordClasses[item][0], "not found in DiscordClassModules"]);
+							return className;
+						}
+						else notFoundAndLazyloaded = true;
 					}
 					else if ([DiscordClasses[item][1]].flat().every(prop => Internal.DiscordClassModules[DiscordClasses[item][0]][prop] === undefined && !(JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`)) || "").split("\"")[0])) {
 						BDFDB.LogUtils.warn([DiscordClasses[item][1], "not found in", DiscordClasses[item][0], "in DiscordClassModules"]);
 						return className;
 					}
-					else {
-						for (let prop of [DiscordClasses[item][1]].flat()) {
-							className = Internal.DiscordClassModules[DiscordClasses[item][0]][prop] || (JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`)) || "").split("\"")[0];
-							if (className) break;
-							else className = fallbackClassName;
-						}
-						if (selector) {
-							className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
-							className = className || fallbackClassName;
-						}
-						return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ") || fallbackClassName;
+					if (notFoundAndLazyloaded) className = `${DiscordClasses[item][1]}_${InternalData.LazyloadedClassModules[DiscordClasses[item][0]]}`;
+					else for (let prop of [DiscordClasses[item][1]].flat()) {
+						className = Internal.DiscordClassModules[DiscordClasses[item][0]][prop] || (JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`)) || "").split("\"")[0];
+						if (className) break;
+						else className = fallbackClassName;
 					}
+					if (selector) {
+						className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
+						className = className || fallbackClassName;
+					}
+					return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ") || fallbackClassName;
 				};
 				const generationChars = "0123456789ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-".split("");
 				Internal.generateClassId = function () {
