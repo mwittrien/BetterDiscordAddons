@@ -7596,7 +7596,6 @@ module.exports = (_ => {
 						let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
 						let selectedItem = this.props.selectedItem || (items[0] || {}).value;
 						let renderItem = typeof this.props.renderItem == "function" ? this.props.renderItem : (data => data.label || data.value);
-						console.log(this);
 						return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							selectedItem: selectedItem,
 							onItemSelect: this.handleItemSelect.bind(this),
