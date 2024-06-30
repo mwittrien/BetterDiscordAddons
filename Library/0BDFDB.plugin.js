@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.3
+ * @version 3.7.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8324,8 +8324,7 @@ module.exports = (_ => {
 				};
 				Internal.processUserPopoutAvatar = function (e) {
 					if (!e.instance.props.user) return;
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutavatarwrapper]]});
-					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
+					e.returnvalue = Internal._processAvatarRender(e.instance.props.user, e.returnvalue, e.instance) || e.returnvalue;
 				};
 				
 				MyReact.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternalFiber" : "_reactInternals";
