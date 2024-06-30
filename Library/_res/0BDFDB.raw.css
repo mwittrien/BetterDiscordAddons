@@ -1100,9 +1100,25 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 [REPLACE_CLASS_themedark] [REPLACE_CLASS_modalsidebar] {
 	background: rgba(0, 0, 0, 0.2);
 }
+[REPLACE_CLASS_tabbarcontainer] {
+	border-bottom: 1px solid var(--profile-body-divider-color);
+	margin: 20px 12px 0;
+	padding: 0
+}
 [REPLACE_CLASS_tabbarcontainer][REPLACE_CLASS_tabbarcontainerbottom] {
 	border-top: unset;
 	border-bottom: 1px solid hsla(0,0%,100%,.1);
+}
+[REPLACE_CLASS_tabbar] {
+	align-items: stretch;
+	display: flex;
+	gap: 40px
+}
+[REPLACE_CLASS_tabbaritem] {
+	display: inline;
+	border-bottom: 2px solid transparent;
+	height: 39px;
+	font-size: 14px
 }
 [REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer] {
 	background: rgba(0, 0, 0, 0.1);
@@ -1121,6 +1137,44 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS_changelogfooter] {
 	align-items: center;
+}
+
+[REPLACE_CLASS_emojiinputbuttoncontainer] {
+	display: flex;
+	align-items: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	margin: 0 var(--custom-custom-status-modal-emoji-margin);
+	height: 100%
+}
+[REPLACE_CLASS_emojiinputbuttonemoji] {
+	width: var(--custom-custom-status-modal-emoji-size);
+	height: var(--custom-custom-status-modal-emoji-size)
+}
+[REPLACE_CLASS_emojiinput] {
+	padding-left: calc(var(--custom-custom-status-modal-emoji-margin) + var(--custom-custom-status-modal-emoji-size) + var(--custom-custom-status-modal-emoji-margin));
+	padding-right: 36px
+}
+[REPLACE_CLASS_emojiinputclearbutton] {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	display: flex;
+	align-items: center;
+	height: 100%;
+	transition: opacity.2s ease-in-out;
+	line-height: 0;
+	opacity: .6
+}
+[REPLACE_CLASS_emojiinputclearbutton]:hover,
+[REPLACE_CLASS_emojiinputclearbutton]:focus {
+	opacity: 1
+}
+[REPLACE_CLASS_emojiinputclearicon] {
+	width: 16px;
+	height: 16px;
+	color: var(--interactive-normal)
 }
 
 [REPLACE_CLASS_popoutwrapper] {
