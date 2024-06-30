@@ -819,6 +819,32 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex: 1 1 auto;
 	min-height: 32px;
 }
+[REPLACE_CLASS_messagespopoutchannelseparator] {
+	display: flex;
+	align-items: center;
+	margin-bottom: 2px;
+}
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname],
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutguildname] {
+	color: var(--header-secondary);
+}
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname]:hover {
+	color: var(--header-primary);
+}
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname]:not(:last-child) {
+	margin-right: 10px;
+}
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname]:not(:last-child)::after {
+	content: "";
+	border-bottom: 1px solid var(--text-muted);
+	width: 100%;
+	margin-left: 10px;
+}
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutguildname] {
+	flex: 0 0 auto;
+	font-size: 12px;
+	width: unset;
+}
 
 [REPLACE_CLASS_charcounter] {
 	color: var(--channels-default);
