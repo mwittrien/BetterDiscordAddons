@@ -191,10 +191,10 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.peoplesuserhovered + BDFDB.dotCN.peoplesdiscriminator} {
 						display: block;
 					}
-					${BDFDB.dotCN.userheadernickname}:has(span) {
+					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernickname}:has(span) {
 						text-decoration: unset !important;
 					}
-					${BDFDB.dotCN.userheadernickname}:hover > span:first-child {
+					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernickname} > span:first-child:hover {
 						text-decoration: underline !important;
 					}
 					${BDFDB.dotCN.message} span[style*="--edited-user-color-gradient"] ${BDFDB.dotCN.messageusername} {
