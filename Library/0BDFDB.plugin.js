@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.4
+ * @version 3.7.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8083,7 +8083,9 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
-						"UserHeaderAvatar"
+						"UserHeaderAvatar",
+						"UserPanelHeader",
+						"UserProfileHeader"
 					],
 					componentDidMount: [
 						"Account",
@@ -8122,7 +8124,7 @@ module.exports = (_ => {
 						}
 					}
 				};
-				Internal._processAvatarRender = function (user, avatar, className) {
+				Internal._processAvatarRender = function (user, avatar, className = "") {
 					if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 						let role = "", note = "", color, link, addBadge = Internal.settings.general.showSupportBadges;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
@@ -8323,7 +8325,17 @@ module.exports = (_ => {
 				};
 				Internal.processUserHeaderAvatar = function (e) {
 					if (!e.instance.props.user) return;
-					e.returnvalue = Internal._processAvatarRender(e.instance.props.user, e.returnvalue, e.instance) || e.returnvalue;
+					e.returnvalue = Internal._processAvatarRender(e.instance.props.user, e.returnvalue) || e.returnvalue;
+				};
+				Internal.processUserPanelHeader = function (e) {
+					if (!e.instance.props.user) return;
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.src && n.props.size});
+					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index]) || children[index];
+				};
+				Internal.processUserProfileHeader = function (e) {
+					if (!e.instance.props.user) return;
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.src && n.props.size});
+					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index]) || children[index];
 				};
 				
 				MyReact.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternalFiber" : "_reactInternals";
