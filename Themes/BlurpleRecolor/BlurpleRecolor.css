@@ -1253,18 +1253,18 @@
 
 /* ----		10.2.		GUILDADD/CREATION				---- */
 
-.icon_a47d49[src="/assets/4d526e1c61d719fd39a0.svg"] {					/* create guild				create own icon							*/
+.icon_a47d49[src="/assets/c4b7801fb3f0df337861.svg"] {					/* create guild				create own icon							*/
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildcreate_createown_accent.svg) center/contain no-repeat;
 }
-.icon_a47d49[src="/assets/4d526e1c61d719fd39a0.svg"] + * {
+.icon_a47d49[src="/assets/c4b7801fb3f0df337861.svg"] + * {
 	position: relative;
 	display: flex;
 	align-items: center;
 	overflow: visible;
 }
-.icon_a47d49[src="/assets/4d526e1c61d719fd39a0.svg"] + *::after {
+.icon_a47d49[src="/assets/c4b7801fb3f0df337861.svg"] + *::after {
 	content: "";
 	position: absolute;
 	left: -56px;
@@ -1277,6 +1277,10 @@
 .uploadIcon_c1ee6b [fill="#5865f2" i],
 .uploadIcon_c1ee6b [fill="#7289da" i] {							/* create guild				upload icon							*/
 	fill: rgb(var(--accentcolor_v));
+}
+
+.header_f5507e {
+	overflow: hidden;
 }
 
 /* ----		10.3.		REGIONSELECTMODAL				---- */
