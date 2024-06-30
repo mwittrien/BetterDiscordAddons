@@ -976,8 +976,8 @@
 .backgroundOptionRing_ad7d79 {								/* voicesettings			selection ring							*/
 	border-color: rgb(var(--accentcolor_v));
 }
-.icon_aae945[src="/assets/ea67b1321e3d4154e476.png"] {					/* voicesettings			krisp								*/
-	-webkit-mask: url(https://discord.com/assets/ea67b1321e3d4154e476.png) center/contain no-repeat;
+.icon_aae945[src="/assets/3cfc93ceb08d74acbcf8.png"] {					/* voicesettings			krisp								*/
+	-webkit-mask: url(https://discord.com/assets/3cfc93ceb08d74acbcf8.png) center/contain no-repeat;
 	background-color: rgb(var(--accentcolor_v));
 	object-position: -999999px -999999px;
 }
@@ -1080,7 +1080,7 @@
 	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
 }
 
-.infoItem_aad57c[src="/assets/14ec46803da2a8bdcb2c.svg"] {				/* widgetsettings			widget placeholder image 					*/
+.infoItem_aad57c[src="/assets/5a82d0404d1612050791.svg"] {				/* widgetsettings			widget placeholder image 					*/
 	object-position: -999999px -999999px;
 	border-radius: 5px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor_v)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));
@@ -1118,24 +1118,24 @@
 	background-color: rgb(var(--accentcolor_v));
 }
 
-.headerIcon_bd2368[src="/assets/860c39d4003b98a5ee9d.svg"] {				/* discoverysettings			requirements icon						*/
+.headerIcon_bd2368[src="/assets/c118f02ca2b6012645dc.svg"] {				/* discoverysettings			requirements icon						*/
 	object-position: -999999999px -999999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_requirements_bg.svg) center/cover no-repeat;
 }
-.headerIcon_bd2368[src="/assets/860c39d4003b98a5ee9d.svg"] + * {
+.headerIcon_bd2368[src="/assets/c118f02ca2b6012645dc.svg"] + * {
 	position: relative;
 	height: 60px;
 }
-.headerIcon_bd2368[src="/assets/860c39d4003b98a5ee9d.svg"] + * {
+.headerIcon_bd2368[src="/assets/c118f02ca2b6012645dc.svg"] + * {
 	position: relative;
 	height: 60px;
 }
-.headerIcon_bd2368[src="/assets/860c39d4003b98a5ee9d.svg"] + h2 {
+.headerIcon_bd2368[src="/assets/c118f02ca2b6012645dc.svg"] + h2 {
 	display: flex;
 	align-items: center;
 	white-space: pre-wrap;
 }
-.headerIcon_bd2368[src="/assets/860c39d4003b98a5ee9d.svg"] + *::after {
+.headerIcon_bd2368[src="/assets/c118f02ca2b6012645dc.svg"] + *::after {
 	content: "";
 	position: absolute;
 	left: -56px;
