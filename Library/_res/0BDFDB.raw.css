@@ -1107,32 +1107,35 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	background: rgba(0, 0, 0, 0.2);
 }
 [REPLACE_CLASS_tabbarcontainer] {
-	border-bottom: 1px solid var(--profile-body-divider-color);
-	margin: 20px 12px 0;
-	padding: 0
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	border-radius: var(--radius-sm);
+	overflow: hidden;
 }
 [REPLACE_CLASS_tabbarcontainer][REPLACE_CLASS_tabbarcontainerbottom] {
 	border-top: unset;
 	border-bottom: 1px solid hsla(0,0%,100%,.1);
 }
 [REPLACE_CLASS_tabbar] {
-	align-items: stretch;
 	display: flex;
-	gap: 40px
+	gap: 32px;
+	margin: 16px 16px 0;
+	border-bottom: 1px solid var(--profile-body-divider-color);
 }
 [REPLACE_CLASS_tabbaritem] {
-	display: inline;
-	border-bottom: 2px solid transparent;
-	height: 39px;
-	font-size: 14px
+	height: 25px;
+	box-sizing: border-box;
 }
 [REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer] {
 	background: rgba(0, 0, 0, 0.1);
 	border: none;
+	border-radius: unset;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
 	flex: 1 1 auto;
-	margin: 0;
-	padding: 16px 16px 0 16px;
+}
+[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbaritem] {
+	height: 39px;
 }
 [REPLACE_CLASS_themedark] [REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer] {
 	background: rgba(0, 0, 0, 0.2);
