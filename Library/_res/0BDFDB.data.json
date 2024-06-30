@@ -3154,7 +3154,6 @@
 		"spoilertext": ["Spoiler", "spoilerContent"],
 		"spoilerwarning": ["Spoiler", "spoilerWarning"],
 		"strikethrough": ["TextStyle", "strikethrough"],
-		"status": ["Avatar", "status"],
 		"stopanimations": ["NotFound", "stopAnimations"],
 		"subtext": ["NotFound", "subtext"],
 		"svgicon": ["BDFDB", "svgIcon"],
