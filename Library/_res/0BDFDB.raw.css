@@ -735,6 +735,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-left: none;
 	padding-left: 0;
 }
+[REPLACE_CLASS_tableheadercellsorted] {
+	color: var(--text-normal);
+}
 [REPLACE_CLASS_table] [REPLACE_CLASS_tablerow] {
 	position: relative;
 	display: flex;
