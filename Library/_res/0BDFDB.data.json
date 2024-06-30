@@ -589,7 +589,7 @@
 		"UserPopoutMemberSince": {"strings": [".title,", "textClassName:", ".USER_PROFILE_MEMBER_SINCE"]},
 		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"], "noSearch": true},
 		"UserProfileBody": {"strings": [".userInfoSectionHeader", "Messages.NOTE", "connectedAccounts:"], "noSearch": true},
-		"UserProfileHeader": {"strings": ["friendToken:", ".additionalActionsIcon", "onMessage"], "noSearch": true},
+		"UserProfileHeader": {"strings": ["statusBackdropColor", "\"header\"", "originalFriendingEnabled"], "noSearch": true},
 		"UserProfileInfoSection": {"strings": ["userInfoText", ".USER_PROFILE_MEMBER_SINCE"], "noSearch": true},
 		"UserProfileInfoSectionSimplified": {"strings": ["trackUserProfileAction:", "\"PRESS_APP_CONNECTION\"", "onUpdate"], "noSearch": true},
 		"UserProfileMutualFriends": {"strings": [".getMutualFriends", ".listScroller", ".emptyText"]},
