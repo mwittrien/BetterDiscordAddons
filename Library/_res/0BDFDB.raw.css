@@ -92,6 +92,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_h5][REPLACE_CLASS_marginreset] {
 	flex: 1 1 auto;
 }
+[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_settingsrow] + [REPLACE_CLASS_settingsrow] {
+	margin-left: 6px;
+}
 
 [REPLACE_CLASS_settingspanel] [REPLACE_CLASS_slidermark] {
 	line-height: 10px;
