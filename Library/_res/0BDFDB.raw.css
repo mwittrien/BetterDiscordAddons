@@ -1127,7 +1127,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	border: none;
 	border-radius: unset;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
-	padding: 16px 12px 0;
+	padding: 12px 16px 0;
 	flex: 1 1 auto;
 }
 [REPLACE_CLASS_modal] [REPLACE_CLASS_tabbar] {
