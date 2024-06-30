@@ -8084,7 +8084,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
-						"UserPopoutAvatar"
+						"UserHeaderAvatar"
 					],
 					componentDidMount: [
 						"Account",
@@ -8322,7 +8322,7 @@ module.exports = (_ => {
 				Internal.processSearchBar = function (e) {
 					if (typeof e.instance.props.query != "string") e.instance.props.query = "";
 				};
-				Internal.processUserPopoutAvatar = function (e) {
+				Internal.processUserHeaderAvatar = function (e) {
 					if (!e.instance.props.user) return;
 					e.returnvalue = Internal._processAvatarRender(e.instance.props.user, e.returnvalue, e.instance) || e.returnvalue;
 				};
