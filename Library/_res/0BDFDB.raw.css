@@ -474,8 +474,11 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 
-[REPLACE_CLASS_userpopoutheaderbottag] {
+[REPLACE_CLASS_userheaderbottag] {
 	margin-top: 4px !important;
+}
+[REPLACE_CLASS_userprofilemodal] [REPLACE_CLASS_userheaderbottag] {
+	margin-top: 6px !important;
 }
 
 [REPLACE_CLASS_avatardisabled] {
