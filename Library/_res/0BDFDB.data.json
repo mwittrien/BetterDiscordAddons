@@ -3312,6 +3312,7 @@
 		"userbannermodal": ["UserBanner", "modalBanner"],
 		"userbannermodalpremium": ["UserBanner", "modalBannerPremium"],
 		"userheaderbottag": ["UserHeaderUsername", "botTag"],
+		"userheaderclickableusername": ["UserHeaderUsername", "clickableUsername"],
 		"userheadernickname": ["UserHeaderUsername", "nickname"],
 		"userheadertag": ["UserHeaderUsername", "userTag"],
 		"userpopoutavatarclickable": ["UserPopoutHeader", "clickable"],
