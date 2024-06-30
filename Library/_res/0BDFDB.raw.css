@@ -827,23 +827,23 @@ img:not([src]), img[src=""], img[src="null"] {
 	align-items: center;
 	margin-bottom: 2px;
 }
-[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname],
-[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutguildname] {
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutchannelname],
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutguildname] {
 	color: var(--header-secondary);
 }
-[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname]:hover {
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutchannelname]:hover {
 	color: var(--header-primary);
 }
-[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname]:not(:last-child) {
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutchannelname]:not(:last-child) {
 	margin-right: 10px;
 }
-[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutchannelname]:not(:last-child)::after {
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutchannelname]:not(:last-child)::after {
 	content: "";
 	border-bottom: 1px solid var(--text-muted);
 	width: 100%;
 	margin-left: 10px;
 }
-[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutmessagespopoutguildname] {
+[REPLACE_CLASS_messagespopoutchannelseparator] [REPLACE_CLASS_messagespopoutguildname] {
 	flex: 0 0 auto;
 	font-size: 12px;
 	width: unset;
