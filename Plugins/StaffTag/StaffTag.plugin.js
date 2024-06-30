@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.1
+ * @version 1.6.2
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -100,8 +100,7 @@ module.exports = (_ => {
 						"NameContainer"
 					],
 					after: [
-						"UserProfileUsername",
-						"UsernameSection",
+						"UserHeaderUsername",
 						"VoiceUser"
 					]
 				};
@@ -320,32 +319,16 @@ module.exports = (_ => {
 				});
 			}
 			
-			processUsernameSection (e) {
-				if (e.instance.props.user && this.settings.tagPlaces.userPopout) {
-					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
-					if (!userType) return;
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-					if (index > -1) {
-						if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-						this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
-							tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-							inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-						});
-					}
-				}
-			}
-			
-			processUserProfileUsername (e) {
-				if (e.instance.props.user && this.settings.tagPlaces.userProfile) {
-					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
-					if (!userType) return;
-					let username = BDFDB.ReactUtils.findChild(e.returnvalue, {props: ["children", "style", "variant"]});
-					if (!username) return;
-					username.props.children = [username.props.children];
-					this.injectStaffTag(username.props.children, e.instance.props.user, userType, 2, {
-						tagClass: BDFDB.disCN.bottagnametag,
-						useRem: e.instance.props.useRemSizes,
-						inverted: e.instance.props.invertBotTagColor
+			processUserHeaderUsername (e) {
+				if (!e.instance.props.user || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE && !this.settings.tagPlaces.userPopout || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.FULL_SIZE && !this.settings.tagPlaces.userProfile) return;
+				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
+				if (!userType) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userheadernickname]]});
+				if (index > -1) {
+					if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+					this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
+						tagClass: BDFDB.disCNS.userheaderbottag + BDFDB.disCN.bottagnametag,
+						inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 					});
 				}
 			}
