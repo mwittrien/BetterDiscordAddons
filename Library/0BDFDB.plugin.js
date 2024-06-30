@@ -7596,11 +7596,14 @@ module.exports = (_ => {
 						let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
 						let selectedItem = this.props.selectedItem || (items[0] || {}).value;
 						let renderItem = typeof this.props.renderItem == "function" ? this.props.renderItem : (data => data.label || data.value);
+						console.log(this);
 						return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							selectedItem: selectedItem,
 							onItemSelect: this.handleItemSelect.bind(this),
 							children: items.map(data => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TabBar.Item, {
 								className: BDFDB.DOMUtils.formatClassName(this.props.itemClassName, selectedItem == data.value && this.props.itemSelectedClassName),
+								color: this.props.color,
+								look: this.props.look,
 								itemType: this.props.type,
 								id: data.value,
 								children: renderItem(data),
@@ -7615,12 +7618,9 @@ module.exports = (_ => {
 					TOP_PILL: "top-pill"
 				};
 				CustomComponents.TabBar.Looks = {
-					0: "GREY",
-					1: "BRAND",
-					2: "CUSTOM",
-					GREY: 0,
-					BRAND: 1,
-					CUSTOM: 2
+					GREY: "grey",
+					BRAND: "brand",
+					CUSTOM: "custom"
 				};
 				
 				CustomComponents.Table = reactInitialized && class BDFDB_Table extends Internal.LibraryModules.React.Component {
