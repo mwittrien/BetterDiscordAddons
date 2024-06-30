@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.0
+ * @version 4.9.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -131,6 +131,8 @@ module.exports = (_ => {
 						"UserHeaderAvatar",
 						"UserHeaderUsername",
 						"UserInfo",
+						"UserPanelHeader",
+						"UserProfileHeader",
 						"UserSummaryItem",
 						"VoiceUser"
 					],
@@ -581,6 +583,16 @@ module.exports = (_ => {
 						e.instance.props.displayProfile.premiumType = 2;
 					}
 				}
+			}
+			
+			processUserPanelHeader (e) {
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || !this.settings.places.userProfile) return;
+				e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
+			}
+			
+			processUserProfileHeader (e) {
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || !this.settings.places.userProfile) return;
+				e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 			}
 			
 			processUserHeaderUsername (e) {
