@@ -230,7 +230,8 @@ module.exports = (_ => {
 					},
 					rescaleSettings: {
 						messages: 				{value: "NONE",	description: "Messages"},
-						imageViewer: 				{value: "NONE",	description: "Image Viewer"}
+						imageViewer: 				{value: "NONE",	description: "Image Viewer"},
+						rescaleEmbeds: 				{value: true,	description: "Resize Image Embeds"}
 					},
 					detailsSettings: {
 						footnote:				{value: true, 			description: "in the Image Description"},
@@ -513,9 +514,9 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Resize Settings",
 							collapseStates: collapseStates,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Automatically Resize Images in: ",
-								children: Object.keys(this.defaults.rescaleSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								children: Object.keys(this.defaults.rescaleSettings).filter(key => typeof this.defaults.rescaleSettings[key].value != "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Select",
 									plugin: this,
 									keys: ["rescaleSettings", key],
@@ -524,7 +525,13 @@ module.exports = (_ => {
 									options: Object.keys(rescaleOptions).map(n => ({value: n, label: rescaleOptions[n]})),
 									value: this.settings.rescaleSettings[key]
 								}))
-							})
+							})].concat(Object.keys(this.defaults.rescaleSettings).filter(key => typeof this.defaults.rescaleSettings[key].value == "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["rescaleSettings", key],
+								label: this.defaults.rescaleSettings[key].description,
+								value: this.settings.rescaleSettings[key]
+							})))
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -1238,7 +1245,12 @@ module.exports = (_ => {
 				if (e.node) {
 					if (!e.instance.props.src.split("?")[0].endsWith(".gif") && !e.instance.props.animated && !e.instance.props.children) for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeFormatInUrl(ele.src);
 					if (e.instance.props.resized) {
-						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"]) {
+						let selectors = ["embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"];
+
+						if (this.settings.rescaleSettings.rescaleEmbeds)
+							selectors.push("embedfull", "embedinlinemedia")
+
+						for (let selector of selectors) {
 							let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN[selector], e.node);
 							if (parent) parent.style.setProperty("max-width", "unset", "important");
 							if (parent) parent.style.setProperty("max-height", "unset", "important");
@@ -1393,6 +1405,9 @@ module.exports = (_ => {
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
 						if (mRects.width || mwRects.width) {
 							let embed = BDFDB.ReactUtils.findValue(reactInstance, "embed", {up: true});
+							if (embed && !this.settings.rescaleSettings.rescaleEmbeds)
+								return;
+
 							let ratio = ((mRects.width || (mwRects.width - 120)) - (embed && embed.color ? 100 : 0)) / e.instance.props.width;
 							ratio = this.settings.rescaleSettings.messages == "ORIGINAL" && ratio > 1 ? 1 : ratio;
 							let width = Math.round(ratio * e.instance.props.width);
