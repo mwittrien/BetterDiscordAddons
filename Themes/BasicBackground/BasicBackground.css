@@ -1047,18 +1047,18 @@ button.button_f67531.enabled_f67531:hover svg {
 	box-shadow: none;
 }
 .message_d5deea,									/* message				container							*/
-.messagesWrapper_e2e187 .wrapper_ec86aa,						/* message				upload placeholder						*/
-.card_d4f6c7 .wrapper_ec86aa,								/* message				home								*/
+.messagesWrapper_e2e187 .wrapper_f9f2ca,						/* message				upload placeholder						*/
+.card_d4f6c7 .wrapper_f9f2ca,								/* message				home								*/
 .wrapper_b211c6,									/* message				loading 							*/
 .message_ddb5b4,									/* message				mention popout							*/
 .message_c06487,									/* message				inbox popout							*/
-.message_ddcc45 .wrapper_ec86aa,							/* message				settings preview						*/
+.message_ddcc45 .wrapper_f9f2ca,							/* message				settings preview						*/
 .messageGroupCozy_ac90a2,								/* message				pin popout							*/
-.message_ddc613 .wrapper_ec86aa {							/* message				searchpage							*/
+.message_ddc613 .wrapper_f9f2ca {							/* message				searchpage							*/
 	background-color: rgba(var(--transparencycolor_v), var(--messagetransparency_v)) !important;
 	contain: unset;
 }
-.message_ddc613 .wrapper_ec86aa {							/* message				searchpage							*/
+.message_ddc613 .wrapper_f9f2ca {							/* message				searchpage							*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 0.8)) !important;
 }
 .message_d5deea.selected_d5deea,
@@ -1131,36 +1131,36 @@ button.button_f67531.enabled_f67531:hover svg {
 .message_d5deea.automodMessage_d5deea::before {
 	background-color: rgb(var(--dangercolor));
 }
-.message_d5deea.mentioned_d5deea .contents_ec86aa .messageContent_ec86aa {
+.message_d5deea.mentioned_d5deea .contents_f9f2ca .messageContent_f9f2ca {
 	border-radius: 3px;
 	background-color: rgba(var(--mentioncolor), calc(0.3 * var(--usechatbubbles)));
 }
-#app-mount .avatar_ec86aa,								/* message				container avatar						*/
+#app-mount .avatar_f9f2ca,								/* message				container avatar						*/
 #app-mount .avatar_b211c6 {								/* message				loading avatar							*/
 	position: absolute;
 	top: 2px;
 	left: calc(-70px * var(--usechatbubbles) + 16px);
 }
-#app-mount .compact_ec86aa .avatar_ec86aa {						/* message				compact avatar							*/
+#app-mount .compact_f9f2ca .avatar_f9f2ca {						/* message				compact avatar							*/
 	position: relative;
 	top: .18em;
 	left: nsetcalc(-70px * var(--usechatbubbles) + 16px);
 }
-#app-mount .messageItemBody__8fd54.hasReply_ec86aa .avatar_ec86aa,
-#app-mount .repliedMessage_ec86aa ~ * .avatar_ec86aa {
+#app-mount .messageItemBody__8fd54.hasReply_f9f2ca .avatar_f9f2ca,
+#app-mount .repliedMessage_f9f2ca ~ * .avatar_f9f2ca {
 	top: 24px;
 }
-#app-mount .avatarDecoration_ec86aa {							/* message				avatar decoration						*/
+#app-mount .avatarDecoration_f9f2ca {							/* message				avatar decoration						*/
 	position: absolute;
 	top: 2px;
 	left: calc(-70px * var(--usechatbubbles) + 16px - (6.6666666px * var(--decoration-to-avatar-ratio)/2));
 }
-#app-mount .messageItemBody__8fd54.hasReply_ec86aa .avatarDecoration_ec86aa,
-#app-mount .repliedMessage_ec86aa ~ * .avatarDecoration_ec86aa {
+#app-mount .messageItemBody__8fd54.hasReply_f9f2ca .avatarDecoration_f9f2ca,
+#app-mount .repliedMessage_f9f2ca ~ * .avatarDecoration_f9f2ca {
 	top: 24px;
 }
 
-#app-mount .replyBadge_ec86aa {								/* message				reply badge							*/
+#app-mount .replyBadge_f9f2ca {								/* message				reply badge							*/
 	background-color: rgba(var(--transparencycolor_v), .5);
 }
 #app-mount .spine_c15230 {
@@ -1170,11 +1170,11 @@ button.button_f67531.enabled_f67531:hover svg {
 	left: unset;
 	border: none;
 }
-#app-mount .compact_ec86aa .spine_c15230 {
+#app-mount .compact_f9f2ca .spine_c15230 {
 	right: 0;
 }
-#app-mount .repliedMessage_ec86aa::before,						/* message				reply spine							*/
-#app-mount .repliedMessage_ec86aa::after,
+#app-mount .repliedMessage_f9f2ca::before,						/* message				reply spine							*/
+#app-mount .repliedMessage_f9f2ca::after,
 #app-mount .spine_c15230::before,							/* message				command spine							*/
 #app-mount .spine_c15230::after {
 	--avatar-size: 38px;
@@ -1194,8 +1194,8 @@ button.button_f67531.enabled_f67531:hover svg {
 	border-right: 0 solid var(--background-accent);
 	border-left: var(--spine-width) solid var(--background-accent);
 }
-#app-mount .repliedMessage_ec86aa::before,
-#app-mount .repliedMessage_ec86aa::after {
+#app-mount .repliedMessage_f9f2ca::before,
+#app-mount .repliedMessage_f9f2ca::after {
 	border-top: var(--spine-width) solid var(--background-accent);
 	border-bottom: 0 solid var(--background-accent);
 	border-top-left-radius: 6px;
@@ -1206,33 +1206,33 @@ button.button_f67531.enabled_f67531:hover svg {
 	border-bottom: var(--spine-width) solid var(--background-accent);
 	border-bottom-left-radius: 6px;
 }
-#app-mount .compact_ec86aa .repliedMessage_ec86aa::before,
-#app-mount .compact_ec86aa .repliedMessage_ec86aa::after,
-#app-mount .compact_ec86aa .spine_c15230::before,
-#app-mount .compact_ec86aa .spine_c15230::after {
+#app-mount .compact_f9f2ca .repliedMessage_f9f2ca::before,
+#app-mount .compact_f9f2ca .repliedMessage_f9f2ca::after,
+#app-mount .compact_f9f2ca .spine_c15230::before,
+#app-mount .compact_f9f2ca .spine_c15230::after {
 	--avatar-size: 20px;
 	left: calc(-1 * var(--avatar-size));
 }
-#app-mount .repliedMessage_ec86aa::before,
+#app-mount .repliedMessage_f9f2ca::before,
 #app-mount .spine_c15230::before {
 	border-color: rgba(var(--textbrighter_v), calc(0.3 * (1 - var(--usechatbubbles))));
 }
-#app-mount .repliedMessage_ec86aa::after,
+#app-mount .repliedMessage_f9f2ca::after,
 #app-mount .spine_c15230::after {
 	border-color: rgba(var(--transparencycolor_v), calc(0.5 * var(--usechatbubbles)));
 }
-#app-mount .compact_ec86aa .repliedMessage_ec86aa::before,
-#app-mount .compact_ec86aa .spine_c15230::before {
+#app-mount .compact_f9f2ca .repliedMessage_f9f2ca::before,
+#app-mount .compact_f9f2ca .spine_c15230::before {
 	border-color: rgba(var(--textbrighter_v), .3);
 }
-#app-mount .compact_ec86aa .repliedMessage_ec86aa::after,
-#app-mount .compact_ec86aa .spine_c15230::after {
+#app-mount .compact_f9f2ca .repliedMessage_f9f2ca::after,
+#app-mount .compact_f9f2ca .spine_c15230::after {
 	border-color: transparent;
 }
 
-#app-mount .cozy_ec86aa.hasThread_ec86aa::before,					/* message				thread spine							*/
-#app-mount .cozy_ec86aa.hasThread_ec86aa::after,
-#app-mount .compact_ec86aa.hasThread_ec86aa::after {
+#app-mount .cozy_f9f2ca.hasThread_f9f2ca::before,					/* message				thread spine							*/
+#app-mount .cozy_f9f2ca.hasThread_f9f2ca::after,
+#app-mount .compact_f9f2ca.hasThread_f9f2ca::after {
 	--avatar-size: 38px;
 	--gutter: 16px;
 	--spine-width: 2px;
@@ -1250,32 +1250,32 @@ button.button_f67531.enabled_f67531:hover svg {
 	border-left: var(--spine-width) solid var(--background-accent);
 	border-bottom-left-radius: 8px;
 }
-#app-mount .cozy_ec86aa.hasThread_ec86aa::before {
+#app-mount .cozy_f9f2ca.hasThread_f9f2ca::before {
 	border-color: rgba(var(--textbrighter_v), calc(0.3 * (1 - var(--usechatbubbles))));
 }
-#app-mount .cozy_ec86aa.hasThread_ec86aa::after {
+#app-mount .cozy_f9f2ca.hasThread_f9f2ca::after {
 	border-color: rgba(var(--transparencycolor_v), calc(0.5 * var(--usechatbubbles)));
 }
-#app-mount .message_d5deea.mentioned_d5deea.hasThread_ec86aa::before {
+#app-mount .message_d5deea.mentioned_d5deea.hasThread_f9f2ca::before {
 	background-color: transparent;
 }
-#app-mount .compact_ec86aa.hasThread_ec86aa::after {
+#app-mount .compact_f9f2ca.hasThread_f9f2ca::after {
 	left: calc(var(--avatar-size) + 11px);
 	width: calc(var(--avatar-size) - 13px);
 	border-color: rgba(var(--textbrighter_v), .3);
 }
-#app-mount .compact_ec86aa.hasThread_ec86aa .contents_ec86aa::before {
+#app-mount .compact_f9f2ca.hasThread_f9f2ca .contents_f9f2ca::before {
 	border-color: rgba(var(--textbrighter_v), .3);
 }
 
 .spine_c15230 {
 	border-color: rgba(var(--textbrighter_v), .3);
 }
-.hasThread_ec86aa .spine_c15230 {
+.hasThread_f9f2ca .spine_c15230 {
 	display: none;
 }
 
-.cozy_ec86aa .header_ec86aa::after,							/* message				container header						*/
+.cozy_f9f2ca .header_f9f2ca::after,							/* message				container header						*/
 .cozy_b211c6 .header_b211c6::after {							/* message				loading header							*/
 	content: "";
 	position: absolute;
@@ -1284,16 +1284,16 @@ button.button_f67531.enabled_f67531:hover svg {
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--transparencycolor_v), var(--messagetransparency_v));
 }
-.messageGroupWrapper_ac90a2 .messageGroupCozy_ac90a2 .header_ec86aa::after {
+.messageGroupWrapper_ac90a2 .messageGroupCozy_ac90a2 .header_f9f2ca::after {
 	top: 2px;
 }
-.message_ddc613 .wrapper_ec86aa .header_ec86aa::after {
+.message_ddc613 .wrapper_f9f2ca .header_f9f2ca::after {
 	border-right-color: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 0.8));
 }
-.cozy_ec86aa .timestamp_ec86aa.alt_ec86aa {
+.cozy_f9f2ca .timestamp_f9f2ca.alt_f9f2ca {
 	left: calc(-78px * var(--usechatbubbles));
 }
-.cozy_ec86aa .iconContainer_e62b38 {
+.cozy_f9f2ca .iconContainer_e62b38 {
 	background-color: rgba(var(--transparencycolor_v), var(--messagetransparency_v));
 	border-radius: 50%;
 	left: calc(1px * (-58 * var(--usechatbubbles) + -48 * (1 - var(--usechatbubbles))));
@@ -1303,10 +1303,10 @@ button.button_f67531.enabled_f67531:hover svg {
 	margin-right: 1rem;
 	padding: 0;
 }
-.cozy_ec86aa .blockedSystemMessage_c09d0f .iconContainer_e62b38 {
+.cozy_f9f2ca .blockedSystemMessage_c09d0f .iconContainer_e62b38 {
 	background-color: transparent;
 }
-.cozy_ec86aa .iconContainer_e62b38::after {
+.cozy_f9f2ca .iconContainer_e62b38::after {
 	content: "";
 	position: absolute;
 	top: 2px;
@@ -1314,67 +1314,67 @@ button.button_f67531.enabled_f67531:hover svg {
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--transparencycolor_v), var(--messagetransparency_v));
 }
-.cozy_ec86aa .blockedSystemMessage_c09d0f .iconContainer_e62b38::after {
+.cozy_f9f2ca .blockedSystemMessage_c09d0f .iconContainer_e62b38::after {
 	display: none;
 }
-.selected_d5deea.message_d5deea.cozy_ec86aa .header_ec86aa::after, 
-.mouse-mode .message_d5deea.cozy_ec86aa:hover .header_ec86aa::after,
-.mouse-mode.full-motion .message_d5deea.cozy_ec86aa:hover .header_ec86aa::after,
+.selected_d5deea.message_d5deea.cozy_f9f2ca .header_f9f2ca::after, 
+.mouse-mode .message_d5deea.cozy_f9f2ca:hover .header_f9f2ca::after,
+.mouse-mode.full-motion .message_d5deea.cozy_f9f2ca:hover .header_f9f2ca::after,
 .mouse-mode .wrapper_b211c6.cozy_b211c6:hover .header_b211c6::after,
 .mouse-mode.full-motion .wrapper_b211c6.cozy_b211c6:hover .header_b211c6::after,
-.selected_d5deea.message_d5deea.cozy_ec86aa .iconContainer_e62b38::after,
-.mouse-mode .message_d5deea.cozy_ec86aa:hover .iconContainer_e62b38::after,
-.mouse-mode.full-motion .message_d5deea.cozy_ec86aa:hover .iconContainer_e62b38::after {
+.selected_d5deea.message_d5deea.cozy_f9f2ca .iconContainer_e62b38::after,
+.mouse-mode .message_d5deea.cozy_f9f2ca:hover .iconContainer_e62b38::after,
+.mouse-mode.full-motion .message_d5deea.cozy_f9f2ca:hover .iconContainer_e62b38::after {
 	border-right-color: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 1.2));
 }
-#app-mount .mentioned_d5deea.cozy_ec86aa .header_ec86aa::after {
+#app-mount .mentioned_d5deea.cozy_f9f2ca .header_f9f2ca::after {
 	border-right-color: rgba(var(--mentioncolor), calc(var(--messagetransparency_v) * 100000000000000000000000000000));
 }
-#app-mount .ephemeral_d5deea.cozy_ec86aa .header_ec86aa::after,
-#app-mount .replying_d5deea.cozy_ec86aa .header_ec86aa::after,
-#app-mount .highlighted_fc800f.cozy_ec86aa .header_ec86aa::after {
+#app-mount .ephemeral_d5deea.cozy_f9f2ca .header_f9f2ca::after,
+#app-mount .replying_d5deea.cozy_f9f2ca .header_f9f2ca::after,
+#app-mount .highlighted_fc800f.cozy_f9f2ca .header_f9f2ca::after {
 	border-right-color: rgba(var(--accentcolor_v), calc(var(--messagetransparency_v) * 100000000000000000000000000000));
 }
-#app-mount .automodMessage_d5deea.cozy_ec86aa .header_ec86aa::after {
+#app-mount .automodMessage_d5deea.cozy_f9f2ca .header_f9f2ca::after {
 	border-right-color: rgba(var(--dangercolor), calc(var(--messagetransparency_v) * 100000000000000000000000000000));
 }
 .message_ddb5b4,
 .message_c06487,
-.zalgo_ec86aa .messageContent_ec86aa,
-.zalgo_ec86aa.cozy_ec86aa .header_ec86aa,
+.zalgo_f9f2ca .messageContent_f9f2ca,
+.zalgo_f9f2ca.cozy_f9f2ca .header_f9f2ca,
 .wrapper_b211c6,
 .cozy_b211c6 .header_b211c6 {
 	overflow: visible;
 }
 #app-mount .cozyMessage_d5deea,								/* message				container cozy							*/
-#app-mount .messagesWrapper_e2e187 .cozy_ec86aa,					/* message				upload placeholder cozy						*/
-#app-mount .card_d4f6c7 .cozy_ec86aa,							/* message				home cozy							*/
+#app-mount .messagesWrapper_e2e187 .cozy_f9f2ca,					/* message				upload placeholder cozy						*/
+#app-mount .card_d4f6c7 .cozy_f9f2ca,							/* message				home cozy							*/
 #app-mount .cozy_b211c6 {								/* message				loading cozy							*/
 	margin-left: calc(80px * var(--usechatbubbles));
 	padding-left: calc(1px * (10 * var(--usechatbubbles) + 72 * (1 - var(--usechatbubbles))));
 }
-#app-mount .wrapper_ec86aa[data-list-item-id*="Uploader"] {
+#app-mount .wrapper_f9f2ca[data-list-item-id*="Uploader"] {
 	margin-top: 1rem;
 }
 #app-mount .compact_b211c6 {								/* message				loading compact							*/
 	margin-top: .0625rem;
 }
-#app-mount .cozy_ec86aa .header_ec86aa,
-#app-mount .cozy_ec86aa .messageContent_ec86aa,
+#app-mount .cozy_f9f2ca .header_f9f2ca,
+#app-mount .cozy_f9f2ca .messageContent_f9f2ca,
 #app-mount .cozy_b211c6 .header_b211c6 {
 	margin-left: 0;
 	padding-left: 0;
 }
-.messageContainer_ddb5b4 .wrapper_ec86aa,
-.messages_c06487 .wrapper_ec86aa,
-.message_ddcc45 .wrapper_ec86aa,
+.messageContainer_ddb5b4 .wrapper_f9f2ca,
+.messages_c06487 .wrapper_f9f2ca,
+.message_ddcc45 .wrapper_f9f2ca,
 .messageGroupWrapper_ac90a2 .messageGroupCozy_ac90a2,
-.message_ddc613 .wrapper_ec86aa {
+.message_ddc613 .wrapper_f9f2ca {
 	border-radius: 5px;
 	margin-left: calc(60px * var(--usechatbubbles));
 	padding-left: calc(1px * (10 * var(--usechatbubbles) + 72 * (1 - var(--usechatbubbles))));
 }
-.messages_c06487 .wrapper_ec86aa {
+.messages_c06487 .wrapper_f9f2ca {
 	border-radius: 0;
 }
 
