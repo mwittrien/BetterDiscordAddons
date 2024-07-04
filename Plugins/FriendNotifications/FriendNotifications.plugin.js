@@ -325,7 +325,7 @@ module.exports = (_ => {
 				let createUserList = (users, type, title) => {
 					let items = [];
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCN.cursordefault,
 						children: [
 							"Click on an Option to toggle",
 							BDFDB.ReactUtils.createElement("span", {
@@ -337,7 +337,7 @@ module.exports = (_ => {
 						]
 					}));
 					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCN.cursordefault,
 						children: [
 							"Right-Click on an Option to toggle",
 							BDFDB.ReactUtils.createElement("span", {
@@ -349,7 +349,7 @@ module.exports = (_ => {
 						]
 					}));
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCN.cursordefault,
 						style: {marginTop: 6},
 						children: [
 							"Click on an Option Header to toggle",
@@ -362,7 +362,7 @@ module.exports = (_ => {
 						]
 					}));
 					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCN.cursordefault,
 						children: [
 							"Right-Click on an Option Header to toggle",
 							BDFDB.ReactUtils.createElement("span", {
@@ -374,12 +374,12 @@ module.exports = (_ => {
 						]
 					}));
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCN.cursordefault,
 						style: {marginTop: 6},
 						children: "Click on an Avatar to toggle between enabled/disabled"
 					}));
 					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCN.cursordefault,
 						children: [
 							"Right-Click on an Avatar to toggle all Options between",
 							BDFDB.ReactUtils.createElement("span", {
@@ -604,7 +604,7 @@ module.exports = (_ => {
 							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								className: BDFDB.disCN.marginbottom8,
 								children: BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCN.cursordefault,
 									children: [
 										"Allows you to configure your own Message Strings for the different Statuses.",
 										[
