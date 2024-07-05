@@ -3018,14 +3018,16 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 #app-mount .biteSizeInnerThemed_c69a7b,
-#app-mount .fullSizeInnerThemed_c69a7b {
+#app-mount .fullSizeInnerThemed_c69a7b,
+#app-mount .biteSizeInnerThemed_c69a7b .activity_cd74cc {
 	--bg-surface-overlay: var(--background-secondary-alt);
 }
 #app-mount .biteSizeOverlayBackground_c69a7b,
 #app-mount .fullSizeOverlayBackground_c69a7b,
+#app-mount .biteSizeInnerThemed_c69a7b .activity_cd74cc,
 #app-mount .menu_d4e7c2 {
-	--bg-mod-faint: var(--background-floating);
-	--border-faint: var(--background-floating);
+	--bg-mod-faint: var(--background-primary);
+	--border-faint: var(--background-primary);
 }
 
 .userPopoutOuter_c69a7b:not(.custom-profile-theme) .container_e5a42d,
