@@ -603,7 +603,7 @@
 		"UserThemeContainer": {"strings": ["shouldTrackView", "guildId:", ".Provider"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
 		"VoiceUser": {"protos": ["renderPrioritySpeaker", "renderIcons", "renderAvatar"]},
-		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "Permissions.MOVE_MEMBERS"]}
+		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", ".MOVE_MEMBERS"]}
 	},
 	"ModuleUtilsConfig": {
 		"QueuedComponents": [],
