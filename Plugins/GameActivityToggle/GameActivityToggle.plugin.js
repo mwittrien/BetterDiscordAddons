@@ -226,7 +226,7 @@ module.exports = (_ => {
 				if (!this.settings.general.showItem || (e.instance.props.navId != "account" && e.instance.props.navId != "status")) return;
 				let [_, oldIndex] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: BDFDB.ContextMenuUtils.createItemId(this.name, "activity-toggle")});
 				if (oldIndex > -1) return;
-				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status"]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status", "add-custom-status"]});
 				if (index > -1) {
 					let isChecked = BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
 					children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
