@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.5
+ * @version 3.7.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,7 +27,9 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			
+			"fixed": {
+				"Lags": "Fixed some Issues with Lags, noticable in FriendNotifications for example"
+			}
 		}
 	};
 	
@@ -4472,10 +4474,16 @@ module.exports = (_ => {
 						else notFoundAndLazyloaded = true;
 					}
 					else if ([DiscordClasses[item][1]].flat().every(prop => Internal.DiscordClassModules[DiscordClasses[item][0]][prop] === undefined && !(JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`)) || "").split("\"")[0])) {
-						BDFDB.LogUtils.warn([DiscordClasses[item][1], "not found in", DiscordClasses[item][0], "in DiscordClassModules"]);
-						return className;
+						if (!InternalData.LazyloadedClassModules || !InternalData.LazyloadedClassModules[DiscordClasses[item][0]]) {
+							BDFDB.LogUtils.warn([DiscordClasses[item][1], "not found in", DiscordClasses[item][0], "in DiscordClassModules"]);
+							return className;
+						}
+						else notFoundAndLazyloaded = true;
 					}
-					if (notFoundAndLazyloaded) className = `${DiscordClasses[item][1]}_${InternalData.LazyloadedClassModules[DiscordClasses[item][0]]}`;
+					if (notFoundAndLazyloaded) {
+						className = `${DiscordClasses[item][1]}_${InternalData.LazyloadedClassModules[DiscordClasses[item][0]]}`;
+						DiscordClassModules[DiscordClasses[item][0]] = Object.assign({}, DiscordClassModules[item], {[DiscordClasses[item][1]]: className});
+					}
 					else for (let prop of [DiscordClasses[item][1]].flat()) {
 						className = Internal.DiscordClassModules[DiscordClasses[item][0]][prop] || (JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`)) || "").split("\"")[0];
 						if (className) break;
@@ -5206,6 +5214,7 @@ module.exports = (_ => {
 										borderColor: this.props.checkboxColor
 									}, this.getStyle()),
 									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Checkmark, {
+										size: "null",
 										width: 18,
 										height: 18,
 										color: this.getColor(),
@@ -7173,7 +7182,7 @@ module.exports = (_ => {
 						if (list && !this.props.configWidth) {
 							let headers = Array.from(list.querySelectorAll(BDFDB.dotCN.settingstableheader));
 							headers.shift();
-							if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => {this.resizeList(headers);});
+							if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => this.resizeList(headers));
 							else this.resizeList(headers);
 						}
 					}
@@ -7267,7 +7276,7 @@ module.exports = (_ => {
 							} : {},
 							children: [
 								this.renderHeaderOption({
-									className: BDFDB.disCN.settingstableheadername,
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstableheadername, BDFDB.disCN.settingstableheader),
 									clickable: this.props.title && isHeaderClickable,
 									label: this.props.title || ""
 								}),
@@ -7279,7 +7288,7 @@ module.exports = (_ => {
 										maxWidth: wrapperWidth || null
 									},
 									children: this.props.settings.map(setting => this.renderHeaderOption({
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstableheaderoption, this.props.vertical && BDFDB.disCN.settingstableheadervertical),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstableheaderoption, BDFDB.disCN.settingstableheader, this.props.vertical && BDFDB.disCN.settingstableheadervertical),
 										clickable: isHeaderClickable,
 										label: setting
 									}))
