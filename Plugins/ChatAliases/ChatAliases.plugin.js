@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.6
+ * @version 2.4.7
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -368,6 +368,7 @@ module.exports = (_ => {
 							value: values.wordValue,
 							placeholder: values.wordValue,
 							errorMessage: !values.wordValue && "Choose a Word Value" || aliases[values.wordValue] && "Word Value already used, saving will overwrite old Alias",
+							maxLength: 1900,
 							onChange: (value, instance) => {
 								values.wordValue = value.trim();
 								if (!values.wordValue) instance.props.errorMessage = "Choose a Word Value";
@@ -386,6 +387,7 @@ module.exports = (_ => {
 							placeholder: values.replaceValue,
 							autoFocus: true,
 							errorMessage: !values.replaceValue && "Choose a Replacement Value",
+							maxLength: 1900,
 							onChange: (value, instance) => {
 								values.replaceValue = value.trim();
 								if (!values.replaceValue) instance.props.errorMessage = "Choose a Replacement Value";
