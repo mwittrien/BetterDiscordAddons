@@ -768,6 +768,20 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: space-between;
 	flex: 0 0 auto;
 }
+[REPLACE_CLASS_settingstableheader] {
+	margin-bottom: 8px;
+	color: var(--text-normal)
+}
+[REPLACE_CLASS_settingstableheadername] {
+	margin-left: 8px;
+	flex: 1 1 auto
+}
+[REPLACE_CLASS_settingstableheaderoption] {
+	cursor: default;
+	text-align: center;
+	width: 75px;
+	flex: 0 0 auto
+}
 [REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_settingstableheader] {
 	min-height: 10px;
 	text-transform: uppercase;
