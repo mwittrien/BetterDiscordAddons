@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.6
+ * @version 2.5.7
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -526,6 +526,7 @@ module.exports = (_ => {
 															height: this.height,
 															className: BDFDB.disCN.imagemodalimage,
 															shouldAnimate: true,
+															renderForwardComponent: _ => {},
 															renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
 														})
 													}), true));
