@@ -292,7 +292,7 @@
 			"NumberBadge": [".numberBadge"],
 			"TextBadge": [".textBadge"]
 		}},
-		"Checkmark": {"strings": ["d:\"M9.58473 14.8636L6.04944 11.4051L4.50003 12.9978L9.58473 18L19.5 8.26174L17.9656 6.64795L9.58473 14.8636Z"], "funcStrings": ["foreground:"]},
+		"Checkmark": {"strings": ["M21.7 5.3a1 1 0 0 1 0 1.4l-12 12a1 1 0 0 1-1.4 0l-6-6a1 1 0 1 1 1.4-1.4L9 16.58l11.3-11.3a1 1 0 0 1 1.4 0Z"]},
 		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["autoplay"]},
 		"EmojiButton": {"strings": ["renderButtonContents", "\"emojiButton\"", "SELECT_EMOJI"]},
 		"EmojiPicker": {"strings": ["emojiSize", "inspectedExpressionPosition", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
