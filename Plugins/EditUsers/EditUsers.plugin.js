@@ -177,10 +177,6 @@ module.exports = (_ => {
 						background-size: cover;
 						object-fit: cover;
 					}
-					${BDFDB.dotCNS.userprofilemodal + BDFDB.dotCNS.linedefaultcolor + BDFDB.dotCN.bottag} {
-						display: inline-flex;
-						margin-top: 4px;
-					}
 					${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
 						margin-left: 4px;
 					}
