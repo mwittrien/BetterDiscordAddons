@@ -610,7 +610,7 @@ module.exports = (_ => {
 							this.changeUserColor(children[index], e.instance.props.user.id);
 							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
 							this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), 2, {
-								tagClass: BDFDB.disCNS.userheaderbottag + BDFDB.disCN.bottagnametag,
+								tagClass: BDFDB.disCN.userheaderbottag,
 								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 							});
 						}
