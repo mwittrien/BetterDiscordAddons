@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.1
+ * @version 4.9.2
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1342,18 +1342,12 @@ module.exports = (_ => {
 						newUserObject.username = !keepName && data.name || nativeObject.username;
 						newUserObject.usernameNormalized = !keepName && data.name && data.name.toLowerCase() || nativeObject.usernameNormalized;
 					}
-					if (data.removeIcon) {
-						newUserObject.avatar = null;
-						newUserObject.avatarURL = null;
-						newUserObject.getAvatarSource = _ => null;
-						newUserObject.getAvatarURL = _ => null;
-						newUserObject.guildMemberAvatars = {};
-					}
-					else if (data.url) {
-						newUserObject.avatar = data.url;
-						newUserObject.avatarURL = data.url;
-						newUserObject.getAvatarSource = _ => data.url;
-						newUserObject.getAvatarURL = _ => data.url;
+					let url = data.removeIcon ? "https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/empty.png?src=.com/avatars/" + user.id + "/" + user.avatar : data.url;
+					if (url) {
+						newUserObject.avatar = url;
+						newUserObject.avatarURL = url;
+						newUserObject.getAvatarSource = _ => url;
+						newUserObject.getAvatarURL = _ => url;
 						newUserObject.guildMemberAvatars = {};
 					}
 					return newUserObject;
