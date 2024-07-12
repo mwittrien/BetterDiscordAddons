@@ -475,6 +475,7 @@ img:not([src]), img[src=""], img[src="null"] {
 
 
 [REPLACE_CLASS_userheaderbottag] {
+	display: inline-flex;
 	margin-top: 4px !important;
 }
 [REPLACE_CLASS_userprofilemodal] [REPLACE_CLASS_userheaderbottag] {
