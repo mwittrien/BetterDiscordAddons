@@ -1161,6 +1161,9 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	align-items: center;
 }
 
+[REPLACE_CLASS_emojiinputcontainer] {
+	position: relative;
+}
 [REPLACE_CLASS_emojiinputbuttoncontainer] {
 	display: flex;
 	align-items: center;
