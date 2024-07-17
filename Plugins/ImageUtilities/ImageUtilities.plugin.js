@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.4.5
+ * @version 5.4.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -837,7 +837,8 @@ module.exports = (_ => {
 			}
 			
 			getPosterUrl (url) {
-				return (url || "").replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg";
+				url = (url || "").replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0];
+				return url + (url.indexOf("?") > -1 ? "&format=jpeg" : "?format=jpeg");
 			}
 			
 			createSubMenus (data) {
@@ -1243,7 +1244,7 @@ module.exports = (_ => {
 			
 			processLazyImage (e) {
 				if (e.node) {
-					if (!e.instance.props.src.split("?")[0].endsWith(".gif") && !e.instance.props.animated && !e.instance.props.children) for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeFormatInUrl(ele.src);
+					if (!e.instance.props.src.split("?")[0].endsWith(".gif") && !e.instance.props.src.split("?")[0].endsWith(".mp4") && !e.instance.props.animated && !e.instance.props.children) for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeFormatInUrl(ele.src);
 					if (e.instance.props.resized) {
 						let selectors = ["embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"];
 
