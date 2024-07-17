@@ -105,7 +105,7 @@ body.folderContentIsOpen_zz6FgW .titleBar_a934d8.typeMacOS_a934d8 .macButtons_a9
 .wrapper_fea3ef .lowerLeftBadge_zr4T_9 .base__5ed84 {
 	transform: translate(calc(-1.5px * ((50 - var(--guildsize_v))/10)), calc(1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.wrapper_fea3ef .wrapper_fd07a3 {
+.wrapper_fea3ef .wrapper_c4cd66 {
 	top: calc(-5px * var(--guildsize_v)/50) !important;
 	height: calc(1px * (var(--guildsize_v) + 10 * var(--guildsize_v)/50)) !important;
 	transform: scale(calc(var(--guildsize_v)/50)) !important;
