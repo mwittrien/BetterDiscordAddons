@@ -2761,6 +2761,7 @@
 		"messagerepliedmessagecontentclickable": ["MessageBody", "clickable"],
 		"messagerepliedmessagepreview": ["MessageBody", "repliedTextPreview"],
 		"messagereply": ["MessageReply", "container"],
+		"messagereplyname": ["MessageReply", "name"],
 		"messagereplytext": ["MessageReply", "text"],
 		"messageroleicon": ["MessageBody", "roleIcon"],
 		"messageselected": ["Message", "selected"],
