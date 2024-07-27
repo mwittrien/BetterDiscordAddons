@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.1
+ * @version 1.2.2
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -163,10 +163,11 @@ module.exports = (_ => {
 				requestedUsers = {};
 				queuedInstances = {};
 				
+				this.patchPriority = 9;
+				
 				this.modulePatches = {
 					after: [
-						"UserConnectionsSection",
-						"UserPopoutBodySimplified"
+						"UserHeaderUsername"
 					]
 				};
 				
@@ -259,22 +260,12 @@ module.exports = (_ => {
 				});
 			}
 
-			processUserConnectionsSection (e) {
+			processUserHeaderUsername (e) {
+				if (e.instance.props.profileType != "BITE_SIZE") return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
-				e.returnvalue = [
-					e.returnvalue,
-					BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
-						user: user,
-						theme: e.instance.props.theme
-					}, true)
-				];
-			}
-
-			processUserPopoutBodySimplified (e) {
-				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
-				if (!user || user.isNonUserBot()) return;
-				e.returnvalue.props.children.splice(2, 0, BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
+				e.returnvalue = [e.returnvalue].flat(10);
+				e.returnvalue.push(BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
 					user: user,
 					isSimplified: true,
 					theme: e.instance.props.theme
