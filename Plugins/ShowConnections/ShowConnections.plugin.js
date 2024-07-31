@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.2
+ * @version 1.2.3
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -261,7 +261,7 @@ module.exports = (_ => {
 			}
 
 			processUserHeaderUsername (e) {
-				if (e.instance.props.profileType != "BITE_SIZE") return;
+				if (e.instance.props.profileType != "BITE_SIZE" || e.instance.props.className) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
 				e.returnvalue = [e.returnvalue].flat(10);
