@@ -12,6 +12,9 @@
 	--aligndms_v: 		var(--aligndms_s, var(--aligndms));
 }
 
+.wrapper_fea3ef.content_Pph8t6 {
+	--columns_v: 		var(--SFcolumns, var(--columns));
+}
 .titleBar_a934d8.typeMacOS_a934d8,
 .titleBar_a934d8.typeMacOS_a934d8 .macButtons_a934d8,
 .wrapper_fea3ef,
