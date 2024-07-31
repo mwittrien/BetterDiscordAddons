@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.8
+ * @version 1.1.9
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		fixed: {
+			"New Style": "If Discord updated for you and you no longer got the old Custom Status Entry in the UserPopup, then you'll need to right click the Custom Status Bubble next to your avatar to pick a preset Custom Status"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -236,7 +238,8 @@ module.exports = (_ => {
 						"Menu"
 					],
 					after: [
-						"CustomStatusModal"
+						"CustomStatusModal",
+						"UserPopoutCustomStatusPicker"
 					]
 				};
 				
@@ -313,6 +316,73 @@ module.exports = (_ => {
 				presets = BDFDB.DataUtils.load(this, "presets");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
+			}
+			
+			processUserPopoutCustomStatusPicker (e) {
+				if (e.instance.props.profileType != "BITE_SIZE") return;
+				let container = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutcustomstatuspickervisiblecontainer]]});
+				if (!container) return;
+				let onContextMenu = container.props.onContextMenu;
+				container.props.onContextMenu = BDFDB.TimeUtils.suppress(event => {
+					onContextMenu && onContextMenu(event);
+					let enabledPresets = BDFDB.ObjectUtils.filter(presets, id => !presets[id].disabled, true);
+					if (!Object.keys(enabledPresets).length) return;
+					BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", id),
+							label: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._customstatuspresetscustomstatusitem,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+										text: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_CLEAR_CUSTOM_STATUS,
+										tooltipConfig: {
+											zIndex: 2001
+										},
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+											className: BDFDB.disCN._customstatuspresetsdeletebutton,
+											onClick: _ => {
+												delete presets[id];
+												let pos = 0, sortedPresets = BDFDB.ObjectUtils.sort(presets, "pos");
+												for (let id in sortedPresets) presets[id].pos = pos++;
+												BDFDB.DataUtils.save(presets, this, "presets");
+											},
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+												className: BDFDB.disCN._customstatuspresetsdeleteicon,
+												name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE,
+												width: 14,
+												height: 14
+											})
+										})
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {
+										className: BDFDB.disCN._customstatuspresetsstatus,
+										status: presets[id].status || BDFDB.LibraryComponents.StatusComponents.Types.ONLINE
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+										children: presets[id].text
+									})
+								]
+							}),
+							imageUrl: presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name)),
+							hint: !presets[id].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
+							action: _ => {
+								if (!presets[id]) return;
+								let expiresAt = presets[id].clearAfter ? presets[id].clearAfter : null;
+								if (presets[id].clearAfter === ClearAfterValues.TODAY) {
+									let date = new Date;
+									expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
+								}
+								if (presets[id].status) BDFDB.DiscordUtils.setSetting("status", "status", presets[id].status);
+								BDFDB.DiscordUtils.setSetting("status", "customStatus", {
+									text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : "",
+									expiresAtMs: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toDate().getTime().toString() : "0",
+									emojiId: presets[id].emojiInfo ? presets[id].emojiInfo.id : "0",
+									emojiName: presets[id].emojiInfo ? presets[id].emojiInfo.name : ""
+								});
+							}
+						}))
+					}));
+				}, "", this);
 			}
 			
 			processMenu (e) {
