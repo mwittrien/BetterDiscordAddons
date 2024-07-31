@@ -14,6 +14,8 @@
 
 .wrapper_fea3ef.content_Pph8t6 {
 	--columns_v: 		var(--SFcolumns, var(--columns));
+	--guildsize_v: 		var(--SFguildsize, var(--guildsize));
+	--guildgap_v: 		var(--SFguildgap, var(--guildgap));
 }
 .titleBar_a934d8.typeMacOS_a934d8,
 .titleBar_a934d8.typeMacOS_a934d8 .macButtons_a934d8,
