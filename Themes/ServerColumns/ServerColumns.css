@@ -12,11 +12,6 @@
 	--aligndms_v: 		var(--aligndms_s, var(--aligndms));
 }
 
-.wrapper_fea3ef.content_Pph8t6 {
-	--columns_v: 		var(--SFcolumns, var(--columns));
-	--guildsize_v: 		var(--SFguildsize, var(--guildsize));
-	--guildgap_v: 		var(--SFguildgap, var(--guildgap));
-}
 .titleBar_a934d8.typeMacOS_a934d8,
 .titleBar_a934d8.typeMacOS_a934d8 .macButtons_a934d8,
 .wrapper_fea3ef,
@@ -207,6 +202,11 @@ body.folderContentIsOpen_zz6FgW .titleBar_a934d8.typeMacOS_a934d8 .macButtons_a9
 
 /* SERVERFOLDERS */
 
+.wrapper_fea3ef.content_Pph8t6 {
+	--columns_v: 		var(--SFcolumns, var(--columns));
+	--guildsize_v: 		var(--SFguildsize, var(--guildsize));
+	--guildgap_v: 		var(--SFguildgap, var(--guildgap));
+}
 .wrapper_fea3ef.content_Pph8t6 .scroller_fea3ef {
 	padding-left: 0 !important;
 }
@@ -215,6 +215,11 @@ body.folderContentIsOpen_zz6FgW .titleBar_a934d8.typeMacOS_a934d8 .macButtons_a9
 }
 .wrapper_fea3ef.content_Pph8t6 .wrapper_bc7085 > .listItem_c96c45 {
 	margin: calc(1px * var(--guildgap_v)) calc(5px * var(--guildsize_v)/50) calc(1px * var(--guildgap_v)) 0 !important;
+}
+.wrapper_fea3ef.content_Pph8t6 .folder_bc7085,
+.wrapper_fea3ef.content_Pph8t6 .folderIconWrapper_bc7085 {
+	height: calc(1px * var(--guildsize_v)) !important;
+	width: calc(1px * var(--guildsize_v)) !important;
 }
 .wrapper_fea3ef.content_Pph8t6 .wrapper_bc7085 .expandedFolderBackground_bc7085 {
 	right: 0 !important;
