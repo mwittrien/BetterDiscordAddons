@@ -1429,12 +1429,12 @@ button.button_f67531.enabled_f67531:hover svg {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.wrapper_ef319f {									/* message				buttons								*/
+.wrapper_ef319f:not(.popover_bba79b) {							/* message				buttons								*/
 	position: relative;
 	background: transparent;
 }
-.wrapper_ef319f::before,
-.wrapper_ef319f::after {
+.wrapper_ef319f:not(.popover_bba79b)::before,
+.wrapper_ef319f:not(.popover_bba79b)::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -1447,11 +1447,11 @@ button.button_f67531.enabled_f67531:hover svg {
 	pointer-events: none;
 	z-index: -1;
 }
-.wrapper_ef319f::before {
+.wrapper_ef319f:not(.popover_bba79b)::before {
 	background: var(--backgound) var(--backgoundposition)/var(--backgroundsize_v);
 	background-attachment: fixed;
 }
-.wrapper_ef319f::after {
+.wrapper_ef319f:not(.popover_bba79b)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
@@ -4204,6 +4204,11 @@ button.button_f67531.enabled_f67531:hover svg {
 .userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubble_d0a252 {
 	background-color: transparent;
 	border-color: transparent;
+}
+
+.background_d0a252.editable_d0a252:hover {
+	--custom-status-bubble-background: rgba(var(--accentcolor_v), .2) important;
+	--custom-status-bubble-background: linear-gradient(rgba(var(--accentcolor_v), .2), rgba(var(--accentcolor_v), .2)), rgba(var(--accentcolor_v), .2);
 }
 
 .accountProfilePopoutWrapper_b2ca13 .overlayBackground_c69a7b {
