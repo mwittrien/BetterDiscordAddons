@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.2
+ * @version 1.4.3
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -243,7 +243,7 @@ module.exports = (_ => {
 			}
 
 			processUserHeaderUsername (e) {
-				if (!currentPopout || e.instance.props.profileType != "BITE_SIZE") return;
+				if (!currentPopout || e.instance.props.profileType != "BITE_SIZE" || e.instance.props.className) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
 				e.returnvalue = [e.returnvalue].flat(10);
