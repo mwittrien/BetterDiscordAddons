@@ -156,6 +156,12 @@
 	--background-mobile-primary: rgb(var(--backgroundprimary_v));
 	--background-mobile-secondary: rgb(var(--backgroundsecondary_v));
 	
+	--bg-backdrop: rgba(0 0,0,.7);
+	--bg-backdrop-no-opacity: rgb(0,0,0);
+	--bg-base-primary: rgb(var(--backgroundprimary_v));
+	--bg-base-secondary: rgb(var(--backgroundsecondary_v));
+	--bg-base-tertiary: rgb(var(--backgroundtertiary_v));
+	
 	--background-modifier-hover: rgba(var(--backgroundaccent_v),.3);
 	--background-modifier-active: rgba(var(--backgroundaccent_v),.4);
 	--background-modifier-selected: rgba(var(--backgroundaccent_v),.6);
@@ -187,6 +193,30 @@
 	--elevation-low: 0 1px 0 rgba(6,6,7,.1), 0 1.5px 0 rgba(6,6,7,.25), 0 2px 0 rgba(6,6,7,.025);
 	--elevation-medium: 0 4px 4px rgba(0,0,0,.08);
 	--elevation-high: 0 8px 16px rgba(0,0,0,.16);
+	
+	--shadow-border: 0 0 0 1px rgba(6,6,7,.08);
+	--shadow-border-filter: drop-shadow(0 0 1px rgba(6,6,7,.08));
+	--shadow-button-overlay: 0 12px 24px 0 rgba(6,6,7,.24);
+	--shadow-high: 0 12px 24px 0 rgba(0,0,0,.24);
+	--shadow-high-filter: drop-shadow(0 12px 24px rgba(0,0,0,.24));
+	--shadow-ledge: 0 2px 0 0 rgba(0,0,0,.05), 0 1.5px 0 0 rgba(0,0,0,.05), 0 1px 0 0 rgba(0,0,0,.16);
+	--shadow-ledge-filter: drop-shadow(0 1.5px 0 rgba(0,0,0,.24));
+	--shadow-low: 0 1px 4px 0 rgba(6,6,7,.14);
+	--shadow-low-filter: drop-shadow(0 1px 4px rgba(6,6,7,.14));
+	--shadow-low-active: 0 0 4px 0 rgba(6,6,7,.14);
+	--shadow-low-active-filter: drop-shadow(0 0 4px rgba(6,6,7,.14));
+	--shadow-low-hover: 0 4px 10px 0 rgba(6,6,7,.14);
+	--shadow-low-hover-filter: drop-shadow(0 4px 10px rgba(6,6,7,.14));
+	--shadow-medium: 0 4px 8px 0 rgba(0,0,0,.16);
+	--shadow-medium-filter: drop-shadow(0 4px 8px rgba(0,0,0,.16));
+	--shadow-mobile-navigator-x: 0 0 10px 0 rgba(0,0,0,.22);
+	--shadow-mobile-navigator-x-filter: drop-shadow(0 0 10px rgba(0,0,0,.22));
+	--shadow-top-high: 0 -12px 32px 0 rgba(0,0,0,.24);
+	--shadow-top-high-filter: drop-shadow(0 -12px 32px rgba(0,0,0,.24));
+	--shadow-top-ledge: 0 -2px 0 0 rgba(0,0,0,.05), 0 -1.5px 0 0 rgba(0,0,0,.05), 0 -1px 0 0 rgba(0,0,0,.16);
+	--shadow-top-ledge-filter: drop-shadow(0 -1.5px 0 rgba(0,0,0,.24));
+	--shadow-top-low: 0 -1px 4px 0 rgba(0,0,0,.14);
+	--shadow-top-low-filter: drop-shadow(0 -1px 4px rgba(0,0,0,.14));
 	
 	--logo-primary: rgb(var(--accentcolor_v));
 	
