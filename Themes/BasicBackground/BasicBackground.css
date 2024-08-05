@@ -89,15 +89,17 @@
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
 	--text-danger: rgb(var(--dangercolor));
-	--info-positive-background: rgba(var(--successcolor),.1);
+	
+	--info-positive-background: rgba(var(--successcolor), .1);
 	--info-positive-foreground: rgb(var(--successcolor));
 	--info-positive-text: #fff;
-	--info-warning-background: rgba(var(--warningcolor),.1);
+	--info-warning-background: rgba(var(--warningcolor), .1);
 	--info-warning-foreground: rgb(var(--warningcolor));
 	--info-warning-text: #fff;
-	--info-danger-background: rgba(var(--dangercolor),.1);
+	--info-danger-background: rgba(var(--dangercolor), .1);
 	--info-danger-foreground: rgb(var(--dangercolor));
 	--info-danger-text: #fff;
+	
 	--status-positive: rgb(var(--successcolor));
 	--status-positive-background: rgb(var(--successcolor));
 	--status-positive-text: #fff;
@@ -107,6 +109,7 @@
 	--status-danger: rgb(var(--dangercolor));
 	--status-danger-background: rgb(var(--dangercolor));
 	--status-danger-text: #fff;
+	
 	--header-primary: rgb(var(--textbrightest_v));
 	--header-secondary: rgb(var(--textbright_v));
 	--text-normal: rgb(var(--textbrighter_v));
@@ -117,11 +120,15 @@
 	--interactive-hover: rgb(var(--textbrighter_v));
 	--interactive-active: rgb(var(--textbrightest_v));
 	--interactive-muted: rgb(var(--textdarkest_v));
+	
 	--logo-primary: rgb(var(--textbrightest_v));
 	--focus-primary: rgb(var(--focuscolor, var(--accentcolor_v))) !important;
+	
 	--modal-background: rgba(var(--transparencycolor_v), .2);
 	--modal-footer-background: rgba(var(--transparencycolor_v), .2);
+	
 	--home-background: transparent;
+	
 	--background-accent: rgba(var(--transparencycolor_v), .1);
 	--background-primary: rgba(var(--transparencycolor_v), .2);
 	--background-secondary: rgba(var(--transparencycolor_v), .3);
@@ -135,26 +142,58 @@
 	--background-modifier-active: rgba(var(--textbrightest_v), .15);
 	--background-modifier-hover: rgba(var(--textbrightest_v), .1);
 	--background-modifier-selected: rgba(var(--textbrightest_v), .2);
+	
 	--card-gradient-bg: var(--background-tertiary);
 	--card-primary-bg: var(--background-primary);
 	--card-secondary-bg: var(--background-secondary);
 	--card-gradient-pressed-bg: var(--background-floating);
 	--card-primary-pressed-bg: var(--background-secondary);
 	--card-secondary-pressed-bg: var(--background-tertiary);
+	
 	--bg-backdrop: rgba(var(--transparencycolor_v), .7);
 	--bg-backdrop-no-opacity: rgb(var(--transparencycolor_v));
 	--bg-base-primary: rgba(var(--transparencycolor_v), .2);
 	--bg-base-secondary: rgba(var(--transparencycolor_v), .3);
 	--bg-base-tertiary: rgba(var(--transparencycolor_v), .4);
-	--bg-mod-faint:rgba(var(--transparencycolor_v), .3);
-	--bg-mod-strong:rgba(var(--transparencycolor_v), .54);
-	--bg-mod-subtle:rgba(var(--transparencycolor_v), .48);
+	--bg-surface-raised: rgba(var(--transparencycolor_v), .2);
+	--bg-mod-faint: rgba(var(--transparencycolor_v), .3);
+	--bg-mod-strong: rgba(var(--transparencycolor_v), .54);
+	--bg-mod-subtle: rgba(var(--transparencycolor_v), .48);
+	
 	--background-message-automod: rgba(var(--dangercolor), .05);
 	--background-message-automod-hover: rgba(var(--dangercolor), .1);
+	
 	--channeltextarea-background: rgba(var(--transparencycolor_v), .3);
+	
 	--input-background: rgba(var(--transparencycolor_v), .1);
+	
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor_v), .3);
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
+	
+	--shadow-border: 0 0 0 1px rgba(var(--transparencycolor_v), .08);
+	--shadow-border-filter: drop-shadow(0 0 1px rgba(var(--transparencycolor_v), .08));
+	--shadow-button-overlay: 0 12px 24px 0 rgba(var(--transparencycolor_v), .24);
+	--shadow-high: 0 12px 24px 0 rgba(var(--transparencycolor_v), .24);
+	--shadow-high-filter: drop-shadow(0 12px 24px rgba(var(--transparencycolor_v), .24));
+	--shadow-ledge: 0 2px 0 0 rgba(var(--transparencycolor_v), .05), 0 1.5px 0 0 rgba(var(--transparencycolor_v), .05), 0 1px 0 0 rgba(var(--transparencycolor_v), .16);
+	--shadow-ledge-filter: drop-shadow(0 1.5px 0 rgba(var(--transparencycolor_v), .24));
+	--shadow-low: 0 1px 4px 0 rgba(var(--transparencycolor_v), .14);
+	--shadow-low-filter: drop-shadow(0 1px 4px rgba(var(--transparencycolor_v), .14));
+	--shadow-low-active: 0 0 4px 0 rgba(var(--transparencycolor_v), .14);
+	--shadow-low-active-filter: drop-shadow(0 0 4px rgba(var(--transparencycolor_v), .14));
+	--shadow-low-hover: 0 4px 10px 0 rgba(var(--transparencycolor_v), .14);
+	--shadow-low-hover-filter: drop-shadow(0 4px 10px rgba(var(--transparencycolor_v), .14));
+	--shadow-medium: 0 4px 8px 0 rgba(var(--transparencycolor_v), .16);
+	--shadow-medium-filter: drop-shadow(0 4px 8px rgba(var(--transparencycolor_v), .16));
+	--shadow-mobile-navigator-x: 0 0 10px 0 rgba(var(--transparencycolor_v), .22);
+	--shadow-mobile-navigator-x-filter: drop-shadow(0 0 10px rgba(var(--transparencycolor_v), .22));
+	--shadow-top-high: 0 -12px 32px 0 rgba(var(--transparencycolor_v), .24);
+	--shadow-top-high-filter: drop-shadow(0 -12px 32px rgba(var(--transparencycolor_v), .24));
+	--shadow-top-ledge: 0 -2px 0 0 rgba(var(--transparencycolor_v), .05), 0 -1.5px 0 0 rgba(var(--transparencycolor_v), .05), 0 -1px 0 0 rgba(var(--transparencycolor_v), .16);
+	--shadow-top-ledge-filter: drop-shadow(0 -1.5px 0 rgba(var(--transparencycolor_v), .24));
+	--shadow-top-low: 0 -1px 4px 0 rgba(var(--transparencycolor_v), .14);
+	--shadow-top-low-filter: drop-shadow(0 -1px 4px rgba(var(--transparencycolor_v), .14));
+	
 	--font-primary: var(--font_v) !important;
 	--font-display: var(--font_v) !important;
 	
@@ -243,6 +282,7 @@ html {
 		22.	ACTIVITYSHAREPOPOUT
 		23.	SOUNDBOARD
 		24.	SERVERSURVEY
+		25.	APPPICKER
 	15.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -510,7 +550,7 @@ body::after {
 
 #app-mount .guildIconUnavailable_bc7085,						/* guilderror				miniicon							*/
 #app-mount .guildsError__32e67 {							/* guilderror				innerwrap							*/
-	background-color: rgba(var(--dangercolor)),.3);
+	background-color: rgba(var(--dangercolor)), .3);
 }
 
 #app-mount .dragInner_f734d8 {								/* dragplaceholder											*/
@@ -1966,7 +2006,7 @@ button.button_f67531.enabled_f67531:hover svg {
 	background-color: rgba(var(--transparencycolor_v), .6);
 }
 .controlButton_b6e2f9.colorable_ef18ee.red_ef18ee {
-	background-color: rgba(var(--dangercolor)),.5);
+	background-color: rgba(var(--dangercolor)), .5);
 }
 .controlButton_b6e2f9.colorable_ef18ee.red_ef18ee:hover {
 	background-color: rgb(var(--dangercolor));
@@ -2416,11 +2456,11 @@ button.button_f67531.enabled_f67531:hover svg {
 }
 
 #app-mount .addEntryCard_d9422a {							/* add entry card											*/
-	background-color: rgba(var(--transparencycolor_v),.2);
+	background-color: rgba(var(--transparencycolor_v), .2);
 	border-color: var(--interactive-normal);
 }
 #app-mount .addEntryCard_d9422a:hover {
-	background-color: rgba(var(--transparencycolor_v),.4);
+	background-color: rgba(var(--transparencycolor_v), .4);
 	border-color: var(--interactive-active);
 }
 
@@ -3196,7 +3236,7 @@ button.button_f67531.enabled_f67531:hover svg {
 	color: var(--text-muted);
 }
 #app-mount .member__55269 .roleWrapper__0f174 {						/* membersettings			rolewrapper							*/
-	color: rgba(var(--textbrightest_v),.8);
+	color: rgba(var(--textbrightest_v), .8);
 }
 #app-mount .actionButton_e4010c {							/* membersettings			addrolebutton							*/
 	border-color: var(--header-secondary);
@@ -3414,7 +3454,7 @@ button.button_f67531.enabled_f67531:hover svg {
 }
 
 #app-mount .separator_bcb954 {
-	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor_v),.3), 0 1px 2px 0 rgba(var(--transparencycolor_v),.3);
+	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor_v), .3), 0 1px 2px 0 rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .divider_bcb954 {
 	border-color: var(--background-modifier-accent);
@@ -3958,14 +3998,14 @@ button.button_f67531.enabled_f67531:hover svg {
 	color: var(--header-secondary);
 }
 #app-mount .override_cacc4c:hover {
-	background-color: rgba(var(--backgroundtertiary),.1);
+	background-color: rgba(var(--backgroundtertiary), .1);
 }
 #app-mount .overrideHighlight_cacc4c,
 #app-mount .overrideHighlight_cacc4c:hover {
-	background-color: rgba(var(--backgroundtertiary),.3);
+	background-color: rgba(var(--backgroundtertiary), .3);
 }
 #app-mount .checkboxContainer_cacc4c::before {
-	background-color: rgba(var(--backgroundtertiary),.6);
+	background-color: rgba(var(--backgroundtertiary), .6);
 }
 #app-mount .overridePlaceholder_cacc4c {
 	border: 1px dashed var(--background-floating);
@@ -4215,7 +4255,7 @@ button.button_f67531.enabled_f67531:hover svg {
 	display: block !important;
 }
 .profileColors_ac6ab4 {									/* popout				profilecolors							*/
-	--profile-body-background-color: rgba(0,0,0,.4) !important;
+	--profile-body-background-color: rgba(0,0,0, .4) !important;
 	--profile-body-divider-color: var(--background-modifier-accent) !important;
 	--profile-body-divider-opacity: 1 !important;
 }
@@ -4534,7 +4574,7 @@ button.button_f67531.enabled_f67531:hover svg {
 	box-shadow: 0 11px 22px 1px rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .placeholder_bad108 {
-	background: rgba(var(--textdarkest_v),.6);
+	background: rgba(var(--textdarkest_v), .6);
 }
 #app-mount .endContainer_bad108::after {
 	background-image: url(https://discord.com/assets/6836d88af9197cbd4cbb.svg);
@@ -5548,6 +5588,43 @@ button.button_f67531.enabled_f67531:hover svg {
 	border-color: rgb(var(--accentcolor_v));
 }
 
+/* ----		14.25.		APPPICKER					---- */
+
+#app-mount .contentWrapper_f7506e {							/* popout												*/
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
+	position: relative;
+}
+.contentWrapper_f7506e::before,
+.contentWrapper_f7506e::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
+}
+.contentWrapper_f7506e::before {
+	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
+	background-attachment: fixed;
+}
+.contentWrapper_f7506e::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
+	backdrop-filter: blur(var(--popoutblur_v));
+}
+.container_e5da8b:hover,
+.keyboard-mode .container_e5da8b:focus {
+	background-color: rgb(var(--accentcolor_v));
+}
+
+
 /* ~~~~		15.		GENERAL						~~~~ */
 
 .highlight {
@@ -5593,10 +5670,10 @@ button.button_f67531.enabled_f67531:hover svg {
 }
 
 #app-mount .breadcrumbWrapper__75797 {							/* breadcrumbs				wrapper								*/
-	color: rgba(var(--textbrightest_v),.3);
+	color: rgba(var(--textbrightest_v), .3);
 }
 #app-mount .activeBreadcrumb__56acd {							/* breadcrumbs				active								*/
-	color: rgba(var(--textbrightest_v),.6);
+	color: rgba(var(--textbrightest_v), .6);
 }
 
 /* ----		15.1.		TEXT						---- */
@@ -5733,7 +5810,7 @@ button.button_f67531.enabled_f67531:hover svg {
 }
 
 #app-mount .lookInverted_a299dc.colorTransparent_dd4f85 .spinnerItem_dd4f85 {
-	background-color: rgba(var(--textbrightest_v),.1);
+	background-color: rgba(var(--textbrightest_v), .1);
 }
 #app-mount .lookFilled_dd4f85.colorTransparent_dd4f85 .spinnerItem_dd4f85,
 #app-mount .lookOutlined_dd4f85.colorTransparent_dd4f85 .spinnerItem_dd4f85,
@@ -5743,38 +5820,38 @@ button.button_f67531.enabled_f67531:hover svg {
 
 #app-mount .lookFilled_dd4f85.colorTransparent_dd4f85:hover,
 #app-mount .lookFilled_dd4f85.hoverTransparent__31061.hasHover_dfa15e:hover {
-	background-color: rgba(var(--textbrightest_v),.05);
+	background-color: rgba(var(--textbrightest_v), .05);
 }
 #app-mount .lookFilled_dd4f85.colorTransparent_dd4f85:active,
 #app-mount .lookFilled_dd4f85.hoverTransparent__31061.hasHover_dfa15e:active  {
-	background-color: rgba(var(--textbrightest_v),.01);
+	background-color: rgba(var(--textbrightest_v), .01);
 }
 #app-mount .lookFilled_dd4f85.colorTransparent_dd4f85,
 #app-mount .lookFilled_dd4f85.colorTransparent_dd4f85:disabled {
-	background-color: rgba(var(--textbrightest_v),.1);
+	background-color: rgba(var(--textbrightest_v), .1);
 	color: rgb(var(--textbrightest_v));
 }
 
 #app-mount .lookInverted_a299dc.colorTransparent_dd4f85:hover,
 #app-mount .lookInverted_a299dc.hoverTransparent__31061.hasHover_dfa15e:hover {
-	background-color: rgba(var(--textbrightest_v),.05);
+	background-color: rgba(var(--textbrightest_v), .05);
 }
 #app-mount .lookInverted_a299dc.colorTransparent_dd4f85:active,
 #app-mount .lookInverted_a299dc.hoverTransparent__31061.hasHover_dfa15e:active {
-	background-color: rgba(var(--textbrightest_v),.1);
+	background-color: rgba(var(--textbrightest_v), .1);
 }
 #app-mount .lookInverted_a299dc.colorTransparent_dd4f85,
 #app-mount .lookInverted_a299dc.colorTransparent_dd4f85:disabled  {
 	background-color: rgb(var(--textbrightest_v));
-	color: rgba(var(--textbrightest_v),.1);
+	color: rgba(var(--textbrightest_v), .1);
 }
 
 #app-mount .lookOutlined_dd4f85.hoverTransparent__31061.hasHover_dfa15e:hover {
-	background-color: rgba(var(--textbrighter_v),.1);
+	background-color: rgba(var(--textbrighter_v), .1);
 	border-color: rgb(var(--textbrightest_v));
 }
 #app-mount .lookOutlined_dd4f85.hoverTransparent__31061.hasHover_dfa15e:active {
-	background-color: rgba(var(--textbrightest_v),.1);
+	background-color: rgba(var(--textbrightest_v), .1);
 	border-color: rgb(var(--textbrightest_v));
 }
 #app-mount .lookOutlined_dd4f85.colorTransparent_dd4f85,
@@ -5806,11 +5883,11 @@ input.input_f8bc55:hover:not(:focus) {
 }
 
 #app-mount .prefixInput_a6236d {
-	background-color: rgba(0,0,0,.1);
-	border-color: rgba(0,0,0,.3);
+	background-color: rgba(0,0,0, .1);
+	border-color: rgba(0,0,0, .3);
 }
 #app-mount .prefixInput_a6236d:hover {
-	border-color: rgba(0,0,0,.6);
+	border-color: rgba(0,0,0, .6);
 }
 #app-mount .prefixInputInput_a6236d {
 	color: var(--header-primary);
@@ -5841,7 +5918,7 @@ input.input_f8bc55:hover:not(:focus) {
 }
 #app-mount .hiddenMessage_e7355b::placeholder,
 #app-mount .inputDefault__591c7::placeholder {
-	color: rgba(var(--textbrightest_v),.3);
+	color: rgba(var(--textbrightest_v), .3);
 }
 
 .container_cebd1c {									/* checkboxswitch											*/
@@ -5952,11 +6029,11 @@ input.input_f8bc55:hover:not(:focus) {
 	background: var(--header-primary);
 }
 #app-mount .container_e61cfb .button__0982c {
-	background-color: rgba(var(--transparencycolor_v),.3) !important;
+	background-color: rgba(var(--transparencycolor_v), .3) !important;
 	color: var(--header-primary) !important;
 }
 #app-mount .container_e61cfb.recording_fb7bb2 .button__0982c {
-	background-color: rgba(var(--dangercolor),.1) !important;
+	background-color: rgba(var(--dangercolor), .1) !important;
 	color: rgb(var(--dangercolor)) !important;
 }
 
