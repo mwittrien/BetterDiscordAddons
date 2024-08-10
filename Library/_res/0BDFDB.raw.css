@@ -114,6 +114,14 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: .4;
 }
 
+[REPLACE_CLASS_subtext] {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	color: var(--header-secondary);
+	line-height: 13px;
+}
+
 [REPLACE_CLASS_marginleft4] {
 	margin-left: 4px;
 }
