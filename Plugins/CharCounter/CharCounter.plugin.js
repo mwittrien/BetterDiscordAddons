@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.5
+ * @version 1.6.6
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -221,10 +221,14 @@ module.exports = (_ => {
 					parsing: parsing,
 					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.LibraryStores.UserStore.getCurrentUser()) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
 					showPercentage: this.settings.sliders.showPercentage,
+					style: {visibility: "hidden"},
 					onChange: instance => {
 						let node = BDFDB.ReactUtils.findDOMNode(instance);
+						node && node.style.removeProperty("visibility");
 						let form = node && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, node);
 						if (form) {
+							let widthDifference = BDFDB.DOMUtils.getWidth(form.firstElementChild) - BDFDB.DOMUtils.getWidth(node.parentElement);
+							if (widthDifference > 0) node.style.setProperty("right", `-${widthDifference}px`);
 							let typing = form.querySelector(BDFDB.dotCN.typing);
 							if (typing) typing.style.setProperty("margin-right", `${BDFDB.DOMUtils.getWidth(node) + 10}px`);
 						}
