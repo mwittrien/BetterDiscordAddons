@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.6
+ * @version 3.7.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,9 +27,7 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			"fixed": {
-				"Lags": "Fixed some Issues with Lags, noticable in FriendNotifications for example"
-			}
+			
 		}
 	};
 	
@@ -1396,9 +1394,10 @@ module.exports = (_ => {
 					return Internal.findModule("proto", JSON.stringify(protoProps), m => Internal.checkModuleProtos(m, protoProps) && m, config);
 				};
 				BDFDB.ModuleUtils.findStringObject = function (props, config = {}) {
+					let nonProps = [config.nonProps].flat(10).filter(n => n);
 					let firstReturn = BDFDB.ModuleUtils.find(m => {
 						let amount = Object.keys(m).length;
-						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(prop => typeof m[prop] == "string") && m;
+						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(prop => typeof m[prop] == "string") && (!nonProps.length || nonProps.every(prop => typeof m[prop] == "undefined")) && m;
 					}, {all: config.all, defaultExport: config.defaultExport});
 					if (!config.all && firstReturn) return firstReturn;
 					let secondReturn = BDFDB.ModuleUtils.find(m => {
@@ -1406,7 +1405,7 @@ module.exports = (_ => {
 						let stringified = m.toString().replace(/\s/g, "");
 						if (stringified.indexOf(".exports={") == -1 || !(/function\([A-z],[A-z],[A-z]\)\{[A-z]\.[A-z]\([A-z]\.exports=\{/.test(stringified) || /function\([A-z],[A-z],[A-z]\)\{[A-z]\.exports=\{/.test(stringified) || /function\([A-z]\)\{[A-z]\.exports=\{/.test(stringified))) return false;
 						let amount = stringified.split(":\"").length - 1;
-						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(string => stringified.indexOf(`${string}:`) > -1) && m;
+						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(string => stringified.indexOf(`${string}:`) > -1) && (!nonProps.length || nonProps.every(string => stringified.indexOf(`${string}:`) == -1)) && m;
 					}, {onlySearchUnloaded: true, all: config.all, defaultExport: config.defaultExport});
 					if (!config.all) return secondReturn;
 					return BDFDB.ArrayUtils.removeCopies([firstReturn].concat(secondReturn).flat(10));
