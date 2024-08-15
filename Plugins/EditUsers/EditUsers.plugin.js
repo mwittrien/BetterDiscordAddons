@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.2
+ * @version 4.9.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -712,13 +712,13 @@ module.exports = (_ => {
 						const renderChildren = accountButton.props.children;
 						accountButton.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							const returnValue = renderChildren(...args);
-							const renderChildren2 = returnValue.props.children.props.children;
-							returnValue.props.children.props.children = BDFDB.TimeUtils.suppress((...args2) => {
-								const returnValue2 = renderChildren2(...args2);
-								let username = BDFDB.ReactUtils.findChild(returnValue2, {props: [["className", BDFDB.disCN.accountinfodetails]]});
+							const renderNameTag = returnValue.props.renderNameTag;
+							returnValue.props.renderNameTag = BDFDB.TimeUtils.suppress((...args2) => {
+								const nameTag = renderNameTag(...args2);
+								let username = BDFDB.ReactUtils.findChild(nameTag, {props: [["className", BDFDB.disCN.accountinfodetails]]});
 								if (username) this.changeUserColor(username.props.children, e.instance.props.currentUser.id);
-								return returnValue2;
-							}, "Error in Children Render of Account Button Children!", this);
+								return nameTag;
+							}, "Error in Render NameTag in Account Button!", this);
 							return returnValue;
 						}, "Error in Children Render of Account Button!", this);
 					}
