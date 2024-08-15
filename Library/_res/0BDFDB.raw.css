@@ -1286,6 +1286,12 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	padding-right: 100px;
 	padding-bottom: 0;
 }
+[REPLACE_CLASS__repolistheader] [REPLACE_CLASS_flex] {
+	gap: 6px;
+}
+[REPLACE_CLASS__repolistheader] [REPLACE_CLASS_headertitle] {
+	text-wrap: nowrap;
+}
 [REPLACE_CLASS__repolistscroller] {
 	padding-top: 0;
 }
