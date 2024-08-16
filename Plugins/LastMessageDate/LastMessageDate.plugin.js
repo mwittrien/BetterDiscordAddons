@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.3
+ * @version 1.4.4
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -102,13 +102,14 @@ module.exports = (_ => {
 					nativeClass: false,
 					name: BDFDB.LibraryComponents.SvgIcon.Names.NUMPAD
 				});
-				return BDFDB.ReactUtils.createElement(!this.props.isInPopout ? "section" : "div", {
-					className: !this.props.isInPopout && BDFDB.disCN.userprofilesection,
+				return BDFDB.ReactUtils.createElement("section", {
+					className: BDFDB.disCN.userprofilesection,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
-							className: this.props.isInPopout ? BDFDB.disCN.userpopoutsectiontitle : BDFDB.disCN.userprofilesectionheading,
-							variant: this.props.isInPopout ? "eyebrow" : "text-xs/semibold",
-							style: this.props.isInPopout ? {} : {color: "var(--header-secondary)"},
+							className: BDFDB.disCN.userprofilesectionheading,
+							variant: "text-xs/semibold",
+							style: {color: "var(--header-secondary)"},
+							color: null,
 							children: _this.labels.last_message
 						}),
 						BDFDB.ReactUtils.createElement(loadedUsers[this.props.guildId][this.props.user.id] ? BDFDB.LibraryComponents.Clickable : "div", {

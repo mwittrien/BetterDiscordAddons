@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.3
+ * @version 1.2.4
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -78,12 +78,13 @@ module.exports = (_ => {
 				let connections = loadedUsers[this.props.user.id].filter(c => _this.settings.connections[c.type]);
 				if (!connections.length) return null;
 				let isLightTheme = (!this.props.theme || this.props.theme == "light") && BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-				return BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(!this.props.isSimplified && BDFDB.disCN.userpopoutsection, BDFDB.disCN._showconnectionsconnectionswrapper),
+				return BDFDB.ReactUtils.createElement("section", {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.userprofilesection, BDFDB.disCN._showconnectionsconnectionswrapper),
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
-							className: BDFDB.disCN.userpopoutsectiontitle,
-							variant: "eyebrow",
+							className: BDFDB.disCN.userprofilesectionheading,
+							variant: "text-xs/semibold",
+							style: {color: "var(--header-secondary)"},
 							color: null,
 							children: BDFDB.LanguageUtils.LanguageStrings.CONNECTIONS
 						}),
