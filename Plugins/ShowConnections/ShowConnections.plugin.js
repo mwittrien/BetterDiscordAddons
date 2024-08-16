@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.4
+ * @version 1.2.5
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -96,8 +96,6 @@ module.exports = (_ => {
 								let metadata = [];
 								if (_this.settings.general.showDetails && provider.hasMetadata && c.metadata) {
 									if (c.metadata.created_at) metadata.push(BDFDB.ReactUtils.createElement("span", {children: BDFDB.LanguageUtils.LanguageStringsFormat("CONNECTIONS_PROFILE_MEMBER_SINCE", (new Date(c.metadata.created_at)).toLocaleDateString("default", {year: "numeric", month: "long", day: "numeric"}))}));
-									let metadataGetter = BDFDB.LibraryModules.ConnectionMetadataUtils["get" + BDFDB.StringUtils.upperCaseFirstChar(c.type)];
-									if (metadataGetter) metadata = metadata.concat(metadataGetter(c.metadata));
 								}
 								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 									text: `${provider.name}: ${c.name}`,
