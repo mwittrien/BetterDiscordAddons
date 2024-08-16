@@ -111,12 +111,6 @@ module.exports = (_ => {
 						"TextInput"
 					]
 				};
-				
-				this.css = `
-					${BDFDB.dotCNS.userpopoutmessageinputcontainer + BDFDB.dotCNS.flex + BDFDB.dotCN.inputwrapper} {
-						flex: 1 1 auto;
-					}
-				`;
 			}
 			
 			onStart () {
@@ -196,7 +190,7 @@ module.exports = (_ => {
 			}
 			
 			processTextInput (e) {
-				if (!this.settings.places.quickmessage || !e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.userpopoutmessageinputcontainer) == -1) return;
+				if (!this.settings.places.quickmessage || !e.instance.props.className) return;
 				let channelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
 				if (!e.returnvalue) {
 					let input = e.instance.props.inputRef.current;
