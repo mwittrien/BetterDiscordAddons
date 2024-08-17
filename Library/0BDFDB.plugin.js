@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.8
+ * @version 3.7.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8300,6 +8300,7 @@ module.exports = (_ => {
 					if (!avatar) return;
 					let src = avatar.props._originalSrc || avatar.props.src;
 					if (!src) return;
+					if (src.indexOf("discordapp.com/guilds/") > -1) src = BDFDB.UserUtils.getAvatar(src.split(".com")[1].split("/").slice(4, 5)[0]);
 					src = (src.split(".com")[1] || src).split("/").slice(0, 3).join("/").split(".")[0];
 					let username = avatar.props["aria-label"];
 					if (!memberStore.members[src + " " + username]) return;
