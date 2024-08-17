@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.6
+ * @version 2.0.7
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -382,9 +382,12 @@ module.exports = (_ => {
 							return null;
 						}
 						else {
-							user = BDFDB.ObjectUtils.copy(user);
-							user.id = "SHOWBADGES__USER__" + user.id;
-							return _this.createBadges(user, guildId, place);
+							if (user.id == "320568730159677440") console.log(loadedUsers[user.id].badges);
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadges, {
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN[`_showbadgesinchatbadges${place.toLowerCase()}`]),
+								custom: true,
+								badges: loadedUsers[user.id].badges
+							});
 						}
 					}
 				}, {}, true));
@@ -404,31 +407,6 @@ module.exports = (_ => {
 						BDFDB.LibraryModules.UserProfileUtils.fetchProfile(id);
 					}
 				}
-			}
-
-			createBadges (user, guildId, place) {
-				let fakeGuildBoostDate;
-				if (typeof user.id == "string" && user.id.startsWith("SHOWBADGES__GUILD_BOOST__")) {
-					let level = parseInt(user.id.split("__").pop());
-					for (let i = 0; i < 100 && !fakeGuildBoostDate; i++) {
-						let date = new Date() - 1000*60*60*24*15 * i;
-						if (level == this.getBoostLevel(date)) fakeGuildBoostDate = date;
-					}
-				}
-				let realUserId = typeof user.id == "string" && user.id.startsWith("SHOWBADGES__USER__") ? user.id.split("__").pop() : user.id;
-				let member = guildId && BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, realUserId);
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadges, {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN[`_showbadgesinchatbadges${place.toLowerCase()}`]),
-					custom: true,
-					badges: loadedUsers[realUserId].badges
-				});
-			}
-			
-			getBoostLevel (date) {
-				let level = 1;
-				let monthDifference = BDFDB.DiscordObjects.Timestamp().diff(BDFDB.DiscordObjects.Timestamp(date), "months");
-				for (let i = 0, levels = Object.keys(BDFDB.DiscordConstants.UserPremiumLevels); i < levels.length; i++) if (BDFDB.DiscordConstants.UserPremiumLevels[levels[i]] < monthDifference) level = parseInt(levels[i]);
-				return level;
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
