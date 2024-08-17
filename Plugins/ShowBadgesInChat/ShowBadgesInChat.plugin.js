@@ -382,7 +382,6 @@ module.exports = (_ => {
 							return null;
 						}
 						else {
-							if (user.id == "320568730159677440") console.log(loadedUsers[user.id].badges);
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadges, {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN[`_showbadgesinchatbadges${place.toLowerCase()}`]),
 								custom: true,
