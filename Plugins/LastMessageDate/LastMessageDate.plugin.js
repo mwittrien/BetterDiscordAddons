@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.5
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -121,7 +121,6 @@ module.exports = (_ => {
 									children: icon
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Text, {
-									className: this.props.isInPopout && BDFDB.disCN.userpopoutsectionbody,
 									variant: "text-sm/normal",
 									children: loadedUsers[this.props.guildId][this.props.user.id] ? BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.lastMessageDate, new Date(loadedUsers[this.props.guildId][this.props.user.id].timestamp)) : "---"
 								})
@@ -237,10 +236,11 @@ module.exports = (_ => {
 			}
 
 			processUserThemeContainer (e) {
-				if (e.instance.props.layout == "POPOUT") currentPopout = e.instance;
-				if (e.instance.props.layout == "BITE_SIZE_POPOUT") currentPopout = e.instance;
-				if (e.instance.props.layout == "MODAL") currentProfile = e.instance;
-				if (e.instance.props.layout == "SIMPLIFIED_MODAL") currentProfile = e.instance;
+				let popout = {props: e.instance.props.value || e.instance.props};
+				if (popout.props.layout == "POPOUT") currentPopout = popout;
+				if (popout.props.layout == "BITE_SIZE_POPOUT") currentPopout = popout;
+				if (popout.props.layout == "MODAL") currentProfile = popout;
+				if (popout.props.layout == "SIMPLIFIED_MODAL") currentProfile = popout;
 			}
 
 			processUserHeaderUsername (e) {
