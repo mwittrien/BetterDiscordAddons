@@ -77,7 +77,7 @@
 	},
 	"DiscordConstants": {
 		"ActivityTypes": ["CUSTOM_STATUS", "STREAMING", "WATCHING"],
-		"AnalyticsSections": ["FRIENDS_LIST", "PROFILE_POPOUT", "ACCOUNT_PANEL"],
+		"AnalyticsSections": ["FRIENDS_LIST", "PROFILE_MODAL", "ACCOUNT_PANEL"],
 		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTextAreaTypes": ["CREATE_FORUM_POST", "PROFILE_BIO_INPUT", "FORUM_CHANNEL_GUIDELINES"],
 		"ChannelTypes": ["GUILD_STORE", "GUILD_TEXT", "GUILD_FORUM"],
