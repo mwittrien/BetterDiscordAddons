@@ -219,6 +219,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 											grow: 1,
 											shrink: 0,
+											basis: "auto",
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H1,
 												className: BDFDB.disCN.marginreset,
