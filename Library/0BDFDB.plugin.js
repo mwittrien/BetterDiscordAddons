@@ -3989,6 +3989,7 @@ module.exports = (_ => {
 												separator: config.headerSeparator || false,
 												children: [
 													BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
+														style: {flex: 1},
 														children: [
 															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
 																tag: Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H4,
