@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.7
+ * @version 1.7.8
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -167,24 +167,36 @@ module.exports = (_ => {
 			}
 		
 			processGuildsBar (e) {
-				let scroller = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildsscroller]]});
-				if (scroller) {
-					scroller.props.fade = true;
-					let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isDarwin() ? 0 : 12) + 10;
-					let isVisible = (currentItem, t, items) => {
-						if (!scroller.ref || !scroller.ref.current) return false;
-						const index = items.findIndex(item => typeof item == "string" || !item ? currentItem === item : item.includes(currentItem));
-						if (index < 0) return false;
-						let size = this.settings.amounts.serverElementHeight * index + padding;
-						if (!t) size += 40;
-						const state = typeof scroller.ref.current.getScrollerState == "function" ? scroller.ref.current.getScrollerState() : Node.prototype.isPrototypeOf(scroller.ref.current) ? scroller.ref.current : {};
-						return !!(!t && size >= state.scrollTop || t && size + parseInt(this.settings.amounts.serverElementHeight) <= state.scrollTop + state.offsetHeight);
-					};
-					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
-					if (topBar) topBar.props.isVisible = BDFDB.TimeUtils.suppress(isVisible, "Error in isVisible of Top Bar in Guild List!");
-					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
-					if (bottomBar) bottomBar.props.isVisible = BDFDB.TimeUtils.suppress(isVisible, "Error in isVisible of Bottom Bar in Guild List!");
+				const process = returnValue => {
+					let scroller = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildsscroller]]});
+					if (scroller) {
+						scroller.props.fade = true;
+						let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isDarwin() ? 0 : 12) + 10;
+						let isVisible = (currentItem, t, items) => {
+							if (!scroller.ref || !scroller.ref.current) return false;
+							const index = items.findIndex(item => typeof item == "string" || !item ? currentItem === item : item.includes(currentItem));
+							if (index < 0) return false;
+							let size = this.settings.amounts.serverElementHeight * index + padding;
+							if (!t) size += 40;
+							const state = typeof scroller.ref.current.getScrollerState == "function" ? scroller.ref.current.getScrollerState() : Node.prototype.isPrototypeOf(scroller.ref.current) ? scroller.ref.current : {};
+							return !!(!t && size >= state.scrollTop || t && size + parseInt(this.settings.amounts.serverElementHeight) <= state.scrollTop + state.offsetHeight);
+						};
+						let topBar = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
+						if (topBar) topBar.props.isVisible = BDFDB.TimeUtils.suppress(isVisible, "Error in isVisible of Top Bar in Guild List!");
+						let bottomBar = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
+						if (bottomBar) bottomBar.props.isVisible = BDFDB.TimeUtils.suppress(isVisible, "Error in isVisible of Bottom Bar in Guild List!");
+					}
+				};
+				let themeWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (themeWrapper) {
+					let childrenRender = themeWrapper.props.children;
+					themeWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						process(children);
+						return children;
+					}, "Error in Children Render of Theme Wrapper!", this);
 				}
+				else process(e.returnvalue);
 			}
 			
 			processHomeButtonDefault (e) {
