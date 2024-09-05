@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.2.3
+ * @version 7.2.4
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -722,24 +722,38 @@ module.exports = (_ => {
 						folderGuildContent.props.themeOverride = e.instance.props.themeOverride;
 						BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 					}
-					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
-					if (topBar) {
-						let topIsVisible = topBar.props.isVisible;
-						topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
-							let ids = BDFDB.LibraryStores.SortedGuildStore.getGuildFolders().filter(n => n.folderId).map(n => n.guildIds).flat(10);
-							args[2] = args[2].filter(id => !ids.includes(id));
-							return topIsVisible(...args) || ids.includes(args[0]) && BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Top Bar in Guild List!");
+					
+					const process = returnValue => {
+						let topBar = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
+						if (topBar) {
+							let topIsVisible = topBar.props.isVisible;
+							topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
+								let ids = BDFDB.LibraryStores.SortedGuildStore.getGuildFolders().filter(n => n.folderId).map(n => n.guildIds).flat(10);
+								args[2] = args[2].filter(id => !ids.includes(id));
+								return topIsVisible(...args) || ids.includes(args[0]) && BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
+							}, "Error in isVisible of Top Bar in Guild List!");
+						}
+						let bottomBar = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
+						if (bottomBar) {
+							let bottomIsVisible = bottomBar.props.isVisible;
+							bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
+								let ids = BDFDB.LibraryStores.SortedGuildStore.getGuildFolders().filter(n => n.folderId).map(n => n.guildIds).flat(10);
+								args[2] = args[2].filter(id => !ids.includes(id));
+								return bottomIsVisible(...args) || ids.includes(args[0]) && BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
+							}, "Error in isVisible of Bottom Bar in Guild List!");
+						}
+					};
+					let themeWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+					if (themeWrapper) {
+						let childrenRender = themeWrapper.props.children;
+						themeWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+							let children = childrenRender(...args);
+							process(children);
+							return children;
+						}, "Error in Children Render of Theme Wrapper!", this);
 					}
-					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
-					if (bottomBar) {
-						let bottomIsVisible = bottomBar.props.isVisible;
-						bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
-							let ids = BDFDB.LibraryStores.SortedGuildStore.getGuildFolders().filter(n => n.folderId).map(n => n.guildIds).flat(10);
-							args[2] = args[2].filter(id => !ids.includes(id));
-							return bottomIsVisible(...args) || ids.includes(args[0]) && BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Bottom Bar in Guild List!");
-					}
+					else process(e.returnvalue);
+					
 					e.returnvalue = [
 						e.returnvalue,
 						BDFDB.ReactUtils.createElement(FolderGuildContentComponent, {
