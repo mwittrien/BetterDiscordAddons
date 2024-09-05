@@ -54,6 +54,7 @@
 	--settingsicons-designsystem: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/designsystem.png);
 	--settingsicons-textplayground: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textplayground.png);
 	--settingsicons-textcomponent: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textcomponent.png);
+	--settingsicons-messagelink: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/messagelink.png);
 	--settingsicons-profilepreview: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/profilepreview.png);
 	--settingsicons-logout: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/logout.png);
 }
@@ -556,6 +557,25 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar_c25c6d:has(.socialLinks_c
 .platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.themerepo-tab ~ .item_a0:nth-child(55),
 .platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.pluginrepo-tab ~ .item_a0.themerepo-tab ~ .item_a0:nth-child(56),
 .platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.vc-settings ~ .item_a0:nth-child(55),
+#app-mount .sidebar_c25c6d .side_a0 .item_a0[aria-controls="intl-testing-tab" i],
+#app-mount .standardSidebarView_c25c6d .contentColumn_c25c6d[id="intl-testing-tab" i] {
+	--settingsicons-icon: var(--settingsicons-messagelink);
+}
+.sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0:nth-child(53),
+.sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.pluginrepo-tab ~ .item_a0:nth-child(54),
+.sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.themerepo-tab ~ .item_a0:nth-child(54),
+.sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.pluginrepo-tab ~ .item_a0.themerepo-tab ~ .item_a0:nth-child(55),
+.sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.vc-settings ~ .item_a0:nth-child(54),
+.platform-win .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0:nth-child(55),
+.platform-win .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.pluginrepo-tab ~ .item_a0:nth-child(56),
+.platform-win .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.themerepo-tab ~ .item_a0:nth-child(56),
+.platform-win .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.pluginrepo-tab ~ .item_a0.themerepo-tab ~ .item_a0:nth-child(57),
+.platform-win .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.vc-settings ~ .item_a0:nth-child(56),
+.platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0:nth-child(55),
+.platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.pluginrepo-tab ~ .item_a0:nth-child(56),
+.platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.themerepo-tab ~ .item_a0:nth-child(56),
+.platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.pluginrepo-tab ~ .item_a0.themerepo-tab ~ .item_a0:nth-child(57),
+.platform-linux .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.vc-settings ~ .item_a0:nth-child(56),
 #app-mount .sidebar_c25c6d .side_a0 .item_a0[aria-controls="profile-effects-preview-tool-tab" i],
 #app-mount .standardSidebarView_c25c6d .contentColumn_c25c6d[id="profile-effects-preview-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-profilepreview);
