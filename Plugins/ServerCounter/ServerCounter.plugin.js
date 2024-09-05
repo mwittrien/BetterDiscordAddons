@@ -2,7 +2,7 @@
  * @name ServerCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Adds a Server Counter to the Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -79,14 +79,26 @@ module.exports = (_ => {
 			}
 		
 			processGuildsBar (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UnreadDMs"});
-				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCNS.guildouter + BDFDB.disCN._servercounterservercountwrap,
-					children: BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
-						children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} – ${BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().length}`
-					})
-				}));
+				const process = returnValue => {
+					let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {name: "UnreadDMs"});
+					if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCNS.guildouter + BDFDB.disCN._servercounterservercountwrap,
+						children: BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
+							children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} – ${BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().length}`
+						})
+					}));
+				};
+				let themeWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (themeWrapper) {
+					let childrenRender = themeWrapper.props.children;
+					themeWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						process(children);
+						return children;
+					}, "Error in Children Render of Theme Wrapper!", this);
+				}
+				else process(e.returnvalue);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
