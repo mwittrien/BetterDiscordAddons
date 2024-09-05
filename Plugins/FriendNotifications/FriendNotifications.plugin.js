@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.0
+ * @version 2.0.1
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -747,10 +747,22 @@ module.exports = (_ => {
 			
 			processGuildsBar (e) {
 				if (!this.settings.general.addOnlineCount) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UnreadDMs"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
-					amount: this.getOnlineCount()
-				}));
+				const process = returnValue => {
+					let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {name: "UnreadDMs"});
+					if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
+						amount: this.getOnlineCount()
+					}));
+				};
+				let themeWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (themeWrapper) {
+					let childrenRender = themeWrapper.props.children;
+					themeWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						process(children);
+						return children;
+					}, "Error in Children Render of Theme Wrapper!", this);
+				}
+				else process(e.returnvalue);
 			}
 			
 			getObservedData () {
@@ -1004,163 +1016,163 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							clear_log:							"Наистина ли искате да изчистите дневника на времето?",
+							clear_log:						"Наистина ли искате да изчистите дневника на времето?",
 							status_listening:					"Слушане",
 							status_playing:						"Играе"
 						};
 					case "da":		// Danish
 						return {
-							clear_log:							"Er du sikker på, at du vil rydde tidsloggen?",
+							clear_log:						"Er du sikker på, at du vil rydde tidsloggen?",
 							status_listening:					"Hører efter",
 							status_playing:						"Spiller"
 						};
 					case "de":		// German
 						return {
-							clear_log:							"Möchtest du das Zeitprotokoll wirklich löschen?",
+							clear_log:						"Möchtest du das Zeitprotokoll wirklich löschen?",
 							status_listening:					"Hören",
 							status_playing:						"Spielen"
 						};
 					case "el":		// Greek
 						return {
-							clear_log:							"Είστε βέβαιοι ότι θέλετε να διαγράψετε το ημερολόγιο ώρας;",
+							clear_log:						"Είστε βέβαιοι ότι θέλετε να διαγράψετε το ημερολόγιο ώρας;",
 							status_listening:					"Ακούγοντας",
 							status_playing:						"Παιχνίδι"
 						};
 					case "es":		// Spanish
 						return {
-							clear_log:							"¿Está seguro de que desea borrar el registro de tiempo?",
+							clear_log:						"¿Está seguro de que desea borrar el registro de tiempo?",
 							status_listening:					"Escuchando",
 							status_playing:						"Jugando"
 						};
 					case "fi":		// Finnish
 						return {
-							clear_log:							"Haluatko varmasti tyhjentää aikalokin?",
+							clear_log:						"Haluatko varmasti tyhjentää aikalokin?",
 							status_listening:					"Kuunteleminen",
 							status_playing:						"Pelataan"
 						};
 					case "fr":		// French
 						return {
-							clear_log:							"Voulez-vous vraiment effacer le journal de temps?",
+							clear_log:						"Voulez-vous vraiment effacer le journal de temps?",
 							status_listening:					"Écoute",
 							status_playing:						"En jouant"
 						};
 					case "hr":		// Croatian
 						return {
-							clear_log:							"Jeste li sigurni da želite očistiti vremenski zapisnik?",
+							clear_log:						"Jeste li sigurni da želite očistiti vremenski zapisnik?",
 							status_listening:					"Slušanje",
 							status_playing:						"Sviranje"
 						};
 					case "hu":		// Hungarian
 						return {
-							clear_log:							"Biztosan törli az időnaplót?",
+							clear_log:						"Biztosan törli az időnaplót?",
 							status_listening:					"Hallgatás",
 							status_playing:						"Játék"
 						};
 					case "it":		// Italian
 						return {
-							clear_log:							"Sei sicuro di voler cancellare il registro del tempo?",
+							clear_log:						"Sei sicuro di voler cancellare il registro del tempo?",
 							status_listening:					"Ascoltando",
 							status_playing:						"Giocando"
 						};
 					case "ja":		// Japanese
 						return {
-							clear_log:							"タイムログをクリアしてもよろしいですか？",
+							clear_log:						"タイムログをクリアしてもよろしいですか？",
 							status_listening:					"聞いている",
 							status_playing:						"遊ぶ"
 						};
 					case "ko":		// Korean
 						return {
-							clear_log:							"시간 로그를 지우시겠습니까?",
+							clear_log:						"시간 로그를 지우시겠습니까?",
 							status_listening:					"청취",
 							status_playing:						"놀이"
 						};
 					case "lt":		// Lithuanian
 						return {
-							clear_log:							"Ar tikrai norite išvalyti laiko žurnalą?",
+							clear_log:						"Ar tikrai norite išvalyti laiko žurnalą?",
 							status_listening:					"Klausymas",
 							status_playing:						"Žaidžia"
 						};
 					case "nl":		// Dutch
 						return {
-							clear_log:							"Weet u zeker dat u het tijdlogboek wilt wissen?",
+							clear_log:						"Weet u zeker dat u het tijdlogboek wilt wissen?",
 							status_listening:					"Luisteren",
 							status_playing:						"Spelen"
 						};
 					case "no":		// Norwegian
 						return {
-							clear_log:							"Er du sikker på at du vil slette tidsloggen?",
+							clear_log:						"Er du sikker på at du vil slette tidsloggen?",
 							status_listening:					"Lytte",
 							status_playing:						"Spiller"
 						};
 					case "pl":		// Polish
 						return {
-							clear_log:							"Czy na pewno chcesz wyczyścić dziennik czasu?",
+							clear_log:						"Czy na pewno chcesz wyczyścić dziennik czasu?",
 							status_listening:					"Słuchający",
 							status_playing:						"Gra"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							clear_log:							"Tem certeza de que deseja limpar o registro de horas?",
+							clear_log:						"Tem certeza de que deseja limpar o registro de horas?",
 							status_listening:					"Ouvindo",
 							status_playing:						"Jogando"
 						};
 					case "ro":		// Romanian
 						return {
-							clear_log:							"Sigur doriți să ștergeți jurnalul de timp?",
+							clear_log:						"Sigur doriți să ștergeți jurnalul de timp?",
 							status_listening:					"Ascultare",
 							status_playing:						"Joc"
 						};
 					case "ru":		// Russian
 						return {
-							clear_log:							"Вы уверены, что хотите очистить журнал времени?",
+							clear_log:						"Вы уверены, что хотите очистить журнал времени?",
 							status_listening:					"Прослушивание",
 							status_playing:						"Играет"
 						};
 					case "sv":		// Swedish
 						return {
-							clear_log:							"Är du säker på att du vill rensa tidsloggen?",
+							clear_log:						"Är du säker på att du vill rensa tidsloggen?",
 							status_listening:					"Lyssnande",
 							status_playing:						"Spelar"
 						};
 					case "th":		// Thai
 						return {
-							clear_log:							"แน่ใจไหมว่าต้องการล้างบันทึกเวลา",
+							clear_log:						"แน่ใจไหมว่าต้องการล้างบันทึกเวลา",
 							status_listening:					"การฟัง",
 							status_playing:						"กำลังเล่น"
 						};
 					case "tr":		// Turkish
 						return {
-							clear_log:							"Zaman kaydını temizlemek istediğinizden emin misiniz?",
+							clear_log:						"Zaman kaydını temizlemek istediğinizden emin misiniz?",
 							status_listening:					"Dinleme",
 							status_playing:						"Çalma"
 						};
 					case "uk":		// Ukrainian
 						return {
-							clear_log:							"Ви впевнені, що хочете очистити журнал часу?",
+							clear_log:						"Ви впевнені, що хочете очистити журнал часу?",
 							status_listening:					"Слухання",
 							status_playing:						"Гра"
 						};
 					case "vi":		// Vietnamese
 						return {
-							clear_log:							"Bạn có chắc chắn muốn xóa nhật ký thời gian không?",
+							clear_log:						"Bạn có chắc chắn muốn xóa nhật ký thời gian không?",
 							status_listening:					"Lắng nghe",
 							status_playing:						"Đang chơi"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							clear_log:							"您确定要清除时间记录吗？",
+							clear_log:						"您确定要清除时间记录吗？",
 							status_listening:					"聆听中",
 							status_playing:						"游戏中"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							clear_log:							"您確定要清除時間記錄嗎？",
+							clear_log:						"您確定要清除時間記錄嗎？",
 							status_listening:					"聆聽中",
 							status_playing:						"遊戲中"
 						};
 					default:		// English
 						return {
-							clear_log:							"Are you sure you want to clear the timelog?",
+							clear_log:						"Are you sure you want to clear the timelog?",
 							status_listening:					"Listening",
 							status_playing:						"Playing"
 						};
