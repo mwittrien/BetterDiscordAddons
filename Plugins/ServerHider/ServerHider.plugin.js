@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.9
+ * @version 6.3.0
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -188,21 +188,33 @@ module.exports = (_ => {
 				let hiddenGuildIds = hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles.folders || [];
 				if (!hiddenGuildIds.length && !hiddenFolderIds.length) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["folderNode", "guildNode"], someProps: true});
-				if (index > -1) for (let i in children) if (children[i] && children[i].props) {
-					if (children[i].props.folderNode) {
-						if (hiddenFolderIds.includes(children[i].props.folderNode.id)) children[i] = null;
-						else {
-							let guilds = [].concat(children[i].props.folderNode.children.filter(guild => !hiddenGuildIds.includes(guild.id)));
-							if (guilds.length) {
-								children[i].props.hiddenGuildIds = [].concat(children[i].props.folderNode.children.filter(guild => hiddenGuildIds.includes(guild.id)));
-								children[i].props.folderNode = Object.assign({}, children[i].props.folderNode, {children: guilds});
+				const process = returnValue => {
+					let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {props: ["folderNode", "guildNode"], someProps: true});
+					if (index > -1) for (let i in children) if (children[i] && children[i].props) {
+						if (children[i].props.folderNode) {
+							if (hiddenFolderIds.includes(children[i].props.folderNode.id)) children[i] = null;
+							else {
+								let guilds = [].concat(children[i].props.folderNode.children.filter(guild => !hiddenGuildIds.includes(guild.id)));
+								if (guilds.length) {
+									children[i].props.hiddenGuildIds = [].concat(children[i].props.folderNode.children.filter(guild => hiddenGuildIds.includes(guild.id)));
+									children[i].props.folderNode = Object.assign({}, children[i].props.folderNode, {children: guilds});
+								}
+								else children[i] = null;
 							}
-							else children[i] = null;
 						}
+						else if (children[i].props.guildNode && hiddenGuildIds.includes(children[i].props.guildNode.id)) children[i] = null;
 					}
-					else if (children[i].props.guildNode && hiddenGuildIds.includes(children[i].props.guildNode.id)) children[i] = null;
+				};
+				let themeWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (themeWrapper) {
+					let childrenRender = themeWrapper.props.children;
+					themeWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						process(children);
+						return children;
+					}, "Error in Children Render of Theme Wrapper!", this);
 				}
+				else process(e.returnvalue);
 			}
 
 			processQuickSwitcher (e) {
