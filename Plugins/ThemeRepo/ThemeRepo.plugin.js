@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.7
+ * @version 2.5.8
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -63,7 +63,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var _this;
 		
-		var list;
+		var list, listState;
 		
 		var loading, cachedThemes, grabbedThemes, generatorThemes, updateInterval, errorState;
 		var searchString, searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
@@ -139,18 +139,18 @@ module.exports = (_ => {
 						state: state
 					});
 				}).filter(n => n);
-				if (!this.props.updated) themes = themes.filter(theme => theme.state != themeStates.INSTALLED);
-				if (!this.props.outdated) themes = themes.filter(theme => theme.state != themeStates.OUTDATED);
-				if (!this.props.downloadable) themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
+				if (!listState.updated) themes = themes.filter(theme => theme.state != themeStates.INSTALLED);
+				if (!listState.outdated) themes = themes.filter(theme => theme.state != themeStates.OUTDATED);
+				if (!listState.downloadable) themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
 				if (searchString) {
 					let usedSearchString = searchString.toUpperCase();
 					let spacelessUsedSearchString = usedSearchString.replace(/\s/g, "");
 					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1 || theme.search.indexOf(spacelessUsedSearchString) > -1);
 				}
 				
-				BDFDB.ArrayUtils.keySort(themes, this.props.sortKey.toLowerCase());
-				if (this.props.orderKey == "DESC") themes.reverse();
-				if (reverseSorts.includes(this.props.sortKey)) themes.reverse();
+				BDFDB.ArrayUtils.keySort(themes, listState.sortKey.toLowerCase());
+				if (listState.orderKey == "DESC") themes.reverse();
+				if (reverseSorts.includes(listState.sortKey)) themes.reverse();
 				return themes;
 			}
 			createThemeFile(name, filename, body, autoloadKey) {
@@ -172,8 +172,8 @@ module.exports = (_ => {
 				}));
 			}
 			generateTheme(css) {
-				if (!css || !BDFDB.ObjectUtils.is(this.props.generatorValues)) return "";
-				for (let inputId in this.props.generatorValues) if (this.props.generatorValues[inputId].value && this.props.generatorValues[inputId].value.trim() && this.props.generatorValues[inputId].value != this.props.generatorValues[inputId].oldValue) css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(this.props.generatorValues[inputId].oldValue)}`,"g"),`--${inputId}$1: $2${this.props.generatorValues[inputId].value}`);
+				if (!css || !BDFDB.ObjectUtils.is(listState.generatorValues)) return "";
+				for (let inputId in listState.generatorValues) if (listState.generatorValues[inputId].value && listState.generatorValues[inputId].value.trim() && listState.generatorValues[inputId].value != listState.generatorValues[inputId].oldValue) css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(listState.generatorValues[inputId].oldValue)}`,"g"),`--${inputId}$1: $2${listState.generatorValues[inputId].value}`);
 				return css;
 			}
 			createFixerCSS(body) {
@@ -186,7 +186,9 @@ module.exports = (_ => {
 				return newCSS.replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\r/g, "\r");
 			}
 			render() {
-				if (!this.props.tab) this.props.tab = "Themes";
+				if (!listState) listState = this.props;
+				
+				if (!listState.tab) listState.tab = "Themes";
 				
 				const entries = (!loading.is && grabbedThemes.length ? this.filterThemes() : []);
 				
@@ -194,14 +196,14 @@ module.exports = (_ => {
 					lightSrc: "/assets/d6dfb89ab06b62044dbb.svg",
 					darkSrc: "/assets/8eeb59bba0a61cbffc41.svg",
 					text: "Could not load Theme Store due to an Issue with the BD Website"
-				} : !entries.length && !this.props.updated && !this.props.outdated && !this.props.downloadable ? {
+				} : !entries.length && !listState.updated && !listState.outdated && !listState.downloadable ? {
 					text: `You disabled all Filter Options in the "${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}" Tab`
 				} : !entries.length && searchString ? {
 					lightSrc: "/assets/75081bdaad2d359c1469.svg",
 					darkSrc: "/assets/45cd76fed34c8e398cc8.svg"
 				} : !entries.length ? {} : null;
 				
-				if (forceRerenderGenerator && this.props.tab == "Generator") BDFDB.TimeUtils.timeout(_ => {
+				if (forceRerenderGenerator && listState.tab == "Generator") BDFDB.TimeUtils.timeout(_ => {
 					forceRerenderGenerator = false;
 					BDFDB.ReactUtils.forceUpdate(this);
 				});
@@ -265,10 +267,10 @@ module.exports = (_ => {
 												className: BDFDB.disCN.tabbar,
 												itemClassName: BDFDB.disCN.tabbaritem,
 												type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-												selectedItem: this.props.tab,
+												selectedItem: listState.tab,
 												items: [{value: "Themes"}, {value: "Generator"}, {value: BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
 												onItemSelect: value => {
-													this.props.tab = value;
+													listState.tab = value;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											})
@@ -277,15 +279,15 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 												label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
 												value: {
-													label: sortKeys[this.props.sortKey],
-													value: this.props.sortKey
+													label: sortKeys[listState.sortKey],
+													value: listState.sortKey
 												},
 												options: Object.keys(sortKeys).map(key => ({
 													label: sortKeys[key],
 													value: key
 												})),
 												onChange: key => {
-													this.props.sortKey = key;
+													listState.sortKey = key;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											})
@@ -294,15 +296,15 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 												label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
 												value: {
-													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
-													value: this.props.orderKey
+													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[listState.orderKey]],
+													value: listState.orderKey
 												},
 												options: Object.keys(orderKeys).map(key => ({
 													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
 													value: key
 												})),
 												onChange: key => {
-													this.props.orderKey = key;
+													listState.orderKey = key;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											})
@@ -316,7 +318,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 									tab: "Themes",
-									open: this.props.tab == "Themes",
+									open: listState.tab == "Themes",
 									render: false,
 									children: loading.is ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 										direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
@@ -341,7 +343,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 									tab: "Generator",
-									open: this.props.tab == "Generator",
+									open: listState.tab == "Generator",
 									render: false,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -349,26 +351,26 @@ module.exports = (_ => {
 											margin: 20,
 											label: "Choose a Generator Theme",
 											basis: "60%",
-											value: this.props.currentGenerator || "-----",
+											value: listState.currentGenerator || "-----",
 											options: [{value: "-----", label: "-----"}, nativeCSSvars && {value: "nativediscord", label: "Discord"}].concat(generatorThemes.map(t => ({value: t.id, label: t.name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0))).filter(n => n),
 											onChange: value => {
 												let generatorTheme = generatorThemes.find(t => t.id == value);
 												if (generatorTheme || value == "nativediscord") {
-													if (this.props.currentGenerator) forceRerenderGenerator = true;
-													this.props.currentGenerator = value;
-													this.props.currentGeneratorIsNative = value == "nativediscord";
-													this.props.generatorValues = {};
+													if (listState.currentGenerator) forceRerenderGenerator = true;
+													listState.currentGenerator = value;
+													listState.currentGeneratorIsNative = value == "nativediscord";
+													listState.generatorValues = {};
 												}
 												else {
-													delete this.props.currentGenerator;
-													delete this.props.currentGeneratorIsNative;
-													delete this.props.generatorValues;
+													delete listState.currentGenerator;
+													delete listState.currentGeneratorIsNative;
+													delete listState.generatorValues;
 												}
-												delete this.props.currentTheme;
+												delete listState.currentTheme;
 												BDFDB.ReactUtils.forceUpdate(this);
 											}
 										}),
-										!this.props.currentGenerator ? null : (forceRerenderGenerator ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										!listState.currentGenerator ? null : (forceRerenderGenerator ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 											direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 											justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
 											style: {marginTop: "50%"},
@@ -382,11 +384,11 @@ module.exports = (_ => {
 												label: "Download generated Theme",
 												children: "Download",
 												onClick: _ => {
-													if (this.props.currentGeneratorIsNative) {
+													if (listState.currentGeneratorIsNative) {
 														this.createThemeFile("Discord", "Discord.theme.css", `/**\n * @name Discord\n * @description Allow you to easily customize Discord's native Look  \n * @author DevilBro\n * @version 1.0.0\n * @authorId 278543574059057154\n * @invite Jx3TjNS\n * @donate https://www.paypal.me/MircoWittrien\n * @patreon https://www.patreon.com/MircoWittrien\n */\n\n` + this.generateTheme(nativeCSSvars), "startDownloaded");
 													}
 													else {
-														let generatorTheme = generatorThemes.find(t => t.id == this.props.currentGenerator);
+														let generatorTheme = generatorThemes.find(t => t.id == listState.currentGenerator);
 														if (generatorTheme) this.createThemeFile(generatorTheme.name, generatorTheme.rawSourceUrl.split("/").pop(), this.generateTheme(generatorTheme.fullCSS), "startDownloaded");
 													}
 												}
@@ -395,8 +397,8 @@ module.exports = (_ => {
 												className: BDFDB.disCN.marginbottom20
 											}),
 											(_ => {
-												let generatorTheme = generatorThemes.find(t => t.id == this.props.currentGenerator);
-												let vars = this.props.currentGeneratorIsNative ? nativeCSSvars.split(".theme-dark, .theme-light") : ((generatorTheme || {}).fullCSS || "").split(":root");
+												let generatorTheme = generatorThemes.find(t => t.id == listState.currentGenerator);
+												let vars = listState.currentGeneratorIsNative ? nativeCSSvars.split(".theme-dark, .theme-light") : ((generatorTheme || {}).fullCSS || "").split(":root");
 												if (vars.length < 2) return null;
 												vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
 												vars = vars.split("{");
@@ -427,7 +429,7 @@ module.exports = (_ => {
 															}
 														}
 														let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-														this.props.generatorValues[varName] = {value: oldValue, oldValue};
+														listState.generatorValues[varName] = {value: oldValue, oldValue};
 														inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 															dividerBottom: vars[vars.length-1] != varStr,
 															type: "TextInput",
@@ -443,7 +445,7 @@ module.exports = (_ => {
 															placeholder: oldValue,
 															onChange: value => {
 																BDFDB.TimeUtils.clear(updateGeneratorTimeout);
-																updateGeneratorTimeout = BDFDB.TimeUtils.timeout(_ => this.props.generatorValues[varName] = {value, oldValue}, 1000);
+																updateGeneratorTimeout = BDFDB.TimeUtils.timeout(_ => listState.generatorValues[varName] = {value, oldValue}, 1000);
 															}
 														}));
 													}
@@ -455,7 +457,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 									tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
-									open: this.props.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+									open: listState.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
 									render: false,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
@@ -467,7 +469,7 @@ module.exports = (_ => {
 												label: _this.defaults.filters[key].description,
 												value: _this.settings.filters[key],
 												onChange: value => {
-													this.props[key] = _this.settings.filters[key] = value;
+													listState[key] = _this.settings.filters[key] = value;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											}))
