@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.7
+ * @version 2.5.8
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -63,7 +63,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var _this;
 		
-		var list;
+		var list, listState;
 		
 		var loading, cachedPlugins, grabbedPlugins, updateInterval, errorState;
 		var searchString, searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
@@ -138,29 +138,30 @@ module.exports = (_ => {
 						state: state
 					});
 				}).filter(n => n);
-				if (!this.props.updated) plugins = plugins.filter(plugin => plugin.state != pluginStates.INSTALLED);
-				if (!this.props.outdated) plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
-				if (!this.props.downloadable) plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
+				if (!listState.updated) plugins = plugins.filter(plugin => plugin.state != pluginStates.INSTALLED);
+				if (!listState.outdated) plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
+				if (!listState.downloadable) plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
 				if (searchString) {
 					let usedSearchString = searchString.toUpperCase();
 					let spacelessUsedSearchString = usedSearchString.replace(/\s/g, "");
 					plugins = plugins.filter(plugin => plugin.search.indexOf(usedSearchString) > -1 || plugin.search.indexOf(spacelessUsedSearchString) > -1);
 				}
 				
-				BDFDB.ArrayUtils.keySort(plugins, this.props.sortKey.toLowerCase());
-				if (this.props.orderKey == "DESC") plugins.reverse();
-				if (reverseSorts.includes(this.props.sortKey)) plugins.reverse();
+				BDFDB.ArrayUtils.keySort(plugins, listState.sortKey.toLowerCase());
+				if (listState.orderKey == "DESC") plugins.reverse();
+				if (reverseSorts.includes(listState.sortKey)) plugins.reverse();
 				return plugins;
 			}
 			render() {
-				if (!this.props.tab) this.props.tab = "Plugins";
+				if (!listState) listState = this.props;
+				if (!listState.tab) listState.tab = "Plugins";
 				
 				const entries = (!loading.is && grabbedPlugins.length ? this.filterPlugins() : []);
 				const emptyState = errorState ? {
 					lightSrc: "/assets/d6dfb89ab06b62044dbb.svg",
 					darkSrc: "/assets/8eeb59bba0a61cbffc41.svg",
 					text: "Could not load Plugin Store due to an Issue with the BD Website"
-				} : !entries.length && !this.props.updated && !this.props.outdated && !this.props.downloadable ? {
+				} : !entries.length && !listState.updated && !listState.outdated && !listState.downloadable ? {
 					text: `You disabled all Filter Options in the "${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}" Tab`
 				} : !entries.length && searchString ? {
 					lightSrc: "/assets/75081bdaad2d359c1469.svg",
@@ -226,10 +227,10 @@ module.exports = (_ => {
 												className: BDFDB.disCN.tabbar,
 												itemClassName: BDFDB.disCN.tabbaritem,
 												type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-												selectedItem: this.props.tab,
+												selectedItem: listState.tab,
 												items: [{value: "Plugins"}, {value: BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
 												onItemSelect: value => {
-													this.props.tab = value;
+													listState.tab = value;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											})
@@ -238,15 +239,15 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 												label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
 												value: {
-													label: sortKeys[this.props.sortKey],
-													value: this.props.sortKey
+													label: sortKeys[listState.sortKey],
+													value: listState.sortKey
 												},
 												options: Object.keys(sortKeys).map(key => ({
 													label: sortKeys[key],
 													value: key
 												})),
 												onChange: key => {
-													this.props.sortKey = key;
+													listState.sortKey = key;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											})
@@ -255,15 +256,15 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 												label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
 												value: {
-													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
-													value: this.props.orderKey
+													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[listState.orderKey]],
+													value: listState.orderKey
 												},
 												options: Object.keys(orderKeys).map(key => ({
 													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
 													value: key
 												})),
 												onChange: key => {
-													this.props.orderKey = key;
+													listState.orderKey = key;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											})
@@ -277,7 +278,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 									tab: "Plugins",
-									open: this.props.tab == "Plugins",
+									open: listState.tab == "Plugins",
 									render: false,
 									children: loading.is ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 										direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
@@ -302,7 +303,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 									tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
-									open: this.props.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+									open: listState.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
 									render: false,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
@@ -314,7 +315,7 @@ module.exports = (_ => {
 												label: _this.defaults.filters[key].description,
 												value: _this.settings.filters[key],
 												onChange: value => {
-													this.props[key] = _this.settings.filters[key] = value;
+													listState[key] = _this.settings.filters[key] = value;
 													BDFDB.ReactUtils.forceUpdate(this);
 												}
 											}))
