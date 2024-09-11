@@ -171,7 +171,7 @@ module.exports = (_ => {
 					let scroller = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildsscroller]]});
 					if (scroller) {
 						scroller.props.fade = true;
-						let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isMax() ? 0 : 12) + 10;
+						let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isMac() ? 0 : 12) + 10;
 						let isVisible = (currentItem, t, items) => {
 							if (!scroller.ref || !scroller.ref.current) return false;
 							const index = items.findIndex(item => typeof item == "string" || !item ? currentItem === item : item.includes(currentItem));
