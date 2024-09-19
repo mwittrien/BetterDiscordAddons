@@ -799,26 +799,26 @@ body::after {
 	border-top: 1px solid rgba(var(--transparencycolor_v), .2);
 }
 
-button.button_f67531.enabled_f67531 {							/* account/voice			panel button							*/
+button.button_adca65.enabled_adca65 {							/* account/voice			panel button							*/
 	opacity: 0.7;
 }
-button.button_f67531.enabled_f67531:hover {
+button.button_adca65.enabled_adca65:hover {
 	opacity: 1;
 	background-color: rgb(var(--accentcolor_v));
 }
 .avatarWrapper_b2ca13:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
-button.button_f67531.enabled_f67531:hover svg {
+button.button_adca65.enabled_adca65:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 .button_adcaac.buttonColor_adcaac {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-.button_adcaac.buttonColor_adcaac.disabledButtonWrapper_dd4f85 {
+.button_adcaac.buttonColor_adcaac.disabledButtonWrapper_adca65 {
 	background-color: rgba(var(--transparencycolor_v), .15);
 }
-.button_adcaac.buttonColor_adcaac:not(.disabledButtonWrapper_dd4f85):hover {
+.button_adcaac.buttonColor_adcaac:not(.disabledButtonWrapper_adca65):hover {
 	background-color: rgb(var(--accentcolor_v));
 }
 .button_adcaac.buttonColor_adcaac.buttonActive_adcaac,
@@ -4601,6 +4601,7 @@ button.button_f67531.enabled_f67531:hover svg {
 /* ----		14.4.		PINS/MENTIONS					---- */
 
 .messagesPopoutWrap_ac90a2,								/* popout				wrapper								*/
+.recentMentionsPopout_ddb5b4,								/* popout				wrapper	(for you)						*/
 .container_f1c3d9 {									/* popout				wrapper	(inbox)							*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
@@ -4608,12 +4609,14 @@ button.button_f67531.enabled_f67531:hover svg {
 	overflow: hidden;
 }
 .messagesPopoutWrap_ac90a2 > *,
+.recentMentionsPopout_ddb5b4 > *,
 .container_f1c3d9 > * {
 	z-index: 1000;
 }
 .messagesPopoutWrap_ac90a2::before,
-.container_f1c3d9::before,
+.recentMentionsPopout_ddb5b4::before,
 .messagesPopoutWrap_ac90a2::after,
+.recentMentionsPopout_ddb5b4::after,
 .container_f1c3d9::after {
 	content: "";
 	position: absolute;
@@ -4627,11 +4630,13 @@ button.button_f67531.enabled_f67531:hover svg {
 	z-index: -1;
 }
 .messagesPopoutWrap_ac90a2::before,
+.recentMentionsPopout_ddb5b4::before,
 .container_f1c3d9::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
 .messagesPopoutWrap_ac90a2::after,
+.recentMentionsPopout_ddb5b4::after,
 .container_f1c3d9::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
@@ -4643,6 +4648,7 @@ button.button_f67531.enabled_f67531:hover svg {
 .header_ac90a2 {									/* popout				header								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor_v), .2);
+	border: none;
 }
 
 .footer_ac90a2 {									/* popout				footer								*/
@@ -4726,6 +4732,16 @@ button.button_f67531.enabled_f67531:hover svg {
 }
 .channelHeader_f3978e:only-child {
 	border-radius: 0;
+}
+.channelHeader_f3978e {
+	margin-left: 8px;
+}
+.channel_d09ffd .channelHeader_f3978e {
+	margin-left: 0;
+}
+.messageContainer_ddb5b4 {
+	margin-left: 8px;
+	padding-left: 8px;
 }
 .messageContainer_ddb5b4,								/* popout				messagecontainer						*/
 .messages_c06487 {									/* popout				messagecontainer (inbox)					*/
