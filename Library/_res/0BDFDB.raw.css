@@ -846,7 +846,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	height: unset;
 	min-height: 56px;
 }
-[REPLACE_CLASS_popoutwrapper] [REPLACE_CLASS_messagespopouttabbarheader] [REPLACE_CLASS_messagespopouttabbar] {
+[REPLACE_CLASS_popoutwrapper] [REPLACE_CLASS_messagespopouttabbarheader] [REPLACE_CLASS_messagespopouttabbarinner] {
 	align-items: center;
 	flex: 1 1 auto;
 	min-height: 32px;
@@ -1288,6 +1288,9 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS__repolistheader] [REPLACE_CLASS_flex] {
 	gap: 6px;
+}
+[REPLACE_CLASS__repolistheader] [REPLACE_CLASS_headertitle] {
+	text-wrap: nowrap;
 }
 [REPLACE_CLASS__repolistscroller] {
 	padding-top: 0;
