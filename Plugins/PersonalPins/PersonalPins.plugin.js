@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.0
+ * @version 2.2.1
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -323,9 +323,8 @@ module.exports = (_ => {
 										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 										children: [
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
-												className: BDFDB.disCN.messagespopouttabbar,
+												className: BDFDB.disCN.messagespopouttabbarinner,
 												itemClassName: BDFDB.disCN.messagespopouttabbartab,
-												itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
 												type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
 												selectedItem: popoutProps.selectedFilter.value,
 												items: filterKeys.map(option => _this.getPopoutValue(option, "filter")),
