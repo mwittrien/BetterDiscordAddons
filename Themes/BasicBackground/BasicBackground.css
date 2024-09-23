@@ -5647,28 +5647,28 @@ button.button_adca65.enabled_adca65:hover svg {
 	background: rgba(var(--accentcolor_v), .3);
 }
 
-.clickable_e9f61e:hover .layout_e9f61e {
+.clickable_d808b0:hover .layout_d808b0 {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.clickable_e9f61e:active .layout_e9f61e {
+.clickable_d808b0:active .layout_d808b0 {
 	background: rgb(var(--accentcolor_v));
 }
-.clickable_e9f61e:active .layout_e9f61e,
-.selected_e9f61e .layout_e9f61e,
-.selected_e9f61e:hover .layout_e9f61e,
-.selected_e9f61e:active .layout_e9f61e {
+.clickable_d808b0:active .layout_d808b0,
+.selected_d808b0 .layout_d808b0,
+.selected_d808b0:hover .layout_d808b0,
+.selected_d808b0:active .layout_d808b0 {
 	background-color: rgb(var(--accentcolor_v));
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.clickable_e9f61e .icon_ec85ca {
+.clickable_d808b0 .icon_ec85ca {
 	color: inherit;
 }
-.clickable_e9f61e:active .layout_e9f61e svg,
-.clickable_e9f61e.selected_e9f61e .layout_e9f61e svg {
+.clickable_d808b0:active .layout_d808b0 svg,
+.clickable_d808b0.selected_d808b0 .layout_d808b0 svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
-.clickable_e9f61e:active .premiumIcon_a31c43,
-.clickable_e9f61e.selected_e9f61e .premiumIcon_a31c43 {
+.clickable_d808b0:active .premiumIcon_a31c43,
+.clickable_d808b0.selected_d808b0 .premiumIcon_a31c43 {
 	color: var(--header-primary) !important;
 }
 
