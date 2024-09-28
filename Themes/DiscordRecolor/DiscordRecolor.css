@@ -153,6 +153,7 @@
 	--background-tertiary: rgb(var(--backgroundtertiary_v));
 	--background-accent: rgb(var(--backgroundaccent_v));
 	--background-floating: rgb(var(--backgroundfloating_v));
+	--background-nested-floating: rgb(var(--backgroundfloating_v));
 	--background-mobile-primary: rgb(var(--backgroundprimary_v));
 	--background-mobile-secondary: rgb(var(--backgroundsecondary_v));
 	
