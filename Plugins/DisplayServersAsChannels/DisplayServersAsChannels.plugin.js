@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.9
+ * @version 1.8.0
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -171,7 +171,7 @@ module.exports = (_ => {
 					let scroller = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildsscroller]]});
 					if (scroller) {
 						scroller.props.fade = true;
-						let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isMac() ? 0 : 12) + 10;
+						let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isLinux() ? 0 : 12) + 10;
 						let isVisible = (currentItem, t, items) => {
 							if (!scroller.ref || !scroller.ref.current) return false;
 							const index = items.findIndex(item => typeof item == "string" || !item ? currentItem === item : item.includes(currentItem));
@@ -425,12 +425,14 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildswrapperunreadmentionsbarbottom} {
 						width: ${this.settings.amounts.serverListWidth}px;
 					}
-					
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsfooter} {
+						width: 100%;
+						box-sizing: border-box;
+					}
 					${BDFDB.dotCNS.themedark + BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscroller}::-webkit-scrollbar-thumb,
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS.themedark + BDFDB.dotCN.guildsscroller}::-webkit-scrollbar-thumb {
 						background-color: ${BDFDB.DiscordConstants.Colors.PRIMARY_800};
 					}
-
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {
 						width: auto;
 						display: flex;
