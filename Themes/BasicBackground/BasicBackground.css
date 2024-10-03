@@ -525,6 +525,9 @@ body::after {
 
 /* ~~~~		4.		GUILDLIST					~~~~ */
 
+#app-mount .footer_aa1bff {								/* footer												*/
+	background: transparent;
+}
 #app-mount .childWrapper_a6ce15 {							/* homebutton/acronym			innerwrap							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 	color: var(--text-normal);
