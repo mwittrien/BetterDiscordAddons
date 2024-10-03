@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.2.4
+ * @version 7.2.5
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -119,9 +119,11 @@ module.exports = (_ => {
 										folderIcon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? _this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
 										folderIcon = folderIcon ? BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.guildfoldericonwrapper,
+											onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
 											style: {background: `url(${folderIcon}) center/cover no-repeat`}
 										}) : BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.guildfoldericonwrapper,
+											onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
 											children: BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCN.guildfoldericonwrapperexpanded,
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
@@ -543,7 +545,6 @@ module.exports = (_ => {
 						display: none !important;
 					}
 					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
-						cursor: default;
 						border-radius: 100%;
 					}
 				`;
