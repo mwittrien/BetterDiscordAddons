@@ -1253,18 +1253,8 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	flex-direction: column;
 }
 
-[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_flex]:first-child,
-[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_flexchild]:first-child {
-	margin-left: 0;
-}
-[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_flex]:last-child,
-[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_flexchild]:last-child {
-	margin-right: 0;
-}
-[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_flex],
-[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_flexchild] {
+[REPLACE_CLASS_flexhorizontal] > [REPLACE_CLASS_flexchild] + [REPLACE_CLASS_flexchild] {
 	margin-left: 10px;
-	margin-right: 10px;
 }
 
 [REPLACE_CLASS__repomodal] {
