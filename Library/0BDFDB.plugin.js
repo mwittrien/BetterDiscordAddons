@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.9
+ * @version 3.8.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6187,14 +6187,18 @@ module.exports = (_ => {
 									onChange: e => {
 										let file = e.currentTarget.files[0];
 										if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
-											this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data:${file.type};base64,${Internal.LibraryRequires.fs.readFileSync(file.path, "base64")}`}${this.props.mode ? "')" : ""}`;
-											BDFDB.ReactUtils.forceUpdate(this.refInput);
-											this.refInput.handleChange(this.refInput.props.value);
+											let reader = new FileReader();
+											reader.onload = _ => {
+												this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${`data:${file.type};base64,${btoa(String.fromCharCode(...new Uint8Array(reader.result)))}`}${this.props.mode ? "')" : ""}`;
+												BDFDB.ReactUtils.forceUpdate(this.refInput);
+												this.refInput.handleChange(this.refInput.props.value);
+											}
+											reader.readAsArrayBuffer(file);
 										}
 									}
 								})
 							]
-						}), "filter", "mode", "useFilePath", "searchFolders"));
+						}), "filter", "mode", "searchFolders"));
 					}
 				};
 				
@@ -6206,7 +6210,6 @@ module.exports = (_ => {
 							style: this.props.style,
 							children: [
 								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
-									align: Internal.LibraryComponents.Flex.Align.BASELINE,
 									children: [
 										this.props.title != null || this.props.error != null ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 											wrap: true,
@@ -7731,7 +7734,7 @@ module.exports = (_ => {
 								maxLength: this.props.type == "file" ? false : this.props.maxLength,
 								style: this.props.width ? {width: `${this.props.width}px`} : {},
 								ref: this.props.inputRef
-							}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "colorPickerOpen", "noAlpha", "filter", "useFilePath", "searchFolders")),
+							}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "colorPickerOpen", "noAlpha", "filter", "searchFolders")),
 							this.props.inputChildren,
 							this.props.type == "color" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 								wrap: true,
@@ -7749,7 +7752,6 @@ module.exports = (_ => {
 							this.props.type == "file" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FileButton, {
 								filter: this.props.filter,
 								mode: this.props.mode,
-								useFilePath: this.props.useFilePath,
 								searchFolders: this.props.searchFolders,
 								ref: this.props.controlsRef
 							}) : null
@@ -7786,6 +7788,7 @@ module.exports = (_ => {
 									]
 								}) : null,
 								inputChildren.length == 1 ? inputChildren[0] : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+									wrap: Internal.LibraryComponents.Flex.Wrap.NO_WRAP,
 									align: Internal.LibraryComponents.Flex.Align.CENTER,
 									children: inputChildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 										shrink: 0,
