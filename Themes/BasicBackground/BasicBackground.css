@@ -2730,14 +2730,14 @@ button.button_adca65.enabled_adca65:hover svg {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
-.container_e5cdf3 {									/* voicesettings			voicebarcontainer						*/
+#app-mount .container_a1107d {									/* voicesettings			voicebarcontainer						*/
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/voice_level_bar.svg);
 }
-.notches_e5cdf3 {
-	background: transparent !important;
+#app-mount .notches_a1107d {
+	color: transparent !important;
 }
-#app-mount .progress_e5cdf3 {								/* voicesettings			voicebar							*/
-	background-color: rgba(var(--transparencycolor_v), .3);
+#app-mount .progress_a1107d {								/* voicesettings			voicebar							*/
+	background-color: var(--text-muted) !important;
 }
 .icon_aae945[src="/assets/6762ed8abdaef6a7f6fc.png"],
 .icon_aae945[src="/assets/5af9f85713084d6867a6.png"] {
