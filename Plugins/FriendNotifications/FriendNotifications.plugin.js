@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.1
+ * @version 2.0.2
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -318,9 +318,8 @@ module.exports = (_ => {
 					this.SettingsUpdated = true;
 					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 				};
-				let successSavedAudio = (type, parsedUrl, parsedData) => {
-					if (parsedUrl && parsedData) BDFDB.NotificationUtils.toast(`Sound was saved successfully.`, {type: "success"});
-					this.settings.notificationSounds[type].url = parsedUrl;
+				let successSavedAudio = (type, parsedData) => {
+					if (parsedData) BDFDB.NotificationUtils.toast(`Sound was saved successfully.`, {type: "success"});
 					this.settings.notificationSounds[type].song = parsedData;
 					BDFDB.DataUtils.save(this.settings.notificationSounds, this, "notificationSounds");
 					this.SettingsUpdated = true;
@@ -686,9 +685,8 @@ module.exports = (_ => {
 												className: `input-${key}src`,
 												type: "file",
 												filter: ["audio", "video"],
-												useFilePath: true,
-												placeholder: "Url or File Path",
-												value: this.settings.notificationSounds[key].url
+												placeholder: "Url or File",
+												value: this.settings.notificationSounds[key].data
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
@@ -702,16 +700,13 @@ module.exports = (_ => {
 													if (response) {
 														let type = response.headers["content-type"];
 														if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
-															successSavedAudio(key, source, source);
+															successSavedAudio(key, source);
 															return;
 														}
 													}
 													BDFDB.NotificationUtils.toast("Use a valid direct Link to a Video or Audio Source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
 												});
-												else BDFDB.LibraryRequires.fs.readFile(source, "base64", (error, body) => {
-													if (error) BDFDB.NotificationUtils.toast("Could not fetch File, please make sure the File exists", {type: "danger"});
-													else successSavedAudio(key, source, `data:audio/mpeg;base64,${body}`);
-												});
+												else if (source.indexOf("data:") == 0) return successSavedAudio(key, source);
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.SAVE
 										})
