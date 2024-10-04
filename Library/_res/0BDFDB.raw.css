@@ -146,6 +146,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	text-transform: capitalize;
 	cursor: pointer;
 	order: 1;
 }
