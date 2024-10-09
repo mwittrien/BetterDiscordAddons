@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.3
+ * @version 1.8.4
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -168,7 +168,7 @@ module.exports = (_ => {
 
 			onTextAreaContextMenu (e) {
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children.unshift(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
 						label: this.labels.context_enable,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "enabled"),
@@ -278,42 +278,42 @@ module.exports = (_ => {
 						};
 					case "cs":		// Czech
 						return {
-							context_enable:						"Rozdělte velké zprávy na menší zprávy",
+							context_enable:						"Rozdělte velké zprávy",
 							toast_allsent:						"Všechny zprávy odeslány"
 						};
 					case "da":		// Danish
 						return {
-							context_enable:						"Opdel store beskeder i mindre beskeder",
+							context_enable:						"Opdel store beskeder",
 							toast_allsent:						"Alle beskeder sendt"
 						};
 					case "de":		// German
 						return {
-							context_enable:						"Spalte große in kleinere Nachrichten auf",
+							context_enable:						"Spalte große Nachrichten auf",
 							toast_allsent:						"Alle Nachrichten gesendet"
 						};
 					case "el":		// Greek
 						return {
-							context_enable:						"Διαχωρίστε τα μεγάλα μηνύματα σε μικρότερα μηνύματα",
+							context_enable:						"Διαχωρίστε τα μεγάλα μηνύματα",
 							toast_allsent:						"Όλα τα μηνύματα εστάλησαν"
 						};
 					case "es":		// Spanish
 						return {
-							context_enable:						"Dividir mensajes grandes en mensajes más pequeños",
+							context_enable:						"Dividir mensajes grandes",
 							toast_allsent:						"Todos los mensajes enviados"
 						};
 					case "es-419":		// Spanish (Latin America)
 						return {
-							context_enable:						"Dividir mensajes grandes en mensajes más pequeños",
+							context_enable:						"Dividir mensajes grandes",
 							toast_allsent:						"Todos los mensajes enviados"
 						};
 					case "fi":		// Finnish
 						return {
-							context_enable:						"Jaa suuret viestit pienemmiksi viesteiksi",
+							context_enable:						"Jaa suuret viestit",
 							toast_allsent:						"Kaikki viestit lähetetty"
 						};
 					case "fr":		// French
 						return {
-							context_enable:						"Divisez les gros messages en messages plus petits",
+							context_enable:						"Divisez les gros messages",
 							toast_allsent:						"Tous les messages envoyés"
 						};
 					case "hi":		// Hindi
@@ -323,7 +323,7 @@ module.exports = (_ => {
 						};
 					case "hr":		// Croatian
 						return {
-							context_enable:						"Podijelite velike poruke u manje poruke",
+							context_enable:						"Podijelite velike poruke",
 							toast_allsent:						"Sve poruke poslane"
 						};
 					case "hu":		// Hungarian
@@ -333,7 +333,7 @@ module.exports = (_ => {
 						};
 					case "it":		// Italian
 						return {
-							context_enable:						"Suddividi messaggi di grandi dimensioni in messaggi più piccoli",
+							context_enable:						"Suddividi messaggi di grandi",
 							toast_allsent:						"Tutti i messaggi inviati"
 						};
 					case "ja":		// Japanese
@@ -343,22 +343,22 @@ module.exports = (_ => {
 						};
 					case "ko":		// Korean
 						return {
-							context_enable:						"큰 메시지를 작은 메시지로 분할",
+							context_enable:						"큰 메시지를 작은",
 							toast_allsent:						"보낸 모든 메시지"
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_enable:						"Padalinkite didelius pranešimus į mažesnius pranešimus",
+							context_enable:						"Padalinkite didelius pranešimus",
 							toast_allsent:						"Visi pranešimai išsiųsti"
 						};
 					case "nl":		// Dutch
 						return {
-							context_enable:						"Splits grote berichten op in kleinere berichten",
+							context_enable:						"Splits grote berichten op",
 							toast_allsent:						"Alle berichten zijn verzonden"
 						};
 					case "no":		// Norwegian
 						return {
-							context_enable:						"Del store meldinger i mindre meldinger",
+							context_enable:						"Del store meldinger",
 							toast_allsent:						"Alle meldinger sendt"
 						};
 					case "pl":		// Polish
@@ -368,22 +368,22 @@ module.exports = (_ => {
 						};
 					case "pt-BR":		// Portuguese (Brazil)
 						return {
-							context_enable:						"Divida mensagens grandes em mensagens menores",
+							context_enable:						"Divida mensagens grandes",
 							toast_allsent:						"Todas as mensagens enviadas"
 						};
 					case "ro":		// Romanian
 						return {
-							context_enable:						"Împărțiți mesajele mari în mesaje mai mici",
+							context_enable:						"Împărțiți mesajele mari",
 							toast_allsent:						"Toate mesajele trimise"
 						};
 					case "ru":		// Russian
 						return {
-							context_enable:						"Разделите большие сообщения на более мелкие сообщения",
+							context_enable:						"Разделите большие сообщения",
 							toast_allsent:						"Все сообщения отправлены"
 						};
 					case "sv":		// Swedish
 						return {
-							context_enable:						"Dela upp stora meddelanden i mindre meddelanden",
+							context_enable:						"Dela upp stora meddelanden",
 							toast_allsent:						"Alla meddelanden skickade"
 						};
 					case "th":		// Thai
@@ -418,7 +418,7 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
-							context_enable:						"Split large Messages into smaller Messages",
+							context_enable:						"Split large Messages",
 							toast_allsent:						"All Messages sent"
 						};
 				}
