@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.7
+ * @version 3.9.8
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -437,15 +437,16 @@ module.exports = (_ => {
 												for (let input of settingsPanel.props._node.querySelectorAll(".input-newsound " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all Fields to add a new Sound", {type: "danger"});
 												let category = settingsPanel.props._node.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
 												let sound = settingsPanel.props._node.querySelector(".input-sound " + BDFDB.dotCN.input).value.trim();
-												let source = settingsPanel.props._node.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
-												if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
+												let source = settingsPanel.props._node.querySelector(".input-source " + BDFDB.dotCN.input);
+												let value = source && (source.getAttribute("file") || source.value).trim();
+												if (value.indexOf("http") == 0) BDFDB.LibraryRequires.request(value, (error, response, result) => {
 													if (response) {
 														let type = response.headers["content-type"];
-														if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return successSavedAudio({category, sound, source});
+														if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return successSavedAudio({category, sound, source: value});
 													}
 													BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
 												});
-												else if (source.indexOf("data:") == 0) return successSavedAudio({category, sound, source: source});
+												else if (value.indexOf("data:") == 0) return successSavedAudio({category, sound, source: value});
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.SAVE
 										})
