@@ -368,6 +368,9 @@ module.exports = (_ => {
 		var translationEnabledStates = [], isTranslating;
 		var translatedMessages = {}, oldMessages = {};
 		
+		var messageContentTimeouts = {};
+		var messageContentTranslations = {};
+		
 		const defaultLanguages = {
 			INPUT: "auto",
 			OUTPUT: "$discord"
@@ -391,6 +394,7 @@ module.exports = (_ => {
 						usePerChatTranslation:		{value: true, 	popout: false},
 						sendOriginalMessage:		{value: false, 	popout: true},
 						showOriginalMessage:		{value: false, 	popout: true},
+						showTranslationOnHover:	{value: false, 	popout: true},
 						useSpoilerInOriginal:		{value: false, 	popout: false,	description: "Use Spoilers instead of Quotes for the original Message Text"}
 					},
 					choices: {},
@@ -739,8 +743,10 @@ module.exports = (_ => {
 			}
 
 			processMessageContent (e) {
-				if (!e.instance.props.message) return;
-				let translation = translatedMessages[e.instance.props.message.id];
+				let message = e.instance.props.message;
+				if (!message) return;
+				
+				let translation = translatedMessages[message.id];
 				if (translation && translation.content) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.getName(translation.output)}`,
 					tooltipConfig: {style: "max-width: 400px"},
@@ -752,6 +758,64 @@ module.exports = (_ => {
 						})
 					})
 				}));
+				
+				if (this.settings.general.showTranslationOnHover) {
+					let originalOnMouseEnter = e.returnvalue.props.onMouseEnter;
+					e.returnvalue.props.onMouseEnter = (e) => {
+						originalOnMouseEnter && originalOnMouseEnter(e);
+						this.handleMessageContentOnMouseEnter(e, message);
+					}
+					
+					let originalOnMouseLeave = e.returnvalue.props.onMouseLeave;
+					e.returnvalue.props.onMouseLeave = (e) => {
+						originalOnMouseLeave && originalOnMouseLeave(e);
+						this.handleMessageContentOnMouseLeave(e, message);
+					}
+				}
+			}
+
+			handleMessageContentOnMouseEnter (e, message) {
+				let translation = messageContentTranslations[message.id];
+				if (translation) {
+					this.showTooltipForMessageContent(message, translation);
+				}
+				else {
+					messageContentTimeouts[message.id] = BDFDB.TimeUtils.timeout(() => {
+						this.translateText(message.content, messageTypes.RECEIVED, false, (translation, input, output) => {
+							if (translation) {
+								messageContentTranslations[message.id] = translation;
+								this.showTooltipForMessageContent(message, translation);
+							}
+						})
+					}, 500);
+				}
+			}
+
+			handleMessageContentOnMouseLeave (e, message) {
+				BDFDB.TimeUtils.clear(messageContentTimeouts[message.id]);
+				delete messageContentTimeouts[message.id];
+			}
+
+			showTooltipForMessageContent (message, translation) {
+				// NOTE: Although id props should be unique, Discord reuses them when, for example, displaying threads in floating views.
+				let nodes = document.querySelectorAll(`#message-content-${message.id}`);
+				let node = Array.from(nodes).find((n) => n === n.parentElement.querySelector(":hover"));
+				if (!node) return;
+				
+				let tooltip = node.__translatorMessageContentTooltip;
+				if (!tooltip) {
+					tooltip = BdApi.UI.createTooltip(node, translation, { disabled: true });
+					tooltip.tooltipElement.style.setProperty("white-space", "pre-wrap");
+					tooltip.tooltipElement.style.setProperty("line-height", "20px");
+					node.__translatorMessageContentTooltip = tooltip;
+				}
+				const rect = node.getBoundingClientRect();
+				const paddingLeft = parseInt(window.getComputedStyle(node, null).paddingLeft, 10);
+				tooltip.tooltipElement.style.setProperty("max-width", `${rect.width - paddingLeft}px`);
+				tooltip.show();
+				
+				// NOTE: Must set after calling `show()` to override what `show()` sets.
+				tooltip.element.style.setProperty("left", `${rect.left + paddingLeft}px`);
 			}
 
 			processEmbed (e) {
@@ -895,7 +959,7 @@ module.exports = (_ => {
 				});
 			}
 
-			translateText (text, place, callback) {
+			translateText (text, place, showToast = true, callback) {
 				let toast = null, toastInterval, finished = false, finishTranslation = translation => {
 					isTranslating = false;
 					if (toast) toast.close();
@@ -933,6 +997,7 @@ module.exports = (_ => {
 							if (toast) toast.close();
 							BDFDB.TimeUtils.clear(toastInterval);
 							
+							if (!showToast) return;
 							toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_translating} (${translationEngines[engine].name}) - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {
 								timeout: 0,
 								ellipsis: true,
@@ -2447,6 +2512,7 @@ module.exports = (_ => {
 							general_addTranslateButton:				"Adds a Translate Button to the Channel Textarea",
 							general_sendOriginalMessage:				"Also sends the original Message when translating your sent Message",
 							general_showOriginalMessage:				"Also shows the original Message when translating a received Message",
+							general_showTranslationOnHover:		"Shows translation in a popup when mouse hovers over a Message",
 							general_usePerChatTranslation:				"Enables/Disables the Translator Button State per Channel and not globally",
 							language_choice_input_received:				"Input Language in received Messages",
 							language_choice_input_sent:				"Input Language in your sent Messages",
