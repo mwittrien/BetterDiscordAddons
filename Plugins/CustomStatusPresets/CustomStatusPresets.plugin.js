@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.1
+ * @version 1.2.2
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -319,7 +319,7 @@ module.exports = (_ => {
 			
 			processUserPopoutCustomStatusPicker (e) {
 				if (e.instance.props.profileType != BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE) return;
-				let container = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutcustomstatuspickervisiblecontainer]]});
+				let container = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", [BDFDB.disCN.userpopoutcustomstatuspickervisiblecontainer, BDFDB.disCN.userpopoutcustomstatuspickeraddbutton]]]});
 				if (!container) return;
 				let onContextMenu = container.props.onContextMenu;
 				container.props.onContextMenu = BDFDB.TimeUtils.suppress(event => {
