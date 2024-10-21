@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.4.7
+ * @version 5.4.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -910,24 +910,33 @@ module.exports = (_ => {
 									_this.cacheClickedImage(target);
 									BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
 										return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
-											className: BDFDB.disCN.imagemodal
+											className: BDFDB.disCNS.modalcarouselmodal + BDFDB.disCN.imagemodal
 										}, modalData, {
 											size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
 											"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
-											children: isVideo ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageVideoModal, {
-												src: imageThrowaway.src,
-												poster: _this.getPosterUrl(imageThrowaway.src),
-												width: this.videoWidth,
-												naturalWidth: this.videoWidth,
-												height: this.videoHeight,
-												naturalHeight: this.videoHeight,
+											children: isVideo ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
+												items: [{
+													src: imageThrowaway.src,
+													poster: _this.getPosterUrl(imageThrowaway.src),
+													width: this.videoWidth,
+													naturalWidth: this.videoWidth,
+													height: this.videoHeight,
+													naturalHeight: this.videoHeight
+												}],
 												renderForwardComponent: _ => {},
 												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
 											}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-												src: imageThrowaway.src,
-												original: urlData.original,
-												width: this.width,
-												height: this.height,
+												items: [{
+													animated: false,
+													height: this.height,
+													original: imageThrowaway.src,
+													srcIsAnimated: false,
+													trigger: "CLICK",
+													type: "IMAGE",
+													url: imageThrowaway.src,
+													width: this.width,
+													zoomThumbnailPlaceholder: imageThrowaway.src
+												}],
 												className: BDFDB.disCN.imagemodalimage,
 												renderForwardComponent: _ => {},
 												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
@@ -992,7 +1001,7 @@ module.exports = (_ => {
 					switchedImageProps = null;
 				}
 				else if (e.returnvalue) {
-					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || e.instance.props.items[0].src);
+					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || e.instance.props.items[0].src || e.instance.props.items[0].original);
 					
 					let zoomedFitWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.imagemodalimagezoomedfit]]});
 					if (zoomedFitWrapper) zoomedFitWrapper.props.className = BDFDB.ArrayUtils.remove(zoomedFitWrapper.props.className.split(" "), BDFDB.disCN.imagemodalimagezoomedfit, true).join(" ");
