@@ -3329,6 +3329,7 @@
 		"userpopoutavatarwrappernonuserbot": ["UserPopoutHeader", "avatarWrapperNonUserBot"],
 		"userpopoutavatarwrapper": ["UserPopoutHeader", "avatarWrapper"],
 		"userpopoutavatarwrappernormal": ["UserPopoutHeader", "avatarWrapperNormal"],
+		"userpopoutcustomstatuspickeraddbutton": ["UserPopoutCustomStatusPicker", "addCustomStatusButtonBubble"],
 		"userpopoutcustomstatuspickervisiblecontainer": ["UserPopoutCustomStatusPicker", "visibleContainer"],
 		"userpopoutcustomstatus": ["CustomStatus", "customStatus"],
 		"userpopoutcustomstatusemoji": ["CustomStatus", "customStatusEmoji"],
