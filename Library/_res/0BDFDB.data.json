@@ -480,7 +480,7 @@
 		"LayerProvider": {"strings": ["layerContainerElement", "getContextValue"]},
 		"LayersProvider": {"strings": ["._currentlyTransitioningKeys", "._keysToEnter", "._keyChildMapping"]},
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
-		"LazyImageZoomable": {"strings": ["renderLinkComponent", "onCloseImage"]},
+		"LazyImageZoomable": {"strings": ["zoomThumbnailPlaceholder", "onCloseImage"], "noSearch": true},
 		"ListItemTooltip": {"strings": [".listItemWrapper", "tooltipClassName", "disableWrapper"]},
 		"MemberListItem": {"strings": ["ownerTooltipText", "onClickPremiumGuildIcon:", "Messages.GUILD_OWNER"]},
 		"Mention": {"strings": ["iconType:", "color:", "),backgroundColor:"]},
