@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.3
+ * @version 4.9.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1672,7 +1672,7 @@ module.exports = (_ => {
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: BDFDB.LibraryModules.LanguageStore.Messages.USER_SETTINGS_PROFILE_THEME,
+							tab: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME,
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.marginbottom20,
@@ -1721,7 +1721,7 @@ module.exports = (_ => {
 									]
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: BDFDB.LibraryModules.LanguageStore.Messages.USER_SETTINGS_BANNER_COLOR_TITLE,
+									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_BANNER_COLOR_TITLE,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color5,
@@ -1734,7 +1734,7 @@ module.exports = (_ => {
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: BDFDB.LibraryModules.LanguageStore.Messages.USER_SETTINGS_PROFILE_THEME_PRIMARY,
+									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME_PRIMARY,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color6,
@@ -1747,7 +1747,7 @@ module.exports = (_ => {
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: BDFDB.LibraryModules.LanguageStore.Messages.USER_SETTINGS_PROFILE_THEME_ACCENT,
+									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME_ACCENT,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color7,
