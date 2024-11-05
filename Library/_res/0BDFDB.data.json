@@ -165,7 +165,8 @@
 			"keyToCode": ["\"meta\",\"command\"", "return parseInt("]
 		}},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
-		"LanguageUtils": {"props": ["getLanguages", "getLocale", "intl"]},
+		"LanguageUtils": {"props": ["getLanguages", "getLocale"]},
+		"LanguageIntlUtils": {"props": ["getLanguages", "getSystemLocale", "intl"]},
 		"LoginUtils": {"props": ["login", "logout"]},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
 		"MemberDisplayUtils": {"strings": [".getGuildMemberProfile", ".getUser("], "exported": false, "value": "exports", "map": {
