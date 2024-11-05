@@ -1384,7 +1384,6 @@
 	width: 108px;
 	height: 144px;
 	margin-left: 46px;
-	-webkit-mask-size: 72px 96px !important;
 }
 .uploadModal_f82cc7 .icon_f82cc7:not(img)::before,
 .uploadModal_f82cc7 .icon_f82cc7:not(img)::after,
