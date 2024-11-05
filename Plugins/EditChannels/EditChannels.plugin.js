@@ -80,8 +80,6 @@ module.exports = (_ => {
 						recentMentions:		{value: true, 			description: "Recent Mentions Popout"},
 						threads:		{value: true, 			description: "Thread Overview"},
 						autocompletes:		{value: true, 			description: "Autocomplete Menu"},
-						auditLog:		{value: true, 			description: "Audit Log"},
-						inviteLog:		{value: true, 			description: "Invite Log"},
 						quickSwitcher:		{value: true, 			description: "Quick Switcher"},
 						searchResults:		{value: true, 			description: "Search Results"},
 						searchPopout:		{value: true, 			description: "Search Popout"},
@@ -91,14 +89,12 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					before: [
-						"AuditLogEntry",
 						"AutocompleteChannelResult",
 						"ChannelCallHeader",
 						"ChannelEmptyMessages",
 						"ChannelsList",
 						"ChannelTextAreaEditor",
 						"ChannelThreadItem",
-						"GuildInvites",
 						"MessageContent",
 						"QuickSwitchChannelResult",
 						"RecentsChannelHeader",
@@ -107,7 +103,6 @@ module.exports = (_ => {
 						"ThreadMessageAccessories"
 					],
 					after: [
-						"AuditLogEntry",
 						"AutocompleteChannelResult",
 						"ChannelCallHeader",
 						"ChannelFloatingSidebar",
@@ -334,23 +329,6 @@ module.exports = (_ => {
 						return children;
 					}, "Error in Children Render of AutocompleteChannelResult!", this);
 				}
-			}
-
-			processAuditLogEntry (e) {
-				if (!this.settings.places.auditLog) return;
-				let channel = BDFDB.ObjectUtils.get(e.instance, "props.log.options.channel");
-				if (!channel) return;
-				if (!e.returnvalue) e.instance.props.log.options.channel = this.getChannelData(channel.id);
-				else {
-					let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["children", [["#" + channel.name]]]]});
-					if (channelName) this.changeChannelColor(channelName, channel.id);
-				}
-			}
-
-			processGuildInvites (e) {
-				if (!this.settings.places.inviteLog || !e.instance.props.invites) return;
-				e.instance.props.invites = Object.assign({}, e.instance.props.invites);
-				for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {channel: this.getChannelData(e.instance.props.invites[id].channel.id)}));
 			}
 			
 			processChannelFloatingSidebar (e) {
