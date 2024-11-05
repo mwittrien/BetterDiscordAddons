@@ -486,7 +486,7 @@
 		"Messages": {"strings": ["messageGroupSpacing", "groupSpacing", "jumpToPresent"]},
 		"MessageSearchResultContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message"], "nonStrings": ["getGuildId"]},
 		"MessageTimestamp": {"strings": [".timestampVisibleOnHover", "MESSAGE_EDITED_TIMESTAMP", ".timestampTooltip"], "noSearch": true},
-		"MessageToolbar": {"strings": ["Messages.MORE", "hasDeveloperMode", "emojiPicker:"], "noSearch": true},
+		"MessageToolbar": {"strings": ["useMessageUtilitiesProps", "hasDeveloperMode", "emojiPicker:"], "noSearch": true},
 		"MessageUsername": {"strings": ["\"username\"", "colorString", "compact"]},
 		"ModalHeader": {"strings": ["headerIdIsManaged:", ".header,", "Direction.HORIZONTAL"]},
 		"ModalFooter": {"strings": [".footerSeparator", ".separator", "Direction.HORIZONTAL_REVERSE"]},
