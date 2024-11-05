@@ -90,7 +90,6 @@ module.exports = (_ => {
 						userPopout:			{value: true, 		description: "User Popouts"},
 						userProfile:			{value: true, 		description: "User Profile Modal"},
 						autocompletes:			{value: true, 		description: "Autocomplete Menu"},
-						guildSettings:			{value: true, 		description: "Server Settings"},
 						quickSwitcher:			{value: true, 		description: "Quick Switcher"},
 						searchPopout:			{value: true, 		description: "Search Popout"},
 						userAccount:			{value: true, 		description: "Your Account Information"},
@@ -101,7 +100,6 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"Account",
-						"AuditLogEntry",
 						"AutocompleteUserResult",
 						"ChannelCall",
 						"ChannelCallGrid",
@@ -109,10 +107,7 @@ module.exports = (_ => {
 						"ChannelReply",
 						"ChannelTextAreaEditor",
 						"DirectMessageAddPopout",
-						"GuildBans",
-						"GuildEmojis",
 						"GuildInvitationRow",
-						"GuildInvites",
 						"MemberListItem",
 						"Message",
 						"MessageContent",
@@ -138,7 +133,6 @@ module.exports = (_ => {
 					],
 					after: [
 						"Account",
-						"AuditLogs",
 						"AutocompleteUserResult",
 						"ChannelCallHeader",
 						"ChannelReply",
@@ -1029,50 +1023,6 @@ module.exports = (_ => {
 				this.injectBadge(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), 2, {
 					tagClass: BDFDB.disCN.bottagmember
 				});
-			}
-
-			processAuditLogs (e) {
-				if (!this.settings.places.guildSettings || !e.instance.props.logs) return;
-				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "renderUserQuickSelectItem")) BDFDB.PatchUtils.patch(this, e.instance, "renderUserQuickSelectItem", {after: e2 => {
-					if (!e2.methodArguments[0] || !e2.methodArguments[0].user || !changedUsers[e2.methodArguments[0].user.id]) return;
-					let username = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["children", e2.methodArguments[0].label]]});
-					if (username) {
-						if (changedUsers[e2.methodArguments[0].user.id].name) username.props.children = changedUsers[e2.methodArguments[0].user.id].name;
-						this.changeUserColor(username, e2.methodArguments[0].user.id);
-					}
-					let avatar = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["className", BDFDB.disCN.selectfilterpopoutavatar]]});
-					if (avatar) avatar.props.src = this.getUserAvatar(e2.methodArguments[0].user.id);
-				}}, {noCache: true});
-			}
-
-			processAuditLogEntry (e) {
-				if (!this.settings.places.guildSettings || !e.instance.props.log) return;
-				if (e.instance.props.log.user) e.instance.props.log.user = this.getUserData(e.instance.props.log.user.id);
-				if (e.instance.props.log.target && e.instance.props.log.targetType == "USER") e.instance.props.log.target = this.getUserData(e.instance.props.log.target.id);
-			}
-
-			processGuildEmojis (e) {
-				if (!this.settings.places.guildSettings) return;
-				if (e.instance.props.staticEmojis) {
-					e.instance.props.staticEmojis = [].concat(e.instance.props.staticEmojis);
-					for (let i in e.instance.props.staticEmojis) e.instance.props.staticEmojis[i] = Object.assign({}, e.instance.props.staticEmojis[i], {user: this.getUserData(e.instance.props.staticEmojis[i].user.id)});
-				}
-				if (e.instance.props.animatedEmojis) {
-					e.instance.props.animatedEmojis = [].concat(e.instance.props.animatedEmojis);
-					for (let i in e.instance.props.animatedEmojis) e.instance.props.animatedEmojis[i] = Object.assign({}, e.instance.props.animatedEmojis[i], {user: this.getUserData(e.instance.props.animatedEmojis[i].user.id)});
-				}
-			}
-
-			processGuildInvites (e) {
-				if (!this.settings.places.guildSettings || !e.instance.props.invites) return;
-				e.instance.props.invites = Object.assign({}, e.instance.props.invites);
-				for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {inviter: this.getUserData(e.instance.props.invites[id].inviter.id)}));
-			}
-
-			processGuildBans (e) {
-				if (!this.settings.places.guildSettings || !e.instance.props.bans) return;
-				e.instance.props.bans = Object.assign({}, e.instance.props.bans);
-				for (let id in e.instance.props.bans) e.instance.props.bans[id] = Object.assign({}, e.instance.props.bans[id], {user: this.getUserData(e.instance.props.bans[id].user.id)});
 			}
 
 			processGuildInvitationRow (e) {
