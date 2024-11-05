@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.2
+ * @version 3.8.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4366,7 +4366,7 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.getLanguage = function () {
-					return Internal.LibraryModules.LanguageUtils && (Internal.LibraryModules.LanguageUtils.chosenLocale || Internal.LibraryModules.LanguageUtils._chosenLocale) || document.querySelector("html[lang]").getAttribute("lang");
+					return Internal.LibraryModules.LanguageUtils && (Internal.LibraryModules.LanguageUtils.chosenLocale || Internal.LibraryModules.LanguageUtils._chosenLocale) || Internal.LibraryModules.LanguageIntlUtils.getSystemLocale && (Internal.LibraryModules.LanguageIntlUtils.getSystemLocale && Internal.LibraryModules.LanguageIntlUtils.getSystemLocale()) || document.querySelector("html[lang]").getAttribute("lang");
 				};
 				BDFDB.DiscordUtils.getBuild = function () {
 					if (BDFDB.DiscordUtils.getBuild.build) return BDFDB.DiscordUtils.getBuild.build;
@@ -4550,6 +4550,7 @@ module.exports = (_ => {
 				});
 				
 				const LanguageStringsObj = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore.Messages || Internal.LibraryModules.LanguageStore || {};
+				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("createLoader:", "getBinds", InternalData.LanguageStringHashes.DISCORD) || {}).Z;
 				const LibraryStrings = Object.assign({}, InternalData.LibraryStrings);
 				BDFDB.LanguageUtils = {};
 				BDFDB.LanguageUtils.languages = Object.assign({}, InternalData.Languages);
@@ -4572,7 +4573,7 @@ module.exports = (_ => {
 						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]];
 						if (!stringObj) BDFDB.LogUtils.warn([item, "not found in BDFDB.LanguageUtils.LanguageStrings"]);
 						else {
-							if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function") return BDFDB.LanguageUtils.LanguageStringsFormat(item);
+							if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) return BDFDB.LanguageUtils.LanguageStringsFormat(item);
 							else return stringObj;
 						}
 						return "";
@@ -4596,16 +4597,17 @@ module.exports = (_ => {
 				};
 				BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 					if (item) {
+						let formatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.intl && Internal.LibraryModules.LanguageIntlUtils.intl.format;
 						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]];
-						if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function") {
+						if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) {
 							let i = 0, returnvalue, formatVars = {};
 							while (!returnvalue && i < 10) {
 								i++;
-								try {returnvalue = stringObj.format(formatVars, false);}
+								try {returnvalue = formatter && BDFDB.ArrayUtils.is(stringObj) ? formatter(LanguageStringFormattersObj[InternalData.LanguageStringHashes[item]], formatVars) : stringObj.format(formatVars, false);}
 								catch (err) {
 									returnvalue = null;
 									let value = values.shift();
-									formatVars[err.toString().split("for: ")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
+									formatVars[err.toString().split("for: ")[1] || err.toString().split("\"")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
 									if (stringObj.intMessage) {
 										try {for (let hook of stringObj.intMessage.format(formatVars).match(/\([^\(\)]+\)/gi)) formatVars[hook.replace(/[\(\)]/g, "")] = n => n;}
 										catch (err2) {}
