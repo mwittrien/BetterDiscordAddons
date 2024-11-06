@@ -449,6 +449,8 @@
 		"GuildIconWrapper": {"strings": ["badgeStrokeColor:", "textScale:"]},
 		"GuildInvitationRow": {"strings": [".getSelectedInviteMetadata", ".getSuggestedProps", "inviteKey:"], "noSearch": true},
 		"GuildItem": {"strings": ["isUserLurking", "includeActivity", "tooltipClassName"]},
+		"GuildItemWrapper": {"strings": ["guildNode:", "lowerBadge:", "isUnavailable"]},
+		"GuildItemIcon": {"strings": ["\"always\"", ".acronym", "width:48,height:48"], "noSearch": true},
 		"GuildItemWrapper": {"strings": [".pauseBackground", ".isUnavailable", "guildJoinRequestStatus"]},
 		"GuildsBar": {"strings": ["unreadMentionsIndicatorTop", "disableAppDownload", ".GUILD_MEMBER_VERIFICATION"]},
 		"GuildSidebar": {"strings": ["\"guildsnav\"", "unreadMentionsIndicatorBottom"]},
