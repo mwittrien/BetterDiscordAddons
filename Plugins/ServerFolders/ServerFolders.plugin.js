@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.2.5
+ * @version 7.2.6
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -878,8 +878,7 @@ module.exports = (_ => {
 					guildStates[e.instance.props.guild.id] = state;
 					if (e.returnvalue) {
 						let data = this.getFolderConfig(folder.folderId);
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
-						if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							tooltipConfig: Object.assign({
 								type: "right",
 								list: true,
@@ -889,7 +888,7 @@ module.exports = (_ => {
 								backgroundColor: data.color3,
 								fontColor: data.color4,
 							}),
-							children: children[index].props.children
+							children: typeof e.returnvalue.props.children == "function" ? e.instance.props.children : e.returnvalue.props.children
 						});
 					}
 				}
