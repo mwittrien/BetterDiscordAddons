@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.3
+ * @version 2.4.4
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -97,6 +97,7 @@ module.exports = (_ => {
 						"GuildIcon",
 						"GuildIconWrapper",
 						"GuildItem",
+						"GuildItemWrapper",
 						"UserProfileMutualGuilds",
 						"RecentsChannelHeader"
 					]
@@ -232,14 +233,18 @@ module.exports = (_ => {
 				}));
 			}
 
+			processGuildItemWrapper (e) {
+				if (!this.settings.places.guildList || !BDFDB.GuildUtils.is(e.returnvalue.props.guild) || !e.returnvalue.props.guild.joinedAt) return;
+				e.returnvalue.props.guild = this.getGuildData(e.returnvalue.props.guild.id);
+			}
+
 			processGuildItem (e) {
 				if (!this.settings.places.guildList || !BDFDB.GuildUtils.is(e.instance.props.guild) || !e.instance.props.guild.joinedAt) return;
 				if (!e.returnvalue) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 				else {
 					let data = changedGuilds[e.instance.props.guild.id];
 					if (data && (data.color3 || data.color4)) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
-						if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							tooltipConfig: {
 								type: "right",
 								guild: e.instance.props.guild,
@@ -248,7 +253,7 @@ module.exports = (_ => {
 								backgroundColor: data.color3,
 								fontColor: data.color4
 							},
-							children: children[index].props.children
+							children: typeof e.returnvalue.props.children == "function" ? e.instance.props.children : e.returnvalue.props.children
 						});
 					}
 				}
@@ -269,6 +274,7 @@ module.exports = (_ => {
 			}
 			
 			processGuildIconWrapper (e) {
+				console.log(e);
 				if (!BDFDB.GuildUtils.is(e.instance.props.guild) || !changedGuilds[e.instance.props.guild.id] || !e.instance.props.guild.joinedAt) return;
 				let change = true;
 				if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) change = this.settings.places.guildList;
