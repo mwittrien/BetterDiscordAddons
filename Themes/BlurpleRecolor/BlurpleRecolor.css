@@ -515,18 +515,17 @@
 #app-mount .selectedPill_d4df8b {
 	border-color: rgb(var(--accentcolor_v)) !important;
 }
-
-.image_faf5ab[src="/assets/428b2be4430a0d1d072f.svg"] {					/* textarea				follow channel icon						*/
+.image_faf5ab[src="/assets/d73341fd9c4ccfa62ba5.svg"] {					/* textarea				follow channel icon						*/
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_bg.svg) center/contain no-repeat;
 	width: 47px;
 	height: 60px;
 	margin-bottom: -8px;
 }
-.image_faf5ab[src="/assets/428b2be4430a0d1d072f.svg"] + * {
+.image_faf5ab[src="/assets/d73341fd9c4ccfa62ba5.svg"] + * {
 	overflow: visible;
 }
-.image_faf5ab[src="/assets/428b2be4430a0d1d072f.svg"] + *::after {
+.image_faf5ab[src="/assets/d73341fd9c4ccfa62ba5.svg"] + *::after {
 	content: "";
 	position: absolute;
 	bottom: 8px;
