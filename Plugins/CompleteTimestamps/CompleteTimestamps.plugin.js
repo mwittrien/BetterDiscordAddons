@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -88,8 +88,7 @@ module.exports = (_ => {
 					after: [
 						"AuditLogEntry",
 						"Embed",
-						"MessageTimestamp",
-						"UserMemberSince"
+						"MessageTimestamp"
 					]
 				};
 				
@@ -214,18 +213,6 @@ module.exports = (_ => {
 						else tooltipWrapper.props.text = timestamp;
 					}
 				}
-			}
-			
-			processUserMemberSince (e) {
-				let bodys = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutsectionbody]], all: true});
-				if (bodys[0]) bodys[0].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: this.formatTimestamp(this.settings.dates.tooltipDate, BDFDB.LibraryModules.TimestampUtils.extractTimestamp(e.instance.props.userId)),
-					children: BDFDB.ReactUtils.createElement("span", {children: bodys[0].props.children})
-				});
-				if (e.instance.props.guildMember && e.instance.props.guildMember.joinedAt && bodys[1]) bodys[1].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.guildMember.joinedAt),
-					children: BDFDB.ReactUtils.createElement("span", {children: bodys[1].props.children})
-				});
 			}
 
 			processEmbed (e) {
