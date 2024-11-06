@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.0
+ * @version 1.2.1
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -244,10 +244,6 @@ module.exports = (_ => {
 						color: var(--text-normal);
 						font-size: 40px;
 					}
-					${BDFDB.dotCNS.tooltiplistitem + BDFDB.dotCN.flowerstarchild} > svg {
-						width: 10px;
-						height: 10px;
-					}
 				`;
 			}
 			
@@ -363,12 +359,11 @@ module.exports = (_ => {
 			processGuildItem (e) {
 				if (!BDFDB.GuildUtils.is(e.instance.props.guild)) return;
 				let tooltipContainer;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
-				if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, Object.assign({}, children[index].props, {
+				e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, Object.assign({}, e.returnvalue.props, {
 					ref: instance => {if (instance) tooltipContainer = instance;},
 					tooltipConfig:  Object.assign({
 						backgroundColor: this.settings.colors.tooltipColor
-					}, children[index].props.tooltipConfig, {
+					}, e.returnvalue.props.tooltipConfig, {
 						type: "right",
 						guild: e.instance.props.guild,
 						list: true,
@@ -378,7 +373,8 @@ module.exports = (_ => {
 						shiftKey: event.shiftKey,
 						tooltipContainer: tooltipContainer,
 						guild: e.instance.props.guild
-					})
+					}),
+					children: typeof e.returnvalue.props.children == "function" ? e.instance.props.children : e.returnvalue.props.children
 				}));
 			}
 
