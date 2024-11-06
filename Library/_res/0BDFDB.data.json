@@ -459,7 +459,7 @@
 		"HeaderBarRecipient": {"strings": ["getRecipientId", ".avatar", "getName"]},
 		"HeaderBarTitle": {"strings": [".titleWrapper", ",onContextMenu", "forceLevel:"]},
 		"HeaderBarTitleIcon": {"strings": ["HEADER_BAR_BADGE", ".iconBadge", "iconClassName:"]},
-		"HomeButtonDefault": {"strings": [".DISCODO_ENABLED", "showProgressBadge", "tutorialContainer"], "noSearch": true},
+		"HomeButtonDefault": {"strings": ["getHomeLink", "showProgressBadge", "tutorialContainer"], "noSearch": true},
 		"I18nLoader": {"strings": ["default.locale", ".loading", "__OVERLAY__"]},
 		"IconBadge": {"strings": [".icon}", "ROUND,disableColor", ".iconBadge,"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "noSearch": true},
