@@ -268,7 +268,7 @@
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
 		"TextArea": {"strings": ["onKeyDown", "defaultDirty"]},
-		"TextInput": {"strings": ["onFocus", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"]},
+		"TextInput": {"strings": ["onFocus", "inputPrefix:", "getIsOverFlowing"]},
 		"TooltipContainer": {"strings": ["Tooltip cannot find DOM node", "shouldShowTooltip", "clickable"]}
 	},
 	"LibraryComponents": {
@@ -545,7 +545,7 @@
 		"SystemMessageWrapper": {"strings": ["unknown message type", "\"SystemMessage\""]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"TextChannelEmptyMessage": {"strings": ["MANAGE_CHANNELS", ".BEGINNING_CHANNEL_DESCRIPTION", "topicHook:"]},
-		"TextInput": {"strings": ["onFocus", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"], "noSearch": true},
+		"TextInput": {"strings": ["onFocus", "inputPrefix:", "getIsOverFlowing"], "noSearch": true},
 		"ThreadCard": {"strings": ["threadId:", ".container", ".threadName"]},
 		"ThreadCardDescription": {"strings": [".bullet", ".lastMessageId"]},
 		"ThreadEmptyMessage": {"strings": [",{channel:", ".name", "{channelId:", ".iconWrapper", ".icon}"]},
