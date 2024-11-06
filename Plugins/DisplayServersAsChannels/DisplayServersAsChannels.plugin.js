@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.0
+ * @version 1.8.1
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -79,6 +79,7 @@ module.exports = (_ => {
 
 				this.modulePatches = {
 					before: [
+						"GuildItem",
 						"TooltipContainer"
 					],
 					after: [
@@ -200,13 +201,13 @@ module.exports = (_ => {
 			}
 			
 			processHomeButtonDefault (e) {
-				this.removeTooltip(e.returnvalue);
+				e.returnvalue = this.removeTooltip(e.returnvalue);
 				e.returnvalue = this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, BDFDB.LanguageUtils.LanguageStrings.HOME);
 			}
 			
 			processGuildFavorites (e) {
-				this.removeTooltip(e.returnvalue);
+				e.returnvalue = this.removeTooltip(e.returnvalue);
 				e.returnvalue = this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, BDFDB.LanguageUtils.LanguageStrings.FAVORITES_GUILD_NAME);
 			}
@@ -215,7 +216,7 @@ module.exports = (_ => {
 				if (!e.instance.props.channel.id) return;
 				if (e.returnvalue.props.children && e.returnvalue.props.children.props) e.returnvalue.props.children.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.children.props.className, BDFDB.LibraryStores.UserGuildSettingsStore.isChannelMuted(null, e.instance.props.channel.id) && BDFDB.disCN._displayserversaschannelsmuted);
 				let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
-				this.removeTooltip(e.returnvalue);
+				e.returnvalue = this.removeTooltip(e.returnvalue);
 				e.returnvalue = this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, text, {
 					isDm: true
@@ -224,26 +225,30 @@ module.exports = (_ => {
 			
 			processGuildItem (e) {
 				if (!e.instance.props.guild) return;
-				let guildcontainer = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildcontainer]]});
-				if (guildcontainer) guildcontainer.props.className = BDFDB.DOMUtils.formatClassName(guildcontainer.props.className, BDFDB.LibraryStores.UserGuildSettingsStore.isMuted(e.instance.props.guild.id) && BDFDB.disCN._displayserversaschannelsmuted);
-				if (!BDFDB.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue, e.instance.props.guild);
-				e.returnvalue = this.removeMask(e.returnvalue);
-				this.addElementName(e.returnvalue, e.instance.props.guild.name, {
-					badges: [
-						this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
-							animate: e.instance.props.animatable && e.instance.state && e.instance.state.hovered,
-							guild: e.instance.props.guild,
-							size: BDFDB.LibraryComponents.GuildIcon.Sizes.SMALLER
-						}),
-						this.settings.general.showGuildBadge && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildBadge, {
-							size: this.settings.amounts.serverElementHeight * 0.5,
-							badgeColor: BDFDB.DiscordConstants.Colors.PRIMARY_400,
-							tooltipColor: BDFDB.LibraryComponents.TooltipContainer.Colors.BLACK,
-							tooltipPosition: BDFDB.LibraryComponents.TooltipContainer.Positions.RIGHT,
-							guild: e.instance.props.guild
-						})
-					]
-				});
+				if (!e.returnvalue) {
+					let guildcontainer = BDFDB.ReactUtils.findChild(e.instance, {props: [["className", BDFDB.disCN.guildcontainer]]});
+					if (guildcontainer) guildcontainer.props.className = BDFDB.DOMUtils.formatClassName(guildcontainer.props.className, BDFDB.LibraryStores.UserGuildSettingsStore.isMuted(e.instance.props.guild.id) && BDFDB.disCN._displayserversaschannelsmuted);
+					e.instance.props.children = this.removeMask(e.instance.props.children);
+					this.addElementName(e.instance.props.children, e.instance.props.guild.name, {
+						badges: [
+							this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
+								animate: e.instance.props.animatable && e.instance.state && e.instance.state.hovered,
+								guild: e.instance.props.guild,
+								size: BDFDB.LibraryComponents.GuildIcon.Sizes.SMALLER
+							}),
+							this.settings.general.showGuildBadge && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildBadge, {
+								size: this.settings.amounts.serverElementHeight * 0.5,
+								badgeColor: BDFDB.DiscordConstants.Colors.PRIMARY_400,
+								tooltipColor: BDFDB.LibraryComponents.TooltipContainer.Colors.BLACK,
+								tooltipPosition: BDFDB.LibraryComponents.TooltipContainer.Positions.RIGHT,
+								guild: e.instance.props.guild
+							})
+						]
+					});
+				}
+				else {
+					if (!BDFDB.BDUtils.isPluginEnabled("ServerDetails")) e.returnvalue = this.removeTooltip(e.instance.props.children, e.instance.props.guild);
+				}
 			}
 			
 			processGuildBadge (e) {
@@ -299,7 +304,7 @@ module.exports = (_ => {
 			}
 			
 			processCircleIconButton (e) {
-				this.removeTooltip(e.returnvalue);
+				e.returnvalue = this.removeTooltip(e.returnvalue);
 				e.returnvalue = this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, e.instance.props.tooltip, {
 					wrap: true,
@@ -308,7 +313,7 @@ module.exports = (_ => {
 			}
 			
 			processUnavailableGuildsButton (e) {
-				this.removeTooltip(e.returnvalue);
+				e.returnvalue = this.removeTooltip(e.returnvalue);
 				this.addElementName(e.returnvalue, `${e.instance.props.unavailableGuilds} ${e.instance.props.unavailableGuilds == 1 ? "Server" : "Servers"}`, {
 					wrap: true,
 					backgroundColor: "transparent"
@@ -322,17 +327,30 @@ module.exports = (_ => {
 			
 			removeTooltip (parent, guild) {
 				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: ["ListItemTooltip", "GuildTooltip", "BDFDB_TooltipContainer"]});
-				if (index == -1) return;
-				if (!guild) children[index] = children[index].props.children;
-				else children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildVoiceList, {
-						guild: guild
-					}),
-					tooltipConfig: {
-						type: "right"
-					},
-					children: children[index].props.children
-				});
+				if (index == -1) {
+					if (guild) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildVoiceList, {
+							guild: guild
+						}),
+						tooltipConfig: {
+							type: "right"
+						},
+						children: parent
+					});
+				}
+				else {
+					if (!guild) children[index] = children[index].props.children;
+					else children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildVoiceList, {
+							guild: guild
+						}),
+						tooltipConfig: {
+							type: "right"
+						},
+						children: children[index].props.children
+					});
+				}
+				return parent;
 			}
 			
 			removeMask (parent) {
