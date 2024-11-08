@@ -575,7 +575,7 @@
 		"UserPopout": {"strings": ["{user:", "userId:", "\"Unexpected missing user\")", "getUser"], "noSearch": true},
 		"UserPopoutBody": {"strings": ["customStatusActivity:", "canDM:", "hidePersonalInformation:", "showCopiableUsername:"]},
 		"UserPopoutBodySimplified": {"strings": [".BITE_SIZE", "hidePersonalInformation", "onOpenProfile:", "getRelationshipType"], "noSearch": true},
-		"UserPopoutCustomStatusPicker": {"strings": [".visibleContainer", "CUSTOM_STATUS_CUSTOM_STATUS_A11Y_LABEL", "HOVER_CUSTOM_STATUS"], "noSearch": true},
+		"UserPopoutCustomStatusPicker": {"strings": [".visibleContainer", "HOVER_CUSTOM_STATUS"], "noSearch": true},
 		"UserPopoutMemberSince": {"strings": [".title,", "textClassName:", ".USER_PROFILE_MEMBER_SINCE"]},
 		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"], "noSearch": true},
 		"UserProfileHeader": {"strings": ["statusBackdropColor", "\"header\"", "originalFriendingEnabled"], "noSearch": true},
