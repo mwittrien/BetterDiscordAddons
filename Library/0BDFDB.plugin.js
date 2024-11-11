@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.5
+ * @version 3.8.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4609,7 +4609,9 @@ module.exports = (_ => {
 								catch (err) {
 									returnvalue = null;
 									let value = values.shift();
-									formatVars[err.toString().split("for: ")[1] || err.toString().split("\"")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
+									value = value != null ? (value === 0 ? "0" : value) : "undefined";
+									let valueName = err.toString().split("for: ")[1] || err.toString().split("\"")[1];
+									formatVars[valueName] = valueName.endsWith("Hook") ? (_ => value) : value;
 									if (stringObj.intMessage) {
 										try {for (let hook of stringObj.intMessage.format(formatVars).match(/\([^\(\)]+\)/gi)) formatVars[hook.replace(/[\(\)]/g, "")] = n => n;}
 										catch (err2) {}
