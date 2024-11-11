@@ -46,9 +46,9 @@
 	--backgroundfloating_v:			var(--backgroundfloating_s, var(--backgroundfloating));
 }
 
-.theme-light:not(.userProfileOuterThemed_c69a7b),
-.theme-dark:not(.userProfileOuterThemed_c69a7b),
-.theme-amoled:not(.userProfileOuterThemed_c69a7b) {
+.theme-light:not(.custom-profile-theme),
+.theme-dark:not(.custom-profile-theme),
+.theme-amoled:not(.custom-profile-theme) {
 	--text-positive: rgb(var(--successcolor_v));
 	--text-warning: rgb(var(--warningcolor_v));
 	--text-danger: rgb(var(--dangercolor_v));
@@ -3043,36 +3043,34 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		12.1.		USERPOPOUT					---- */
 
-#app-mount .userPopoutOuter_c69a7b {
+#app-mount .outer_c69a7b {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v), .6), 0 2px 10px 0 rgba(0,0,0, .2);
 }
 
-#app-mount .biteSizeInnerThemed_c69a7b,
-#app-mount .fullSizeInnerThemed_c69a7b,
-#app-mount .biteSizeInnerThemed_c69a7b .activity_cd74cc {
+#app-mount .outer_c69a7b.custom-profile-theme .inner_c69a7b .activity_cd74cc {
 	--bg-surface-overlay: var(--background-secondary-alt);
 }
 #app-mount .biteSizeOverlayBackground_c69a7b,
 #app-mount .fullSizeOverlayBackground_c69a7b,
-#app-mount .biteSizeInnerThemed_c69a7b .activity_cd74cc,
+#app-mount .outer_c69a7b.custom-profile-theme .inner_c69a7b .activity_cd74cc,
 #app-mount .menu_d4e7c2 {
 	--bg-mod-faint: var(--background-primary);
 	--border-faint: var(--background-primary);
 }
 
-.userPopoutOuter_c69a7b:not(.custom-profile-theme) .container_e5a42d,
-.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubble_d0a252,
-.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252,
-.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252:before,
-.userPopoutOuter_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252:after {
+.outer_c69a7b:not(.custom-profile-theme) .container_e5a42d,
+.outer_c69a7b:not(.custom-profile-theme) .statusBubble_d0a252,
+.outer_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252,
+.outer_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252:before,
+.outer_c69a7b:not(.custom-profile-theme) .statusBubbleOuter_d0a252:after {
 	background: var(--background-primary);
 	border-color: var(--background-primary);
 }
 
-.profileColors_ac6ab4 .mask_c51b4e circle {
+.outer_c69a7b.custom-profile-theme .mask_c51b4e circle {
 	fill: transparent;
 }
-#app-mount .userProfileOuterThemed_c69a7b ::-webkit-scrollbar-thumb {
+#app-mount .outer_c69a7b.custom-profile-theme ::-webkit-scrollbar-thumb {
 	background-color: var(--profile-gradient-secondary-color) !important;
 }
 
