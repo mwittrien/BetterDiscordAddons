@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.7
+ * @version 1.2.8
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -115,24 +115,20 @@ module.exports = (_ => {
 						width: 16,
 						height: 16
 					}),
+					onClick: _ => {
+						_this.toggle();
+						if (toggleButton) BDFDB.ReactUtils.forceUpdate(toggleButton);
+					},
 					hint: enabled ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.menucolordefault,
 						background: BDFDB.disCN.menucheckbox,
 						foreground: BDFDB.disCN.menucheck,
 						name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKBOX,
-						style: {background: "unset"},
-						onClick: _ => {
-							_this.toggle();
-							if (toggleButton) BDFDB.ReactUtils.forceUpdate(toggleButton);
-						}
+						style: {background: "unset"}
 					}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.menucolordefault,
 						name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKBOX_EMPTY,
-						style: {background: "unset"},
-						onClick: _ => {
-							_this.toggle();
-							if (toggleButton) BDFDB.ReactUtils.forceUpdate(toggleButton);
-						}
+						style: {background: "unset"}
 					})
 				});
 			}
