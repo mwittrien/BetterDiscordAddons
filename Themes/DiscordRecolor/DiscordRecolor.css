@@ -1678,6 +1678,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ~~~~		6.		STORE/NITRO					~~~~ */
 
+#app-mount .headerBarTransparentDarkBackground_d8354c {
+	background-color: var(--background-primary) !important;
+	opacity: 0.8;
+}
 #app-mount .header_dbef3e {
 	color: var(--header-primary);
 }
