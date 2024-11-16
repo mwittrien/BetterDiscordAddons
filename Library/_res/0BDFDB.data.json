@@ -512,7 +512,7 @@
 		"PeopleListSectionedLazy": {"strings": ["statusSections", "peopleList", "id:\"people-list\""]},
 		"PeopleListSectionedNonLazy": {"strings": ["statusSections", "peopleList", "id:\"people\""]},
 		"PictureInPictureVideo": {"strings": [".topControls", ".bottomControl", "screenMessage", "renderBottomLeftControls:"]},
-		"PrivateChannel": {"strings": ["getActivities", "\"PrivateChannel\"", "isMultiUserDM"]},
+		"PrivateChannel": {"strings": ["isMultiUserDM", "PrivateChannel.renderAvatar", "isGDMFacepileEnabled"], "noSearch": true},
 		"PrivateChannelRecipients": {"strings": [".membersWrap", "recipients"]},
 		"PrivateChannelsList": {"strings": ["privateChannelIds", "privateChannelRecipientsInviteButtonIcon"]},
 		"QuickMessage": {"strings": ["QUICK_DM_USER", ".NORMAL"]},
