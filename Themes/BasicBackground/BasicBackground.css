@@ -342,6 +342,8 @@ body,											/* body													*/
 #app-mount .container_bf550a,								/* peoples				activity list							*/
 #app-mount .applicationStore_cecc86,							/* nitro												*/
 #app-mount .shop_e77fa3,								/* shop													*/
+#app-mount .shopScroll_e77fa3,								/* shop					scroller							*/
+#app-mount .shop_ebba41,								/* shop					inner								*/
 #app-mount .containerSidenav_d576e9,							/* family control											*/
 #app-mount .pageWrapper_a3a4ce,								/* guilddiscovery											*/
 #app-mount .pageContainer_a9a262,							/* unihub												*/
@@ -525,7 +527,7 @@ body::after {
 
 /* ~~~~		4.		GUILDLIST					~~~~ */
 
-#app-mount .footer_aa1bff {								/* footer												*/
+#app-mount .footer_f8ec41 {								/* footer												*/
 	background: transparent;
 }
 #app-mount .childWrapper_a6ce15 {							/* homebutton/acronym			innerwrap							*/
@@ -2147,6 +2149,22 @@ button.button_adca65.enabled_adca65:hover svg {
 
 
 /* ~~~~		7.		STORE/NITRO					~~~~ */
+
+#app-mount .headerBarTransparentDarkBackground_d8354c {					/* store				header								*/
+	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
+	position: static !important;
+}
+#app-mount .shop_ebba41 {								/* store				inner								*/
+	position: static !important;
+	margin-top: unset !important;
+}
+#app-mount .shopCard_c23530 {								/* store				card								*/
+	background-color: var(--background-secondary) !important;
+	border-color: var(--background-tertiary) !important;
+}
+#app-mount .shopCard_c23530:hover {							/* store				card hover							*/
+	box-shadow: 0 0 15px 1px var(--background-secondary) !important;
+}
 
 #app-mount .loading_e0eaac {								/* loading												*/
 	background: transparent;
