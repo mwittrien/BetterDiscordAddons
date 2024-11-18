@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.8
+ * @version 2.5.9
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -368,13 +368,18 @@ module.exports = (_ => {
 														size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
 														"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
 														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-															animated: false,
-															src: url,
-															original: url,
-															width: this.width,
-															height: this.height,
+															items: [{
+																animated: false,
+																height: this.height,
+																original: url,
+																srcIsAnimated: false,
+																trigger: "CLICK",
+																type: "IMAGE",
+																url: url,
+																width: this.width,
+																zoomThumbnailPlaceholder: url
+															}],
 															className: BDFDB.disCN.imagemodalimage,
-															shouldAnimate: true,
 															renderForwardComponent: _ => {},
 															renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
 														})
@@ -886,191 +891,191 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							list:								"Списък",
+							list:						"Списък",
 							notice_failed_plugins:				"Някои Plugins [{{var0}}] не можаха да бъдат заредени",
-							notice_new_plugins:					"Новите Plugins [{{var0}}] бяха добавени към Plugin Repo",
+							notice_new_plugins:				"Новите Plugins [{{var0}}] бяха добавени към Plugin Repo",
 							notice_outdated_plugins:			"Някои Plugins [{{var0}}] са остарели"
 						};
 					case "da":		// Danish
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_plugins:				"Nogle Plugins [{{var0}}] kunne ikke indlæses",
-							notice_new_plugins:					"Nye Plugins [{{var0}}] er blevet føjet til Plugin Repo",
+							notice_new_plugins:				"Nye Plugins [{{var0}}] er blevet føjet til Plugin Repo",
 							notice_outdated_plugins:			"Nogle Plugins [{{var0}}] er forældede"
 						};
 					case "de":		// German
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_plugins:				"Einige Plugins [{{var0}}] konnten nicht geladen werden",
-							notice_new_plugins:					"Neue Plugins [{{var0}}] wurden zur Plugin Repo hinzugefügt",
+							notice_new_plugins:				"Neue Plugins [{{var0}}] wurden zur Plugin Repo hinzugefügt",
 							notice_outdated_plugins:			"Einige Plugins [{{var0}}] sind veraltet"
 						};
 					case "el":		// Greek
 						return {
-							list:								"Λίστα",
+							list:						"Λίστα",
 							notice_failed_plugins:				"Δεν ήταν δυνατή η φόρτωση ορισμένων Πρόσθετων [{{var0}}] ",
-							notice_new_plugins:					"Προστέθηκαν νέα Πρόσθετα [{{var0}}] στο Αποθετήριο Προσθέτων",
+							notice_new_plugins:				"Προστέθηκαν νέα Πρόσθετα [{{var0}}] στο Αποθετήριο Προσθέτων",
 							notice_outdated_plugins:			"Ορισμένα Πρόσθετα [{{var0}}] είναι παλαιά"
 						};
 					case "es":		// Spanish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_plugins:				"Algunos Plugins [{{var0}}] no se pudieron cargar",
-							notice_new_plugins:					"Se han agregado nuevos Plugins [{{var0}}] a Plugin Repo",
+							notice_new_plugins:				"Se han agregado nuevos Plugins [{{var0}}] a Plugin Repo",
 							notice_outdated_plugins:			"Algunas Plugins [{{var0}}] están desactualizadas"
 						};
 					case "fi":		// Finnish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_plugins:				"Joitain kohdetta Plugins [{{var0}}] ei voitu ladata",
-							notice_new_plugins:					"Uusi Plugins [{{var0}}] on lisätty Plugin Repo",
+							notice_new_plugins:				"Uusi Plugins [{{var0}}] on lisätty Plugin Repo",
 							notice_outdated_plugins:			"Jotkut Plugins [{{var0}}] ovat vanhentuneita"
 						};
 					case "fr":		// French
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_plugins:				"Certains Plugins [{{var0}}] n'ont pas pu être chargés",
-							notice_new_plugins:					"De nouveaux Plugins [{{var0}}] ont été ajoutés à Plugin Repo",
+							notice_new_plugins:				"De nouveaux Plugins [{{var0}}] ont été ajoutés à Plugin Repo",
 							notice_outdated_plugins:			"Certains Plugins [{{var0}}] sont obsolètes"
 						};
 					case "hr":		// Croatian
 						return {
-							list:								"Popis",
+							list:						"Popis",
 							notice_failed_plugins:				"Neke datoteke Plugins [{{var0}}] nije moguće učitati",
-							notice_new_plugins:					"Novi Plugins [{{var0}}] dodani su u Plugin Repo",
+							notice_new_plugins:				"Novi Plugins [{{var0}}] dodani su u Plugin Repo",
 							notice_outdated_plugins:			"Neki su Plugins [{{var0}}] zastarjeli"
 						};
 					case "hu":		// Hungarian
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_plugins:				"Néhány Plugins [{{var0}}] nem sikerült betölteni",
-							notice_new_plugins:					"Új Plugins [{{var0}}] hozzáadva a következőhöz: Plugin Repo",
+							notice_new_plugins:				"Új Plugins [{{var0}}] hozzáadva a következőhöz: Plugin Repo",
 							notice_outdated_plugins:			"Néhány Plugins [{{var0}}] elavult"
 						};
 					case "it":		// Italian
 						return {
-							list:								"Elenco",
+							list:						"Elenco",
 							notice_failed_plugins:				"Impossibile caricare alcuni Plugins [{{var0}}] ",
-							notice_new_plugins:					"Il nuovo Plugins [{{var0}}] è stato aggiunto a Plugin Repo",
+							notice_new_plugins:				"Il nuovo Plugins [{{var0}}] è stato aggiunto a Plugin Repo",
 							notice_outdated_plugins:			"Alcuni Plugins [{{var0}}] non sono aggiornati"
 						};
 					case "ja":		// Japanese
 						return {
-							list:								"リスト",
+							list:						"リスト",
 							notice_failed_plugins:				"一部の Plugins [{{var0}}] を読み込めませんでした",
-							notice_new_plugins:					"新しい Plugins [{{var0}}] が Plugin Repo に追加されました",
+							notice_new_plugins:				"新しい Plugins [{{var0}}] が Plugin Repo に追加されました",
 							notice_outdated_plugins:			"一部の Plugins [{{var0}}] は古くなっています"
 						};
 					case "ko":		// Korean
 						return {
-							list:								"명부",
+							list:						"명부",
 							notice_failed_plugins:				"일부 Plugins [{{var0}}] 을 (를)로드 할 수 없습니다.",
-							notice_new_plugins:					"새 Plugins [{{var0}}] 이 Plugin Repo 에 추가되었습니다.",
+							notice_new_plugins:				"새 Plugins [{{var0}}] 이 Plugin Repo 에 추가되었습니다.",
 							notice_outdated_plugins:			"일부 Plugins [{{var0}}] 이 오래되었습니다."
 						};
 					case "lt":		// Lithuanian
 						return {
-							list:								"Sąrašas",
+							list:						"Sąrašas",
 							notice_failed_plugins:				"Kai kurių Plugins [{{var0}}] nepavyko įkelti",
-							notice_new_plugins:					"Naujas Plugins [{{var0}}] pridėtas prie Plugin Repo",
+							notice_new_plugins:				"Naujas Plugins [{{var0}}] pridėtas prie Plugin Repo",
 							notice_outdated_plugins:			"Kai kurie Plugins [{{var0}}] yra pasenę"
 						};
 					case "nl":		// Dutch
 						return {
-							list:								"Lijst",
+							list:						"Lijst",
 							notice_failed_plugins:				"Sommige Plugins [{{var0}}] konden niet worden geladen",
-							notice_new_plugins:					"Nieuwe Plugins [{{var0}}] zijn toegevoegd aan de Plugin Repo",
+							notice_new_plugins:				"Nieuwe Plugins [{{var0}}] zijn toegevoegd aan de Plugin Repo",
 							notice_outdated_plugins:			"Sommige Plugins [{{var0}}] zijn verouderd"
 						};
 					case "no":		// Norwegian
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_plugins:				"Noen Plugins [{{var0}}] kunne ikke lastes inn",
-							notice_new_plugins:					"Nye Plugins [{{var0}}] er lagt til i Plugin Repo",
+							notice_new_plugins:				"Nye Plugins [{{var0}}] er lagt til i Plugin Repo",
 							notice_outdated_plugins:			"Noen Plugins [{{var0}}] er utdaterte"
 						};
 					case "pl":		// Polish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_plugins:				"Nie można załadować niektórych Plugins [{{var0}}] ",
-							notice_new_plugins:					"Nowe Plugins [{{var0}}] zostały dodane do Plugin Repo",
+							notice_new_plugins:				"Nowe Plugins [{{var0}}] zostały dodane do Plugin Repo",
 							notice_outdated_plugins:			"Niektóre Plugins [{{var0}}] są nieaktualne"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_plugins:				"Algum Plugins [{{var0}}] não pôde ser carregado",
-							notice_new_plugins:					"Novo Plugins [{{var0}}] foi adicionado ao Plugin Repo",
+							notice_new_plugins:				"Novo Plugins [{{var0}}] foi adicionado ao Plugin Repo",
 							notice_outdated_plugins:			"Alguns Plugins [{{var0}}] estão desatualizados"
 						};
 					case "ro":		// Romanian
 						return {
-							list:								"Listă",
+							list:						"Listă",
 							notice_failed_plugins:				"Unele Plugins [{{var0}}] nu au putut fi încărcate",
-							notice_new_plugins:					"Plugins [{{var0}}] nou au fost adăugate la Plugin Repo",
+							notice_new_plugins:				"Plugins [{{var0}}] nou au fost adăugate la Plugin Repo",
 							notice_outdated_plugins:			"Unele Plugins [{{var0}}] sunt învechite"
 						};
 					case "ru":		// Russian
 						return {
-							list:								"Список",
+							list:						"Список",
 							notice_failed_plugins:				"Не удалось загрузить некоторые Plugins [{{var0}}] ",
-							notice_new_plugins:					"Новые Plugins [{{var0}}] добавлены в Plugin Repo",
+							notice_new_plugins:				"Новые Plugins [{{var0}}] добавлены в Plugin Repo",
 							notice_outdated_plugins:			"Некоторые Plugins [{{var0}}] устарели"
 						};
 					case "sv":		// Swedish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_plugins:				"Vissa Plugins [{{var0}}] kunde inte laddas",
-							notice_new_plugins:					"Nya Plugins [{{var0}}] har lagts till i Plugin Repo",
+							notice_new_plugins:				"Nya Plugins [{{var0}}] har lagts till i Plugin Repo",
 							notice_outdated_plugins:			"Vissa Plugins [{{var0}}] är föråldrade"
 						};
 					case "th":		// Thai
 						return {
-							list:								"รายการ",
+							list:						"รายการ",
 							notice_failed_plugins:				"ไม่สามารถโหลด Plugins [{{var0}}] บางรายการได้",
-							notice_new_plugins:					"เพิ่ม Plugins [{{var0}}] ใหม่ใน Plugin Repo แล้ว",
+							notice_new_plugins:				"เพิ่ม Plugins [{{var0}}] ใหม่ใน Plugin Repo แล้ว",
 							notice_outdated_plugins:			"Plugins [{{var0}}] บางรายการล้าสมัย"
 						};
 					case "tr":		// Turkish
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_plugins:				"Bazı Plugins [{{var0}}] yüklenemedi",
-							notice_new_plugins:					"Yeni Plugins [{{var0}}], Plugin Repo 'ye eklendi",
+							notice_new_plugins:				"Yeni Plugins [{{var0}}], Plugin Repo 'ye eklendi",
 							notice_outdated_plugins:			"Bazı Plugins [{{var0}}] güncel değil"
 						};
 					case "uk":		// Ukrainian
 						return {
-							list:								"Список",
+							list:						"Список",
 							notice_failed_plugins:				"Деякі Plugins [{{var0}}] не вдалося завантажити",
-							notice_new_plugins:					"Нові Plugins [{{var0}}] були додані до Plugin Repo",
+							notice_new_plugins:				"Нові Plugins [{{var0}}] були додані до Plugin Repo",
 							notice_outdated_plugins:			"Деякі Plugins [{{var0}}] застарілі"
 						};
 					case "vi":		// Vietnamese
 						return {
-							list:								"Danh sách",
+							list:						"Danh sách",
 							notice_failed_plugins:				"Không thể tải một số Plugins [{{var0}}] ",
-							notice_new_plugins:					"Plugins [{{var0}}] mới đã được thêm vào Plugin Repo",
+							notice_new_plugins:				"Plugins [{{var0}}] mới đã được thêm vào Plugin Repo",
 							notice_outdated_plugins:			"Một số Plugins [{{var0}}] đã lỗi thời"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							list:								"清单",
+							list:						"清单",
 							notice_failed_plugins:				"某些 Plugins [{{var0}}] 无法加载",
-							notice_new_plugins:					"新的 Plugins [{{var0}}] 已添加到 Plugin Repo",
+							notice_new_plugins:				"新的 Plugins [{{var0}}] 已添加到 Plugin Repo",
 							notice_outdated_plugins:			"一些 Plugins [{{var0}}] 已过时"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							list:								"清單",
+							list:						"清單",
 							notice_failed_plugins:				"某些 Plugins [{{var0}}] 無法加載",
-							notice_new_plugins:					"新的 Plugins [{{var0}}] 已添加到 Plugin Repo",
+							notice_new_plugins:				"新的 Plugins [{{var0}}] 已添加到 Plugin Repo",
 							notice_outdated_plugins:			"一些 Plugins [{{var0}}] 已過時"
 						};
 					default:		// English
 						return {
-							list:								"List",
+							list:						"List",
 							notice_failed_plugins:				"Some Plugins [{{var0}}] could not be loaded",
-							notice_new_plugins:					"New Plugins [{{var0}}] have been added to the Plugin Repo",
+							notice_new_plugins:				"New Plugins [{{var0}}] have been added to the Plugin Repo",
 							notice_outdated_plugins:			"Some Plugins [{{var0}}] are outdated"
 						};
 				}
