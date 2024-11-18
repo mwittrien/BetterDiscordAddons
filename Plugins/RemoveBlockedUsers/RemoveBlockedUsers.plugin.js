@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"added": {
+			"Block Replies": "Added option to completely block messages, that replied to blocked messages"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -77,7 +79,8 @@ module.exports = (_ => {
 						messages:			{value: true, 	description: "Messages"},
 						pins:				{value: true, 	description: "Pinned Messages"},
 						inbox:				{value: true, 	description: "Inbox Messages"},
-						replies:			{value: true, 	description: "Replies"},
+						replies:			{value: true, 	description: "Message Preview in Replies"},
+						repliesToBlocked:		{value: true, 	description: "Replies to blocked Messages"},
 						mentions:			{value: true, 	description: "Mentions"},
 						reactions:			{value: true, 	description: "Reactions"},
 						threads:			{value: true, 	description: "Threads"},
@@ -257,9 +260,10 @@ module.exports = (_ => {
 			}
 		
 			processMessages (e) {
-				if (!this.settings.places.messages) return;
+				if (!this.settings.places.messages && !this.settings.places.repliesToBlocked) return;
 				if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) {
-					let oldStream = e.instance.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"), newStream = [];
+					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.messages && n.type == "MESSAGE_GROUP_BLOCKED") && !(this.settings.places.repliesToBlocked && n.content.messageReference && BDFDB.LibraryStores.RelationshipStore.isBlocked((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id)));
+					let newStream = [];
 					if (oldStream.length != e.instance.props.channelStream.length) {
 						for (let i in oldStream) {
 							let next = parseInt(i)+1;
@@ -267,7 +271,8 @@ module.exports = (_ => {
 						}
 						let groupId, timestamp, author;
 						for (let i in newStream) {
-							if (newStream[i].type == "MESSAGE" && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(newStream[i].content.type) && groupId != newStream[i].groupId && timestamp && newStream[i].content.timestamp - timestamp < 600000) {
+							if (newStream[i].type == "MESSAGE" && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(newStream[i].content.type) && groupId != newStream[i].groupId && (!timestamp || timestamp && newStream[i].content.timestamp - timestamp < 600000)) {
+								if (newStream[i-1] && newStream[i-1].type == "DIVIDER") groupId = newStream[i].groupId = newStream[i].content.id;
 								if (author && author.id == newStream[i].content.author.id && author.username == newStream[i].content.author.username) newStream[i] = Object.assign({}, newStream[i], {groupId: groupId});
 								author = newStream[i].content.author;
 							}
