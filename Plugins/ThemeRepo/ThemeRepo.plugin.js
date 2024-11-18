@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.8
+ * @version 2.5.9
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -522,13 +522,18 @@ module.exports = (_ => {
 														size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
 														"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
 														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-															animated: false,
-															src: url,
-															original: url,
-															width: this.width,
-															height: this.height,
+															items: [{
+																animated: false,
+																height: this.height,
+																original: url,
+																srcIsAnimated: false,
+																trigger: "CLICK",
+																type: "IMAGE",
+																url: url,
+																width: this.width,
+																zoomThumbnailPlaceholder: url
+															}],
 															className: BDFDB.disCN.imagemodalimage,
-															shouldAnimate: true,
 															renderForwardComponent: _ => {},
 															renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
 														})
@@ -1072,191 +1077,191 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							list:								"Списък",
+							list:						"Списък",
 							notice_failed_themes:				"Някои Themes [{{var0}}] не можаха да бъдат заредени",
-							notice_new_themes:					"Новите Themes [{{var0}}] бяха добавени към Theme Repo",
+							notice_new_themes:				"Новите Themes [{{var0}}] бяха добавени към Theme Repo",
 							notice_outdated_themes:				"Някои Themes [{{var0}}] са остарели"
 						};
 					case "da":		// Danish
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_themes:				"Nogle Themes [{{var0}}] kunne ikke indlæses",
-							notice_new_themes:					"Nye Themes [{{var0}}] er blevet føjet til Theme Repo",
+							notice_new_themes:				"Nye Themes [{{var0}}] er blevet føjet til Theme Repo",
 							notice_outdated_themes:				"Nogle Themes [{{var0}}] er forældede"
 						};
 					case "de":		// German
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_themes:				"Einige Themes [{{var0}}] konnten nicht geladen werden",
-							notice_new_themes:					"Neue Themes [{{var0}}] wurden zur Theme Repo hinzugefügt",
+							notice_new_themes:				"Neue Themes [{{var0}}] wurden zur Theme Repo hinzugefügt",
 							notice_outdated_themes:				"Einige Themes [{{var0}}] sind veraltet"
 						};
 					case "el":		// Greek
 						return {
-							list:								"Λίστα",
+							list:						"Λίστα",
 							notice_failed_themes:				"Ορισμένα Θέματα [{{var0}}] δεν μπορούν να φορτωθούν",
-							notice_new_themes:					"Νέα Θέματα [{{var0}}] προστέθηκαν στο Απωθετήριο Θεμάτων",
+							notice_new_themes:				"Νέα Θέματα [{{var0}}] προστέθηκαν στο Απωθετήριο Θεμάτων",
 							notice_outdated_themes:				"Ορισμένα Θέματα [{{var0}}] είναι παλαιά"
 						};
 					case "es":		// Spanish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_themes:				"Algunos Themes [{{var0}}] no se pudieron cargar",
-							notice_new_themes:					"Se han agregado nuevos Themes [{{var0}}] a Theme Repo",
+							notice_new_themes:				"Se han agregado nuevos Themes [{{var0}}] a Theme Repo",
 							notice_outdated_themes:				"Algunas Themes [{{var0}}] están desactualizadas"
 						};
 					case "fi":		// Finnish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_themes:				"Joitain kohdetta Themes [{{var0}}] ei voitu ladata",
-							notice_new_themes:					"Uusi Themes [{{var0}}] on lisätty Theme Repo",
+							notice_new_themes:				"Uusi Themes [{{var0}}] on lisätty Theme Repo",
 							notice_outdated_themes:				"Jotkut Themes [{{var0}}] ovat vanhentuneita"
 						};
 					case "fr":		// French
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_themes:				"Certains Themes [{{var0}}] n'ont pas pu être chargés",
-							notice_new_themes:					"De nouveaux Themes [{{var0}}] ont été ajoutés à Theme Repo",
+							notice_new_themes:				"De nouveaux Themes [{{var0}}] ont été ajoutés à Theme Repo",
 							notice_outdated_themes:				"Certains Themes [{{var0}}] sont obsolètes"
 						};
 					case "hr":		// Croatian
 						return {
-							list:								"Popis",
+							list:						"Popis",
 							notice_failed_themes:				"Neke datoteke Themes [{{var0}}] nije moguće učitati",
-							notice_new_themes:					"Novi Themes [{{var0}}] dodani su u Theme Repo",
+							notice_new_themes:				"Novi Themes [{{var0}}] dodani su u Theme Repo",
 							notice_outdated_themes:				"Neki su Themes [{{var0}}] zastarjeli"
 						};
 					case "hu":		// Hungarian
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_themes:				"Néhány Themes [{{var0}}] nem sikerült betölteni",
-							notice_new_themes:					"Új Themes [{{var0}}] hozzáadva a következőhöz: Theme Repo",
+							notice_new_themes:				"Új Themes [{{var0}}] hozzáadva a következőhöz: Theme Repo",
 							notice_outdated_themes:				"Néhány Themes [{{var0}}] elavult"
 						};
 					case "it":		// Italian
 						return {
-							list:								"Elenco",
+							list:						"Elenco",
 							notice_failed_themes:				"Impossibile caricare alcuni Themes [{{var0}}] ",
-							notice_new_themes:					"Il nuovo Themes [{{var0}}] è stato aggiunto a Theme Repo",
+							notice_new_themes:				"Il nuovo Themes [{{var0}}] è stato aggiunto a Theme Repo",
 							notice_outdated_themes:				"Alcuni Themes [{{var0}}] non sono aggiornati"
 						};
 					case "ja":		// Japanese
 						return {
-							list:								"リスト",
+							list:						"リスト",
 							notice_failed_themes:				"一部の Themes [{{var0}}] を読み込めませんでした",
-							notice_new_themes:					"新しい Themes [{{var0}}] が Theme Repo に追加されました",
+							notice_new_themes:				"新しい Themes [{{var0}}] が Theme Repo に追加されました",
 							notice_outdated_themes:				"一部の Themes [{{var0}}] は古くなっています"
 						};
 					case "ko":		// Korean
 						return {
-							list:								"명부",
+							list:						"명부",
 							notice_failed_themes:				"일부 Themes [{{var0}}] 을 (를)로드 할 수 없습니다.",
-							notice_new_themes:					"새 Themes [{{var0}}] 이 Theme Repo 에 추가되었습니다.",
+							notice_new_themes:				"새 Themes [{{var0}}] 이 Theme Repo 에 추가되었습니다.",
 							notice_outdated_themes:				"일부 Themes [{{var0}}] 이 오래되었습니다."
 						};
 					case "lt":		// Lithuanian
 						return {
-							list:								"Sąrašas",
+							list:						"Sąrašas",
 							notice_failed_themes:				"Kai kurių Themes [{{var0}}] nepavyko įkelti",
-							notice_new_themes:					"Naujas Themes [{{var0}}] pridėtas prie Theme Repo",
+							notice_new_themes:				"Naujas Themes [{{var0}}] pridėtas prie Theme Repo",
 							notice_outdated_themes:				"Kai kurie Themes [{{var0}}] yra pasenę"
 						};
 					case "nl":		// Dutch
 						return {
-							list:								"Lijst",
+							list:						"Lijst",
 							notice_failed_themes:				"Sommige Themes [{{var0}}] konden niet worden geladen",
-							notice_new_themes:					"Nieuwe Themes [{{var0}}] zijn toegevoegd aan de Theme Repo",
+							notice_new_themes:				"Nieuwe Themes [{{var0}}] zijn toegevoegd aan de Theme Repo",
 							notice_outdated_themes:				"Sommige Themes [{{var0}}] zijn verouderd"
 						};
 					case "no":		// Norwegian
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_themes:				"Noen Themes [{{var0}}] kunne ikke lastes inn",
-							notice_new_themes:					"Nye Themes [{{var0}}] er lagt til i Theme Repo",
+							notice_new_themes:				"Nye Themes [{{var0}}] er lagt til i Theme Repo",
 							notice_outdated_themes:				"Noen Themes [{{var0}}] er utdaterte"
 						};
 					case "pl":		// Polish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_themes:				"Nie można załadować niektórych Themes [{{var0}}] ",
-							notice_new_themes:					"Nowe Themes [{{var0}}] zostały dodane do Theme Repo",
+							notice_new_themes:				"Nowe Themes [{{var0}}] zostały dodane do Theme Repo",
 							notice_outdated_themes:				"Niektóre Themes [{{var0}}] są nieaktualne"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_themes:				"Algum Themes [{{var0}}] não pôde ser carregado",
-							notice_new_themes:					"Novo Themes [{{var0}}] foi adicionado ao Theme Repo",
+							notice_new_themes:				"Novo Themes [{{var0}}] foi adicionado ao Theme Repo",
 							notice_outdated_themes:				"Alguns Themes [{{var0}}] estão desatualizados"
 						};
 					case "ro":		// Romanian
 						return {
-							list:								"Listă",
+							list:						"Listă",
 							notice_failed_themes:				"Unele Themes [{{var0}}] nu au putut fi încărcate",
-							notice_new_themes:					"Themes [{{var0}}] nou au fost adăugate la Theme Repo",
+							notice_new_themes:				"Themes [{{var0}}] nou au fost adăugate la Theme Repo",
 							notice_outdated_themes:				"Unele Themes [{{var0}}] sunt învechite"
 						};
 					case "ru":		// Russian
 						return {
-							list:								"Список",
+							list:						"Список",
 							notice_failed_themes:				"Не удалось загрузить некоторые Themes [{{var0}}] ",
-							notice_new_themes:					"Новые Themes [{{var0}}] добавлены в Theme Repo",
+							notice_new_themes:				"Новые Themes [{{var0}}] добавлены в Theme Repo",
 							notice_outdated_themes:				"Некоторые Themes [{{var0}}] устарели"
 						};
 					case "sv":		// Swedish
 						return {
-							list:								"Lista",
+							list:						"Lista",
 							notice_failed_themes:				"Vissa Themes [{{var0}}] kunde inte laddas",
-							notice_new_themes:					"Nya Themes [{{var0}}] har lagts till i Theme Repo",
+							notice_new_themes:				"Nya Themes [{{var0}}] har lagts till i Theme Repo",
 							notice_outdated_themes:				"Vissa Themes [{{var0}}] är föråldrade"
 						};
 					case "th":		// Thai
 						return {
-							list:								"รายการ",
+							list:						"รายการ",
 							notice_failed_themes:				"ไม่สามารถโหลด Themes [{{var0}}] บางรายการได้",
-							notice_new_themes:					"เพิ่ม Themes [{{var0}}] ใหม่ใน Theme Repo แล้ว",
+							notice_new_themes:				"เพิ่ม Themes [{{var0}}] ใหม่ใน Theme Repo แล้ว",
 							notice_outdated_themes:				"Themes [{{var0}}] บางรายการล้าสมัย"
 						};
 					case "tr":		// Turkish
 						return {
-							list:								"Liste",
+							list:						"Liste",
 							notice_failed_themes:				"Bazı Themes [{{var0}}] yüklenemedi",
-							notice_new_themes:					"Yeni Themes [{{var0}}], Theme Repo 'ye eklendi",
+							notice_new_themes:				"Yeni Themes [{{var0}}], Theme Repo 'ye eklendi",
 							notice_outdated_themes:				"Bazı Themes [{{var0}}] güncel değil"
 						};
 					case "uk":		// Ukrainian
 						return {
-							list:								"Список",
+							list:						"Список",
 							notice_failed_themes:				"Деякі Themes [{{var0}}] не вдалося завантажити",
-							notice_new_themes:					"Нові Themes [{{var0}}] були додані до Theme Repo",
+							notice_new_themes:				"Нові Themes [{{var0}}] були додані до Theme Repo",
 							notice_outdated_themes:				"Деякі Themes [{{var0}}] застарілі"
 						};
 					case "vi":		// Vietnamese
 						return {
-							list:								"Danh sách",
+							list:						"Danh sách",
 							notice_failed_themes:				"Không thể tải một số Themes [{{var0}}] ",
-							notice_new_themes:					"Themes [{{var0}}] mới đã được thêm vào Theme Repo",
+							notice_new_themes:				"Themes [{{var0}}] mới đã được thêm vào Theme Repo",
 							notice_outdated_themes:				"Một số Themes [{{var0}}] đã lỗi thời"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							list:								"清单",
+							list:						"清单",
 							notice_failed_themes:				"某些 Themes [{{var0}}] 无法加载",
-							notice_new_themes:					"新的 Themes [{{var0}}] 已添加到 Theme Repo",
+							notice_new_themes:				"新的 Themes [{{var0}}] 已添加到 Theme Repo",
 							notice_outdated_themes:				"一些 Themes [{{var0}}] 已过时"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							list:								"清單",
+							list:						"清單",
 							notice_failed_themes:				"某些 Themes [{{var0}}] 無法加載",
-							notice_new_themes:					"新的 Themes [{{var0}}] 已添加到 Theme Repo",
+							notice_new_themes:				"新的 Themes [{{var0}}] 已添加到 Theme Repo",
 							notice_outdated_themes:				"一些 Themes [{{var0}}] 已過時"
 						};
 					default:		// English
 						return {
-							list:								"List",
+							list:						"List",
 							notice_failed_themes:				"Some Themes [{{var0}}] could not be loaded",
-							notice_new_themes:					"New Themes [{{var0}}] have been added to the Theme Repo",
+							notice_new_themes:				"New Themes [{{var0}}] have been added to the Theme Repo",
 							notice_outdated_themes:				"Some Themes [{{var0}}] are outdated"
 						};
 				}
