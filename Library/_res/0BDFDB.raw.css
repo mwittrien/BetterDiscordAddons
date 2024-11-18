@@ -1351,6 +1351,13 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	height: 0 !important;
 	overflow: hidden !important;
 }
+[REPLACE_CLASS_noticesuccess] {
+	background-color: var(--status-positive-background);
+	color: var(--status-positive-text)
+}
+[REPLACE_CLASS_noticesuccess] [REPLACE_CLASS_noticebutton]:hover {
+	color: var(--text-positive)
+}
 [REPLACE_CLASS_noticetext] {
 	display: inline-flex;
 	flex: 0 1 auto;
