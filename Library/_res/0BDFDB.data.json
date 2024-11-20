@@ -538,7 +538,7 @@
 		"SearchResult": {"strings": ["onJump:", "message:", "handleMessageClick"]},
 		"SearchResults": {"strings": ["renderNoResults", "emptyResultsText", "isSearching"], "noSearch": true},
 		"SearchResultsHeader": {"strings": [".MOST_RELEVANT", "searchByMode"]},
-		"SearchResultsInner": {"strings": ["channelNameContainer", "totalResults", "\"search-result-\"", "noSearch": true]},
+		"SearchResultsInner": {"strings": ["channelNameContainer", "totalResults", "\"search-result-\""], "noSearch": true},
 		"SearchResultsPagination": {"strings": ["pageLength", "changePage", "maxVisiblePages"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
