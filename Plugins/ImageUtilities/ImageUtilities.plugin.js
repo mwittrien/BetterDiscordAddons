@@ -1546,9 +1546,9 @@ module.exports = (_ => {
 			requestFile (urls, onLoad, onError, config = {}) {
 				if (!urls || typeof onLoad != "function") return typeof onError == "function" && onError();
 				let url = (urls.url && urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url || "");
-				let isResized = !config.orignalSizeChecked && (url.indexOf("?width=") > -1 || url.indexOf("?height=") > -1 || url.indexOf("?size=") > -1);
+				let isResized = !config.orignalSizeChecked && (url.indexOf("width=") > -1 || url.indexOf("height=") > -1 || url.indexOf("size=") > -1);
 				url = isResized ? this.removeSizeInUrl(url) : url;
-				let isFormatted = (url.indexOf("?format=") > -1);
+				let isFormatted = (url.indexOf("format=") > -1);
 				url = isFormatted ? this.removeFormatInUrl(url) : url;
 				url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 				BDFDB.LibraryRequires.request(url, {toBuffer: true}, (error, response, buffer) => {
