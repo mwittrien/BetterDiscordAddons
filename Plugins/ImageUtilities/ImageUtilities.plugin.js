@@ -1069,7 +1069,7 @@ module.exports = (_ => {
 											children: this.labels.context_saveas.replace("{{var0}}", type),
 											onClick: event => {
 												BDFDB.ListenerUtils.stopEvent(event);
-												this.downloadFile({url: e.instance.props.original, fallbackUrl: url});
+												this.downloadFile({url: e.instance.props.items?.[0]?.original, fallbackUrl: url});
 											},
 											onContextMenu: event => {
 												let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
@@ -1077,7 +1077,7 @@ module.exports = (_ => {
 													children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 														id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
 														label: name,
-														action: _ => this.downloadFile({url: e.instance.props.original, fallbackUrl: url}, ownLocations[name].location)
+														action: _ => this.downloadFile({url: e.instance.props.items?.[0]?.original, fallbackUrl: url}, ownLocations[name].location)
 													}))
 												}));
 											}
@@ -1097,7 +1097,7 @@ module.exports = (_ => {
 											children: this.labels.context_copy.replace("{{var0}}", type),
 											onClick: event => {
 												BDFDB.ListenerUtils.stopEvent(event);
-												this.copyFile({url: e.instance.props.original, fallbackUrl: url});
+												this.copyFile({url: e.instance.props.items?.[0]?.original, fallbackUrl: url});
 											}
 										})
 									]
@@ -1436,7 +1436,7 @@ module.exports = (_ => {
 			}
 
 			processLazyImageZoomable (e) {
-				if (!e.instance.props.original || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
+				if (!e.instance.props.items?.[0]?.original || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
 				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length > 1) {
 					const item = BDFDB.ReactUtils.findValue(e.instance, "item", {up: true});
 					if (item && item.originalItem) {
@@ -1459,7 +1459,7 @@ module.exports = (_ => {
 						children: [
 							e.returnvalue,
 							BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
-								original: e.instance.props.original,
+								original: e.instance.props.items?.[0]?.original,
 								attachment: {
 									height: 0,
 									width: 0,
@@ -1546,9 +1546,9 @@ module.exports = (_ => {
 			requestFile (urls, onLoad, onError, config = {}) {
 				if (!urls || typeof onLoad != "function") return typeof onError == "function" && onError();
 				let url = (urls.url && urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url || "");
-				let isResized = !config.orignalSizeChecked && (url.indexOf("?width=") > -1 || url.indexOf("?height=") > -1 || url.indexOf("?size=") > -1);
+				let isResized = !config.orignalSizeChecked && (url.indexOf("width=") > -1 || url.indexOf("height=") > -1 || url.indexOf("size=") > -1);
 				url = isResized ? this.removeSizeInUrl(url) : url;
-				let isFormatted = (url.indexOf("?format=") > -1);
+				let isFormatted = (url.indexOf("format=") > -1);
 				url = isFormatted ? this.removeFormatInUrl(url) : url;
 				url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 				BDFDB.LibraryRequires.request(url, {toBuffer: true}, (error, response, buffer) => {
