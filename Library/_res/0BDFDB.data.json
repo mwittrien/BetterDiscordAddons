@@ -1510,7 +1510,7 @@
 		"GuildSettingsBanned": {"props": ["bannedUser", "bannedUserAvatar"]},
 		"GuildSettingsEmoji": {"props": ["emojiRow", "emojiAliasPlaceholder"]},
 		"GuildSettingsInvite": {"props": ["countdownColumn", "inviteSettingsInviteRow"]},
-		"GuildsFooter": {"props": ["coachmarkTextContainer", "footer"]},
+		"GuildsFooter": {"props": ["gradientHidden", "footer"]},
 		"GuildsListItem": {"props": ["listItemWrapper", "listItemTooltip"], "length": 4, "smaller": true},
 		"GuildsListTooltipItem": {"props": ["listItemTooltip"], "length": 1},
 		"GuildsWrapper": {"props": ["scroller", "unreadMentionsBar", "wrapper"]},
