@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.1
+ * @version 1.8.2
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -224,7 +224,7 @@ module.exports = (_ => {
 			}
 			
 			processGuildItem (e) {
-				if (!e.instance.props.guild) return;
+				if (!e.instance.props.guild || typeof e.instance.props?.children?.props?.className != "string" || e.instance.props?.children?.props?.className.indexOf(BDFDB.disCN.guildcontainer) == -1) return;
 				if (!e.returnvalue) {
 					let guildcontainer = BDFDB.ReactUtils.findChild(e.instance, {props: [["className", BDFDB.disCN.guildcontainer]]});
 					if (guildcontainer) guildcontainer.props.className = BDFDB.DOMUtils.formatClassName(guildcontainer.props.className, BDFDB.LibraryStores.UserGuildSettingsStore.isMuted(e.instance.props.guild.id) && BDFDB.disCN._displayserversaschannelsmuted);
