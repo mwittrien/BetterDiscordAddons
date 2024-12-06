@@ -726,10 +726,10 @@
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
-.iconBackgroundTier1_ca73a1 {								/* tierlist				tier1 bg							*/
+[id*="iconBackgroundTier1_"] {								/* tierlist				tier1 bg							*/
 	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
-.iconBackgroundTier2_ca73a1 {								/* tierlist				tier2 bg							*/
+[id*="iconBackgroundTier2_"] {								/* tierlist				tier2 bg							*/
 	background: #ffcd4b linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
 
@@ -773,26 +773,26 @@
 	background: #fff linear-gradient(114deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.6));
 }
 
-.tier0_c87d73 {
+[id*="tier0_"] {
 	background: rgb(100, 100, 100) linear-gradient(195deg, rgba(var(--accentcolor_v), 0.9), rgba(var(--accentcolor_v), 0.5));
 }
-.tier0_c87d73.withTier0Rim_c87d73:before {
+[id*="tier0_"][id*="withTier0Rim_"]:before {
 	background: rgb(100, 100, 100) linear-gradient(195deg, rgba(var(--accentcolor_v), 0.9), rgba(var(--accentcolor_v), 0.5));
 }
-.tier2_c87d73 {
+[id*="tier2_"] {
 	background: rgb(255, 255, 255) linear-gradient(195deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
-.tier2_c87d73.withTier2Rim_c87d73:before {
+[id*="tier2_"][id*="withTier2Rim_"]:before {
 	background: rgb(255, 255, 255) linear-gradient(195deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
-#app-mount .tier2_c87d73 [id*="lookInverted_"][id*="colorBrand_"] {
+#app-mount [id*="tier2_"] [id*="lookInverted_"][id*="colorBrand_"] {
 	color: rgb(var(--accentcolor2_v));
 }
 [id*="mostPopularPill_"],
 [id*="mostPopularPill_"] {
 	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor2_v)), rgba(var(--accentcolor2_v), 0.5));
 }
-.tier2ColumnOuter_b1bbf4 {
+[id*="tier2ColumnOuter_"] {
 	border-color: rgb(var(--accentcolor2_v));
 }
 
@@ -868,14 +868,14 @@
 	border-color: rgb(var(--accentcolor_v));
 }
 
-#app-mount .tier1ProfilePerk__46cf4 {							/* nitropage				tier 1 profile icon						*/
+#app-mount [id*="tier1ProfilePerk_"] {							/* nitropage				tier 1 profile icon						*/
 	color: rgb(var(--accentcolor_v));
 	filter: brightness(75%);
 }
-#app-mount .tier1BoostPerk__9aea0 {							/* nitropage				tier 1 boost icon						*/
+#app-mount [id*="tier1BoostPerk_"] {							/* nitropage				tier 1 boost icon						*/
 	color: rgb(var(--accentcolor2_v));
 }
-#app-mount .tier1UploadPerk__23aaf {							/* nitropage				tier 1 upload icon						*/
+#app-mount [id*="tier1UploadPerk_"] {							/* nitropage				tier 1 upload icon						*/
 	color: rgb(var(--accentcolor_v));
 }
 		
@@ -2272,16 +2272,16 @@ a[id*="metadataDownload_"] {
 
 /* ----		12.7.		NOTIFICATIONBAR					---- */
 
-.colorPremiumTier1_bff508 {
+[id*="colorPremiumTier1_"] {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.7));
 }
-.colorPremiumTier1_bff508 [id*="button_"]:hover {
+[id*="colorPremiumTier1_"] [id*="button_"]:hover {
 	color: rgb(var(--accentcolor_v));
 }
-.colorPremiumTier2__9a69b {
+[id*="colorPremiumTier2_"] {
 	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
 }
-.colorPremiumTier2__9a69b [id*="button_"]:hover {
+[id*="colorPremiumTier2_"] [id*="button_"]:hover {
 	color: rgb(var(--accentcolor_v));
 }
 [id*="colorBrand_"] {
