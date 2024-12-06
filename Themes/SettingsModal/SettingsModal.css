@@ -11,7 +11,7 @@
 	--settingsbackground_v: 	var(--settingsbackground_s, var(--settingsbackground));
 }
 
-#app-mount [id*="baseLayer_"] {
+#app-mount [class*="baseLayer_"] {
 	opacity: 1 !important;
 	transform: unset !important;
 	will-change: unset !important;
@@ -20,7 +20,7 @@
 	transition-property: inherit !important;
 	animation: inherit !important;
 }
-#app-mount [id*="layer_"].stop-animations:first-child::after {
+#app-mount [class*="layer_"].stop-animations:first-child::after {
 	content: "" !important;
 	position: fixed !important;
 	background: rgb(0, 0, 0) !important;
@@ -35,7 +35,7 @@
 	pointer-events: none !important;
 }
 
-#app-mount [id*="layer_"] ~ [id*="layer_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -53,8 +53,8 @@
 	z-index: 1000 !important;
 	--settingsiconsadditionalsize: var(--use-settingsicons, 0) * (var(--settingsicons-size, 0px) + var(--settingsicons-gap, 0px));
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] > div,
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="standardSidebarView_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] > div,
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="standardSidebarView_"] {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -63,46 +63,46 @@
 	padding: unset !important;
 	overflow: hidden !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="sidebarRegion_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="sidebarRegionScroller_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="sidebarRegion_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="sidebarRegionScroller_"] {
 	flex: 0 0 auto !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="sidebar_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="sidebar_"] {
 	width: 218px !important;
 	padding: 20px 6px 20px 20px !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="contentColumnDefault_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="contentColumnWide_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="contentColumnDefault_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="contentColumnWide_"] {
 	padding: 20px 40px !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="wrapper_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="wrapper_"] {
 	width: calc(var(--settingswidth_v) - 420px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="repo_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="repo_"] {
 	max-width: calc(var(--settingswidth_v) - 226px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="repoHeader_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="repoHeader_"] {
 	padding-bottom: 0 !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="repoHeader_"] [id*="tabBar_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="repoHeader_"] [class*="tabBar_"] {
 	gap: 30px !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="repoHeader_"] [id*="quickSelectLabel_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="repoHeader_"] [class*="quickSelectLabel_"] {
 	font-size: 12px !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="repoScroller_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="repoScroller_"] {
 	padding-top: 0 !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="sidebar_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="sidebar_"] {
 	height: var(--settingsheight_v) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="standardSidebarView_"] .editor {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="standardSidebarView_"] .editor {
 	height: calc(var(--settingsheight_v) - 120px) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="toolsContainer_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="toolsContainer_"] [id*="tools_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="toolsContainer_"] [id*="container_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="toolsContainer_"] [id*="closeButton_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="toolsContainer_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="toolsContainer_"] [class*="tools_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="toolsContainer_"] [class*="container_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="toolsContainer_"] [class*="closeButton_"] {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -120,54 +120,54 @@
 	opacity: 0 !important;
 	cursor: default !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="toolsContainer_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="toolsContainer_"] {
 	position: fixed !important;
 	top: 22px !important;
 	z-index: -1 !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="settingsToolbar_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="settingsToolbar_"] {
 	display: none !important;
 }
 
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="accountProfileCard_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="accountProfileCard_"] {
 	max-width: calc(var(--settingswidth_v) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] {
 	gap: 30px !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] [id*="sectionsContainer_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] [id*="sectionsContainer_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] [id*="editor_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] [id*="preview_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] [class*="sectionsContainer_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] [class*="sectionsContainer_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] [class*="editor_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] [class*="preview_"] {
 	min-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"][id*="tryItOutLayout_"] [id*="sectionsContainer_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"][id*="tryItOutLayout_"] [id*="sectionsContainer_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"][id*="tryItOutLayout_"] [id*="editor_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"][id*="tryItOutLayout_"] [id*="preview_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"][class*="tryItOutLayout_"] [class*="sectionsContainer_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"][class*="tryItOutLayout_"] [class*="sectionsContainer_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"][class*="tryItOutLayout_"] [class*="editor_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"][class*="tryItOutLayout_"] [class*="preview_"] {
 	min-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] [id*="preview_"] [id*="userPopoutOuter_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] [class*="preview_"] [class*="userPopoutOuter_"] {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="baseLayout_"][id*="tryItOutLayout_"] [id*="preview_"] [id*="userPopoutOuter_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="baseLayout_"][class*="tryItOutLayout_"] [class*="preview_"] [class*="userPopoutOuter_"] {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] [id*="preview_"] [id*="userPopoutOuter_"],
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="baseLayout_"][id*="tryItOutLayout_"] [id*="preview_"] [id*="userPopoutOuter_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] [class*="preview_"] [class*="userPopoutOuter_"],
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="baseLayout_"][class*="tryItOutLayout_"] [class*="preview_"] [class*="userPopoutOuter_"] {
 	min-width: unset !important;
 	max-width: 340px !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="profileCustomizationSection_"] [id*="baseLayout_"] [id*="preview_"] [id*="userPopoutInner_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="profileCustomizationSection_"] [class*="baseLayout_"] [class*="preview_"] [class*="userPopoutInner_"] {
 	overflow: hidden !important;
 }
-#app-mount [id*="layer_"] ~ [id*="layer_"] [id*="guildsSection_"] {
+#app-mount [class*="layer_"] ~ [class*="layer_"] [class*="guildsSection_"] {
 	max-width: calc(var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) !important;
 }
 
-#app-mount [id*="root_"] {
+#app-mount [class*="root_"] {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -184,14 +184,14 @@
 	contain: unset !important;
 	z-index: 1000 !important;
 }
-#app-mount [id*="root_"][id*="enterDone_"] {
+#app-mount [class*="root_"][class*="enterDone_"] {
 	transform: unset !important;
 }
-#app-mount [id*="root_"] [id*="closeIconWrapper_"],
-#app-mount [id*="root_"] [id*="closeIconWrapper_"] [id*="container_"],
-#app-mount [id*="root_"] [id*="closeIconWrapper_"] [id*="closeButton_"],
-#app-mount [id*="shop_"] [id*="container_"],
-#app-mount [id*="shop_"] [id*="closeButton_"] {
+#app-mount [class*="root_"] [class*="closeIconWrapper_"],
+#app-mount [class*="root_"] [class*="closeIconWrapper_"] [class*="container_"],
+#app-mount [class*="root_"] [class*="closeIconWrapper_"] [class*="closeButton_"],
+#app-mount [class*="shop_"] [class*="container_"],
+#app-mount [class*="shop_"] [class*="closeButton_"] {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -212,6 +212,6 @@
 	animation: unset !important;
 	transition: unset !important;
 }
-#app-mount [id*="root_"] [id*="closeIconWrapper_"] {
+#app-mount [class*="root_"] [class*="closeIconWrapper_"] {
 	top: 22px !important;
 }
