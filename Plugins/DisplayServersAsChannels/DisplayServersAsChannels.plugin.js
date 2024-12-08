@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.2
+ * @version 1.8.3
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -355,7 +355,7 @@ module.exports = (_ => {
 			
 			removeMask (parent) {
 				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: "BlobMask"});
-				let parentIsMask = index == -1 && parent.type.prototype && parent.type.prototype && typeof parent.type.prototype.getLowerBadgeStyles == "function";
+				let parentIsMask = index == -1 && typeof parent.type == "function" && parent.type.toString().indexOf("BlobMask") > -1;
 				if (parentIsMask) [children, index] = [[parent], 0];
 				if (index > -1) {
 					let badges = [];
