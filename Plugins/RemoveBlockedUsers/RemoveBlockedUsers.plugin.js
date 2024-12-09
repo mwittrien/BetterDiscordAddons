@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.9
+ * @version 1.7.0
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -77,6 +77,8 @@ module.exports = (_ => {
 					},
 					places: {
 						messages:			{value: true, 	description: "Messages"},
+						spamMessages:			{value: true, 	description: "Spam Messages"},
+						ignoredMessages:		{value: true, 	description: "Ignored Messages"},
 						pins:				{value: true, 	description: "Pinned Messages"},
 						inbox:				{value: true, 	description: "Inbox Messages"},
 						replies:			{value: true, 	description: "Message Preview in Replies"},
@@ -262,7 +264,7 @@ module.exports = (_ => {
 			processMessages (e) {
 				if (!this.settings.places.messages && !this.settings.places.repliesToBlocked) return;
 				if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) {
-					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.messages && n.type == "MESSAGE_GROUP_BLOCKED") && !(this.settings.places.repliesToBlocked && n.content.messageReference && BDFDB.LibraryStores.RelationshipStore.isBlocked((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id)));
+					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.messages && n.type == "MESSAGE_GROUP_BLOCKED") && !(this.settings.places.spamMessages && n.type == "MESSAGE_GROUP_SPAMMER") &&  !(this.settings.places.ignoredMessages && n.type == "MESSAGE_GROUP_IGNORED") && !(this.settings.places.repliesToBlocked && n.content.messageReference && BDFDB.LibraryStores.RelationshipStore.isBlocked((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id)));
 					let newStream = [];
 					if (oldStream.length != e.instance.props.channelStream.length) {
 						for (let i in oldStream) {
