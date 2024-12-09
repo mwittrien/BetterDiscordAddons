@@ -262,7 +262,7 @@ module.exports = (_ => {
 			}
 		
 			processMessages (e) {
-				if (!this.settings.places.messages && !this.settings.places.repliesToBlocked) return;
+				if (!this.settings.places.messages && !this.settings.places.spamMessages && !this.settings.places.ignoredMessages && !this.settings.places.repliesToBlocked) return;
 				if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) {
 					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.messages && n.type == "MESSAGE_GROUP_BLOCKED") && !(this.settings.places.spamMessages && n.type == "MESSAGE_GROUP_SPAMMER") &&  !(this.settings.places.ignoredMessages && n.type == "MESSAGE_GROUP_IGNORED") && !(this.settings.places.repliesToBlocked && n.content.messageReference && BDFDB.LibraryStores.RelationshipStore.isBlocked((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id)));
 					let newStream = [];
