@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.2
+ * @version 2.6.3
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		improved: {
+			"Search Translation": "Clicking the option once, searchs the translation for the selected text, clicking it again copies the found translation, clicking it another time opens Google Translate in the Web Browser"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -583,7 +585,7 @@ module.exports = (_ => {
 			injectSearchItem (e, ownMessage) {
 				let text = document.getSelection().toString();
 				if (text) {
-					let translating, foundTranslation, foundInput, foundOutput;
+					let translating, foundTranslation, foundInput, foundOutput, copied;
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["devmode-copy-id", "search-google"], group: true});
 					children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -611,8 +613,15 @@ module.exports = (_ => {
 									};
 									if (foundTranslation && foundInput && foundOutput) {
 										if (document.querySelector(".googletranslate-tooltip")) {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text));
+											if (!copied) {
+												copied = true;
+												BDFDB.LibraryModules.WindowUtils.copy(foundTranslation);
+												BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("clipboard_success", BDFDB.LanguageUtils.LanguageStrings.TEXT), {type: "success"});
+											}
+											else {
+												BDFDB.ContextMenuUtils.close(e.instance);
+												BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text));
+											}
 										}
 										else createTooltip();
 									}
