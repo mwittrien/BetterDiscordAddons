@@ -168,8 +168,7 @@ module.exports = (_ => {
 						justify-content: flex-end;
 					}
 					
-					${BDFDB.dotCNS.chatthreadsidebaropen} > *:first-child ${BDFDB.dotCN._oldtitlebartoolbar},
-					${BDFDB.dotCNS.callcurrentchatsidebaropen} > *:first-child  ${BDFDB.dotCN._oldtitlebartoolbar} {
+					${BDFDB.dotCNS.chatthreadsidebaropen} > *:first-child ${BDFDB.dotCN._oldtitlebartoolbar} {
 						display: none !important;
 					}
 
