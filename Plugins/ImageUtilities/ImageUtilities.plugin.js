@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.4.9
+ * @version 5.5.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1436,30 +1436,26 @@ module.exports = (_ => {
 			}
 
 			processLazyImageZoomable (e) {
-				if (!e.instance.props.items?.[0]?.original || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
+				if (!e.instance.props.item || !e.instance.props.item.originalItem || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
 				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length > 1) {
-					const item = BDFDB.ReactUtils.findValue(e.instance, "item", {up: true});
-					if (item && item.originalItem) {
-						const onMouseEnter = e.returnvalue.props.onMouseEnter;
-						e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
-							BDFDB.TooltipUtils.create(args[0].target, [
-								item.originalItem.filename,
-								BDFDB.NumberUtils.formatBytes(item.originalItem.size),
-								`${item.originalItem.width}x${item.originalItem.height}px`
-							].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
-								type: "right",
-								delay: this.settings.detailsSettings.tooltipDelay
-							});
-							return onMouseEnter(...args);
-						}, "Error in onMouseEnter of LazyImageZoomable!");
-					}
+					e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
+						BDFDB.TooltipUtils.create(args[0].target, [
+							e.instance.props.item.originalItem.filename,
+							BDFDB.NumberUtils.formatBytes(e.instance.props.item.originalItem.size),
+							`${e.instance.props.item.originalItem.width}x${e.instance.props.item.originalItem.height}px`
+						].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
+							type: "right",
+							delay: this.settings.detailsSettings.tooltipDelay
+						});
+						return onMouseEnter(...args);
+					}, "Error in onMouseEnter of LazyImageZoomable!");
 				}
 				if (this.settings.detailsSettings.footnote && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedmedia, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length < 2)) {
 					e.returnvalue = BDFDB.ReactUtils.createElement("div", {
 						children: [
 							e.returnvalue,
 							BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
-								original: e.instance.props.items?.[0]?.original,
+								original: e.instance.props.item.original,
 								attachment: {
 									height: 0,
 									width: 0,
