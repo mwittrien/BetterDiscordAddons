@@ -172,12 +172,6 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.callcurrentchatsidebaropen} > *:first-child  ${BDFDB.dotCN._oldtitlebartoolbar} {
 						display: none !important;
 					}
-					${BDFDB.dotCN.callscreensharevideocontrols}:has(${BDFDB.dotCNS.callscreensharetopcontrols + BDFDB.dotCN._oldtitlebartoolbar}) ~ div ${BDFDB.dotCN.callscreensharechatbutton} {
-						margin-right: 137px;
-					}
-					${BDFDB.dotCN.callscreensharevideocontrols}:has(${BDFDB.dotCNS.callscreensharetopcontrols + BDFDB.dotCN._oldtitlebartoolbar} div:nth-child(6)) ~ div ${BDFDB.dotCN.callscreensharechatbutton} {
-						margin-right: 194px;
-					}
 
 					${BDFDB.dotCN._oldtitlebarsettingstoolbar} {
 						display: flex;
