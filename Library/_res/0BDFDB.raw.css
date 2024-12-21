@@ -413,7 +413,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex: 0 0 auto;
 	margin-left: 3px;
 }
-[REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] [REPLACE_CLASS_giffavoritesize] {
+[REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] [REPLACE_CLASS_giffavoriteicon] {
 	width: 20px;
 	height: 20px;
 }
@@ -590,7 +590,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_selectsearchinput] {
 	width: 100%;
 }
-[REPLACE_CLASS_selectoption] [REPLACE_CLASS_giffavoritesize] {
+[REPLACE_CLASS_selectoption] [REPLACE_CLASS_giffavoriteicon] {
 	width: 20px;
 	height: 20px;
 }
