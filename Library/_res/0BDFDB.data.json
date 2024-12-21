@@ -2039,7 +2039,6 @@
 		"callincomingtitle": ["CallIncoming", "title"],
 		"callincomingwrapper": ["CallIncoming", "wrapper"],
 		"callscreensharebottomcontrols": ["CallScreenshare", "bottomControls"],
-		"callscreensharechatbutton": ["CallScreenshare", "chatButton"],
 		"callscreensharetopcontrols": ["CallScreenshare", "topControls"],
 		"callscreensharevideocontrols": ["CallScreenshare", "videoControls"],
 		"card": ["Card", "card"],
