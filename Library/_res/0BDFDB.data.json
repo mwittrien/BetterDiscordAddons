@@ -289,7 +289,7 @@
 			"TextBadge": [".textBadge"]
 		}},
 		"Checkmark": {"strings": ["M21.7 5.3a1 1 0 0 1 0 1.4l-12 12a1 1 0 0 1-1.4 0l-6-6a1 1 0 1 1 1.4-1.4L9 16.58l11.3-11.3a1 1 0 0 1 1.4 0Z"]},
-		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["autoplay"]},
+		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["shouldAnimate"]},
 		"EmojiButton": {"strings": ["renderButtonContents", "\"emojiButton\"", "spritePremiumColored"]},
 		"EmojiPicker": {"strings": ["emojiSize", "inspectedExpressionPosition", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
 		"Flex": {"props": ["Wrap", "Direction", "Child", "Gutter"]},
