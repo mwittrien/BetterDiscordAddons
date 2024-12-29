@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.2
+ * @version 1.2.3
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -68,13 +68,11 @@ module.exports = (_ => {
 			HOURS_1: 3600000,
 			HOURS_4: 14400000,
 			MINUTES_30: 1800000,
+			DONT_CLEAR: "DONT_CLEAR",
 			TODAY: "TODAY"
 		};
 		
 		const CustomStatusInputComponent = class CustomStatusInput extends BdApi.React.Component {
-			handleChange() {
-				this.props.onChange(this.props);
-			}
 			render() {
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.emojiinputcontainer,
@@ -84,7 +82,11 @@ module.exports = (_ => {
 							className: BDFDB.disCN.emojiinputbuttoncontainer,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
 								emoji: this.props.emoji,
-								onSelect: this.handleChange.bind(this)
+								onSelect: value => {
+									this.props.emoji = value;
+									this.props.onChange(this.props);
+									BDFDB.ReactUtils.forceUpdate(this);
+								}
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -93,7 +95,11 @@ module.exports = (_ => {
 							maxLength: 128,
 							value: this.props.text,
 							placeholder: this.props.text,
-							onChange: this.handleChange.bind(this)
+							onChange: value => {
+								this.props.text = value;
+								this.props.onChange(this.props);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							size: BDFDB.LibraryComponents.Button.Sizes.NONE,
@@ -105,8 +111,8 @@ module.exports = (_ => {
 							}),
 							onClick: (e, instance) => {
 								this.props.text = "";
-								delete this.props.text;
-								this.handleChange();
+								delete this.props.emoji;
+								this.props.onChange(this.props);
 								BDFDB.ReactUtils.forceUpdate(this);
 							}
 						})
@@ -204,6 +210,15 @@ module.exports = (_ => {
 											BDFDB.DataUtils.save(presets, _this, "presets");
 										}
 									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+									className: BDFDB.disCN.flexchild,
+									value: presets[id].clearAfter,
+									options: Object.entries(ClearAfterValues).map(entry => ({value: entry[0], label: !entry[1] || entry[1] == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : entry[1] == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", entry[1]/3600000)})),
+									onChange: value => {
+										presets[id].clearAfter = value;
+										BDFDB.DataUtils.save(presets, _this, "presets");
+									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
@@ -372,10 +387,10 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								hint: !presets[id].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
+								hint: !presets[id].clearAfter || presets[id].clearAfter == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
 								action: _ => {
 									if (!presets[id]) return;
-									let expiresAt = presets[id].clearAfter ? presets[id].clearAfter : null;
+									let expiresAt = presets[id].clearAfter && presets[id].clearAfter != ClearAfterValues.DONT_CLEAR ? presets[id].clearAfter : null;
 									if (presets[id].clearAfter === ClearAfterValues.TODAY) {
 										let date = new Date;
 										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
