@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.3
+ * @version 2.0.4
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -686,28 +686,28 @@ module.exports = (_ => {
 												type: "file",
 												filter: ["audio", "video"],
 												placeholder: "Url or File",
-												value: this.settings.notificationSounds[key].data
+												value: this.settings.notificationSounds[key].song
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 											onClick: _ => {
 												let source = settingsPanel.props._node.querySelector(`.input-${key}src ` + BDFDB.dotCN.input);
 												let value = source && (source.getAttribute("file") || source.value).trim()
-												if (!source.length) {
+												if (!value.length) {
 													BDFDB.NotificationUtils.toast(`Sound File was removed.`, {type: "warning"});
-													successSavedAudio(key, source, source);
+													successSavedAudio(key, value);
 												}
-												else if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
+												else if (value.indexOf("http") == 0) BDFDB.LibraryRequires.request(value, (error, response, result) => {
 													if (response) {
 														let type = response.headers["content-type"];
 														if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
-															successSavedAudio(key, source);
+															successSavedAudio(key, value);
 															return;
 														}
 													}
 													BDFDB.NotificationUtils.toast("Use a valid direct Link to a Video or Audio Source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
 												});
-												else if (source.indexOf("data:") == 0) return successSavedAudio(key, source);
+												else if (value.indexOf("data:") == 0) return successSavedAudio(key, value);
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.SAVE
 										})
