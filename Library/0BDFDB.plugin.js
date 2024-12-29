@@ -302,7 +302,7 @@ module.exports = (_ => {
 			};
 			BDFDB.TimeUtils.suppress = function (callback, strings, config) {return function (...args) {
 				try {return callback(...args);}
-				catch (err) {!config.ignoreErrors && BDFDB.LogUtils.error([strings, err], config);}
+				catch (err) {(!config || !config.ignoreErrors) && BDFDB.LogUtils.error([strings, err], config);}
 			}};
 
 			BDFDB.LogUtils.log("Loading Library");
