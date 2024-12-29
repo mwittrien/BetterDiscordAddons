@@ -3057,7 +3057,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .biteSizeOverlayBackground_c69a7b,
 #app-mount .fullSizeOverlayBackground_c69a7b,
 #app-mount .outer_c69a7b.custom-profile-theme .inner_c69a7b .activity_cd74cc,
-#app-mount .menu_d4e7c2 {
+#app-mount .overlay_c69a7b {
 	--bg-mod-faint: var(--background-primary);
 	--border-faint: var(--background-primary);
 }
