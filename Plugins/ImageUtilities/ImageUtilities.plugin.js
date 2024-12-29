@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.5.0
+ * @version 5.5.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1438,6 +1438,7 @@ module.exports = (_ => {
 			processLazyImageZoomable (e) {
 				if (!e.instance.props.item || !e.instance.props.item.originalItem || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
 				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length > 1) {
+					const onMouseEnter = e.returnvalue.props.onMouseEnter || (_ => {});
 					e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
 						BDFDB.TooltipUtils.create(args[0].target, [
 							e.instance.props.item.originalItem.filename,
