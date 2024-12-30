@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.0
+ * @version 1.4.1
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,10 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		fixed: {
+			"User Profile": "Works with the Quick Message Input in User Profile again",
+			"BetterSearchPage": "Fixed an Issue, that could cause crashs with BetterSearchPage"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -97,18 +100,16 @@ module.exports = (_ => {
 						normal:			{value: true, 			description: "Normal Message Textarea"},
 						edit:			{value: true, 			description: "Edit Message Textarea"},
 						form:			{value: true, 			description: "Upload Message Prompt"},
-						quickmessage:		{value: true, 			description: "Quick Message Textarea UserPopout"}
+						user_profile:		{value: true, 			description: "Quick Message Textarea UserPopout"}
 					}
 				};
 				
 				this.modulePatches = {
 					before: [
-						"ChannelTextAreaEditor",
-						"TextInput"
+						"ChannelTextAreaEditor"
 					],
 					after: [
-						"ChannelTextAreaButtons",
-						"TextInput"
+						"ChannelTextAreaButtons"
 					]
 				};
 			}
@@ -181,39 +182,11 @@ module.exports = (_ => {
 			
 			processChannelTextAreaButtons (e) {
 				let type = e.instance.props.type.analyticsName || e.instance.props.type || "";
-				if ((!type || this.settings.places[type] || !this.defaults.places[type]) && this.settings.general.addQuickToggle && !e.instance.props.disabled) {
+				if ((!type || this.settings.places[type] || !this.defaults.places[type]) && !this.settings.general.addQuickToggle && !e.instance.props.disabled) {
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(QuickToogleButtonComponent, {
 						type: type,
 						channelId: e.instance.props.channel.id
 					}));
-				}
-			}
-			
-			processTextInput (e) {
-				if (!this.settings.places.quickmessage || !e.instance.props.className) return;
-				let channelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
-				if (!e.returnvalue) {
-					let input = e.instance.props.inputRef.current;
-					if (input) BDFDB.ListenerUtils.add(this, input, "keyup", event => {
-						if (this.settings.places.quickmessage && (!this.settings.general.addQuickToggle || channelBlacklist.indexOf(channelId) == -1)) {
-							let string = input.value;
-							let newString = this.parse(string);
-							if (string != newString) input.value = newString;
-						}
-					});
-				}
-				else {
-					if (this.settings.general.addQuickToggle) e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-								children: e.returnvalue
-							}),
-							BDFDB.ReactUtils.createElement(QuickToogleButtonComponent, {
-								type: "quickmessage",
-								channelId: channelId
-							})
-						]
-					});
 				}
 			}
 			
