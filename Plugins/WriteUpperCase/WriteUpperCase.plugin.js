@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.1
+ * @version 1.4.2
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -182,7 +182,7 @@ module.exports = (_ => {
 			
 			processChannelTextAreaButtons (e) {
 				let type = e.instance.props.type.analyticsName || e.instance.props.type || "";
-				if ((!type || this.settings.places[type] || !this.defaults.places[type]) && !this.settings.general.addQuickToggle && !e.instance.props.disabled) {
+				if ((!type || this.settings.places[type] || !this.defaults.places[type]) && this.settings.general.addQuickToggle && !e.instance.props.disabled) {
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(QuickToogleButtonComponent, {
 						type: type,
 						channelId: e.instance.props.channel.id
