@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.4
+ * @version 1.8.5
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -15,7 +15,7 @@
 module.exports = (_ => {
 	const changeLog = {
 		added: {
-			"Right Click Option": "Added right click option disable splitting"
+			"Empty Split Lines": "Added an option for NewLine splits so that if the message splits on an empty line, the resulting two messages will maintain that one-line Gap."
 		}
 	};
 
@@ -72,6 +72,7 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						byNewlines:	{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
+						leaveGaps:	{value: false,	description: "Leave Gaps if splitting on empty Newline",		note: "If splitting on NewLines and the Line is left empty, this will maintain the Gap"}
 					},
 					amounts: {
 						splitCounter:	{value: 0, 	description: "Messages will be split after roughly X Characters"},
@@ -253,6 +254,9 @@ module.exports = (_ => {
 						messages[j] = insertCodeLine + messages[j];
 						insertCodeLine = null;
 					}
+					else if (messages[j].charCodeAt(0) == 10 && this.settings.general.byNewlines && this.settings.general.leaveGaps){
+						messages[j] = "** **" + messages[j];
+					}
 
 					let codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
 					let codeLines = messages[j].match(/[^`]{0,1}`{1,2}[^`]|[^`]`{1,2}[^`]{0,1}/gm);
@@ -264,6 +268,9 @@ module.exports = (_ => {
 					else if (codeLines && codeLines.length % 2 == 1) {
 						insertCodeLine = codeLines[codeLines.length-1].replace(/[^`]/g, "");
 						messages[j] = messages[j] + insertCodeLine;
+					}
+					else if (messages[j].charCodeAt(messages[j].length-1) == 10 && this.settings.general.byNewlines && this.settings.general.leaveGaps){
+						messages[j] = messages[j] + "** **";
 					}
 				}
 				return this.settings.amounts.maxMessages ? messages.slice(0, this.settings.amounts.maxMessages) : messages;
