@@ -2,20 +2,18 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.4
- * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
+ * @version 1.8.5c
+ * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages. Modded by Cuantum to have Splits on Blank Lines maintain the blank split.
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
- * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SplitLargeMessages/
- * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/SplitLargeMessages/SplitLargeMessages.plugin.js
  */
 
 module.exports = (_ => {
 	const changeLog = {
 		added: {
-			"Right Click Option": "Added right click option disable splitting"
+			"Empty split lines": "Added option to allow a message splitting on a blank line to maintain the blank line when using by-line splitting."
 		}
 	};
 
@@ -72,6 +70,7 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						byNewlines:	{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
+						leaveGaps: {value: false, description: "Leave Gaps if splitting on empty Newline.",		note: "If the Message is split on an empty Newline, that Newline will hold ** ** to keep the blank space."}
 					},
 					amounts: {
 						splitCounter:	{value: 0, 	description: "Messages will be split after roughly X Characters"},
@@ -252,6 +251,8 @@ module.exports = (_ => {
 					else if (insertCodeLine) {
 						messages[j] = insertCodeLine + messages[j];
 						insertCodeLine = null;
+					}else if (messages[j].charCodeAt(0) == 10 && this.settings.general.byNewlines && this.settings.general.leaveGaps){
+						messages[j] = "** **" + messages[j];
 					}
 
 					let codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
@@ -264,7 +265,13 @@ module.exports = (_ => {
 					else if (codeLines && codeLines.length % 2 == 1) {
 						insertCodeLine = codeLines[codeLines.length-1].replace(/[^`]/g, "");
 						messages[j] = messages[j] + insertCodeLine;
+					}else if (messages[j].charCodeAt(messages[j].length-1) == 10 && this.settings.general.byNewlines && this.settings.general.leaveGaps){
+						messages[j] = messages[j] + "** **";
 					}
+
+
+
+					//messages[j] = messages[j] + messages[j].charCodeAt(messages[j].length-1)
 				}
 				return this.settings.amounts.maxMessages ? messages.slice(0, this.settings.amounts.maxMessages) : messages;
 			}
