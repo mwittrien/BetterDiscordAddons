@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.5.1
+ * @version 5.5.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -908,41 +908,29 @@ module.exports = (_ => {
 								const imageThrowaway = document.createElement(isVideo ? "video" : "img");
 								imageThrowaway.addEventListener(isVideo ? "loadedmetadata" : "load", function() {
 									_this.cacheClickedImage(target);
-									BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
-										return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
-											className: BDFDB.disCNS.modalcarouselmodal + BDFDB.disCN.imagemodal
-										}, modalData, {
-											size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
-											"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
-											children: isVideo ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-												items: [{
-													src: imageThrowaway.src,
-													poster: _this.getPosterUrl(imageThrowaway.src),
-													width: this.videoWidth,
-													naturalWidth: this.videoWidth,
-													height: this.videoHeight,
-													naturalHeight: this.videoHeight
-												}],
-												renderForwardComponent: _ => {},
-												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
-											}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-												items: [{
-													animated: false,
-													height: this.height,
-													original: imageThrowaway.src,
-													srcIsAnimated: false,
-													trigger: "CLICK",
-													type: "IMAGE",
-													url: imageThrowaway.src,
-													width: this.width,
-													zoomThumbnailPlaceholder: imageThrowaway.src
-												}],
-												className: BDFDB.disCN.imagemodalimage,
-												renderForwardComponent: _ => {},
-												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
-											})
-										}), true);
-									});
+									let modalData;
+									BDFDB.LibraryModules.ModalUtils.openModal(m => modalData = m, {Layer: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModalOuter, {
+										onClose: modalData.onClose,
+										className: BDFDB.disCN.imagemodal,
+										items: [isVideo ? {
+											src: imageThrowaway.src,
+											poster: _this.getPosterUrl(imageThrowaway.src),
+											width: this.videoWidth,
+											naturalWidth: this.videoWidth,
+											height: this.videoHeight,
+											naturalHeight: this.videoHeight
+										} : {
+											animated: false,
+											height: this.height,
+											original: imageThrowaway.src,
+											srcIsAnimated: false,
+											trigger: "CLICK",
+											type: "IMAGE",
+											url: imageThrowaway.src,
+											width: this.width,
+											zoomThumbnailPlaceholder: imageThrowaway.src
+										}]
+									}, true)});
 								});
 								imageThrowaway.src = urlData.src || urlData.file;
 							}
