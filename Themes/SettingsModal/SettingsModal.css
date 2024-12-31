@@ -105,21 +105,21 @@
 }
 #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .closeButton_df5532 {
 	border: none !important;
-	border-radius: 0 !important;
-	width: 100% !important;
-	max-width: unset !important;
-	height: 100% !important;
-	max-height: unset !important;
-	cursor: default !important;
-	flex: unset !important;
-	transition: unset !important;
-	&:hover {
-	        transition: unset !important;
-	        background: unset !important;
-	}
-        > svg {
-		display: none !important;
-        }
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: unset !important;
+    height: 100% !important;
+    max-height: unset !important;
+    cursor: default !important;
+    flex: unset !important;
+    transition: unset !important;
+    &:hover {
+        transition: unset !important;
+        background: unset !important;
+    }
+    > svg {
+        display: none !important;
+    }
 }
 #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d {
     position: fixed !important;
