@@ -2,8 +2,8 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.5c
- * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages. Modded by Cuantum to have Splits on Blank Lines maintain the blank split.
+ * @version 1.8.5
+ * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages.
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -13,7 +13,7 @@
 module.exports = (_ => {
 	const changeLog = {
 		added: {
-			"Empty split lines": "Added option to allow a message splitting on a blank line to maintain the blank line when using by-line splitting."
+			"Empty Split Lines": "Added an option for NewLine splits so that if the message splits on an empty line, the resulting two messages will maintain that one-line Gap."
 		}
 	};
 
@@ -70,7 +70,7 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						byNewlines:	{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
-						leaveGaps: {value: false, description: "Leave Gaps if splitting on empty Newline.",		note: "If the Message is split on an empty Newline, that Newline will hold ** ** to keep the blank space."}
+						leaveGaps: {value: false, description: "Leave Gaps if splitting on empty Newline.",		note: "If splitting on NewLines and the Line is left empty, this will maintain the Gap."}
 					},
 					amounts: {
 						splitCounter:	{value: 0, 	description: "Messages will be split after roughly X Characters"},
