@@ -314,6 +314,7 @@
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["containerRef", "zoomable", "LOADING"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"]},
+		"ImageModalOuter": {"strings": ["MEDIA_VIEWER", "numMediaItem", "BackdropStyles"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
 			"LayerContainer": [".layerContainer", "missing parent"]
