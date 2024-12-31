@@ -99,36 +99,47 @@
 #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .standardSidebarView_c25c6d .editor {
 	height: calc(var(--settingsheight_v) - 120px) !important;
 }
-#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d,
-#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .tools_c25c6d,
-#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .container_df5532,
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .tools_c25c6d {
+	width: 100% !important;
+	height: 100% !important;
+}
 #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .closeButton_df5532 {
-	position: absolute !important;
-	top: 0 !important;
-	right: 0 !important;
-	bottom: 0 !important;
-	left: 0 !important;
-	background: transparent !important;
 	border: none !important;
 	border-radius: 0 !important;
 	width: 100% !important;
 	max-width: unset !important;
 	height: 100% !important;
 	max-height: unset !important;
-	margin: 0 !important;
-	padding: 0 !important;
-	opacity: 0 !important;
 	cursor: default !important;
+	flex: unset !important;
+	transition: unset !important;
+}
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .closeButton_df5532:hover {
+	transition: unset !important;
+	background: unset !important;
+}
+#app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d .closeButton_df5532 > svg {
+	display: none !important;
 }
 #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .toolsContainer_c25c6d {
 	position: fixed !important;
-	top: 22px !important;
+	inset: 0 !important;
+	width: 100% !important;
+	max-width: unset !important;
+	height: 100% !important;
+	max-height: unset !important;
 	z-index: -1 !important;
+	padding-top: 0 !important;
+}
+#app-mount > .appAsidePanelWrapper_bd26cc > .notAppAsidePanel_bd26cc .contentRegion_c25c6d .toolsContainer_c25c6d .container_df5532 {
+	height: 100% !important;
+}
+#app-mount > .appAsidePanelWrapper_bd26cc > .notAppAsidePanel_bd26cc .contentRegion_c25c6d .toolsContainer_c25c6d .keybind_df5532 {
+	display: none !important;
 }
 #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .settingsToolbar_wu4yfQ {
 	display: none !important;
 }
-
 #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .accountProfileCard_b69b77 {
 	max-width: calc(var(--settingswidth_v) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
