@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.8
+ * @version 3.9.9
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -69,7 +69,7 @@ module.exports = (_ => {
 		
 		var currentDevice = defaultDevice, createdAudios = {};
 		
-		let types = {};
+		let types = {}, soundPacks = [];
 		
 		const message1Types = {
 			dm:		{src: "./message3.mp3", name: "Message (Direct Message)"},
@@ -186,6 +186,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				soundPacks = [];
 				const soundKeys = BDFDB.LibraryModules.SoundParser.keys();
 				for (let key of soundKeys) {	
 					const id = key.replace("./", "").replace(".mp3", "");
@@ -193,7 +194,8 @@ module.exports = (_ => {
 					const src = BDFDB.LibraryModules.SoundParser(key);	
 					
 					let soundPackName = id.split("_")[0];
-					if (soundPackName != id && soundKeys.filter(n => n.indexOf(`./${soundPackName}`) > -1).length > 10) {
+					if (soundPackName != id && soundKeys.filter(n => n.indexOf(`./${soundPackName}`) > -1).length > 8) {
+						soundPacks.push(soundPackName);
 						soundPackName = BDFDB.StringUtils.upperCaseFirstChar(soundPackName);
 						if (!defaultAudios[soundPackName]) defaultAudios[soundPackName] = {};
 						defaultAudios[soundPackName][name.replace(new RegExp(`${soundPackName} `, "i"), "").replace(/bootup/i, "Discodo")] = src;
@@ -707,6 +709,7 @@ module.exports = (_ => {
 			}
 
 			playAudio (type, functionCall = "play", duration = 0) {
+				type = soundPacks.some(soundPack => type.startsWith(soundPack + "_")) ? type.split("_").splice(1).join("_") : type;
 				if (this.dontPlayAudio(type) || BDFDB.LibraryStores.StreamerModeStore.disableSounds) return;
 				if (createdAudios[type]) createdAudios[type].stop();
 				createdAudios[type] = new WebAudioSound(type);
