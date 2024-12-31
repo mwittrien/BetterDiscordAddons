@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.9
+ * @version 2.6.0
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -362,28 +362,22 @@ module.exports = (_ => {
 												const url = this.props.data.thumbnailUrl;
 												const img = document.createElement("img");
 												img.addEventListener("load", function() {
-													BDFDB.LibraryModules.ModalUtils.openModal(modalData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
-														className: BDFDB.disCN.imagemodal
-													}, modalData, {
-														size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
-														"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
-														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-															items: [{
-																animated: false,
-																height: this.height,
-																original: url,
-																srcIsAnimated: false,
-																trigger: "CLICK",
-																type: "IMAGE",
-																url: url,
-																width: this.width,
-																zoomThumbnailPlaceholder: url
-															}],
-															className: BDFDB.disCN.imagemodalimage,
-															renderForwardComponent: _ => {},
-															renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
-														})
-													}), true));
+													let modalData;
+													BDFDB.LibraryModules.ModalUtils.openModal(m => modalData = m, {Layer: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModalOuter, {
+														onClose: modalData.onClose,
+														className: BDFDB.disCN.imagemodal,
+														items: [{
+															animated: false,
+															height: this.height,
+															original: url,
+															srcIsAnimated: false,
+															trigger: "CLICK",
+															type: "IMAGE",
+															url: url,
+															width: this.width,
+															zoomThumbnailPlaceholder: url
+														}]
+													}, true)});
 												});
 												img.src = url;
 											}
