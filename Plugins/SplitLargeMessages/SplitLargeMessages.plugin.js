@@ -268,10 +268,6 @@ module.exports = (_ => {
 					}else if (messages[j].charCodeAt(messages[j].length-1) == 10 && this.settings.general.byNewlines && this.settings.general.leaveGaps){
 						messages[j] = messages[j] + "** **";
 					}
-
-
-
-					//messages[j] = messages[j] + messages[j].charCodeAt(messages[j].length-1)
 				}
 				return this.settings.amounts.maxMessages ? messages.slice(0, this.settings.amounts.maxMessages) : messages;
 			}
