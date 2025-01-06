@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.7
+ * @version 3.8.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7691,7 +7691,7 @@ module.exports = (_ => {
 						let value = e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
 						this.props.value = this.props.valuePrefix && !value.startsWith(this.props.valuePrefix) ? (this.props.valuePrefix + value) : value;
 						this.props.file = e2 = BDFDB.ObjectUtils.is(e2) ? e2.currentTarget.value : e2;
-						if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
+						if (typeof this.props.onChange == "function") this.props.onChange(this.props.type == "file" ? this.props.file : this.props.value, this);
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
 					handleInput(e) {if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e, this);}
