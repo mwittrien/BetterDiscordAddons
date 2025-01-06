@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.3
+ * @version 1.2.4
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -340,9 +340,12 @@ module.exports = (_ => {
 				container.props.onContextMenu = BDFDB.TimeUtils.suppress(event => {
 					onContextMenu && onContextMenu(event);
 					let enabledPresets = BDFDB.ObjectUtils.filter(presets, id => !presets[id].disabled, true);
-					if (!Object.keys(enabledPresets).length) return;
 					BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => {
+						children: !Object.keys(enabledPresets).length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "no-presets"),
+								label: this.labels.contextmenu_no_presets,
+								disabled: true
+							}) : Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => {
 							let imageUrl = presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name));
 							return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", id),
@@ -430,110 +433,152 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							contextmenu_no_presets:					"Няма запазени бързи избори",
 							modal_savepreset:					"Запазване като бърз избор"
+						};
+					case "cs":		// Czech
+						return {
+							contextmenu_no_presets:					"Nebyly uloženy žádné rychlé volby",
+							modal_savepreset:					"Uložit jako Rychlý výběr"
 						};
 					case "da":		// Danish
 						return {
+							contextmenu_no_presets:					"Ingen hurtige valg er gemt",
 							modal_savepreset:					"Gem som hurtigvalg"
 						};
 					case "de":		// German
 						return {
+							contextmenu_no_presets:					"Keine Schnellauswahl gespeichert",
 							modal_savepreset:					"Als Schnellauswahl speichern"
 						};
 					case "el":		// Greek
 						return {
-							modal_savepreset:					"Αποθήκευση ως γρήγορη επιλογή"
+							contextmenu_no_presets:					"Δεν έχουν αποθηκευτεί Γρήγορες Επιλογές",
+							modal_savepreset:					"Αποθήκευση ως Γρήγορη επιλογή"
 						};
 					case "es":		// Spanish
 						return {
+							contextmenu_no_presets:					"No se han guardado selecciones rápidas",
+							modal_savepreset:					"Guardar como selección rápida"
+						};
+					case "es-419":		// Spanish (Latin America)
+						return {
+							contextmenu_no_presets:					"No se han guardado selecciones rápidas",
 							modal_savepreset:					"Guardar como selección rápida"
 						};
 					case "fi":		// Finnish
 						return {
+							contextmenu_no_presets:					"Pikavalintoja ei ole tallennettu",
 							modal_savepreset:					"Tallenna pikavalintana"
 						};
 					case "fr":		// French
 						return {
+							contextmenu_no_presets:					"Aucune sélection rapide enregistrée",
 							modal_savepreset:					"Enregistrer en tant que sélection rapide"
+						};
+					case "hi":		// Hindi
+						return {
+							contextmenu_no_presets:					"कोई त्वरित चयन सहेजा नहीं गया",
+							modal_savepreset:					"त्वरित चयन के रूप में सहेजें"
 						};
 					case "hr":		// Croatian
 						return {
+							contextmenu_no_presets:					"Nema spremljenih brzih odabira",
 							modal_savepreset:					"Spremi kao brzi odabir"
 						};
 					case "hu":		// Hungarian
 						return {
-							modal_savepreset:					"Mentés gyorsválasztásként"
+							contextmenu_no_presets:					"Nincs mentett gyorskiválasztás",
+							modal_savepreset:					"Mentés gyorskiválasztásként"
 						};
 					case "it":		// Italian
 						return {
+							contextmenu_no_presets:					"Nessuna selezione rapida salvata",
 							modal_savepreset:					"Salva come selezione rapida"
 						};
 					case "ja":		// Japanese
 						return {
+							contextmenu_no_presets:					"クイック選択は保存されませんでした",
 							modal_savepreset:					"クイック選択として保存"
 						};
 					case "ko":		// Korean
 						return {
+							contextmenu_no_presets:					"빠른 선택이 저장되지 않았습니다.",
 							modal_savepreset:					"빠른 선택으로 저장"
 						};
 					case "lt":		// Lithuanian
 						return {
-							modal_savepreset:					"Išsaugoti kaip greitą pasirinkimą"
+							contextmenu_no_presets:					"Greitųjų pasirinkimų neišsaugota",
+							modal_savepreset:					"Išsaugoti kaip greitąjį pasirinkimą"
 						};
 					case "nl":		// Dutch
 						return {
-							modal_savepreset:					"Opslaan als snel selecteren"
+							contextmenu_no_presets:					"Geen snelle selecties opgeslagen",
+							modal_savepreset:					"Opslaan als Snelselectie"
 						};
 					case "no":		// Norwegian
 						return {
+							contextmenu_no_presets:					"Ingen hurtigvalg lagret",
 							modal_savepreset:					"Lagre som hurtigvalg"
 						};
 					case "pl":		// Polish
 						return {
+							contextmenu_no_presets:					"Nie zapisano żadnych szybkich wyborów",
 							modal_savepreset:					"Zapisz jako Szybki wybór"
 						};
-					case "pt-BR":	// Portuguese (Brazil)
+					case "pt-BR":		// Portuguese (Brazil)
 						return {
+							contextmenu_no_presets:					"Nenhuma seleção rápida salva",
 							modal_savepreset:					"Salvar como seleção rápida"
 						};
 					case "ro":		// Romanian
 						return {
-							modal_savepreset:					"Salvați ca selecție rapidă"
+							contextmenu_no_presets:					"Nicio selecție rapidă salvată",
+							modal_savepreset:					"Salvați ca Selectare rapidă"
 						};
 					case "ru":		// Russian
 						return {
+							contextmenu_no_presets:					"Быстрый выбор не сохранен.",
 							modal_savepreset:					"Сохранить как быстрый выбор"
 						};
 					case "sv":		// Swedish
 						return {
+							contextmenu_no_presets:					"Inga snabbval sparade",
 							modal_savepreset:					"Spara som snabbval"
 						};
 					case "th":		// Thai
 						return {
-							modal_savepreset:					"บันทึกเป็น เลือกด่วน"
+							contextmenu_no_presets:					"ไม่มีการบันทึกการเลือกด่วน",
+							modal_savepreset:					"บันทึกเป็นการเลือกด่วน"
 						};
 					case "tr":		// Turkish
 						return {
+							contextmenu_no_presets:					"Hiçbir Hızlı Seçim kaydedilmedi",
 							modal_savepreset:					"Hızlı Seçim olarak kaydet"
 						};
 					case "uk":		// Ukrainian
 						return {
+							contextmenu_no_presets:					"Немає збережених пунктів швидкого вибору",
 							modal_savepreset:					"Зберегти як швидкий вибір"
 						};
 					case "vi":		// Vietnamese
 						return {
+							contextmenu_no_presets:					"Không có lựa chọn nhanh nào được lưu",
 							modal_savepreset:					"Lưu dưới dạng Chọn nhanh"
 						};
-					case "zh-CN":	// Chinese (China)
+					case "zh-CN":		// Chinese (China)
 						return {
+							contextmenu_no_presets:					"未保存快速选择",
 							modal_savepreset:					"另存为快速选择"
 						};
-					case "zh-TW":	// Chinese (Taiwan)
+					case "zh-TW":		// Chinese (Taiwan)
 						return {
+							contextmenu_no_presets:					"未儲存快速選擇",
 							modal_savepreset:					"另存為快速選擇"
 						};
 					default:		// English
 						return {
+							contextmenu_no_presets:					"No Quick Selects saved",
 							modal_savepreset:					"Save as Quick Select"
 						};
 				}
