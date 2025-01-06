@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.2.7
+ * @version 7.2.8
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -358,7 +358,6 @@ module.exports = (_ => {
 				}
 			}
 			render() {
-				let openInput, closeInput;
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: _this.labels.modal_customopen,
@@ -367,7 +366,6 @@ module.exports = (_ => {
 							type: "file",
 							filter: "image",
 							value: this.props.open,
-							ref: instance => {if (instance) openInput = instance;},
 							onChange: value => {
 								this.props.open = value;
 								BDFDB.ReactUtils.forceUpdate(this);
@@ -381,7 +379,6 @@ module.exports = (_ => {
 							type: "file",
 							filter: "image",
 							value: this.props.closed,
-							ref: instance => {if (instance) closeInput = instance;},
 							onChange: value => {
 								this.props.closed = value;
 								BDFDB.ReactUtils.forceUpdate(this);
@@ -419,9 +416,9 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 									onClick: _ => {
-										if (openInput.props.value && closeInput.props.value) {
-											this.checkImage(openInput.props.value, openIcon => {
-												this.checkImage(closeInput.props.value, closedIcon => {
+										if (this.props.open && this.props.closed) {
+											this.checkImage(this.props.open, openIcon => {
+												this.checkImage(this.props.closed, closedIcon => {
 													customIcons[_this.generateId("customicon")] = {openicon: openIcon, closedicon: closedIcon};
 													BDFDB.DataUtils.save(customIcons, _this, "customicons");
 													this.props.open = null;
