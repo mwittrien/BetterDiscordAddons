@@ -401,6 +401,7 @@
 		"AutocompleteRowIcon": {"strings": [".jsx)(\"div\"", "autocompleteRowIcon"]},
 		"AutocompleteUserResult": {"strings": ["hidePersonalInformation:", ".descriptionDiscriminator", "\"#\"", "Sizes.SIZE_24"], "noSearch": true},
 		"BlobMask": {"strings": ["\"BlobMask\"", "isVisualRefreshEnabled"]},
+		"BlobMaskInner": {"strings": ["lower_badge_masks", "upper_badge_masks"], "noSearch": true},
 		"BlockedMessageGroup": {"strings": ["collapsed-message-item", "isBeforeGroup", "collapsedReason"]},
 		"ChannelCall": {"strings": ["maybeLeaveFullScreen", "handleFullscreenParticipant", "CHANNEL_CALL_POPOUT"]},
 		"ChannelCallHeader": {"strings": ["focusedApplication:", "focusedParticipant:", ".getSelectedParticipant", "appContext"]},
