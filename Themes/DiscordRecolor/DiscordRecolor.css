@@ -3531,9 +3531,7 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	border-radius: 4px;
 }
 
-.bd-slider-input {
-	background-color: var(--background-accent);
-}
+
 .bd-slider-input[type="range"]::-webkit-slider-thumb {
 	background-color: #fff;
 	border-color: var(--background-accent);
