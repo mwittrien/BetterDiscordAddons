@@ -2418,6 +2418,10 @@ html #bd-modal-container > * {
 	background: var(--bd-blue);
 }
 
+.bd-slider-track {
+	background-image: linear-gradient(var(--bd-blue), var(--bd-blue));
+}
+
 .bd-server-tag {
 	background: var(--bd-blue);
 }
