@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.8
+ * @version 3.8.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8082,7 +8082,7 @@ module.exports = (_ => {
 				
 				Internal.modulePatches = {
 					before: [
-						"BlobMask",
+						"BlobMaskInner",
 						"EmojiPickerListRow",
 						"MemberListItem",
 						"Menu",
@@ -8185,12 +8185,15 @@ module.exports = (_ => {
 					const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopoutouter + BDFDB.dotCN.userprofilemodal) || e.node;
 					if (avatar) Internal._processAvatarMount(user, avatar, wrapper);
 				};
-				Internal.processBlobMask = function (e) {
+				Internal.processBlobMaskInner = function (e) {
 					if (!e.component.prototype || BDFDB.PatchUtils.isPatched(BDFDB, e.component.prototype, "render")) return;
 					
 					let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
 					let extraDefaultProps = {};
-					for (let type of newBadges) extraDefaultProps[`${type}Width`] = 16;
+					for (let type of newBadges) {
+						extraDefaultProps[`${type}`] = null;
+						extraDefaultProps[`${type}Size`] = {width: 16};
+					}
 					
 					BDFDB.PatchUtils.patch(BDFDB, e.component.prototype, "render", {
 						before: e2 => {
@@ -8230,8 +8233,8 @@ module.exports = (_ => {
 								mChildren[mIndex].props.children.push(BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.rect, {
 									x: -4,
 									y: -4,
-									width: e2.instance.props.upperLeftBadgeWidth + 8,
-									height: 24,
+									width: e2.instance.props.upperLeftBadgeSize.width ? (e2.instance.props.upperLeftBadgeSize.width + 8) : 24,
+									height: e2.instance.props.upperLeftBadgeSize.height ? (e2.instance.props.upperLeftBadgeSize.height + 8) : 24,
 									rx: 12,
 									ry: 12,
 									transform: e2.instance.state.upperLeftBadgeMask.springs.spring.to([0, 1], [20, 0]).to(value => `translate(${value * -1} ${value * -1})`),
@@ -8240,8 +8243,8 @@ module.exports = (_ => {
 								mChildren[mIndex].props.children.push(BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.rect, {
 									x: -4,
 									y: 28,
-									width: e2.instance.props.lowerLeftBadgeWidth + 8,
-									height: 24,
+									width: e2.instance.props.lowerLeftBadgeSize.width ? (e2.instance.props.lowerLeftBadgeSize.width + 8) : 24,
+									height: e2.instance.props.lowerLeftBadgeSize.height ? (e2.instance.props.lowerLeftBadgeSize.height + 8) : 24,
 									rx: 12,
 									ry: 12,
 									transform: e2.instance.state.lowerLeftBadgeMask.springs.spring.to([0, 1], [20, 0]).to(value => `translate(${value * -1} ${value * 1})`),
