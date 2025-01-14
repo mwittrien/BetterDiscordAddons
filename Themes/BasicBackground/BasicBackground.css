@@ -6641,8 +6641,9 @@ html .bd-toast.toast-warn.icon::before {
 	color: var(--header-primary);
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.bd-slider-input {									/* bd slider				input								*/
-	background-color: rgba(var(--transparencycolor_v), .3);
+.bd-slider-track,									/* bd slider				input								*/
+.bd-slider-marker::before {								/* bd slider				marker								*/
+	background-color: var(--background-modifier-accent);
 }
 .bd-slider-input[type="range"]::-webkit-slider-thumb {
 	background-color: var(--header-primary);
