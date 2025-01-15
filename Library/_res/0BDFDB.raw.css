@@ -592,6 +592,13 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_selectsearchinput] {
 	width: 100%;
 }
+[REPLACE_CLASS_selectoption] [REPLACE_CLASS_favbuttoncontainer] {
+	background: transparent;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	flex: 0 0 auto;
+}
 [REPLACE_CLASS_selectoption] [REPLACE_CLASS_giffavoriteicon] {
 	width: 20px;
 	height: 20px;
