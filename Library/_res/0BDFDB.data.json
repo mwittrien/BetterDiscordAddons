@@ -1542,7 +1542,7 @@
 		"Margins": {"props": ["marginBottom4", "marginCenterHorz"]},
 		"Menu": {"props": ["menu", "colorPremiumGradient", "item"]},
 		"MenuReactButton": {"props": ["wrapper", "icon", "focused", "button"]},
-		"MenuSlider": {"props": ["slider", "sliderContainer"]},
+		"MenuSlider": {"props": ["slider", "sliderContainer"], "length": 4, "smaller": true},
 		"Member": {"props": ["member", "ownerIcon"]},
 		"MemberSince": {"props": ["memberSince", "discordIcon"]},
 		"MembersWrapper": {"props": ["membersWrap", "membersGroup"]},
