@@ -1308,7 +1308,7 @@
 .attachment_b52bef {
 	position: relative;
 }
-.attachment_b52bef .icon_b52bef,
+.attachment_b52bef .icon_f46c86,
 .uploadContainer_df1eaf .icon_f847a3,
 .audioMetadata_f316dd::before,
 .uploadModal_f82cc7 .icon_f82cc7:not(img),
@@ -1321,7 +1321,8 @@
 .uploadModal_f82cc7 .icon_f82cc7:not(img),
 .icon_f82cc7:not(img) {
 	background-size: 72px 96px !important;
-}.attachment_b52bef .icon_b52bef,
+}
+.attachment_b52bef .icon_f46c86,
 .uploadContainer_df1eaf .icon_f847a3,
 .audioMetadata_f316dd::before,
 .uploadModal_f82cc7 .icon_f82cc7:not(img),
@@ -1333,8 +1334,8 @@
 .optionIcon_fff78a {
 	background-size: 62px 75px !important;
 }
-.attachment_b52bef .icon_b52bef + *::before,
-.attachment_b52bef .icon_b52bef + *::after,
+.attachment_b52bef .icon_f46c86 + *::before,
+.attachment_b52bef .icon_f46c86 + *::after,
 .uploadContainer_df1eaf .icon_f847a3::before,
 .uploadContainer_df1eaf .icon_f847a3::after,
 .audioMetadata_f316dd > *:first-child::before,
@@ -1354,15 +1355,15 @@
 	flex: 0 0 auto !important;
 	background-position: top center !important;
 }
-.attachment_b52bef .icon_b52bef + *::before,
-.attachment_b52bef .icon_b52bef + *::after {
+.attachment_b52bef .icon_f46c86 + *::before,
+.attachment_b52bef .icon_f46c86 + *::after {
 	top: 10px;
 	left: 10px;
 	width: 30px;
 	height: 40px;
 }
-.attachment_b52bef.newMosaicStyle_b52bef .icon_b52bef + *::before,
-.attachment_b52bef.newMosaicStyle_b52bef .icon_b52bef + *::after {
+.attachment_b52bef.newMosaicStyle_b52bef .icon_f46c86 + *::before,
+.attachment_b52bef.newMosaicStyle_b52bef .icon_f46c86 + *::after {
 	top: 16px;
 	left: 16px;
 }
@@ -1409,7 +1410,7 @@
 .uploadModalIn_f82cc7 .error_f82cc7 .icon_f82cc7:not(img)::after {
 	background: #d83c3f;
 }
-.attachment_b52bef .icon_b52bef + *::before,
+.attachment_b52bef .icon_f46c86 + *::before,
 .uploadContainer_df1eaf .icon_f847a3::before,
 .audioMetadata_f316dd > *:first-child::before,
 .uploadModal_f82cc7 .icon_f82cc7:not(img)::before,
@@ -1417,7 +1418,7 @@
 .optionIcon_fff78a + *::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_details.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef + *::after,
+.attachment_b52bef .icon_f46c86 + *::after,
 .uploadContainer_df1eaf .icon_f847a3.unknown_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.unknown_f82cc7::after,
 .uploadModal_f82cc7 .icon_f82cc7:not(img)::after,
@@ -1425,56 +1426,56 @@
 .optionIcon_fff78a + *::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/empty.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="acrobat"] + *::after,
+.attachment_b52bef .icon_f46c86[title="acrobat"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.acrobat_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.acrobat_f82cc7::after,
 .icon_f82cc7.acrobat_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_acrobat_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="ae"] + *::after,
+.attachment_b52bef .icon_f46c86[title="ae"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.ae_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.ae_f82cc7::after,
 .icon_f82cc7.ae_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_ae_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="ai"] + *::after,
+.attachment_b52bef .icon_f46c86[title="ai"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.ai_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.ai_f82cc7::after,
 .icon_f82cc7.ai_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_ai_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="archive"] + *::after,
+.attachment_b52bef .icon_f46c86[title="archive"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.archive_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.archive_f82cc7::after,
 .icon_f82cc7.archive_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_archive_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="audio"] + *::after,
+.attachment_b52bef .icon_f46c86[title="audio"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.audio_f847a3::after,
 .audioMetadata_f316dd > *:first-child::after,
 .uploadModal_f82cc7 .icon_f82cc7.audio_f82cc7::after,
 .icon_f82cc7.audio_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_audio_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="code"] + *::after,
+.attachment_b52bef .icon_f46c86[title="code"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.code_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.code_f82cc7::after,
 .icon_f82cc7.code_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_code_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="document"] + *::after,
+.attachment_b52bef .icon_f46c86[title="document"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.document_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.document_f82cc7::after,
 .icon_f82cc7.document_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_document_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="image"] + *::after,
+.attachment_b52bef .icon_f46c86[title="image"] + *::after,
 .uploadModal_f82cc7 .icon_f82cc7.image_f82cc7::after,
 .icon_f82cc7.image_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_image_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="photoshop"] + *::after,
-.attachment_b52bef .icon_b52bef[title="ps"] + *::after,
+.attachment_b52bef .icon_f46c86[title="photoshop"] + *::after,
+.attachment_b52bef .icon_f46c86[title="ps"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.photoshop_f847a3::after,
 .uploadContainer_df1eaf .icon_f847a3.ps_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.photoshop_f82cc7::after,
@@ -1483,25 +1484,25 @@
 .icon_f82cc7.ps_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_photoshop_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="sketch"] + *::after,
+.attachment_b52bef .icon_f46c86[title="sketch"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.sketch_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.sketch_f82cc7::after,
 .icon_f82cc7.sketch_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_sketch_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="spreadsheet"] + *::after,
+.attachment_b52bef .icon_f46c86[title="spreadsheet"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.spreadsheet_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.spreadsheet_f82cc7::after,
 .icon_f82cc7.spreadsheet_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_spreadsheet_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="video"] + *::after,
+.attachment_b52bef .icon_f46c86[title="video"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.video_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.video_f82cc7::after,
 .icon_f82cc7.video_f82cc7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_video_accent.svg) center/contain no-repeat;
 }
-.attachment_b52bef .icon_b52bef[title="webcode"] + *::after,
+.attachment_b52bef .icon_f46c86[title="webcode"] + *::after,
 .uploadContainer_df1eaf .icon_f847a3.webcode_f847a3::after,
 .uploadModal_f82cc7 .icon_f82cc7.webcode_f82cc7::after,
 .icon_f82cc7.webcode_f82cc7::after {
