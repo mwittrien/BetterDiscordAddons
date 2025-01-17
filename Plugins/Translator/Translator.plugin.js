@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.3
+ * @version 2.6.4
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -417,9 +417,7 @@ module.exports = (_ => {
 					after: [
 						"ChannelTextAreaButtons",
 						"Embed",
-						"MessageActionsContextMenu",
-						"MessageContent",
-						"MessageToolbar"
+						"MessageContent"
 					]
 				};
 
@@ -440,6 +438,21 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "editMessage", {before: e => {
 					delete translatedMessages[e.methodArguments[1]];
 					delete oldMessages[e.methodArguments[1]];
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageToolbarUtils, "useMessageMenu", {after: e => {
+					if (e.instance.props.message && e.instance.props.channel) {
+						let translated = !!translatedMessages[e.instance.props.message.id];
+						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: ["pin", "unpin"]});
+						children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
+							disabled: isTranslating,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+								icon: translated ? translateIconUntranslate : translateIcon
+							}),
+							action: _ => this.translateMessage(e.instance.props.message, e.instance.props.channel)
+						}));
+					}
 				}});
 				this.forceUpdateAll();
 			}
@@ -640,51 +653,6 @@ module.exports = (_ => {
 						})
 					}));
 				}
-			}
-			
-			processMessageActionsContextMenu (e) {
-				if (e.instance.props.message && e.instance.props.channel) {
-					let translated = !!translatedMessages[e.instance.props.message.id];
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
-					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
-						disabled: isTranslating,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
-						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-							icon: translated ? translateIconUntranslate : translateIcon
-						}),
-						action: _ => this.translateMessage(e.instance.props.message, e.instance.props.channel)
-					}));
-				}
-			}
-		
-			processMessageToolbar (e) {
-				if (!e.instance.props.message || !e.instance.props.channel) return;
-				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
-				if (!expanded) return;
-				let translated = !!translatedMessages[e.instance.props.message.id];
-				e.returnvalue.props.children.unshift();
-				e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
-					render() {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							key: translated ? "untranslate-message" : "translate-message",
-							text: _ => translated ? _this.labels.context_messageuntranslateoption : _this.labels.context_messagetranslateoption,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCN.messagetoolbarbutton,
-								onClick: _ => {
-									if (!isTranslating) _this.translateMessage(e.instance.props.message, e.instance.props.channel).then(_ => {
-										translated = !!translatedMessages[e.instance.props.message.id];
-										BDFDB.ReactUtils.forceUpdate(this);
-									});
-								},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.messagetoolbaricon,
-									iconSVG: translated ? translateIconUntranslate : translateIcon
-								})
-							})
-						});
-					}
-				}));
 			}
 			
 			processChannelTextAreaContainer (e) {
