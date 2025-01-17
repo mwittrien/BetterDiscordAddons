@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.1
+ * @version 2.2.2
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -386,10 +386,6 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"HeaderBar"
-					],
-					after: [
-						"MessageActionsContextMenu",
-						"MessageToolbar"
 					]
 				};
 				
@@ -427,6 +423,28 @@ module.exports = (_ => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "MESSAGE_DELETE") {
 						let note = this.getNoteData({id: e.methodArguments[0].id, channel_id: e.methodArguments[0].channelId});
 						if (note) this.removeNoteData(note, true);
+					}
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageToolbarUtils, "useMessageMenu", {after: e => {
+					if (e.instance.props.message && e.instance.props.channel) {
+						let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
+						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: ["pin", "unpin"]});
+						children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+								icon: note ? pinIconDelete : pinIcon
+							}),
+							action: _ => this.addMessageToNotes(e.instance.props.message, e.instance.props.channel)
+						}));
+						if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: this.labels.context_updateoption,
+							id: "update-note",
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+								icon: pinIconUpdate
+							}),
+							action: _ => this.updateNoteData(note, e.instance.props.message)
+						}));
 					}
 				}});
 				
@@ -483,7 +501,7 @@ module.exports = (_ => {
 					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
 					let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null;
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
-					if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["edit", "add-reaction", "add-reaction-1", "quote"]});
+					if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["copy-text", "edit", "add-reaction", "add-reaction-1", "quote"]});
 					children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
@@ -504,68 +522,6 @@ module.exports = (_ => {
 						action: _ => this.updateNoteData(note, e.instance.props.message)
 					}));
 				}
-			}
-			
-			processMessageActionsContextMenu (e) {
-				if (e.instance.props.message && e.instance.props.channel) {
-					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
-					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
-						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-							icon: note ? pinIconDelete : pinIcon
-						}),
-						action: _ => this.addMessageToNotes(e.instance.props.message, e.instance.props.channel)
-					}));
-					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_updateoption,
-						id: "update-note",
-						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-							icon: pinIconUpdate
-						}),
-						action: _ => this.updateNoteData(note, e.instance.props.message)
-					}));
-				}
-			}
-		
-			processMessageToolbar (e) {
-				if (!e.instance.props.message || !e.instance.props.channel) return;
-				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
-				if (!expanded) return;
-				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-				e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
-					render() {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							key: note ? "unpin-note" : "pin-note",
-							text: _ => note ? _this.labels.context_unpinoption : _this.labels.context_pinoption,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCN.messagetoolbarbutton,
-								onClick: _ => {
-									_this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
-									note = _this.getNoteData(e.instance.props.message, e.instance.props.channel);
-									BDFDB.ReactUtils.forceUpdate(this);
-								},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.messagetoolbaricon,
-									iconSVG: note ? pinIconDelete : pinIcon
-								})
-							})
-						})
-					}
-				}));
-				if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					key: "update-note",
-					text: this.labels.context_updateoption,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-						className: BDFDB.disCN.messagetoolbarbutton,
-						onClick: _ => this.updateNoteData(note, e.instance.props.message),
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCN.messagetoolbaricon,
-							iconSVG: pinIconUpdate
-						})
-					})
-				}));
 			}
 
 			processHeaderBar (e) {
