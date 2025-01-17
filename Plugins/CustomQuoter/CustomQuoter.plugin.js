@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.5
+ * @version 1.3.6
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -106,10 +106,6 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"ChannelTextAreaContainer"
-					],
-					after: [
-						"MessageActionsContextMenu",
-						"MessageToolbar"
 					]
 				};
 				
@@ -125,7 +121,27 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart () {				
+			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageToolbarUtils, "useMessageMenu", {after: e => {
+					if (e.instance.props.message && e.instance.props.channel) {
+						let [quoteChildren, quoteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: "quote"});
+						if (quoteIndex == -1) {
+							let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: "mark-unread"});
+							children.splice(index > -1 ? index : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "quote"),
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN.menuicon,
+									name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
+								}),
+								action: event => {
+									this.quote(e.instance.props.channel, e.instance.props.message, event.shiftKey);
+								}
+							}));
+						}
+					}
+				}});
+				
 				this.forceUpdateAll();
 			}
 			
@@ -319,50 +335,6 @@ module.exports = (_ => {
 							hint: hint
 						});
 					}
-				}
-			}
-			
-			processMessageActionsContextMenu (e) {
-				if (e.instance.props.message && e.instance.props.channel) {
-					let [quoteChildren, quoteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "quote"});
-					if (quoteIndex == -1) {
-						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-unread"});
-						children.splice(index > -1 ? index : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "quote"),
-							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.menuicon,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
-							}),
-							action: event => {
-								this.quote(e.instance.props.channel, e.instance.props.message, event.shiftKey);
-							}
-						}));
-					}
-				}
-			}
-		
-			processMessageToolbar (e) {
-				if (!e.instance.props.message || !e.instance.props.channel) return;
-				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
-				if (!expanded && this.settings.general.holdShiftToolbar) return;
-				let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
-				if (!quoteButton) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: ["reply", "mark-unread"]});
-					children.splice(index > -1 ? index : (!e.instance.props.expanded ? 1 : 0), 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: "quote",
-						text: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => {
-								this.quote(e.instance.props.channel, e.instance.props.message);
-							},
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
-							})
-						})
-					}));
 				}
 			}
 		
