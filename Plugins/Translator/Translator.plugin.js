@@ -14,9 +14,6 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		improved: {
-			"Search Translation": "Clicking the option once, searchs the translation for the selected text, clicking it again copies the found translation, clicking it another time opens Google Translate in the Web Browser"
-		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
