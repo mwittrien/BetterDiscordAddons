@@ -1219,6 +1219,9 @@ button.button_adca65.enabled_adca65:hover svg {
 #app-mount .compact_f9f2ca .spine_c15230 {
 	right: 0;
 }
+#app-mount .repliedMessageClickableSpine_f9f2ca {
+	diplay: none;
+}
 #app-mount .repliedMessage_f9f2ca::before,						/* message				reply spine							*/
 #app-mount .repliedMessage_f9f2ca::after,
 #app-mount .spine_c15230::before,							/* message				command spine							*/
