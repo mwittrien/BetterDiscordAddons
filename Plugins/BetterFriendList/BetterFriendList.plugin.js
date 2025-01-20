@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -235,7 +235,7 @@ module.exports = (_ => {
 							className: BDFDB.disCN.peoplestabbaritem,
 							children: this.labels.favorites
 						}));
-						if (this.settings.general.addHiddenCategory) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.BLOCKED) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+						if (this.settings.general.addHiddenCategory) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.PENDING) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
 							id: hiddenFriendsSection,
 							className: BDFDB.disCN.peoplestabbaritem,
 							children: this.labels.hidden
@@ -278,9 +278,9 @@ module.exports = (_ => {
 			
 			processAnalyticsContext (e) {
 				if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.FRIENDS_LIST) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {filter: n => n && n.props && n.props.title && n.props.id});
-				if (index == -1) return;
-				let users = (BDFDB.ReactUtils.findChild(e.instance, {props: ["statusSections"]}) || {props: {statusSections: []}}).props.statusSections.flat(10);
+				let body = BDFDB.ReactUtils.findChild(e.instance, {filter: n => n && n.props && n.props.renderRow && n.props.rows});
+				if (!body) return;
+				let users = body.props.rows.flat(10);
 				let filteredUsers = users;
 				if (this.settings.general.addFavorizedCategory) {
 					if (isFavoritesSelected) filteredUsers = filteredUsers.filter(n => n && n.user && favorizedFriends.indexOf(n.user.id) > -1);
@@ -289,45 +289,51 @@ module.exports = (_ => {
 					if (isHiddenSelected) filteredUsers = filteredUsers.filter(n => n && n.user && hiddenFriends.indexOf(n.user.id) > -1);
 					else filteredUsers = filteredUsers.filter(n => n && n.user && hiddenFriends.indexOf(n.user.id) == -1);
 				}
-				children[index].props.title = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-					children: [
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._betterfriendlisttitle,
-							children: this.settings.general.addFavorizedCategory && isFavoritesSelected ? `${this.labels.favorites} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : this.settings.general.addHiddenCategory && isHiddenSelected ? `${this.labels.hidden} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : children[index].props.title.replace(users.length, filteredUsers.filter(u => u && u.key != placeHolderId).length)
-						}),
-						this.settings.general.addSortOptions && [
-							{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
-							{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
-						].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.tableheadercellcontent,
-								children: [
-									data.label,
-									sortKey == data.key && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.tableheadersorticon,
-										name: BDFDB.LibraryComponents.SvgIcon.Names[sortReversed ? "ARROW_UP" : "ARROW_DOWN"]
-									})
-								].filter(n => n)
+				let renderSection = body.props.renderSection;
+				body.props.renderSection = BDFDB.TimeUtils.suppress((...args) => {
+					let returnValue = renderSection(...args);
+					let title = returnValue.props.children.props.title;
+					returnValue.props.children.props.title = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._betterfriendlisttitle,
+								children: this.settings.general.addFavorizedCategory && isFavoritesSelected ? `${this.labels.favorites} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : this.settings.general.addHiddenCategory && isHiddenSelected ? `${this.labels.hidden} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : title.replace(users.length, filteredUsers.filter(u => u && u.key != placeHolderId).length)
 							}),
-							onClick: event => {
-								if (sortKey == data.key) {
-									if (!sortReversed) sortReversed = true;
+							this.settings.general.addSortOptions && [
+								{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
+								{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
+							].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.tableheadercellcontent,
+									children: [
+										data.label,
+										sortKey == data.key && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											className: BDFDB.disCN.tableheadersorticon,
+											name: BDFDB.LibraryComponents.SvgIcon.Names[sortReversed ? "ARROW_UP" : "ARROW_DOWN"]
+										})
+									].filter(n => n)
+								}),
+								onClick: event => {
+									if (sortKey == data.key) {
+										if (!sortReversed) sortReversed = true;
+										else {
+											sortKey = null;
+											sortReversed = false;
+										}
+									}
 									else {
-										sortKey = null;
+										sortKey = data.key;
 										sortReversed = false;
 									}
+									this.rerenderList();
 								}
-								else {
-									sortKey = data.key;
-									sortReversed = false;
-								}
-								this.rerenderList();
-							}
-						}))
-					].flat(10).filter(n => n)
-				});
+							}))
+						].flat(10).filter(n => n)
+					});
+					return returnValue;
+				}, "Error in Section Render of AnalyticsContext!", this);
 			}
 
 			processPeopleListSectionedLazy (e) {
@@ -336,13 +342,13 @@ module.exports = (_ => {
 			
 			processPeopleListSectionedNonLazy (e) {
 				if (this.settings.general.addFavorizedCategory) {
-					if (isFavoritesSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
+					if (isFavoritesSelected) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
 				}
 				if (this.settings.general.addHiddenCategory) {
-					if (isHiddenSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
-					else if (([].concat(e.instance.props.statusSections).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
+					if (isHiddenSelected) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
+					else if (([].concat(e.instance.props.rows).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
 				}
-				if (sortKey && e.instance.props.statusSections.flat(10).length) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
+				if (sortKey && e.instance.props.rows.flat(10).length) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => {
 					let newSection = [].concat(section);
 					newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {
 						statusIndex: statusSortOrder[entry.status],
@@ -393,7 +399,7 @@ module.exports = (_ => {
 									max: 10
 								}, true));
 								return returnValue;
-							}, "", this);
+							}, "Error in PeopleListItem Render!", this);
 						}
 					}
 				}
@@ -423,10 +429,10 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							context_favorizefriend:				"Добавете приятел към любими",
-							context_hidefriend:					"Скрий приятел",
-							context_unfavorizefriend:			"Премахване на приятел от любимите",
-							context_unhidefriend:				"Разкрий приятел",
+							context_favorizefriend:						"Добавете приятел към любими",
+							context_hidefriend:						"Скрий приятел",
+							context_unfavorizefriend:					"Премахване на приятел от любимите",
+							context_unhidefriend:						"Разкрий приятел",
 							favorites:							"Любими",
 							hidden:								"Скрити",
 							incoming:							"Входящи",
@@ -434,10 +440,10 @@ module.exports = (_ => {
 						};
 					case "cs":		// Czech
 						return {
-							context_favorizefriend:				"Přidat přítele do oblíbených",
-							context_hidefriend:					"Skrýt přítele",
-							context_unfavorizefriend:			"Odebrat přítele z oblíbených",
-							context_unhidefriend:				"Odkrýt přítele",
+							context_favorizefriend:						"Přidat přítele do oblíbených",
+							context_hidefriend:						"Skrýt přítele",
+							context_unfavorizefriend:					"Odebrat přítele z oblíbených",
+							context_unhidefriend:						"Odkrýt přítele",
 							favorites:							"Oblíbené",
 							hidden:								"Skrytý",
 							incoming:							"Přicházející",
@@ -445,10 +451,10 @@ module.exports = (_ => {
 						};
 					case "da":		// Danish
 						return {
-							context_favorizefriend:				"Føj ven til favoritter",
-							context_hidefriend:					"Skjul ven",
-							context_unfavorizefriend:			"Fjern ven fra favoritter",
-							context_unhidefriend:				"Skjul ven",
+							context_favorizefriend:						"Føj ven til favoritter",
+							context_hidefriend:						"Skjul ven",
+							context_unfavorizefriend:					"Fjern ven fra favoritter",
+							context_unhidefriend:						"Skjul ven",
 							favorites:							"Favoritter",
 							hidden:								"Skjult",
 							incoming:							"Indgående",
@@ -456,10 +462,10 @@ module.exports = (_ => {
 						};
 					case "de":		// German
 						return {
-							context_favorizefriend:				"Freund zu Favoriten hinzufügen",
-							context_hidefriend:					"Freund ausblenden",
-							context_unfavorizefriend:			"Freund aus Favoriten entfernen",
-							context_unhidefriend:				"Freund einblenden",
+							context_favorizefriend:						"Freund zu Favoriten hinzufügen",
+							context_hidefriend:						"Freund ausblenden",
+							context_unfavorizefriend:					"Freund aus Favoriten entfernen",
+							context_unhidefriend:						"Freund einblenden",
 							favorites:							"Favoriten",
 							hidden:								"Versteckt",
 							incoming:							"Eingehend",
@@ -467,10 +473,10 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
-							context_favorizefriend:				"Προσθήκη φίλου στους αγαπημένους",
-							context_hidefriend:					"Απόκρυψη φίλου",
-							context_unfavorizefriend:			"Κατάργηση φίλου από τούς αγαπημένους",
-							context_unhidefriend:				"Επανεμφάνιση φίλου",
+							context_favorizefriend:						"Προσθήκη φίλου στους αγαπημένους",
+							context_hidefriend:						"Απόκρυψη φίλου",
+							context_unfavorizefriend:					"Κατάργηση φίλου από τούς αγαπημένους",
+							context_unhidefriend:						"Επανεμφάνιση φίλου",
 							favorites:							"Αγαπημένοι",
 							hidden:								"Σε απόκρυψη",
 							incoming:							"Εισερχόμενος",
@@ -478,10 +484,10 @@ module.exports = (_ => {
 						};
 					case "es":		// Spanish
 						return {
-							context_favorizefriend:				"Agregar amigo a favoritos",
-							context_hidefriend:					"Ocultar amigo",
-							context_unfavorizefriend:			"Quitar amigo de favoritos",
-							context_unhidefriend:				"Mostrar amigo",
+							context_favorizefriend:						"Agregar amigo a favoritos",
+							context_hidefriend:						"Ocultar amigo",
+							context_unfavorizefriend:					"Quitar amigo de favoritos",
+							context_unhidefriend:						"Mostrar amigo",
 							favorites:							"Favoritos",
 							hidden:								"Oculto",
 							incoming:							"Entrante",
@@ -489,10 +495,10 @@ module.exports = (_ => {
 						};
 					case "fi":		// Finnish
 						return {
-							context_favorizefriend:				"Lisää ystävä suosikkeihin",
-							context_hidefriend:					"Piilota ystävä",
-							context_unfavorizefriend:			"Poista ystävä suosikeista",
-							context_unhidefriend:				"Näytä ystävä",
+							context_favorizefriend:						"Lisää ystävä suosikkeihin",
+							context_hidefriend:						"Piilota ystävä",
+							context_unfavorizefriend:					"Poista ystävä suosikeista",
+							context_unhidefriend:						"Näytä ystävä",
 							favorites:							"Suosikit",
 							hidden:								"Piilotettu",
 							incoming:							"Saapuva",
@@ -500,10 +506,10 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
-							context_favorizefriend:				"Ajouter un ami aux favoris",
-							context_hidefriend:					"Masquer l'ami",
-							context_unfavorizefriend:			"Supprimer un ami des favoris",
-							context_unhidefriend:				"Afficher l'ami",
+							context_favorizefriend:						"Ajouter un ami aux favoris",
+							context_hidefriend:						"Masquer l'ami",
+							context_unfavorizefriend:					"Supprimer un ami des favoris",
+							context_unhidefriend:						"Afficher l'ami",
 							favorites:							"Favoris",
 							hidden:								"Caché",
 							incoming:							"Entrant",
@@ -511,10 +517,10 @@ module.exports = (_ => {
 						};
 					case "hi":		// Hindi
 						return {
-							context_favorizefriend:				"मित्र को पसंदीदा में जोड़ें",
-							context_hidefriend:					"दोस्त छुपाएं",
-							context_unfavorizefriend:			"मित्र को पसंदीदा से हटाएं",
-							context_unhidefriend:				"मित्र दिखाएँ",
+							context_favorizefriend:						"मित्र को पसंदीदा में जोड़ें",
+							context_hidefriend:						"दोस्त छुपाएं",
+							context_unfavorizefriend:					"मित्र को पसंदीदा से हटाएं",
+							context_unhidefriend:						"मित्र दिखाएँ",
 							favorites:							"पसंदीदा",
 							hidden:								"छिपा हुआ",
 							incoming:							"आने वाली",
@@ -522,10 +528,10 @@ module.exports = (_ => {
 						};
 					case "hr":		// Croatian
 						return {
-							context_favorizefriend:				"Dodaj prijatelja u favorite",
-							context_hidefriend:					"Sakrij prijatelja",
-							context_unfavorizefriend:			"Ukloni prijatelja iz omiljenih",
-							context_unhidefriend:				"Otkrij prijatelja",
+							context_favorizefriend:						"Dodaj prijatelja u favorite",
+							context_hidefriend:						"Sakrij prijatelja",
+							context_unfavorizefriend:					"Ukloni prijatelja iz omiljenih",
+							context_unhidefriend:						"Otkrij prijatelja",
 							favorites:							"Favoriti",
 							hidden:								"Skriven",
 							incoming:							"Dolazni",
@@ -533,10 +539,10 @@ module.exports = (_ => {
 						};
 					case "hu":		// Hungarian
 						return {
-							context_favorizefriend:				"Ismerős hozzáadása a kedvencekhez",
-							context_hidefriend:					"Barát elrejtése",
-							context_unfavorizefriend:			"Ismerős eltávolítása a kedvencekből",
-							context_unhidefriend:				"Barát megjelenítése",
+							context_favorizefriend:						"Ismerős hozzáadása a kedvencekhez",
+							context_hidefriend:						"Barát elrejtése",
+							context_unfavorizefriend:					"Ismerős eltávolítása a kedvencekből",
+							context_unhidefriend:						"Barát megjelenítése",
 							favorites:							"Kedvencek",
 							hidden:								"Rejtett",
 							incoming:							"Beérkező",
@@ -544,10 +550,10 @@ module.exports = (_ => {
 						};
 					case "it":		// Italian
 						return {
-							context_favorizefriend:				"Aggiungi amico ai preferiti",
-							context_hidefriend:					"Nascondi amico",
-							context_unfavorizefriend:			"Rimuovi amico dai preferiti",
-							context_unhidefriend:				"Scopri amico",
+							context_favorizefriend:						"Aggiungi amico ai preferiti",
+							context_hidefriend:						"Nascondi amico",
+							context_unfavorizefriend:					"Rimuovi amico dai preferiti",
+							context_unhidefriend:						"Scopri amico",
 							favorites:							"Preferiti",
 							hidden:								"Nascosto",
 							incoming:							"In arrivo",
@@ -555,10 +561,10 @@ module.exports = (_ => {
 						};
 					case "ja":		// Japanese
 						return {
-							context_favorizefriend:				"お気に入りに友達を追加する",
-							context_hidefriend:					"友達を隠す",
-							context_unfavorizefriend:			"お気に入りから友達を削除する",
-							context_unhidefriend:				"友達を再表示",
+							context_favorizefriend:						"お気に入りに友達を追加する",
+							context_hidefriend:						"友達を隠す",
+							context_unfavorizefriend:					"お気に入りから友達を削除する",
+							context_unhidefriend:						"友達を再表示",
 							favorites:							"お気に入り",
 							hidden:								"隠し",
 							incoming:							"着信",
@@ -566,10 +572,10 @@ module.exports = (_ => {
 						};
 					case "ko":		// Korean
 						return {
-							context_favorizefriend:				"즐겨찾기에 친구 추가",
-							context_hidefriend:					"친구 숨기기",
-							context_unfavorizefriend:			"즐겨찾기에서 친구 제거",
-							context_unhidefriend:				"친구 숨기기 해제",
+							context_favorizefriend:						"즐겨찾기에 친구 추가",
+							context_hidefriend:						"친구 숨기기",
+							context_unfavorizefriend:					"즐겨찾기에서 친구 제거",
+							context_unhidefriend:						"친구 숨기기 해제",
 							favorites:							"즐겨찾기",
 							hidden:								"숨겨진",
 							incoming:							"들어오는",
@@ -577,10 +583,10 @@ module.exports = (_ => {
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_favorizefriend:				"Pridėti draugą prie mėgstamiausių",
-							context_hidefriend:					"Slėpti draugą",
-							context_unfavorizefriend:			"Pašalinti draugą iš mėgstamiausių",
-							context_unhidefriend:				"Nerodyti draugo",
+							context_favorizefriend:						"Pridėti draugą prie mėgstamiausių",
+							context_hidefriend:						"Slėpti draugą",
+							context_unfavorizefriend:					"Pašalinti draugą iš mėgstamiausių",
+							context_unhidefriend:						"Nerodyti draugo",
 							favorites:							"Mėgstamiausi",
 							hidden:								"Paslėpta",
 							incoming:							"Gaunamasis",
@@ -588,10 +594,10 @@ module.exports = (_ => {
 						};
 					case "nl":		// Dutch
 						return {
-							context_favorizefriend:				"Vriend toevoegen aan favorieten",
-							context_hidefriend:					"Vriend verbergen",
-							context_unfavorizefriend:			"Vriend uit favorieten verwijderen",
-							context_unhidefriend:				"Vriend zichtbaar maken",
+							context_favorizefriend:						"Vriend toevoegen aan favorieten",
+							context_hidefriend:						"Vriend verbergen",
+							context_unfavorizefriend:					"Vriend uit favorieten verwijderen",
+							context_unhidefriend:						"Vriend zichtbaar maken",
 							favorites:							"Favorieten",
 							hidden:								"Verborgen",
 							incoming:							"Inkomend",
@@ -599,10 +605,10 @@ module.exports = (_ => {
 						};
 					case "no":		// Norwegian
 						return {
-							context_favorizefriend:				"Legg til en venn i favoritter",
-							context_hidefriend:					"Skjul venn",
-							context_unfavorizefriend:			"Fjern venn fra favoritter",
-							context_unhidefriend:				"Skjul venn",
+							context_favorizefriend:						"Legg til en venn i favoritter",
+							context_hidefriend:						"Skjul venn",
+							context_unfavorizefriend:					"Fjern venn fra favoritter",
+							context_unhidefriend:						"Skjul venn",
 							favorites:							"Favoritter",
 							hidden:								"Skjult",
 							incoming:							"Innkommende",
@@ -610,10 +616,10 @@ module.exports = (_ => {
 						};
 					case "pl":		// Polish
 						return {
-							context_favorizefriend:				"Dodaj znajomego do ulubionych",
-							context_hidefriend:					"Ukryj znajomego",
-							context_unfavorizefriend:			"Usuń znajomego z ulubionych",
-							context_unhidefriend:				"Pokaż znajomego",
+							context_favorizefriend:						"Dodaj znajomego do ulubionych",
+							context_hidefriend:						"Ukryj znajomego",
+							context_unfavorizefriend:					"Usuń znajomego z ulubionych",
+							context_unhidefriend:						"Pokaż znajomego",
 							favorites:							"Ulubione",
 							hidden:								"Ukryci",
 							incoming:							"Przychodzące",
@@ -621,10 +627,10 @@ module.exports = (_ => {
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_favorizefriend:				"Adicionar amigo aos favoritos",
-							context_hidefriend:					"Esconder Amigo",
-							context_unfavorizefriend:			"Remover amigo dos favoritos",
-							context_unhidefriend:				"Reexibir amigo",
+							context_favorizefriend:						"Adicionar amigo aos favoritos",
+							context_hidefriend:						"Esconder Amigo",
+							context_unfavorizefriend:					"Remover amigo dos favoritos",
+							context_unhidefriend:						"Reexibir amigo",
 							favorites:							"Favoritos",
 							hidden:								"Escondido",
 							incoming:							"Entrada",
@@ -632,10 +638,10 @@ module.exports = (_ => {
 						};
 					case "ro":		// Romanian
 						return {
-							context_favorizefriend:				"Adaugă prieten la favorite",
-							context_hidefriend:					"Ascunde prietenul",
-							context_unfavorizefriend:			"Scoateți prietenul din favorite",
-							context_unhidefriend:				"Afișează prietenul",
+							context_favorizefriend:						"Adaugă prieten la favorite",
+							context_hidefriend:						"Ascunde prietenul",
+							context_unfavorizefriend:					"Scoateți prietenul din favorite",
+							context_unhidefriend:						"Afișează prietenul",
 							favorites:							"Favorite",
 							hidden:								"Ascuns",
 							incoming:							"Primite",
@@ -643,10 +649,10 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
-							context_favorizefriend:				"Добавить друга в избранное",
-							context_hidefriend:					"Скрыть друга",
-							context_unfavorizefriend:			"Удалить друга из избранного",
-							context_unhidefriend:				"Показать друга",
+							context_favorizefriend:						"Добавить друга в избранное",
+							context_hidefriend:						"Скрыть друга",
+							context_unfavorizefriend:					"Удалить друга из избранного",
+							context_unhidefriend:						"Показать друга",
 							favorites:							"Избранное",
 							hidden:								"Скрытый",
 							incoming:							"Входящий",
@@ -654,10 +660,10 @@ module.exports = (_ => {
 						};
 					case "sv":		// Swedish
 						return {
-							context_favorizefriend:				"Lägg till vän till favoriter",
-							context_hidefriend:					"Dölj vän",
-							context_unfavorizefriend:			"Ta bort vän från favoriter",
-							context_unhidefriend:				"Göm din vän",
+							context_favorizefriend:						"Lägg till vän till favoriter",
+							context_hidefriend:						"Dölj vän",
+							context_unfavorizefriend:					"Ta bort vän från favoriter",
+							context_unhidefriend:						"Göm din vän",
 							favorites:							"Favoriter",
 							hidden:								"Dold",
 							incoming:							"Inkommande",
@@ -665,10 +671,10 @@ module.exports = (_ => {
 						};
 					case "th":		// Thai
 						return {
-							context_favorizefriend:				"เพิ่มเพื่อนในรายการโปรด",
-							context_hidefriend:					"ซ่อนเพื่อน",
-							context_unfavorizefriend:			"ลบเพื่อนออกจากรายการโปรด",
-							context_unhidefriend:				"เลิกซ่อนเพื่อน",
+							context_favorizefriend:						"เพิ่มเพื่อนในรายการโปรด",
+							context_hidefriend:						"ซ่อนเพื่อน",
+							context_unfavorizefriend:					"ลบเพื่อนออกจากรายการโปรด",
+							context_unhidefriend:						"เลิกซ่อนเพื่อน",
 							favorites:							"รายการโปรด",
 							hidden:								"ซ่อนเร้น",
 							incoming:							"ขาเข้า",
@@ -676,10 +682,10 @@ module.exports = (_ => {
 						};
 					case "tr":		// Turkish
 						return {
-							context_favorizefriend:				"Favorilere arkadaş ekle",
-							context_hidefriend:					"Arkadaşı Gizle",
-							context_unfavorizefriend:			"Arkadaşını favorilerden kaldır",
-							context_unhidefriend:				"Arkadaşı Göster",
+							context_favorizefriend:						"Favorilere arkadaş ekle",
+							context_hidefriend:						"Arkadaşı Gizle",
+							context_unfavorizefriend:					"Arkadaşını favorilerden kaldır",
+							context_unhidefriend:						"Arkadaşı Göster",
 							favorites:							"Favoriler",
 							hidden:								"Gizli",
 							incoming:							"Gelen",
@@ -687,10 +693,10 @@ module.exports = (_ => {
 						};
 					case "uk":		// Ukrainian
 						return {
-							context_favorizefriend:				"Додати друга у вибране",
-							context_hidefriend:					"Сховати друга",
-							context_unfavorizefriend:			"Видалити друга з вибраного",
-							context_unhidefriend:				"Показати друга",
+							context_favorizefriend:						"Додати друга у вибране",
+							context_hidefriend:						"Сховати друга",
+							context_unfavorizefriend:					"Видалити друга з вибраного",
+							context_unhidefriend:						"Показати друга",
 							favorites:							"Вибране",
 							hidden:								"Прихований",
 							incoming:							"Вхідні",
@@ -698,10 +704,10 @@ module.exports = (_ => {
 						};
 					case "vi":		// Vietnamese
 						return {
-							context_favorizefriend:				"Thêm bạn bè vào danh sách yêu thích",
-							context_hidefriend:					"Ẩn bạn bè",
-							context_unfavorizefriend:			"Xóa bạn bè khỏi danh sách yêu thích",
-							context_unhidefriend:				"Bỏ ẩn bạn bè",
+							context_favorizefriend:						"Thêm bạn bè vào danh sách yêu thích",
+							context_hidefriend:						"Ẩn bạn bè",
+							context_unfavorizefriend:					"Xóa bạn bè khỏi danh sách yêu thích",
+							context_unhidefriend:						"Bỏ ẩn bạn bè",
 							favorites:							"Yêu thích",
 							hidden:								"Ẩn",
 							incoming:							"Mới đến",
@@ -709,10 +715,10 @@ module.exports = (_ => {
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_favorizefriend:				"添加好友到收藏夹",
-							context_hidefriend:					"隐藏好友",
-							context_unfavorizefriend:			"从收藏夹中移除好友",
-							context_unhidefriend:				"取消隐藏好友",
+							context_favorizefriend:						"添加好友到收藏夹",
+							context_hidefriend:						"隐藏好友",
+							context_unfavorizefriend:					"从收藏夹中移除好友",
+							context_unhidefriend:						"取消隐藏好友",
 							favorites:							"收藏夹",
 							hidden:								"隐藏",
 							incoming:							"导入",
@@ -720,10 +726,10 @@ module.exports = (_ => {
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_favorizefriend:				"新增好友到我的最愛",
-							context_hidefriend:					"隱藏好友",
-							context_unfavorizefriend:			"從我的最愛中移除好友",
-							context_unhidefriend:				"取消隱藏好友",
+							context_favorizefriend:						"新增好友到我的最愛",
+							context_hidefriend:						"隱藏好友",
+							context_unfavorizefriend:					"從我的最愛中移除好友",
+							context_unhidefriend:						"取消隱藏好友",
 							favorites:							"我的最愛",
 							hidden:								"隱藏",
 							incoming:							"匯入",
@@ -731,10 +737,10 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
-							context_favorizefriend:				"Add Friend to Favorites",
-							context_hidefriend:					"Hide Friend",
-							context_unfavorizefriend:			"Remove Friend from Favorites",
-							context_unhidefriend:				"Unhide Friend",
+							context_favorizefriend:						"Add Friend to Favorites",
+							context_hidefriend:						"Hide Friend",
+							context_unfavorizefriend:					"Remove Friend from Favorites",
+							context_unhidefriend:						"Unhide Friend",
 							favorites:							"Favorites",
 							hidden:								"Hidden",
 							incoming:							"Incoming",
