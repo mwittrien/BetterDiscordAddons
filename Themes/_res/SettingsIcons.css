@@ -116,8 +116,8 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar_c25c6d:has(.socialLinks_c
 }
 .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0:nth-child(6),
 .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0.vc-settings ~ .item_a0:nth-child(14),
-#app-mount .sidebar_c25c6d .side_a0 .item_a0[aria-controls="privacy-&-safety-tab" i],
-#app-mount .standardSidebarView_c25c6d .contentColumn_c25c6d[id="privacy-&-safety-tab" i] {
+#app-mount .sidebar_c25c6d .side_a0 .item_a0[aria-controls="data-&-privacy-tab" i],
+#app-mount .standardSidebarView_c25c6d .contentColumn_c25c6d[id="data-&-privacy-tab" i] {
 	--settingsicons-icon: var(--settingsicons-privacy);
 }
 .sidebar_c25c6d:has(.socialLinks_c44e94) .side_a0 .item_a0:nth-child(7),
