@@ -652,24 +652,27 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar_c25c6d:has(.socialLinks_c
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .bd-settings-title > *:last-child {
 	margin-left: auto;
 }
-.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_f62afd:first-child,
-.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar_d576e9 {
-	margin-left: calc(var(--use-settingsicons) * 30px);
-}
 .standardSidebarView_c25c6d .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs),
 .standardSidebarView_c25c6d .contentColumnWide_c25c6d:not(.repoScroller_9JnAPs) {
 	--settingsicons-icon: var(--settingsicons-default);
 }
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .tabBar_d8bb15:first-child,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_d576e9:first-child,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar_d576e9 {
+	margin-left: calc(var(--use-settingsicons) * 30px);
+}
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .settingsPage_a2c19a > h3:first-child::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) div:first-child > div:first-child > .sectionTitle_a6ae9b:first-child .title_c46f6a::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) div:first-child > div:first-child > h2.title_c46f6a::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) div:first-child > .sectionTitle_a206c7::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d.repoHeader_2KfNvH .title_c46f6a::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > h2:first-child::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnWide_c25c6d:not(.repoScroller_9JnAPs) > h2:first-child::before,
-.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_f62afd:first-child::before,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .tabBar_d8bb15:first-child::before,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_d576e9:first-child::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar_d576e9::before {
 	content: "";
-	display: inline;
+	display: inline-block;
 	position: relative;
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * 18px);
@@ -680,16 +683,18 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar_c25c6d:has(.socialLinks_c
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_f62afd:first-child::before,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .tabBar_d8bb15:first-child::before,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_d576e9:first-child::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar_d576e9::before {
 	position: absolute;
 }
-.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_f62afd:first-child::before {
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .tabBar_d8bb15:first-child::before,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) > .settingsTabBar_d576e9:first-child::before {
 	left: 40px;
 }
-.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .settingsTabBar_f62afd ~ * h2::before,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .tabBar_d8bb15 ~ * h2::before,
+.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .tabBar_d8bb15 ~ * .title_c46f6a::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .settingsTabBar_d576e9 ~ * h2::before,
-.standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .settingsTabBar_f62afd ~ * .title_c46f6a::before,
 .standardSidebarView_c25c6d:has(.socialLinks_c44e94) .contentColumnDefault_c25c6d:not(.repoScroller_9JnAPs) .settingsTabBar_d576e9 ~ * .title_c46f6a::before {
 	display: none !important;
 }
