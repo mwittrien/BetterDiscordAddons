@@ -1516,7 +1516,7 @@
 		"GuildSettingsInvite": {"props": ["countdownColumn", "inviteSettingsInviteRow"]},
 		"GuildsFooter": {"props": ["gradient", "footer"]},
 		"GuildsListItem": {"props": ["listItemWrapper", "listItemTooltip"], "length": 4, "smaller": true},
-		"GuildsListTooltipItem": {"props": ["listItemTooltip"], "length": 1},
+		"GuildsListTooltipItem": {"props": ["listItemTooltip", "listItemTooltipContent"]},
 		"GuildsWrapper": {"props": ["scroller", "unreadMentionsBar", "wrapper"]},
 		"HeaderBar": {"props": ["container", "children", "toolbar"]},
 		"HeaderBarExtras": {"props": ["forumOrHome", "search"]},
