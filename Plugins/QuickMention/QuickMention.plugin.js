@@ -2,7 +2,7 @@
  * @name QuickMention
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Adds a Mention Button to the Message 3-Dot Menu
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -84,6 +84,23 @@ module.exports = (_ => {
 			}
 			
 			onStop () {}
+
+			onMessageContextMenu (e) {
+				if (e.instance.props.message && e.instance.props.channel) {
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["reply", "forward"]});
+					children.splice(index > -1 ? index : 3, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: BDFDB.LanguageUtils.LanguageStrings.MENTION,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "mention"),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_AT
+						}),
+						action: _ => BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
+							plainText: `<@!${e.instance.props.message.author.id}>`
+						})
+					}));
+				}
+			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();
