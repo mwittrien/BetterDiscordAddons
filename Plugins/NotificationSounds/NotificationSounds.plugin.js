@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.9
+ * @version 4.0.0
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -588,8 +588,8 @@ module.exports = (_ => {
 												searchable: true,
 												onChange: (category, instance) => {
 													let soundSelectIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "REMOVE_SOUND"});
-													if (soundSelectIns && removeableSounds[category.value]) {
-														soundSelectIns.props.options = removeableSounds[category.value];
+													if (soundSelectIns && removeableSounds[category]) {
+														soundSelectIns.props.options = removeableSounds[category];
 														soundSelectIns.props.value = removeAllKey;
 														BDFDB.ReactUtils.forceUpdate(soundSelectIns);
 													}
