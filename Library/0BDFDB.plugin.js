@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.0
+ * @version 3.9.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3996,8 +3996,8 @@ module.exports = (_ => {
 													BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 														style: {flex: 1},
 														children: [
-															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-																tag: Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H4,
+															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormTitle.Title, {
+																tag: Internal.LibraryComponents.FormTitle.Tags && Internal.LibraryComponents.FormTitle.Tags.H4,
 																children: config.header
 															}),
 															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextElement, {
@@ -5275,8 +5275,8 @@ module.exports = (_ => {
 										if (typeof this.props.onClick == "function") this.props.onClick(this.props.collapsed, this);
 										BDFDB.ReactUtils.forceUpdate(this);
 									},
-									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-										tag: Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H5,
+									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormTitle.Title, {
+										tag: Internal.LibraryComponents.FormTitle.Tags && Internal.LibraryComponents.FormTitle.Tags.H5,
 										className: BDFDB.disCN.collapsecontainertitle,
 										children: this.props.title
 									})
@@ -6219,8 +6219,8 @@ module.exports = (_ => {
 									children: [
 										this.props.title != null || this.props.error != null ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 											wrap: true,
-											children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-												tag: this.props.tag || Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H5,
+											children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormTitle.Title, {
+												tag: this.props.tag || Internal.LibraryComponents.FormTitle.Tags && Internal.LibraryComponents.FormTitle.Tags.H5,
 												disabled: this.props.disabled,
 												required: this.props.required,
 												error: this.props.error,
@@ -7088,9 +7088,9 @@ module.exports = (_ => {
 								this.props.dividerTop ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 								}) : null,
-								typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
+								typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormTitle.Title, {
 									className: BDFDB.disCN.marginbottom4,
-									tag: Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H3,
+									tag: Internal.LibraryComponents.FormTitle.Tags && Internal.LibraryComponents.FormTitle.Tags.H3,
 									children: this.props.title
 								}) : null,
 								BDFDB.ReactUtils.createElement("div", {
@@ -7114,7 +7114,7 @@ module.exports = (_ => {
 						let childComponent = Internal.LibraryComponents[this.props.type];
 						if (!childComponent) return null;
 						if (this.props.mini && childComponent.Sizes) this.props.size = childComponent.Sizes.MINI || childComponent.Sizes.MIN;
-						let label = this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
+						let label = this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormTitle.Title, {
 							className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.marginreset),
 							tag: this.props.tag,
 							children: this.props.label
