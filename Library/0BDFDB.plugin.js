@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.9
+ * @version 3.9.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6960,6 +6960,15 @@ module.exports = (_ => {
 						}));
 					}
 				};
+				
+				CustomComponents.Scrollers = new Proxy({}, {
+					get: function (_, item) {
+						if (item == "AUTO") return Internal.LibraryComponents.ScrollerBase(BDFDB.disCN.scrollerauto, BDFDB.disCN.scrollerfade, BDFDB.disCN.scrollercustomtheme);
+						else if (item == "Thin") return Internal.LibraryComponents.ScrollerBase(BDFDB.disCN.scrollerthin, BDFDB.disCN.scrollerfade, BDFDB.disCN.scrollercustomtheme);
+						else if (item == "None") return Internal.LibraryComponents.ScrollerBase(BDFDB.disCN.scrollernone, BDFDB.disCN.scrollerfade, BDFDB.disCN.scrollercustomtheme);
+						else return "div";
+					}
+				});
 				
 				CustomComponents.SearchBar = reactInitialized && class BDFDB_SearchBar extends Internal.LibraryModules.React.Component {
 					handleChange(query) {
