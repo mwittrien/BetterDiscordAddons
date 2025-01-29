@@ -7085,7 +7085,7 @@ module.exports = (_ => {
 						return this.props.children ? BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingspanellistwrapper, this.props.mini && BDFDB.disCN.settingspanellistwrappermini),
 							children: [
-								this.props.dividerTop ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormDivider, {
+								this.props.dividerTop ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 								}) : null,
 								typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormTitle.Title, {
@@ -7097,7 +7097,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.settingspanellist,
 									children: this.props.children
 								}),
-								this.props.dividerBottom ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormDivider, {
+								this.props.dividerBottom ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.margintop4 : BDFDB.disCN.margintop8
 								}) : null
 							]
@@ -7128,7 +7128,7 @@ module.exports = (_ => {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, BDFDB.disCN.settingsrowcontainer, this.props.disabled && BDFDB.disCN.settingsrowdisabled, margin != null && (InternalData.DiscordClasses[`marginbottom${margin}`] && BDFDB.disCN[`marginbottom${margin}`] || margin == 0 && BDFDB.disCN.marginreset)),
 							id: this.props.id,
 							children: [
-								this.props.dividerTop ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormDivider, {
+								this.props.dividerTop ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 								}) : null,
 								BDFDB.ReactUtils.createElement("div", {
@@ -7162,7 +7162,7 @@ module.exports = (_ => {
 										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextScroller, {speed: 2, children: this.props.note})
 									})
 								}) : null,
-								this.props.dividerBottom ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormDivider, {
+								this.props.dividerBottom ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.margintop4 : BDFDB.disCN.margintop8
 								}) : null
 							]
