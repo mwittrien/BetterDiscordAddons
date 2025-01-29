@@ -6208,7 +6208,6 @@ module.exports = (_ => {
 					}
 				};
 				
-				CustomComponents.FormComponents = {};
 				CustomComponents.FormItem = reactInitialized && class BDFDB_FormItem extends Internal.LibraryModules.React.Component {
 					render() {
 						return BDFDB.ReactUtils.createElement("div", {
@@ -6415,8 +6414,8 @@ module.exports = (_ => {
 											style: {flex: "1 1 auto"},
 											children: this.props.label
 										}),
-										typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormText, {
-											type: Internal.LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
+										typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormText.Text, {
+											type: Internal.LibraryComponents.FormText.Types.DESCRIPTION,
 											children: this.props.note
 										}) : null
 									].filter(n => n)
@@ -7156,9 +7155,9 @@ module.exports = (_ => {
 								}),
 								typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 									className: BDFDB.disCN.settingsrownote,
-									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormText, {
+									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormText.Text, {
 										disabled: this.props.disabled,
-										type: Internal.LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
+										type: Internal.LibraryComponents.FormText.Types.DESCRIPTION,
 										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextScroller, {speed: 2, children: this.props.note})
 									})
 								}) : null,
