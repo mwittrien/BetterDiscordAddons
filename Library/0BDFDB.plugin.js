@@ -6209,7 +6209,7 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.FormComponents = {};
-				CustomComponents.FormComponents.FormItem = reactInitialized && class BDFDB_FormItem extends Internal.LibraryModules.React.Component {
+				CustomComponents.FormItem = reactInitialized && class BDFDB_FormItem extends Internal.LibraryModules.React.Component {
 					render() {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: this.props.className,
