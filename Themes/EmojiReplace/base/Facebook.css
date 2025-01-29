@@ -9,12 +9,12 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Facebook/symbols.css);
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Facebook/flags.css);
 @namespace xlink 'http://www.w3.org/1999/xlink';
-.sprite_d91a75 {
+.sprite__04eed {
 	-webkit-mask: none !important;
 	background-color: transparent !important;
 	background-position: var(--custom-emoji-sprite-bg-position) !important;
 	background-size: var(--custom-emoji-sprite-bg-size) !important;
 }
-.spriteGreyscale_d91a75 {
+.spriteGreyscale__04eed {
 	filter: grayscale(1) !important;
 }
