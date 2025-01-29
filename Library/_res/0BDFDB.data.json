@@ -302,6 +302,10 @@
 			"FormText": ["FormText"]
 		}},
 		"FormDivider": {"strings": ["let{className:", ".divider", ",style:", "=e;return"]},
+		"FormText": {"strings": ["SELECTABLE", "INPUT_PLACEHOLDER", "selectable"], "exported": false, "value": "exports", "map": {
+			"Text": ["SELECTABLE", "selectable", "className"],
+			"Types": ["\"DESCRIPTION\"", "\"INPUT_PLACEHOLDER\""]
+		}},
 		"FormTitle": {"strings": ["errorSeparator", "defaultMargin", ".LEGEND"], "exported": false, "value": "exports", "map": {
 			"Tags": ["\"H1\"", "\"H5\""],
 			"Title": ["errorSeparator", "legend"]
