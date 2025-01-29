@@ -297,14 +297,15 @@
 		"FlowerStar": {"strings": ["flowerStarContainer", ".jsx)"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FormComponents": {"props": ["FormText", "FormTitleTags", "FormDivider"], "exported": false, "value": "exports", "map": {
-			"FormDivider": ["FormDivider"],
 			"FormItem": ["FormItem"],
 			"FormNotice": ["FormNotice"],
 			"FormSection": ["FormSection"],
-			"FormTags": ["FormTitleTags"],
-			"FormText": ["FormText"],
-			"FormTextTypes": ["FormTextTypes"],
-			"FormTitle": ["FormTitle"]
+			"FormText": ["FormText"]
+		}},
+		"FormDivider": {"strings": ["let{className:", ".divider", ",style:", "=e;return"]},
+		"FormTitle": {"strings": ["errorSeparator", "defaultMargin", ".LEGEND"], "exported": false, "value": "exports", "map": {
+			"Tags": ["\"H1\"", "\"H5\""],
+			"Title": ["errorSeparator", "legend"]
 		}},
 		"GuildBadge": {"strings": ["foregroundDarkColor", ".tooltipRemovePadding"]},
 		"GuildChild": {"strings": ["selected", ",fontSize:", ".acronym"]},
