@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.9
+ * @version 4.6.0
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -814,7 +814,7 @@ module.exports = (_ => {
 					header: this.labels.modal_header,
 					subHeader: channel.name,
 					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 							title: this.labels.modal_channelname,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
@@ -824,12 +824,12 @@ module.exports = (_ => {
 									autoFocus: true,
 									onChange: value => {newData.name = value;}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
 								})
 							]
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 							title: this.labels.modal_colorpicker1,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
@@ -843,7 +843,7 @@ module.exports = (_ => {
 							type: "Switch",
 							margin: 20,
 							label: this.labels.modal_inheritcolor,
-							tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+							tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 							value: channel.isCategory() && data.inheritColor,
 							disabled: !channel.isCategory(),
 							onChange: value => {newData.inheritColor = value;}
@@ -851,7 +851,7 @@ module.exports = (_ => {
 						channel.isGroupDM() && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.marginbottom20,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom20
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -859,9 +859,9 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 											className: BDFDB.disCN.marginreset,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											children: this.labels.modal_channelicon
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -869,7 +869,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											value: data.removeIcon,
 											onChange: value => {
 												newData.removeIcon = value;

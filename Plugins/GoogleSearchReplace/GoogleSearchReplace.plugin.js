@@ -2,7 +2,7 @@
  * @name GoogleSearchReplace
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.7
+ * @version 1.3.8
  * @description Replaces the default Google Text Search with a custom Search Engine
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -128,7 +128,7 @@ module.exports = (_ => {
 							title: "Add your own Search Engine",
 							collapseStates: collapseStates,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: "Name:",
 									className: BDFDB.disCN.marginbottom8,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -155,7 +155,7 @@ module.exports = (_ => {
 										})
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: "URL:",
 									className: BDFDB.disCN.marginbottom8,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {

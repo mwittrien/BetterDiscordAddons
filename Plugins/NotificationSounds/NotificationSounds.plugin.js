@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.0
+ * @version 4.0.1
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -396,7 +396,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.margintop4,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Categoryname",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newsound input-category",
@@ -406,7 +406,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Soundname",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newsound input-sound",
@@ -422,7 +422,7 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.END,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Source",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newsound input-source",
@@ -504,7 +504,7 @@ module.exports = (_ => {
 											grow: 0,
 											shrink: 0,
 											basis: "31%",
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Category",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 													value: choices[type].category,
@@ -524,7 +524,7 @@ module.exports = (_ => {
 											grow: 0,
 											shrink: 0,
 											basis: "31%",
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Sound",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 													value: choices[type].sound,
@@ -542,7 +542,7 @@ module.exports = (_ => {
 											grow: 0,
 											shrink: 0,
 											basis: "31%",
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Volume",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Slider, {
 													defaultValue: choices[type].volume,
@@ -559,7 +559,7 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.marginbottom8
 								})
 							]).flat(10).filter(n => n)
@@ -579,7 +579,7 @@ module.exports = (_ => {
 										grow: 0,
 										shrink: 0,
 										basis: "35%",
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 											title: "Category",
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 												key: "REMOVE_CATEGORY",
@@ -601,7 +601,7 @@ module.exports = (_ => {
 										grow: 0,
 										shrink: 0,
 										basis: "35%",
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 											title: "Sound",
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 												key: "REMOVE_SOUND",

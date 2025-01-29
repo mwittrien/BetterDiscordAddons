@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.3
+ * @version 1.2.4
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -298,7 +298,7 @@ module.exports = (_ => {
 									this.settings.dates[key] = valueObj;
 									BDFDB.DataUtils.save(this.settings.dates, this, "dates");
 								}
-							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 								className: BDFDB.disCN.marginbottom8
 							})).concat(Object.keys(this.defaults.amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Slider",
@@ -313,7 +313,7 @@ module.exports = (_ => {
 								onValueRender: value => value + this.defaults.amounts[key].unit,
 								childProps: {type: "number"},
 								value: this.settings.amounts[key]
-							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 								className: BDFDB.disCN.marginbottom8
 							})).concat(Object.keys(this.defaults.colors).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",

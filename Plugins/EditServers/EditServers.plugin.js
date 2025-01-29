@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.4
+ * @version 2.4.5
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -391,7 +391,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_guildname,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -408,7 +408,7 @@ module.exports = (_ => {
 										}
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_guildacronym,
 									className: BDFDB.disCN.marginbottom8,
 									children: 
@@ -423,7 +423,7 @@ module.exports = (_ => {
 									type: "Switch",
 									className: BDFDB.disCN.marginbottom20,
 									label: this.labels.modal_ignorecustomname,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+									tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 									value: data.ignoreCustomName,
 									onChange: value => {
 										newData.ignoreCustomName = value;
@@ -439,9 +439,9 @@ module.exports = (_ => {
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													children: BDFDB.LanguageUtils.LibraryStrings.guildicon
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -449,7 +449,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
 													onChange: value => {
 														newData.removeIcon = value;
@@ -488,9 +488,9 @@ module.exports = (_ => {
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													children: BDFDB.LanguageUtils.LibraryStrings.guildbanner
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -498,7 +498,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													value: data.removeBanner && guild.id != "410787888507256842",
 													disabled: guild.id == "410787888507256842",
 													onChange: value => {
@@ -535,7 +535,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader2,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker3,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
@@ -545,7 +545,7 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker4,
 									className: BDFDB.disCN.marginbottom20,
 									children: [

@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.4
+ * @version 2.0.5
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -163,7 +163,7 @@ module.exports = (_ => {
 					amount: 50,
 					copyToBottom: true,
 					renderItem: (log, i) => [
-						i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 						className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8
 						}) : null,
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -652,7 +652,7 @@ module.exports = (_ => {
 							title: "Notification Sounds",
 							collapseStates: collapseStates,
 							children: Object.keys(this.defaults.notificationSounds).map((key, i) => (key.indexOf("desktop") == -1 || "Notification" in window) && [
-								i != 0 && key.indexOf("toast") == 0 && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								i != 0 && key.indexOf("toast") == 0 && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.marginbottom8
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {

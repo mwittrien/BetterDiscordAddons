@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.3.0
+ * @version 6.3.1
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -247,7 +247,7 @@ module.exports = (_ => {
 						if (firstGuildInFolder) foldersAdded.push(folder.folderId);
 						return [
 							firstGuildInFolder ? [
-								!(folders.indexOf(folder) == 0 && i == 0) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								!(folders.indexOf(folder) == 0 && i == 0) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
@@ -273,7 +273,7 @@ module.exports = (_ => {
 									})
 								})
 							] : null,
-							(i > 0 || folder) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							(i > 0 || folder) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 								className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {

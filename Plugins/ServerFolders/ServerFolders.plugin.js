@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.2.8
+ * @version 7.2.9
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -359,7 +359,7 @@ module.exports = (_ => {
 			}
 			render() {
 				return [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 						title: _this.labels.modal_customopen,
 						className: BDFDB.disCN.marginbottom20,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -372,7 +372,7 @@ module.exports = (_ => {
 							}
 						})
 					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 						title: _this.labels.modal_customclosed,
 						className: BDFDB.disCN.marginbottom20,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -385,7 +385,7 @@ module.exports = (_ => {
 							}
 						})
 					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 						title: _this.labels.modal_custompreview,
 						className: BDFDB.disCN.marginbottom20,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -941,7 +941,7 @@ module.exports = (_ => {
 						open: true,
 						ref: instance => {if (instance) tabs[this.labels.modal_tabheader1] = instance;},
 						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 								title: BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -951,7 +951,7 @@ module.exports = (_ => {
 									onChange: value => newData.folderName = value
 								})
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 								title: this.labels.modal_iconpicker,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(FolderIconPickerComponent, {
@@ -963,7 +963,7 @@ module.exports = (_ => {
 								type: "Switch",
 								margin: 20,
 								label: this.labels.modal_useclosedicon,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+								tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 								value: data.useClosedIcon,
 								onChange: value => newData.useClosedIcon = value
 							})
@@ -973,7 +973,7 @@ module.exports = (_ => {
 						tab: this.labels.modal_tabheader2,
 						ref: instance => {if (instance) tabs[this.labels.modal_tabheader2] = instance;},
 						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 								title: this.labels.modal_colorpicker1,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -982,7 +982,7 @@ module.exports = (_ => {
 									onColorChange: value => newData.color1 = value
 								})
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 								title: this.labels.modal_colorpicker2,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -995,7 +995,7 @@ module.exports = (_ => {
 								type: "Switch",
 								margin: 20,
 								label: this.labels.modal_swapcolor,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+								tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 								value: data.swapColors,
 								onChange: value => newData.swapColors = value
 							})
@@ -1005,7 +1005,7 @@ module.exports = (_ => {
 						tab: this.labels.modal_tabheader3,
 						ref: instance => {if (instance) tabs[this.labels.modal_tabheader3] = instance;},
 						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 								title: this.labels.modal_colorpicker3,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1013,7 +1013,7 @@ module.exports = (_ => {
 									onColorChange: value => newData.color3 = value
 								})
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 								title: this.labels.modal_colorpicker4,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1025,7 +1025,7 @@ module.exports = (_ => {
 								type: "Switch",
 								margin: 20,
 								label: this.labels.modal_copytooltipcolor,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+								tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 								value: data.copyTooltipColor,
 								onChange: value => newData.copyTooltipColor = value
 							})
@@ -1148,7 +1148,7 @@ module.exports = (_ => {
 					contentClassName: BDFDB.disCN.listscroller,
 					children: guilds.map((guild, i) => {
 						return [
-							i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 								className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {

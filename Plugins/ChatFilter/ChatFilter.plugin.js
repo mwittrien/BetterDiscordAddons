@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.8
+ * @version 3.5.9
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -259,8 +259,8 @@ module.exports = (_ => {
 									"Regex: Will treat the entered Word Value as a Regular Expression. ",
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
 								],
-							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-								type: BDFDB.LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
+							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormText.Text, {
+								type: BDFDB.LibraryComponents.FormText.Types.DESCRIPTION,
 								children: string
 							}))
 						}));
@@ -528,7 +528,7 @@ module.exports = (_ => {
 			createInputs (values) {
 				let wordValueInput;
 				return [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 						title: "Block/Censor:",
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -546,7 +546,7 @@ module.exports = (_ => {
 							}
 						})
 					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 						title: "With:",
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {

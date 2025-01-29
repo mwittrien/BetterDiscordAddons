@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.4
+ * @version 2.6.5
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -126,7 +126,7 @@ module.exports = (_ => {
 								label: _this.labels.exception_text.replace("{{var0}}", _this.settings.exceptions.wordStart.map(n => '"' + n + '"').join(", "))
 							})
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 							className: BDFDB.disCN.marginbottom8
 						})
 					],
@@ -134,7 +134,7 @@ module.exports = (_ => {
 						let isChannelSpecific = channelLanguages[this.props.channelId] && channelLanguages[this.props.channelId][place];
 						let isGuildSpecific = !isChannelSpecific && guildLanguages[this.props.guildId] && guildLanguages[this.props.guildId][place];
 						return Object.keys(_this.defaults.choices[place].value).map(direction => [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 								title: _this.labels[`language_choice_${direction.toLowerCase()}_${place.toLowerCase()}`] + ": ",
 								titleChildren: direction == languageTypes.OUTPUT && [{
 									text: _ => isChannelSpecific ? _this.labels.language_selection_channel : isGuildSpecific ? _this.labels.language_selection_server : _this.labels.language_selection_global,
@@ -235,12 +235,12 @@ module.exports = (_ => {
 									}
 								})
 							}),
-							direction == languageTypes.OUTPUT && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							direction == languageTypes.OUTPUT && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 								className: BDFDB.disCN.marginbottom8
 							})
 						]);
 					}),
-					Object.keys(_this.defaults.engines).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					Object.keys(_this.defaults.engines).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 						title: _this.labels[`${key}_engine`],
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
@@ -260,13 +260,13 @@ module.exports = (_ => {
 						plugin: _this,
 						keys: ["general", key],
 						label: _this.labels[`general_${key}`] || _this.defaults.general[key].description,
-						tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+						tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 						value: _this.settings.general[key]
 					})),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Switch",
 						label: _this.labels.translate_your_message,
-						tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+						tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 						value: _this.isTranslationEnabled(this.props.channelId),
 						onChange: value => {
 							_this.toggleTranslation(this.props.channelId);
@@ -473,7 +473,7 @@ module.exports = (_ => {
 							value: this.settings.general[key]
 						}));
 						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 							className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
 						}));
 						
@@ -487,9 +487,9 @@ module.exports = (_ => {
 										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 										direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 										children: [
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 												className: BDFDB.disCN.marginreset,
-												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+												tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 												children: translationEngines[key].name
 											}),
 											translationEngines[key].premium && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -497,7 +497,7 @@ module.exports = (_ => {
 												margin: 0,
 												grow: 0,
 												label: "Paid Version",
-												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+												tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 												value: authKeys[key] && authKeys[key].paid,
 												onChange: value => {
 													if (!authKeys[key]) authKeys[key] = {};
@@ -520,11 +520,11 @@ module.exports = (_ => {
 							}))
 						}));
 						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 							className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
 						}));
 						
-						for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 							title: this.labels.exception_text.replace("{{var0}}", "").split(" ").filter(n => n).join(" "),
 							className: BDFDB.disCN.marginbottom8,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {

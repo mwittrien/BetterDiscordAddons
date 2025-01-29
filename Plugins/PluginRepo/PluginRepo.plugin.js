@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.0
+ * @version 2.6.1
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -182,8 +182,8 @@ module.exports = (_ => {
 											grow: 1,
 											shrink: 0,
 											basis: "auto",
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H1,
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
+												tag: BDFDB.LibraryComponents.FormTitle.Tags.H1,
 												className: BDFDB.disCN.marginreset,
 												children: `Plugin Repo — ${loading.is ? 0 : entries.length || 0}/${loading.is ? 0 : grabbedPlugins.length}`
 											})

@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.4
+ * @version 4.9.5
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1378,9 +1378,9 @@ module.exports = (_ => {
 											className: BDFDB.disCN.marginbottom8,
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 												className: BDFDB.disCN.marginreset,
-												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+												tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 												children: this.labels.modal_username
 											})
 										}),
@@ -1403,7 +1403,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: this.labels.modal_showaccountname,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											value: data.showAccountName,
 											onChange: value => newData.showAccountName = value
 										}),
@@ -1412,7 +1412,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: this.labels.modal_showservernick,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											value: data.showServerNick,
 											onChange: value => newData.showServerNick = value
 										}),
@@ -1421,7 +1421,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: this.labels.modal_useservernick,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											value: data.useServerNick,
 											onChange: value => newData.useServerNick = value
 										})
@@ -1435,9 +1435,9 @@ module.exports = (_ => {
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													children: this.labels.modal_useravatar
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1445,7 +1445,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
 													onChange: value => {
 														newData.removeIcon = value;
@@ -1482,9 +1482,9 @@ module.exports = (_ => {
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													children: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1492,7 +1492,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													value: data.removeStatus,
 													onChange: value => {
 														newData.removeStatus = value;
@@ -1549,7 +1549,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader2,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker1,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1557,7 +1557,7 @@ module.exports = (_ => {
 										onColorChange: value => newData.color1 = value
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker2,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1569,7 +1569,7 @@ module.exports = (_ => {
 									type: "Switch",
 									margin: 20,
 									label: this.labels.modal_userolecolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+									tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 									value: data.useRoleColor,
 									onChange: value => newData.useRoleColor = value
 								})
@@ -1578,7 +1578,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader3,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_usertag,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -1586,7 +1586,7 @@ module.exports = (_ => {
 										onChange: value => newData.tag = value
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker3,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1596,7 +1596,7 @@ module.exports = (_ => {
 										onColorChange: value => newData.color3 = value
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker4,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1610,7 +1610,7 @@ module.exports = (_ => {
 									type: "Switch",
 									margin: 20,
 									label: this.labels.modal_ignoretagcolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+									tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 									value: data.ignoreTagColor,
 									onChange: value => {
 										newData.ignoreTagColor = value;
@@ -1632,9 +1632,9 @@ module.exports = (_ => {
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													children: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1642,7 +1642,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													value: data.removeBanner,
 													onChange: value => {
 														newData.removeBanner = value;
@@ -1670,7 +1670,7 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_BANNER_COLOR_TITLE,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1683,7 +1683,7 @@ module.exports = (_ => {
 										onColorChange: value => newData.color5 = value
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME_PRIMARY,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1696,7 +1696,7 @@ module.exports = (_ => {
 										onColorChange: value => newData.color6 = value
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME_ACCENT,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {

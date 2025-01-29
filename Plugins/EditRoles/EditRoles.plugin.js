@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.9
+ * @version 1.2.0
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -297,7 +297,7 @@ module.exports = (_ => {
 					header: this.labels.modal_header,
 					subHeader: role.name,
 					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_NAME,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
@@ -307,12 +307,12 @@ module.exports = (_ => {
 									autoFocus: true,
 									onChange: value => newData.name = value
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
 								})
 							]
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_COLOR,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
@@ -330,7 +330,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.marginbottom20,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom20
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -338,9 +338,9 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 											className: BDFDB.disCN.marginreset,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											children: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_ICON
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -348,7 +348,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											value: data.removeIcon,
 											onChange: value => {
 												newData.removeIcon = value;

@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.6
+ * @version 1.3.7
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -182,7 +182,7 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.END,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Name:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newquote input-name",
@@ -192,7 +192,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Quote:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newquote input-quote",
@@ -218,7 +218,7 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.marginbottom20
 								})
 							].concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
@@ -272,8 +272,8 @@ module.exports = (_ => {
 								"$serverName will be replaced with the Name of the Server",
 								"$timestamp will be replaced with the Formatted Timestamp of the quoted Message",
 								"$unixTimestamp will be replaced with the Unix Timestamp of the quoted Message"
-							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-								type: BDFDB.LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
+							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormText.Text, {
+								type: BDFDB.LibraryComponents.FormText.Types.DESCRIPTION,
 								children: string
 							}))
 						}));
