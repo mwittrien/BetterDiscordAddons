@@ -329,15 +329,14 @@
 			"Header": [".header", "heading"],
 			"Popout": ["renderHeader", "renderEmptyState"]
 		}},
-		"ModalComponents": {"props": ["Modal", "ModalCloseButton"], "exported": false, "value": "exports", "map": {
-			"Modal": ["Modal"],
-			"ModalCloseButton": ["ModalCloseButton"],
-			"ModalContent": ["ModalContent"],
-			"ModalFooter": ["ModalFooter"],
-			"ModalHeader": ["ModalHeader"],
-			"ModalListContent": ["ModalListContent"],
-			"ModalRoot": ["ModalRoot"],
-			"ModalSize": ["ModalSize"]
+		"ModalComponents": {"strings": ["HORIZONTAL_REVERSE", "withCircleBackground", "headerIdIsManaged"], "exported": false, "value": "exports", "map": {
+			"Modal": [".content", "children"],
+			"ModalCloseButton": ["withCircleBackground", "closeIcon"],
+			"ModalFooter": ["HORIZONTAL_REVERSE", "footerSeparator"],
+			"ModalHeader": ["headerIdIsManaged", "Direction.HORIZONTAL"],
+			"ModalContent": ["...r", "scrollbarRef"],
+			"ModalRoot": ["fullscreenOnMobile", "ENTERING"],
+			"ModalSize": ["\"DYNAMIC\"", "\"LARGE\""]
 		}},
 		"Paginator": {"strings": ["totalPageCount", "selectedPage", "endButtonInner"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"]},
@@ -346,19 +345,15 @@
 			"DirectMessage": ["getUser", "getRecipientId"],
 			"LinkButton": [".apply(this"]
 		}},
-		"Scrollers": {"props": ["ScrollerThin", "ScrollerAuto", "ScrollerNone"], "exported": false, "value": "exports", "map": {
-			"Auto": ["ScrollerAuto"],
-			"None": ["ScrollerNone"],
-			"Thin": ["ScrollerThin"]
-		}},
+		"ScrollerBase": {"strings": ["paddingFix", "getScrollerState"]},
 		"SearchResultsPagination": {"strings": ["pageLength", "changePage", "maxVisiblePages"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
 		}},
-		"StatusComponents": {"props": ["Status", "StatusTypes"], "exported": false, "value": "exports", "map": {
-			"Status": ["Status"],
-			"Types": ["StatusTypes"]
+		"StatusComponents": {"strings": ["OFFLINE", "mask", "isMobile", ".status"], "exported": false, "value": "exports", "map": {
+			"Status": [".status", "mask"],
+			"Types": ["\"OFFLINE\"", "\"ONLINE\""]
 		}},
 		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"], "funcStrings": ["defaultColor"]},
 		"TextElement": {"strings": [".strong]", ".STANDARD"]},
@@ -966,6 +961,7 @@
 			"inputNumberWrapper": "numberInputWrapper_j4svZS",
 			"inputNumberWrapperDefault": "numberInputWrapperDefault_gRxcuK numberInputWrapper_j4svZS",
 			"inputNumberWrapperMini": "numberInputWrapperMini_wtUU31 numberInputWrapper_j4svZS",
+			"inputSuccess": "success__0f084",
 			"layerContainerZIndexDisabled": "zIndexDisabled_Pf4Txx",
 			"listInput": "listInput_11g5Sr",
 			"listInputDelete": "delete_M_nPTt",
@@ -1525,7 +1521,7 @@
 		"Heading": {"props": ["eyebrow", "code"]},
 		"HotKeyRecorder": {"props": ["editIcon", "recording"]},
 		"HotKeyRecorderBase": {"props": ["addKeybindButton", "containerDisabled"]},
-		"HoverCard": {"props": ["card", "active"]},
+		"HoverCard": {"props": ["card"], "length": 1},
 		"HoverCardRemoveButton": {"props": ["button", "filled", "default"]},
 		"IconDirection": {"props": ["directionDown", "directionUp"]},
 		"ImageAssets": {"props": ["pngImage", "lottieCanvas"]},
@@ -2557,7 +2553,7 @@
 		"inputnumberwrapperdefault": ["BDFDB", "inputNumberWrapperDefault"],
 		"inputnumberwrappermini": ["BDFDB", "inputNumberWrapperMini"],
 		"inputprefix": ["Input", "inputPrefix"],
-		"inputsuccess": ["Input", "success"],
+		"inputsuccess": ["BDFDB", "inputSuccess"],
 		"inputwrapper": ["Input", "inputWrapper"],
 		"invite": ["GuildInvite", "wrapper"],
 		"invitebutton": ["GuildInvite", "button"],
@@ -3027,6 +3023,7 @@
 		"scroller": ["Scroller", "scrollerBase"],
 		"scrollerauto": ["Scroller", "auto"],
 		"scrollercontent": ["Scroller", "content"],
+		"scrollercustomtheme": ["Scroller", "customTheme"],
 		"scrollerdisablescrollanchor": ["Scroller", "disableScrollAnchor"],
 		"scrollerfade": ["Scroller", "fade"],
 		"scrollernone": ["Scroller", "none"],
