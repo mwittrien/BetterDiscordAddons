@@ -204,10 +204,10 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	left: 0 !important;
 	margin-bottom: 0 !important;
 }
-.tutorialContainer__650eb:nth-last-child(2) .listItem__650eb{
+.wrapper_ef3116 .tutorialContainer__650eb:nth-last-child(2) .listItem__650eb{
 	margin-bottom: 8px !important;
 }
-.gradient__214dc {
+.wrapper_ef3116 .gradient__214dc {
 	position: fixed !important;
 	width: calc(1px * (var(--guildsize_v) * var(--columns_v) + 20 * (var(--guildsize_v)/50) + 14 * (var(--guildsize_v)/50) * (var(--columns_v) - 1))) !important;
 	top: calc(100% - 16px) !important;
