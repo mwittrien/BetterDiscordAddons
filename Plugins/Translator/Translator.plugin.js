@@ -3,7 +3,7 @@
  * @author DevilBro
  * @authorId 278543574059057154
  * @version 2.6.5
- * @description Allows you to translate Messages and your outgoing Messages within Discord
+ * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
