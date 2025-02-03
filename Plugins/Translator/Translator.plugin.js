@@ -515,6 +515,58 @@ module.exports = (_ => {
 											authKeys[key].key = (value || "").trim();
 											BDFDB.DataUtils.save(authKeys, this, "authKeys");
 										}
+									}),
+									// region selector for Microsoft translator
+									key === "microsoft" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+										className: BDFDB.disCN.marginbottom8,
+										value: authKeys[key] && authKeys[key].region || "eastus",
+										options: [
+											{value: "eastasia", label: "East Asia"},
+											{value: "southeastasia", label: "Southeast Asia"},
+											{value: "centralus", label: "Central US"},
+											{value: "eastus", label: "East US"},
+											{value: "eastus2", label: "East US 2"},
+											{value: "westus", label: "West US"},
+											{value: "northcentralus", label: "North Central US"},
+											{value: "southcentralus", label: "South Central US"},
+											{value: "northeurope", label: "North Europe"},
+											{value: "westeurope", label: "West Europe"},
+											{value: "japanwest", label: "Japan West"},
+											{value: "japaneast", label: "Japan East"},
+											{value: "brazilsouth", label: "Brazil South"},
+											{value: "australiaeast", label: "Australia East"},
+											{value: "australiasoutheast", label: "Australia Southeast"},
+											{value: "southindia", label: "South India"},
+											{value: "centralindia", label: "Central India"},
+											{value: "westindia", label: "West India"},
+											{value: "canadacentral", label: "Canada Central"},
+											{value: "canadaeast", label: "Canada East"},
+											{value: "uksouth", label: "UK South"},
+											{value: "ukwest", label: "UK West"},
+											{value: "westcentralus", label: "West Central US"},
+											{value: "westus2", label: "West US 2"},
+											{value: "koreacentral", label: "Korea Central"},
+											{value: "koreasouth", label: "Korea South"},
+											{value: "francecentral", label: "France Central"},
+											{value: "francesouth", label: "France South"},
+											{value: "australiacentral", label: "Australia Central"},
+											{value: "australiacentral2", label: "Australia Central 2"},
+											{value: "uaecentral", label: "UAE Central"},
+											{value: "uaenorth", label: "UAE North"},
+											{value: "southafricanorth", label: "South Africa North"},
+											{value: "southafricawest", label: "South Africa West"},
+											{value: "switzerlandnorth", label: "Switzerland North"},
+											{value: "switzerlandwest", label: "Switzerland West"},
+											{value: "germanynorth", label: "Germany North"},
+											{value: "germanywestcentral", label: "Germany West Central"},
+											{value: "norwaywest", label: "Norway West"},
+											{value: "norwayeast", label: "Norway East"}
+										].sort((a, b) => a.label.localeCompare(b.label)),
+										onChange: value => {
+											if (!authKeys[key]) authKeys[key] = {};
+											authKeys[key].region = value;
+											BDFDB.DataUtils.save(authKeys, this, "authKeys");
+										}
 									})
 								]
 							}))
@@ -988,7 +1040,8 @@ module.exports = (_ => {
 					method: "post",
 					headers: {
 						"Content-Type": "application/json",
-						"Ocp-Apim-Subscription-Key": authKeys.microsoft && authKeys.microsoft.key || "1ea861033a56423f860fd6f5ff33e308"
+						"Ocp-Apim-Subscription-Key": authKeys.microsoft && authKeys.microsoft.key || "1ea861033a56423f860fd6f5ff33e308",
+						"Ocp-Apim-Subscription-Region": authKeys.microsoft && authKeys.microsoft.region || "global"
 					},
 					body: JSON.stringify([{"Text": data.text}]),
 					form: Object.assign({
