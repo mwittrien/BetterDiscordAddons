@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.5
+ * @version 2.6.6
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -519,7 +519,7 @@ module.exports = (_ => {
 									// region selector for Microsoft translator
 									key === "microsoft" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 										className: BDFDB.disCN.marginbottom8,
-										value: authKeys[key] && authKeys[key].region || "eastus",
+										value: authKeys[key] && authKeys[key].region || "global",
 										options: [
 											{value: "eastasia", label: "East Asia"},
 											{value: "southeastasia", label: "Southeast Asia"},
