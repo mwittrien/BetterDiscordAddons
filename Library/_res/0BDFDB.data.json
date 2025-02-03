@@ -314,7 +314,7 @@
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["containerRef", "zoomable", "LOADING"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"]},
-		"ImageModalOuter": {"strings": ["MEDIA_VIEWER", "numMediaItem", "BackdropStyles"]},
+		"ImageModalOuter": {"strings": ["MEDIA_VIEWER", "numMediaItem", "IMMERSIVE"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
 			"LayerContainer": [".layerContainer", "missing parent"]
@@ -1350,7 +1350,7 @@
 			"mentionWrapper": "wrapper_f61d60",
 			"messagesLoadingWrapper": "wrapper_ba0ffb",
 			"nameContainer": "container__91a9d",
-			"nameContainerNameContainer": "container__13cf1 text__13cf1",
+			"nameContainerNameContainer": "container_e45859",
 			"saturationBlack": "saturation-black",
 			"saturationColor": "saturation-color",
 			"saturationCursor": "saturation-cursor",
