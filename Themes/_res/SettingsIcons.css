@@ -663,7 +663,7 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .bd-settings-title {
 	justify-content: flex-start;
 }
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .bd-settings-title > *:last-child {
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .bd-settings-title > .bd-button {
 	margin-left: auto;
 }
 .standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs),
