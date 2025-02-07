@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.0
+ * @version 1.7.1
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -13,11 +13,7 @@
  */
 
 module.exports = (_ => {
-	const changeLog = {
-		"added": {
-			"Block Replies": "Added option to completely block messages, that replied to blocked messages"
-		}
-	};
+	const changeLog = {};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		constructor (meta) {for (let key in meta) this[key] = meta[key];}
@@ -409,7 +405,7 @@ module.exports = (_ => {
 				}
 				if (hiddenRows) {
 					let indexSum = 0;
-					for (let i in newGroups) {
+					for (let i in newGroups) if (newGroups[i].id != "content-inventory-feed") {
 						newGroups[i].index = indexSum;
 						if (newGroups[i].count > 0) indexSum += (newGroups[i].count + 1);
 					}
@@ -423,6 +419,7 @@ module.exports = (_ => {
 						return [].concat(array.filter(filter), new Array(suffixLength))
 					};
 					e.instance.props.rows = removeEmptyWithin(newRows, n => n);
+					if (newGroups[0] && newGroups[0].id == "content-inventory-feed") newGroups[0].index = e.instance.props.rows.length - (newGroups[0].count + 1);
 					e.instance.props.groups = removeEmptyWithin(newGroups, g => g && g.count > 0);
 				}
 			}
