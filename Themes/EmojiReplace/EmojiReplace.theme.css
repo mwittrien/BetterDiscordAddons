@@ -1,6 +1,6 @@
 /**
  * @name EmojiReplace
- * @description Replaces Discord's Emojis with Emojis of a different Provider (Apple, Facebook...)
+ * @description Replaces Discord's Emojis with a selected provider. Requires the EmojiReplaceSettings plugin for customization.
  * @author DevilBro
  * @version 1.0.0
  * @authorId 278543574059057154
@@ -10,35 +10,8 @@
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/
  * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/EmojiReplace.theme.css
- */
-
-/*
-	!!READ THIS!!
-	
-	This theme lets you swap the default emojis of discord with the emojis of a provider of your choice.
-	To change the provider simply swap the marked word in the import url down below with a supported provider listed below.
-	The name of the provider is CASE SENSITIVE, meaning you have to write it exactly like it's written below.
-	Correct: Apple
-	False: apple, APPLE, aPpLe
-	
-	Supported Providers:
-		→ Apple
-		→ BlobMoji
-		→ Facebook
-		→ Google
-		→ Huawei
-		→ JoyPixels
-		→ Microsoft
-		→ Microsoft-3D
-		→ OpenMoji
-		→ Samsung
-		→ Samsung-Old
-		→ Toss
-		→ WhatsApp
 */
 
-/*										   REPLACE THIS			*/
-/*										     ↓↓↓↓↓			*/
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/base/Apple.css);
-/*										     ↑↑↑↑↑		  	*/
-/*										   REPLACE THIS			*/
+ :root {
+	--emoji-provider: "Samsung"; /* Default */
+}
