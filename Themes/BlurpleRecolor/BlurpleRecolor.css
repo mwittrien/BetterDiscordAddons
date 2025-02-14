@@ -934,8 +934,8 @@
 .backgroundOptionRing__53965 {								/* voicesettings			selection ring							*/
 	border-color: rgb(var(--accentcolor_v));
 }
-.icon_f43ba5[src="/assets/3cfc93ceb08d74acbcf8.png"] {					/* voicesettings			krisp								*/
-	-webkit-mask: url(https://discord.com/assets/3cfc93ceb08d74acbcf8.png) center/contain no-repeat;
+.icon_f43ba5[src="/assets/e9ed313dde26d91b.png"] {					/* voicesettings			krisp								*/
+	-webkit-mask: url(https://discord.com/assets/e9ed313dde26d91b.png) center/contain no-repeat;
 	background-color: rgb(var(--accentcolor_v));
 	object-position: -999999px -999999px;
 }
@@ -1038,7 +1038,7 @@
 	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
 }
 
-.infoItem__60406[src="/assets/125ae6d728222a7c.svg"] {				/* widgetsettings			widget placeholder image 					*/
+.infoItem__60406[src="/assets/125ae6d728222a7c.svg"] {					/* widgetsettings			widget placeholder image 					*/
 	object-position: -999999px -999999px;
 	border-radius: 5px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor_v)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));
