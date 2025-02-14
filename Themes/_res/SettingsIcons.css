@@ -52,6 +52,7 @@
 	--settingsicons-dismissable: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/dismissable.png);
 	--settingsicons-paymentmodals: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/paymentmodals.png);
 	--settingsicons-revenue: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/revenue.png);
+	--settingsicons-virtualcurrency: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/virtualcurrency.png);
 	--settingsicons-designsystem: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/designsystem.png);
 	--settingsicons-textplayground: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textplayground.png);
 	--settingsicons-textcomponent: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textcomponent.png);
@@ -536,9 +537,9 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(55),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(53),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(54),
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="design-system-tab" i],
-#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="design-system-tab" i] {
-	--settingsicons-icon: var(--settingsicons-designsystem);
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="virtual-currency-configuration-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="virtual-currency-configuration-tab" i] {
+	--settingsicons-icon: var(--settingsicons-virtualcurrency);
 }
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(52),
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(53),
@@ -552,9 +553,9 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(56),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(54),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(55),
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="text-playground-tab" i],
-#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-playground-tab" i] {
-	--settingsicons-icon: var(--settingsicons-textplayground);
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="design-system-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="design-system-tab" i] {
+	--settingsicons-icon: var(--settingsicons-designsystem);
 }
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(53),
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(54),
@@ -568,9 +569,9 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(57),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(55),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(56),
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="text-component-tab" i],
-#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-component-tab" i] {
-	--settingsicons-icon: var(--settingsicons-textcomponent);
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="text-playground-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-playground-tab" i] {
+	--settingsicons-icon: var(--settingsicons-textplayground);
 }
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(54),
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(55),
@@ -584,9 +585,9 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(58),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(56),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(57),
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="intl-testing-tab" i],
-#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="intl-testing-tab" i] {
-	--settingsicons-icon: var(--settingsicons-messagelink);
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="text-component-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-component-tab" i] {
+	--settingsicons-icon: var(--settingsicons-textcomponent);
 }
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(55),
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(56),
@@ -600,9 +601,9 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(59),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(57),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(58),
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="profile-effects-preview-tool-tab" i],
-#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-effects-preview-tool-tab" i] {
-	--settingsicons-icon: var(--settingsicons-profilepreview);
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="intl-testing-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="intl-testing-tab" i] {
+	--settingsicons-icon: var(--settingsicons-messagelink);
 }
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(56),
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(57),
@@ -616,9 +617,9 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(60),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(58),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(59),
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="name-plate-tool-tab-tab" i],
-#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="name-plate-tool-tab-tab" i] {
-	--settingsicons-icon: var(--settingsicons-nameplates);
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="profile-effects-preview-tool-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-effects-preview-tool-tab" i] {
+	--settingsicons-icon: var(--settingsicons-profilepreview);
 }
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(57),
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(58),
@@ -632,14 +633,26 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(61),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(59),
 .platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(60),
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="name-plate-tool-tab-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="name-plate-tool-tab-tab" i] {
+	--settingsicons-icon: var(--settingsicons-nameplates);
+}
+.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(58),
+.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(59),
+.platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(60),
+.platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(61),
+.platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:nth-child(59),
+.platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026.vc-settings ~ .item_b3f026:nth-child(60),
+.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(59),
+.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(60),
+.platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(61),
+.platform-win .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(62),
+.platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026:nth-child(60),
+.platform-linux .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026:has(.poggermodeIcon__581ea) ~ .item_b3f026.vc-settings ~ .item_b3f026:nth-child(61),
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="web-setting-tree-tool-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="web-setting-tree-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-settingstree);
 }
-
-
-
-
 
 .bd-server-search ~ .item_b3f026::before {
 	display: none;
