@@ -338,38 +338,6 @@
 
 /* ~~~~		2.		CHANNELLIST					~~~~ */
 
-.channelNotice__4c43d .imageContainer__4c43d {
-	position: relative;
-}
-.channelNotice__4c43d .imageContainer__4c43d::before,
-.channelNotice__4c43d .imageContainer__4c43d::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	pointer-events: none;
-}
-.channelNotice__4c43d:has(.image__4c43d[src="/assets/148fd8378ac32a66783c.svg"]) .image__4c43d,
-.channelNotice__4c43d:has(.image__4c43d[src="/assets/7e724c5bbf29dd3598ea.svg"]) .image__4c43d {
-	visibility: hidden;
-}
-.channelNotice__4c43d:has(.image__4c43d[src="/assets/148fd8378ac32a66783c.svg"]) .imageContainer__4c43d {
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_bg.svg) center/cover no-repeat;
-}
-.channelNotice__4c43d:has(.image__4c43d[src="/assets/148fd8378ac32a66783c.svg"]) .imageContainer__4c43d::before {
-	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_accent.svg) center/cover no-repeat;
-}
-.channelNotice__4c43d:has(.image__4c43d[src="/assets/148fd8378ac32a66783c.svg"]) .imageContainer__4c43d::after {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_accent2.svg) center/cover no-repeat;
-}
-.channelNotice__4c43d:has(.image__4c43d[src="/assets/7e724c5bbf29dd3598ea.svg"]) .imageContainer__4c43d::before {
-	filter: grayscale(0.5);
-	background: url(https://discord.com/assets/7e724c5bbf29dd3598ea.svg) center/cover no-repeat;
-}
 
 .eventStatusContainer__29021 [fill="#949cf7" i] {
 	fill: rgb(var(--accentcolor_v));
@@ -514,17 +482,17 @@
 #app-mount .selectedPill__1464f {
 	border-color: rgb(var(--accentcolor_v)) !important;
 }
-.image__44df5[src="/assets/d73341fd9c4ccfa62ba5.svg"] {					/* textarea				follow channel icon						*/
+.image__44df5[src="/assets/e1ac50c09aed17d0.svg"] {					/* textarea				follow channel icon						*/
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_bg.svg) center/contain no-repeat;
 	width: 47px;
 	height: 60px;
 	margin-bottom: -8px;
 }
-.image__44df5[src="/assets/d73341fd9c4ccfa62ba5.svg"] + * {
+.image__44df5[src="/assets/e1ac50c09aed17d0.svg"] + * {
 	overflow: visible;
 }
-.image__44df5[src="/assets/d73341fd9c4ccfa62ba5.svg"] + *::after {
+.image__44df5[src="/assets/e1ac50c09aed17d0.svg"] + *::after {
 	content: "";
 	position: absolute;
 	bottom: 8px;
@@ -535,17 +503,17 @@
 	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_accent.svg) center/contain no-repeat;
 }
-.image__44df5[src="/assets/0e33fc3f60b69ba9b0247df60d589439.svg"] {			/* textarea				verify email icon						*/
+.image__44df5[src="/assets/bbbec3b2b3c11149.svg"] {					/* textarea				verify email icon						*/
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_bg.svg) center/contain no-repeat;
 	width: 65px;
 	height: 60px;
 	margin-bottom: -16px;
 }
-.image__44df5[src="/assets/0e33fc3f60b69ba9b0247df60d589439.svg"] + * {
+.image__44df5[src="/assets/bbbec3b2b3c11149.svg"] + * {
 	overflow: visible;
 }
-.image__44df5[src="/assets/0e33fc3f60b69ba9b0247df60d589439.svg"] + *::after {
+.image__44df5[src="/assets/bbbec3b2b3c11149.svg"] + *::after {
 	content: "";
 	position: absolute;
 	bottom: 0px;
@@ -556,17 +524,17 @@
 	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
 }
-.image__44df5[src="/assets/45372ebbfad1c491747d6f5b7117fd88.svg"] {			/* textarea				verify phone icon						*/
+.image__44df5[src="/assets/77c54045c78b5622.svg"] {					/* textarea				verify phone icon						*/
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_bg.svg) center/contain no-repeat;
 	width: 65px;
 	height: 60px;
 	margin-bottom: -16px;
 }
-.image__44df5[src="/assets/45372ebbfad1c491747d6f5b7117fd88.svg"] + * {
+.image__44df5[src="/assets/77c54045c78b5622.svg"] + * {
 	overflow: visible;
 }
-.image__44df5[src="/assets/45372ebbfad1c491747d6f5b7117fd88.svg"] + *::after {
+.image__44df5[src="/assets/77c54045c78b5622.svg"] + *::after {
 	content: "";
 	position: absolute;
 	bottom: 0px;
@@ -730,14 +698,6 @@
 }
 .iconBackgroundTier2_ca73a1 {								/* tierlist				tier2 bg							*/
 	background: #ffcd4b linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
-}
-
-#app-mount .tag_d0ccaf {								/* tag													*/
-	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor_v)), rgba(var(--accentcolor_v), 0.5));
-}
-#app-mount .tag_d0ccaf::before {
-	background: rgb(var(--accentcolor_v));
-	-webkit-mask: url(https://discord.com/assets/bed21bc77023cebd07a7.svg) top/cover no-repeat;
 }
 
 #app-mount .alternativeSkuSelected__35d70 {
@@ -1601,19 +1561,19 @@ a.metadataDownload_f316dd {
 	-webkit-mask-size: cover;
 }
 .downloadApps__4a98c .platforms__4a98c .icon__4a98c.active__4a98c.apple__4a98c {
-	-webkit-mask: url(https://ptb.discord.com/assets/dcb57f386a6bf90a27c9.svg);
+	-webkit-mask: url(https://ptb.discord.com/assets/77783177cefd67fe.svg);
 }
 .downloadApps__4a98c .platforms__4a98c .icon__4a98c.active__4a98c.windows__4a98c {
-	-webkit-mask: url(https://ptb.discord.com/assets/ecc4859664616ed5ad9a.svg);
+	-webkit-mask: url(https://ptb.discord.com/assets/3ab3b2480e6de1f1.svg);
 }
 .downloadApps__4a98c .platforms__4a98c .icon__4a98c.active__4a98c.linux__4a98c {
-	-webkit-mask: url(https://ptb.discord.com/assets/a2c736476ce092c94a5b.svg);
+	-webkit-mask: url(https://ptb.discord.com/assets/ab3278fc56c3e4c1.svg);
 }
 .downloadApps__4a98c .platforms__4a98c .icon__4a98c.active__4a98c.ios__4a98c {
-	-webkit-mask: url(https://ptb.discord.com/assets/838d4bac7b80d28fd676.svg);
+	-webkit-mask: url(https://ptb.discord.com/assets/9c404f814fcf2d63.svg);
 }
 .downloadApps__4a98c .platforms__4a98c .icon__4a98c.active__4a98c.android__4a98c {
-	-webkit-mask: url(https://ptb.discord.com/assets/c6385e608fcdaec54ef4.svg);
+	-webkit-mask: url(https://ptb.discord.com/assets/c522a59d9f951f59.svg);
 }
 
 .browserItem_be70cf:hover {
