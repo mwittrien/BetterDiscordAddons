@@ -1078,7 +1078,7 @@
 	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
 }
 
-.infoItem__60406[src="/assets/5a82d0404d1612050791.svg"] {				/* widgetsettings			widget placeholder image 					*/
+.infoItem__60406[src="/assets/125ae6d728222a7c.svg"] {				/* widgetsettings			widget placeholder image 					*/
 	object-position: -999999px -999999px;
 	border-radius: 5px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor_v)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));
@@ -1116,24 +1116,24 @@
 	background-color: rgb(var(--accentcolor_v));
 }
 
-.headerIcon__812a7[src="/assets/c118f02ca2b6012645dc.svg"] {				/* discoverysettings			requirements icon						*/
+.headerIcon__812a7[src="/assets/47fa1a531cbfd55c.svg"] {				/* discoverysettings			requirements icon						*/
 	object-position: -999999999px -999999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_requirements_bg.svg) center/cover no-repeat;
 }
-.headerIcon__812a7[src="/assets/c118f02ca2b6012645dc.svg"] + * {
+.headerIcon__812a7[src="/assets/47fa1a531cbfd55c.svg"] + * {
 	position: relative;
 	height: 60px;
 }
-.headerIcon__812a7[src="/assets/c118f02ca2b6012645dc.svg"] + * {
+.headerIcon__812a7[src="/assets/47fa1a531cbfd55c.svg"] + * {
 	position: relative;
 	height: 60px;
 }
-.headerIcon__812a7[src="/assets/c118f02ca2b6012645dc.svg"] + h2 {
+.headerIcon__812a7[src="/assets/47fa1a531cbfd55c.svg"] + h2 {
 	display: flex;
 	align-items: center;
 	white-space: pre-wrap;
 }
-.headerIcon__812a7[src="/assets/c118f02ca2b6012645dc.svg"] + *::after {
+.headerIcon__812a7[src="/assets/47fa1a531cbfd55c.svg"] + *::after {
 	content: "";
 	position: absolute;
 	left: -56px;
@@ -1251,18 +1251,18 @@
 
 /* ----		10.2.		GUILDADD/CREATION				---- */
 
-.icon_eb2cd2[src="/assets/c4b7801fb3f0df337861.svg"] {					/* create guild				create own icon							*/
+.icon_eb2cd2[src="/assets/066ae632287e673f.svg"] {					/* create guild				create own icon							*/
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildcreate_createown_accent.svg) center/contain no-repeat;
 }
-.icon_eb2cd2[src="/assets/c4b7801fb3f0df337861.svg"] + * {
+.icon_eb2cd2[src="/assets/066ae632287e673f.svg"] + * {
 	position: relative;
 	display: flex;
 	align-items: center;
 	overflow: visible;
 }
-.icon_eb2cd2[src="/assets/c4b7801fb3f0df337861.svg"] + *::after {
+.icon_eb2cd2[src="/assets/066ae632287e673f.svg"] + *::after {
 	content: "";
 	position: absolute;
 	left: -56px;
