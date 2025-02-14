@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -76,7 +76,7 @@ module.exports = (_ => {
 					icon: iconProps => BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.lottieicon,
 						style: {
-							"--__lottieIconColor": enabled ? "var(--channel-icon)" : BDFDB.DiscordConstants.ColorsCSS.STATUS_DANGER,
+							"--__lottieIconColor": enabled ? "currentColor" : BDFDB.DiscordConstants.ColorsCSS.STATUS_DANGER,
 							"display": "flex",
 							"width": "20px",
 							"height": "20px"
