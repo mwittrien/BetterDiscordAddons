@@ -1194,8 +1194,8 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	position: absolute;
 	left: 0;
 	top: 0;
-	margin: 0 var(--custom-custom-status-modal-emoji-margin);
-	height: 100%
+	margin: 0 10px;
+	height: 100%;
 }
 [REPLACE_CLASS_emojiinputbuttonemoji] {
 	width: var(--custom-custom-status-modal-emoji-size);
