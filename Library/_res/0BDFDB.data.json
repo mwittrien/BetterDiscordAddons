@@ -383,7 +383,7 @@
 	},
 	"PatchModules": {
 		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "renderSettingsGear"]},
-		"AccountPopout": {"strings": ["SIMPLIFIED_ACCOUNT_POPOUT", "dimissibleUpsellsEnabled"]},
+		"AccountPopout": {"strings": ["SIMPLIFIED_ACCOUNT_POPOUT", ".menus"]},
 		"AccountName": {"strings": ["accountProfilePopoutWrapper", ".avatarWrapper", "renderNameTag"]},
 		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
 		"AuditLogEntry": {"protos": ["renderRoleUpdate", "renderChangeDetails", "getActionTypeColor", "renderPermissionUpdate"]},
