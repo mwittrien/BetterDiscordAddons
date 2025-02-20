@@ -166,7 +166,7 @@
 		}},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LanguageUtils": {"props": ["getLanguages", "getLocale"]},
-		"LanguageIntlUtils": {"props": ["getLanguages", "getSystemLocale", "intl"]},
+		"LanguageIntlUtils": {"props": ["formatToPlainString"]},
 		"LoginUtils": {"props": ["login", "logout"]},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
 		"MemberDisplayUtils": {"strings": [".getGuildMemberProfile", ".getUser("], "exported": false, "value": "exports", "map": {
