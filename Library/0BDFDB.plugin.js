@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.4
+ * @version 3.9.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1321,20 +1321,17 @@ module.exports = (_ => {
 						let m = req.c[i].exports, r = null;
 						if (isSearchable(m, true)) {
 							if (!!(r = filter(m))) {
-								if (config && config.moduleName == "PlatformUtils") console.log(m);
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
 							else if (Object.keys(m).length < 400) for (let key of Object.keys(m)) try {
 								if (m[key] && isSearchable(m[key], true) && !!(r = filter(m[key]))) {
-									if (config && config.moduleName == "PlatformUtils") console.log(m);
 									if (all) found.push(defaultExport ? r : req.c[i]);
 									else return defaultExport ? r : req.c[i];
 								}
 							} catch (err) {}
 						}
 						if (config.moduleName && isSearchable(m, true) && isSearchable(m[config.moduleName], true)) {
-							if (config.moduleName == "PlatformUtils") console.log(m);
 							if (!!(r = filter(m[config.moduleName]))) {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
@@ -4609,7 +4606,7 @@ module.exports = (_ => {
 				};
 				BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 					if (item) {
-						let formatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.intl && Internal.LibraryModules.LanguageIntlUtils.intl.format;
+						let formatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.formatToPlainString;
 						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]];
 						if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) {
 							let i = 0, returnvalue, formatVars = {};
@@ -4617,10 +4614,11 @@ module.exports = (_ => {
 								i++;
 								try {returnvalue = formatter && BDFDB.ArrayUtils.is(stringObj) ? formatter(LanguageStringFormattersObj[InternalData.LanguageStringHashes[item]], formatVars) : stringObj.format(formatVars, false);}
 								catch (err) {
+									window.temp1 = err;
 									returnvalue = null;
 									let value = values.shift();
 									value = value != null ? (value === 0 ? "0" : value) : "undefined";
-									let valueName = err.toString().split("for: ")[1] || err.toString().split("\"")[1];
+									let valueName = (err.toString().split("for variable '")[1] || "").split("'")[0];
 									formatVars[valueName] = valueName.endsWith("Hook") ? (_ => value) : value;
 									if (stringObj.intMessage) {
 										try {for (let hook of stringObj.intMessage.format(formatVars).match(/\([^\(\)]+\)/gi)) formatVars[hook.replace(/[\(\)]/g, "")] = n => n;}
