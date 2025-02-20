@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.3
+ * @version 3.9.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1314,36 +1314,42 @@ module.exports = (_ => {
 					let all = typeof config.all != "boolean" ? false : config.all;
 					const req = Internal.getWebModuleReq();
 					const found = [];
+					const isSearchable = (m, checkObject) => {
+						return m && (checkObject && typeof m == "object" || typeof m == "function") && !m.constructor.toLocaleString().startsWith("function DOMTokenList()") && typeof m.toLocaleString == "function" && m.toLocaleString().indexOf("IntlMessagesProxy") == -1;
+					};
 					if (!onlySearchUnloaded) for (let i in req.c) if (req.c.hasOwnProperty(i) && req.c[i].exports != window) {
 						let m = req.c[i].exports, r = null;
-						if (m && (typeof m == "object" || typeof m == "function")) {
+						if (isSearchable(m, true)) {
 							if (!!(r = filter(m))) {
+								if (config && config.moduleName == "PlatformUtils") console.log(m);
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
 							else if (Object.keys(m).length < 400) for (let key of Object.keys(m)) try {
-								if (m[key] && !!(r = filter(m[key]))) {
+								if (m[key] && isSearchable(m[key], true) && !!(r = filter(m[key]))) {
+									if (config && config.moduleName == "PlatformUtils") console.log(m);
 									if (all) found.push(defaultExport ? r : req.c[i]);
 									else return defaultExport ? r : req.c[i];
 								}
 							} catch (err) {}
 						}
-						if (config.moduleName && m && m[config.moduleName] && (typeof m[config.moduleName] == "object" || typeof m[config.moduleName] == "function")) {
+						if (config.moduleName && isSearchable(m, true) && isSearchable(m[config.moduleName], true)) {
+							if (config.moduleName == "PlatformUtils") console.log(m);
 							if (!!(r = filter(m[config.moduleName]))) {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
-							else if (m[config.moduleName].type && (typeof m[config.moduleName].type == "object" || typeof m[config.moduleName].type == "function") && !!(r = filter(m[config.moduleName].type))) {
+							else if (m[config.moduleName].type && isSearchable(m[config.moduleName].type, true) && !!(r = filter(m[config.moduleName].type))) {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
 						}
-						if (m && m.__esModule && m.default && (typeof m.default == "object" || typeof m.default == "function")) {
+						if (m && m.__esModule && isSearchable(m.default, true)) {
 							if (!!(r = filter(m.default))) {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
-							else if (m.default.type && (typeof m.default.type == "object" || typeof m.default.type == "function") && !!(r = filter(m.default.type))) {
+							else if (isSearchable(m.default.type, true) && !!(r = filter(m.default.type))) {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
@@ -1351,7 +1357,7 @@ module.exports = (_ => {
 					}
 					for (let i in req.m) if (req.m.hasOwnProperty(i)) {
 						let m = req.m[i];
-						if (m && typeof m == "function") {
+						if (m && isSearchable(m)) {
 							if (req.c[i] && !onlySearchUnloaded && filter(m)) {
 								if (all) found.push(defaultExport ? req.c[i].exports : req.c[i]);
 								else return defaultExport ? req.c[i].exports : req.c[i];
