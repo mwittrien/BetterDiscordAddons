@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.1
+ * @version 4.1.1
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -63,6 +63,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var audios, choices, firedEvents;
 		var volumes = {};
+		var toggles = {};
 		
 		const removeAllKey = "REMOVE_ALL_BDFDB_DEVILBRO_DO_NOT_COPY";
 		const defaultDevice = "default";
@@ -179,6 +180,9 @@ module.exports = (_ => {
 				this.defaults = {
 					volumes: {
 						globalVolume:		{value: 100,	description: "Global Notification Sounds Volume"}
+					},
+					toggles: {
+						playIfMuted: 		{value: false,	description: "Play Sounds If Muted"}
 					}
 				};
 				
@@ -257,8 +261,11 @@ module.exports = (_ => {
 							const isCurrent = BDFDB.LibraryStores.SelectedChannelStore.getChannelId() == channel.id;
 							const isGroupDM = channel.isGroupDM();
 							const isThread = BDFDB.ChannelUtils.isThread(channel);
+							const isCurrentAndFocused = isCurrent & document.hasFocus()
 							
-							if (isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id) || !isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id)) return;
+							if (!toggles.playIfMuted) {
+								if ((isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id)) || (!isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id))) return;
+							}
 							
 							if (isCurrent && BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel()) {
 								this.fireEvent("message3");
@@ -267,7 +274,7 @@ module.exports = (_ => {
 							}
 							else if (!guildId) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
-								(!isCurrent || !document.hasFocus()) && this.playAudio(isGroupDM ? "groupdm" : "dm");
+								!isCurrentAndFocused && this.playAudio(isGroupDM ? "groupdm" : "dm");
 								return;
 							}
 							else if (guildId) {
@@ -275,12 +282,12 @@ module.exports = (_ => {
 									if (message.mentions.length && !this.isSuppressMentionsEnabled(guildId, channel.id)) for (const mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
 										if (message.message_reference && !message.interaction) {
 											this.fireEvent("reply");
-											!isCurrent && this.playAudio("reply");
+											!isCurrentAndFocused && this.playAudio("reply");
 											return;
 										}
 										if (!message.message_reference) {
 											this.fireEvent("mentioned");
-											!isCurrent && this.playAudio("mentioned");
+											!isCurrentAndFocused && this.playAudio("mentioned");
 											return;
 										}
 									}
@@ -288,26 +295,26 @@ module.exports = (_ => {
 										const member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, BDFDB.UserUtils.me.id);
 										if (member && member.roles.length) for (const roleId of message.mention_roles) if (member.roles.includes(roleId)) {
 											this.fireEvent("role");
-											!isCurrent && this.playAudio("role");
+											!isCurrentAndFocused && this.playAudio("role");
 											return;
 										}
 									}
 									if (message.mention_everyone && !BDFDB.LibraryStores.UserGuildSettingsStore.isSuppressEveryoneEnabled(guildId, channel.id)) {
 										if (message.content.indexOf("@everyone") > -1) {
 											this.fireEvent("everyone");
-											!isCurrent && this.playAudio("everyone");
+											!isCurrentAndFocused && this.playAudio("everyone");
 											return;
 										}
 										if (message.content.indexOf("@here") > -1) {
 											this.fireEvent("here");
-											!isCurrent && this.playAudio("here");
+											!isCurrentAndFocused && this.playAudio("here");
 											return;
 										}
 									}
 								}
 								if (BDFDB.LibraryStores.UserGuildSettingsStore.allowAllMessages(channel) && !(isThread && !BDFDB.LibraryStores.JoinedThreadsStore.hasJoined(channel.id))) {
 									this.fireEvent("message1");
-									!isCurrent && this.playAudio("message1");
+									!isCurrentAndFocused && this.playAudio("message1");
 									return;
 								}
 							}
@@ -378,14 +385,23 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(volumes).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Slider",
-								plugin: this,
-								keys: ["volumes", key],
-								basis: "50%",
-								label: this.defaults.volumes[key].description,
-								value: volumes[key]
-							}))
+							children: [
+								...Object.keys(volumes).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Slider",
+									plugin: this,
+									keys: ["volumes", key],
+									basis: "50%",
+									label: this.defaults.volumes[key].description,
+									value: volumes[key]
+								})),
+								...Object.keys(toggles).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["toggles", key],
+									label: this.defaults.toggles[key].description,
+									value: toggles[key]
+								}))
+							]
 						}));
 					
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -668,6 +684,7 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				volumes = BDFDB.DataUtils.get(this, "volumes");
+				toggles = BDFDB.DataUtils.get(this, "toggles");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.DiscordUtils.rerenderAll();
