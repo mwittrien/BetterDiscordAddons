@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.1
+ * @version 4.1.0
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -63,6 +63,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var audios, choices, firedEvents;
 		var volumes = {};
+		var toggles = {};
 		
 		const removeAllKey = "REMOVE_ALL_BDFDB_DEVILBRO_DO_NOT_COPY";
 		const defaultDevice = "default";
@@ -179,6 +180,9 @@ module.exports = (_ => {
 				this.defaults = {
 					volumes: {
 						globalVolume:		{value: 100,	description: "Global Notification Sounds Volume"}
+					},
+					toggles: {
+						playIfMuted: 		{value: false,	description: "Play Sounds If Muted"}
 					}
 				};
 				
@@ -258,7 +262,9 @@ module.exports = (_ => {
 							const isGroupDM = channel.isGroupDM();
 							const isThread = BDFDB.ChannelUtils.isThread(channel);
 							
-							if (isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id) || !isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id)) return;
+							if (!toggles.playIfMuted) {
+								if ((isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id)) || (!isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id))) return;
+							}
 							
 							if (isCurrent && BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel()) {
 								this.fireEvent("message3");
@@ -378,14 +384,23 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(volumes).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Slider",
-								plugin: this,
-								keys: ["volumes", key],
-								basis: "50%",
-								label: this.defaults.volumes[key].description,
-								value: volumes[key]
-							}))
+							children: [
+								...Object.keys(volumes).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Slider",
+									plugin: this,
+									keys: ["volumes", key],
+									basis: "50%",
+									label: this.defaults.volumes[key].description,
+									value: volumes[key]
+								})),
+								...Object.keys(toggles).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["toggles", key],
+									label: this.defaults.toggles[key].description,
+									value: toggles[key]
+								}))
+							]
 						}));
 					
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -668,6 +683,7 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				volumes = BDFDB.DataUtils.get(this, "volumes");
+				toggles = BDFDB.DataUtils.get(this, "toggles");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.DiscordUtils.rerenderAll();
