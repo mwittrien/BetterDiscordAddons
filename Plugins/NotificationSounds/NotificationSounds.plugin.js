@@ -261,7 +261,7 @@ module.exports = (_ => {
 							const isCurrent = BDFDB.LibraryStores.SelectedChannelStore.getChannelId() == channel.id;
 							const isGroupDM = channel.isGroupDM();
 							const isThread = BDFDB.ChannelUtils.isThread(channel);
-							const isCurrentAndFocused = isCurrent & document.hasFocus()
+							const isCurrentAndFocused = isCurrent && document.hasFocus();
 							
 							if (!toggles.playIfMuted) {
 								if ((isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id)) || (!isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id))) return;
