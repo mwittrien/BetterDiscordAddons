@@ -589,7 +589,7 @@
 		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},
 		"UserThemeContainer": {"strings": ["shouldTrackView", "\"VIEW\"", ".Provider"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
-		"VoiceUser": {"protos": ["renderPrioritySpeaker", "renderIcons", "renderAvatar"]},
+		"VoiceUser": {"strings": [".voiceUser", ".content", "userNameClassName"]},
 		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", ".MOVE_MEMBERS"]}
 	},
 	"ModuleUtilsConfig": {
