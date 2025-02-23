@@ -1899,6 +1899,7 @@
 		"accountinfobutton": ["AccountDetailsButtons", "button"],
 		"accountinfobuttondisabled": ["AccountDetailsButtons", "disabled"],
 		"accountinfobuttonenabled": ["AccountDetailsButtons", "enabled"],
+		"accountinfobuttons": ["AccountDetails", "buttons"],
 		"accountinfobuttonstrikethrough": ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "panelTitleContainer"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
