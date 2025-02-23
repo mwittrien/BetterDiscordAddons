@@ -663,40 +663,41 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
 }
 
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) div:first-child > div:first-child > h2.title_b717a1,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) div:first-child > .sectionTitle__7bffb22222,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b.repoHeader_2KfNvH .title_b717a1,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > h2:first-child,
-.standardSidebarView__23e6b .contentColumnWide__23e6b:not(.repoScroller_9JnAPs) > h2:first-child {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > .sectionTitle__7bffb,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child,
+.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child {
 	display: flex;
 	align-items: center;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .bd-settings-title {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title {
 	justify-content: flex-start;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .bd-settings-title > .bd-button {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title .bd-addon-title {
+	flex: 1 1 auto;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title > .bd-button {
 	margin-left: auto;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs),
-.standardSidebarView__23e6b .contentColumnWide__23e6b:not(.repoScroller_9JnAPs) {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b,
+.standardSidebarView__23e6b .contentColumnWide__23e6b {
 	--settingsicons-icon: var(--settingsicons-default);
 }
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .tabBar_d6f9e9:first-child,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .settingsTabBar_dc2e0e:first-child,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar_dc2e0e {
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e {
 	margin-left: calc(var(--use-settingsicons) * 30px);
 }
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .settingsPage_f131e9 > h3:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) div:first-child > div:first-child > h2.title_b717a1::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) div:first-child > .sectionTitle__7bffb22222::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b.repoHeader_2KfNvH .title_b717a1::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > h2:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnWide__23e6b:not(.repoScroller_9JnAPs) > h2:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .settingsTabBar_dc2e0e:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar_dc2e0e::before {
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b div:first-child > .sectionTitle__7bffb::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnWide__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	content: "";
 	display: inline-block;
 	position: relative;
@@ -709,23 +710,23 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .settingsTabBar_dc2e0e:first-child::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > *:first-child > .settingsTabBar_dc2e0e::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	position: absolute;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) > .settingsTabBar_dc2e0e:first-child::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before {
 	left: 40px;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .tabBar_d6f9e9 ~ * h2::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .tabBar_d6f9e9 ~ * .title_b717a1::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .settingsTabBar_dc2e0e ~ * h2::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .settingsTabBar_dc2e0e ~ * .title_b717a1::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * h2::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * .title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsTabBar_dc2e0e ~ * h2::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsTabBar_dc2e0e ~ * .title_b717a1::before {
 	display: none !important;
 }
 
-.standardSidebarView__23e6b .contentColumnDefault__23e6b:not(.repoScroller_9JnAPs) .title_b717a1 .lockIcon__0eeee {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .title_b717a1 .lockIcon__0eeee {
 	width: calc((1 - var(--use-settingsicons)) * 24px);
 	margin-right: calc((1 - var(--use-settingsicons)) * 8px);
 }
