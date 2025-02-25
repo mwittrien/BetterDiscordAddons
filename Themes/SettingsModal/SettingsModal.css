@@ -99,6 +99,17 @@
 #app-mount .layer__960e4 ~ .layer__960e4 .standardSidebarView__23e6b .editor {
 	height: calc(var(--settingsheight_v) - 120px) !important;
 }
+#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b {
+	position: fixed !important;
+	inset: 0 !important;
+	width: 100% !important;
+	max-width: unset !important;
+	height: 100% !important;
+	max-height: unset !important;
+	z-index: -1 !important;
+	padding-top: 0 !important;
+	opacity: 0 !important;
+}
 #app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .tools__23e6b {
 	width: 100% !important;
 	height: 100% !important;
@@ -120,16 +131,6 @@
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141 > svg {
 	display: none !important;
-}
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b {
-	position: fixed !important;
-	inset: 0 !important;
-	width: 100% !important;
-	max-width: unset !important;
-	height: 100% !important;
-	max-height: unset !important;
-	z-index: -1 !important;
-	padding-top: 0 !important;
 }
 #app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion__23e6b .toolsContainer__23e6b .container_c2b141 {
 	height: 100% !important;
