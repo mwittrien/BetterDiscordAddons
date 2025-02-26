@@ -1393,6 +1393,7 @@
 	"LazyloadedClassModules": {
 		"AuthBoxBackgroundCharacter": "bdd070",
 		"AuthBoxBackgroundSplash": "f421fb",
+		"ColorPickerInner": "_889ee",
 		"CustomStatusModal": "_9b8f6",
 		"ForumPage": "f369db",
 		"GuildInviteModal": "_67dba",
