@@ -382,7 +382,7 @@
 		"UserSettingsCogContextMenu": "user-settings-cog"
 	},
 	"PatchModules": {
-		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "renderSettingsGear"]},
+		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip"]},
 		"AccountPopout": {"strings": ["SIMPLIFIED_ACCOUNT_POPOUT", ".menus"]},
 		"AccountName": {"strings": ["accountProfilePopoutWrapper", ".avatarWrapper", "renderNameTag"]},
 		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
