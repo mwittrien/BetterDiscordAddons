@@ -382,7 +382,8 @@
 		"UserSettingsCogContextMenu": "user-settings-cog"
 	},
 	"PatchModules": {
-		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip"]},
+		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "isCopiedStreakGodlike"]},
+		"AccountButtons": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "isEligibleForPomelo"]},
 		"AccountPopout": {"strings": ["SIMPLIFIED_ACCOUNT_POPOUT", ".menus"]},
 		"AccountName": {"strings": ["accountProfilePopoutWrapper", ".avatarWrapper", "renderNameTag"]},
 		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
