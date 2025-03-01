@@ -191,7 +191,8 @@
 		"MessageToolbarUtils": {"props": ["useMessageMenu"]},
 		"MessageUtils": {"props": ["receiveMessage", "editMessage"]},
 		"ModalUtils": {"strings": [".modalKey", "onCloseCallback", "Layer:"], "exported": false, "value": "exports", "map": {
-			"openModal": ["backdropStyle:", "modalKey:", "Layer:"]
+			"openModal": ["backdropStyle:", "modalKey:", "Layer:"],
+			"closeAll": ["[e];if(null!=t)for(let n of t)"]
 		}},
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUsePremiumGuildMemberProfile"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
@@ -1179,7 +1180,8 @@
 			"operations": "operations_3V47CY",
 			"previous": "previous_xsNq6B",
 			"sibling": "sibling_6vI7Pu",
-			"switchIcon": "switchIcon_QY6cR4"
+			"switchIcon": "switchIcon_QY6cR4",
+			"viewer": "viewer_ds98Ts"
 		},
 		"LastMessageDate": {
 			"icon": "icon_ocEw13"
@@ -1736,6 +1738,7 @@
 		"_imageutilitiesprevious": ["ImageUtilities", "previous"],
 		"_imageutilitiessibling": ["ImageUtilities", "sibling"],
 		"_imageutilitiesswitchicon": ["ImageUtilities", "switchIcon"],
+		"_imageutilitiesviewer": ["ImageUtilities", "viewer"],
 		"_lastmessagedateicon": ["LastMessageDate", "icon"],
 		"_oldtitlebarenabled": ["OldTitleBar", "oldTitleBarEnabled"],
 		"_oldtitlebarsettingstoolbar": ["OldTitleBar", "settingsToolbar"],
