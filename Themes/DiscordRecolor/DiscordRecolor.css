@@ -164,7 +164,9 @@
 	--bg-base-tertiary: rgb(var(--backgroundtertiary_v));
 	--bg-surface-raised: rgb(var(--backgroundprimary_v));
 	--background-mod-subtle: rgba(var(--backgroundaccent_v), .3);
+	--background-surface-highest: rgb(var(--backgroundaccent_v));
 	--background-surface-higher: rgb(var(--backgroundprimary_v));
+	--background-surface-high: rgb(var(--backgroundprimary_v));
 	--background-base-low: rgb(var(--backgroundprimary_v));
 	--background-base-lower: rgb(var(--backgroundsecondary_v));
 	--background-base-lowest: rgb(var(--backgroundsecondaryalt_v));
@@ -3144,6 +3146,11 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .categoryItemDefaultCategorySelected_b9ee0c .categoryIcon_b9ee0c,
 #app-mount .categoryItemDefaultCategorySelected_b9ee0c:hover .categoryIcon_b9ee0c {
 	color: var(--interactive-active);
+}
+
+#app-mount .inspector_aeaaeb,
+#app-mount .wrapper__4e6ce {
+	background: var(--background-surface-high);
 }
 
 #app-mount .focused_bad108,
