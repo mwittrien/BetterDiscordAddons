@@ -2392,6 +2392,7 @@
 		"guildfolderexpandedbackgroundcollapsed": ["GuildFolder", "collapsed"],
 		"guildfolderexpandedbackgroundhover": ["GuildFolder", "hover"],
 		"guildfolderguildicon": ["GuildFolder", "guildIcon"],
+		"guildfoldericon": ["GuildFolder", "folderIcon"],
 		"guildfoldericonwrapper": ["GuildFolder", "folderIconWrapper"],
 		"guildfoldericonwrapperclosed": ["GuildFolder", "closedFolderIconWrapper"],
 		"guildfoldericonwrapperexpanded": ["GuildFolder", "expandedFolderIconWrapper"],
