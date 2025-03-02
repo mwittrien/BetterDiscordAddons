@@ -1199,7 +1199,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS_emojiinputbuttonemoji] {
 	width: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px));
-	height: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px))
+	height: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px));
 }
 [REPLACE_CLASS_emojiinput] {
 	padding-left: calc(var(--custom-status-modal-emoji-margin, 12px) + var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px)) + var(--custom-status-modal-emoji-margin, 12px));
