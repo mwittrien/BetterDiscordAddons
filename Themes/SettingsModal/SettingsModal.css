@@ -78,20 +78,8 @@
 #app-mount .layer__960e4 ~ .layer__960e4 .wrapper_e5cdf3 {
 	width: calc(var(--settingswidth_v) - 420px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .repo_k8F4Sd {
-	max-width: calc(var(--settingswidth_v) - 226px - var(--settingsiconsadditionalsize)) !important;
-}
-#app-mount .layer__960e4 ~ .layer__960e4 .repoHeader_2KfNvH {
-	padding-bottom: 0 !important;
-}
-#app-mount .layer__960e4 ~ .layer__960e4 .repoHeader_2KfNvH .tabBar_b9fccc {
-	gap: 30px !important;
-}
-#app-mount .layer__960e4 ~ .layer__960e4 .repoHeader_2KfNvH .quickSelectLabel__79774 {
-	font-size: 12px !important;
-}
-#app-mount .layer__960e4 ~ .layer__960e4 .repoScroller_9JnAPs {
-	padding-top: 0 !important;
+#app-mount .layer__960e4 ~ .layer__960e4 .contentRegionScroller__23e6b {
+	margin-top: 0 !important;
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .sidebar_e29cd7 {
 	height: var(--settingsheight_v) !important;
