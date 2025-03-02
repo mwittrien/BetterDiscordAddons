@@ -25,7 +25,11 @@
 .theme-light {
 	--logo-primary: rgb(var(--accentcolor_v));
 }
-[data-popout-root], html, .theme-light, .theme-dark, .theme-amoled {
+[data-popout-root], html, .theme-light, .theme-dark, .visual-refresh .theme-light, .visual-refresh .theme-dark, .visual-refresh.theme-light, .visual-refresh.theme-dark, .theme-amoled {
+	--bg-brand: rgb(var(--accentcolor_v));
+	--checkbox-background-checked: rgb(var(--accentcolor_v));
+	--checkbox-border-checked: rgb(var(--accentcolor_v));
+	
 	--text-brand: rgb(var(--accentcolor_v));
 	--text-link: rgb(var(--linkcolor_v));
 	--text-link-low-saturation: rgb(var(--linkcolor_v));
