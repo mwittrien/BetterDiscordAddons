@@ -163,6 +163,16 @@
 	--bg-base-secondary: rgb(var(--backgroundsecondary_v));
 	--bg-base-tertiary: rgb(var(--backgroundtertiary_v));
 	--bg-surface-raised: rgb(var(--backgroundprimary_v));
+	--background-mod-subtle: rgba(var(--backgroundaccent_v), .3);
+	--background-surface-higher: rgb(var(--backgroundprimary_v));
+	--background-base-low: rgb(var(--backgroundprimary_v));
+	--background-base-lower: rgb(var(--backgroundsecondary_v));
+	--background-base-lowest: rgb(var(--backgroundsecondaryalt_v));
+	--chat-background-default: rgb(var(--backgroundprimary_v));
+	
+	--app-border-frame: transparent;
+	--border-faint: rgba(var(--backgroundaccent_v), .2);
+	--border-subtle: rgba(var(--backgroundaccent_v), .4);
 	
 	--background-modifier-hover: rgba(var(--backgroundaccent_v), .3);
 	--background-modifier-active: rgba(var(--backgroundaccent_v), .4);
@@ -805,7 +815,7 @@ html .iconBadge__0c126 {
 
 .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026),
 .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026) {
-	background-color: var(--background-modifier-selected);
+	background-color: var(--button-secondary-background);
 }
 
 #app-mount .customColorPicker_bbc020 {
