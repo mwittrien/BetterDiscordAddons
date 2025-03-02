@@ -11,6 +11,9 @@
 	--guildgap_v: 		var(--guildgap_s, var(--guildgap));
 	--aligndms_v: 		var(--aligndms_s, var(--aligndms));
 }
+.visual-refresh .wrapper_ef3116 .listItem__650eb {
+	--guildgap_v: 		0;
+}
 
 .titleBar__421ed.typeMacOS__421ed,
 .titleBar__421ed.typeMacOS__421ed .macButtons__421ed,
@@ -71,7 +74,11 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	padding: unset !important;
 }
 .wrapper_ef3116 .listItem__650eb {
-	margin: calc(1px * var(--guildgap_v)) calc(1px * (12 * var(--guildsize_v)/50)) calc(1px * var(--guildgap_v)) 0 !important;
+	margin: calc(1.5px* var(--guildgap_v)) calc(1px*(12* var(--guildsize_v) / 50)) calc(1.5px* var(--guildgap_v)) 0 !important;
+}
+.wrapper_ef3116 .wrapper__48112 [role="group"] .listItem__650eb {
+	margin-top: calc(1.5px* var(--guildgap_v))!important;
+	margin-bottom: calc(1.5px* var(--guildgap_v)) !important;
 }
 .wrapper_ef3116 #server-search {
 	margin: calc(1px * var(--guildgap_v)) calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2)) !important;
