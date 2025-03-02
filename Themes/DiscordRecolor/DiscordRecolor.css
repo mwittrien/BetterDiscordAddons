@@ -822,6 +822,9 @@ html .iconBadge__0c126 {
 	overflow: hidden;
 }
 
+#app-mount .top_b3f026 .item_b3f026.selected_b3f026 {
+	color: var(--text-primary);
+}
 .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026),
 .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026) {
 	background-color: var(--button-secondary-background);
