@@ -701,6 +701,15 @@ html .iconBadge__0c126 {
 #app-mount .item__001a7[aria-checked=false]:hover .radioBar__001a7[style*="--radio-bar-accent-color"] {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
 }
+#app-mount .radioBar__001a7[style*="--radio-bar-accent-color"] .refreshIconStroke__001a7 {
+	stroke: #fff;
+}
+#app-mount .radioBar__001a7[style*="--radio-bar-accent-color"] .radioIndicatorChecked__001a7 .refreshIcon__001a7 {
+	fill: var(--radio-bar-accent-color);
+}
+#app-mount .radioBar__001a7[style*="--radio-bar-accent-color"] .radioIndicatorChecked__001a7 .refreshIconFill__001a7 {
+	fill: #fff;
+}
 
 .lookFilled__3f413.select__3f413 {
 	background-color: var(--deprecated-text-input-bg);
