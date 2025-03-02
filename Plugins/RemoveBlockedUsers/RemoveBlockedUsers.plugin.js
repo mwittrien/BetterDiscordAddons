@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -298,7 +298,7 @@ module.exports = (_ => {
 			processMessage (e) {
 				if (!this.settings.places.replies) return;
 				let repliedMessage = e.instance.props.childrenRepliedMessage;
-				if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.author && BDFDB.LibraryStores.RelationshipStore.isBlocked(repliedMessage.props.children.props.referencedMessage.message.author.id)) {
+				if (repliedMessage && repliedMessage.props && repliedMessage.props.referencedMessage && repliedMessage.props.referencedMessage.message && repliedMessage.props.referencedMessage.message.author && BDFDB.LibraryStores.RelationshipStore.isBlocked(repliedMessage.props.referencedMessage.message.author.id)) {
 					delete e.instance.props.childrenRepliedMessage;
 					let header = e.instance.props.childrenHeader;
 					if (header && header.props) {
