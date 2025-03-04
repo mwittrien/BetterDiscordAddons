@@ -1226,6 +1226,125 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	color: var(--interactive-normal)
 }
 
+[REPLACE_CLASS_colorpickerswatchescontainer] {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: -10px;
+	margin-right: -10px
+}
+[REPLACE_CLASS_colorpickerswatchcustomcontainer], [REPLACE_CLASS_colorpickerswatchdefaultcontainer] {
+	margin-top: 10px;
+	margin-right: 10px;
+	flex: 1;
+	min-width: 60px;
+	max-width: 70px
+}
+[REPLACE_CLASS_colorpickerswatchcustom] [REPLACE_CLASS_colorpickerswatchpreset] {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: vertical
+}
+[REPLACE_CLASS_colorpicker] {
+	display: flex;
+	flex-direction: column;
+	width: 220px;
+	padding: 16px;
+	gap: 16px;
+	border: 1px solid var(--border-subtle);
+	background-color: var(--background-primary);
+	border-radius: 4px;
+	box-shadow: var(--elevation-high)
+}
+[REPLACE_CLASS_colorpickerhexinputcontainer] {
+	display: flex;
+	align-items: center;
+	gap: 12px
+}
+[REPLACE_CLASS_colorpickereyedropper] {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	width: 16px;
+	height: 16px;
+	margin: 0
+}
+[REPLACE_CLASS_colorpickerhexinput] {
+	flex: 1
+}
+[REPLACE_CLASS_colorpickerhexinput] [REPLACE_CLASS_colorpickerhexinputinner] {
+	text-transform: uppercase;
+	height: 24px
+}
+[REPLACE_CLASS_colorpickerrow] {
+	margin-top: 10px;
+	display: flex;
+	flex-wrap: wrap;
+	height: 20px;
+	overflow: hidden
+}
+[REPLACE_CLASS_colorpickerswatch] {
+	background-color: transparent;
+	position: relative;
+	box-sizing: border-box;
+	width: 20px;
+	height: 20px;
+	border-radius: 3px;
+	margin-right: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid transparent;
+	cursor: pointer;
+	padding: 0
+}
+[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchcustom],[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchdefault] {
+	margin-right: 0;
+	width: 100%;
+	height: 50px;
+	border-radius: 4px
+}
+[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchdisabled] {
+	opacity: .3;
+	cursor: not-allowed;
+	pointer-events: none
+}
+[REPLACE_CLASS_colorpickerswatch] [REPLACE_CLASS_colorpickerswatchdropper] {
+	position: absolute;
+	top: 4px;
+	right: 4px
+}
+[REPLACE_CLASS_colorpickerswatch] [REPLACE_CLASS_colorpickerswatchdropperfg] {
+	fill: var(--text-normal)
+}
+[REPLACE_CLASS_colorpickersuggestedcolors] {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 12px
+}
+
+[REPLACE_CLASS_colorpickersuggestedcolor] {
+	width: 32px;
+	height: 32px;
+	border-radius: 4px;
+	cursor: pointer;
+	border: 1px solid var(--primary-400)
+}
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchnocolor] {
+	border-color: var(--opacity-white-8)
+}
+[REPLACE_CLASS_themelight] [REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchnocolor] {
+	border-color: hsl(var(--primary-500-hsl)/.1)
+}
+[REPLACE_CLASS_themeenableforcedcolors] [REPLACE_CLASS_colorpickerswatch] {
+	border: 1px solid ButtonText;
+	forced-color-adjust: none
+}
+[REPLACE_CLASS_themeenableforcedcolors] [REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchdisabled] {
+	border-color: GrayText
+}
+
 [REPLACE_CLASS_popoutwrapper] {
 	position: relative;
 }
