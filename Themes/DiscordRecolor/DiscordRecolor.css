@@ -169,7 +169,9 @@
 	--bg-base-secondary: rgb(var(--backgroundsecondary_v));
 	--bg-base-tertiary: rgb(var(--backgroundtertiary_v));
 	--bg-surface-raised: rgb(var(--backgroundprimary_v));
+	--background-mod-faint: rgba(var(--backgroundaccent_v), .2);
 	--background-mod-subtle: rgba(var(--backgroundaccent_v), .3);
+	--background-mod-strong: rgba(var(--backgroundaccent_v), .4);
 	--background-surface-highest: rgb(var(--backgroundaccent_v));
 	--background-surface-higher: rgb(var(--backgroundprimary_v));
 	--background-surface-high: rgb(var(--backgroundprimary_v));
@@ -181,6 +183,7 @@
 	--app-border-frame: transparent;
 	--border-faint: rgba(var(--backgroundaccent_v), .2);
 	--border-subtle: rgba(var(--backgroundaccent_v), .4);
+	--border-strong: rgba(var(--backgroundaccent_v), .6);
 	
 	--background-modifier-hover: rgba(var(--backgroundaccent_v), .3);
 	--background-modifier-active: rgba(var(--backgroundaccent_v), .4);

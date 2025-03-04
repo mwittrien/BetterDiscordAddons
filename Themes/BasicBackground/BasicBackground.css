@@ -85,7 +85,13 @@
 
 .theme-light:not(.custom-profile-theme),
 .theme-dark:not(.custom-profile-theme),
-.theme-amoled:not(.custom-profile-theme) {
+.theme-amoled:not(.custom-profile-theme),
+.visual-refresh.theme-light:not(.custom-profile-theme),
+.visual-refresh.theme-dark:not(.custom-profile-theme),
+.visual-refresh.theme-amoled:not(.custom-profile-theme),
+.visual-refresh .theme-light:not(.custom-profile-theme),
+.visual-refresh .theme-dark:not(.custom-profile-theme),
+.visual-refresh .theme-amoled:not(.custom-profile-theme) {
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
 	--text-danger: rgb(var(--dangercolor));
@@ -144,13 +150,6 @@
 	--background-modifier-hover: rgba(var(--textbrightest_v), .1);
 	--background-modifier-selected: rgba(var(--textbrightest_v), .2);
 	
-	--card-gradient-bg: var(--background-tertiary);
-	--card-primary-bg: var(--background-primary);
-	--card-secondary-bg: var(--background-secondary);
-	--card-gradient-pressed-bg: var(--background-floating);
-	--card-primary-pressed-bg: var(--background-secondary);
-	--card-secondary-pressed-bg: var(--background-tertiary);
-	
 	--bg-backdrop: rgba(var(--transparencycolor_v), .7);
 	--bg-backdrop-no-opacity: rgb(var(--transparencycolor_v));
 	--bg-base-primary: rgba(var(--transparencycolor_v), .2);
@@ -160,6 +159,13 @@
 	--bg-mod-faint: rgba(var(--transparencycolor_v), .3);
 	--bg-mod-strong: rgba(var(--transparencycolor_v), .54);
 	--bg-mod-subtle: rgba(var(--transparencycolor_v), .48);
+	
+	--card-gradient-bg: var(--background-tertiary);
+	--card-primary-bg: var(--background-primary);
+	--card-secondary-bg: var(--background-secondary);
+	--card-gradient-pressed-bg: var(--background-floating);
+	--card-primary-pressed-bg: var(--background-secondary);
+	--card-secondary-pressed-bg: var(--background-tertiary);
 	
 	--background-message-automod: rgba(var(--dangercolor), .05);
 	--background-message-automod-hover: rgba(var(--dangercolor), .1);
