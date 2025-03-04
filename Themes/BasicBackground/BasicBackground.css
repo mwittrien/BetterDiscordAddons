@@ -568,7 +568,7 @@ body:has(#app-mount)::after {
 
 #app-mount .guildIconUnavailable__48112,						/* guilderror				miniicon							*/
 #app-mount .guildsError__32e67 {							/* guilderror				innerwrap							*/
-	background-color: rgba(var(--dangercolor)), .3);
+	background-color: rgba(var(--dangercolor), .3);
 }
 
 #app-mount .dragInner__87847 {								/* dragplaceholder											*/
@@ -1202,7 +1202,7 @@ button.button__67645.enabled__67645:hover svg {
 #app-mount .compact_c19a55 .avatar_c19a55 {						/* message				compact avatar							*/
 	position: relative;
 	top: .18em;
-	left: nsetcalc(-70px * var(--usechatbubbles) + 16px);
+	left: calc(-70px * var(--usechatbubbles) + 16px);
 }
 #app-mount .messageItemBody__8fd54.hasReply_c19a55 .avatar_c19a55,
 #app-mount .repliedMessage_c19a55 ~ * .avatar_c19a55 {
@@ -1232,7 +1232,7 @@ button.button__67645.enabled__67645:hover svg {
 	right: 0;
 }
 #app-mount .repliedMessageClickableSpine_c19a55 {
-	diplay: none;
+	display: none;
 }
 #app-mount .repliedMessage_c19a55::before,						/* message				reply spine							*/
 #app-mount .repliedMessage_c19a55::after,
@@ -2027,7 +2027,7 @@ button.button__67645.enabled__67645:hover svg {
 	background-color: rgba(var(--transparencycolor_v), .6);
 }
 .controlButton__1405b.colorable_f1ceac.red_f1ceac {
-	background-color: rgba(var(--dangercolor)), .5);
+	background-color: rgba(var(--dangercolor), .5);
 }
 .controlButton__1405b.colorable_f1ceac.red_f1ceac:hover {
 	background-color: rgb(var(--dangercolor));
