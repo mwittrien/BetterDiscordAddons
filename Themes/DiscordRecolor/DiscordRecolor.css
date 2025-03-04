@@ -255,6 +255,7 @@
 	--channel-text-area-placeholder: rgb(var(--textdarker_v));
 	
 	--input-background: rgb(var(--backgroundtertiary_v));
+	--input-border: rgb(var(--backgroundsecondary_v));
 	
 	--activity-card-background: rgb(var(--backgroundtertiary_v));
 	
