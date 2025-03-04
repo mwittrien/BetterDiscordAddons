@@ -1807,3 +1807,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 [REPLACE_CLASS_toastwarning] [REPLACE_CLASS_toastinner] {
 	color: var(--status-warning-text);
 }
+
+[REPLACE_CLASS__bdmodalcontent] {
+	z-index: 1;
+}
