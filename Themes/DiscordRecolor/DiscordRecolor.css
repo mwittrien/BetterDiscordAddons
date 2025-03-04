@@ -1471,10 +1471,6 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		4.3.		TEXTAREA					---- */
 
-#app-mount .form_f75fb0::before {
-	background: linear-gradient(180deg, transparent 0, var(--background-primary));
-}
-
 #app-mount .error_b82429 {
 	color: #f36c6c;
 }
