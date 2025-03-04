@@ -4303,9 +4303,11 @@ body:has(#app-mount)::after {
 	background-color: var(--profile-gradient-secondary-color) !important;
 }
 
-.background_af9888.editable_ab8609:hover {
-	--custom-status-bubble-background: rgba(var(--accentcolor_v), .2) important;
-	--custom-status-bubble-background: linear-gradient(rgba(var(--accentcolor_v), .2), rgba(var(--accentcolor_v), .2)), rgba(var(--accentcolor_v), .2);
+.outer_c0bea0:not(.custom-profile-theme) .container_ab8609 {
+	--custom-status-bubble-background-color: rgb(50, 50, 50) !important;
+}
+.outer_c0bea0:not(.custom-profile-theme) .container_ab8609.editable_ab8609:hover {
+	--custom-status-bubble-background-color: rgb(var(--accentcolor_v)) !important;
 }
 
 .accountProfilePopoutWrapper__37e49 .overlayBackground_c69a7b {
