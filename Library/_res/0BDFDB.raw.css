@@ -1239,11 +1239,6 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	min-width: 60px;
 	max-width: 70px
 }
-[REPLACE_CLASS_colorpickerswatchcustom] [REPLACE_CLASS_colorpickerswatchpreset] {
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: vertical
-}
 [REPLACE_CLASS_colorpicker] {
 	display: flex;
 	flex-direction: column;
@@ -1271,10 +1266,6 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS_colorpickerhexinput] {
 	flex: 1
-}
-[REPLACE_CLASS_colorpickerhexinput] [REPLACE_CLASS_colorpickerhexinputinner] {
-	text-transform: uppercase;
-	height: 24px
 }
 [REPLACE_CLASS_colorpickerrow] {
 	margin-top: 10px;
