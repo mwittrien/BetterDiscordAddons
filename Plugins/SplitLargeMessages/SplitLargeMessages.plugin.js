@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.5
+ * @version 1.8.6
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -13,11 +13,7 @@
  */
 
 module.exports = (_ => {
-	const changeLog = {
-		added: {
-			"Empty Split Lines": "Added an option for NewLine splits so that if the message splits on an empty line, the resulting two messages will maintain that one-line Gap."
-		}
-	};
+	const changeLog = {};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		constructor (meta) {for (let key in meta) this[key] = meta[key];}
@@ -71,12 +67,13 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						byNewlines:	{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
-						leaveGaps:	{value: false,	description: "Leave Gaps if splitting on empty Newline",		note: "If splitting on NewLines and the Line is left empty, this will maintain the Gap"}
+						byNewlines:		{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",	note: "This will stop Sentences from being cut, but might Result in more Messages being sent"},
+						leaveGaps:		{value: false,	description: "Leave Gaps if splitting on empty Newline",		note: "If splitting on NewLines and the Line is left empty, this will maintain the Gap"}
 					},
 					amounts: {
-						splitCounter:	{value: 0, 	description: "Messages will be split after roughly X Characters"},
-						maxMessages:	{value:	0,	description: "Maximum Number of split Messages",			note: "(0 for unlimited) Messages beyond this count will be discarded"}
+						splitCounter:		{value: 0, 	description: "Messages will be split after roughly X Characters"},
+						maxMessages:		{value:	0,	min: 0, 	max: 20, 	description: "Maximum Amount of split Messages",			note: "(0 for unlimited) Messages beyond this Count will be discarded"},
+						attachmentLimit:	{value:	0,	min: 0, 	max: undefined, description: "Maximum Amount of Chars, before generating .txt",		note: "(0 for never) Never generates a .txt FIle"}
 					}
 				};
 				
@@ -141,18 +138,19 @@ module.exports = (_ => {
 							value: this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter
 						}));
 
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						for (let key of Object.keys(this.defaults.amounts)) if (key != "splitCounter") settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "TextInput",
 							childProps: {
 								type: "number"
 							},
 							plugin: this,
-							keys: ["amounts", "maxMessages"],
-							label: this.defaults.amounts.maxMessages.description,
-							note: this.defaults.amounts.maxMessages.note,
-							min: 0,
-							max: 20,
-							value: this.settings.amounts.maxMessages
+							keys: ["amounts", key],
+							label: this.defaults.amounts[key].description,
+							note: this.defaults.amounts[key].note,
+							basis: "20%",
+							min: this.defaults.amounts[key].min,
+							max: this.defaults.amounts[key].max,
+							value: this.settings.amounts[key]
 						}));
 						
 						return settingsItems;
@@ -203,11 +201,18 @@ module.exports = (_ => {
 				else {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelTextAreaCounter"});
 					if (enabled && index > -1 && children[index].props.textValue && children[index].props.textValue.length > splitMessageLength && !this.isSlowDowned(e.instance.props.channel)) children[index] = BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: Math.ceil(children[index].props.textValue.length / splitMessageLength * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
-							children: BDFDB.ReactUtils.createElement("span", {
-								children: splitMessageLength - children[index].props.textValue.length
+						className: BDFDB.disCN.textareacharcounter,
+						children: BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.textareacharcounterinner,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: Math.ceil(children[index].props.textValue.length / splitMessageLength * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
+									tag: "div",
+									className: BDFDB.disCN.tabularnumbers,
+									variant: "text-sm/semibold",
+									style: {color: "var(--text-danger)"},
+									children: splitMessageLength - children[index].props.textValue.length
+								})
 							})
 						})
 					});
@@ -215,7 +220,7 @@ module.exports = (_ => {
 			}
 
 			processChannelTextAreaEditor (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.uploadPromptCharacterCount = 100000;
+				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.uploadPromptCharacterCount = this.settings.amounts.attachmentLimit ? this.settings.amounts.attachmentLimit : 100000;
 			}
 			
 			isSlowDowned (channel) {
