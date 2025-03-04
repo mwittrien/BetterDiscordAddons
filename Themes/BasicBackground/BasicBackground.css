@@ -498,10 +498,12 @@ body:has(#app-mount)::after {
 
 /* ~~~~		3.		TITLEBAR					~~~~ */
 
-.titleBar__421ed {
+.titleBar__421ed,
+.bar_c38106 {
 	z-index: 5001;
 }
-.titleBar__421ed::after {
+.titleBar__421ed::after,
+.bar_c38106::after {
 	content: "";
 	pointer-events: none;
 	position: absolute;
@@ -510,6 +512,9 @@ body:has(#app-mount)::after {
 	left: 0;
 	width: 100%;
 	background-color: rgba(var(--transparencycolor_v), calc(0.1 + var(--guildchanneltransparency_v) * 2));
+}
+.bar_c38106::after {
+	height: 36px;
 }
 .titleBar__421ed:not(.typeMacOS__421ed)::after {
 	height: 22px;
@@ -535,7 +540,8 @@ body:has(#app-mount)::after {
 .platform-osx .standardSidebarView__23e6b::before {
 	left: 72px;
 }
-.winButtonMinMax__421ed:hover {
+.winButtonMinMax__421ed:hover,
+.winButtonMinMax_c38106:hover {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
