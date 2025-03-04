@@ -4264,9 +4264,9 @@ body:has(#app-mount)::after {
 .outer_c0bea0 {										/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
-.outer_c0bea0:not(.custom-profile-theme),						/* popout				container							*/
-.outer_c0bea0 .inner_c0bea0 {								/* popout				inner								*/
-	background: transparent;
+.outer_c0bea0:not(.custom-profile-theme),
+.outer_c0bea0:not(.custom-profile-theme) .inner_c0bea0 {
+	background: transparent !important;
 }
 .outer_c0bea0:not(.custom-profile-theme)::before,
 .outer_c0bea0:not(.custom-profile-theme)::after {
