@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.0
+ * @version 7.3.1
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -123,7 +123,10 @@ module.exports = (_ => {
 											folderIcon = folderIcon ? BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCN.guildfoldericonwrapper,
 												onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
-												style: {background: `url(${folderIcon}) center/cover no-repeat`}
+												children: BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+													style: {background: `url(${folderIcon}) center/cover no-repeat`}
+												})
 											}) : BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCN.guildfoldericonwrapper,
 												onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
@@ -547,7 +550,7 @@ module.exports = (_ => {
 						display: none !important;
 					}
 					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
-						border-radius: 100%;
+						border-radius: 25%;
 					}
 					${BDFDB.dotCN.channels}:has(${BDFDB.dotCN.guilds}) {
 						display: flex !important;
@@ -834,7 +837,10 @@ module.exports = (_ => {
 						if (icon) {
 							children[index] = BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.guildfoldericonwrapper,
-								style: {background: `url(${icon}) center/cover no-repeat`}
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+									style: {background: `url(${icon}) center/cover no-repeat`}
+								})
 							});
 							BDFDB.ReactUtils.forceStyle(children[index], ["background"]);
 						}
