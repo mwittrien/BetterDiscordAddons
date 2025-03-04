@@ -2163,7 +2163,7 @@
 		"colorpickeralphacheckered": ["BDFDB", "colorPickerAlphaCheckered"],
 		"colorpickeralphacursor": ["BDFDB", "colorPickerAlphaCursor"],
 		"colorpickeralphahorizontal": ["BDFDB", "colorPickerAlphaHorizontal"],
-		"colorpickereyedropper": ["BDFDB", "customColorPickerEyeDropper"],
+		"colorpickereyedropper": ["ColorPicker", "customColorPickerEyeDropper"],
 		"colorpickergradient": ["BDFDB", "colorPickerGradient"],
 		"colorpickergradientbutton": ["BDFDB", "colorPickerGradientButton"],
 		"colorpickergradientbuttonenabled": ["BDFDB", "colorPickerGradientButtonEnabled"],
