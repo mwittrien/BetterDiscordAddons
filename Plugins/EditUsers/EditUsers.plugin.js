@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.6
+ * @version 4.9.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -176,6 +176,9 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.voicename + BDFDB.dotCN.bottag} {
 						display: inline-flex;
+					}
+					${BDFDB.dotCNS.bottag + BDFDB.dotCN.emojiold} + span {
+						margin-left: 2px;
 					}
 					${BDFDB.dotCNS.peoplesuser + BDFDB.dotCN.peoplesdiscriminator} {
 						display: none;
@@ -594,7 +597,7 @@ module.exports = (_ => {
 					e.instance.props.nickname = nickname ? nickname : null;
 				}
 				else {
-					if (data.color1 || data.tag) {
+					if (data.color1 || data.tag || data.tagEmoji) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userheadernickname]]});
 						if (index > -1) {
 							this.changeUserColor(children[index], e.instance.props.user.id);
@@ -1323,7 +1326,7 @@ module.exports = (_ => {
 			injectBadge (children, userId, guildId, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !userId) return;
 				let data = changedUsers[userId];
-				if (data && data.tag) {
+				if (data && (data.tag || data.tagEmoji)) {
 					let memberColor = data.ignoreTagColor && (BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, userId) || {}).colorString;
 					let fontColor = !config.inverted ? data.color4 : (memberColor || data.color3);
 					let backgroundColor = !config.inverted ? (memberColor || data.color3) : data.color4;
@@ -1336,10 +1339,16 @@ module.exports = (_ => {
 							background: BDFDB.ObjectUtils.is(backgroundColor) ? BDFDB.ColorUtils.createGradient(backgroundColor) : BDFDB.ColorUtils.convert(backgroundColor, "RGBA"),
 							color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
 						},
-						tag: fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-							gradient: BDFDB.ColorUtils.createGradient(fontColor),
-							children: data.tag
-						}) : data.tag
+						tag: [
+							data.tagEmoji && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Emoji, {
+								emojiId: data.tagEmoji.id,
+								emojiName: data.tagEmoji.name
+							}),
+							data.tag && (fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+								gradient: BDFDB.ColorUtils.createGradient(fontColor),
+								children: data.tag
+							}) : BDFDB.ReactUtils.createElement("span", {children: data.tag}))
+						]
 					}));
 				}
 			}
@@ -1361,7 +1370,7 @@ module.exports = (_ => {
 				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), user.id) || {};
 				let activity = BDFDB.LibraryStores.PresenceStore.getApplicationActivity(user.id);
 				
-				let avatarInput, bannerInput, statusEmojiInput, statusInput, colorPicker3, colorPicker4, colorPicker5, colorPicker6, colorPicker7;
+				let avatarInput, bannerInput, statusEmojiInput, statusInput, tagEmojiInput, tagInput, colorPicker3, colorPicker4, colorPicker5, colorPicker6, colorPicker7;
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "LARGE",
@@ -1581,9 +1590,46 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_usertag,
 									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										value: data.tag,
-										onChange: value => newData.tag = value
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.emojiinputcontainer,
+										children: [
+											BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.emojiinputbuttoncontainer,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
+													position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
+													emoji: data.tagEmoji,
+													allowManagedEmojis: true,
+													allowManagedEmojisUsage: true,
+													ref: instance => {if (instance) tagEmojiInput = instance;},
+													onSelect: value => newData.tagEmoji = value
+												})
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+												inputClassName: BDFDB.disCN.emojiinput,
+												maxLength: 100000000000000000000,
+												value: data.tag,
+												placeholder: activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS && activity.state || "",
+												disabled: data.removeStatus,
+												ref: instance => {if (instance) tagInput = instance;},
+												onChange: value => newData.tag = value
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+												size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+												look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+												className: BDFDB.disCN.emojiinputclearbutton,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													className: BDFDB.disCN.emojiinputclearicon,
+													name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE
+												}),
+												onClick: _ => {
+													newData.tag = "";
+													newData.tagEmoji = null;
+													tagInput.props.value = "";
+													delete tagEmojiInput.props.emoji;
+													BDFDB.ReactUtils.forceUpdate(tagInput, tagEmojiInput);
+												}
+											})
+										]
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
