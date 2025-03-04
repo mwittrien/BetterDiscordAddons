@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.5
+ * @version 1.2.6
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -335,7 +335,7 @@ module.exports = (_ => {
 			
 			processUserPopoutStatusBubble (e) {
 				let container = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutstatusbubbleeditable]]});
-				this.processUserPopoutStatusBubbleEmpty(Object.assign({}, e, {returnvalue: container}));
+				if (container) this.processUserPopoutStatusBubbleEmpty(Object.assign({}, e, {returnvalue: container}));
 			}
 			
 			processUserPopoutStatusBubbleEmpty (e) {
