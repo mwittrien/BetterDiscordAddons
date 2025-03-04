@@ -1937,6 +1937,10 @@ a.metadataDownload_f316dd {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
+.outer_c0bea0.custom-profile-theme .markup__75297 a {
+	color: var(--profile-gradient-secondary-color) !important;
+}
+
 /* ----		11.3.		SEARCHPOPOUT					---- */
 											/* datepicker				day hover							*/
 #app-mount .calendarPicker_d27f17 .react-datepicker__day.react-datepicker__day--selected:hover,
