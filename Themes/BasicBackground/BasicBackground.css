@@ -4329,6 +4329,7 @@ body:has(#app-mount)::after {
 .outer_c0bea0.custom-profile-theme .inner_c0bea0 > * {
 	z-index: 3;
 }
+.outer_c0bea0.custom-profile-theme .inner_c0bea0 .header__5be3e,
 .outer_c0bea0.custom-profile-theme .inner_c0bea0 .wrapper_da5890 {
 	z-index: 4;
 }
