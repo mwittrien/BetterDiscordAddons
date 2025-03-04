@@ -3194,6 +3194,7 @@
 		"textareabuttonpulse": ["ChannelTextAreaButton", "pulseButton"],
 		"textareabuttonwrapper": ["ChannelTextAreaButton", "buttonWrapper"],
 		"textareacharcounter": ["ChannelTextAreaCharCounter", "characterCount"],
+		"textareacharcounteinner": ["ChannelTextAreaCharCounter", "flairContainer"],
 		"textareacharcounterupsell": ["ChannelTextAreaCharCounter", "upsell"],
 		"textareadisabled": ["ChannelTextArea", "textAreaDisabled"],
 		"textareafontsize12padding": ["ChannelTextArea", "fontSize12Padding"],
