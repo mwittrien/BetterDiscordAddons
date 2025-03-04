@@ -1209,10 +1209,6 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: var(--elevation-low);
 }
 
-#app-mount .children__9293f::after {
-	background: linear-gradient(90deg, transparent 0,var(--background-primary));
-}
-
 #app-mount .back__8b3a3 {
 	color: var(--interactive-normal);
 }
