@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.9.7
+ * @version 3.9.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6107,7 +6107,7 @@ module.exports = (_ => {
 							}),
 							wrap: false,
 							animation: Internal.LibraryComponents.PopoutContainer.Animation.NONE,
-							position: Internal.LibraryComponents.PopoutContainer.Positions.TOP,
+							position: this.props.position || Internal.LibraryComponents.PopoutContainer.Positions.TOP,
 							align: Internal.LibraryComponents.PopoutContainer.Align.LEFT,
 							renderPopout: instance => {
 								this.close = instance.close;
