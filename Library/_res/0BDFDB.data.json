@@ -3184,6 +3184,7 @@
 		"tableheadersorticon": ["Table", "sortIcon"],
 		"tablerow": ["Table", "row"],
 		"tablestickyheader": ["Table", "stickyHeader"],
+		"tabularnumbers": ["Text2", "tabularNumbers"],
 		"textarea": ["ChannelTextArea", "textArea"],
 		"textareaattachbutton": ["ChannelTextAreaAttachButton", "attachButton"],
 		"textareaattachbuttoninner": ["ChannelTextAreaAttachButton", "attachButtonInner"],
