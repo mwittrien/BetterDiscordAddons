@@ -4310,6 +4310,10 @@ body:has(#app-mount)::after {
 	--custom-status-bubble-background-color: rgb(var(--accentcolor_v)) !important;
 }
 
+.outer_c0bea0:not(.custom-profile-theme) .note_fcb628 textarea:focus {
+	background: var(--input-background);
+}
+
 .accountProfilePopoutWrapper__37e49 .overlayBackground_c69a7b {
 	display: block !important;
 }
