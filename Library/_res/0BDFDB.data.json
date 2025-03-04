@@ -415,7 +415,7 @@
 		"ChannelsList": {"protos": ["isUnreadVisible", "renderBottomUnread", "getSectionRowsFromChannel"]},
 		"ChannelTextAreaButtons": {"strings": [".buttons", "\"emoji\"", "activeCommandOption"]},
 		"ChannelTextAreaContainer": {"strings": ["uploadPromptCharacterCount", "onSelectSticker", "handleAutocompleteVisibilityChange"], "noSearch": true},
-		"ChannelTextAreaCounter": {"strings": [".flairContainer", "CHARACTER_COUNT_CLOSE_TO_LIMIT"]},
+		"ChannelTextAreaCounter": {"strings": ["iconOnly", ".CHARACTER_COUNT"]},
 		"ChannelTextAreaEditor": {"strings": ["onHideAutocomplete", "onMaybeShowAutocomplete", "uploadPromptCharacterCount", "_focusBlurQueue"]},
 		"ChannelTextAreaForm": {"strings": ["renderApplicationCommandIcon", "handleTextareaChange", "handleSendMessage"]},
 		"ChannelThreadItem": {"strings": [".typeThread", ".modeUnread", ".GUILD_CHANNEL_LIST"]},
