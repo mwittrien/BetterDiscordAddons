@@ -165,10 +165,14 @@
 	
 	--bg-backdrop: rgba(0 0,0, .7);
 	--bg-backdrop-no-opacity: rgb(0,0,0);
+	--bg-surface-raised: rgb(var(--backgroundprimary_v));
+	--bg-mod-faint: rgba(var(--backgroundaccent_v), .2);
+	--bg-mod-subtle: rgba(var(--backgroundaccent_v), .3);
+	--bg-mod-strong: rgba(var(--backgroundaccent_v), .4);
 	--bg-base-primary: rgb(var(--backgroundprimary_v));
 	--bg-base-secondary: rgb(var(--backgroundsecondary_v));
 	--bg-base-tertiary: rgb(var(--backgroundtertiary_v));
-	--bg-surface-raised: rgb(var(--backgroundprimary_v));
+	
 	--background-mod-faint: rgba(var(--backgroundaccent_v), .2);
 	--background-mod-subtle: rgba(var(--backgroundaccent_v), .3);
 	--background-mod-strong: rgba(var(--backgroundaccent_v), .4);
