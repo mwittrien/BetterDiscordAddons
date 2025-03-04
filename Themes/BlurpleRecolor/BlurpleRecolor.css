@@ -2119,7 +2119,7 @@ a.metadataDownload_f316dd {
 	fill: rgb(var(--accentcolor_v)) !important;
 }
 
-.barFill_a562c8 {									/* slider				barfill								*/
+#app-mount .barFill_a562c8 {
 	background: rgb(var(--accentcolor_v));
 }
 .mediaBarGrabber_f7877e,								/* progessbar				grabber								*/
