@@ -163,8 +163,6 @@
 	--border-subtle: rgba(var(--transparencycolor_v), .2);
 	--border-strong: rgba(var(--transparencycolor_v), .3);
 	
-	--button-secondary-background-hover: rgb(var(--accentcolor_v));
-	
 	--card-gradient-bg: var(--background-tertiary);
 	--card-primary-bg: var(--background-primary);
 	--card-secondary-bg: var(--background-secondary);
@@ -822,35 +820,35 @@ body:has(#app-mount)::after {
 	border-top: 1px solid rgba(var(--transparencycolor_v), .2);
 }
 
-button.button__67645.enabled__67645 {							/* account/voice			panel button							*/
+#app-mount button.button__67645.enabled__67645 {					/* account/voice			panel button							*/
 	opacity: 0.7;
 }
-button.button__67645.enabled__67645:hover {
+#app-mount button.button__67645.enabled__67645:hover {
 	opacity: 1;
 	background-color: rgb(var(--accentcolor_v));
 }
-.avatarWrapper__37e49:hover {
+#app-mount .avatarWrapper__37e49:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
-button.button__67645.enabled__67645:hover svg {
+#app-mount button.button__67645.enabled__67645:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
-.button_e131a9.buttonColor_e131a9 {
+#app-mount .button_e131a9.buttonColor_e131a9 {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-.button_e131a9.buttonColor_e131a9.disabledButtonWrapper_adca65 {
+#app-mount .button_e131a9.buttonColor_e131a9.disabledButtonWrapper_adca65 {
 	background-color: rgba(var(--transparencycolor_v), .15);
 }
-.button_e131a9.buttonColor_e131a9:not(.disabledButtonWrapper_adca65):hover {
+#app-mount .button_e131a9.buttonColor_e131a9:not(.disabledButtonWrapper_adca65):hover {
 	background-color: rgb(var(--accentcolor_v));
 }
-.button_e131a9.buttonColor_e131a9.buttonActive_e131a9,
-.button_e131a9.buttonColor_e131a9.buttonActive_e131a9:hover {
+#app-mount .button_e131a9.buttonColor_e131a9.buttonActive_e131a9,
+#app-mount .button_e131a9.buttonColor_e131a9.buttonActive_e131a9:hover {
 	background-color: rgb(var(--accentcolor_v));
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.button_e131a9.buttonColor_e131a9.buttonActive_e131a9 svg,
-.button_e131a9.buttonColor_e131a9.buttonActive_e131a9:hover svg {
+#app-mount .button_e131a9.buttonColor_e131a9.buttonActive_e131a9 svg,
+#app-mount .button_e131a9.buttonColor_e131a9.buttonActive_e131a9:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
