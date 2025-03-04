@@ -135,6 +135,21 @@
 	
 	--home-background: transparent;
 	
+	--background-accent: rgba(var(--transparencycolor_v), .1);
+	--background-primary: rgba(var(--transparencycolor_v), .2);
+	--background-secondary: rgba(var(--transparencycolor_v), .3);
+	--background-secondary-alt: rgba(var(--transparencycolor_v), .35);
+	--background-tertiary: rgba(var(--transparencycolor_v), .4);
+	--background-floating: rgba(var(--transparencycolor_v), .5);
+	--background-nested-floating: rgba(var(--transparencycolor_v), .5);
+	--background-mobile-primary: rgba(var(--transparencycolor_v), .2);
+	--background-mobile-secondary: rgba(var(--transparencycolor_v), .3);
+	--background-modifier-accent: rgba(var(--textbrightest_v), .15);
+	--background-modifier-accent-2: rgba(var(--textbrightest_v), .15);
+	--background-modifier-active: rgba(var(--textbrightest_v), .15);
+	--background-modifier-hover: rgba(var(--textbrightest_v), .1);
+	--background-modifier-selected: rgba(var(--textbrightest_v), .2);
+	
 	--bg-backdrop: rgba(var(--transparencycolor_v), .7);
 	--bg-backdrop-no-opacity: rgb(var(--transparencycolor_v));
 	--bg-mod-faint: rgba(var(--transparencycolor_v), .3);
