@@ -7318,10 +7318,10 @@ html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e
 	pointer-events: none !important;
 	z-index: -1 !important;
 }
-html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin__99f8c.scrollerBase__99f8c.fade__99f8c > nav.sidebar__23e6b > div.side_b3f026 > div.info__2debe {
+html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_b3f026 div.info__2debe {
 	position: relative !important;
 }
-html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin__99f8c.scrollerBase__99f8c.fade__99f8c > nav.sidebar__23e6b > div.side_b3f026 > div.info__2debe::after {
+html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_b3f026 div.info__2debe::after {
 	content: "BasicBackground by" !important;
 	font-size: 12px !important;
 	color: var(--text-muted) !important;
@@ -7340,7 +7340,7 @@ html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e
 	transform: unset !important;
 	animation: unset !important;
 }
-html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin__99f8c.scrollerBase__99f8c.fade__99f8c > nav.sidebar__23e6b > div.side_b3f026 > div.info__2debe::before {
+html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_b3f026 div.info__2debe::before {
 	content: "DevilBro" !important;
 	font-size: 12px !important;
 	font-weight: 600 !important;
