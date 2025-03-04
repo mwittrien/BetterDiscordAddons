@@ -4234,7 +4234,7 @@ body:has(#app-mount)::after {
 	color: rgb(var(--accentcolor2_v));
 }
 #app-mount .item_c1e9c4 .check_c1e9c4 {							/* contextmenu				checkmark 							*/
-	color: #fff;
+	fill: #fff;
 	stroke: var(--textshadow_v);
 }
 .button_f563df {									/* contextmenu				quick reaction button						*/
