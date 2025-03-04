@@ -167,7 +167,8 @@
 	--bg-backdrop-no-opacity: rgb(0,0,0);
 	--bg-mod-faint: rgba(var(--backgroundaccent_v), .2);
 	--bg-mod-subtle: rgba(var(--backgroundaccent_v), .3);
-	--bg-mod-strong: rgba(var(--backgroundaccent_v), .4);
+	--bg-mod-normal: rgba(var(--backgroundaccent_v), .4);
+	--bg-mod-strong: rgba(var(--backgroundaccent_v), .5);
 	--bg-base-primary: rgb(var(--backgroundprimary_v));
 	--bg-base-secondary: rgb(var(--backgroundsecondary_v));
 	--bg-base-tertiary: rgb(var(--backgroundtertiary_v));
@@ -175,7 +176,8 @@
 	
 	--background-mod-faint: rgba(var(--backgroundaccent_v), .2);
 	--background-mod-subtle: rgba(var(--backgroundaccent_v), .3);
-	--background-mod-strong: rgba(var(--backgroundaccent_v), .4);
+	--background-mod-normal: rgba(var(--backgroundaccent_v), .4);
+	--background-mod-strong: rgba(var(--backgroundaccent_v), .5);
 	--background-base-low: rgb(var(--backgroundprimary_v));
 	--background-base-lower: rgb(var(--backgroundsecondary_v));
 	--background-base-lowest: rgb(var(--backgroundsecondaryalt_v));

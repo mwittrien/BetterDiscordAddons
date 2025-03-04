@@ -135,30 +135,35 @@
 	
 	--home-background: transparent;
 	
-	--background-accent: rgba(var(--transparencycolor_v), .1);
-	--background-primary: rgba(var(--transparencycolor_v), .2);
-	--background-secondary: rgba(var(--transparencycolor_v), .3);
-	--background-secondary-alt: rgba(var(--transparencycolor_v), .35);
-	--background-tertiary: rgba(var(--transparencycolor_v), .4);
-	--background-floating: rgba(var(--transparencycolor_v), .5);
-	--background-nested-floating: rgba(var(--transparencycolor_v), .5);
-	--background-mobile-primary: rgba(var(--transparencycolor_v), .2);
-	--background-mobile-secondary: rgba(var(--transparencycolor_v), .3);
-	--background-modifier-accent: rgba(var(--textbrightest_v), .15);
-	--background-modifier-accent-2: rgba(var(--textbrightest_v), .15);
-	--background-modifier-active: rgba(var(--textbrightest_v), .15);
-	--background-modifier-hover: rgba(var(--textbrightest_v), .1);
-	--background-modifier-selected: rgba(var(--textbrightest_v), .2);
-	
 	--bg-backdrop: rgba(var(--transparencycolor_v), .7);
 	--bg-backdrop-no-opacity: rgb(var(--transparencycolor_v));
+	--bg-mod-faint: rgba(var(--transparencycolor_v), .3);
+	--bg-mod-subtle: rgba(var(--transparencycolor_v), .4);
+	--bg-mod-normal: rgba(var(--transparencycolor_v), .46);
+	--bg-mod-strong: rgba(var(--transparencycolor_v), .54);
 	--bg-base-primary: rgba(var(--transparencycolor_v), .2);
 	--bg-base-secondary: rgba(var(--transparencycolor_v), .3);
 	--bg-base-tertiary: rgba(var(--transparencycolor_v), .4);
 	--bg-surface-raised: rgba(var(--transparencycolor_v), .2);
-	--bg-mod-faint: rgba(var(--transparencycolor_v), .3);
-	--bg-mod-strong: rgba(var(--transparencycolor_v), .54);
-	--bg-mod-subtle: rgba(var(--transparencycolor_v), .48);
+	
+	--background-mod-faint: rgba(var(--transparencycolor_v), .3);
+	--background-mod-subtle: rgba(var(--transparencycolor_v), .4);
+	--background-mod-normal: rgba(var(--transparencycolor_v), .46);
+	--background-mod-strong: rgba(var(--transparencycolor_v), .54);
+	--background-base-low: rgba(var(--transparencycolor_v), .2);
+	--background-base-lower: rgba(var(--transparencycolor_v), .3);
+	--background-base-lowest: rgba(var(--transparencycolor_v), .4);
+	--background-surface-highest: rgb(var(--transparencycolor_v));
+	--background-surface-higher: rgb(var(--transparencycolor_v));
+	--background-surface-high: rgb(var(--transparencycolor_v));
+	--chat-background-default: rgba(var(--transparencycolor_v), .3);
+	
+	--app-border-frame: transparent;
+	--border-faint: rgba(var(--transparencycolor_v), .1);
+	--border-subtle: rgba(var(--transparencycolor_v), .2);
+	--border-strong: rgba(var(--transparencycolor_v), .3);
+	
+	--button-secondary-background-hover: rgb(var(--accentcolor_v));
 	
 	--card-gradient-bg: var(--background-tertiary);
 	--card-primary-bg: var(--background-primary);
@@ -2511,6 +2516,9 @@ button.button__67645.enabled__67645:hover svg {
 
 /* ~~~~		11.		USERSETTINGS					~~~~ */
 
+#app-mount .top_b3f026 .item_b3f026.selected_b3f026 {
+	color: var(--text-primary);
+}
 #app-mount .side_b3f026 .themed_b3f026.item_b3f026:active:not(.disabled_b3f026),	/* sideitems												*/
 #app-mount .topPill_b3f026 .themed_b3f026.item_b3f026:active:not(.disabled_b3f026),	/* tabitems												*/
 #app-mount .side_b3f026 .themed_b3f026.item_b3f026:hover:not(.disabled_b3f026),		/* sideitems												*/
