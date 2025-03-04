@@ -1198,11 +1198,11 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	height: 100%;
 }
 [REPLACE_CLASS_emojiinputbuttonemoji] {
-	width: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px));
-	height: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px));
+	width: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 22px));
+	height: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 22px));
 }
 [REPLACE_CLASS_emojiinput] {
-	padding-left: calc(var(--custom-status-modal-emoji-margin, 12px) + var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px)) + var(--custom-status-modal-emoji-margin, 12px));
+	padding-left: calc(var(--custom-status-modal-emoji-margin, 10px) + var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 18px)) + var(--custom-status-modal-emoji-margin, 10px));
 	padding-right: 36px
 }
 [REPLACE_CLASS_emojiinputclearbutton] {
