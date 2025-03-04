@@ -30,6 +30,8 @@
 	--checkbox-background-checked: rgb(var(--accentcolor_v));
 	--checkbox-border-checked: rgb(var(--accentcolor_v));
 	
+	--input-focused-border: rgb(var(--accentcolor_v));
+	
 	--text-brand: rgb(var(--accentcolor_v));
 	--text-link: rgb(var(--linkcolor_v));
 	--text-link-low-saturation: rgb(var(--linkcolor_v));
