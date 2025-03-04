@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.8
+ * @version 1.7.9
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -168,6 +168,7 @@ module.exports = (_ => {
 						margin-left: 10px;
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonframe} {
+						--guildbar-avatar-size: 48px;
 						height: 24px;
 						margin-bottom: 10px;
 					}
