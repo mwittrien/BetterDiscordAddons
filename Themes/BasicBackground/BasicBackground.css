@@ -4426,10 +4426,10 @@ body:has(#app-mount)::after {
 
 /* ----		14.3.		EMOJIPICKER					---- */
 
-.contentWrapper__08434,									/* picker				expression wrapper						*/
-.container__0800c,									/* picker				expandable							*/
-.emojiPicker_c0e32c,									/* picker				inner								*/
-.diversitySelectorOptions_a45a2a {							/* picker				diversityselector						*/
+#app-mount .contentWrapper__08434,							/* picker				expression wrapper						*/
+#app-mount .container__0800c,								/* picker				expandable							*/
+#app-mount .emojiPicker_c0e32c,								/* picker				inner								*/
+#app-mount .diversitySelectorOptions_a45a2a {						/* picker				diversityselector						*/
 	background: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4498,17 +4498,18 @@ body:has(#app-mount)::after {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.emojiPickerHeader__0800c {								/* picker				header								*/
+#app-mount .emojiPickerHeader__0800c,							/* picker				header								*/
+#app-mount .header_c0e32c {								/* picker				header								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.wrapper__4e6ce {									/* picker				sidebar								*/
+#app-mount .wrapper__4e6ce {								/* picker				sidebar								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.slotsContainer__0800c {								/* picker				slots								*/
+#app-mount .slotsContainer__0800c {							/* picker				slots								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-.guildIcon__0fa6d {									/* picker				guildicon							*/
+#app-mount .guildIcon__0fa6d {								/* picker				guildicon							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
