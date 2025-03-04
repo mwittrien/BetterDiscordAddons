@@ -329,6 +329,8 @@ body,											/* body													*/
 #app-mount .bg__960e4,									/* app					background							*/
 #app-mount .layer__960e4,								/* layer				container							*/
 #app-mount .container_c8ffbb,								/* layer				container							*/
+#app-mount .container_f37cb1,								/* channels				header								*/
+#app-mount .header_f37cb1,								/* channels				header inner							*/
 #app-mount .container__2637a,								/* channels				inner								*/
 #app-mount .privateChannels__35e86,							/* dmchannels												*/
 #app-mount .directoryContainer_da3f59,							/* server app directory											*/
@@ -376,6 +378,9 @@ body,											/* body													*/
 }
 #app-mount .sidebar_c48ade {								/* channels				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
+}
+#app-mount .sidebar_c48ade:after {
+	display: none;
 }
 #app-mount .panels_c48ade {								/* account/voice			container							*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) / 1.5));
