@@ -48,7 +48,13 @@
 
 .theme-light:not(.custom-profile-theme),
 .theme-dark:not(.custom-profile-theme),
-.theme-amoled:not(.custom-profile-theme) {
+.theme-amoled:not(.custom-profile-theme),
+.visual-refresh.theme-light:not(.custom-profile-theme),
+.visual-refresh.theme-dark:not(.custom-profile-theme),
+.visual-refresh.theme-amoled:not(.custom-profile-theme),
+.visual-refresh .theme-light:not(.custom-profile-theme),
+.visual-refresh .theme-dark:not(.custom-profile-theme),
+.visual-refresh .theme-amoled:not(.custom-profile-theme) {
 	--text-positive: rgb(var(--successcolor_v));
 	--text-warning: rgb(var(--warningcolor_v));
 	--text-danger: rgb(var(--dangercolor_v));
