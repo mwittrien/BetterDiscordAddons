@@ -6051,8 +6051,9 @@ input.input__0f084:hover:not(:focus) {
 	background-color: rgb(var(--textbrightest_v));
 	border-color: rgb(var(--textbrightest_v));
 }
-#app-mount .checkbox_f525d3.checked_f525d3 path[fill="var(--white)"] {			/* checkbox				checkmark							*/
-	fill: rgb(var(--accentcolor_v));
+#app-mount .checkbox_f525d3.checked_f525d3:has(path[fill="var(--white)"]) {		/* checkbox				checked							*/
+	background-color: rgb(var(--accentcolor_v));
+	border-color: rgb(var(--accentcolor_v));
 }
 #app-mount .checkbox_f525d3.checked_f525d3.round_f525d3 {				/* checkbox				roundchecked							*/
 	background-color: rgb(var(--accentcolor_v)) !important;
