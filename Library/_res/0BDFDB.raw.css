@@ -1226,6 +1226,146 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	color: var(--interactive-normal)
 }
 
+[REPLACE_CLASS_modalmini] {
+	font-size: 13px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	width: 490px;
+	max-height: 800px;
+	min-height: 0
+}
+@media (max-width: 490px) {
+	[REPLACE_CLASS_modalmini] {
+		width:100%
+	}
+}
+[REPLACE_CLASS_modalminicontent] {
+	font-size: 16px;
+	line-height: 20px
+}
+[REPLACE_CLASS_modalminicontent] [REPLACE_CLASS_emojiold] {
+	-o-object-fit: contain;
+	object-fit: contain;
+	width: 22px;
+	height: 22px
+}
+[REPLACE_CLASS_modalminicontent] h1 {
+	line-height: 20px;
+	font-size: 16px
+}
+[REPLACE_CLASS_modalminicontent] h1,
+[REPLACE_CLASS_modalminicontent] h2,
+[REPLACE_CLASS_modalminicontent] strong {
+	font-weight: 700
+}
+[REPLACE_CLASS_modalminicontent] em,
+[REPLACE_CLASS_modalminicontent] i {
+	font-style: italic
+}
+[REPLACE_CLASS_modalminicontent] p+p {
+	margin-top: 10px
+}
+[REPLACE_CLASS_modalminicontent] ol {
+	margin: 16px 0 16px 16px
+}
+[REPLACE_CLASS_modalminicontent] ol li {
+	list-style-type: decimal;
+	margin-bottom: 8px;
+	margin-left: 20px
+}
+[REPLACE_CLASS_modalminicontent] ul {
+	margin: 20px 0 8px 20px
+}
+[REPLACE_CLASS_modalminicontent] ul ul {
+	margin-top: 8px
+}
+[REPLACE_CLASS_modalminicontent] ul li {
+	position: relative;
+	list-style: none;
+	margin-bottom: 8px;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	user-select: text
+}
+[REPLACE_CLASS_modalminicontent] ul li:last-child {
+	margin-bottom: 0
+}
+[REPLACE_CLASS_modalminicontent] ul li:before {
+	content: "";
+	position: absolute;
+	top: 10px;
+	left: -15px;
+	width: 6px;
+	height: 6px;
+	margin-top: -4px;
+	margin-left: -3px;
+	border-radius: 50%;
+	opacity: .3
+}
+[REPLACE_CLASS_modalminicontent] ul li li:before {
+	top: 12px;
+	height: 2px;
+	border-radius: 0
+}
+[REPLACE_CLASS_modalminicontent] img {
+	width: 100%
+}
+[REPLACE_CLASS_modalminicontent] a {
+	color: hsl(200 calc(1*100%) 49.4%);
+	transition: .05s;
+	-webkit-text-decoration: none;
+	text-decoration: none
+}
+@supports (color: hsl(0 0% 0% / 0)) and (top: var(--f)) {
+	[REPLACE_CLASS_modalminicontent] a {
+		color: hsl(200 calc(var(--saturation-factor, 1)*100%) 49.4%)
+	}
+}
+[REPLACE_CLASS_modalminicontent] a:hover {
+	-webkit-text-decoration: underline;
+	text-decoration: underline
+}
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] ol,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] p,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] ul li {
+	color: hsl(210 calc(1*9.3%) 78.8%)
+}
+@supports (color: hsl(0 0% 0% / 0)) and (top: var(--f)) {
+	[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] ol,
+	[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] p,
+	[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] ul li {
+		color: hsl(210 calc(var(--saturation-factor, 1)*9.3%) 78.8%)
+	}
+}
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] ul li:before {
+	background-color: hsl(216 calc(1*9.8%) 90%)
+}
+@supports (color: hsl(0 0% 0% / 0)) and (top: var(--f)) {
+	[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalminicontent] ul li:before {
+		background-color: hsl(216 calc(var(--saturation-factor, 1)*9.8%) 90%)
+	}
+}
+[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] ol,
+[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] p,
+[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] ul li {
+	color: hsl(223 calc(1*5.8%) 52.9%)
+}
+@supports (color: hsl(0 0% 0% / 0)) and (top: var(--f)) {
+	[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] ol,
+	[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] p,
+	[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] ul li {
+		color: hsl(223 calc(var(--saturation-factor, 1)*5.8%) 52.9%)
+	}
+}
+[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] ul li:before {
+	background-color: hsl(223 calc(1*5.8%) 52.9%)
+}
+@supports (color: hsl(0 0% 0% / 0)) and (top: var(--f)) {
+	[REPLACE_CLASS_themelight] [REPLACE_CLASS_modalminicontent] ul li:before {
+		background-color: hsl(223 calc(var(--saturation-factor, 1)*5.8%) 52.9%)
+	}
+}
+
 [REPLACE_CLASS_colorpickerswatchescontainer] {
 	display: flex;
 	flex-wrap: wrap;
