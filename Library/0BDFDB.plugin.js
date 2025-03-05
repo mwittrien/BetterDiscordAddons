@@ -1206,7 +1206,7 @@ module.exports = (_ => {
 					};
 					
 					if (InternalData) loadLibrary();
-					else BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
+					else BdApi.UI.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
 				};
 				
 				const backupObj = getBackup(cssFileName, cssFilePath);
@@ -2005,7 +2005,7 @@ module.exports = (_ => {
 					return notice;
 				};
 				BDFDB.NotificationUtils.alert = function (header, body) {
-					if (typeof header == "string" && typeof header == "string" && BdApi && typeof BdApi.alert == "function") BdApi.alert(header, body);
+					if (typeof header == "string" && typeof header == "string" && BdApi && typeof BdApi.UI.alert == "function") BdApi.UI.alert(header, body);
 				};
 
 				var Tooltips = [];
@@ -3977,7 +3977,7 @@ module.exports = (_ => {
 						let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 						name = typeof name == "string" ? name : null;
 						let oldTransitionState = 0;
-						!Internal.LibraryModules.ModalUtils ? BdApi.alert(BDFDB.ReactUtils.createElement("div", {
+						!Internal.LibraryModules.ModalUtils ? BdApi.UI.alert(BDFDB.ReactUtils.createElement("div", {
 								style: {"display": "flex", "flex-direction": "column"},
 								children: [
 									config.header,
