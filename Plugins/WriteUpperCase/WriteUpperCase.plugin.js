@@ -14,10 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		fixed: {
-			"User Profile": "Works with the Quick Message Input in User Profile again",
-			"BetterSearchPage": "Fixed an Issue, that could cause crashs with BetterSearchPage"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
