@@ -211,7 +211,10 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	padding: 0 0 0 1px !important;
 	gap: unset !important;
 }
-.wrapper_ef3116 .wrapper__48112 [role="group"] .listItem__650eb:last-child {
+.wrapper_ef3116 .wrapper__48112.isExpanded__48112 [role="group"] .listItem__650eb {
+	margin-right: 0 !important;
+}
+.wrapper_ef3116 .wrapper__48112.isExpanded__48112 [role="group"] .listItem__650eb:last-child {
 	margin-bottom: 0 !important;
 }
 .wrapper_ef3116 .expandedFolderBackground__48112 {
