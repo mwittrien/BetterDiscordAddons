@@ -31,3 +31,23 @@ Translation Options Button:
 Translation Options:
 
 ![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/Translator/_res/screenshot5.png)
+
+Translation Prefixes:
+
+![screenshot6](https://mwittrien.github.io/BetterDiscordAddons/Plugins/Translator/_res/screenshot6.png)
+
+## Translation Prefixes
+
+You can now use prefixes to translate messages to specific languages, even when auto-translation is disabled. For example:
+
+- Type `$fr Hello world` to translate "Hello world" to French
+- Type `$de How are you?` to translate "How are you?" to German
+- Type `$jp Nice to meet you` to translate "Nice to meet you" to Japanese
+
+The prefix is removed from the message before translation and sending.
+
+## Disable Translation Prefixes
+
+You can also define prefixes that will disable translation for a message, useful when you want to send a message in its original language even when auto-translation is enabled.
+
+Configure these prefixes in the plugin settings.
