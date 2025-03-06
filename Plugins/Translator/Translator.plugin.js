@@ -398,7 +398,7 @@ module.exports = (_ => {
 						wordStart:			{value: ["!"],	max: 3}
 					},
 					prefixes: {
-						translationPrefixData: {value: [
+						translationPrefixData: 		{value: [
 							{prefix: "$fr", language: "fr"},
 							{prefix: "$de", language: "de"},
 							{prefix: "$es", language: "es"},
@@ -586,7 +586,7 @@ module.exports = (_ => {
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-							title: this.labels.prefixes_disable_text || "Prefixes that disable translation of message",
+							title: this.labels.prefixes_disable_text,
 							className: BDFDB.disCN.marginbottom8,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {
 								placeholder: "New Exception Prefix (e.g. !)",
@@ -600,7 +600,7 @@ module.exports = (_ => {
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-							title: this.labels.prefixes_enable_text || "Prefixes that enable translation with specific language",
+							title: this.labels.prefixes_enable_text,
 							className: BDFDB.disCN.marginbottom8,
 							children: [								
 								// Create a table-like layout for prefixes and language selection
@@ -655,7 +655,6 @@ module.exports = (_ => {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 													color: BDFDB.LibraryComponents.Button.Colors.RED,
 													size: BDFDB.LibraryComponents.Button.Sizes.TINY,
-													look: BDFDB.LibraryComponents.Button.Looks.OUTLINED,
 													onClick: _ => {
 														this.settings.prefixes.translationPrefixData.splice(index, 1);
 														BDFDB.DataUtils.save(this.settings.prefixes.translationPrefixData, this, "prefixes", "translationPrefixData");
@@ -1744,14 +1743,14 @@ module.exports = (_ => {
 							language_selection_server:				"Изборът на език ще бъде променен специално за този сървър",
 							popout_translateoption:					"Превод",
 							popout_untranslateoption:				"Непревод",
+							prefixes_disable_text:					"Префикси, които деактивират превода на съобщението",
+							prefixes_enable_text:					"Префикси, които активират превод със специфичен език (напр. $fr, $de, $jp)",
 							toast_translating:					"Превод",
 							toast_translating_failed:				"Преводът не бе успешен",
 							toast_translating_tryanother:				"Опитайте друг преводач",
 							translate_your_message:					"Преведете вашите съобщения преди изпращане",
 							translated_watermark:					"преведено",
-							translator_engine:					"Преводач",
-							prefixes_disable_text:					"Префикси, които деактивират превода на съобщението",
-							prefixes_enable_text:					"Префикси, които активират превод със специфичен език (напр. $fr, $de, $jp)"
+							translator_engine:					"Преводач"
 						};
 					case "cs":		// Czech
 						return {
@@ -1780,14 +1779,14 @@ module.exports = (_ => {
 							language_selection_server:				"Výběr jazyka bude změněn speciálně pro tento server",
 							popout_translateoption:					"Přeložit",
 							popout_untranslateoption:				"Nepřeložit",
+							prefixes_disable_text:					"Předpony, které deaktivují překlad zprávy",
+							prefixes_enable_text:					"Předpony, které aktivují překlad s konkrétním jazykem (např. $fr, $de, $jp)",
 							toast_translating:					"Překládání",
 							toast_translating_failed:				"Překlad se nezdařil",
 							toast_translating_tryanother:				"Zkuste jiný překladač",
 							translate_your_message:					"Před odesláním si zprávy přeložte",
 							translated_watermark:					"přeloženo",
-							translator_engine:					"Překladatel",
-							prefixes_disable_text:					"Předpony, které deaktivují překlad zprávy",
-							prefixes_enable_text:					"Předpony, které aktivují překlad s konkrétním jazykem (např. $fr, $de, $jp)"
+							translator_engine:					"Překladatel"
 						};
 					case "da":		// Danish
 						return {
@@ -1816,14 +1815,14 @@ module.exports = (_ => {
 							language_selection_server:				"Sprogvalg vil blive ændret specifikt for denne server",
 							popout_translateoption:					"Oversætte",
 							popout_untranslateoption:				"Untranslate",
+							prefixes_disable_text:					"Præfikser, der deaktiverer oversættelse af meddelelse",
+							prefixes_enable_text:					"Præfikser, der aktiverer oversættelse med specifikt sprog (f.eks. $fr, $de, $jp)",
 							toast_translating:					"Oversætter",
 							toast_translating_failed:				"Kunne ikke oversætte",
 							toast_translating_tryanother:				"Prøv en anden oversætter",
 							translate_your_message:					"Oversæt dine beskeder før afsendelse",
 							translated_watermark:					"oversat",
-							translator_engine:					"Oversætter",
-							prefixes_disable_text:					"Præfikser, der deaktiverer oversættelse af meddelelse",
-							prefixes_enable_text:					"Præfikser, der aktiverer oversættelse med specifikt sprog (f.eks. $fr, $de, $jp)"
+							translator_engine:					"Oversætter"
 						};
 					case "de":		// German
 						return {
@@ -1852,14 +1851,14 @@ module.exports = (_ => {
 							language_selection_server:				"Die Sprachauswahl wird speziell für diesen Server geändert",
 							popout_translateoption:					"Übersetzen",
 							popout_untranslateoption:				"Unübersetzen",
+							prefixes_disable_text:					"Präfixe, die die Übersetzung der Nachricht deaktivieren",
+							prefixes_enable_text:					"Präfixe, die die Übersetzung mit einer bestimmten Sprache aktivieren (z.B. $fr, $de, $jp)",
 							toast_translating:					"Übersetzen",
 							toast_translating_failed:				"Übersetzung fehlgeschlagen",
 							toast_translating_tryanother:				"Versuch einen anderen Übersetzer",
 							translate_your_message:					"Übersetzt Nachrichten vor dem Senden",
 							translated_watermark:					"übersetzt",
-							translator_engine:					"Übersetzer",
-							prefixes_disable_text:					"Präfixe, die die Übersetzung der Nachricht deaktivieren",
-							prefixes_enable_text:					"Präfixe, die die Übersetzung mit einer bestimmten Sprache aktivieren (z.B. $fr, $de, $jp)"
+							translator_engine:					"Übersetzer"
 						};
 					case "el":		// Greek
 						return {
@@ -1888,14 +1887,14 @@ module.exports = (_ => {
 							language_selection_server:				"Η επιλογή γλώσσας θα αλλάξει ειδικά για αυτόν τον διακομιστή",
 							popout_translateoption:					"Μετάφραση",
 							popout_untranslateoption:				"Αναίρεση μετάφρασης",
+							prefixes_disable_text:					"Προθέσεις που απενεργοποιούν την μετάφραση του μηνύματος",
+							prefixes_enable_text:					"Προθέσεις που ενεργοποιούν την μετάφραση με συγκεκριμένη γλώσσα (π.χ. $fr, $de, $jp)",
 							toast_translating:					"Μετάφραση",
 							toast_translating_failed:				"Αποτυχία μετάφρασης",
 							toast_translating_tryanother:				"Δοκιμάστε έναν άλλο Μεταφραστή",
 							translate_your_message:					"Μεταφράστε τα Μηνύματά σας πριν την αποστολή",
 							translated_watermark:					"μεταφρασμένο",
-							translator_engine:					"Μεταφράστης",
-							prefixes_disable_text:					"Προθέσεις που απενεργοποιούν την μετάφραση του μηνύματος",
-							prefixes_enable_text:					"Προθέσεις που ενεργοποιούν την μετάφραση με συγκεκριμένη γλώσσα (π.χ. $fr, $de, $jp)"
+							translator_engine:					"Μεταφράστης"
 						};
 					case "es":		// Spanish
 						return {
@@ -1924,14 +1923,50 @@ module.exports = (_ => {
 							language_selection_server:				"La selección de idioma se cambiará específicamente para este servidor",
 							popout_translateoption:					"Traducir",
 							popout_untranslateoption:				"No traducir",
+							prefixes_disable_text:					"Prefijos que desactivan la traducción del mensaje",
+							prefixes_enable_text:					"Prefijos que activan la traducción con un idioma específico (por ejemplo, $fr, $de, $jp)",
 							toast_translating:					"Traductorio",
 							toast_translating_failed:				"No se pudo traducir",
 							toast_translating_tryanother:				"Prueba con otro traductor",
 							translate_your_message:					"Traduce tus mensajes antes de enviarlos",
 							translated_watermark:					"traducido",
-							translator_engine:					"Traductor",
-							prefixes_disable_text:					"Prefijos que desactivan la traducción del mensaje",
-							prefixes_enable_text:					"Prefijos que activan la traducción con un idioma específico (por ejemplo, $fr, $de, $jp)"
+							translator_engine:					"Traductor"
+						};
+					case "es-419":		// Spanish (Latin America)
+						return {
+							backup_engine:						"Traspaso de respaldo",
+							backup_engine_warning:					"Utilizará el traductor de respaldo",
+							context_messagetranslateoption:				"Mensaje de traducir",
+							context_messageuntranslateoption:			"Mensaje no traducido",
+							context_translator:					"Traducción de búsqueda",
+							detect_language:					"Detectar lenguaje",
+							error_dailylimit:					"Límite de solicitud diaria alcanzado.",
+							error_hourlylimit:					"Límite de solicitud por hora alcanzado.",
+							error_keyoutdated:					"Api-key anticuado.",
+							error_monthlylimit:					"Límite de solicitud mensual alcanzado.",
+							error_serverdown:					"El servidor de traducción puede estar fuera de línea.",
+							exception_text:						"Las palabras que comienzan con {{var0}} se ignorarán",
+							general_addTranslateButton:				"Agrega un botón de traducción al canal TextAREA",
+							general_sendOriginalMessage:				"También envía el mensaje original al traducir su mensaje enviado",
+							general_showOriginalMessage:				"También muestra el mensaje original al traducir un mensaje recibido",
+							general_usePerChatTranslation:				"Habilita/deshabilita el estado del botón de traductor por canal y no a nivel mundial",
+							language_choice_input_received:				"Idioma de entrada en mensajes recibidos",
+							language_choice_input_sent:				"Idioma de entrada en sus mensajes enviados",
+							language_choice_output_received:			"Lenguaje de salida en mensajes recibidos",
+							language_choice_output_sent:				"Lenguaje de salida en sus mensajes enviados",
+							language_selection_channel:				"La selección del idioma se cambiará específicamente para este canal",
+							language_selection_global:				"La selección del idioma se cambiará para todos los servidores",
+							language_selection_server:				"La selección del idioma se cambiará específicamente para este servidor",
+							popout_translateoption:					"Traducir",
+							popout_untranslateoption:				"No traducido",
+							prefixes_disable_text:					"Prefijos que deshabilitan la traducción del mensaje",
+							prefixes_enable_text:					"Prefijos que habilitan la traducción con un lenguaje específico (por ejemplo, $fr, $de, $jp)",
+							toast_translating:					"Traductorio",
+							toast_translating_failed:				"No se pudo traducir",
+							toast_translating_tryanother:				"Prueba otro traductor",
+							translate_your_message:					"Traducir sus mensajes antes de enviar",
+							translated_watermark:					"traducido",
+							translator_engine:					"Traductor"
 						};
 					case "fi":		// Finnish
 						return {
@@ -1960,19 +1995,18 @@ module.exports = (_ => {
 							language_selection_server:				"Kielen valintaa muutetaan erityisesti tätä palvelinta varten",
 							popout_translateoption:					"Kääntää",
 							popout_untranslateoption:				"Käännä",
+							prefixes_disable_text:					"Etuliitteet, jotka poistavat viestin käännöksen käytöstä",
+							prefixes_enable_text:					"Etuliitteet, jotka mahdollistavat käännöksen tietyllä kielellä (esim. $fr, $de, $jp)",
 							toast_translating:					"Kääntäminen",
 							toast_translating_failed:				"Käännös epäonnistui",
 							toast_translating_tryanother:				"Kokeile toista kääntäjää",
 							translate_your_message:					"Käännä viestisi ennen lähettämistä",
 							translated_watermark:					"käännetty",
-							translator_engine:					"Kääntäjä",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Kääntäjä"
 						};
 					case "fr":		// French
 						return {
 							backup_engine:						"Backup-Traducteur",
-							
 							backup_engine_warning:					"Utilisera Backup-Traducteur",
 							context_messagetranslateoption:				"Traduire le message",
 							context_messageuntranslateoption:			"Message non traduit",
@@ -1997,14 +2031,14 @@ module.exports = (_ => {
 							language_selection_server:				"La sélection de la langue sera modifiée spécifiquement pour ce serveur",
 							popout_translateoption:					"Traduire",
 							popout_untranslateoption:				"Non traduit",
+							prefixes_disable_text:					"Préfixes qui désactivent la traduction du message",
+							prefixes_enable_text:					"Préfixes qui activent la traduction avec un langage spécifique (par exemple, $fr, $de, $jp)",
 							toast_translating:					"Traduction en cours",
 							toast_translating_failed:				"Échec de la traduction",
 							toast_translating_tryanother:				"Essayez un autre traducteur",
 							translate_your_message:					"Traduisez vos messages avant de les envoyer",
 							translated_watermark:					"traduit",
-							translator_engine:					"Traducteur",
-							prefixes_disable_text:					"Préfixes qui désactivent la traduction du message",
-							prefixes_enable_text:					"Préfixes qui activent la traduction avec un langage spécifique (par exemple, $fr, $de, $jp)"
+							translator_engine:					"Traducteur"
 						};
 					case "hi":		// Hindi
 						return {
@@ -2033,14 +2067,14 @@ module.exports = (_ => {
 							language_selection_server:				"इस सर्वर के लिए भाषा चयन विशेष रूप से बदल दिया जाएगा",
 							popout_translateoption:					"अनुवाद करना",
 							popout_untranslateoption:				"अनुवाद न करें",
+							prefixes_disable_text:					"उपसर्ग जो संदेश के अनुवाद को अक्षम करते हैं",
+							prefixes_enable_text:					"उपसर्ग जो विशिष्ट भाषा के साथ अनुवाद को सक्षम करते हैं (जैसे $fr, $de, $jp)",
 							toast_translating:					"अनुवाद",
 							toast_translating_failed:				"अनुवाद करने में विफल",
 							toast_translating_tryanother:				"दूसरे अनुवादक का प्रयास करें",
 							translate_your_message:					"भेजने से पहले अपने संदेशों का अनुवाद करें",
 							translated_watermark:					"अनुवाद",
-							translator_engine:					"अनुवादक",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"अनुवादक"
 						};
 					case "hr":		// Croatian
 						return {
@@ -2069,14 +2103,14 @@ module.exports = (_ => {
 							language_selection_server:				"Odabir jezika bit će promijenjen posebno za ovaj poslužitelj",
 							popout_translateoption:					"Prevedi",
 							popout_untranslateoption:				"Neprevedi",
+							prefixes_disable_text:					"Prefiksi koji onemogućuju prijevod poruke",
+							prefixes_enable_text:					"Prefiksi koji omogućuju prijevod određenim jezikom (npr. $fr, $de, $jp)",
 							toast_translating:					"Prevođenje",
 							toast_translating_failed:				"Prijevod nije uspio",
 							toast_translating_tryanother:				"Pokušajte s drugim prevoditeljem",
 							translate_your_message:					"Prevedite svoje poruke prije slanja",
 							translated_watermark:					"prevedeno",
-							translator_engine:					"Prevoditelj",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Prevoditelj"
 						};
 					case "hu":		// Hungarian
 						return {
@@ -2105,14 +2139,14 @@ module.exports = (_ => {
 							language_selection_server:				"A nyelvválasztás kifejezetten ehhez a szerverhez módosul",
 							popout_translateoption:					"fordít",
 							popout_untranslateoption:				"Fordítás le",
+							prefixes_disable_text:					"Az üzenet fordítását letiltó előtagok",
+							prefixes_enable_text:					"Előtagok, amelyek lehetővé teszik a fordítás meghatározott nyelvvel (például $fr, $de, $jp)",
 							toast_translating:					"Fordítás",
 							toast_translating_failed:				"Nem sikerült lefordítani",
 							toast_translating_tryanother:				"Próbálkozzon másik fordítóval",
 							translate_your_message:					"Küldés előtt fordítsa le az üzeneteit",
 							translated_watermark:					"lefordított",
-							translator_engine:					"Fordító",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Fordító"
 						};
 					case "it":		// Italian
 						return {
@@ -2141,14 +2175,14 @@ module.exports = (_ => {
 							language_selection_server:				"La selezione della lingua verrà modificata in modo specifico per questo server",
 							popout_translateoption:					"Tradurre",
 							popout_untranslateoption:				"Non tradurre",
+							prefixes_disable_text:					"Parole che iniziano con {{var0}} verranno ignorate",
+							prefixes_enable_text:					"Parole che attivano la traduzione con un linguaggio specifico (ad esempio, $fr, $de, $jp)",
 							toast_translating:					"Tradurre",
 							toast_translating_failed:				"Impossibile tradurre",
 							toast_translating_tryanother:				"Prova un altro traduttore",
 							translate_your_message:					"Traduci i tuoi messaggi prima di inviarli",
 							translated_watermark:					"tradotto",
-							translator_engine:					"Traduttore",
-							prefixes_disable_text:					"Parole che iniziano con {{var0}} verranno ignorate",
-							prefixes_enable_text:					"Parole che attivano la traduzione con un linguaggio specifico (ad esempio, $fr, $de, $jp)"
+							translator_engine:					"Traduttore"
 						};
 					case "ja":		// Japanese
 						return {
@@ -2177,14 +2211,14 @@ module.exports = (_ => {
 							language_selection_server:				"言語の選択は、このサーバー専用に変更されます",
 							popout_translateoption:					"翻訳する",
 							popout_untranslateoption:				"翻訳しない",
+							prefixes_disable_text:					"メッセージの翻訳を無効にするプレフィックス",
+							prefixes_enable_text:					"特定の言語で翻訳を可能にするプレフィックス（例：$fr, $de, $jp）",
 							toast_translating:					"翻訳",
 							toast_translating_failed:				"翻訳に失敗しました",
 							toast_translating_tryanother:				"別の翻訳者を試す",
 							translate_your_message:					"送信する前にメッセージを翻訳する",
 							translated_watermark:					"翻訳済み",
-							translator_engine:					"翻訳者",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"翻訳者"
 						};
 					case "ko":		// Korean
 						return {
@@ -2213,14 +2247,14 @@ module.exports = (_ => {
 							language_selection_server:				"이 서버에 대해 특별히 언어 선택이 변경됩니다.",
 							popout_translateoption:					"옮기다",
 							popout_untranslateoption:				"번역 취소",
+							prefixes_disable_text:					"메시지 변환을 비활성화하는 접두사",
+							prefixes_enable_text:					"특정 언어로 변환을 가능하게하는 접두사 (예: $fr, $de, $jp)",
 							toast_translating:					"번역 중",
 							toast_translating_failed:				"번역하지 못했습니다.",
 							toast_translating_tryanother:				"다른 번역기 시도",
 							translate_your_message:					"보내기 전에 메시지 번역",
 							translated_watermark:					"번역",
-							translator_engine:					"역자",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"역자"
 						};
 					case "lt":		// Lithuanian
 						return {
@@ -2249,14 +2283,14 @@ module.exports = (_ => {
 							language_selection_server:				"Kalbos pasirinkimas bus pakeistas specialiai šiam serveriui",
 							popout_translateoption:					"Išversti",
 							popout_untranslateoption:				"Neišversti",
+							prefixes_disable_text:					"Priešdėliai, kurie išjungia pranešimo vertimą",
+							prefixes_enable_text:					"Priešdėliai, įgalinantys vertimą su konkrečia kalba (pvz., $fr, $de, $jp)",
 							toast_translating:					"Vertimas",
 							toast_translating_failed:				"Nepavyko išversti",
 							toast_translating_tryanother:				"Išbandykite kitą vertėją",
 							translate_your_message:					"Prieš siųsdami išverskite savo pranešimus",
 							translated_watermark:					"išverstas",
-							translator_engine:					"Vertėjas",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Vertėjas"
 						};
 					case "nl":		// Dutch
 						return {
@@ -2285,14 +2319,14 @@ module.exports = (_ => {
 							language_selection_server:				"Taalselectie wordt specifiek voor deze server gewijzigd",
 							popout_translateoption:					"Vertalen",
 							popout_untranslateoption:				"Onvertalen",
+							prefixes_disable_text:					"Voorvoegsels die de vertaling van het bericht uitschakelen",
+							prefixes_enable_text:					"Voorvoegsels die vertaling mogelijk maken met specifieke taal (bijv. $fr, $de, $jp)",
 							toast_translating:					"Vertalen",
 							toast_translating_failed:				"Kan niet vertalen",
 							toast_translating_tryanother:				"Probeer een andere vertaler",
 							translate_your_message:					"Vertaal uw berichten voordat u ze verzendt",
 							translated_watermark:					"vertaald",
-							translator_engine:					"Vertaler",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Vertaler"
 						};
 					case "no":		// Norwegian
 						return {
@@ -2321,14 +2355,14 @@ module.exports = (_ => {
 							language_selection_server:				"Språkvalg vil bli endret spesifikt for denne serveren",
 							popout_translateoption:					"Oversette",
 							popout_untranslateoption:				"Ikke oversett",
+							prefixes_disable_text:					"Prefikser som deaktiverer oversettelse av meldingen",
+							prefixes_enable_text:					"Prefikser som muliggjør oversettelse med spesifikt språk (f.eks. $fr, $de, $jp)",
 							toast_translating:					"Oversetter",
 							toast_translating_failed:				"Kunne ikke oversette",
 							toast_translating_tryanother:				"Prøv en annen oversetter",
 							translate_your_message:					"Oversett meldingene dine før sending",
 							translated_watermark:					"oversatt",
-							translator_engine:					"Oversetter",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Oversetter"
 						};
 					case "pl":		// Polish
 						return {
@@ -2357,16 +2391,16 @@ module.exports = (_ => {
 							language_selection_server:				"Wybór języka zostanie zmieniony specjalnie dla tego serwera",
 							popout_translateoption:					"Tłumaczyć",
 							popout_untranslateoption:				"Nie przetłumacz",
+							prefixes_disable_text:					"Słowa zaczynające się od {{var0}} będą ignorowane",
+							prefixes_enable_text:					"Słowa, które aktywują tłumaczenie na określony język (np. $fr, $de, $jp)",
 							toast_translating:					"Tłumaczenie",
 							toast_translating_failed:				"Nie udało się przetłumaczyć",
 							toast_translating_tryanother:				"Wypróbuj innego tłumacza",
 							translate_your_message:					"Przetłumacz swoje wiadomości przed wysłaniem",
 							translated_watermark:					"przetłumaczony",
-							translator_engine:					"Tłumacz",
-							prefixes_disable_text:					"Słowa zaczynające się od {{var0}} będą ignorowane",
-							prefixes_enable_text:					"Słowa, które aktywują tłumaczenie na określony język (np. $fr, $de, $jp)"
+							translator_engine:					"Tłumacz"
 						};
-					case "pt-BR":	// Portuguese (Brazil)
+					case "pt-BR":		// Portuguese (Brazil)
 						return {
 							backup_engine:						"Backup-Tradutor",
 							backup_engine_warning:					"Usará o Backup-Tradutor",
@@ -2393,14 +2427,14 @@ module.exports = (_ => {
 							language_selection_server:				"A seleção de idioma será alterada especificamente para este servidor",
 							popout_translateoption:					"Traduzir",
 							popout_untranslateoption:				"Não traduzido",
+							prefixes_disable_text:					"Prefixos que desativam a tradução da mensagem",
+							prefixes_enable_text:					"Prefixos que permitem a tradução com linguagem específica (por exemplo, $fr, $de, $jp)",
 							toast_translating:					"Traduzindo",
 							toast_translating_failed:				"Falha ao traduzir",
 							toast_translating_tryanother:				"Tente outro tradutor",
 							translate_your_message:					"Traduza suas mensagens antes de enviar",
 							translated_watermark:					"traduzido",
-							translator_engine:					"Tradutor",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Tradutor"
 						};
 					case "ro":		// Romanian
 						return {
@@ -2429,14 +2463,14 @@ module.exports = (_ => {
 							language_selection_server:				"Selectarea limbii va fi modificată special pentru acest Server",
 							popout_translateoption:					"Traduceți",
 							popout_untranslateoption:				"Netradus",
+							prefixes_disable_text:					"Prefixele care dezactivează traducerea mesajului",
+							prefixes_enable_text:					"Prefixele care permit traducerea cu un limbaj specific (de exemplu, $fr, $de, $jp)",
 							toast_translating:					"Traducere",
 							toast_translating_failed:				"Nu s-a putut traduce",
 							toast_translating_tryanother:				"Încercați un alt traducător",
 							translate_your_message:					"Traduceți mesajele înainte de a le trimite",
 							translated_watermark:					"tradus",
-							translator_engine:					"Traducător",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Traducător"
 						};
 					case "ru":		// Russian
 						return {
@@ -2465,14 +2499,14 @@ module.exports = (_ => {
 							language_selection_server:				"Выбор языка будет изменен специально для этого сервера",
 							popout_translateoption:					"Переведите",
 							popout_untranslateoption:				"Неперевести",
+							prefixes_disable_text:					"Префиксы, которые отключают перевод сообщения",
+							prefixes_enable_text:					"Префиксы, которые обеспечивают перевод с конкретным языком (например, $fr, $de, $jp)",
 							toast_translating:					"Идет перевод",
 							toast_translating_failed:				"Не удалось перевести",
 							toast_translating_tryanother:				"Попробуйте другой переводчик",
 							translate_your_message:					"Переводите свои сообщения перед отправкой",
 							translated_watermark:					"переведено",
-							translator_engine:					"Переводчик",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Переводчик"
 						};
 					case "sv":		// Swedish
 						return {
@@ -2501,14 +2535,14 @@ module.exports = (_ => {
 							language_selection_server:				"Språkval kommer att ändras specifikt för denna server",
 							popout_translateoption:					"Översätt",
 							popout_untranslateoption:				"Untranslate",
+							prefixes_disable_text:					"Prefix som inaktiverar översättning av meddelandet",
+							prefixes_enable_text:					"Prefix som möjliggör översättning med specifikt språk (t.ex. $fr, $de, $jp)",
 							toast_translating:					"Översätter",
 							toast_translating_failed:				"Det gick inte att översätta",
 							toast_translating_tryanother:				"Prova en annan översättare",
 							translate_your_message:					"Översätt dina meddelanden innan du skickar",
 							translated_watermark:					"översatt",
-							translator_engine:					"Översättare",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Översättare"
 						};
 					case "th":		// Thai
 						return {
@@ -2537,14 +2571,14 @@ module.exports = (_ => {
 							language_selection_server:				"การเลือกภาษาจะมีการเปลี่ยนแปลงโดยเฉพาะสำหรับเซิร์ฟเวอร์นี้",
 							popout_translateoption:					"แปลภาษา",
 							popout_untranslateoption:				"ไม่แปล",
+							prefixes_disable_text:					"คำนำหน้าการปิดใช้งานการแปลข้อความ",
+							prefixes_enable_text:					"คำนำหน้าที่เปิดใช้งานการแปลด้วยภาษาที่เฉพาะเจาะจง (เช่น $fr, $de, $jp)",
 							toast_translating:					"กำลังแปล",
 							toast_translating_failed:				"แปลไม่สำเร็จ",
 							toast_translating_tryanother:				"ลองใช้นักแปลคนอื่น",
 							translate_your_message:					"แปลข้อความของคุณก่อนส่ง",
 							translated_watermark:					"แปล",
-							translator_engine:					"นักแปล",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"นักแปล"
 						};
 					case "tr":		// Turkish
 						return {
@@ -2573,14 +2607,14 @@ module.exports = (_ => {
 							language_selection_server:				"Dil Seçimi bu Sunucuya özel olarak değiştirilecektir.",
 							popout_translateoption:					"Çevirmek",
 							popout_untranslateoption:				"Çevirmeyi kaldır",
+							prefixes_disable_text:					"Mesajın çevirisini devre dışı bırakan önekler",
+							prefixes_enable_text:					"Belirli bir dille çeviriyi etkinleştiren önekler (örn. $fr, $de, $jp)",
 							toast_translating:					"Çeviri",
 							toast_translating_failed:				"Tercüme edilemedi",
 							toast_translating_tryanother:				"Başka bir Çevirmen deneyin",
 							translate_your_message:					"Göndermeden önce Mesajlarınızı çevirin",
 							translated_watermark:					"tercüme",
-							translator_engine:					"Çevirmen",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Çevirmen"
 						};
 					case "uk":		// Ukrainian
 						return {
@@ -2609,14 +2643,14 @@ module.exports = (_ => {
 							language_selection_server:				"Вибір мови буде змінено спеціально для цього сервера",
 							popout_translateoption:					"Перекласти",
 							popout_untranslateoption:				"Неперекласти",
+							prefixes_disable_text:					"Префікси, що відключають переклад повідомлення",
+							prefixes_enable_text:					"Префікси, що дозволяють перекладати з конкретною мовою (наприклад, $fr, $de, $jp)",
 							toast_translating:					"Переклад",
 							toast_translating_failed:				"Не вдалося перекласти",
 							toast_translating_tryanother:				"Спробуйте іншого перекладача",
 							translate_your_message:					"Перекладіть свої повідомлення перед надсиланням",
 							translated_watermark:					"переклав",
-							translator_engine:					"Перекладач",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Перекладач"
 						};
 					case "vi":		// Vietnamese
 						return {
@@ -2645,16 +2679,16 @@ module.exports = (_ => {
 							language_selection_server:				"Lựa chọn ngôn ngữ sẽ được thay đổi cụ thể cho Máy chủ này",
 							popout_translateoption:					"Phiên dịch",
 							popout_untranslateoption:				"Chưa dịch",
+							prefixes_disable_text:					"Tiền tố vô hiệu hóa dịch tin nhắn",
+							prefixes_enable_text:					"Tiền tố cho phép dịch với ngôn ngữ cụ thể (ví dụ: $fr, $de, $jp)",
 							toast_translating:					"Phiên dịch",
 							toast_translating_failed:				"Không dịch được",
 							toast_translating_tryanother:				"Thử một Trình dịch khác",
 							translate_your_message:					"Dịch Tin nhắn của bạn trước khi gửi",
 							translated_watermark:					"đã dịch",
-							translator_engine:					"Người phiên dịch",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Người phiên dịch"
 						};
-					case "zh-CN":	// Chinese (China)
+					case "zh-CN":		// Chinese (China)
 						return {
 							backup_engine:						"备份翻译器",
 							backup_engine_warning:					"将使用备份翻译器",
@@ -2681,16 +2715,16 @@ module.exports = (_ => {
 							language_selection_server:				"语言选择将专门为此服务器更改",
 							popout_translateoption:					"翻译",
 							popout_untranslateoption:				"取消翻译",
+							prefixes_disable_text:					"禁用消息翻译的前缀",
+							prefixes_enable_text:					"用特定语言启用翻译的前缀（例如 $fr, $de, $jp）",
 							toast_translating:					"正在翻译",
 							toast_translating_failed:				"翻译失败",
 							toast_translating_tryanother:				"尝试其它翻译器",
 							translate_your_message:					"发送前翻译您的消息",
 							translated_watermark:					"已翻译",
-							translator_engine:					"译者",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"译者"
 						};
-					case "zh-TW":	// Chinese (Taiwan)
+					case "zh-TW":		// Chinese (Taiwan)
 						return {
 							backup_engine:						"備份翻譯器",
 							backup_engine_warning:					"將使用備份翻譯器",
@@ -2717,14 +2751,14 @@ module.exports = (_ => {
 							language_selection_server:				"語言選擇將專門為此服務器更改",
 							popout_translateoption:					"翻譯",
 							popout_untranslateoption:				"取消翻譯",
+							prefixes_disable_text:					"禁用消息翻译的前缀",
+							prefixes_enable_text:					"用特定语言启用翻译的前缀（例如 $fr, $de, $jp）",
 							toast_translating:					"正在翻譯",
 							toast_translating_failed:				"無法翻譯",
 							toast_translating_tryanother:				"嘗試其它翻譯器",
 							translate_your_message:					"發送前翻譯您的消息",
 							translated_watermark:					"已翻譯",
-							translator_engine:					"譯者",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"譯者"
 						};
 					default:		// English
 						return {
@@ -2753,14 +2787,14 @@ module.exports = (_ => {
 							language_selection_server:				"Language Selection will be changed specifically for this Server",
 							popout_translateoption:					"Translate",
 							popout_untranslateoption:				"Untranslate",
+							prefixes_disable_text:					"Prefixes that disable translation of message",
+							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)",
 							toast_translating:					"Translating",
 							toast_translating_failed:				"Failed to translate",
 							toast_translating_tryanother:				"Try another Translator",
 							translate_your_message:					"Translate your Messages before sending",
 							translated_watermark:					"translated",
-							translator_engine:					"Translator",
-							prefixes_disable_text:					"Prefixes that disable translation of message",
-							prefixes_enable_text:					"Prefixes that enable translation with specific language (e.g. $fr, $de, $jp)"
+							translator_engine:					"Translator"
 						};
 				}
 			}
