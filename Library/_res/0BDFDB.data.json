@@ -120,7 +120,9 @@
 			"getAPIBaseURL": ["window.GLOBAL_ENV.API_ENDPOINT+"]
 		}},
 		"AppearanceSettingsUtils": {"props": ["updateLocale", "updateTheme"]},
-		"ApplicationAssetUtils": {"props": ["getAssetImage", "getAssetIds"]},
+		"ApplicationAssetUtils": {"strings": ["icon.customPNG", "smallImage:", "application_id"], "exported": false, "value": "exports", "map": {
+			"getAssetImage": ["icon.customPNG", "smallImage:"]
+		}},
 		"AppUtils": {"props": ["clipboard", "os"]},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
 		"CategoryCollapseUtils": {"strings": [".dispatch({type:\"CATEGORY_EXPAND\"", ".dispatch({type:\"CATEGORY_COLLAPSE\""], "exported": false, "value": "exports", "map": {
