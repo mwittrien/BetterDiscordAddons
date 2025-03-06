@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.5
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -73,6 +73,18 @@ module.exports = (_ => {
 			"track"
 		];
 	
+		const SpotifyControlsCoverComponent = props => {
+			let asset = BDFDB.LibraryModules.ApplicationAssetUtils.getAssetImage(props.song);
+			return asset && asset.largeImage && asset.largeImage.src ? BDFDB.ReactUtils.createElement("img", {
+				className: BDFDB.disCN._spotifycontrolscover,
+				src: asset.largeImage.src
+			}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+				className: BDFDB.disCN._spotifycontrolscover,
+				width: "100%",
+				height: "100%",
+				name: BDFDB.LibraryComponents.SvgIcon.Names.QUESTIONMARK_ACTIVITY
+			});
+		};
 		const SpotifyControlsComponent = class SpotifyControls extends BdApi.React.Component {
 			componentDidMount() {
 				controls = this;
@@ -133,7 +145,7 @@ module.exports = (_ => {
 				}
 				if (!lastSong) return null;
 				
-				let coverSrc = BDFDB.LibraryModules.ApplicationAssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
+				let coverSrc = (BDFDB.ReactUtils.hookCall(BDFDB.LibraryModules.ApplicationAssetUtils.getAssetImage, lastSong) || {largeImage: {}}).largeImage.src;
 				let connection = (BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
@@ -155,14 +167,8 @@ module.exports = (_ => {
 										else BDFDB.ReactUtils.forceUpdate(this);
 									},
 									children: [
-										coverSrc ? BDFDB.ReactUtils.createElement("img", {
-											className: BDFDB.disCN._spotifycontrolscover,
-											src: coverSrc
-										}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-											className: BDFDB.disCN._spotifycontrolscover,
-											width: "100%",
-											height: "100%",
-											name: BDFDB.LibraryComponents.SvgIcon.Names.QUESTIONMARK_ACTIVITY
+										BDFDB.ReactUtils.createElement(SpotifyControlsCoverComponent, {
+											song: lastSong
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN._spotifycontrolscovermaximizer,
