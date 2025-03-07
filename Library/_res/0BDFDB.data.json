@@ -426,6 +426,7 @@
 		"CloseButton": {"strings": [".closeButton", ".closeIcon", "offset:{"]},
 		"ConnectedLazyImageZoomable": {"strings": ["isWindowFocused:", ",appContext:"]},
 		"CustomStatusModal": {"protos": ["renderCustomStatusInput", "renderClearAfter", "getEmojiButtonRenderer"]},
+		"CustomStatusModalWithPreview": {"strings": ["showRemainingCharacterCount", "emojiButtonContainer"]},
 		"DefaultChannelEmptyMessage": {"strings": [".CHANNEL_WELCOME", ".titleName", "handlePersonalize"]},
 		"DirectMessage": {"strings": ["getRecipientId", "Controller", "handleContextMenu", ".DM"]},
 		"DirectMessageAddPopout": {"strings": [".COPY_INSTANT_INVITE", ".handleInviteUsers=", ".selectedUsers", ".mobileToolsContainer"]},
