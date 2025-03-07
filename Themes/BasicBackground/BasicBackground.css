@@ -563,6 +563,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		4.		GUILDLIST					~~~~ */
 
+#app-mount .guildSeparator__252b6 {							/* separator												*/
+	background-color: var(--border-subtle, var(--background-modifier-accent));
+}
 #app-mount .footer__214dc {								/* footer												*/
 	background: transparent;
 }
