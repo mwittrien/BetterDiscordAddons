@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.2
+ * @version 7.3.3
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -538,6 +538,11 @@ module.exports = (_ => {
 						opacity: 0.5 !important;
 						z-index: 10000 !important;
 					}
+					${BDFDB.dotCN.channels}:has(${BDFDB.dotCN.guilds}) {
+						display: flex !important;
+						flex-direction: row !important;
+						width: auto !important;
+					}
 					${BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.notCN.guildswrapperhidden} {
 						transition: width 0.25s cubic-bezier(.44,1.04,1,1.01) !important;
 					}
@@ -549,16 +554,18 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderexpandedbackground} {
 						display: none !important;
 					}
+					${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildfolder},
+					${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildfolder}:hover {
+						background-color: var(--background-secondary);
+					}
 					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
 						border-radius: 25%;
 					}
-					${BDFDB.dotCN.channels}:has(${BDFDB.dotCN.guilds}) {
-						display: flex !important;
-						flex-direction: row !important;
-						width: auto !important;
-					}
 					${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildfoldericon} {
 						margin-bottom: 0 !important;
+					}
+					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildseparator} {
+						background-color: var(--border-subtle, var(--background-modifier-accent));
 					}
 					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.stack} {
 						justify-content: flex-start;
