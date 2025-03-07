@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.0
+ * @version 2.1.1
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -328,8 +328,8 @@ module.exports = (_ => {
 			}
 
 			processNameContainer (e) {
-				if (!e.instance.props.user) return;
-				this.injectBadges(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user, e.instance.props.channel.guild_id, "memberList");
+				let user = BDFDB.LibraryStores.UserStore.getUser(BDFDB.ReactUtils.findValue(e.instance.props.name, "userId"));
+				if (user) this.injectBadges(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), user, e.instance.props.channel.guild_id, "memberList");
 			}
 
 			processPrivateChannel (e) {
