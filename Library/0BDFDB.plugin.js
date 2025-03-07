@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.0
+ * @version 4.0.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -5104,7 +5104,12 @@ module.exports = (_ => {
 						if (this.props.refClass) {
 							let node = BDFDB.ReactUtils.findDOMNode(this);
 							if (node && node.parentElement) {
-								this.refElement = node.parentElement.querySelector(this.props.refClass);
+								let parent = node.parentElement, loop = 0;
+								while (!this.refElement && parent && loop < 5) {
+									this.refElement = parent.querySelector(this.props.refClass);
+									parent = parent.parentElement;
+									loop++;
+								}
 								if (this.refElement) {
 									if (!this._updateCounter) this._updateCounter = _ => {
 										if (!document.contains(node)) BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this._updateCounter);
