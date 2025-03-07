@@ -320,7 +320,6 @@
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["containerRef", "zoomable", "LOADING"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions", "SELECTED_ITEM_CHANGE"]},
-		"ImageModalButtons": {"strings": [".actionButtonWrapper", ".actionButtons", "IMAGE"]},
 		"ImageModalOuter": {"strings": ["MEDIA_VIEWER", "numMediaItem", "LIGHTBOX"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
@@ -473,6 +472,7 @@
 		"I18nLoader": {"strings": ["default.locale", ".loading", "__OVERLAY__"]},
 		"IconBadge": {"strings": [".icon}", "ROUND,disableColor", ".iconBadge,"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "noSearch": true},
+		"ImageModalButtons": {"strings": [".actionButtonWrapper", ".actionButtons", "IMAGE"]},
 		"InboxHeader": {"strings": [".UNREADS", ".TODOS", ".controls"]},
 		"IncomingCallModal": {"strings": ["mainChannelInfo", "previewCamera", "RingingType.INCOMING"]},
 		"InviteGuildName": {"strings": ["{guild:",".guildName",".guildNameWrapper", ".name", "jsx)(\"span\","], "noSearch": true},
