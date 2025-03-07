@@ -472,7 +472,7 @@
 		"I18nLoader": {"strings": ["default.locale", ".loading", "__OVERLAY__"]},
 		"IconBadge": {"strings": [".icon}", "ROUND,disableColor", ".iconBadge,"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "noSearch": true},
-		"ImageModalButtons": {"strings": [".actionButtons", "\"IMAGE\""]},
+		"ImageModalButtons": {"strings": [".actionButtons", "\"IMAGE\"", "FOCUS_SENSITIVE"]},
 		"InboxHeader": {"strings": [".UNREADS", ".TODOS", ".controls"]},
 		"IncomingCallModal": {"strings": ["mainChannelInfo", "previewCamera", "RingingType.INCOMING"]},
 		"InviteGuildName": {"strings": ["{guild:",".guildName",".guildNameWrapper", ".name", "jsx)(\"span\","], "noSearch": true},
@@ -864,6 +864,9 @@
 		},
 		"WARNING": {
 			"icon": "<svg name='Warning' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M 0,22.35 H 24 L 12,1.6227273 Z m 13.090909,-3.272727 h -2.181818 v -2.181818 h 2.181818 z m 0,-4.363637 H 10.909091 V 10.35 h 2.181818 z'/></svg>"
+		},
+		"ZOOM": {
+			"icon": "<svg name='ZOOM' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' fill-rule='evenodd' clip-rule='evenodd' d='M15.62 17.03a9 9 0 1 1 1.41-1.41l4.68 4.67a1 1 0 0 1-1.42 1.42l-4.67-4.68ZM17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z'/><path fill='%%color' d='M11 7a1 1 0 1 0-2 0v2H7a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0-2h-2V7Z'/></svg>"
 		}
 	},
 	"CustomClassModules": {
@@ -1518,6 +1521,7 @@
 		"IconDirection": {"props": ["directionDown", "directionUp"]},
 		"ImageAssets": {"props": ["pngImage", "lottieCanvas"]},
 		"ImageModal": {"props": ["modal"], "length": 1},
+		"ImageModalButtons": {"props": ["actionButtons", "actionButtonWrapper"]},
 		"ImageModalInner": {"props": ["optionsContainer", "downloadLink"]},
 		"ImageModalSlide": {"props": ["slide", "contain"]},
 		"ImageMosaic": {"props": ["lazyImg", "oneByOneGridSingle"]},
@@ -2497,6 +2501,11 @@
 		"imageerror": ["ImageWrapper", "imageError"],
 		"imageoriginallink": ["ImageWrapper", "originalLink"],
 		"imagemodal": ["ImageModal", "modal"],
+		"imagemodalactionbutton": ["ImageModalButtons", "actionButton"],
+		"imagemodalactionbuttoninner": ["ImageModalButtons", "actionButtonInner"],
+		"imagemodalactionbuttonwrapper": ["ImageModalButtons", "actionButtonWrapper"],
+		"imagemodalactionbuttons": ["ImageModalButtons", "actionButtons"],
+		"imagemodalactionbuttonselected": ["ImageModalButtons", "selected"],
 		"imagemodalimage": ["ImageModalSlide", "slide"],
 		"imagemodalimagedownloadlink": ["ImageModalInner", "downloadLink"],
 		"imagemodalimageforward": ["ImageModalInner", "forward"],
