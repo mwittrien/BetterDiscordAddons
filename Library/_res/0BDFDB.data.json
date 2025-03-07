@@ -3111,6 +3111,7 @@
 		"sliderbubble": ["BDFDB", "sliderBubble"],
 		"sliderdisabled": ["Slider", "disabled"],
 		"slidergrabber": ["Slider", "grabber"],
+		"sliderhasmarks": ["Slider", "hasMarks"],
 		"slidermark": ["Slider", "mark"],
 		"slidermarkabove": ["Slider", "markAbove"],
 		"slidermarkbelow": ["Slider", "markBelow"],
