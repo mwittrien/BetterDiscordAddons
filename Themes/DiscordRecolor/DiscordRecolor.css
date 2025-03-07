@@ -1108,8 +1108,11 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	opacity: .5;
 }
 
-/* ~~~~		2.		GUIDLIST					~~~~ */
+/* ~~~~		2.		GUILDLIST					~~~~ */
 
+#app-mount .guildSeparator__252b6 {
+	background-color: var(--border-subtle, var(--background-modifier-accent));
+}
 #app-mount .folder__48112.hover__48112,
 #app-mount .childWrapper_a6ce15,
 #app-mount .circleIconButton__5bc7e {
