@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.5
+ * @version 1.4.6
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -478,6 +478,9 @@ module.exports = (_ => {
 					${BDFDB.dotCN.channelpanels} {
 						display: flex;
 						flex-direction: column;
+					}
+					${BDFDB.dotCN.channelpanels}:has(${BDFDB.dotCN._spotifycontrolscontainer}:first-child) {
+						overflow: hidden;
 					}
 					${BDFDB.dotCN._spotifycontrolscontainer} {
 						display: flex;
