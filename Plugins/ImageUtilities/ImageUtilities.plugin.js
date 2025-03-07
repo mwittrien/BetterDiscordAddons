@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.5.5
+ * @version 5.5.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -272,6 +272,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"ImageModal",
+						"ImageModalButtons",
 						"LazyImage",
 						"LazyImageZoomable",
 						"Spoiler",
@@ -1013,48 +1014,6 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.imagemodalimageoptionscontainer]]});
 					if (index > -1) {
 						let type = filterForVideos ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-						let openContext = event => BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-							children: Object.keys(this.defaults.zoomSettings).map(type => {
-								let isBoolean = typeof this.defaults.zoomSettings[type].value == "boolean";
-								return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems[isBoolean ? "MenuCheckboxItem" : "MenuSliderItem"], Object.assign({
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, type)
-								}, isBoolean ? {
-									checked: this.settings.zoomSettings[type],
-									action: value => {
-										this.settings.zoomSettings[type] = value;
-										BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
-									}
-								} : {
-									value: this.settings.zoomSettings[type],
-									renderLabel: (value, instance) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-										children: [
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-												children: `${this.labels[this.defaults.zoomSettings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.zoomSettings[type].label]}:`
-											}),
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-												type: "number",
-												size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-												style: {width: 70},
-												min: 1,
-												max: this.defaults.zoomSettings[type].maxValue,
-												value: this.settings.zoomSettings[type],
-												onChange: value => value && value >= this.defaults.zoomSettings[type].minValue && instance.handleValueChange(BDFDB.NumberUtils.mapRange([this.defaults.zoomSettings[type].minValue, this.defaults.zoomSettings[type].maxValue], [0, 100], value))
-											}),
-											BDFDB.ReactUtils.createElement("span", {
-												style: {width: 20},
-												children: this.defaults.zoomSettings[type].unit
-											})
-										]
-									}),
-									onValueRender: value => `${value}${this.defaults.zoomSettings[type].unit}`,
-									onValueChange: value => {
-										this.settings.zoomSettings[type] = value;
-										BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
-									}
-								}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], isBoolean ? ["label"] : ["digits", "minValue", "maxValue"])));
-							})
-						}));
 						children[index] = BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN._imageutilitiesoperations,
 							children: [
@@ -1137,34 +1096,33 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 											className: BDFDB.disCN.imagemodalimagedownloadlink, 
 											children: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-											onClick: openContext,
-											onContextMenu: openContext
+											onClick: event => this.openZoomSettings(event),
+											onContextMenu: event => this.openZoomSettings(event)
 										})
 									]
 								})
 							].flat(10).filter(n => n)
 						});
-						
-						if (this.settings.viewerSettings.details) {
-							e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN._imageutilitiesdetailswrapper,
+					}
+					if (this.settings.viewerSettings.details) {
+						e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN._imageutilitiesdetailswrapper,
+							children: [
+								e.instance.props.items[0].alt && {label: "Alt", text: e.instance.props.items[0].alt},
+								{label: "Source", text: this.removeSizeInUrl(this.removeFormatInUrl(url))},
+								{label: "Size", text: `${e.instance.props.items[0].width}x${e.instance.props.items[0].height}px`},
+								cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? "Video" : "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
+							].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+								className: BDFDB.disCN._imageutilitiesdetails,
 								children: [
-									e.instance.props.items[0].alt && {label: "Alt", text: e.instance.props.items[0].alt},
-									{label: "Source", text: this.removeSizeInUrl(this.removeFormatInUrl(url))},
-									{label: "Size", text: `${e.instance.props.items[0].width}x${e.instance.props.items[0].height}px`},
-									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? "Video" : "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
-								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									className: BDFDB.disCN._imageutilitiesdetails,
-									children: [
-										BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN._imageutilitiesdetailslabel,
-											children: data.label + ":"
-										}),
-										data.text
-									]
-								}))
-							}));
-						}
+									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN._imageutilitiesdetailslabel,
+										children: data.label + ":"
+									}),
+									data.text
+								]
+							}))
+						}));
 					}
 					if (this.settings.viewerSettings.galleryMode && viewedImage) {
 						if (!cachedImages || cachedImages.channelId != viewedImage.channelId || cachedImages.amount && this.getImageIndex(cachedImages.all, viewedImage) == -1) {
@@ -1252,6 +1210,35 @@ module.exports = (_ => {
 				}
 			}
 			
+			processImageModalButtons (e) {
+				let children = e.returnvalue.props.children;
+				e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+					let returnValue = children(...args);
+					let [buttons, index] = BDFDB.ReactUtils.findParent(returnValue, {filter: n => n && n.type && n.type.toString().indexOf("ZOOM") > -1});
+					if (index > -1) buttons[index] = this.settings.viewerSettings.zoomMode && !this.isValid(e.instance.props.item.original, "gif") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+						tooltipConfig: {
+							type: BDFDB.LibraryComponents.TooltipContainer.Positions.BOTTOM
+						},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+							className: BDFDB.disCNS.imagemodalactionbutton + BDFDB.disCN.imagemodalactionbuttonwrapper,
+							innerClassName: BDFDB.disCN.imagemodalactionbuttoninner,
+							look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+							color: BDFDB.LibraryComponents.Button.Colors.TRANSPARENT,
+							size: BDFDB.LibraryComponents.Button.Sizes.ICON,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								nativeClass: true,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.ZOOM,
+								width: 18,
+								height: 18
+							}),
+							onClick: event => this.openZoomSettings(event)
+						})
+					}) : null;
+					return returnValue;
+				}, "Error in Children Render of ImageModalButtons!");
+			}
+			
 			processLazyImage (e) {
 				if (e.node) {
 					if (!e.instance.props.src.split("?")[0].endsWith(".gif") && !e.instance.props.src.split("?")[0].endsWith(".mp4") && !e.instance.props.animated && !e.instance.props.children) for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeFormatInUrl(ele.src);
@@ -1296,8 +1283,10 @@ module.exports = (_ => {
 						
 						if (this.isValid(e.instance.props.src, "gif")) e.node.style.setProperty("pointer-events", "none");
 						if (this.settings.viewerSettings.zoomMode && typeof e.instance.props.children != "function" && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling)) {
-							e.node.style.setProperty("cursor", "zoom-in");
-							e.node.addEventListener(this.settings.zoomSettings.clickMode ? "click" : "mousedown", event => {
+							let overlay = BDFDB.DOMUtils.create(`<div style="cursor: zoom-in; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1000; pointer-events: all;"></div>`);
+							e.node.parentElement.parentElement.insertBefore(overlay, e.node.parentElement);
+							e.node.parentElement.parentElement.style.setProperty("position", "relative");
+							overlay.addEventListener(this.settings.zoomSettings.clickMode ? "click" : "mousedown", event => {
 								BDFDB.ListenerUtils.stopEvent(event);
 								if (event.which != 1 || e.node.querySelector("video")) return;
 								
@@ -1736,6 +1725,51 @@ module.exports = (_ => {
 					zoomThumbnailPlaceholder: thisViewedImage.proxy_url,
 				};
 				this.updateImageModal();
+			}
+			
+			openZoomSettings (event) {
+				BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: Object.keys(this.defaults.zoomSettings).map(type => {
+						let isBoolean = typeof this.defaults.zoomSettings[type].value == "boolean";
+						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems[isBoolean ? "MenuCheckboxItem" : "MenuSliderItem"], Object.assign({
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, type)
+						}, isBoolean ? {
+							checked: this.settings.zoomSettings[type],
+							action: value => {
+								this.settings.zoomSettings[type] = value;
+								BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
+							}
+						} : {
+							value: this.settings.zoomSettings[type],
+							renderLabel: (value, instance) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										children: `${this.labels[this.defaults.zoomSettings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.zoomSettings[type].label]}:`
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										type: "number",
+										size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+										style: {width: 70},
+										min: 1,
+										max: this.defaults.zoomSettings[type].maxValue,
+										value: this.settings.zoomSettings[type],
+										onChange: value => value && value >= this.defaults.zoomSettings[type].minValue && instance.handleValueChange(BDFDB.NumberUtils.mapRange([this.defaults.zoomSettings[type].minValue, this.defaults.zoomSettings[type].maxValue], [0, 100], value))
+									}),
+									BDFDB.ReactUtils.createElement("span", {
+										style: {width: 20},
+										children: this.defaults.zoomSettings[type].unit
+									})
+								]
+							}),
+							onValueRender: value => `${value}${this.defaults.zoomSettings[type].unit}`,
+							onValueChange: value => {
+								this.settings.zoomSettings[type] = value;
+								BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
+							}
+						}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], isBoolean ? ["label"] : ["digits", "minValue", "maxValue"])));
+					})
+				}));
 			}
 			
 			updateImageModal () {
