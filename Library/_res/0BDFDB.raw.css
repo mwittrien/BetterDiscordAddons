@@ -1454,7 +1454,6 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	flex-wrap: wrap;
 	gap: 12px
 }
-
 [REPLACE_CLASS_colorpickersuggestedcolor] {
 	width: 32px;
 	height: 32px;
@@ -1474,6 +1473,40 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS_themeenableforcedcolors] [REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchdisabled] {
 	border-color: GrayText
+}
+[REPLACE_CLASS_colorpickerinner] {
+	width: auto
+}
+[REPLACE_CLASS_colorpickersaturation] {
+	position: relative;
+	width: auto;
+	height: 150px;
+	cursor: crosshair
+}
+[REPLACE_CLASS_colorpickersaturation] > div,
+[REPLACE_CLASS_colorpickersaturation] > div > div {
+	border-radius: 3px
+}
+[REPLACE_CLASS_colorpickersaturation] > div > div > div {
+	cursor: crosshair!important
+}
+[REPLACE_CLASS_colorpickerhue] {
+	height: 8px;
+	margin: 8px 0;
+	position: relative;
+	cursor: crosshair
+}
+[REPLACE_CLASS_colorpickerhue] > div > div {
+	border-radius: 3px
+}
+[REPLACE_CLASS_colorpickerhue] > div > div > div > div {
+	height: 16px !important;
+	width: 8px !important;
+	margin-top: -3px !important;
+	border-radius: 3px !important
+}
+[REPLACE_CLASS_colorpickerhue] > div > div > div > div {
+	cursor: ew-resize
 }
 
 [REPLACE_CLASS_popoutwrapper] {
