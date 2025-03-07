@@ -140,6 +140,9 @@
 			"openContextMenu": ["renderLazy:", ".enableSpellCheck"]
 		}},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
+		"CustomStatusStore": {"strings": ["DONT_CLEAR", "getTime", "clear_after:null"], "exported": false, "value": "exports", "map": {
+			"update": ["DONT_CLEAR", "getTime", "clear_after:null"]
+		}},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
 		"DispatchUtils": {"strings": ["ComponentDispatchUtils", "this.emitter.setMaxListeners(100)"], "exported": false, "value": "exports", "map": {
