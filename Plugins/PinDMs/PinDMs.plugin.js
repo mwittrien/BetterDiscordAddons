@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.5
+ * @version 2.0.6
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -118,7 +118,8 @@ module.exports = (_ => {
 						margin-right: 6px;
 						background-color: var(--background-accent);
 					}
-					${BDFDB.dotCN._pindmspinnedchannelsheaderarrow} {
+					#app-mount ${BDFDB.dotCN._pindmspinnedchannelsheaderarrow} {
+						display: block;
 						flex: 0;
 						width: 16px;
 						height: 16px;
