@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.7
+ * @version 1.5.8
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -235,11 +235,16 @@ module.exports = (_ => {
 							className: BDFDB.disCN.peoplestabbaritem,
 							children: this.labels.favorites
 						}));
-						if (this.settings.general.addHiddenCategory) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.PENDING) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
-							id: hiddenFriendsSection,
-							className: BDFDB.disCN.peoplestabbaritem,
-							children: this.labels.hidden
-						}));
+						if (this.settings.general.addHiddenCategory) {
+							let index = e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.PENDING);
+							if (index == -1) index = e.instance.props.children.findIndex(c => c && c.props.id == favorizedFriendsSection);
+							if (index == -1) index = e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ONLINE);
+							e.instance.props.children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+								id: hiddenFriendsSection,
+								className: BDFDB.disCN.peoplestabbaritem,
+								children: this.labels.hidden
+							}));
+						}
 					}
 					else {
 						if (this.settings.general.addTotalAmount) {
