@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.3
+ * @version 1.6.4
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -265,10 +265,11 @@ module.exports = (_ => {
 			}
 
 			processNameContainer (e) {
-				if (!e.instance.props.user) return;
-				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
+				let user = BDFDB.LibraryStores.UserStore.getUser(BDFDB.ReactUtils.findValue(e.instance.props.name, "userId"));
+				if (!user) return;
+				let userType = this.getUserType(user, e.instance.props.channel && e.instance.props.channel.id);
 				if (userType && this.settings.tagPlaces.memberList) {
-					this.injectStaffTag(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
+					this.injectStaffTag(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), user, userType, 1, {
 						channelId: e.instance.props.channel && e.instance.props.channel.id,
 						tagClass: BDFDB.disCN.bottagmember
 					});
