@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.8
+ * @version 5.0.0
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1021,9 +1021,13 @@ module.exports = (_ => {
 			}
 			
 			processNameContainer (e) {
-				if (!this.settings.places.memberList || !e.instance.props.user || !this.shouldChangeInChat(e.instance.props.channel.id)) return;
-				this.changeUserColor(e.instance.props.name, e.instance.props.user.id, {e: e, guildId: e.instance.props.channel.guild_id});
-				this.injectBadge(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), 2, {
+				let channelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
+				if (!this.settings.places.memberList || !this.shouldChangeInChat(channelId)) return;
+				let userId = BDFDB.ReactUtils.findValue(e.instance.props.name, "userId");
+				if (!userId) return;
+				let guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
+				this.changeUserColor(e.instance.props.name, userId, {e: e, guildId: guildId});
+				this.injectBadge(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), userId, guildId, 2, {
 					tagClass: BDFDB.disCN.bottagmember
 				});
 			}
