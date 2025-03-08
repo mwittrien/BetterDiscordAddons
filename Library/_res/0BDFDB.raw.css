@@ -8,6 +8,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
 
+[REPLACE_CLASS_avatarpointerevents][fill="#80848e"][mask="url(#svg-mask-status-online)"] {
+	mask: url(#svg-mask-status-offline);
+}
+
 [REPLACE_CLASS_appmount] > [REPLACE_CLASS_itemlayercontainer] {
 	position: fixed;
 	z-index: 1001;
