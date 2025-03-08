@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.0
+ * @version 2.7.1
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1067,14 +1067,15 @@ module.exports = (_ => {
 						delete translatedMessages[message.id];
 						BDFDB.MessageUtils.rerenderAll(true);
 						callback(false);
-					} else {
+					}
+					else {
 						let originalContentData = {
 							content: message.content || "",
 							embeds: message.embeds.map(embed => ({
 								description: embed.rawDescription || "",
 								title: embed.rawTitle || "",
 								footerText: embed.footer ? embed.footer.text : "",
-								fields: embed.fields ? embed.fields.map(field => ({ name: field.rawName, value: field.rawValue })) : []
+								fields: embed.fields ? embed.fields.map(field => ({name: field.rawName, value: field.rawValue})) : []
 							}))
 						};
 						let allTextsToTranslate = originalContentData.content;
@@ -1088,36 +1089,32 @@ module.exports = (_ => {
 						});
 						message.embeds.forEach(embed => embed.message_id = message.id);
 						let embedIds = message.embeds.map(embed => embed.id);
-						this.translateText(allTextsToTranslate, messageTypes.RECEIVED, (translatedText, input, output) => {
-							if (translatedText) {
-								// Split the translated text back into components
-								let translatedSegments = translatedText.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
-								let translatedContent = translatedSegments.shift();
-								// The first segment is the message content
-								// For each embed segment set id from embedIds
-								// Prepare the translated embeds based on the remaining segments
-								let translatedEmbeds = translatedSegments.reduce((dict, segment, index) => {
+						this.translateText(allTextsToTranslate, messageTypes.RECEIVED, (translation, input, output) => {
+							if (translation) {
+								let oldStrings = originalContentData.content.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
+								let strings = translation.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
+								let oldContent = this.settings.general.showOriginalMessage && (oldStrings.shift() || "").trim();
+								let content = (strings.shift() || "").trim() + (oldContent ? (!this.settings.general.useSpoilerInOriginal ? ("\n\n> *" + oldContent.split("\n").join("*\n> *") + "*").replace(/> \*\*\n/g, "> \n") : `\n\n||${oldContent}||`) : "");
+								let embeds = strings.reduce((dict, segment, index) => {
 									let embedId = embedIds[index];
 									let segmentLines = segment.split("\n");
 									let title = segmentLines.shift();
 									let description = segmentLines.shift();
 									let footerText = segmentLines.pop();
-									// Split remaining lines assuming they are fields separated by \n\n
-									// and field is separated by "__________________ " into name and value
 									let fieldsSegment = segmentLines.join("\n").split("\n\n");
 									let fields = fieldsSegment.map(line => {
 										let [name, value] = line.split("__________________");
-										return { name, value };
+										return {name, value};
 									});
 
-									dict[embedId] = { title, description, fields, footerText };
+									dict[embedId] = {title, description, fields, footerText};
 									return dict;
 								}, {});
 								oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
 								oldMessages[message.id].originalContentData = originalContentData;
 								translatedMessages[message.id] = {
-									content: translatedContent,
-									embeds: translatedEmbeds,
+									content: content,
+									embeds: embeds,
 									input,
 									output
 								};
