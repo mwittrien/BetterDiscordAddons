@@ -1230,6 +1230,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 .noChannel__01d5c {
 	background-color: var(--background-primary);
 }
+#app-mount .wrapper_d852db,
+#app-mount .wrapper_fc8177 {
+	background-color: var(--background-secondary);
+}
 .content_f75fb0::before {
 	display: none;
 }
