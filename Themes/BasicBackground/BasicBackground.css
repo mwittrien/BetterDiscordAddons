@@ -6283,9 +6283,9 @@ input.input__0f084:hover:not(:focus) {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
-.base__5ed84[style*="var(--bdfdb-blurple)"],						/* numberbadge												*/
-.base__5ed84[style*="background-color: rgb(88, 101, 242)"],
-.base__5ed84[style*="background-color: rgb(114, 137, 218)"] {
+.base__2b1f5[style*="var(--bdfdb-blurple)"],						/* numberbadge												*/
+.base__2b1f5[style*="background-color: rgb(88, 101, 242)"],
+.base__2b1f5[style*="background-color: rgb(114, 137, 218)"] {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 

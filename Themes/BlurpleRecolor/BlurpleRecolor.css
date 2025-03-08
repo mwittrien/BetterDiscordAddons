@@ -2182,10 +2182,10 @@ a.metadataDownload_f316dd {
 	filter: brightness(75%);
 }
 
-.base__5ed84[style*="background-color: rgb(88, 101, 242)"],
-.base__5ed84[style*="background-color: rgb(87, 100, 242)"],
-.base__5ed84[style*="background-color: hsl(227, "],
-.base__5ed84[style*="background-color: hsl(235, "] {
+.base__2b1f5[style*="background-color: rgb(88, 101, 242)"],
+.base__2b1f5[style*="background-color: rgb(87, 100, 242)"],
+.base__2b1f5[style*="background-color: hsl(227, "],
+.base__2b1f5[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 

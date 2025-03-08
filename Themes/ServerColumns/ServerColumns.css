@@ -123,16 +123,16 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116 .scroller_ef3116 > div[style*="height"]:not([class]) {
 	height: calc(1px * var(--guildsize_v) * (58/50)) !important;
 }
-.wrapper_ef3116 .upperBadge_cc5dd2 .base__5ed84 {
+.wrapper_ef3116 .upperBadge_cc5dd2 .base__2b1f5 {
 	transform: translate(calc(1.5px * ((50 - var(--guildsize_v))/10)), calc(-1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.wrapper_ef3116 .upperLeftBadge_e35IpL .base__5ed84 {
+.wrapper_ef3116 .upperLeftBadge_e35IpL .base__2b1f5 {
 	transform: translate(calc(-1.5px * ((50 - var(--guildsize_v))/10)), calc(-1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.wrapper_ef3116 .lowerBadge_cc5dd2 .base__5ed84 {
+.wrapper_ef3116 .lowerBadge_cc5dd2 .base__2b1f5 {
 	transform: translate(calc(1.5px * ((50 - var(--guildsize_v))/10)), calc(1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.wrapper_ef3116 .lowerLeftBadge_zr4T_9 .base__5ed84 {
+.wrapper_ef3116 .lowerLeftBadge_zr4T_9 .base__2b1f5 {
 	transform: translate(calc(-1.5px * ((50 - var(--guildsize_v))/10)), calc(1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
 .wrapper_ef3116 .wrapper__58105 {
@@ -243,7 +243,8 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	margin: calc(1px * var(--guildgap_v)) calc(5px * var(--guildsize_v)/50) calc(1px * var(--guildgap_v)) 0 !important;
 }
 .wrapper_ef3116.content_Pph8t6 .folder__48112,
-.wrapper_ef3116.content_Pph8t6 .folderIconWrapper__48112 {
+.wrapper_ef3116.content_Pph8t6 .folderIconWrapper__48112,
+.wrapper_ef3116.content_Pph8t6 .expandedFolderIconWrapper__48112 {
 	height: calc(1px * var(--guildsize_v)) !important;
 	width: calc(1px * var(--guildsize_v)) !important;
 }
