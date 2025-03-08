@@ -3290,6 +3290,7 @@
 		"tooltipmutetextwithactivity": ["TooltipGuild", "muteTextWithActivity"],
 		"tooltipnote": ["BDFDB", "tooltipNote"],
 		"tooltippointer": ["Tooltip", "tooltipPointer"],
+		"tooltippointerbg": ["Tooltip", "tooltipPointerBg"],
 		"tooltipprimary": ["Tooltip", "tooltipPrimary"],
 		"tooltipred": ["Tooltip", "tooltipRed"],
 		"tooltipright": ["Tooltip", "tooltipRight"],
