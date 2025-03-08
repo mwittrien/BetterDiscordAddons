@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.5.7
+ * @version 5.5.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		fixed: {
+			"Final Update": "This should be the final update now to make everything work with the new Media Viewer GUI"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -65,7 +67,8 @@ module.exports = (_ => {
 		var firedEvents = [];
 		var ownLocations = {}, downloadsFolder;
 		
-		var firstViewedImage, viewedImage, viewedImageTimeout;
+		var firstViewedImage, viewedImage;
+		var viewedImageTimeout, updateTimeout;
 		var switchedImageProps;
 		var cachedImages;
 		var eventTypes = {};
@@ -267,6 +270,7 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"ImageModal",
+						"ImageModalBar",
 						"MessageAccessories",
 						"Spoiler"
 					],
@@ -1005,6 +1009,7 @@ module.exports = (_ => {
 			processImageModal (e, filterForVideos = false) {
 				if (switchedImageProps) {
 					e.instance.props.items = [switchedImageProps];
+					e.instance.props.startIndex = 0;
 					switchedImageProps = null;
 				}
 				else if (e.returnvalue) {
@@ -1199,8 +1204,14 @@ module.exports = (_ => {
 								this.addListener("keydown", "Gallery", event => {
 									if (!firedEvents.includes("Gallery")) {
 										firedEvents.push("Gallery");
-										if (event.keyCode == 37) this.switchImages(-1, filterForVideos);
-										else if (event.keyCode == 39) this.switchImages(1, filterForVideos);
+										if (event.keyCode == 37) {
+											BDFDB.ListenerUtils.stopEvent(event);
+											this.switchImages(-1, filterForVideos);
+										}
+										else if (event.keyCode == 39) {
+											BDFDB.ListenerUtils.stopEvent(event);
+											this.switchImages(1, filterForVideos);
+										}
 									}
 								});
 								this.addListener("keyup", "Gallery", _ => BDFDB.ArrayUtils.remove(firedEvents, "Gallery", true));
@@ -1210,6 +1221,31 @@ module.exports = (_ => {
 						e.returnvalue.props.children[0] = null;
 						e.returnvalue.props.children[2] = null;
 					}
+				}
+			}
+			
+			processImageModalBar (e) {
+				if (viewedImage && viewedImage.url) {
+					let item = {};
+					for (let key in viewedImage) item[key.split("_").map((n, i) => i > 0 ? BDFDB.StringUtils.upperCaseFirstChar(n) : n).join("")] = viewedImage[key];
+					item.alt = undefined;
+					item.contentScanMetadata = {version: item.contentScanVersion, flags: 0};
+					item.original = item.url;
+					item.loadingState = 2;
+					item.srcIsAnimated = false;
+					item.type = "IMAGE";
+					item.sourceMetadata = {
+						message: new BDFDB.DiscordObjects.Message(Object.assign({}, item.message, {author: new BDFDB.DiscordObjects.User(item.message.author)})),
+						identifier: {
+							attachmentId: item.id,
+							filename: item.filename,
+							size: item.size,
+							title: undefined,
+							type: "attachment"
+						}
+					};
+					for (let key of ["size", "filename", "id", "message", "channelId", "contentScanVersion"]) delete item[key];
+					e.instance.props.item = item;
 				}
 			}
 			
@@ -1286,9 +1322,10 @@ module.exports = (_ => {
 						
 						if (this.isValid(e.instance.props.src, "gif")) e.node.style.setProperty("pointer-events", "none");
 						if (this.settings.viewerSettings.zoomMode && typeof e.instance.props.children != "function" && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling)) {
-							let overlay = BDFDB.DOMUtils.create(`<div style="cursor: zoom-in; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1000; pointer-events: all;"></div>`);
-							e.node.parentElement.parentElement.insertBefore(overlay, e.node.parentElement);
+							let overlay = BDFDB.DOMUtils.create(`<div style="cursor: zoom-in; position: absolute; top: 0; right: 0; bottom: 0; left: 0; pointer-events: all;"></div>`);
+							e.node.parentElement.parentElement.appendChild(overlay);
 							e.node.parentElement.parentElement.style.setProperty("position", "relative");
+							overlay.addEventListener("contextmenu", event => e.node.querySelector("img").dispatchEvent(new MouseEvent("contextmenu", event)));
 							overlay.addEventListener(this.settings.zoomSettings.clickMode ? "click" : "mousedown", event => {
 								BDFDB.ListenerUtils.stopEvent(event);
 								if (event.which != 1 || e.node.querySelector("video")) return;
@@ -1669,7 +1706,7 @@ module.exports = (_ => {
 								newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
 								lastReached: index == (cachedImages.all.length - 1)
 							});
-							this.updateImageModal();
+							this.updateImageModal(true);
 						}
 					});
 				}
@@ -1696,7 +1733,7 @@ module.exports = (_ => {
 								index: index,
 								amount: cachedImages.all.length
 							});
-							this.updateImageModal();
+							this.updateImageModal(true);
 						}
 					});
 				}
@@ -1728,7 +1765,7 @@ module.exports = (_ => {
 					width: thisViewedImage.width,
 					zoomThumbnailPlaceholder: thisViewedImage.proxy_url,
 				};
-				this.updateImageModal();
+				this.updateImageModal(true);
 			}
 			
 			openZoomSettings (event) {
@@ -1776,8 +1813,12 @@ module.exports = (_ => {
 				}));
 			}
 			
-			updateImageModal () {
-				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.imagemodal), {up: true, filter: n => n && n.stateNode && n.stateNode.props && n.stateNode.props.isTopModal && n.stateNode.props.modalKey}));
+			updateImageModal (switched) {
+				BDFDB.TimeUtils.clear(updateTimeout);
+				updateTimeout = BDFDB.TimeUtils.timeout(_ => {
+					let ownerInstance = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.imagemodal), {up: true, filter: n => n && n.stateNode && n.stateNode.props && n.stateNode.props.isTopModal && n.stateNode.props.modalKey});
+					BDFDB.ReactUtils.forceUpdate(ownerInstance);
+				}, switched ? 0 : 500);
 			}
 			
 			filterForCopies (messages) {
@@ -1817,12 +1858,12 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							context_copy:						"Копирайте {{var0}}",
-							context_imageactions:						"Действия с изображения",
+							context_imageactions:					"Действия с изображения",
 							context_lenssize:					"Размер на обектива",
 							context_saveas:						"Запазете {{var0}} като ...",
 							context_searchwith:					"Търсете {{var0}} с ...",
-							context_streamactions:						"Действия за визуализация на потока",
-							context_videoactions:						"Видео действия",
+							context_streamactions:					"Действия за визуализация на потока",
+							context_videoactions:					"Видео действия",
 							context_view:						"Преглед {{var0}}",
 							context_zoomspeed:					"Скорост на мащабиране",
 							submenu_disabled:					"Всички инвалиди",
