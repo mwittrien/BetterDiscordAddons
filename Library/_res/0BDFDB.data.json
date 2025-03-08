@@ -475,6 +475,7 @@
 		"I18nLoader": {"strings": ["default.locale", ".loading", "__OVERLAY__"]},
 		"IconBadge": {"strings": [".icon}", "ROUND,disableColor", ".iconBadge,"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "noSearch": true},
+		"ImageModalBar": {"strings": [".topBar", "item", "closeButton"]},
 		"ImageModalButtons": {"strings": [".actionButtons", "\"IMAGE\"", "FOCUS_SENSITIVE"]},
 		"InboxHeader": {"strings": [".UNREADS", ".TODOS", ".controls"]},
 		"IncomingCallModal": {"strings": ["mainChannelInfo", "previewCamera", "RingingType.INCOMING"]},
