@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.0
+ * @version 5.0.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -87,6 +87,7 @@ module.exports = (_ => {
 						friendList:			{value: true, 		description: "Friend List"},
 						inviteList:			{value: true, 		description: "Invite List"},
 						activity:			{value: true, 		description: "Activity Page"},
+						userPanel:			{value: true, 		description: "User DM Panel"},
 						userPopout:			{value: true, 		description: "User Popouts"},
 						userProfile:			{value: true, 		description: "User Profile Modal"},
 						autocompletes:			{value: true, 		description: "Autocomplete Menu"},
@@ -127,6 +128,7 @@ module.exports = (_ => {
 						"UserHeaderUsername",
 						"UserInfo",
 						"UserPanelHeader",
+						"UserPopoutHeader",
 						"UserProfileHeader",
 						"UserSummaryItem",
 						"VoiceUser"
@@ -317,6 +319,11 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.PresenceStore, "findActivity", {after: e => {
 					let data = changedUsers[e.methodArguments[0]];
 					if (data && (data.removeStatus || data.status || data.statusEmoji) && (e.returnValue && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS || !e.returnValue && e.methodArguments[1] && e.methodArguments[1].toString().indexOf("type===") > -1 && e.methodArguments[1].toString().indexOf("CUSTOM_STATUS") > -1)) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CustomStatusUtils, "get", {after: e => {
+					let data = changedUsers[e.methodArguments[0]];
+					if (data && (data.removeStatus || data.status || data.statusEmoji) && (e.returnValue && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS || !e.returnValue)) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
 				}});
 				
 				this.forceUpdateAll();
@@ -565,21 +572,13 @@ module.exports = (_ => {
 				}
 			}
 			
-			processUserHeaderAvatar (e) {
-				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id]) return;
-				if (this.settings.places.userPopout) e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
-				if (e.instance.props.displayProfile) {
-					if (changedUsers[e.instance.props.user.id].removeBanner) e.instance.props.displayProfile.banner = null;
-					else if (changedUsers[e.instance.props.user.id].banner) {
-						e.instance.props.displayProfile = BDFDB.ObjectUtils.copy(e.instance.props.displayProfile);
-						e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
-						e.instance.props.displayProfile.premiumType = 2;
-					}
-				}
+			processUserPanelHeader (e) {
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || !this.settings.places.userPanel) return;
+				e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 			}
 			
-			processUserPanelHeader (e) {
-				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || !this.settings.places.userProfile) return;
+			processUserPopoutHeader (e) {
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || !this.settings.places.userPopout) return;
 				e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 			}
 			
@@ -588,10 +587,23 @@ module.exports = (_ => {
 				e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 			}
 			
-			processUserHeaderUsername (e) {
-				if (!e.instance.props.user || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE && !this.settings.places.userPopout || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.FULL_SIZE && !this.settings.places.userProfile) return;
+			processUserHeaderAvatar (e) {
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.PANEL && !this.settings.places.userPanel || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE && !this.settings.places.userPopout || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.FULL_SIZE && !this.settings.places.userProfile) return;
 				let data = changedUsers[e.instance.props.user.id];
-				if (!data) return;
+				e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
+				if (e.instance.props.displayProfile) {
+					if (data.removeBanner) e.instance.props.displayProfile.banner = null;
+					else if (data.banner) {
+						e.instance.props.displayProfile = BDFDB.ObjectUtils.copy(e.instance.props.displayProfile);
+						e.instance.props.displayProfile.banner = data.banner;
+						e.instance.props.displayProfile.premiumType = 2;
+					}
+				}
+			}
+			
+			processUserHeaderUsername (e) {
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.PANEL && !this.settings.places.userPanel || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE && !this.settings.places.userPopout || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.FULL_SIZE && !this.settings.places.userProfile) return;
+				let data = changedUsers[e.instance.props.user.id];
 				if (!e.returnvalue) {
 					let nickname = this.getUserNick(e.instance.props.user.id, e.instance.props.nickname || e.instance.props.user.globalName);
 					e.instance.props.nickname = nickname ? nickname : null;
@@ -1089,6 +1101,7 @@ module.exports = (_ => {
 				if (!e.returnvalue) {
 					let data = changedUsers[e.instance.props.user.id];
 					if (data.removeStatus || data.status || data.statusEmoji) {
+						if (e.instance.props.status == "offline") e.instance.props.status = "offline_with_status";
 						e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 						let activity = this.createCustomStatus(changedUsers[e.instance.props.user.id]);
 						if (activity) e.instance.props.activities.unshift(activity);
