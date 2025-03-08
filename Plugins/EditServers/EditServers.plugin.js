@@ -274,7 +274,6 @@ module.exports = (_ => {
 			}
 			
 			processGuildIconWrapper (e) {
-				console.log(e);
 				if (!BDFDB.GuildUtils.is(e.instance.props.guild) || !changedGuilds[e.instance.props.guild.id] || !e.instance.props.guild.joinedAt) return;
 				let change = true;
 				if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) change = this.settings.places.guildList;
