@@ -135,6 +135,18 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116 .lowerLeftBadge_zr4T_9 .base__2b1f5 {
 	transform: translate(calc(-1.5px * ((50 - var(--guildsize_v))/10)), calc(1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
+sidebar_c48ade .wrapper_ef3116 .upperBadge_cc5dd2 .base__2b1f5 {
+	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+}
+sidebar_c48ade .wrapper_ef3116 .upperLeftBadge_e35IpL .base__2b1f5 {
+	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+}
+sidebar_c48ade .wrapper_ef3116 .lowerBadge_cc5dd2 .base__2b1f5 {
+	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+}
+sidebar_c48ade .wrapper_ef3116 .lowerLeftBadge_zr4T_9 .base__2b1f5 {
+	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+}
 .wrapper_ef3116 .wrapper__58105 {
 	top: calc(-5px * var(--guildsize_v)/50) !important;
 	height: calc(1px * (var(--guildsize_v) + 10 * var(--guildsize_v)/50)) !important;
