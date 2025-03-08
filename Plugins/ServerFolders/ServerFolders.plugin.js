@@ -561,6 +561,11 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
 						border-radius: 25%;
 					}
+					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder},
+					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfoldericonwrapper} {
+						width: var(--guildbar-avatar-size, var(--guildbar-folder-size));
+						height: var(--guildbar-avatar-size, var(--guildbar-folder-size));
+					}
 					${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildfoldericon} {
 						margin-bottom: 0 !important;
 					}
