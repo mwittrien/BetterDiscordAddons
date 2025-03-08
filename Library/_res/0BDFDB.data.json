@@ -2518,7 +2518,7 @@
 		"imagemodalimage": ["ImageModalSlide", "slide"],
 		"imagemodalimagedownloadlink": ["ImageModalInner", "downloadLink"],
 		"imagemodalimageforward": ["ImageModalInner", "forward"],
-		"imagemodalimagemedia": ["ImageModalMedia", "slide"],
+		"imagemodalimagemedia": ["ImageModalMedia", "media"],
 		"imagemodalimageoptionscontainer": ["ImageModalInner", "optionsContainer"],
 		"imagemodalimagezoomedfit": ["ImageModalInner", "zoomedMediaFitWrapper"],
 		"imagemodalnavbutton": ["ModalCarouselNav", "nav"],
