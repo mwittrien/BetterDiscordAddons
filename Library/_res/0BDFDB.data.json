@@ -1333,7 +1333,8 @@
 		"NotFound": {
 			"_": "",
 			"emoji": "emoji",
-			"carouselModal": "carouselModal_d3a6f0",
+			"carouselModal": "carouselModal__8a837",
+			"carouselModalModern": "carouselModal_d3a6f0",
 			"enableForcedColors": "enable-forced-colors",
 			"highlight": "highlight",
 			"highlight": "highlight",
@@ -2850,6 +2851,7 @@
 		"modal": ["Modal", "root"],
 		"modalcancelbutton": ["CustomStatusModal", "cancelButton"],
 		"modalcarouselmodal": ["NotFound", "carouselModal"],
+		"modalcarouselmodalmodern": ["NotFound", "carouselModalModern"],
 		"modalclose": ["Modal", "close"],
 		"modalchangelogmodal": ["BDFDB", "changeLogModal"],
 		"modalconfirmmodal": ["BDFDB", "confirmModal"],
