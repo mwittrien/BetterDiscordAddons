@@ -106,7 +106,6 @@ module.exports = (_ => {
 
 			processUserSettingsAppearance (e) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.setting == "APPEARANCE_THEME"});
-				console.log(e);
 				if (index == -1) return;
 				let slider;
 				children[index].props.children.push([
