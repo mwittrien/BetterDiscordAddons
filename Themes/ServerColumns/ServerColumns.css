@@ -257,8 +257,8 @@ sidebar_c48ade .wrapper_ef3116 .lowerLeftBadge_zr4T_9 .base__2b1f5 {
 .wrapper_ef3116.content_Pph8t6 .folder__48112,
 .wrapper_ef3116.content_Pph8t6 .folderIconWrapper__48112,
 .wrapper_ef3116.content_Pph8t6 .expandedFolderIconWrapper__48112 {
-	height: calc(1px * var(--guildsize_v)) !important;
-	width: calc(1px * var(--guildsize_v)) !important;
+	width: calc(var(--guildsize_v) * (var(--guildbar-avatar-size, calc(1px * var(--guildsize_v)))/calc(var(--guildsize_v)))) !important;
+	height: calc(var(--guildsize_v) * (var(--guildbar-avatar-size, calc(1px * var(--guildsize_v)))/calc(var(--guildsize_v)))) !important;
 }
 .wrapper_ef3116.content_Pph8t6 .wrapper__48112 .expandedFolderBackground__48112 {
 	right: 0 !important;
