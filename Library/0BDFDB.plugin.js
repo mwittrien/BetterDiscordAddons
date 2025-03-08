@@ -2015,7 +2015,7 @@ module.exports = (_ => {
 					const itemLayerContainer = document.querySelector(BDFDB.dotCN.app + " ~ " + BDFDB.dotCN.itemlayercontainer) || document.querySelector(BDFDB.dotCN.itemlayercontainer);
 					if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 					const id = BDFDB.NumberUtils.generateId(Tooltips);
-					const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${BDFDB.disCN.tooltippointer}"></div></div></div>`);
+					const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${document.querySelector(BDFDB.dotCN.titlebarthick) ? BDFDB.disCNS.tooltippointer + BDFDB.disCN.tooltippointerbg : BDFDB.disCN.tooltippointer}"></div></div></div>`);
 					itemLayerContainer.appendChild(itemLayer);
 					
 					const tooltip = itemLayer.firstElementChild;
@@ -2038,7 +2038,8 @@ module.exports = (_ => {
 						customBackgroundColor = true;
 						let backgroundColorIsGradient = BDFDB.ObjectUtils.is(config.backgroundColor);
 						let backgroundColor = !backgroundColorIsGradient ? BDFDB.ColorUtils.convert(config.backgroundColor, "RGBA") : BDFDB.ColorUtils.createGradient(config.backgroundColor);
-						style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(config.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
+						let borderColor = backgroundColorIsGradient ? BDFDB.ColorUtils.convert(config.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor;
+						style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${borderColor} !important; --tooltip-pointer-bg: ${borderColor} !important;`;
 					}
 					if (style) tooltip.style = style;
 					const zIndexed = config.zIndex && typeof config.zIndex == "number";
