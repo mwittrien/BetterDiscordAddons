@@ -1900,20 +1900,20 @@ a.metadataDownload_f316dd {
 	fill: var(--status-success);
 }
 
-.colorDefault_c1e9c4[id="account-status-picker--online"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="account-status-picker--online"]:active:not(.hideInteraction_c1e9c4) {
+.colorDefault_c1e9c4[id="set-status-submenu-online"].focused_c1e9c4,
+.colorDefault_c1e9c4[id="set-status-submenu-online"]:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(59,165,92);
 }
-.colorDefault_c1e9c4[id="account-status-picker--idle"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="account-status-picker--idle"]:active:not(.hideInteraction_c1e9c4) {
+.colorDefault_c1e9c4[id="set-status-submenu-idle"].focused_c1e9c4,
+.colorDefault_c1e9c4[id="set-status-submenu-idle"]:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(250,166,26);
 }
-.colorDefault_c1e9c4[id="account-status-picker--dnd"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="account-status-picker--dnd"]:active:not(.hideInteraction_c1e9c4) {
+.colorDefault_c1e9c4[id="set-status-submenu-dnd"].focused_c1e9c4,
+.colorDefault_c1e9c4[id="set-status-submenu-dnd"]:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(237,66,69);
 }
-.colorDefault_c1e9c4[id="account-status-picker--invisible"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="account-status-picker--invisible"]:active:not(.hideInteraction_c1e9c4) {
+.colorDefault_c1e9c4[id="set-status-submenu-invisible"].focused_c1e9c4,
+.colorDefault_c1e9c4[id="set-status-submenu-invisible"]:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(116,127,141);
 }
 .colorDefault_c1e9c4.focused_c1e9c4 .status_a423bd,
