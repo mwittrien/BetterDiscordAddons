@@ -1924,8 +1924,15 @@ a.metadataDownload_f316dd {
 	grid-template-rows: minmax(24px, auto) 1fr;
 }
 
+.label_c1e9c4,										/* contextmenu				label								*/
 .icon_c1e9c4 {										/* contextmenu				icon								*/
 	color: currentColor !important;
+}
+.icon_c1e9c4 path {									/* contextmenu				icon								*/
+	fill: currentColor !important;
+}
+.item_c1e9c4 .checkbox_f525d3:not(.checked_f525d3) {					/* contextmenu				checkbox								*/
+	border-color: currentColor !important;
 }
 
 .activeIcon_d40c56 path[fill*="hsl(234, "],
