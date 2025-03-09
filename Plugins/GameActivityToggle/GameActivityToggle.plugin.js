@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -162,8 +162,8 @@ module.exports = (_ => {
 				
 				this.css = `
 					${BDFDB.dotCNS._gameactivitytoggleadded + BDFDB.dotCN.accountinfoavatarwrapper} {
-						flex: 1;
-						min-width: 0;
+						flex: 1 !important;
+						min-width: 0 !important;
 					}
 				`;
 			}
