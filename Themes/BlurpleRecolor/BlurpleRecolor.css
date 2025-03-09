@@ -2068,11 +2068,11 @@ a.metadataDownload_f316dd {
 
 /* ----		12.3.		INPUTS						---- */
 
-.input__0f084:not(.error__0f084):not(.success_f8bc55):not(.focused__0f084):not(:focus):hover {
+.input__0f084:not(.error__0f084):not(.success__0f084):not(.focused__0f084):not(:focus):hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
-.input__0f084:not(.error__0f084):not(.success_f8bc55).focused__0f084,
-.input__0f084:not(.error__0f084):not(.success_f8bc55):focus {
+.input__0f084:not(.error__0f084):not(.success__0f084).focused__0f084,
+.input__0f084:not(.error__0f084):not(.success__0f084):focus {
 	border-color: rgb(var(--accentcolor_v));
 }
 .focused__0f084 {
