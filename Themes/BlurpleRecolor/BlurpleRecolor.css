@@ -1931,8 +1931,12 @@ a.metadataDownload_f316dd {
 .icon_c1e9c4 path {									/* contextmenu				icon								*/
 	fill: currentColor !important;
 }
-.item_c1e9c4 .checkbox_f525d3:not(.checked_f525d3) {					/* contextmenu				checkbox								*/
+.item_c1e9c4 .checkbox_f525d3:not(.checked_f525d3) {					/* contextmenu				checkbox							*/
 	border-color: currentColor !important;
+}
+											/* contextmenu				radio								*/
+.item_c1e9c4 .radioIndicator__001a7:not(.radioIndicatorChecked__001a7) .refreshIconStroke__001a7 {
+	stroke: currentColor !important;
 }
 
 .activeIcon_d40c56 path[fill*="hsl(234, "],
