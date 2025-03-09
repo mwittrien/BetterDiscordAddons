@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.3
+ * @version 4.0.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,7 +27,9 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			
+			fixed: {
+				"Message 3-Dot Menu": "Plugins that add an entry inside the 3-Dot ContextMenu in the Message Toolbar, now properly add them again"
+			}
 		}
 	};
 	
@@ -1165,7 +1167,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 					
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					const UserStore = BdApi.Webpack && BdApi.Webpack.getModule && BdApi.Webpack.Filters && BdApi.Webpack.Filters.byKeys && BdApi.Webpack.getModule(BdApi.Webpack.Filters.byKeys("getCurrentUser"));
+					const UserStore = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("getCurrentUser"));
 					if (backupObj.backup && backupObj.hashIsSame || UserStore && UserStore.getCurrentUser().id == "278543574059057154") parseData(backupObj.backup);
 					else requestFunction(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, {timeout: 60000}, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
@@ -2359,6 +2361,7 @@ module.exports = (_ => {
 											data.stopOriginalMethodCall = _ => stopInsteadCall = true;
 										}
 										if (args[0] != module) data.instance = args[0] || {props: args[1][0]};
+										if (module == LibraryModules.MessageToolbarUtils) data.instance = {props: args[1][0]};
 										for (let priority in patches[type].plugins) for (let id in BDFDB.ObjectUtils.sort(patches[type].plugins[priority])) {
 											let tempReturn = BDFDB.TimeUtils.suppress(patches[type].plugins[priority][id], `"${type}" callback of ${methodName} in ${name}`, {name: patches[type].plugins[priority][id].pluginName, version: patches[type].plugins[priority][id].pluginVersion, ignoreErrors: config.ignoreErrors})(data);
 											if (type != "before" && tempReturn !== undefined) data.returnValue = tempReturn;
@@ -2566,12 +2569,16 @@ module.exports = (_ => {
 							const APIUtils = Internal.LibraryModules.APIUtils;
 							if (APIUtils && InternalData.LibraryModules.HTTPUtils.props) LibraryModules[item] = (Object.entries(APIUtils).find(entry => InternalData.LibraryModules.HTTPUtils.props.every(prop => entry[1][prop] !== undefined)) || [])[1];
 						}
+						else if (item == "MessageToolbarUtils") return LibraryModules.MessageToolbarUtils;
 						else Internal.findModuleViaData(LibraryModules, InternalData.LibraryModules, item);
 						
 						return LibraryModules[item] ? LibraryModules[item] : null;
 					}
 				});
 				BDFDB.LibraryModules = Internal.LibraryModules;
+				
+				LibraryModules.MessageToolbarUtils = {};
+				LibraryModules.MessageToolbarUtils.useMessageMenu = (props, returnValue) => {return returnValue;};
 				
 				if (Internal.LibraryModules.KeyCodeUtils && Internal.LibraryModules.PlatformUtils) {
 					let originalModule = LibraryModules.KeyCodeUtils;
@@ -8104,7 +8111,6 @@ module.exports = (_ => {
 						"BlobMaskInner",
 						"EmojiPickerListRow",
 						"Menu",
-						"MessageActionsContextMenu",
 						"MessageHeader",
 						"NameContainer",
 						"SearchBar"
@@ -8319,9 +8325,24 @@ module.exports = (_ => {
 						let patchCancel = BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.ContextMenuUtils, "closeContextMenu", {instead: e => {}});
 						BDFDB.TimeUtils.timeout(_ => patchCancel());
 					}
-				};
-				Internal.processMessageActionsContextMenu = function (e) {
-					e.instance.props.updatePosition = _ => {};
+					if (e.instance.props && e.instance.props.navId == "message-actions" && !e.instance.props.BDFDBpatched) {
+						e.instance.props.BDFDBpatched = true;
+						let copyChild = BDFDB.ReactUtils.findChild(e.instance, {filter: n => n && n.props && n.props.id == "copy-link"});
+						if (!copyChild) return;
+						let link = "";
+						BDFDB.PatchUtils.patch(BDFDB, BDFDB.LibraryModules.ClipboardUtils, "copy", {instead: e => {link = e.methodArguments[0];}}, {once: true});
+						copyChild.props.action();
+						if (!link) return;
+						let guildId = link.split("/channels/")[1].split("/")[0];
+						let channelId = link.split(`/channels/${guildId}/`)[1].split("/")[0];
+						let messageId = link.split(`/channels/${guildId}/${channelId}/`)[1].split("/")[0];
+						if (!guildId || !channelId || !messageId) return;
+						LibraryModules.MessageToolbarUtils.useMessageMenu({
+							guild: Internal.LibraryStores.GuildStore.getGuild(guildId),
+							channel: Internal.LibraryStores.ChannelStore.getChannel(channelId),
+							message: Internal.LibraryStores.MessageStore.getMessage(channelId, messageId)
+						}, e.instance);
+					}
 				};
 				Internal.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {
