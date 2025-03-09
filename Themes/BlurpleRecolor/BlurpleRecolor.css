@@ -1811,6 +1811,7 @@ a.metadataDownload_f316dd {
 .colorDefault_c1e9c4.focused_c1e9c4,
 .colorDefault_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(var(--accentcolor_v));
+	color: var(--header-primary);
 }
 .colorBrand_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorDefault_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4 {
@@ -1831,6 +1832,7 @@ a.metadataDownload_f316dd {
 .colorPremium_c1e9c4.focused_c1e9c4,
 .colorPremium_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(var(--accentcolor2_v));
+	color: var(--header-primary);
 }
 .colorPremium_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4 {
 	color: rgb(var(--accentcolor2_v));
@@ -1850,6 +1852,7 @@ a.metadataDownload_f316dd {
 .colorPremiumGradient_c1e9c4.focused_c1e9c4,
 .colorPremiumGradient_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background: linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgb(var(--accentcolor_v)));
+	color: var(--header-primary);
 }
 .colorPremiumGradient_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4 {
 	color: rgb(var(--accentcolor_v));
@@ -1867,6 +1870,7 @@ a.metadataDownload_f316dd {
 .colorDanger_c1e9c4.focused_c1e9c4,
 .colorDanger_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: var(--status-danger);
+	color: var(--header-primary);
 }
 .colorDanger_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4 {
 	color: var(--status-danger);
@@ -1884,6 +1888,7 @@ a.metadataDownload_f316dd {
 .colorSuccess_c1e9c4.focused_c1e9c4,
 .colorSuccess_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: var(--status-success);
+	color: var(--header-primary);
 }
 .colorSuccess_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4 {
 	color: var(--status-success);
