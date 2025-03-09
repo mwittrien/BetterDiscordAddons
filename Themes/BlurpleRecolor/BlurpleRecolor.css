@@ -658,6 +658,9 @@
 
 /* ----		3.4.		MEMBERLIST					---- */
 
+.icon__8ac07 path[fill="#43a25a"] {
+	fill: var(--text-secondary);
+}
 .premiumIcon__5d473 {
 	color: rgb(var(--accentcolor2_v));
 }
