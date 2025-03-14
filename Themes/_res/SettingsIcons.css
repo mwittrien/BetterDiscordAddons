@@ -678,7 +678,6 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child,
 .standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e {
 	margin-left: calc(var(--use-settingsicons) * 30px);
-	position: relative;
 }
 .standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
 .standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1::before,
@@ -690,22 +689,24 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	content: "";
 	display: inline-block;
-	position: absolute;
+	color: var(--header-primary);
+	position: relative;
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * 18px);
 	height: calc(var(--use-settingsicons) * 18px);
-	left: calc(var(--use-settingsicons) * -26px);
+	margin-right: calc(var(--use-settingsicons) * 8px);
+	left: 0;
 	background: currentColor;
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	position: absolute;
 }
-.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before {
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before {
 	left: 40px;
 }
 .standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * h2::before,
