@@ -380,6 +380,15 @@
 	fill: rgb(var(--accentcolor_v));
 }
 
+.link__972a0 {
+	overflow: hidden;
+	position: relative;
+}
+.marketingButtonBackgroundImage__4ed1a[src="https://cdn.discordapp.com/assets/content/ffea3b8093800be98cd8cd53695037449224b204ac4fb1e5e0d455688b81f1eb.png"] {
+	-webkit-mask: url("https://cdn.discordapp.com/assets/content/ffea3b8093800be98cd8cd53695037449224b204ac4fb1e5e0d455688b81f1eb.png") center/cover no-repeat;
+	background: rgb(var(--accentcolor_v));
+}
+
 
 /* ~~~~		3.		CHAT						~~~~ */
 
