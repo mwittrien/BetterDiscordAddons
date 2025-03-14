@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.8
+ * @version 1.2.9
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -213,8 +213,8 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 									className: BDFDB.disCN.flexchild,
-									value: presets[id].clearAfter,
-									options: Object.entries(ClearAfterValues).map(entry => ({value: entry[0], label: !entry[1] || entry[1] == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : entry[1] == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", entry[1]/3600000)})),
+									value: ClearAfterValues[presets[id].clearAfter] || presets[id].clearAfter,
+									options: Object.entries(ClearAfterValues).map(entry => ({value: entry[1], label: !entry[1] || entry[1] == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : entry[1] == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", entry[1]/3600000)})),
 									onChange: value => {
 										presets[id].clearAfter = value;
 										BDFDB.DataUtils.save(presets, _this, "presets");
@@ -355,6 +355,7 @@ module.exports = (_ => {
 								disabled: true
 							}) : Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => {
 							let imageUrl = presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name));
+							let clearAfter = ClearAfterValues[presets[id].clearAfter] || presets[id].clearAfter;
 							return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", id),
 								label: BDFDB.ReactUtils.createElement("div", {
@@ -398,11 +399,11 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								hint: !presets[id].clearAfter || presets[id].clearAfter == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
+								hint: !clearAfter || clearAfter == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", clearAfter/3600000),
 								action: _ => {
 									if (!presets[id]) return;
-									let expiresAt = presets[id].clearAfter && presets[id].clearAfter != ClearAfterValues.DONT_CLEAR ? presets[id].clearAfter : null;
-									if (presets[id].clearAfter === ClearAfterValues.TODAY) {
+									let expiresAt = clearAfter && clearAfter != ClearAfterValues.DONT_CLEAR ? clearAfter : null;
+									if (clearAfter === ClearAfterValues.TODAY) {
 										let date = new Date;
 										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 									}
