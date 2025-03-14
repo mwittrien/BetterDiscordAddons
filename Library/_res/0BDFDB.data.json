@@ -133,6 +133,9 @@
 		"ChatRestrictionUtils": {"strings": ["dispatch({type:\"MESSAGE_LENGTH_UPSELL\"", "Message Too Long Alert"], "exported": false, "value": "exports", "map": {
 			"applyChatRestrictions": ["Message Too Long Alert"]
 		}},
+		"ClipboardUtils": {"strings": ["ClipboardUtils.copy", "execCommand(\"copy\")"], "exported": false, "value": "exports", "map": {
+			"copy": ["ClipboardUtils.copy", "execCommand(\"copy\")"]
+		}},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
 		"ContextMenuUtils": {"strings": ["renderLazy:", ".enableSpellCheck", "type:\"CONTEXT_MENU_CLOSE\""], "exported": false, "value": "exports", "map": {
@@ -1532,7 +1535,7 @@
 		"Layers": {"props": ["layer", "layers"]},
 		"LiveTag": {"props": ["liveLarge", "live"]},
 		"LoadingScreen": {"props": ["container", "problemsText", "problems"]},
-		"LottieIcon": {"props": ["lottieIcon"], "length": 1},
+		"LottieIcon": {"props": ["lottieIcon", "lottieIconColors"]},
 		"Margins": {"props": ["marginBottom4", "marginCenterHorz"]},
 		"Menu": {"props": ["menu", "colorPremiumGradient", "item"]},
 		"MenuReactButton": {"props": ["wrapper", "icon", "focused", "button"]},
