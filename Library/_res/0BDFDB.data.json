@@ -1892,6 +1892,7 @@
 		"accountinfobuttons": ["AccountDetails", "buttons"],
 		"accountinfobuttonstrikethrough": ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "panelTitleContainer"],
+		"accountinfomicbuttonparent": ["AccountDetails", "micButtonParent"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
 		"aliasautocomplete": ["AutocompleteAliases", "autocomplete"],
 		"anchor": ["Anchor", "anchor"],
