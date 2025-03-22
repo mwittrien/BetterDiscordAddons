@@ -172,8 +172,8 @@
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"InternalReactUtils": {"props": ["jsx", "jsxs", "Fragment"]},
 		"KeyCodeUtils": {"strings": [".KEYBOARD_MODIFIER_KEY", "Unrecognized DeviceType", "[\"\"+"], "exported": false, "value": "exports", "map": {
-			"codeToKey": ["[\"\"+", "default:return"],
-			"keyToCode": ["\"meta\",\"command\"", "parseInt("]
+			"codeToKey": [".keyCode,", "return null"],
+			"keyToCode": [".keyCode:null", ".KEYBOARD_KEY,"]
 		}},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LanguageUtils": {"props": ["getLanguages", "getLocale"]},
