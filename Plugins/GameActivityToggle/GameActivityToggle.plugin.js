@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.3.5
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -165,6 +165,10 @@ module.exports = (_ => {
 						flex: 1 !important;
 						min-width: 0 !important;
 					}
+					${BDFDB.dotCNS._gameactivitytoggleadded + BDFDB.dotCN.accountinfobuttons} > * {
+						margin-left: 0;
+						margin-right: 0;
+					}
 				`;
 			}
 			
@@ -280,23 +284,34 @@ module.exports = (_ => {
 			
 			processAccount (e) {
 				if (!this.settings.general.showButton) return;
-				let accountinfo = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.accountinfo]]});
-				if (!accountinfo) return;
-				let buttons = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.accountinfobuttons]]});
-				if (buttons) {
-					accountinfo.props.className = BDFDB.DOMUtils.formatClassName(accountinfo.props.className, BDFDB.disCN._gameactivitytoggleadded);
-					buttons.props.children.unshift(BDFDB.ReactUtils.createElement(ActivityToggleComponent, {}));
-				}
-				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "AccountButtons"});
-					if (index > -1) {
+				let insertButton = returnvalue => {
+					let accountinfo = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.accountinfo]]});
+					if (!accountinfo) return;
+					let buttons = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.accountinfobuttons]]});
+					if (buttons) {
 						accountinfo.props.className = BDFDB.DOMUtils.formatClassName(accountinfo.props.className, BDFDB.disCN._gameactivitytoggleadded);
-						children.splice(index, 0, BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.accountinfobuttons,
-							children: BDFDB.ReactUtils.createElement(ActivityToggleComponent, {})
-						}));
+						buttons.props.children.unshift(BDFDB.ReactUtils.createElement(ActivityToggleComponent, {}));
 					}
+					else {
+						let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "AccountButtons"});
+						if (index > -1) {
+							accountinfo.props.className = BDFDB.DOMUtils.formatClassName(accountinfo.props.className, BDFDB.disCN._gameactivitytoggleadded);
+							children.splice(index, 0, BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.accountinfobuttons,
+								children: BDFDB.ReactUtils.createElement(ActivityToggleComponent, {})
+							}));
+						}
+					}
+				};
+				if (typeof e.returnvalue.props.children == "function") {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let renderedChildren = childrenRender(...args);
+						insertButton(renderedChildren);
+						return renderedChildren;
+					}, "Error in Children Render in Account!", this);
 				}
+				else insertButton(children[index]);
 			}
 			
 			activateKeybind () {
