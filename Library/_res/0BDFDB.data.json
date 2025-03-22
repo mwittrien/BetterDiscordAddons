@@ -173,7 +173,7 @@
 		"InternalReactUtils": {"props": ["jsx", "jsxs", "Fragment"]},
 		"KeyCodeUtils": {"strings": [".KEYBOARD_MODIFIER_KEY", "Unrecognized DeviceType", "[\"\"+"], "exported": false, "value": "exports", "map": {
 			"codeToKey": ["[\"\"+", "default:return"],
-			"keyToCode": ["\"meta\",\"command\"", "return parseInt("]
+			"keyToCode": ["\"meta\",\"command\"", "parseInt("]
 		}},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LanguageUtils": {"props": ["getLanguages", "getLocale"]},
