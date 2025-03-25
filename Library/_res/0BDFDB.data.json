@@ -1654,7 +1654,7 @@
 		"TypingCoowldown": {"props": ["cooldownWrapper", "slowModeIcon"]},
 		"UnreadBar": {"props": ["active", "bar", "unread"]},
 		"UploadModal": {"props": ["uploadModal", "bgScale"]},
-		"UserBadges": {"props": ["badge", "container", "tieredTenureBadgeBronzeGlow"]},
+		"UserBadges": {"props": ["badge", "container", "orbBadge"]},
 		"UserBanner": {"props": ["popoutBanner", "popoutBannerPremium"]},
 		"UserHeaderUsername": {"props": ["clickableUsername", "nickname", "bot"]},
 		"UserPopoutBody": {"props": ["body", "menus"]},
