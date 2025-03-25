@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -93,8 +93,8 @@ module.exports = (_ => {
 							key: "TEXTINPUT",
 							inputClassName: BDFDB.disCN.emojiinput,
 							maxLength: 128,
-							value: this.props.text,
-							placeholder: this.props.text,
+							value: this.props.text && this.props.text.text || this.props.text,
+							placeholder: this.props.text && this.props.text.text || this.props.text,
 							onChange: value => {
 								this.props.text = value;
 								this.props.onChange(this.props);
@@ -202,7 +202,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									wrap: true,
 									children: BDFDB.ReactUtils.createElement(CustomStatusInputComponent, {
-										text: presets[id].text,
+										text: presets[id].text && presets[id].text.text || presets[id].text,
 										emoji: presets[id].emojiInfo,
 										onChange: value => {
 											presets[id].text = value.text;
@@ -395,7 +395,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-											children: presets[id].text
+											children: presets[id].text && presets[id].text.text || presets[id].text
 										})
 									]
 								}),
