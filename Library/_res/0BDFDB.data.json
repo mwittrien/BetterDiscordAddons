@@ -1177,7 +1177,7 @@
 		},
 		"GameActivityToggle": {
 			"added": "gameActivityToggleAdded_Yd-YxC",
-			"button": "gameActivityButton_Yd-YxC"
+			"button": "gameActivityToggleButton_Yd-YxC"
 		},
 		"ImageUtilities": {
 			"details": "details_9dkFPc",
