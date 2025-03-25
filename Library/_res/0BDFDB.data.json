@@ -1119,8 +1119,8 @@
 		},
 		"BetterFriendList": {
 			"mutualGuilds": "mutualGuilds_s7F2aa",
-			"nameCell": "nameCell_7F4sRs",
-			"title": "title_3aDrFs"
+			"nameCell": "nameCell_s7F2aa",
+			"title": "title_s7F2aa"
 		},
 		"BetterNsfwTag": {
 			"nsfwTag": "nsfwTag_666omg"
@@ -1130,53 +1130,54 @@
 		},
 		"ChatFilter": {
 			"blocked": "blocked_jUhayi",
-			"blockedStamp": "blockedStamp_ijVeNn",
-			"censored": "censored_UYfeYg",
-			"censoredStamp": "censoredStamp_fb2cYb"
+			"blockedStamp": "blockedStamp_jUhayi",
+			"censored": "censored_jUhayi",
+			"censoredStamp": "censoredStamp_jUhayi"
 		},
 		"CharCounter": {
 			"charCounter": "charCounter_7fw40k",
-			"chatCounter": "chatCounter_XOMPsh",
-			"counterAdded": "charCounterAdded_zz9O4t",
-			"customStatusCounter": "customStatusCounter_G8FrsT",
-			"editCounter": "editCounter_pNT1Xe",
-			"popoutNoteCounter": "popoutNoteCounter_62U4Rh",
-			"profileNoteCounter": "profileNoteCounter_p0fWA_",
-			"threadCreationCounter": "threadCreationCounter_p0fWA_",
-			"userProfileCounter": "userProfileCounter_iEGQQk"
+			"chatCounter": "chatCounter_7fw40k",
+			"counterAdded": "charCounterAdded_7fw40k",
+			"customStatusCounter": "customStatusCounter_7fw40k",
+			"editCounter": "editCounter_7fw40k",
+			"popoutNoteCounter": "popoutNoteCounter_7fw40k",
+			"profileNoteCounter": "profileNoteCounter_7fw40k",
+			"threadCreationCounter": "threadCreationCounter_7fw40k",
+			"userProfileCounter": "userProfileCounter_7fw40k"
 		},
 		"CustomStatusPresets": {
 			"customStatusItem": "customStatusItem_f5Trsa",
-			"deleteButton": "deleteButton_k8a4Sa",
-			"deleteIcon": "deleteIcon_22SgHa",
-			"dragPreview": "dragPreview_3F0ssT",
-			"sortableCard": "sortableCard_oF6sTT",
-			"sortDivider": "sortDivider_d8SzzU",
-			"status": "status_0f5Sr2"
+			"deleteButton": "deleteButton_f5Trsa",
+			"deleteIcon": "deleteIcon_f5Trsa",
+			"dragPreview": "dragPreview_f5Trsa",
+			"sortableCard": "sortableCard_f5Trsa",
+			"sortDivider": "sortDivider_f5Trsa",
+			"status": "status_f5Trsa"
 		},
 		"DisplayServersAsChannels": {
 			"badge": "badge_fxFrUP",
-			"muted": "muted_k5Fraa",
-			"name": "name_z5133D",
-			"styled": "styledGuildsAsChannels_DNHtg_"
+			"muted": "muted_fxFrUP",
+			"name": "name_fxFrUP",
+			"styled": "styledGuildsAsChannels_fxFrUP"
 		},
 		"EmojiStatistics": {
 			"amountCell": "amountCell_g_W6Rx",
-			"iconCell": "iconCell_-wniOu",
-			"nameCell": "nameCell_xyXENZ",
-			"statisticsButton": "statisticsButton_nW2KoM"
+			"iconCell": "iconCell_g_W6Rx",
+			"nameCell": "nameCell_g_W6Rx",
+			"statisticsButton": "statisticsButton_g_W6Rx"
 		},
 		"FriendNotifications": {
 			"friendsOnline": "friendsOnline_2JkivW",
-			"friendsOnlineWrap": "friendsOnlineWrap_0gZ63m",
-			"logAvatar": "avatar_GgGssS",
-			"logContent": "content__3_FFs",
-			"logTime": "time_00Fs44",
-			"timeLogModal": "timeLogModal_9s4Rts",
-			"typeLabel": "label_9FgsSa"
+			"friendsOnlineWrap": "friendsOnlineWrap_2JkivW",
+			"logAvatar": "avatar_2JkivW",
+			"logContent": "content_2JkivW",
+			"logTime": "time_2JkivW",
+			"timeLogModal": "timeLogModal_2JkivW",
+			"typeLabel": "label_2JkivW"
 		},
 		"GameActivityToggle": {
-			"added": "gameActivityToggleAdded_Yd-YxC"
+			"added": "gameActivityToggleAdded_Yd-YxC",
+			"button": "gameActivityButton_Yd-YxC"
 		},
 		"ImageUtilities": {
 			"details": "details_9dkFPc",
@@ -1728,6 +1729,7 @@
 		"_friendnotificationstimelogmodal": ["FriendNotifications", "timeLogModal"],
 		"_friendnotificationstypelabel": ["FriendNotifications", "typeLabel"],
 		"_gameactivitytoggleadded": ["GameActivityToggle", "added"],
+		"_gameactivitytogglebutton": ["GameActivityToggle", "button"],
 		"_imageutilitiesdetails": ["ImageUtilities", "details"],
 		"_imageutilitiesdetailsadded": ["ImageUtilities", "detailsAdded"],
 		"_imageutilitiesdetailslabel": ["ImageUtilities", "detailsLabel"],
