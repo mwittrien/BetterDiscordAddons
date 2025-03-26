@@ -224,6 +224,9 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	padding: 0 0 0 1px !important;
 	gap: unset !important;
 }
+.wrapper_ef3116 .wrapper__48112:not(.isExpanded__48112) .stack_dbd263 {
+	display: none;
+}
 .wrapper_ef3116 .wrapper__48112.isExpanded__48112 [role="group"] .listItem__650eb {
 	margin-right: 0 !important;
 }
@@ -236,6 +239,10 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	bottom: 0 !important;
 	left: 0 !important;
 	margin-bottom: 0 !important;
+}
+.wrapper_ef3116 .expandedFolderIconWrapper__48112 svg {
+	width: 24px;
+	height: 24px;
 }
 
 /* SERVERFOLDERS */
