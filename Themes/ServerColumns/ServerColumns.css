@@ -180,6 +180,7 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116 .friendsOnlineWrap_2JkivW,
 .wrapper_ef3116 .serverCountWrap_k8F5De,
 .wrapper_ef3116 .frame_oXWS21,
+.wrapper_ef3116 .frame_oXWS21 .innerFrame_8Hg64E,
 .wrapper_ef3116 .frame_oXWS21 .button_Jt-tIg {
 	height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
 }
