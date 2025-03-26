@@ -381,7 +381,9 @@ body,											/* body													*/
 #app-mount .contentRegion__23e6b {							/* settings				content								*/
 	background: transparent;
 }
-
+#app-mount .app_a3002d {
+	color: transparent;
+}
 #app-mount .scroller__7d20c {								/* peoples				activity scroller						*/
 	border: none;
 }
