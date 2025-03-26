@@ -26,11 +26,7 @@ module.exports = (_ => {
 	
 	BDFDB = {
 		started: true,
-		changeLog: {
-			fixed: {
-				"Message 3-Dot Menu": "Plugins that add an entry inside the 3-Dot ContextMenu in the Message Toolbar, now properly add them again"
-			}
-		}
+		changeLog: {}
 	};
 	
 	return class BDFDB_Frame {
