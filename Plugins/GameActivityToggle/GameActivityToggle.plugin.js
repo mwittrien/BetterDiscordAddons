@@ -97,7 +97,7 @@ module.exports = (_ => {
 							if (toggleItem) BDFDB.ReactUtils.forceUpdate(toggleItem);
 						}
 					}))
-				});
+				}, true);
 			}
 		};
 		
