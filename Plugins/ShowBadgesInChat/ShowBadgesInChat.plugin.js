@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.1
+ * @version 2.1.2
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -329,7 +329,7 @@ module.exports = (_ => {
 
 			processNameContainer (e) {
 				let user = BDFDB.LibraryStores.UserStore.getUser(BDFDB.ReactUtils.findValue(e.instance.props.name, "userId"));
-				if (user) this.injectBadges(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), user, e.instance.props.channel.guild_id, "memberList");
+				if (user) this.injectBadges(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), user, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), "memberList");
 			}
 
 			processPrivateChannel (e) {
@@ -373,6 +373,7 @@ module.exports = (_ => {
 					if (requestQueue.queue.indexOf(user.id) == -1) requestQueue.queue.push(user.id);
 					this.runQueue();
 				}
+				if (place == "memberList") console.log(children);
 				children.push(BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
 					render() {
 						if (!loadedUsers[user.id] || !loadedUsers[user.id].badges || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
