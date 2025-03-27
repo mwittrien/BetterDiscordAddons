@@ -120,9 +120,11 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	top: 0 !important;
 	left: 0 !important;
 }
+.wrapper_ef3116 .scroller_ef3116 > div[style*="height"].pinned_jHvFrr,
 .wrapper_ef3116 .scroller_ef3116 > div[style*="height"]:not([class]) {
 	height: calc(1px * var(--guildsize_v) * (58/50)) !important;
 }
+.sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 > div[style*="height"].pinned_jHvFrr,
 .sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 > div[style*="height"]:not([class]) {
 	height: calc(1px * var(--guildsize_v) * (54/50)) !important;
 }
