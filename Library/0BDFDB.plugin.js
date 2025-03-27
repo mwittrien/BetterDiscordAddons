@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.5
+ * @version 4.0.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4408,7 +4408,7 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.getTheme = function () {
-					return BDFDB.LibraryStores.ThemeStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+					return BDFDB.LibraryStores.ThemeStore.theme == "light" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 				};
 				BDFDB.DiscordUtils.getZoomFactor = function () {
 					let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
