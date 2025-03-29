@@ -133,6 +133,7 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 }
 
 .sidebar__23e6b .side_b3f026 .item_b3f026:nth-last-child(4),
+.sidebar__23e6b .side_b3f026 .item_b3f026:nth-last-child(5),
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="logout-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="logout-tab" i] {
 	--settingsicons-icon: var(--settingsicons-logout) !important;
