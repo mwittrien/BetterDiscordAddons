@@ -843,8 +843,8 @@ html .iconBadge__0c126 {
 #app-mount .top_b3f026 .item_b3f026.selected_b3f026 {
 	color: var(--text-primary);
 }
-.side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026),
-.topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026) {
+.side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026):not(.addFriend__133bf),
+.topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover:not(.disabled_b3f026):not(.addFriend__133bf) {
 	background-color: var(--button-secondary-background);
 }
 
