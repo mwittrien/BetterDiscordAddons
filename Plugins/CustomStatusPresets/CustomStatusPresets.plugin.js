@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -87,7 +87,7 @@ module.exports = (_ => {
 									this.props.onChange(this.props);
 									BDFDB.ReactUtils.forceUpdate(this);
 								}
-							})
+							}, true)
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							key: "TEXTINPUT",
@@ -344,8 +344,9 @@ module.exports = (_ => {
 			
 			processUserPopoutStatusBubbleEmpty (e) {
 				if (e.instance.props.profileType != BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE) return;
-				let onContextMenu = e.returnvalue.props.onContextMenu;
-				e.returnvalue.props.onContextMenu = BDFDB.TimeUtils.suppress(event => {
+				let bubble = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutstatusbubbleeditable]]}) || e.returnvalue;
+				let onContextMenu = bubble.props.onContextMenu;
+				bubble.props.onContextMenu = BDFDB.TimeUtils.suppress(event => {
 					onContextMenu && onContextMenu(event);
 					let enabledPresets = BDFDB.ObjectUtils.filter(presets, id => !presets[id].disabled, true);
 					BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
