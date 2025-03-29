@@ -314,6 +314,7 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["className", BDFDB.disCN.peopleslistsearchbar]]});
 					if (index > -1) children[index] = null;
 					body.props.hasSearchQuery = false;
+					body.props.footer = null;
 				}
 				if (this.settings.general.addBlockedCategory || this.settings.general.addIgnoredCategory) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {filter: n => n.type && n.type.toLocaleString().indexOf("blockedIgnoredSettingsNotice") > -1});
