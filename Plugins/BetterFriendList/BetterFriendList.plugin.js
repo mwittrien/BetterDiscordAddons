@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.6.0
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -380,10 +380,18 @@ module.exports = (_ => {
 					if (currentSection == customSections.HIDDEN) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
 					else if (([].concat(e.instance.props.rows).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
 				}
-				if (e.instance.props.rows.flat(10)[0] && (this.settings.general.addBlockedCategory && currentSection == customSections.BLOCKED || this.settings.general.addIgnoredCategory && currentSection == customSections.IGNORED)) {
+				if (this.settings.general.addBlockedCategory && currentSection == customSections.BLOCKED || this.settings.general.addIgnoredCategory && currentSection == customSections.IGNORED) {
 					let ignoredSection = currentSection == customSections.IGNORED;
 					let userIDs = ignoredSection ? BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs() : this.getBlockedIDs();
-					let RelationshipConstructor = e.instance.props.rows.flat(10)[0].constructor;
+					let RelationshipConstructor = e.instance.props.rows.flat(10)[0] && e.instance.props.rows.flat(10)[0].constructor || class RelationshipConstructor {
+						get comparator() {
+							return [this.type, 1, this.nickname || this.user && this.user.global && this.user.global.toLowerCase() || this.usernameLower]
+						}
+						constructor(e) {
+							for (let prop of Object.keys(e)) this[prop] = e[prop];
+						}
+					};
+					console.log(RelationshipConstructor);
 					e.instance.props.rows = [userIDs.map(id => {
 						let user = BDFDB.LibraryStores.UserStore.getUser(id);
 						return new RelationshipConstructor({
