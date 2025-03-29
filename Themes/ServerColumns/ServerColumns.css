@@ -181,22 +181,6 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	line-height: calc(1px * (var(--guildsize_v)/4 + 6.5)) !important;
 }
 .wrapper_ef3116 #sort-button,
-.wrapper_ef3116 #sort-button > div,
-.wrapper_ef3116 .friendsOnlineWrap_2JkivW,
-.wrapper_ef3116 .serverCountWrap_k8F5De,
-.wrapper_ef3116 .frame_oXWS21,
-.wrapper_ef3116 .frame_oXWS21 .innerFrame_8Hg64E,
-.wrapper_ef3116 .frame_oXWS21 .button_Jt-tIg {
-	height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
-}
-.wrapper_ef3116 .label_2wRs_g {
-	display: flex !important;
-	justify-content: center !important;
-	width: calc(1px * (var(--guildsize_v) * var(--columns_v) + 20 * (var(--guildsize_v)/50) + 14 * (var(--guildsize_v)/50) * (var(--columns_v) - 1) - (20 * var(--guildsize_v)/50) calc(10px * var(--guildsize_v)/50))) !important;
-	margin: 0 !important;
-	font-size: calc(1px * ((var(--guildsize_v)/8) + 3)) !important;
-}
-.wrapper_ef3116 #sort-button,
 .wrapper_ef3116 .friendsOnlineWrap_2JkivW,
 .wrapper_ef3116 .serverCountWrap_k8F5De,
 .wrapper_ef3116 .frame_oXWS21 {
@@ -209,9 +193,21 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116 .frame_oXWS21 .innerFrame_8Hg64E,
 .wrapper_ef3116 .frame_oXWS21 .button_Jt-tIg {
 	white-space: pre !important;
-	font-size: calc(1px * ((var(--guildsize_v)/8) + 5)) !important;
-	line-height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
 	width: 100% !important;
+}
+.wrapper_ef3116 .label_2wRs_g {
+	display: flex !important;
+	justify-content: center !important;
+	height: calc(1px * ((var(--guildsize_v)/5) + 5)) !important;
+	line-height: calc(1px * ((var(--guildsize_v)/5) + 5)) !important;
+	font-size: calc(1px * ((var(--guildsize_v)/8) + 3)) !important;
+	margin: 0 !important;
+}
+.wrapper_ef3116 #sort-button > div,
+.wrapper_ef3116 .frame_oXWS21 .button_Jt-tIg {
+	height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
+	line-height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
+	font-size: calc(1px * ((var(--guildsize_v)/8) + 6)) !important;
 }
 
 .wrapper_ef3116 .wrapper__48112 {
