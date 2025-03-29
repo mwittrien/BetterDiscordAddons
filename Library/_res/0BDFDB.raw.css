@@ -17,8 +17,8 @@ img:not([src]), img[src=""], img[src="null"] {
 	z-index: 1001;
 }
 
-[REPLACE_CLASS_titlebarmac] {
-	z-index: 1000001;
+[REPLACE_CLASS_userpopoutmenuitemicon] {
+	align-self: center;
 }
 
 [REPLACE_CLASS_itemlayercontainerzindexdisabled] {
