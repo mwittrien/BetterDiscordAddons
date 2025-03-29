@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.0
+ * @version 1.6.1
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -232,10 +232,15 @@ module.exports = (_ => {
 			
 			processTabBar (e) {
 				if (e.instance.props.children && e.instance.props.children.some(c => c && c.props && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
+					let relationships = BDFDB.LibraryStores.RelationshipStore.getRelationships(), relationshipCount = {};
+					for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
+					for (let id in relationships) if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || relationships[id] != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[relationships[id]]++;
+					relationshipCount.IGNORED = BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs().length;
 					currentSection = e.instance.props.selectedItem;
+					let hasFriends = relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.FRIEND] > 0;
 					if (!e.returnvalue) {
 						e.instance.props.children = e.instance.props.children.filter(c => c && c.props.id != customSections.FAVORITES && c.props.id != customSections.HIDDEN);
-						if (this.settings.general.addFavorizedCategory) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ONLINE) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+						if (this.settings.general.addFavorizedCategory && hasFriends) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ONLINE) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
 							id: customSections.FAVORITES,
 							className: BDFDB.disCN.peoplestabbaritem,
 							children: this.labels.favorites
@@ -243,7 +248,7 @@ module.exports = (_ => {
 						let index = e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.PENDING);
 						if (index == -1) index = e.instance.props.children.findIndex(c => c && c.props.id == customSections.FAVORITES);
 						if (index == -1) index = e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ONLINE);
-						if (this.settings.general.addHiddenCategory) e.instance.props.children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+						if (this.settings.general.addHiddenCategory && hasFriends) e.instance.props.children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
 							id: customSections.HIDDEN,
 							className: BDFDB.disCN.peoplestabbaritem,
 							children: this.labels.hidden
@@ -261,10 +266,6 @@ module.exports = (_ => {
 					}
 					else {
 						if (this.settings.general.addTotalAmount) {
-							let relationships = BDFDB.LibraryStores.RelationshipStore.getRelationships(), relationshipCount = {};
-							for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
-							for (let id in relationships) if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || relationships[id] != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[relationships[id]]++;
-							relationshipCount.IGNORED = BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs().length;
 							for (let child of e.returnvalue.props.children) if (child && child.props.id != BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND) {
 								let newChildren = [child.props.children].flat().filter(n => !n || !n.props || n.props.count == undefined);
 								switch (child.props.id) {
@@ -300,6 +301,7 @@ module.exports = (_ => {
 			
 			processAnalyticsContext (e) {
 				if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.FRIENDS_LIST) return;
+				console.log(e);
 				let body = BDFDB.ReactUtils.findChild(e.instance, {filter: n => n && n.props && n.props.renderRow && n.props.rows});
 				if (!body) return;
 				let users = body.props.rows.flat(10);
@@ -311,10 +313,11 @@ module.exports = (_ => {
 				}
 				if (this.settings.general.addBlockedCategory && currentSection == customSections.BLOCKED || this.settings.general.addIgnoredCategory && currentSection == customSections.IGNORED) {
 					filteredUsers = currentSection == customSections.IGNORED ? BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs() : this.getBlockedIDs();
-					let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["className", BDFDB.disCN.peopleslistsearchbar]]});
-					if (index > -1) children[index] = null;
+					for (let className of [BDFDB.disCN.peopleslistsearchbar, BDFDB.disCN.peopleslistempty]) {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["className", className]]});
+						if (index > -1) children[index] = null;
+					}
 					body.props.hasSearchQuery = false;
-					body.props.footer = null;
 				}
 				if (this.settings.general.addBlockedCategory || this.settings.general.addIgnoredCategory) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {filter: n => n.type && n.type.toLocaleString().indexOf("blockedIgnoredSettingsNotice") > -1});
