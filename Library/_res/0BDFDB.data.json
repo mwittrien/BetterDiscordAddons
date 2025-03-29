@@ -3349,6 +3349,7 @@
 		"userpopoutcustomstatustext": ["CustomStatus", "customStatusText"],
 		"userpopoutinner": ["UserTheme", "inner"],
 		"userpopoutmenudivider": ["UserPopoutBody", "menuDivider"],
+		"userpopoutmenuitemicon": ["UserPopoutBody", "menuItemIcon"],
 		"userpopoutmenus": ["UserPopoutBody", "menus"],
 		"userpopoutouter": ["UserTheme", "outer"],
 		"userpopoutsection": ["UserPopoutSection", "section"],
