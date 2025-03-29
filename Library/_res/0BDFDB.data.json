@@ -2981,6 +2981,7 @@
 		"peoplesitem": ["PeopleItem", "peopleListItem"],
 		"peopleslist": ["PeopleList", "peopleList"],
 		"peopleslistempty": ["PeopleList", "emptyStateContainer"],
+		"peopleslistsearchbar": ["PeopleList", "searchBar"],
 		"peoplesnowplayingcolumn": ["Peoples", "nowPlayingColumn"],
 		"peoplesnowplayingmember": ["PeoplesNowPlayingMember", "memberItem"],
 		"peoplespeoplecolumn": ["Peoples", "peopleColumn"],
