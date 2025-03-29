@@ -391,7 +391,6 @@ module.exports = (_ => {
 							for (let prop of Object.keys(e)) this[prop] = e[prop];
 						}
 					};
-					console.log(RelationshipConstructor);
 					e.instance.props.rows = [userIDs.map(id => {
 						let user = BDFDB.LibraryStores.UserStore.getUser(id);
 						return new RelationshipConstructor({
