@@ -1335,20 +1335,19 @@ module.exports = (_ => {
 				const apiUrl = "https://api.deepseek.com/v1/chat/completions";
 
 				const processedText = data.text
-					.replace(/\n/g, " \\n ")
+					.replace(/\n/g, " [NEWLINE] ")
 					.replace(/\s+/g, ' ');
 
 				const translationPrompt = `
-				You are a professional localization expert. Translate the following ${data.input.auto ? "" : data.input.name + " "}content into ${data.output.name} following these rules:
-				1. Return ONLY the translation without any explanations, notes or examples
-				2. Use natural, fluent language that sounds native in the target language
-				3. Maintain the original tone (formal, casual, humorous, etc.)
-				4. Keep technical/game terms consistent with industry standards
-				5. Preserve all numbers, units, and proper nouns exactly
-				6. Maintain line breaks where present (marked by \\n)
-				7. For game-related content, use community-approved terminology
-				8. Never add content that wasn't in the original text
-				9. Adapt idioms/cultural references to equivalent target language ones
+				You are a professional localization expert. Translate the following ${data.input.auto ? "" : data.input.name + " "}content to ${data.output.name} following these rules:
+				1. Return ONLY the translation without any explanations
+				2. Use natural, fluent language
+				3. Maintain consistent terminology for technical/game terms  
+				4. Preserve the original tone and style
+				5. Use concise sentence structures
+				6. Handle numbers/units/proper nouns correctly
+				7. Use community-approved expressions for game content
+				8. Convert [NEWLINE] markers to actual line breaks (don't show them literally)
 				
 				Text to translate:
 				${processedText}
@@ -1359,7 +1358,7 @@ module.exports = (_ => {
 					messages: [
 						{
 							role: "system",
-							content: "You are a senior localization specialist experienced in game and technical translations across multiple languages."
+							content: "You are a senior bilingual localization specialist"
 						},
 						{
 							role: "user",
@@ -1382,14 +1381,13 @@ module.exports = (_ => {
 						try {
 							body = JSON.parse(body);
 							let translatedText = body.choices[0].message.content;
-							translatedText = translatedText.replace(/ \\n /g, '\n');
+							translatedText = translatedText.replace(/\[NEWLINE\]/g, '\n');
 							callback(translatedText);
 						} catch (err) {
 							console.error("DeepSeek translation error:", err);
 							callback("");
 						}
 					} else {
-
 						if (response.statusCode == 401 || response.statusCode == 403) {
 							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_keyoutdated}`, {
 								type: "danger",
