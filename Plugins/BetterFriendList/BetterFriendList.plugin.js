@@ -301,7 +301,6 @@ module.exports = (_ => {
 			
 			processAnalyticsContext (e) {
 				if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.FRIENDS_LIST) return;
-				console.log(e);
 				let body = BDFDB.ReactUtils.findChild(e.instance, {filter: n => n && n.props && n.props.renderRow && n.props.rows});
 				if (!body) return;
 				let users = body.props.rows.flat(10);
