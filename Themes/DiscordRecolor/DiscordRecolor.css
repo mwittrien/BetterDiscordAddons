@@ -138,6 +138,7 @@
 	
 	--header-primary: rgb(var(--textbrightest_v));
 	--header-secondary: rgb(var(--textbright_v));
+	--header-muted: rgb(var(--textdarker_v));
 	--text-primary: rgb(var(--textbrightest_v));
 	--text-secondary: rgb(var(--textbright_v));
 	--text-normal: rgb(var(--textbrighter_v));
@@ -146,8 +147,9 @@
 	--channel-icon: rgb(var(--textdark_v));
 	
 	--icon-primary: rgb(var(--textbrightest_v));
-	--icon-secondary: rgb(var(--textbright_v));
-	--icon-tertiary: rgb(var(--textbrighter_v));
+	--icon-secondary: rgb(var(--textbrighter_v));
+	--icon-tertiary: rgb(var(--textbright_v));
+	--icon-muted: rgb(var(--textdarker_v));
 	
 	--interactive-normal: rgb(var(--textbright_v));
 	--interactive-hover: rgb(var(--textbrighter_v));
