@@ -6705,6 +6705,10 @@ html .bd-toast.toast-warn.icon::before {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="black" d="M 1 21 h 22 L 12 2 1 21 z m 12-3 h -2 v -2 h 2 v 2 z m 0-4 h -2 v -4 h 2 v 4 z"/></svg>') 6px 50%/20px 20px no-repeat;
 }
 
+html .bd-sidebar-header h2 {
+	color: var(--channels-default);
+}
+
 #app-mount .fav {
 	background: var(--interactive-active);
 	width: 16px;
