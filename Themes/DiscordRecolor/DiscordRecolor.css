@@ -3572,6 +3572,10 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	background-color: currentColor;
 }
 
+html .bd-sidebar-header h2 {
+	color: var(--channels-default);
+}
+
 .bd-select {
 	border: 1px solid transparent;
 	padding: 8px 8px 8px 12px;
