@@ -140,7 +140,8 @@
 	--header-secondary: rgb(var(--textbright_v));
 	--header-muted: rgb(var(--textdarker_v));
 	--text-primary: rgb(var(--textbrightest_v));
-	--text-secondary: rgb(var(--textbright_v));
+	--text-secondary: rgb(var(--textbrighter_v));
+	--text-tertiary: rgb(var(--textbright_v));
 	--text-normal: rgb(var(--textbrighter_v));
 	--text-muted: rgb(var(--textdarker_v));
 	--channels-default: rgb(var(--textdark_v));
