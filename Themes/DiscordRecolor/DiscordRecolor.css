@@ -145,6 +145,10 @@
 	--channels-default: rgb(var(--textdark_v));
 	--channel-icon: rgb(var(--textdark_v));
 	
+	--icon-primary: rgb(var(--textbrightest_v));
+	--icon-secondary: rgb(var(--textbright_v));
+	--icon-tertiary: rgb(var(--textbrighter_v));
+	
 	--interactive-normal: rgb(var(--textbright_v));
 	--interactive-hover: rgb(var(--textbrighter_v));
 	--interactive-active: rgb(var(--textbrightest_v));
