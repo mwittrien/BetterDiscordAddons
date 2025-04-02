@@ -223,6 +223,8 @@
 	--font-primary: var(--font_v) !important;
 	--font-display: var(--font_v) !important;
 	
+	--deprecated-card-bg: rgba(var(--transparencycolor_v), .6);
+	--deprecated-card-editable-bg: rgba(var(--transparencycolor_v), .3);
 	--deprecated-text-input-bg: rgba(var(--transparencycolor_v), .1);
 	--deprecated-text-input-border: rgba(var(--transparencycolor_v), .1);
 	--deprecated-text-input-border-hover: rgba(var(--transparencycolor_v), .3);
