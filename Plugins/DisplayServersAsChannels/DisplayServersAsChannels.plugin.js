@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.6
+ * @version 1.8.7
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -168,6 +168,8 @@ module.exports = (_ => {
 			}
 		
 			processGuildsBar (e) {
+				let sidebar = document.querySelector(BDFDB.dotCN.channels);
+				if (sidebar) sidebar.style.removeProperty("display");
 				const process = returnValue => {
 					let scroller = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.guildsscroller]]});
 					if (scroller) {
