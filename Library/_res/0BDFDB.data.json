@@ -2101,6 +2101,7 @@
 		"channelpanels": ["AppBase", "panels"],
 		"channels": ["AppBase", "sidebar"],
 		"channelselected": ["ChannelContainer", "selected"],
+		"channelshidden": ["AppBase", "hidden"],
 		"channelsscroller": ["GuildChannels", "scroller"],
 		"channelsunreadbar": ["GuildChannels", "unreadBar"],
 		"channelsunreadbarcontainer": ["GuildChannels", "positionedContainer"],
