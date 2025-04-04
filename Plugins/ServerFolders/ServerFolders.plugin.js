@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.3
+ * @version 7.3.4
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -538,7 +538,7 @@ module.exports = (_ => {
 						opacity: 0.5 !important;
 						z-index: 10000 !important;
 					}
-					${BDFDB.dotCN.channels}:has(${BDFDB.dotCN.guilds}) {
+					${BDFDB.dotCN.channels + BDFDB.notCN.channelshidden}:has(${BDFDB.dotCN.guilds}) {
 						display: flex !important;
 						flex-direction: row !important;
 						width: auto !important;
