@@ -60,6 +60,30 @@
 	--settingsicons-nameplates: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/nameplate.png);
 	--settingsicons-settingstree: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/settingstree.png);
 	--settingsicons-logout: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/logout.png);
+	
+	--settingsicons-overview: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overview.png);
+	--settingsicons-engagement: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/engagement.png);
+	--settingsicons-boostperks: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boost.png);
+	--settingsicons-emotes: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/emotes.png);
+	--settingsicons-stickers: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/stickers.png);
+	--settingsicons-soundboard: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/soundboard.png);
+	--settingsicons-members: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/members.png);
+	--settingsicons-roles: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/roles.png);
+	--settingsicons-invites: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/invites.png);
+	--settingsicons-access: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/access.png);
+	--settingsicons-widgets: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/widgets.png);
+	--settingsicons-apps: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/apps.png);
+	--settingsicons-moderation: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/moderation.png);
+	--settingsicons-audit: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.png);
+	--settingsicons-bans: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/bans.png);
+	--settingsicons-community: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/community.png);
+	--settingsicons-introductions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/library.png);
+	--settingsicons-analytics: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/analytics.png);
+	--settingsicons-welcome: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/welcome.png);
+	--settingsicons-monetization: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/revenue.png);
+	--settingsicons-booststatus: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boost.png);
+	--settingsicons-template: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/template.png);
+	--settingsicons-serverdelete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
 
 body #app-mount .sidebarRegion__23e6b:has(.socialLinks__7df54) {
@@ -131,12 +155,6 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 .sidebar__23e6b .side_b3f026 .item_b3f026.vc-backup-restore,
 #app-mount .standardSidebarView__23e6b:has(.vc-backup-restore[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-vc-backup-restore) !important;
-}
-
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Logout" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="logout-tab" i],
-#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="logout-tab" i] {
-	--settingsicons-icon: var(--settingsicons-logout) !important;
 }
 
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="My Account" i],
@@ -379,6 +397,152 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="web-setting-tree-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-settingstree);
 }
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Changelog" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="changelog-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="changelog-tab" i] {
+	--settingsicons-icon: var(--settingsicons-changelog);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Merchandise" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="merchandise-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="merchandise-tab" i] {
+	--settingsicons-icon: var(--settingsicons-merchandise);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Hypesquad Online" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="hypesquad-online-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hypesquad-online-tab" i] {
+	--settingsicons-icon: var(--settingsicons-hypesquad);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Logout" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="logout-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="logout-tab" i] {
+	--settingsicons-icon: var(--settingsicons-logout);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="PROFILE" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="profile-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-tab" i] {
+	--settingsicons-icon: var(--settingsicons-overview);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ENGAGEMENT" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="engagement-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="engagement-tab" i] {
+	--settingsicons-icon: var(--settingsicons-engagement);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="BOOST_PERKS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="boost_perks-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="boost_perks-tab" i] {
+	--settingsicons-icon: var(--settingsicons-boostperks);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="EMOJI" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="emoji-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="emoji-tab" i] {
+	--settingsicons-icon: var(--settingsicons-emotes);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="STICKERS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="stickers-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="stickers-tab" i] {
+	--settingsicons-icon: var(--settingsicons-stickers);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="SOUNDBOARD" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="soundboard-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="soundboard-tab" i] {
+	--settingsicons-icon: var(--settingsicons-soundboard);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="MEMBERS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="members-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="members-tab" i] {
+	--settingsicons-icon: var(--settingsicons-members);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ROLES" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="roles-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="roles-tab" i] {
+	--settingsicons-icon: var(--settingsicons-roles);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="INVITES" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="invites-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="invites-tab" i] {
+	--settingsicons-icon: var(--settingsicons-invites);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ACCESS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="access-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="access-tab" i] {
+	--settingsicons-icon: var(--settingsicons-access);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="INTEGRATIONS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="integrations-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="integrations-tab" i] {
+	--settingsicons-icon: var(--settingsicons-widgets);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="APP_DIRECTORY" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="app_directory-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="app_directory-tab" i] {
+	--settingsicons-icon: var(--settingsicons-apps);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="SAFETY" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="safety-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="safety-tab" i] {
+	--settingsicons-icon: var(--settingsicons-moderation);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="AUDIT_LOG" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="audit_log-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="audit_log-tab" i] {
+	--settingsicons-icon: var(--settingsicons-audit);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="BANS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="bans-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="bans-tab" i] {
+	--settingsicons-icon: var(--settingsicons-bans);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="COMMUNITY" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="community-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community-tab" i] {
+	--settingsicons-icon: var(--settingsicons-community);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ONBOARDING" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="onboarding-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="onboarding-tab" i] {
+	--settingsicons-icon: var(--settingsicons-library);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ANALYTICS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="analytics-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="analytics-tab" i] {
+	--settingsicons-icon: var(--settingsicons-analytics);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="COMMUNITY_WELCOME" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="community_welcome-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community_welcome-tab" i] {
+	--settingsicons-icon: var(--settingsicons-welcome);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ROLE_SUBSCRIPTIONS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="role_subscriptions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="role_subscriptions-tab" i] {
+	--settingsicons-icon: var(--settingsicons-monetization);
+}
+
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="GUILD_PREMIUM" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="guild_premium-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_premium-tab" i] {
+	--settingsicons-icon: var(--settingsicons-booststatus);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="GUILD_TEMPLATES" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="guild_templates-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_templates-tab" i] {
+	--settingsicons-icon: var(--settingsicons-template);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="DELETE" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="delete-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="delete-tab" i] {
+	--settingsicons-icon: var(--settingsicons-delete);
+}
+
+
 
 
 
