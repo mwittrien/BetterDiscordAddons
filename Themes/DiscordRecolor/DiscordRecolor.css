@@ -3608,6 +3608,10 @@ html .bd-sidebar-header h2 {
 	padding: 0 10px 16px 10px;
 }
 
+#app-mount .bd-links .bd-addon-button {
+	margin-right: 6px;
+}
+
 #app-mount .fav {
 	background: var(--interactive-active);
 	width: 16px;
