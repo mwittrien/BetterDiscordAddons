@@ -545,7 +545,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(0.1 + var(--guildchanneltransparency_v) * 2));
 }
 .bar_c38106::after {
-	height: 36px;
+	height: var(--custom-app-top-bar-height);
 }
 .titleBar__421ed:not(.typeMacOS__421ed)::after {
 	height: 22px;
