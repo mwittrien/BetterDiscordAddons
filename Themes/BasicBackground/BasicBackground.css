@@ -2027,15 +2027,24 @@ body:has(#app-mount)::after {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 
-#app-mount .wrapper_cb9592 {								/* call					voice wrapper							*/
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 0.8));
-}
-#app-mount .callContainer_cb9592 {							/* call					voice wrapper inner						*/
-	background-color: rgba(var(--transparencycolor_v), calc((1 - (var(--guildchanneltransparency_v) * 0.8)) * 0.8));
-}
-#app-mount .root_bfe55a {								/* call					root								*/
+#app-mount .root_bfe55a,								/* call					root								*/
+#app-mount .callContainer_cb9592,							/* call					root								*/
+#app-mount .wrapper_cb9592 {								/* call					root								*/
+	background: rgba(var(--transparencycolor_v), 0);
 	color: var(--header-primary);
 }
+#app-mount .buttonSection__1405b {
+	background: rgba(var(--transparencycolor_v), 0.3);
+}
+
+:not(:root):fullscreen::backdrop {
+	display: none;
+}
+.base_c48ade:not(:has(.bar_c38106)),
+.base_c48ade:not(:has(.bar_c38106)) .content_c48ade {
+	display: flex;
+}
+
 .videoWrapper__2f4f7 {									/* call					video wrapper							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
