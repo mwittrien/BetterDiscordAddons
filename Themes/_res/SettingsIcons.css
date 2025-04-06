@@ -77,7 +77,7 @@
 	--settingsicons-audit: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.png);
 	--settingsicons-bans: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/bans.png);
 	--settingsicons-community: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/community.png);
-	--settingsicons-introductions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/library.png);
+	--settingsicons-introductions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/introductions.png);
 	--settingsicons-analytics: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/analytics.png);
 	--settingsicons-welcome: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/welcome.png);
 	--settingsicons-monetization: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/virtualcurrency.png);
@@ -508,7 +508,7 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ONBOARDING" i],
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="onboarding-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="onboarding-tab" i] {
-	--settingsicons-icon: var(--settingsicons-library);
+	--settingsicons-icon: var(--settingsicons-introductions);
 }
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ANALYTICS" i],
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="analytics-tab" i],
