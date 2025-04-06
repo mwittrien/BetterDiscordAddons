@@ -83,7 +83,7 @@
 	--settingsicons-monetization: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/virtualcurrency.png);
 	--settingsicons-booststatus: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/booststatus.png);
 	--settingsicons-template: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/template.png);
-	--settingsicons-serverdelete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
+	--settingsicons-delete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
 
 body #app-mount .sidebarRegion__23e6b:has(.socialLinks__7df54) {
@@ -425,6 +425,11 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-tab" i] {
 	--settingsicons-icon: var(--settingsicons-overview);
 }
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="OVERVIEW" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="overview-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="overview-tab" i] {
+	--settingsicons-icon: var(--settingsicons-overview);
+}
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ENGAGEMENT" i],
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="engagement-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="engagement-tab" i] {
@@ -460,6 +465,11 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ROLES" i],
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="roles-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="roles-tab" i] {
+	--settingsicons-icon: var(--settingsicons-roles);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="PERMISSIONS" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="permissions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="permissions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-roles);
 }
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="INVITES" i],
