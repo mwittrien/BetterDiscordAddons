@@ -2563,6 +2563,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		11.		USERSETTINGS					~~~~ */
 
+.visual-refresh.platform-win .sidebarRegionScroller__23e6b {
+	margin-top: var(--custom-app-top-bar-height);
+}
 #app-mount .top_b3f026 .item_b3f026.selected_b3f026 {
 	color: var(--text-primary);
 }
