@@ -400,7 +400,7 @@ body,											/* body													*/
 	border: none;
 }
 
-#app-mount .sidebarRegion__23e6b,							/* settings				sidebar								*/
+#app-mount .sidebarRegionScroller__23e6b,						/* settings				sidebar								*/
 #app-mount .sidebar__0OpfR {								/* sidebarlist				sidebar								*/
 	background-color: rgba(var(--transparencycolor_v), calc(0.2 * (var(--transparencyalpha_v) / (var(--transparencyalpha_v) + 0.00000000000000000000001))));
 }
