@@ -72,7 +72,7 @@
 	--settingsicons-invites: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/invites.png);
 	--settingsicons-access: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/access.png);
 	--settingsicons-widgets: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/widgets.png);
-	--settingsicons-apps: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/apps.png);
+	--settingsicons-appdirectory: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/appdirectory.png);
 	--settingsicons-moderation: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/moderation.png);
 	--settingsicons-audit: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.png);
 	--settingsicons-bans: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/bans.png);
@@ -481,7 +481,7 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="APP_DIRECTORY" i],
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="app_directory-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="app_directory-tab" i] {
-	--settingsicons-icon: var(--settingsicons-apps);
+	--settingsicons-icon: var(--settingsicons-appdirectory);
 }
 
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="SAFETY" i],
