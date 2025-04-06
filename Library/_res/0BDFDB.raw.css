@@ -4,6 +4,18 @@
 	--bdfdb-blurple: var(--brand-experiment, hsl(235, calc(var(--saturation-factor, 1) * 85.6%), 64.7%));
 }
 
+#bd-notices:has(.bd-notice) {
+	display: block;
+	width: 100vw;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+}
+[REPLACE_CLASS_appbase]:has(#bd-notices .bd-notice) {
+	margin-top: 36px;
+}
+
 img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
