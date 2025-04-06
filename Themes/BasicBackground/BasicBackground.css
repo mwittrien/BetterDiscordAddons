@@ -2040,10 +2040,6 @@ body:has(#app-mount)::after {
 :not(:root):fullscreen::backdrop {
 	display: none;
 }
-.base_c48ade:not(:has(.bar_c38106)),
-.base_c48ade:not(:has(.bar_c38106)) .content_c48ade {
-	display: flex;
-}
 
 .videoWrapper__2f4f7 {									/* call					video wrapper							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
