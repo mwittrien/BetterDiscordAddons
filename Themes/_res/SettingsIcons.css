@@ -63,7 +63,7 @@
 	
 	--settingsicons-overview: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overview.png);
 	--settingsicons-engagement: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/engagement.png);
-	--settingsicons-boostperks: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boost.png);
+	--settingsicons-boostperks: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boosts.png);
 	--settingsicons-emotes: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/emotes.png);
 	--settingsicons-stickers: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/stickers.png);
 	--settingsicons-soundboard: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/soundboard.png);
@@ -81,7 +81,7 @@
 	--settingsicons-analytics: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/analytics.png);
 	--settingsicons-welcome: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/welcome.png);
 	--settingsicons-monetization: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/virtualcurrency.png);
-	--settingsicons-booststatus: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boost.png);
+	--settingsicons-booststatus: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/booststatus.png);
 	--settingsicons-template: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/template.png);
 	--settingsicons-serverdelete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
