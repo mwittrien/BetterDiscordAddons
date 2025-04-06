@@ -1915,6 +1915,7 @@
 		"animationsfocussensitive": ["Animations", "focusSensitive"],
 		"animationshidden": ["Animations", "hidden"],
 		"app": ["AppOuter", "app"],
+		"appbase": ["AppBase", "base"],
 		"appcontainer": ["AppBase", "container"],
 		"appinner": ["AppInner", "app"],
 		"appmount": ["AppMount", "appMount"],
