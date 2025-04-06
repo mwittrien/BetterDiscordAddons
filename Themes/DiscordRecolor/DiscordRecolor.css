@@ -4047,6 +4047,9 @@ html .typingindicator-folder {
 
 /* ~~~~		16.		WATERMARK					~~~~ */
 
+#app-mount:not(:has(.base_c48ade .bar_c38106)) {
+	--custom-app-top-bar-height: 0px;
+}
 html:only-child > head + body div.typeWindows__421ed.titleBar__421ed > div.wordmark__421ed {
 	display: block !important;
 	position: absolute !important;
