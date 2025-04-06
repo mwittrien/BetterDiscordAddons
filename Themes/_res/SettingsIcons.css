@@ -89,32 +89,32 @@
 body #app-mount .sidebarRegion__23e6b:has(.socialLinks__7df54) {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-body #app-mount .sidebar__23e6b:has(.socialLinks__7df54),
-body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__7df54) {
+body #app-mount .sidebar__23e6b,
+body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 	width: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026 {
+.sidebar__23e6b .side_b3f026 .item_b3f026 {
 	--settingsicons-icon: var(--settingsicons-default);
 	display: flex;
 	align-items: center;
 }
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026 > div {
+.sidebar__23e6b .side_b3f026 .item_b3f026 > div {
 	flex: 1 1 auto;
 }
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026::before,
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026::after {
+.sidebar__23e6b .side_b3f026 .item_b3f026::before,
+.sidebar__23e6b .side_b3f026 .item_b3f026::after {
 	content: "";
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	height: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	margin-right: calc(var(--use-settingsicons) * var(--settingsicons-size)/2);
 }
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026::before {
+.sidebar__23e6b .side_b3f026 .item_b3f026::before {
 	background: currentColor;
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026::after {
+.sidebar__23e6b .side_b3f026 .item_b3f026::after {
 	position: absolute;
 	z-index: 1;
 	background: var(--settingsicons-icon) center/contain no-repeat;
@@ -543,16 +543,13 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b:has(.socialLinks__
 }
 
 
-
-
-
 .bd-server-search ~ .item_b3f026::before {
 	display: none;
 }
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .premiumLabel_e681d1 > svg,
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .premiumLabel_e681d1 img,
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .tabBarItemContainer_c7e907 > svg,
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .tabBarItemContainer_c7e907 img {
+.sidebar__23e6b .side_b3f026 .premiumLabel_e681d1 > svg,
+.sidebar__23e6b .side_b3f026 .premiumLabel_e681d1 img,
+.sidebar__23e6b .side_b3f026 .tabBarItemContainer_c7e907 > svg,
+.sidebar__23e6b .side_b3f026 .tabBarItemContainer_c7e907 img {
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
 }
 
