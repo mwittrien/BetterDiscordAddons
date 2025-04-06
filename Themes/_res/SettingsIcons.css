@@ -76,6 +76,7 @@
 	--settingsicons-moderation: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/moderation.png);
 	--settingsicons-audit: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.png);
 	--settingsicons-bans: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/bans.png);
+	--settingsicons-automod: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/introductions.png);
 	--settingsicons-community: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/community.png);
 	--settingsicons-introductions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/introductions.png);
 	--settingsicons-analytics: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/analytics.png);
@@ -504,6 +505,11 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="safety-tab" i] {
 	--settingsicons-icon: var(--settingsicons-moderation);
 }
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="MODERATION" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="moderation-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="moderation-tab" i] {
+	--settingsicons-icon: var(--settingsicons-moderation);
+}
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="AUDIT_LOG" i],
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="audit_log-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="audit_log-tab" i] {
@@ -513,6 +519,11 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="bans-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="bans-tab" i] {
 	--settingsicons-icon: var(--settingsicons-bans);
+}
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="GUILD_AUTOMOD" i],
+#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="guild_automod-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_automod-tab" i] {
+	--settingsicons-icon: var(--settingsicons-automod);
 }
 
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="COMMUNITY" i],
