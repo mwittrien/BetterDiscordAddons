@@ -529,6 +529,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		3.		TITLEBAR					~~~~ */
 
+#app-mount:not(:has(.base_c48ade .bar_c38106)) {
+	--custom-app-top-bar-height: 0px;
+}
 .titleBar__421ed,
 .bar_c38106 {
 	z-index: 5001;
