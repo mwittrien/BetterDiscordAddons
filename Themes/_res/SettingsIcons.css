@@ -539,7 +539,7 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="DELETE" i],
 #app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="delete-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="delete-tab" i] {
-	--settingsicons-icon: var(--settingsicons-delete);
+	--settingsicons-icon: var(--settingsicons-serverdelete);
 }
 
 
