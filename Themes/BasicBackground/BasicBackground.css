@@ -898,6 +898,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		6.		CHAT						~~~~ */
 
+.chat_f75fb0 {										/* chat													*/
+	border-top: 0 !important;
+}
 .chat_f75fb0.threadSidebarOpen_f75fb0 {							/* chat					threadsidebar open						*/
 	border-radius: 0;
 }
