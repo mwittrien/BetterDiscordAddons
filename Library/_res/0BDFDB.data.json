@@ -273,7 +273,7 @@
 		"Checkbox": {"props": ["Aligns", "Shapes", "Types"]},
 		"Clickable": {"strings": [".ENTER", "renderNonInteractive", ".handleKeyPress"]},
 		"KeybindRecorder": {"strings": [".RECORDING", ".DEFAULT", "toggleRecordMode"]},
-		"PopoutContainer": {"props": ["Animation", "defaultProps"]},
+		"PopoutContainer": {"strings": ["Unsupported animation config"]},
 		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"]},
 		"SearchBar": {"strings": ["this.inputRef", ".containerRef", ".handleOnChange"]},
 		"SearchableSelect": {"strings": ["serialize", "haspopup", "maxVisibleItems"]},
