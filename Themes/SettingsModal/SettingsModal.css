@@ -66,6 +66,7 @@
 #app-mount .layer__960e4 ~ .layer__960e4 .sidebarRegion__23e6b,
 #app-mount .layer__960e4 ~ .layer__960e4 .sidebarRegionScroller__23e6b {
 	flex: 0 0 auto !important;
+	margin-top: 0 !important;
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
 	width: 218px !important;
