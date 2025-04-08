@@ -87,7 +87,7 @@
 	--settingsicons-delete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
 
-body #app-mount .sidebarRegion__23e6b:has(.socialLinks__7df54) {
+body #app-mount .sidebarRegion__23e6b {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
 body #app-mount .sidebar__23e6b,
@@ -581,8 +581,11 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 
 .standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child,
-.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child {
+.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child,
+.standardSidebarView__23e6b .emojiSettings_e7d73e h2.title_b717a1 {
 	display: flex;
 	align-items: center;
 }
@@ -599,19 +602,22 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 .standardSidebarView__23e6b .contentColumnWide__23e6b {
 	--settingsicons-icon: var(--settingsicons-default);
 }
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e {
 	margin-left: calc(var(--use-settingsicons) * 30px);
 }
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > h2:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnWide__23e6b > h2:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b .emojiSettings_e7d73e h2.title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	content: "";
 	display: inline-block;
 	color: var(--header-primary);
@@ -625,13 +631,13 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	position: absolute;
 }
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
-.standardSidebarView__23e6b:has(.socialLinks__7df54) .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before {
 	left: 40px;
 }
 .standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * h2::before,
