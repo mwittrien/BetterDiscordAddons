@@ -1745,14 +1745,10 @@ body:has(#app-mount)::after {
 
 /* ----		6.3.		TEXTAREA					---- */
 
-.form_f75fb0 {
-	padding-top: 0;
-	margin-top: 0;
-}
 .form_f75fb0 {										/* textarea				form								*/
 	background: rgba(var(--transparencycolor_v), var(--chatinputtransparency_v));
-	margin-top: 0;
-	padding-top: 8px;
+	margin-top: 0 !important;
+	padding-top: calc(8px * (var(--chatinputtransparency_v) / (var(--chatinputtransparency_v) + 0.00000000000000000000001))) !important;
 	border-top-right-radius: calc(8px * (1 - (var(--memberlisttransparency_v) / (var(--memberlisttransparency_v) + 0.00000000000000000000001))));
 	border-top-left-radius: calc(8px * (1 - (var(--guildchanneltransparency_v) / (var(--guildchanneltransparency_v) + 0.00000000000000000000001))));
 }
