@@ -3455,7 +3455,7 @@ body:has(#app-mount)::after {
 	z-index: 1011;
 }
 
-#app-mount .root__49fc1:not(.noBackground_f061f6),					/* modal				container (foldersettings)					*/
+#app-mount .root__49fc1:not(.noBackground_f061f6):not(.carouselModal_d3a6f0),		/* modal				container							*/
 #app-mount .modal__7f8f5,								/* modal				container							*/
 #app-mount .bd-modal-root {								/* modal				bd modal							*/
 	background-color: transparent;
@@ -3504,10 +3504,12 @@ body:has(#app-mount)::after {
 .root__49fc1 .modal__7f8f5::before,
 .root__49fc1.noBackground_f061f6::before,
 .root__49fc1.carouselModal_d2b9a1::before,
+.root__49fc1.carouselModal_d3a6f0::before,
 .modal_b0827a::before,
 .root__49fc1 .modal__7f8f5::after,
 .root__49fc1.noBackground_f061f6::after,
 .root__49fc1.carouselModal_d2b9a1::after,
+.root__49fc1.carouselModal_d3a6f0::after,
 .modal_b0827a::after {
 	display: none;
 }
