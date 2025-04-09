@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.5.8
+ * @version 5.5.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		fixed: {
-			"Final Update": "This should be the final update now to make everything work with the new Media Viewer GUI"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -1421,7 +1419,7 @@ module.exports = (_ => {
 				}
 				else {
 					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
-					if (this.settings.rescaleSettings.imageViewer != "NONE" && e.instance.props.className && (e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimage) > -1 || e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimagemedia) > -1)) {
+					if (this.settings.rescaleSettings.imageViewer != "NONE" && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimagemedia) > -1) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (this.settings.viewerSettings.galleryMode ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
 						ratio = this.settings.rescaleSettings.imageViewer == "ORIGINAL" && ratio > 1 ? 1 : ratio;
