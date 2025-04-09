@@ -641,7 +641,7 @@
 .image__44df5[src="/assets/e1ac50c09aed17d0.svg"] + *::after {
 	content: "";
 	position: absolute;
-	bottom: 8px;
+	bottom: 14px;
 	left: 16px;
 	width: 47px;
 	height: 60px;
