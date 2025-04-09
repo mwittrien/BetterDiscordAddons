@@ -1589,12 +1589,12 @@ body:has(#app-mount)::after {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.wrapper_f7ecac:not(.popover_c97e55) {							/* message				buttons								*/
+.wrapper_f7ecac:not(.popover__2d0ab) {							/* message				buttons								*/
 	position: relative;
 	background: transparent;
 }
-.wrapper_f7ecac:not(.popover_c97e55)::before,
-.wrapper_f7ecac:not(.popover_c97e55)::after {
+.wrapper_f7ecac:not(.popover__2d0ab)::before,
+.wrapper_f7ecac:not(.popover__2d0ab)::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -1607,11 +1607,11 @@ body:has(#app-mount)::after {
 	pointer-events: none;
 	z-index: -1;
 }
-.wrapper_f7ecac:not(.popover_c97e55)::before {
+.wrapper_f7ecac:not(.popover__2d0ab)::before {
 	background: var(--backgound) var(--backgoundposition)/var(--backgroundsize_v);
 	background-attachment: fixed;
 }
-.wrapper_f7ecac:not(.popover_c97e55)::after {
+.wrapper_f7ecac:not(.popover__2d0ab)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
