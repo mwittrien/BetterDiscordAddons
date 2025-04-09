@@ -46,15 +46,15 @@
 	--backgroundfloating_v:			var(--backgroundfloating_s, var(--backgroundfloating));
 }
 
-.theme-light:not(.custom-profile-theme),
-.theme-dark:not(.custom-profile-theme),
-.theme-amoled:not(.custom-profile-theme),
-.visual-refresh.theme-light:not(.custom-profile-theme),
-.visual-refresh.theme-dark:not(.custom-profile-theme),
-.visual-refresh.theme-amoled:not(.custom-profile-theme),
-.visual-refresh .theme-light:not(.custom-profile-theme),
-.visual-refresh .theme-dark:not(.custom-profile-theme),
-.visual-refresh .theme-amoled:not(.custom-profile-theme) {
+.theme-light:not(.custom-user-profile-theme),
+.theme-dark:not(.custom-user-profile-theme),
+.theme-amoled:not(.custom-user-profile-theme),
+.visual-refresh.theme-light:not(.custom-user-profile-theme),
+.visual-refresh.theme-dark:not(.custom-user-profile-theme),
+.visual-refresh.theme-amoled:not(.custom-user-profile-theme),
+.visual-refresh .theme-light:not(.custom-user-profile-theme),
+.visual-refresh .theme-dark:not(.custom-user-profile-theme),
+.visual-refresh .theme-amoled:not(.custom-user-profile-theme) {
 	--text-positive: rgb(var(--successcolor_v));
 	--text-warning: rgb(var(--warningcolor_v));
 	--text-danger: rgb(var(--dangercolor_v));
@@ -3112,30 +3112,30 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v), .6), 0 2px 10px 0 rgba(0,0,0, .2);
 }
 
-#app-mount .outer_c0bea0.custom-profile-theme .inner_c0bea0 .activity_f00225 {
+#app-mount .outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .activity_f00225 {
 	--bg-surface-overlay: var(--background-secondary-alt);
 }
 #app-mount .biteSizeOverlayBackground_c69a7b,
 #app-mount .fullSizeOverlayBackground_c69a7b,
-#app-mount .outer_c0bea0.custom-profile-theme .inner_c0bea0 .activity_f00225,
+#app-mount .outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .activity_f00225,
 #app-mount .overlay_c0bea0 {
 	--bg-mod-faint: var(--background-primary);
 	--border-faint: var(--background-primary);
 }
 
-.outer_c0bea0:not(.custom-profile-theme) .container__8061a,
-.outer_c0bea0:not(.custom-profile-theme) .statusBubble_af9888,
-.outer_c0bea0:not(.custom-profile-theme) .statusBubbleOuter_af9888,
-.outer_c0bea0:not(.custom-profile-theme) .statusBubbleOuter_af9888:before,
-.outer_c0bea0:not(.custom-profile-theme) .statusBubbleOuter_af9888:after {
+.outer_c0bea0:not(.custom-user-profile-theme) .container__8061a,
+.outer_c0bea0:not(.custom-user-profile-theme) .statusBubble_af9888,
+.outer_c0bea0:not(.custom-user-profile-theme) .statusBubbleOuter_af9888,
+.outer_c0bea0:not(.custom-user-profile-theme) .statusBubbleOuter_af9888:before,
+.outer_c0bea0:not(.custom-user-profile-theme) .statusBubbleOuter_af9888:after {
 	background: var(--background-primary);
 	border-color: var(--background-primary);
 }
 
-.outer_c0bea0.custom-profile-theme .mask__44b0c circle {
+.outer_c0bea0.custom-user-profile-theme .mask__44b0c circle {
 	fill: transparent;
 }
-#app-mount .outer_c0bea0.custom-profile-theme ::-webkit-scrollbar-thumb {
+#app-mount .outer_c0bea0.custom-user-profile-theme ::-webkit-scrollbar-thumb {
 	background-color: var(--profile-gradient-secondary-color) !important;
 }
 
