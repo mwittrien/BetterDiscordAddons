@@ -2150,6 +2150,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		7.		PEOPLES						~~~~ */
 
+.container__133bf {										/* chat													*/
+	border-top: 0 !important;
+}
 .addFriendInputWrapper__72ba7 {								/* peoples				add friend							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
 	border-color: rgba(var(--transparencycolor_v), .3);
@@ -2240,6 +2243,10 @@ body:has(#app-mount)::after {
 
 /* ~~~~		7.		STORE/NITRO					~~~~ */
 
+.homeWrapper__0920e,									/* nitro												*/
+.shop__6db1d {										/* store												*/
+	border-top: 0 !important;
+}
 #app-mount .headerBarTransparentDarkBackground__80679 {					/* store				header								*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
 	position: static !important;
@@ -2408,6 +2415,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		9.		LIBRARY						~~~~ */
 
+.containerSidenav_dc2e0e {								/* family center											*/
+	border-top: 0 !important;
+}
 .header_adb41f {									/* library				table header							*/
 	background-color: transparent;
 	border-bottom-color: var(--background-modifier-accent);
