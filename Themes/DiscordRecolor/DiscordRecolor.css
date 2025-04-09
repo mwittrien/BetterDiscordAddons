@@ -1119,6 +1119,13 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ~~~~		2.		GUILDLIST					~~~~ */
 
+.sidebar_c48ade .wrapper_ef3116 {
+	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
+	margin-bottom: 0;
+}
+.sidebar_c48ade:after {
+	display: none;
+}
 #app-mount .guildSeparator__252b6 {
 	background-color: var(--border-subtle, var(--background-modifier-accent));
 }
