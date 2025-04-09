@@ -16,6 +16,10 @@
 	margin-top: 36px;
 }
 
+#app-mount [REPLACE_CLASS_h5] {
+	text-transform: unset;
+}
+
 img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
