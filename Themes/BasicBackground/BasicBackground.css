@@ -417,9 +417,6 @@ body,											/* body													*/
 #app-mount .sidebar_c48ade:after {
 	display: none;
 }
-#app-mount .panels_c48ade {								/* account/voice			container							*/
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) / 1.5));
-}
 #app-mount .container__9293f.themed__9293f {						/* channelheader			container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
 }
@@ -687,6 +684,30 @@ body:has(#app-mount)::after {
 
 #app-mount .sidebar_c48ade {								/* channels				container							*/
 	border-radius: 0;
+}
+
+#app-mount .panels_c48ade {								/* account/voice			container							*/
+	background-color: transparent;
+	overflow: hidden;
+}
+.panels_c48ade::before,
+.panels_c48ade::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+.panels_c48ade::before {
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	background-attachment: fixed;
+}
+.panels_c48ade::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v)));
+	backdrop-filter: blur(var(--backgroundblur_v));
 }
 
 /* ----		5.1.		GUILDHEADER					---- */
