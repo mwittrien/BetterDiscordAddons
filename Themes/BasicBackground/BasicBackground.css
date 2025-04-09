@@ -425,6 +425,30 @@ body,											/* body													*/
 #app-mount .container__9293f.themed__9293f {						/* channelheader			container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
 }
+#app-mount .container__9293f.themed__9293f.headerBar__80679 {
+	background: transparent;
+	border-bottom-right-radius: 10px;
+}
+#app-mount .container__9293f.themed__9293f.headerBar__80679::before,
+#app-mount .container__9293f.themed__9293f.headerBar__80679::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	border-bottom-right-radius: inherit;
+	z-index: -1;
+}
+#app-mount .container__9293f.themed__9293f.headerBar__80679::before {
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	background-attachment: fixed;
+}
+#app-mount .container__9293f.themed__9293f.headerBar__80679::after {
+	background-color: var(--bg-overlay-2,var(--__header-bar-background));
+	backdrop-filter: blur(var(--backgroundblur_v));
+}
 #app-mount .chatHeaderBar__3e137 {							/* channelheader			sub header							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
 }
