@@ -425,10 +425,10 @@ body,											/* body													*/
 	display: none;
 }
 #app-mount .container__9293f.themed__9293f {						/* channelheader			container							*/
-	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
+	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
 }
 #app-mount .container__9293f.themed__9293f.headerBar__80679 {
-	background: transparent;
+	background: transparent !important;
 	border-bottom-right-radius: 10px;
 }
 #app-mount .container__9293f.themed__9293f.headerBar__80679::before,
