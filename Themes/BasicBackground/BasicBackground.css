@@ -1768,6 +1768,12 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
+.hoverButton__06ab4.selected__06ab4,
+.hoverButton__06ab4:hover,
+.keyboard-mode .hoverButton__06ab4:focus {						/* attachment				hover button							*/
+	background-color: rgb(var(--accentcolor_v));
+}
+
 /* ====		6.2.3.		NITROGIFT					==== */
 
 #app-mount .tile__72090 {								/* gift					container							*/
