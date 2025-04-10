@@ -835,15 +835,26 @@ body:has(#app-mount)::after {
 
 .wrapper__260e1 {									/* voicechat				limit								*/
 	background-color: rgba(var(--transparencycolor_v), .15);
+	display: flex !important;
+	align-items: center !important;
+	padding: 0 4px;
 }
-.wrapper__260e1 .users__260e1 {
-	background-color: transparent;
-}
+.wrapper__260e1 .users__260e1,
 .wrapper__260e1 .total__260e1 {
-	background-color: rgba(var(--transparencycolor_v), .3);
+	background-color: transparent;
+	flex: 0 0 auto;
+	padding: 0;
+	width: unset;
+}
+.wrapper__260e1 .total__260e1::before {
+	content: "/";
+	padding: 0 2px;
+	color: var(--text-secondary);
+	font-size: 12px;
+	font-weight: bold;
 }
 .wrapper__260e1 .total__260e1::after {
-	border-right-color: rgba(var(--transparencycolor_v), .3);
+	display: none;
 }
 
 .listDefault__07f91 .clickable__07f91:hover .content__07f91 {
