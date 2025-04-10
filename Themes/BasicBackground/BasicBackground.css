@@ -391,7 +391,8 @@ body,											/* body													*/
 #app-mount .pageContainer__09fde,							/* unihub												*/
 #app-mount .scrollerBase__99f8c,							/* scroller												*/
 #app-mount .standardSidebarView__23e6b,							/* settings												*/
-#app-mount .contentRegion__23e6b {							/* settings				content								*/
+#app-mount .contentRegion__23e6b,							/* settings				content								*/
+#app-mount .contentRegionScroller__23e6b {						/* settings				content scroller						*/
 	background: transparent;
 }
 #app-mount .app_a3002d {
@@ -4331,27 +4332,27 @@ body:has(#app-mount)::after {
 }
 .item_c1e9c4.colorDefault_c1e9c4.focused_c1e9c4,
 .item_c1e9c4.colorDefault_c1e9c4:hover:not(.hideInteraction_c1e9c4) {
-	background-color: rgba(var(--accentcolor_v), .2) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 .item_c1e9c4.colorDanger_c1e9c4.focused_c1e9c4,
 .item_c1e9c4.colorDanger_c1e9c4:hover:not(.hideInteraction_c1e9c4) {
-	background-color: rgba(var(--dangercolor), .2) !important;
+	background-color: rgb(var(--dangercolor)) !important;
 }
 .item_c1e9c4.colorSuccess_c1e9c4.focused_c1e9c4,
 .item_c1e9c4.colorSuccess_c1e9c4:hover:not(.hideInteraction_c1e9c4) {
-	background-color: rgba(var(--successcolor), .2) !important;
+	background-color: rgb(var(--successcolor)) !important;
 }
 .item_c1e9c4.colorBrand_c1e9c4.focused_c1e9c4,
 .item_c1e9c4.colorBrand_c1e9c4:hover:not(.hideInteraction_c1e9c4) {
-	background-color: rgba(var(--accentcolor_v), .2) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 .item_c1e9c4.colorPremium_c1e9c4.focused_c1e9c4,
 .item_c1e9c4.colorPremium_c1e9c4:hover:not(.hideInteraction_c1e9c4) {
-	background-color: rgba(var(--accentcolor2_v), .2) !important;
+	background-color: rgb(var(--accentcolor2_v)) !important;
 }
 .item_c1e9c4.colorPremiumGradient_c1e9c4.focused_c1e9c4,
 .item_c1e9c4.colorPremiumGradient_c1e9c4:hover:not(.hideInteraction_c1e9c4) {
-	background: linear-gradient(90deg, rgba(var(--accentcolor2_v), .2), rgba(var(--accentcolor_v), .2)) !important;
+	background: linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgb(var(--accentcolor_v))) !important;
 }
 #app-mount .item_c1e9c4 .checkbox_c1e9c4 {						/* contextmenu				checkbox 							*/
 	color: rgb(var(--accentcolor_v));
