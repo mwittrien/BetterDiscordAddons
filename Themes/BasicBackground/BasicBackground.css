@@ -394,7 +394,7 @@ body,											/* body													*/
 #app-mount .standardSidebarView__23e6b,							/* settings												*/
 #app-mount .contentRegion__23e6b,							/* settings				content								*/
 #app-mount .contentRegionScroller__23e6b {						/* settings				content scroller						*/
-	background: transparent;
+	background: transparent !important;
 }
 #app-mount .app_a3002d {
 	color: transparent;
