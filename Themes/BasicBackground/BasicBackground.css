@@ -1766,7 +1766,8 @@ body:has(#app-mount)::after {
 
 #app-mount .file__0ccae,								/* attachment				filerapper							*/
 #app-mount .wrapper_f316dd,								/* attachment				videowrapper							*/
-#app-mount .wrapperAudio_cf09d8 {							/* attachment				audiowrapper							*/
+#app-mount .wrapperAudio_cf09d8.							/* attachment				audiowrapper							*/
+#app-mount .footer__4d95d {								/* attachment				codewrapper footer						*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
