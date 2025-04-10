@@ -720,7 +720,7 @@ body:has(#app-mount)::after {
 	overflow: hidden;
 }
 #app-mount .container__2637a ~ .panels_c48ade {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v)));
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) / 1.5));
 }
 .panels_c48ade::before,
 .panels_c48ade::after {
@@ -738,7 +738,7 @@ body:has(#app-mount)::after {
 	background-attachment: fixed;
 }
 .panels_c48ade::after {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v)));
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 3));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 .container__2637a ~ .panels_c48ade::before,
