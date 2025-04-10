@@ -1465,27 +1465,17 @@
 }
 .file__0ccae .icon__0ccae + *::before,
 .file__0ccae .icon__0ccae + *::after {
-	top: 10px;
-	left: 10px;
+	top: 16px;
+	left: 16px;
 	width: 30px;
 	height: 40px;
 }
-.file__0ccae.newMosaicStyle_b52bef .icon__0ccae + *::before,
-.file__0ccae.newMosaicStyle_b52bef .icon__0ccae + *::after {
-	top: 16px;
-	left: 16px;
-}
 .wrapperAudio_f316dd .audioMetadata_f316dd > *:first-child::before,
 .wrapperAudio_f316dd .audioMetadata_f316dd > *:first-child::after {
-	top: 10px;
-	left: 10px;
-	width: 24px;
-	height: 32px;
-}
-.wrapperAudio_f316dd.newMosaicStyle_f316dd .audioMetadata_f316dd > *:first-child::before,
-.wrapperAudio_f316dd.newMosaicStyle_f316dd .audioMetadata_f316dd > *:first-child::after {
 	top: 16px;
 	left: 16px;
+	width: 24px;
+	height: 32px;
 }
 .uploadContainer_aa605f .icon__41ea0::before,
 .uploadContainer_aa605f .icon__41ea0::after {
