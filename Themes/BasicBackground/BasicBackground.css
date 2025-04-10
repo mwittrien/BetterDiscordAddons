@@ -1453,7 +1453,7 @@ body:has(#app-mount)::after {
 .cozy_c19a55 .timestamp_c19a55.alt_c19a55 {
 	left: calc(-78px * var(--usechatbubbles));
 }
-.cozy_c19a55 .iconContainer__235ca {
+#app-mount .cozy_c19a55 .iconContainer__235ca {
 	background-color: rgba(var(--transparencycolor_v), var(--messagetransparency_v));
 	border-radius: 50%;
 	left: calc(1px * (-58 * var(--usechatbubbles) + -48 * (1 - var(--usechatbubbles))));
@@ -3662,12 +3662,12 @@ body:has(#app-mount)::after {
 
 .container_eb2cd2,									/* create modal				item								*/
 .guildRow__66057 {									/* hub modal				item								*/
-	background-color: rgb(var(--transparencycolor_v), .2);
+	background-color: rgba(var(--transparencycolor_v), .3);
 	border: none;
 }
 .container_eb2cd2:hover,
 .guildRow__66057:hover {
-	background-color: rgb(var(--transparencycolor_v), .4);
+	background-color: rgb(var(--accentcolor_v));
 }
 .text_eb2cd2,										/* create modal				text								*/
 .guildName__66057 {									/* hub modal				text								*/
