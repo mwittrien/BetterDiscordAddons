@@ -1418,7 +1418,7 @@
 }
 .file__0ccae .icon__0ccae,
 .uploadContainer_aa605f .icon__41ea0,
-.audioMetadata_f316dd::before,
+.audioMetadata_cf09d8::before,
 .uploadModal_dbca3c .icon_dbca3c:not(img),
 .icon_dbca3c:not(img),
 .optionIcon_b088b0 {
@@ -1432,7 +1432,7 @@
 }
 .file__0ccae .icon__0ccae,
 .uploadContainer_aa605f .icon__41ea0,
-.audioMetadata_f316dd::before,
+.audioMetadata_cf09d8::before,
 .uploadModal_dbca3c .icon_dbca3c:not(img),
 .icon_dbca3c:not(img),
 .optionIcon_b088b0 {
@@ -1446,8 +1446,8 @@
 .file__0ccae .icon__0ccae + *::after,
 .uploadContainer_aa605f .icon__41ea0::before,
 .uploadContainer_aa605f .icon__41ea0::after,
-.audioMetadata_f316dd > *:first-child::before,
-.audioMetadata_f316dd > *:first-child::after,
+.audioMetadata_cf09d8 > *:first-child::before,
+.audioMetadata_cf09d8 > *:first-child::after,
 .uploadModal_dbca3c .icon_dbca3c:not(img)::before,
 .uploadModal_dbca3c .icon_dbca3c:not(img)::after,
 .icon_dbca3c:not(img)::before,
@@ -1459,7 +1459,7 @@
 	pointer-events: none;
 	background: rgb(var(--accentcolor_v));
 }
-.audioMetadata_f316dd::before {
+.audioMetadata_cf09d8::before {
 	flex: 0 0 auto !important;
 	background-position: top center !important;
 }
@@ -1470,8 +1470,8 @@
 	width: 30px;
 	height: 40px;
 }
-.wrapperAudio_f316dd .audioMetadata_f316dd > *:first-child::before,
-.wrapperAudio_f316dd .audioMetadata_f316dd > *:first-child::after {
+.wrapperAudio_cf09d8 .audioMetadata_cf09d8 > *:first-child::before,
+.wrapperAudio_cf09d8 .audioMetadata_cf09d8 > *:first-child::after {
 	top: 16px;
 	left: 16px;
 	width: 24px;
@@ -1510,7 +1510,7 @@
 }
 .file__0ccae .icon__0ccae + *::before,
 .uploadContainer_aa605f .icon__41ea0::before,
-.audioMetadata_f316dd > *:first-child::before,
+.audioMetadata_cf09d8 > *:first-child::before,
 .uploadModal_dbca3c .icon_dbca3c:not(img)::before,
 .icon_dbca3c:not(img)::before,
 .optionIcon_b088b0 + *::before {
@@ -1550,7 +1550,7 @@
 }
 .file__0ccae .icon__0ccae[title="audio"] + *::after,
 .uploadContainer_aa605f .icon__41ea0.audio__41ea0::after,
-.audioMetadata_f316dd > *:first-child::after,
+.audioMetadata_cf09d8 > *:first-child::after,
 .uploadModal_dbca3c .icon_dbca3c.audio_dbca3c::after,
 .icon_dbca3c.audio_dbca3c::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_audio_accent.svg) center/contain no-repeat;
@@ -1609,7 +1609,7 @@
 .filenameLinkWrapper__0ccae,
 a.fileNameLink__0ccae,
 a.metadataName__87840,
-a.metadataDownload_f316dd {
+a.metadataDownload_cf09d8 {
 	color: rgb(var(--accentcolor_v));
 }
 
