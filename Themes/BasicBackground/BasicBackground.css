@@ -719,6 +719,9 @@ body:has(#app-mount)::after {
 	background-color: transparent;
 	overflow: hidden;
 }
+#app-mount .container__2637a ~ .panels_c48ade {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v)));
+}
 .panels_c48ade::before,
 .panels_c48ade::after {
 	content: "";
@@ -737,6 +740,10 @@ body:has(#app-mount)::after {
 .panels_c48ade::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v)));
 	backdrop-filter: blur(var(--backgroundblur_v));
+}
+.container__2637a ~ .panels_c48ade::before,
+.container__2637a ~ .panels_c48ade::after {
+	display: none;
 }
 
 /* ----		5.1.		GUILDHEADER					---- */
