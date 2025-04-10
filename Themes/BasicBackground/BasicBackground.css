@@ -738,7 +738,7 @@ body:has(#app-mount)::after {
 	background-attachment: fixed;
 }
 .panels_c48ade::after {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 3));
+	background-color: rgba(var(--transparencycolor_v), calc(0.2 + var(--guildchanneltransparency_v) * 3));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 .container__2637a ~ .panels_c48ade::before,
@@ -927,8 +927,27 @@ body:has(#app-mount)::after {
 	opacity: 1;
 	background-color: rgb(var(--accentcolor_v));
 }
+#app-mount .avatarWrapper__37e49 {
+	background: transparent !important;
+	position: relative;
+}
 #app-mount .avatarWrapper__37e49:hover {
-	background-color: rgb(var(--accentcolor_v));
+	text-shadow: 1px 1px var(--textshadow_v);
+}
+#app-mount .avatarWrapper__37e49::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 20px;
+	border-top-right-radius: inherit;
+	border-bottom-right-radius: inherit;
+	transition: background-color .2s ease;
+	z-index: -1;
+}
+#app-mount .avatarWrapper__37e49:hover::after {
+	background: rgb(var(--accentcolor));
 }
 #app-mount button.button__67645.enabled__67645:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
