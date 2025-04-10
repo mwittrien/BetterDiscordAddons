@@ -1491,7 +1491,6 @@
 	left: 0;
 	width: 100px;
 	height: 130px;
-	-webkit-mask-size: 72px 96px !important;
 }
 .optionIcon_b088b0 + * {
 	position: relative;
