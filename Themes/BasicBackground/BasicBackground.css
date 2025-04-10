@@ -1550,7 +1550,7 @@ body:has(#app-mount)::after {
 	border-color: var(--background-secondary);
 }
 
-.wrapper_d852db {									/* message				loading wrapper							*/
+#app-mount .wrapper_d852db {								/* message				loading wrapper							*/
 	background: transparent;
 }
 .avatar_fc8177 {									/* message				loading avatar							*/
