@@ -4892,12 +4892,12 @@ body:has(#app-mount)::after {
 	top: 4px;
 	right: 14px;
 }
-.jumpButton_ed0c8c,									/* popout				jumpbutton (mentions)						*/
-.jumpButton__45690 {									/* popout				jumpbutton (pins)						*/
+#app-mount .jumpButton_ed0c8c,								/* popout				jumpbutton (mentions)						*/
+#app-mount .jumpButton__45690 {								/* popout				jumpbutton (pins)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-.jumpButton_ed0c8c:hover,
-.jumpButton__45690:hover {
+#app-mount .jumpButton_ed0c8c:hover,
+#app-mount .jumpButton__45690:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
 .jumpButton_ed0c8c + .jumpButton_ed0c8c,
@@ -4974,10 +4974,10 @@ body:has(#app-mount)::after {
 	border-radius: 0 0 5px 5px;
 }
 
-.tutorial__2692d {									/* popout				tutorial (inbox)						*/
+#app-mount .tutorial__2692d {								/* popout				tutorial (inbox)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-.tutorialIcon__2692d {									/* popout				tutorial (inbox)						*/
+#app-mount .tutorialIcon__2692d {							/* popout				tutorial (inbox)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
