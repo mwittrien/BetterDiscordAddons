@@ -713,7 +713,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		5.		CHANNELLIST					~~~~ */
 
-#app-mount .sidebar_c48ade {								/* channels				container							*/
+#app-mount .sidebar_c48ade,								/* channels				container							*/
+#app-mount .sidebarList_c48ade {							/* channels				container inner							*/
+	border: unset;
 	border-radius: 0;
 }
 
