@@ -1397,6 +1397,12 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	height: 36px !important;
 	border-radius: 0 !important;
 	transition: height 0.5s ease !important;
+	--custom-notice-text: var(--white-500);
+}
+[REPLACE_CLASS_noticewrapper]:not([class*=" color"]) {
+	--custom-notice-background: var(--brand-500);
+	--custom-notice-text: var(--white-500);
+	--custom-notice-button-hover: var(--brand-500);
 }
 [REPLACE_CLASS_noticeclosing] {
 	height: 0 !important;
