@@ -4859,8 +4859,12 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
-#app-mount .messagesPopout__45690 {							/* popout				innerwrap							*/
+#app-mount .messagesPopout__45690,							/* popout				innerwrap							*/
+#app-mount .container__0f711 {								/* popout				for you								*/
 	background-color: transparent;
+}
+#app-mount .container__0f711 .body__6fddf > * {						/* popout				for you text							*/
+	color: var(--header-secondary) !important;
 }
 
 #app-mount .header__45690,								/* popout				header								*/
