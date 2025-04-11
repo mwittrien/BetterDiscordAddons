@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.1
+ * @version 2.7.2
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -449,6 +449,7 @@ module.exports = (_ => {
 					if (e.instance.props.message && e.instance.props.channel) {
 						let translated = !!translatedMessages[e.instance.props.message.id];
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: ["pin", "unpin"]});
+						if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: ["copy-text", "edit", "add-reaction", "add-reaction-1", "quote"]});
 						children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
 							disabled: isTranslating,
