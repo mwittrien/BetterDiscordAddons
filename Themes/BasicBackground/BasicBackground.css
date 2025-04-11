@@ -4818,9 +4818,9 @@ body:has(#app-mount)::after {
 
 /* ----		14.4.		PINS/MENTIONS					---- */
 
-.messagesPopoutWrap__45690,								/* popout				wrapper								*/
-.recentMentionsPopout__95796,								/* popout				wrapper	(for you)						*/
-.container__2692d {									/* popout				wrapper	(inbox)							*/
+#app-mount .messagesPopoutWrap__45690,							/* popout				wrapper								*/
+#app-mount .recentMentionsPopout__95796,						/* popout				wrapper	(for you)						*/
+#app-mount .container__2692d {								/* popout				wrapper	(inbox)							*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -4863,17 +4863,18 @@ body:has(#app-mount)::after {
 	background-color: transparent;
 }
 
-.header__45690 {									/* popout				header								*/
+#app-mount .header__45690,								/* popout				header								*/
+#app-mount .header_d9c882 {								/* popout				header								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor_v), .2);
 	border: none;
 }
 
-.footer__45690 {									/* popout				footer								*/
+#app-mount .footer__45690 {								/* popout				footer								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
-.messageGroupWrapper__45690 {
+#app-mount .messageGroupWrapper__45690 {
 	background-color: transparent;
 	border: none;
 	overflow: visible;
@@ -4914,15 +4915,17 @@ body:has(#app-mount)::after {
 #app-mount .header_ab6641 .tabBar_ab6641 .tab_ab6641.active_f0cd33 {			/* popout				active tab							*/
 	background-color: rgb(var(--accentcolor_v));
 }
-.secondary__45d4f,									/* popout				header button							*/
-.tertiary_ad6d80,									/* popout				message button							*/
-.collapseButton__427f0 {								/* popout				collapse button							*/
+#app-mount .secondary__06eda,								/* popout				header button							*/
+#app-mount .tertiary__06eda,								/* popout				message button							*/
+#app-mount .friendRequestsButton__523aa,						/* popout				friends button							*/
+#app-mount .collapseButton__427f0 {							/* popout				collapse button							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.secondary__45d4f:hover,
-.tertiary_ad6d80:hover,
-.collapseButton__427f0:hover {
-	background-color: rgba(var(--transparencycolor_v), .4);
+#app-mount .secondary__06eda:hover,
+#app-mount .tertiary__06eda:hover,
+#app-mount .friendRequestsButton__523aa:hover,
+#app-mount .collapseButton__427f0:hover {
+	background-color: rgb(var(--accentcolor_v));
 }
 .collapseButton__427f0 {
 	position: static;
@@ -4938,36 +4941,36 @@ body:has(#app-mount)::after {
 	padding: 8px;
 	transform: unset !important;
 }
-.collapseButton__427f0.collapsed__427f0 svg {
+.collapseButton__427f0.collapsed__06eda svg {
 	transform: rotate(-90deg);
 }
 
-.channelHeader__35a7e {									/* popout				channelheader							*/
+#app-mount .channelHeader__35a7e {							/* popout				channelheader							*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 	padding-right: 16px;
 	border-radius: 5px 5px 0 0;
 	position: static;
 }
-.channelHeader__35a7e:only-child {
+#app-mount .channelHeader__35a7e:only-child {
 	border-radius: 0;
 }
 .channelHeader__35a7e {
 	margin-left: 8px;
 }
-.channel__427f0 .channelHeader__35a7e {
+.channel__06eda .channelHeader__35a7e {
 	margin-left: 0;
 }
 .messageContainer__95796 {
 	margin-left: 8px;
 	padding-left: 8px;
 }
-.messageContainer__95796,								/* popout				messagecontainer						*/
-.messages__1ccd1 {									/* popout				messagecontainer (inbox)					*/
+#app-mount .messageContainer__95796,							/* popout				messagecontainer						*/
+#app-mount .messages__1ccd1 {								/* popout				messagecontainer (inbox)					*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border-radius: 0;
 }
-.messageContainer__95796:last-child,
-.messages__1ccd1:last-child {
+#app-mount .messageContainer__95796:last-child,
+#app-mount .messages__1ccd1:last-child {
 	border-radius: 0 0 5px 5px;
 }
 
