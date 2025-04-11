@@ -25,11 +25,11 @@
 .titleBar__421ed.typeMacOS__421ed .macButtons__421ed {
 	padding-right: calc(1px * ((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * var(--columns) - 50)) !important;
 }
-body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed,
-body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__421ed {
+body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed,
+body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__421ed {
 	width: calc(2px * ((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * var(--columns_v) + 35 - 25)) !important;
 }
-body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__421ed {
+body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__421ed {
 	padding-right: calc(1px * ((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * var(--columns_v) * 2 - 40)) !important;
 }
 .titleBar__421ed.typeMacOS__421ed.typeMacOSWithFrame__421ed .macButtons__421ed {
@@ -120,11 +120,11 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	top: 0 !important;
 	left: 0 !important;
 }
-.wrapper_ef3116 .scroller_ef3116 > div[style*="height"].pinned_jHvFrr,
+.wrapper_ef3116 .scroller_ef3116 > div[style*="height"].pinned_c32045,
 .wrapper_ef3116 .scroller_ef3116 > div[style*="height"]:not([class]) {
 	height: calc(1px * var(--guildsize_v) * (58/50)) !important;
 }
-.sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 > div[style*="height"].pinned_jHvFrr,
+.sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 > div[style*="height"].pinned_c32045,
 .sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 > div[style*="height"]:not([class]) {
 	height: calc(1px * var(--guildsize_v) * (54/50)) !important;
 }
@@ -181,17 +181,17 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	line-height: calc(1px * (var(--guildsize_v)/4 + 6.5)) !important;
 }
 .wrapper_ef3116 #sort-button,
-.wrapper_ef3116 .friendsOnlineWrap_2JkivW,
-.wrapper_ef3116 .serverCountWrap_k8F5De,
-.wrapper_ef3116 .frame_oXWS21 {
+.wrapper_ef3116 .friendsOnlineWrap_aa9717,
+.wrapper_ef3116 .serverCountWrap_1dcf05,
+.wrapper_ef3116 .frame_aa90f4 {
 	width: calc(1px * ((var(--guildsize_v)*4/5) + 12 * var(--guildsize_v)/50)) !important;
 	text-align: center !important;
 	margin: calc(1px * var(--guildgap_v)) calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1) - ((var(--guildsize_v)*4/5) + 12 * var(--guildsize_v)/50) + var(--guildsize_v))/2)) calc(1px * var(--guildgap_v)) calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1) - ((var(--guildsize_v)*4/5) + 12 * var(--guildsize_v)/50) + var(--guildsize_v))/2)) !important;
 }
 .wrapper_ef3116 #sort-button > div,
 .wrapper_ef3116 .label_2wRs_g,
-.wrapper_ef3116 .frame_oXWS21 .innerFrame_8Hg64E,
-.wrapper_ef3116 .frame_oXWS21 .button_Jt-tIg {
+.wrapper_ef3116 .frame_aa90f4 .innerFrame_aa90f4,
+.wrapper_ef3116 .frame_aa90f4 .button_aa90f4 {
 	white-space: pre !important;
 	width: 100% !important;
 }
@@ -204,7 +204,7 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	margin: 0 !important;
 }
 .wrapper_ef3116 #sort-button > div,
-.wrapper_ef3116 .frame_oXWS21 .button_Jt-tIg {
+.wrapper_ef3116 .frame_aa90f4 .button_aa90f4 {
 	height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
 	line-height: calc(1px * ((var(--guildsize_v)/5) + 10)) !important;
 	font-size: calc(1px * ((var(--guildsize_v)/8) + 6)) !important;
@@ -248,32 +248,32 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 
 /* SERVERFOLDERS */
 
-.wrapper_ef3116.content_Pph8t6 {
+.wrapper_ef3116.content_ac0584 {
 	--columns_v: 		var(--SFcolumns, var(--columns));
 	--guildsize_v: 		var(--SFguildsize, var(--guildsize));
 	--guildgap_v: 		var(--SFguildgap, var(--guildgap));
 }
-.wrapper_ef3116.content_Pph8t6 .scroller_ef3116 {
+.wrapper_ef3116.content_ac0584 .scroller_ef3116 {
 	padding-left: 0 !important;
 }
-.wrapper_ef3116.content_Pph8t6 .wrapper__48112 {
+.wrapper_ef3116.content_ac0584 .wrapper__48112 {
 	width: calc(1px * (var(--guildsize_v) * var(--columns_v) + 20 * (var(--guildsize_v)/50) + 14 * (var(--guildsize_v)/50) * (var(--columns_v) - 1))) !important;
 	margin-right: 0 !important;
 }
-.wrapper_ef3116.content_Pph8t6 .wrapper__48112 > .listItem__650eb {
+.wrapper_ef3116.content_ac0584 .wrapper__48112 > .listItem__650eb {
 	margin: calc(1px * var(--guildgap_v)) calc(5px * var(--guildsize_v)/50) calc(1px * var(--guildgap_v)) 0 !important;
 }
-.wrapper_ef3116.content_Pph8t6 .folder__48112,
-.wrapper_ef3116.content_Pph8t6 .folderIconWrapper__48112,
-.wrapper_ef3116.content_Pph8t6 .expandedFolderIconWrapper__48112 {
+.wrapper_ef3116.content_ac0584 .folder__48112,
+.wrapper_ef3116.content_ac0584 .folderIconWrapper__48112,
+.wrapper_ef3116.content_ac0584 .expandedFolderIconWrapper__48112 {
 	width: calc(var(--guildsize_v) * (var(--guildbar-avatar-size, calc(1px * var(--guildsize_v)))/calc(var(--guildsize_v)))) !important;
 	height: calc(var(--guildsize_v) * (var(--guildbar-avatar-size, calc(1px * var(--guildsize_v)))/calc(var(--guildsize_v)))) !important;
 }
-.wrapper_ef3116.content_Pph8t6 .wrapper__48112 .expandedFolderBackground__48112 {
+.wrapper_ef3116.content_ac0584 .wrapper__48112 .expandedFolderBackground__48112 {
 	right: 0 !important;
 	width: calc(100% - calc(5px * var(--guildsize_v)/50)) !important;
 }
-.wrapper_ef3116.content_Pph8t6 .wrapper__48112 [role="group"] {
+.wrapper_ef3116.content_ac0584 .wrapper__48112 [role="group"] {
 	width: auto !important;
 	margin: 0 !important;
 	padding: 0 0 0 calc(10px * var(--guildsize_v)/50) !important;
@@ -281,7 +281,7 @@ body.folderContentIsOpen_zz6FgW .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	flex-flow: row wrap !important;
 	justify-content: space-between !important;
 }
-.wrapper_ef3116.content_Pph8t6 .wrapper__48112 .expandedFolderBackground__48112 ~ [role="group"] {
+.wrapper_ef3116.content_ac0584 .wrapper__48112 .expandedFolderBackground__48112 ~ [role="group"] {
 	padding-bottom: calc(8px * var(--guildsize_v)/50) !important;
 }
 

@@ -1119,217 +1119,212 @@
 			"switchWrapper": "ui-switch-wrapper"
 		},
 		"BetterFriendList": {
-			"mutualGuilds": "mutualGuilds_s7F2aa",
-			"nameCell": "nameCell_s7F2aa",
-			"title": "title_s7F2aa"
+			"mutualGuilds": "mutualGuilds_d61638",
+			"nameCell": "nameCell_d61638",
+			"title": "title_d61638"
 		},
 		"BetterNsfwTag": {
-			"nsfwTag": "nsfwTag_666omg"
+			"nsfwTag": "nsfwTag_efc92a"
 		},
 		"BetterSearchPage": {
-			"pagination": "pagination_shit69"
+			"pagination": "pagination_4b5900"
 		},
 		"ChatFilter": {
-			"blocked": "blocked_jUhayi",
-			"blockedStamp": "blockedStamp_jUhayi",
-			"censored": "censored_jUhayi",
-			"censoredStamp": "censoredStamp_jUhayi"
+			"blocked": "blocked_5616f4",
+			"blockedStamp": "blockedStamp_5616f4",
+			"censored": "censored_5616f4",
+			"censoredStamp": "censoredStamp_5616f4"
 		},
 		"CharCounter": {
-			"charCounter": "charCounter_7fw40k",
-			"chatCounter": "chatCounter_7fw40k",
-			"counterAdded": "charCounterAdded_7fw40k",
-			"customStatusCounter": "customStatusCounter_7fw40k",
-			"editCounter": "editCounter_7fw40k",
-			"popoutNoteCounter": "popoutNoteCounter_7fw40k",
-			"profileNoteCounter": "profileNoteCounter_7fw40k",
-			"threadCreationCounter": "threadCreationCounter_7fw40k",
-			"userProfileCounter": "userProfileCounter_7fw40k"
+			"charCounter": "charCounter_c47c43",
+			"chatCounter": "chatCounter_c47c43",
+			"counterAdded": "charCounterAdded_c47c43",
+			"customStatusCounter": "customStatusCounter_c47c43",
+			"editCounter": "editCounter_c47c43",
+			"popoutNoteCounter": "popoutNoteCounter_c47c43",
+			"profileNoteCounter": "profileNoteCounter_c47c43",
+			"threadCreationCounter": "threadCreationCounter_c47c43",
+			"userProfileCounter": "userProfileCounter_c47c43"
 		},
 		"CustomStatusPresets": {
-			"customStatusItem": "customStatusItem_f5Trsa",
-			"deleteButton": "deleteButton_f5Trsa",
-			"deleteIcon": "deleteIcon_f5Trsa",
-			"dragPreview": "dragPreview_f5Trsa",
-			"sortableCard": "sortableCard_f5Trsa",
-			"sortDivider": "sortDivider_f5Trsa",
-			"status": "status_f5Trsa"
+			"customStatusItem": "customStatusItem_e78cca",
+			"deleteButton": "deleteButton_e78cca",
+			"deleteIcon": "deleteIcon_e78cca",
+			"dragPreview": "dragPreview_e78cca",
+			"sortableCard": "sortableCard_e78cca",
+			"sortDivider": "sortDivider_e78cca",
+			"status": "status_e78cca"
 		},
 		"DisplayServersAsChannels": {
-			"badge": "badge_fxFrUP",
-			"muted": "muted_fxFrUP",
-			"name": "name_fxFrUP",
-			"styled": "styledGuildsAsChannels_fxFrUP"
+			"badge": "badge_71509e",
+			"muted": "muted_71509e",
+			"name": "name_71509e",
+			"styled": "styledGuildsAsChannels_71509e"
 		},
 		"EmojiStatistics": {
-			"amountCell": "amountCell_g_W6Rx",
-			"iconCell": "iconCell_g_W6Rx",
-			"nameCell": "nameCell_g_W6Rx",
-			"statisticsButton": "statisticsButton_g_W6Rx"
+			"amountCell": "amountCell_7741f8",
+			"iconCell": "iconCell_7741f8",
+			"nameCell": "nameCell_7741f8",
+			"statisticsButton": "statisticsButton_7741f8"
 		},
 		"FriendNotifications": {
-			"friendsOnline": "friendsOnline_2JkivW",
-			"friendsOnlineWrap": "friendsOnlineWrap_2JkivW",
-			"logAvatar": "avatar_2JkivW",
-			"logContent": "content_2JkivW",
-			"logTime": "time_2JkivW",
-			"timeLogModal": "timeLogModal_2JkivW",
-			"typeLabel": "label_2JkivW"
+			"friendsOnline": "friendsOnline_aa9717",
+			"friendsOnlineWrap": "friendsOnlineWrap_aa9717",
+			"logAvatar": "avatar_aa9717",
+			"logContent": "content_aa9717",
+			"logTime": "time_aa9717",
+			"timeLogModal": "timeLogModal_aa9717",
+			"typeLabel": "label_aa9717"
 		},
 		"GameActivityToggle": {
-			"added": "gameActivityToggleAdded_Yd-YxC",
-			"button": "gameActivityToggleButton_Yd-YxC"
+			"added": "gameActivityToggleAdded_fd3fb5",
+			"button": "gameActivityToggleButton_fd3fb5"
 		},
 		"ImageUtilities": {
-			"details": "details_9dkFPc",
-			"detailsAdded": "detailsAdded_fHiJlm",
-			"detailsLabel": "label_mrlccN",
-			"detailsWrapper": "detailsWrapper_TE1mu5",
-			"gallery": "gallery_JViwKR",
-			"imageDetails": "imageDetails_1t6Zms",
-			"imageDetailsAdded": "imageDetailsAdded_sda9Fa",
-			"lens": "zoomLens_uOK8xV",
-			"lensBackdrop": "lensBackdrop_yEm7Om",
-			"next": "next_SHEZrz",
-			"operations": "operations_3V47CY",
-			"previous": "previous_xsNq6B",
-			"sibling": "sibling_6vI7Pu",
-			"switchIcon": "switchIcon_QY6cR4",
-			"viewer": "viewer_ds98Ts"
+			"details": "details_ac0584",
+			"detailsAdded": "detailsAdded_ac0584",
+			"detailsLabel": "label_ac0584",
+			"detailsWrapper": "detailsWrapper_ac0584",
+			"gallery": "gallery_Jac0584",
+			"imageDetails": "imageDetails_ac0584",
+			"imageDetailsAdded": "imageDetailsAdded_ac0584",
+			"lens": "zoomLens_ac0584",
+			"lensBackdrop": "lensBackdrop_ac0584",
+			"next": "next_ac0584",
+			"operations": "operations_ac0584",
+			"previous": "previous_ac0584",
+			"sibling": "sibling_ac0584",
+			"switchIcon": "switchIcon_ac0584",
+			"viewer": "viewer_ac0584"
 		},
 		"LastMessageDate": {
-			"icon": "icon_ocEw13"
+			"icon": "icon_dba1d2"
 		},
 		"OldTitleBar": {
-			"oldTitleBarEnabled": "oldTitleBarEnabled_D8ppJQ",
-			"settingsToolbar": "settingsToolbar_wu4yfQ",
-			"toolbar": "toolbar_hRzFw-"
+			"oldTitleBarEnabled": "oldTitleBarEnabled_8227b0",
+			"settingsToolbar": "settingsToolbar_8227b0",
+			"toolbar": "toolbar_8227b0"
 		},
 		"PersonalPins": {
-			"messageTag": "messageTag_yRSUYg",
-			"messageTagAdd": "messageTagAdd_vKM0VY",
-			"messageTagAddActive": "active_G0VvAY",
-			"messageTagDelete": "messageTagDelete_QaGh6V",
-			"messageTagName": "messageTagName_dT8OZ4"
+			"messageTag": "messageTag_226317",
+			"messageTagAdd": "messageTagAdd_226317",
+			"messageTagAddActive": "active_226317",
+			"messageTagDelete": "messageTagDelete_226317",
+			"messageTagName": "messageTagName_226317"
 		},
 		"PinDMs": {
-			"dragPreview": "dragPreview_nXiByA",
-			"dmChannelPinned": "pinned_0lM4wD",
-			"dmChannelPlaceholder": "placeholder_7bhR5s",
-			"pinnedChannelsHeaderAmount": "headerAmount__-7GrS",
-			"pinnedChannelsHeaderArrow": "pinnedChannelsHeaderArrow_44rrTz",
-			"pinnedChannelsHeaderCollapsed": "collapsed_3w_-ff",
-			"pinnedChannelsHeaderColored": "colored_oIzG5s",
-			"pinnedChannelsHeaderContainer": "pinnedChannelsHeaderContainer_89Gjv4",
-			"recentPinned": "pinned_jHvFrr",
-			"recentPlaceholder": "placeholder_Uff-gH",
-			"unpinButton": "unpinButton_z3-UVO",
-			"unpinIcon": "unpinIcon_79ZnEr"
+			"dragPreview": "dragPreview_c32045",
+			"dmChannelPinned": "pinned_c32045",
+			"dmChannelPlaceholder": "placeholder_c32045",
+			"pinnedChannelsHeaderAmount": "headerAmount_c32045",
+			"pinnedChannelsHeaderArrow": "pinnedChannelsHeaderArrow_c32045",
+			"pinnedChannelsHeaderCollapsed": "collapsed_c32045",
+			"pinnedChannelsHeaderColored": "colored_c32045",
+			"pinnedChannelsHeaderContainer": "pinnedChannelsHeaderContainer_c32045",
+			"recentPinned": "pinned_c32045",
+			"recentPlaceholder": "placeholder_c32045",
+			"unpinButton": "unpinButton_c32045",
+			"unpinIcon": "unpinIcon_c32045"
 		},
 		"ReadAllNotificationsButton": {
-			"button": "button_Jt-tIg",
-			"frame": "frame_oXWS21",
-			"innerFrame": "innerFrame_8Hg64E"
+			"button": "button_aa90f4",
+			"frame": "frame_aa90f4",
+			"innerFrame": "innerFrame_aa90f4"
 		},
 		"ServerCounter": {
-			"serverCount": "serverCount_FsTTs1",
-			"serverCountWrap": "serverCountWrap_k8F5De"
+			"serverCount": "serverCount_1dcf05",
+			"serverCountWrap": "serverCountWrap_1dcf05"
 		},
 		"ServerDetails": {
-			"details": "details_08FrsT",
-			"icon": "icon_hSL42R",
-			"tooltip": "detailsTooltip_G9hSSa"
+			"details": "details_78f589",
+			"icon": "icon_78f589",
+			"tooltip": "detailsTooltip_78f589"
 		},
 		"ServerFolders": {
-			"dragPreview": "dragPreview_nXiByA",
-			"folderContent": "content_Pph8t6",
-			"folderContentClosed": "closed_j55_T-",
-			"folderContentIsOpen": "folderContentIsOpen_zz6FgW",
-			"guildPlaceholder": "placeholder_7bhR5s",
-			"hasSideBar": "hasSideBar_sda9Fa",
-			"iconSwatch": "iconSwatch__78Ghj",
-			"iconSwatchInner": "iconInner_aOY-qk",
-			"iconSwatchPreview": "preview_Bbg_24",
-			"iconSwatchNoPreview": "noPreview_G8SS4t",
-			"iconSwatchSelected": "selected_P5oePO"
+			"dragPreview": "dragPreview_c32045",
+			"folderContent": "content_ac0584",
+			"folderContentClosed": "closed_ac0584",
+			"folderContentIsOpen": "folderContentIsOpen_ac0584",
+			"guildPlaceholder": "placeholder_c32045",
+			"hasSidebar": "hasSidebar_ac0584",
+			"iconSwatch": "iconSwatch_ac0584",
+			"iconSwatchInner": "iconInner_ac0584",
+			"iconSwatchPreview": "preview_ac0584",
+			"iconSwatchNoPreview": "noPreview_ac0584",
+			"iconSwatchSelected": "selected_ac0584"
 		},
 		"SpellCheck": {
-			"error": "error_k9z2IV",
-			"overlay": "spellCheckOverlay_cNSap5"
+			"error": "error_29aaa7",
+			"overlay": "spellCheckOverlay_29aaa7"
 		},
 		"ShowBadgesInChat": {
-			"badges": "badges_XRnWAp",
-			"badgesChat": "badgesChat_f_cbR8",
-			"badgesDMs": "badgesDMs_Aw_p52",
-			"badgesMembers": "badgesMembers_8Kf3S1",
-			"badgesSettings": "badgesSettings_ychoGn",
-			"indicator": "indicator_8F4GGw"
+			"badges": "badges_a12ad2",
+			"badgesChat": "badgesChat_a12ad2",
+			"badgesDMs": "badgesDMs_a12ad2",
+			"badgesMembers": "badgesMembers_a12ad2",
+			"badgesSettings": "badgesSettings_a12ad2",
+			"indicator": "indicator_a12ad2"
 		},
 		"ShowConnections": {
-			"connection": "connection_9Gh4sa",
-			"connectionIcon": "connectionIcon_888F4s",
-			"connections": "connections_pPr4as",
-			"connectionsWrapper": "connectionsWrapper_kU5cYa",
-			"verifiedBadge": "verifiedBadge_mH2YpO"
+			"connection": "connection_c56430",
+			"connectionIcon": "connectionIcon_c56430",
+			"connections": "connections_c56430",
+			"connectionsWrapper": "connectionsWrapper_c56430",
+			"verifiedBadge": "verifiedBadge_c56430"
 		},
 		"SpotifyControls": {
-			"activityButton": "activityButton_5Fs4Aa",
-			"bar": "bar_g2ZMIm",
-			"barGabber": "grabber_7sd5f5",
-			"barFill": "barFill_Dhkah7",
-			"barText": "barText_lmqc5O",
-			"buttonActive": "active_6TsW-_",
-			"container": "container_6sXIoE",
-			"containerInner": "inner_WRV6k5",
-			"containerMaximized": "maximized_vv2Wr0",
-			"containerPaused": "paused_l9f3As",
-			"containerWithTimeline": "withTimeline_824fT_",
-			"cover": "cover_SwJ-ck",
-			"coverMaximizer": "maximizer_RVu85p",
-			"coverWrapper": "coverWrapper_YAplwJ",
-			"details": "details_ntX2k5",
-			"interpret": "interpret_F93iqP",
-			"settingsIcon": "icon_F4SSra",
-			"settingsLabel": "label_3f00Sr",
-			"song": "song_tIdBpF",
-			"timeline": "timeline_UWmgAx",
-			"volumeSlider": "volumeSlider_sR5g00"
+			"activityButton": "activityButton_791eb8",
+			"bar": "bar_791eb8",
+			"barGabber": "grabber_791eb8",
+			"barFill": "barFill_791eb8",
+			"barText": "barText_791eb8",
+			"buttonActive": "active_791eb8",
+			"container": "container_791eb8",
+			"containerInner": "inner_791eb8",
+			"containerMaximized": "maximized_791eb8",
+			"containerPaused": "paused_791eb8",
+			"containerWithTimeline": "withTimeline_791eb8",
+			"cover": "cover_791eb8",
+			"coverMaximizer": "maximizer_791eb8",
+			"coverWrapper": "coverWrapper_791eb8",
+			"details": "details_791eb8",
+			"interpret": "interpret_791eb8",
+			"settingsIcon": "icon_791eb8",
+			"settingsLabel": "label_791eb8",
+			"song": "song_791eb8",
+			"timeline": "timeline_791eb8",
+			"volumeSlider": "volumeSlider_791eb8"
 		},
 		"StaffTag": {
-			"adminIcon": "admin_Kv1Hp_",
-			"forumCreatorIcon": "forumCreator_5sOT2A",
-			"groupOwnerIcon": "groupOwner_g6FlmA",
-			"managementIcon": "management_3fF_o8",
-			"ownerIcon": "owner_FfFh3B",
-			"threadCreatorIcon": "threadCreator_lp5sXo"
-		},
-		"ThemeSettings": {
-			"card": "card_h4Rts2",
-			"cardName": "card_jdf7Rs",
-			"grid": "settingsButton_60jFra"
+			"adminIcon": "admin_975d7e",
+			"forumCreatorIcon": "forumCreator_975d7e",
+			"groupOwnerIcon": "groupOwner_975d7e",
+			"managementIcon": "management_975d7e",
+			"ownerIcon": "owner_975d7e",
+			"threadCreatorIcon": "threadCreator_975d7e"
 		},
 		"TimedLightDarkMode": {
-			"dateGrabber": "dateGrabber_QrRkIX",
-			"timerGrabber": "timerGrabber_zpRAIk",
-			"timerSettings": "timerSettings_wkvEfF"
+			"dateGrabber": "dateGrabber_53ee4a",
+			"timerGrabber": "timerGrabber_53ee4a",
+			"timerSettings": "timerSettings_53ee4a"
 		},
 		"TopRolesEverywhere": {
-			"badgeStyle": "badgeStyle_tFiEQ8",
-			"chatTag": "chatTag_Y-5TDc",
-			"memberTag": "memberTag_QVWzGc",
-			"roleStyle": "roleStyle_jQ7KI2",
-			"tag": "tag_wWVHyf",
-			"voiceTag": "voiceTag_0F4Ss0"
+			"badgeStyle": "badgeStyle_78e9f1",
+			"chatTag": "chatTag_78e9f1",
+			"memberTag": "memberTag_78e9f1",
+			"roleStyle": "roleStyle_78e9f1",
+			"tag": "tag_78e9f1",
+			"voiceTag": "voiceTag_78e9f1"
 		},
 		"Translator": {
-			"configButton": "configButton_lLgMs2",
-			"translateButton": "translateButton_DhP9x8",
-			"translated": "translated_5YO8i3",
-			"translating": "translating_Yi-YxC"
+			"configButton": "configButton_68ddea",
+			"translateButton": "translateButton_68ddea",
+			"translated": "translated_68ddea",
+			"translating": "translating_68ddea"
 		},
 		"WriteUpperCase": {
-			"enabled": "enabled_7KI3Q2",
-			"quickToggleButton": "quickToggleButton_P2xDh8"
+			"enabled": "enabled_e9b3d0",
+			"quickToggleButton": "quickToggleButton_e9b3d0"
 		},
 		"NotFound": {
 			"_": "",
@@ -1361,30 +1356,30 @@
 			"themeUndefined": "theme-undefined"
 		},
 		"Toast": {
-			"avatar": "avatar_3xmbmC",
-			"bar": "bar_95Sdw1",
-			"barInner": "barInner_u7Frsw",
-			"bg": "bg_8df5St",
-			"brand": "colorBrand_WfDfzD",
-			"center": "center_9SpJeg",
-			"closable": "closable_7ShrRt",
-			"closeIcon": "closeIcon_8R553s",
-			"closing": "closing_K489s7",
-			"custom": "colorCustom_WKsPgT",
-			"customBar": "customBar_3RsUzs",
-			"danger": "colorDanger_O5wq9n",
-			"default": "colorDefault_XdNdIp",
-			"icon": "icon_OZgBPQ",
-			"info": "colorInfo_ujWH4-",
-			"inner": "inner_6Fsw34",
-			"left": "left_IXnX5I",
-			"opening": "opening_3TzSw2",
-			"right": "right_Eka_pI",
-			"success": "colorSuccess_6GreWs",
-			"text": "text_28VADE",
-			"toast": "toast_g4bfgI",
-			"toasts": "toasts_tApoHv",
-			"warning": "colorWarning_qZNMsx"
+			"avatar": "avatar_67c5da",
+			"bar": "bar_67c5da",
+			"barInner": "barInner_67c5da",
+			"bg": "bg_67c5da",
+			"brand": "colorBrand_67c5da",
+			"center": "center_67c5da",
+			"closable": "closable_67c5da",
+			"closeIcon": "closeIcon_67c5da",
+			"closing": "closing_67c5da",
+			"custom": "colorCustom_67c5da",
+			"customBar": "customBar_67c5da",
+			"danger": "colorDanger_67c5da",
+			"default": "colorDefault_67c5da",
+			"icon": "icon_67c5da",
+			"info": "colorInfo_67c5da",
+			"inner": "inner_67c5da",
+			"left": "left_67c5da",
+			"opening": "opening_67c5da",
+			"right": "right_67c5da",
+			"success": "colorSuccess_67c5da",
+			"text": "text_67c5da",
+			"toast": "toast_67c5da",
+			"toasts": "toasts_67c5da",
+			"warning": "colorWarning_67c5da"
 		}
 	},
 	"LazyloadedClassModules": {
@@ -1778,7 +1773,7 @@
 		"_serverfoldersfoldercontentclosed": ["ServerFolders", "folderContentClosed"],
 		"_serverfoldersfoldercontentisopen": ["ServerFolders", "folderContentIsOpen"],
 		"_serverfoldersguildplaceholder": ["ServerFolders", "guildPlaceholder"],
-		"_serverfoldershassidebar": ["ServerFolders", "hasSideBar"],
+		"_serverfoldershassidebar": ["ServerFolders", "hasSidebar"],
 		"_serverfoldersiconswatch": ["ServerFolders", "iconSwatch"],
 		"_serverfoldersiconswatchinner": ["ServerFolders", "iconSwatchInner"],
 		"_serverfoldersiconswatchpreview": ["ServerFolders", "iconSwatchPreview"],
@@ -1824,9 +1819,6 @@
 		"_stafftagmanagementicon": ["StaffTag", "managementIcon"],
 		"_stafftagownericon": ["StaffTag", "ownerIcon"],
 		"_stafftagthreadcreatoricon": ["StaffTag", "threadCreatorIcon"],
-		"_themesettingscard": ["ThemeSettings", "card"],
-		"_themesettingscardname": ["ThemeSettings", "cardName"],
-		"_themesettingsgrid": ["ThemeSettings", "grid"],
 		"_timedlightdarkmodedategrabber": ["TimedLightDarkMode", "dateGrabber"],
 		"_timedlightdarkmodetimergrabber": ["TimedLightDarkMode", "timerGrabber"],
 		"_timedlightdarkmodetimersettings": ["TimedLightDarkMode", "timerSettings"],

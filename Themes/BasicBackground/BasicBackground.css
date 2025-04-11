@@ -670,10 +670,10 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
-.wrapper_ef3116:not(.content_Pph8t6) .wrapper__48112 [role="group"] {			/* folder				guildwrap							*/
+.wrapper_ef3116:not(.content_ac0584) .wrapper__48112 [role="group"] {			/* folder				guildwrap							*/
 	margin-bottom: -8px;
 }
-.wrapper_ef3116:not(.content_Pph8t6) .wrapper__48112 [role="group"] .listItem__650eb:last-child {
+.wrapper_ef3116:not(.content_ac0584) .wrapper__48112 [role="group"] .listItem__650eb:last-child {
 	margin-bottom: 0;
 }
 
@@ -7085,7 +7085,7 @@ html .powercord-toast .contents .inner {
 
 /* ----		18.1.		BDFDB						---- */
 
-html .colorDefault_XdNdIp .bg_8df5St {
+html .colorDefault_67c5da .bg_67c5da {
 	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
 	background-color: rgb(var(--accentcolor_v));
 	opacity: 1;

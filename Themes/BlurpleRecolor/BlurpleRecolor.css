@@ -2416,15 +2416,15 @@ a.metadataDownload_cf09d8 {
 .toast-brand {
 	background-color: rgb(var(--accentcolor_v));
 }
-.colorBrand_WfDfzD .bg_8df5St {
+.colorBrand_67c5da .bg_67c5da {
 	background-color: rgb(var(--accentcolor_v));
 }
-.colorCustom_WKsPgT .bg_8df5St[style*="background-color: hsl(235, "],
-.colorCustom_WKsPgT .bg_8df5St[style*="background-color: hsl(227, "] {
+.colorCustom_67c5da .bg_67c5da[style*="background-color: hsl(235, "],
+.colorCustom_67c5da .bg_67c5da[style*="background-color: hsl(227, "] {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
-.bar_95Sdw1.customBar_3RsUzs[style*="background-color: hsl(235, "],
-.bar_95Sdw1.customBar_3RsUzs[style*="background-color: hsl(227, "] {
+.bar_67c5da.customBar_67c5da[style*="background-color: hsl(235, "],
+.bar_67c5da.customBar_67c5da[style*="background-color: hsl(227, "] {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
@@ -2744,7 +2744,7 @@ html .powercord-updater .debug-info b {
 
 /* ----		15.2.		READALLNOTIFICATIONSBUTTON			---- */
 
-.wrapper__8436d:active .childWrapper_a6ce15.button_Jt-tIg {
+.wrapper__8436d:active .childWrapper_a6ce15.button_aa90f4 {
 	background: var(--accentcolor-hover);
 }
 
