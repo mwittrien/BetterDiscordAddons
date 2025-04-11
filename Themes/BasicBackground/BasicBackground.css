@@ -1647,7 +1647,7 @@ body:has(#app-mount)::after {
 	z-index: -1;
 }
 .wrapper_f7ecac:not(.popover__2d0ab)::before {
-	background: var(--backgound) var(--backgoundposition)/var(--backgroundsize_v);
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
 	background-attachment: fixed;
 }
 .wrapper_f7ecac:not(.popover__2d0ab)::after {
