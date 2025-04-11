@@ -4461,10 +4461,11 @@ body:has(#app-mount)::after {
 }
 
 .outer_c0bea0:not(.custom-user-profile-theme) .container_ab8609 {
-	--custom-status-bubble-background-color: rgb(50, 50, 50) !important;
+	--custom-status-bubble-background-color: linear-gradient(rgba(var(--transparencycolor_v), .5), rgba(var(--transparencycolor_v), .5)) rgb(var(--accentcolor)) !important;
+	transition: background .2s ease;
 }
 .outer_c0bea0:not(.custom-user-profile-theme) .container_ab8609.editable_ab8609:hover {
-	--custom-status-bubble-background-color: rgb(var(--accentcolor_v)) !important;
+	--custom-status-bubble-background-color: linear-gradient(rgba(var(--transparencycolor_v), 0), rgba(var(--transparencycolor_v), 0)) rgb(var(--accentcolor)) !important;
 }
 
 .outer_c0bea0:not(.custom-user-profile-theme) .note_fcb628 textarea:focus {
