@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.4
+ * @version 2.2.5
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -430,6 +430,7 @@ module.exports = (_ => {
 					if (e.instance.props.message && e.instance.props.channel) {
 						let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: ["pin", "unpin"]});
+						if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: ["copy-text", "edit", "add-reaction", "add-reaction-1", "quote"]});
 						children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
