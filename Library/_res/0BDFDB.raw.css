@@ -1384,83 +1384,10 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	margin-left: 10px;
 }
 
-[REPLACE_CLASS__repomodal] {
-	min-height: unset;
-}
-[REPLACE_CLASS__repomodalheader] {
-	pointer-events: none;
-}
-[REPLACE_CLASS__repomodalsettings] {
-	padding: 0 16px 16px 16px;
-}
 [REPLACE_CLASS__repochangelogbutton] {
 	position: fixed;
 	top: 14px;
 	right: 14px;
-}
-
-[REPLACE_CLASS__repo] {
-	display: flex;
-	flex-direction: column;
-	flex: 1 1 auto;
-	width: 100%;
-	height: 100%;
-}
-[REPLACE_CLASS__repo] ~ [REPLACE_CLASS_settingswindowtoolscontainer] {
-	position: absolute;
-	right: 0;
-	margin-right: 21px;
-}
-[REPLACE_CLASS__repolistheader] {
-	display: flex;
-	flex-direction: column;
-	padding-right: 100px;
-	padding-bottom: 0;
-}
-[REPLACE_CLASS__repolistheader] [REPLACE_CLASS_flex] {
-	gap: 6px;
-}
-[REPLACE_CLASS__repolistscroller] {
-	padding-top: 0;
-}
-[REPLACE_CLASS__repolistheader] [REPLACE_CLASS_tabbarcontainer] {
-	display: flex;
-	align-items: flex-start;
-	margin-top: 16px;
-}
-[REPLACE_CLASS__repolistheader] [REPLACE_CLASS_quickselectwrapper] {
-	line-height: 20px;
-}
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] > *:only-child {
-	margin-left: auto;
-}
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols],
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols] {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex: 0 0 auto;
-}
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols] > *,
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > * {
-	margin-left: 10px;
-}
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols][REPLACE_CLASS__repocontrols] > * {
-	margin-left: 0;
-}
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrolsbutton] {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-}
-[REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > [REPLACE_CLASS__repocontrolsbutton]:only-child {
-	border-radius: 3px;
 }
 
 [REPLACE_CLASS_noticewrapper] {
