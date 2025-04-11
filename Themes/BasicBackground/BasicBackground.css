@@ -1883,8 +1883,9 @@ body:has(#app-mount)::after {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
-.replyBar__841c8,
-.threadSuggestionBar__841c8 {
+#app-mount .stackedBars__74017,
+#app-mount .replyBar__841c8,
+#app-mount .threadSuggestionBar__841c8 {
 	background: transparent;
 }
 
