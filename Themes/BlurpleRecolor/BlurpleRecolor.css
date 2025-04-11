@@ -601,10 +601,6 @@
 	color: #fff;
 }
 
-#app-mount .reactionMe__23977 .reactionCount__23977,					/* reaction				count me							*/
-#app-mount .reactionMe__23977:hover .reactionCount__23977 {
-	color: rgb(var(--accentcolor_v));
-}
 #app-mount .reaction__23977.reactionMe__23977 {						/* reaction				wrapper me							*/
 	background-color: rgba(var(--accentcolor_v), .3);
 	border-color: rgb(var(--accentcolor_v));
