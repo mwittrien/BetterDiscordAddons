@@ -131,25 +131,25 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116 .upperBadge_cc5dd2 .base__2b1f5 {
 	transform: translate(calc(1.5px * ((50 - var(--guildsize_v))/10)), calc(-1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.wrapper_ef3116 .upperLeftBadge_e35IpL .base__2b1f5 {
+.wrapper_ef3116 .upperLeftBadge_820890 .base__2b1f5 {
 	transform: translate(calc(-1.5px * ((50 - var(--guildsize_v))/10)), calc(-1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
 .wrapper_ef3116 .lowerBadge_cc5dd2 .base__2b1f5 {
 	transform: translate(calc(1.5px * ((50 - var(--guildsize_v))/10)), calc(1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.wrapper_ef3116 .lowerLeftBadge_zr4T_9 .base__2b1f5 {
+.wrapper_ef3116 .lowerLeftBadge_820890 .base__2b1f5 {
 	transform: translate(calc(-1.5px * ((50 - var(--guildsize_v))/10)), calc(1.5px * ((50 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
 .sidebar_c48ade .wrapper_ef3116 .upperBadge_cc5dd2 .base__2b1f5 {
 	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.sidebar_c48ade .wrapper_ef3116 .upperLeftBadge_e35IpL .base__2b1f5 {
+.sidebar_c48ade .wrapper_ef3116 .upperLeftBadge_820890 .base__2b1f5 {
 	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
 .sidebar_c48ade .wrapper_ef3116 .lowerBadge_cc5dd2 .base__2b1f5 {
 	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
-.sidebar_c48ade .wrapper_ef3116 .lowerLeftBadge_zr4T_9 .base__2b1f5 {
+.sidebar_c48ade .wrapper_ef3116 .lowerLeftBadge_820890 .base__2b1f5 {
 	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
 }
 .wrapper_ef3116 .wrapper__58105 {
@@ -189,13 +189,13 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	margin: calc(1px * var(--guildgap_v)) calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1) - ((var(--guildsize_v)*4/5) + 12 * var(--guildsize_v)/50) + var(--guildsize_v))/2)) calc(1px * var(--guildgap_v)) calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1) - ((var(--guildsize_v)*4/5) + 12 * var(--guildsize_v)/50) + var(--guildsize_v))/2)) !important;
 }
 .wrapper_ef3116 #sort-button > div,
-.wrapper_ef3116 .label_2wRs_g,
+.wrapper_ef3116 .label_caf933,
 .wrapper_ef3116 .frame_aa90f4 .innerFrame_aa90f4,
 .wrapper_ef3116 .frame_aa90f4 .button_aa90f4 {
 	white-space: pre !important;
 	width: 100% !important;
 }
-.wrapper_ef3116 .label_2wRs_g {
+.wrapper_ef3116 .label_caf933 {
 	display: flex !important;
 	justify-content: center !important;
 	height: calc(1px * ((var(--guildsize_v)/5) + 5)) !important;
