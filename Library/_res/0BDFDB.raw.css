@@ -336,6 +336,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-left: 0;
 }
 
+[REPLACE_CLASS_messagetoolbarbutton]:has([REPLACE_CLASS_emojiold]),
+[REPLACE_CLASS_messagetoolbarbutton]:has([REPLACE_CLASS_emojiold]) + span,
+[REPLACE_CLASS_messagetoolbarbutton]:has([REPLACE_CLASS_emojiold]) + span + [REPLACE_CLASS_messagetoolbarseparator]  {
+	order: -1;
+}
+
 [REPLACE_CLASS_messageavatar][REPLACE_CLASS_bdfdbbadgeavatar] > :not([REPLACE_CLASS_bdfdbbadge]),
 [REPLACE_CLASS_messageavatar][REPLACE_CLASS_bdfdbbadgeavatar] [REPLACE_CLASS_avatarwrapper] {
 	width: inherit !important;
