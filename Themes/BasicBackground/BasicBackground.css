@@ -244,7 +244,6 @@ html {
 	color: var(--header-primary);
 }
 
-
 /* ~~~~		0.		TABLE OF CONTENTS				~~~~ */
 /*
 	1.	TRANSPARENCY
@@ -629,8 +628,12 @@ body:has(#app-mount)::after {
 #app-mount .wrapper__8436d rect[fill] {
 	fill: rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .noIcon_f34534 {								/* acronym				minicontainer							*/
+#app-mount .childWrapperNoHoverBg__6e9f8 {						/* acronym				minicontainer							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
+}
+#app-mount .wrapper__6e9f8.selected__6e9f8 .childWrapper__6e9f8,
+#app-mount .wrapper__6e9f8:hover .childWrapper__6e9f8 {
+	background-color: var(--bg-brand);
 }
 
 #app-mount .circleIconButton__5bc7e {							/* guildadd/discovery			innerwrap							*/
@@ -1352,6 +1355,12 @@ body:has(#app-mount)::after {
 #app-mount .repliedMessage_c19a55 ~ * .avatar_c19a55 {
 	top: 24px;
 }
+#app-mount .messageGroupWrapper__45690 .avatar_c19a55 {
+	top: 6px;
+}
+#app-mount .messageGroupWrapper__45690 .repliedMessage_c19a55 ~ * .avatar_c19a55 {
+	top: 28px;
+}
 #app-mount .avatarDecoration_c19a55 {							/* message				avatar decoration						*/
 	position: absolute;
 	top: 2px;
@@ -1360,6 +1369,9 @@ body:has(#app-mount)::after {
 #app-mount .messageItemBody__8fd54.hasReply_c19a55 .avatarDecoration_c19a55,
 #app-mount .repliedMessage_c19a55 ~ * .avatarDecoration_c19a55 {
 	top: 24px;
+}
+#app-mount .messageGroupWrapper__45690 .repliedMessage_c19a55 ~ * .avatarDecoration_c19a55 {
+	top: 28px;
 }
 
 #app-mount .replyBadge_c19a55 {								/* message				reply badge							*/
@@ -1433,6 +1445,10 @@ body:has(#app-mount)::after {
 #app-mount .compact_c19a55 .repliedMessage_c19a55::after,
 #app-mount .compact_c19a55 .spine__9271d::after {
 	border-color: transparent;
+}
+#app-mount .messageGroupWrapper__45690 .repliedMessage_c19a55::before,
+#app-mount .messageGroupWrapper__45690 .repliedMessage_c19a55::after {
+	top: 0px;
 }
 
 #app-mount .cozy_c19a55.hasThread_c19a55::before,					/* message				thread spine							*/
@@ -4805,6 +4821,11 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
+#app-mount .row__6fddf:hover {
+	background-color: rgba(var(--transparencycolor_v), .2);
+	border-radius: 5px;
+}
+
 #app-mount .messageGroupWrapper__45690 {
 	background-color: transparent;
 	border: none;
@@ -4823,9 +4844,43 @@ body:has(#app-mount)::after {
 	top: 4px;
 	right: 14px;
 }
-#app-mount .jumpButton_ed0c8c,								/* popout				jumpbutton (mentions)						*/
-#app-mount .jumpButton__45690 {								/* popout				jumpbutton (pins)						*/
-	background-color: rgba(var(--transparencycolor_v), .4);
+
+#app-mount .jumpButton_ed0c8c,
+#app-mount .jumpButton__45690 {
+	background: transparent;
+	z-index: 1000;
+}
+#app-mount .jumpButton_ed0c8c::before,
+#app-mount .jumpButton_ed0c8c::after,
+#app-mount .jumpButton__45690::before,
+#app-mount .jumpButton__45690::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 4px;
+	pointer-events: none;
+	z-index: -1;
+}
+#app-mount .jumpButton_ed0c8c::before,
+#app-mount .jumpButton__45690::before {
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	background-attachment: fixed;
+}
+#app-mount .jumpButton_ed0c8c::after,
+#app-mount .jumpButton__45690::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.4));
+	backdrop-filter: blur(var(--backgroundblur_v));
+}
+#app-mount .jumpButton_ed0c8c:hover::before,
+#app-mount .jumpButton_ed0c8c:hover::after,
+#app-mount .jumpButton__45690:hover::before,
+#app-mount .jumpButton__45690:hover::after {
+	display: none;
 }
 #app-mount .jumpButton_ed0c8c:hover,
 #app-mount .jumpButton__45690:hover {
@@ -4883,12 +4938,12 @@ body:has(#app-mount)::after {
 	position: static;
 }
 #app-mount .channelHeader__35a7e:only-child {
-	border-radius: 0;
+	border-radius: 5px;
 }
 .channelHeader__35a7e {
 	margin-left: 8px;
 }
-.channel__06eda .channelHeader__35a7e {
+.channel__427f0 .channelHeader__35a7e {
 	margin-left: 0;
 }
 .messageContainer__95796 {
