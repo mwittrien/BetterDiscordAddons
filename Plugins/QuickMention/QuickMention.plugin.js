@@ -113,7 +113,6 @@ module.exports = (_ => {
 			processMessageButtons (e) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.messagebuttons]]});
 				if (index == -1) return;
-				let buttons = children[index];
 				children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					key: "mention",
 					text: BDFDB.LanguageUtils.LanguageStrings.MENTION,
@@ -121,7 +120,7 @@ module.exports = (_ => {
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.messagetoolbarhoverbutton + BDFDB.disCN.messagetoolbarbutton,
 						onClick: _ => BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
-							plainText: `<@!${buttons.props.message.author.id}>`
+							plainText: `<@!${e.instance.props.message.author.id}>`
 						}),
 						children: BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCNS.messagetoolbaricon + BDFDB.disCN.messagetoolbarbuttoncontent,
@@ -131,7 +130,7 @@ module.exports = (_ => {
 							})
 						})
 					})
-				}))
+				}));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
