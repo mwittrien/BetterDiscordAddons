@@ -126,6 +126,7 @@ module.exports = (_ => {
 							className: BDFDB.disCNS.messagetoolbaricon + BDFDB.disCN.messagetoolbarbuttoncontent,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.messagetoolbaricon,
+								nativeClass: true,
 								name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_AT
 							})
 						})
