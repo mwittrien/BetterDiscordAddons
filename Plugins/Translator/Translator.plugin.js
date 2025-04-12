@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.2
+ * @version 2.7.3
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"improved": {
+			"Message Actions": "Button is back in the Message Actions Toolbar"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -423,6 +425,7 @@ module.exports = (_ => {
 					after: [
 						"ChannelTextAreaButtons",
 						"Embed",
+						"MessageButtons",
 						"MessageContent"
 					]
 				};
@@ -807,6 +810,38 @@ module.exports = (_ => {
 						})
 					}));
 				}
+			}
+			
+			processMessageButtons (e) {
+				if (!e.instance.props.message || !e.instance.props.channel) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.messagebuttons]]});
+				if (index == -1) return;
+				let translated = !!translatedMessages[e.instance.props.message.id];
+				children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
+					render() {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							key: translated ? "untranslate-message" : "translate-message",
+							text: _ => translated ? _this.labels.context_messageuntranslateoption : _this.labels.context_messagetranslateoption,
+							tooltipConfig: {className: BDFDB.disCN.messagetoolbartooltip},
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS.messagetoolbarhoverbutton + BDFDB.disCN.messagetoolbarbutton,
+								onClick: _ => {
+									if (!isTranslating) _this.translateMessage(e.instance.props.message, e.instance.props.channel).then(_ => {
+										translated = !!translatedMessages[e.instance.props.message.id];
+										BDFDB.ReactUtils.forceUpdate(this);
+									});
+								},
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCNS.messagetoolbaricon + BDFDB.disCN.messagetoolbarbuttoncontent,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.messagetoolbaricon,
+										iconSVG: translated ? translateIconUntranslate : translateIcon
+									})
+								})
+							})
+						});
+					}
+				}));
 			}
 			
 			processChannelTextAreaContainer (e) {
