@@ -1998,24 +1998,24 @@ a.metadataDownload_cf09d8 {
 	fill: var(--status-success);
 }
 
-.colorDefault_c1e9c4[id="set-status-submenu-online"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="set-status-submenu-online"]:active:not(.hideInteraction_c1e9c4) {
-	background-color: rgb(59,165,92);
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-online"].focused_c1e9c4,
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-online"]:active:not(.hideInteraction_c1e9c4) {
+	background-color: rgb(59,165,92) !important;
 }
-.colorDefault_c1e9c4[id="set-status-submenu-idle"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="set-status-submenu-idle"]:active:not(.hideInteraction_c1e9c4) {
-	background-color: rgb(250,166,26);
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-idle"].focused_c1e9c4,
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-idle"]:active:not(.hideInteraction_c1e9c4) {
+	background-color: rgb(250,166,26) !important;
 }
-.colorDefault_c1e9c4[id="set-status-submenu-dnd"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="set-status-submenu-dnd"]:active:not(.hideInteraction_c1e9c4) {
-	background-color: rgb(237,66,69);
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-dnd"].focused_c1e9c4,
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-dnd"]:active:not(.hideInteraction_c1e9c4) {
+	background-color: rgb(237,66,69) !important;
 }
-.colorDefault_c1e9c4[id="set-status-submenu-invisible"].focused_c1e9c4,
-.colorDefault_c1e9c4[id="set-status-submenu-invisible"]:active:not(.hideInteraction_c1e9c4) {
-	background-color: rgb(116,127,141);
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-invisible"].focused_c1e9c4,
+.item_c1e9c4.colorDefault_c1e9c4[id="set-status-submenu-invisible"]:active:not(.hideInteraction_c1e9c4) {
+	background-color: rgb(116,127,141) !important;
 }
-.colorDefault_c1e9c4.focused_c1e9c4 .status_a423bd,
-.colorDefault_c1e9c4:active .status_a423bd {
+.item_c1e9c4.colorDefault_c1e9c4.focused_c1e9c4 .status_a423bd,
+.item_c1e9c4.colorDefault_c1e9c4:active .status_a423bd {
 	background-color: #fff !important;
 }
 #status-picker-custom-status .statusItem_e0f739 {
