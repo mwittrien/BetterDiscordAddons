@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.5
+ * @version 2.2.6
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"improved": {
+			"Message Actions": "Button is back in the Message Actions Toolbar"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -387,6 +389,9 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"HeaderBar"
+					],
+					after: [
+						"MessageButtons"
 					]
 				};
 				
@@ -524,6 +529,53 @@ module.exports = (_ => {
 						action: _ => this.updateNoteData(note, e.instance.props.message)
 					}));
 				}
+			}
+			
+			processMessageButtons (e) {
+				if (!e.instance.props.message || !e.instance.props.channel) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.messagebuttons]]});
+				if (index == -1) return;
+				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
+				children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
+					render() {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							key: note ? "unpin-note" : "pin-note",
+							text: _ => note ? _this.labels.context_unpinoption : _this.labels.context_pinoption,
+							tooltipConfig: {className: BDFDB.disCN.messagetoolbartooltip},
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS.messagetoolbarhoverbutton + BDFDB.disCN.messagetoolbarbutton,
+								onClick: _ => {
+									_this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
+									note = _this.getNoteData(e.instance.props.message, e.instance.props.channel);
+									BDFDB.ReactUtils.forceUpdate(this);
+								},
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCNS.messagetoolbaricon + BDFDB.disCN.messagetoolbarbuttoncontent,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.messagetoolbaricon,
+										iconSVG: note ? pinIconDelete : pinIcon
+									})
+								})
+							})
+						})
+					}
+				}));
+				if (this.isNoteOutdated(note, e.instance.props.message)) children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					key: "update-note",
+					text: this.labels.context_updateoption,
+					tooltipConfig: {className: BDFDB.disCN.messagetoolbartooltip},
+					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCNS.messagetoolbarhoverbutton + BDFDB.disCN.messagetoolbarbutton,
+						onClick: _ => this.updateNoteData(note, e.instance.props.message),
+						children: BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCNS.messagetoolbaricon + BDFDB.disCN.messagetoolbarbuttoncontent,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								iconSVG: pinIconUpdate
+							})
+						})
+					})
+				}));
 			}
 
 			processHeaderBar (e) {
