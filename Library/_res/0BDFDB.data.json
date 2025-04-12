@@ -2700,7 +2700,7 @@
 		"messagetoolbaricon": ["MessageToolbarExtras", "icon"],
 		"messagetoolbarinner": ["MessageToolbarItems", "wrapper"],
 		"messagetoolbarisheader": ["MessageToolbar", "isHeader"],
-		"messagetoolbarseparator": ["MessageToolbarItems", "separator"],
+		"messagetoolbarseparator": ["MessageToolbarExtras", "separator"],
 		"messagetoolbartooltip": ["MessageToolbarExtras", "tooltip"],
 		"messageuploadcancel": ["MessageFile", "cancelButton"],
 		"messageusername": ["MessageBody", "username"],
