@@ -4869,7 +4869,8 @@ body:has(#app-mount)::after {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 #app-mount .messagesPopout__45690,							/* popout				innerwrap							*/
-#app-mount .container__0f711 {								/* popout				for you								*/
+#app-mount .container__0f711,								/* popout				for you								*/
+#app-mount .container__6764b {								/* popout				threads								*/
 	background-color: transparent;
 }
 #app-mount .container__0f711 .body__6fddf > * {						/* popout				for you text							*/
