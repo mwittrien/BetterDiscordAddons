@@ -116,6 +116,7 @@ module.exports = (_ => {
 					id: BDFDB.ContextMenuUtils.createItemId(_this.name, "activity-toggle"),
 					icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						name: BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD,
+						nativeClass: true,
 						width: 16,
 						height: 16
 					}),
