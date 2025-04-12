@@ -4326,8 +4326,10 @@ body:has(#app-mount)::after {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
 .menu_c1e9c4::before,
+.submenuPaddingContainer_af7fb7 .scroller_c1e9c4::before,
 .submenu_c1e9c4::before,
 .menu_c1e9c4::after,
+.submenuPaddingContainer_af7fb7 .scroller_c1e9c4::after,
 .submenu_c1e9c4::after {
 	content: "";
 	position: absolute;
@@ -4342,14 +4344,20 @@ body:has(#app-mount)::after {
 	z-index: -1;
 }
 .menu_c1e9c4::before,
+.submenuPaddingContainer_af7fb7 .scroller_c1e9c4::before,
 .submenu_c1e9c4::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
 .menu_c1e9c4::after,
+.submenuPaddingContainer_af7fb7 .scroller_c1e9c4::after,
 .submenu_c1e9c4::after {
 	background: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.3));
 	backdrop-filter: blur(var(--popoutblur_v));
+}
+.submenuPaddingContainer_af7fb7 .menu_c1e9c4::before,
+.submenuPaddingContainer_af7fb7 .menu_c1e9c4::after {
+	display: none;
 }
 .submenu_c1e9c4 {
 	position: relative;
