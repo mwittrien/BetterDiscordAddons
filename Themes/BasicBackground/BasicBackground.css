@@ -903,6 +903,10 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 
+.memberRowContainer__71c22:hover td {							/* members channel			row								*/
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+
 /* ----		5.3.		DMCHANNELS					---- */
 
 .interactive_bf202d:focus-within,							/* dmchannel/page			inner								*/
@@ -3061,33 +3065,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		12.		GUILDSETTINGS					~~~~ */
 
-.container_fcf29c {									/* settings				confirmnotice							*/
-	position: relative;
-	backdrop-filter: blur(var(--backgroundblur_v));
-}
-.container_fcf29c[style*="background-color: rgba(248, 249, 249"],
-.container_fcf29c[style*="background-color: rgba(32, 34, 37"] {
-	background-color: rgba(var(--transparencycolor_v), .7) !important;
-}
-.container_fcf29c[style*="background-color: rgba(248, 249, 249"] .message_fcf29c,
-.container_fcf29c[style*="background-color: rgba(32, 34, 37"] .message_fcf29c {
-	color: var(--header-primary) !important;
-}
-.container_fcf29c[style*="background-color: rgba(248, 249, 249"] .resetButton_fcf29c span[style],
-.container_fcf29c[style*="background-color: rgba(32, 34, 37"] .resetButton_fcf29c span[style] {
-	color: var(--header-primary) !important;
-}
-.container_fcf29c::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
-	background-attachment: fixed;
-	pointer-events: none;
-	z-index: -1;
+#app-mount .container_fcf29c {
+	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 .roles__9e177 {										/* rolesettings				intro roles							*/
@@ -3178,17 +3158,17 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v)));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
-.roleRow_a930f1:hover:not(.roleRowDisableHover_a930f1) {				/* rolesettings				role row							*/
+.roleRow__5f97b:hover:not(.roleRowDisableHover__5f97b) {				/* rolesettings				role row							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.roleRow_a930f1:hover:not(.roleRowDisableHover_a930f1) .circleButton_a930f1 {
+.roleRow__5f97b:hover:not(.roleRowDisableHover__5f97b) .circleButton__5f97b {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.roleRow_a930f1:hover:not(.roleRowDisableHover_a930f1) .circleButton_a930f1:hover {
+.roleRow__5f97b:hover:not(.roleRowDisableHover__5f97b) .circleButton__5f97b:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
-.roleRow_a930f1::before,
-.roleRow_a930f1:last-child::after {
+.roleRow__5f97b::before,
+.roleRow__5f97b:last-child::after {
 	background-color: var(--background-modifier-accent);
 }
 .memberRow__9a73f:hover {								/* rolesettings				member row							*/
@@ -3430,69 +3410,6 @@ body:has(#app-mount)::after {
 	color: rgba(var(--transparencycolor_v), .3);
 }
 
-#app-mount .member__55269 {								/* membersettings			membercard							*/
-	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
-}
-#app-mount .member__55269 .name__7635a {						/* membersettings			membercardname							*/
-	color: var(--header-primary);
-}
-#app-mount .member__55269 .tag__1a537 {							/* membersettings			membercardtag							*/
-	color: var(--text-muted);
-}
-#app-mount .member__55269 .roleWrapper__0f174 {						/* membersettings			rolewrapper							*/
-	color: rgba(var(--textbrightest_v), .8);
-}
-#app-mount .actionButton__48c1c {							/* membersettings			addrolebutton							*/
-	border-color: var(--header-secondary);
-	color: var(--header-secondary);
-}
-#app-mount .member__55269 .overflowIconFg__2b31c {					/* membersettings			3-dot icon							*/
-	fill: var(--header-primary);
-}
-#app-mount .member__55269 .ownerHelpIcon__021a4 {					/* membersettings			help icon							*/
-	color: var(--header-primary);
-}
-
-#app-mount .overflowRolesPopout__48c1c,							/* membersettings			roleoverflow popout						*/
-#app-mount .overflowRolesPopoutArrow__48c1c {
-	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .2), 0 2px 10px 0 rgba(var(--transparencycolor_v), .2);
-	border: none;
-	border-radius: 3px;
-	overflow: hidden;
-}
-.overflowRolesPopout__48c1c::before,
-.overflowRolesPopoutArrow__48c1c::before,
-.overflowRolesPopout__48c1c::after,
-.overflowRolesPopoutArrow__48c1c::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
-.overflowRolesPopout__48c1c::before,
-.overflowRolesPopoutArrow__48c1c::before {
-	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
-	background-attachment: fixed;
-}
-.overflowRolesPopout__48c1c::after,
-.overflowRolesPopoutArrow__48c1c::after {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1));
-	backdrop-filter: blur(var(--popoutblur_v));
-}
-.overflowRolesPopoutHeaderIcon__48c1c path {
-	fill: var(--header-secondary);
-}
-.overflowRolesPopoutHeaderText__48c1c {
-	color: var(--header-secondary);
-}
-
 #app-mount .to__910e1 {									/* membersettings			transfer to							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 	box-shadow: 0 0 0 4px rgba(var(--transparencycolor_v), .3);
@@ -3512,12 +3429,12 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .inviteSettingsInviteRow__1de14 {						/* invitesettings			invitecard							*/
-	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
+	box-shadow: 0 1px 0 0 rgba(var(--textbright), .1);
 }
 
 #app-mount .bannedUser_cdb2b0 {								/* bansettings				bancard								*/
 	background-color: transparent;
-	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
+	box-shadow: 0 1px 0 0 rgba(var(--textbright), .1);
 }
 #app-mount .bannedUser_cdb2b0:hover {
 	background-color: rgba(var(--transparencycolor_v), .3);
@@ -5168,15 +5085,15 @@ body:has(#app-mount)::after {
 
 /* ----		14.6.		COLORPICKER					---- */
 
-#app-mount .customColorPicker_bbc020 {							/* popout				wrapper								*/
+#app-mount .customColorPicker__459fb {							/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
 	border-radius: 3px;
 	overflow: hidden;
 }
-.customColorPicker_bbc020::before,
-.customColorPicker_bbc020::after {
+.customColorPicker__459fb::before,
+.customColorPicker__459fb::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5189,11 +5106,11 @@ body:has(#app-mount)::after {
 	pointer-events: none;
 	z-index: -1;
 }
-.customColorPicker_bbc020::before {
+.customColorPicker__459fb::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
-.customColorPicker_bbc020::after {
+.customColorPicker__459fb::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.35));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
