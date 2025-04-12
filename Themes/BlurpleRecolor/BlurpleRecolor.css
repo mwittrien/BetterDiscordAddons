@@ -1903,6 +1903,7 @@ a.metadataDownload_cf09d8 {
 	color: rgb(var(--accentcolor_v));
 }
 .menu_ad5fac .menuItemFocused_ad5fac,
+.menuItemColor_af7fb7:hover,
 .colorBrand_c1e9c4.focused_c1e9c4,
 .colorBrand_c1e9c4:active:not(.hideInteraction_c1e9c4),
 .colorDefault_c1e9c4.focused_c1e9c4,
