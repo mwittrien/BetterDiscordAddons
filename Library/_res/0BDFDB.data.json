@@ -2693,6 +2693,7 @@
 		"messagetimestampvisibleonhover": ["MessageBody", "timestampVisibleOnHover"],
 		"messagetoolbar": ["MessageToolbar", "container"],
 		"messagetoolbarbutton": ["MessageToolbarItems", "button"],
+		"messagetoolbarbuttoncontent": ["MessageToolbarExtras", "buttonContent"],
 		"messagetoolbarbuttondisabled": ["MessageToolbarItems", "disabled"],
 		"messagetoolbarbuttonselected": ["MessageToolbarItems", "selected"],
 		"messagetoolbarhoverbutton": ["MessageToolbarExtras", "hoverBarButton"],
