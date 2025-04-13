@@ -1791,7 +1791,7 @@ body:has(#app-mount)::after {
 
 #app-mount .file__0ccae,								/* attachment				filerapper							*/
 #app-mount .wrapper_f316dd,								/* attachment				videowrapper							*/
-#app-mount .wrapperAudio_cf09d8.							/* attachment				audiowrapper							*/
+#app-mount .wrapperAudio_cf09d8,							/* attachment				audiowrapper							*/
 #app-mount .footer__4d95d {								/* attachment				codewrapper footer						*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
@@ -3084,7 +3084,7 @@ body:has(#app-mount)::after {
 
 /* ~~~~		12.		GUILDSETTINGS					~~~~ */
 
-#app-mount .container_fcf29c:not([data-emphasized="true"]} {
+#app-mount .container_fcf29c:not([data-emphasized="true"]) {
 	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
 	background-color: rgb(var(--accentcolor_v));
 }
@@ -4461,7 +4461,7 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .wrapper_f7ecac:not(.buttonsInner__5126c) {					/* popout				actions								*/
-	background: var(--custom-status-bubble-background-color, var(--theme-base-color-dark, transparent));
+	background: var(--custom-status-bubble-background, var(--theme-base-color-dark, transparent));
 	box-shadow: unset;
 	overflow: visible;
 }
