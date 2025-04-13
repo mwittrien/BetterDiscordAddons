@@ -2,6 +2,8 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 
 :root {
+	--overflowfloat:			0.00000000000000000000001;
+	
 	--transparencycolor:			0, 0, 0;
 	--transparencyalpha:			0.15;
 	--messagetransparency:			0.5;
@@ -72,7 +74,7 @@
 	--textdarkest_v:			var(--textdarkest_s, var(--textdarkest));
 
 	
-	--usechatbubbles: 			calc(var(--messagetransparency_v) / (var(--messagetransparency_v) + 0.00000000000000000000001));
+	--usechatbubbles: 			calc(var(--messagetransparency_v) / (var(--messagetransparency_v) + var(--overflowfloat)));
 	
 	--accentcolor2:				var(--accentcolor_v);
 	--mentioncolor:				var(--accentcolor_v);
@@ -404,7 +406,7 @@ body,											/* body													*/
 
 #app-mount .sidebarRegionScroller__23e6b,						/* settings				sidebar								*/
 #app-mount .sidebar_e62d17 {								/* sidebarlist				sidebar								*/
-	background-color: rgba(var(--transparencycolor_v), calc(0.2 * (var(--transparencyalpha_v) / (var(--transparencyalpha_v) + 0.00000000000000000000001))));
+	background-color: rgba(var(--transparencycolor_v), calc(0.2 * (var(--transparencyalpha_v) / (var(--transparencyalpha_v) + var(--overflowfloat)))));
 }
 
 #app-mount {										/* app-mount												*/
@@ -1874,9 +1876,9 @@ body:has(#app-mount)::after {
 .form_f75fb0 {										/* textarea				form								*/
 	background: rgba(var(--transparencycolor_v), var(--chatinputtransparency_v));
 	margin-top: 0 !important;
-	padding-top: calc(8px * (var(--chatinputtransparency_v) / (var(--chatinputtransparency_v) + 0.00000000000000000000001))) !important;
-	border-top-right-radius: calc(8px * (1 - (var(--memberlisttransparency_v) / (var(--memberlisttransparency_v) + 0.00000000000000000000001))));
-	border-top-left-radius: calc(8px * (1 - (var(--guildchanneltransparency_v) / (var(--guildchanneltransparency_v) + 0.00000000000000000000001))));
+	padding-top: calc(8px * (var(--chatinputtransparency_v) / (var(--chatinputtransparency_v) + var(--overflowfloat)))) !important;
+	border-top-right-radius: calc(8px * (1 - (var(--memberlisttransparency_v) / (var(--memberlisttransparency_v) + var(--overflowfloat)))));
+	border-top-left-radius: calc(8px * (1 - (var(--guildchanneltransparency_v) / (var(--guildchanneltransparency_v) + var(--overflowfloat)))));
 }
 .threadSidebarOpen_f75fb0 .form_f75fb0 {
 	border-top-right-radius: 8px;
