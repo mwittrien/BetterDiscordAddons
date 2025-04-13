@@ -763,7 +763,8 @@
 
 /* ----		3.4.		MEMBERLIST					---- */
 
-.icon__8ac07 path[fill="#43a25a"] {
+.icon_c9d15c path[fill="#43a25a"],
+.icon_c9d15c path[fill="#40a258"] {
 	fill: var(--text-secondary);
 }
 .premiumIcon__5d473 {
