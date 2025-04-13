@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.6
+ * @version 2.2.7
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -15,7 +15,8 @@
 module.exports = (_ => {
 	const changeLog = {
 		"improved": {
-			"Message Actions": "Button is back in the Message Actions Toolbar"
+			"Message Actions": "Button is back in the Message Actions Toolbar",
+			"Disable Option": "Added an Option to disable it, since some of y'all are ungrateful brats"
 		}
 	};
 
@@ -379,10 +380,13 @@ module.exports = (_ => {
 				_this = this;
 				
 				this.defaults = {
+					general: {
+						addQuickTranslateButton:	{value: true, 	description: "Adds a Quick Note Button in the Message Actions Bar"}
+					},
 					choices: {
-						defaultFilter:		{value: filterKeys[0], 		options: filterKeys,		type: "filter",		description: "Default choice tab"},
-						defaultSort:		{value: sortKeys[0], 		options: sortKeys,		type: "sort",		description: "Default sort choice"},
-						defaultOrder:		{value: orderKeys[0], 		options: orderKeys,		type: "order",		description: "Default order choice"},
+						defaultFilter:			{value: filterKeys[0], 		options: filterKeys,		type: "filter",		description: "Default Choice Tab"},
+						defaultSort:			{value: sortKeys[0], 		options: sortKeys,		type: "sort",		description: "Default Sort Choice"},
+						defaultOrder:			{value: orderKeys[0], 		options: orderKeys,		type: "order",		description: "Default Order Choice"},
 					}
 				};
 			
@@ -469,6 +473,15 @@ module.exports = (_ => {
 					children: _ => {
 						let settingsItems = [];
 						
+						for (let key in this.settings.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
+							value: this.settings.general[key]
+						}));
+						
 						for (let key in this.settings.choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Select",
 							plugin: this,
@@ -532,7 +545,7 @@ module.exports = (_ => {
 			}
 			
 			processMessageButtons (e) {
-				if (!e.instance.props.message || !e.instance.props.channel) return;
+				if (!this.settings.general.addQuickTranslateButton || !e.instance.props.message || !e.instance.props.channel) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.messagebuttons]]});
 				if (index == -1) return;
 				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
