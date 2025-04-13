@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.3
+ * @version 2.7.4
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -15,7 +15,8 @@
 module.exports = (_ => {
 	const changeLog = {
 		"improved": {
-			"Message Actions": "Button is back in the Message Actions Toolbar"
+			"Message Actions": "Button is back in the Message Actions Toolbar",
+			"Disable Option": "Added an Option to disable it, since some of y'all are ungrateful brats"
 		}
 	};
 	
@@ -390,6 +391,7 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						addTranslateButton:		{value: true, 	popout: false},
+						addQuickTranslateButton:	{value: true, 	popout: false},
 						usePerChatTranslation:		{value: true, 	popout: false},
 						sendOriginalMessage:		{value: false, 	popout: true},
 						showOriginalMessage:		{value: false, 	popout: true},
@@ -813,7 +815,7 @@ module.exports = (_ => {
 			}
 			
 			processMessageButtons (e) {
-				if (!e.instance.props.message || !e.instance.props.channel) return;
+				if (!this.settings.general.addQuickTranslateButton || !e.instance.props.message || !e.instance.props.channel) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.messagebuttons]]});
 				if (index == -1) return;
 				let translated = !!translatedMessages[e.instance.props.message.id];
@@ -1764,6 +1766,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Месечният лимит на заявките е достигнат.",
 							error_serverdown:					"Сървърът за превод може да е офлайн.",
 							exception_text:						"Думите, започващи с {{var0}}, ще бъдат игнорирани",
+							general_addQuickTranslateButton:			"Добавя бърз бутон за превод в лентата за действия за съобщения",
 							general_addTranslateButton:				"Добавя бутон за превод към текстовото поле на канала",
 							general_sendOriginalMessage:				"Също така изпраща оригиналното съобщение, когато превежда вашето изпратено съобщение",
 							general_showOriginalMessage:				"Също така показва оригиналното съобщение при превод на получено съобщение",
@@ -1800,6 +1803,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Byl dosažen limit měsíčních požadavků.",
 							error_serverdown:					"Překladový server může být offline.",
 							exception_text:						"Slova začínající na {{var0}} budou ignorována",
+							general_addQuickTranslateButton:			"Přidá tlačítko rychlého překladu do panelu Actions Message",
 							general_addTranslateButton:				"Přidá tlačítko Přeložit do textové oblasti kanálu",
 							general_sendOriginalMessage:				"Při překladu odeslané zprávy také odešle původní zprávu",
 							general_showOriginalMessage:				"Také zobrazuje původní zprávu při překladu přijaté zprávy",
@@ -1836,6 +1840,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Månedlig anmodningsgrænse nået.",
 							error_serverdown:					"Oversættelsesserveren er muligvis offline.",
 							exception_text:						"Ord, der begynder med {{var0}}, ignoreres",
+							general_addQuickTranslateButton:			"Tilføjer en hurtig oversættelsesknap i linjen Message Actions",
 							general_addTranslateButton:				"Tilføjer en Oversæt-knap til kanaltekstområdet",
 							general_sendOriginalMessage:				"Sender også den originale besked, når du oversætter din sendte besked",
 							general_showOriginalMessage:				"Viser også den originale besked, når du oversætter modtaget besked",
@@ -1872,6 +1877,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Monatliches Anforderungslimit erreicht.",
 							error_serverdown:					"Der Übersetzungsserver ist möglicherweise offline.",
 							exception_text:						"Wörter, die mit {{var0}} beginnen, werden ignoriert",
+							general_addQuickTranslateButton:			"Fügt einen Schnellübersetz Schalter zur Nachrichtenaktionsleiste hinzu",
 							general_addTranslateButton:				"Fügt dem Textbereich des Kanals eine Schalter zum Übersetzen hinzu",
 							general_sendOriginalMessage:				"Sendet auch die ursprüngliche Nachricht, wenn die gesendete Nachricht übersetzt wird",
 							general_showOriginalMessage:				"Zeigt auch die ursprüngliche Nachricht an, wenn eine empfangene Nachricht übersetzt wird",
@@ -1908,6 +1914,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Συμπληρώθηκε το μηνιαίο όριο αιτημάτων.",
 							error_serverdown:					"Ο διακομιστής μετάφρασης ενδέχεται να είναι εκτός σύνδεσης.",
 							exception_text:						"Οι λέξεις θα αγνοηθούν που ξεκινούν με {{var0}}",
+							general_addQuickTranslateButton:			"Προσθέτει ένα κουμπί γρήγορης μετάφρασης στη γραμμή ενεργειών μηνυμάτων",
 							general_addTranslateButton:				"Προσθήκη κουμπιού μετάφρασης στην Περιοχή κειμένου του Καναλιού",
 							general_sendOriginalMessage:				"Αποστολή αρχικού Μηνύματος με τη μετάφραση απεσταλμένου μηνύματος",
 							general_showOriginalMessage:				"Εμφάνιση αρχικού Μηνύματος με τη μετάφραση ενός ληφθέντος μηνύματος",
@@ -1944,6 +1951,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Se alcanzó el límite de solicitudes mensuales.",
 							error_serverdown:					"El servidor de traducción puede estar fuera de línea.",
 							exception_text:						"Las palabras que comienzan con {{var0}} serán ignoradas",
+							general_addQuickTranslateButton:			"Agrega un botón de traducción rápida en la barra de acciones del mensaje",
 							general_addTranslateButton:				"Agrega un botón de traducción al área de texto del canal",
 							general_sendOriginalMessage:				"También envía el mensaje original al traducir su mensaje enviado",
 							general_showOriginalMessage:				"También muestra el mensaje original al traducir un mensaje recibido",
@@ -1980,6 +1988,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Límite de solicitud mensual alcanzado.",
 							error_serverdown:					"El servidor de traducción puede estar fuera de línea.",
 							exception_text:						"Las palabras que comienzan con {{var0}} se ignorarán",
+							general_addQuickTranslateButton:			"Agrega un botón de traducción rápida en la barra de acciones del mensaje",
 							general_addTranslateButton:				"Agrega un botón de traducción al canal TextAREA",
 							general_sendOriginalMessage:				"También envía el mensaje original al traducir su mensaje enviado",
 							general_showOriginalMessage:				"También muestra el mensaje original al traducir un mensaje recibido",
@@ -2016,6 +2025,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Kuukauden pyyntöraja saavutettu.",
 							error_serverdown:					"Käännöspalvelin saattaa olla offline-tilassa.",
 							exception_text:						"{{var0}} alkavat sanat ohitetaan",
+							general_addQuickTranslateButton:			"Lisää nopea käännöspainike Message Action -palkkiin",
 							general_addTranslateButton:				"Lisää käännöspainikkeen kanavan tekstialueeseen",
 							general_sendOriginalMessage:				"Lähettää myös alkuperäisen viestin kääntäessään lähettämääsi viestiä",
 							general_showOriginalMessage:				"Näyttää myös alkuperäisen viestin käännettäessä vastaanotettua viestiä",
@@ -2052,6 +2062,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Limite mensuelle de demandes atteinte.",
 							error_serverdown:					"Le serveur de traduction est peut-être hors ligne.",
 							exception_text:						"Les mots commençant par {{var0}} seront ignorés",
+							general_addQuickTranslateButton:			"Ajoute un bouton de traduire rapidement dans la barre des actions du message",
 							general_addTranslateButton:				"Ajoute un bouton de traduction à la zone de texte du canal",
 							general_sendOriginalMessage:				"Envoie également le message d'origine lors de la traduction de votre message envoyé",
 							general_showOriginalMessage:				"Affiche également le message d'origine lors de la traduction d'un message reçu",
@@ -2088,6 +2099,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"मासिक अनुरोध सीमा पूरी हो गई है।",
 							error_serverdown:					"अनुवाद सर्वर ऑफ़लाइन हो सकता है।",
 							exception_text:						"{{var0}} से शुरू होने वाले शब्दों पर ध्यान नहीं दिया जाएगा",
+							general_addQuickTranslateButton:			"संदेश कार्रवाई बार में एक त्वरित अनुवाद बटन जोड़ता है",
 							general_addTranslateButton:				"चैनल Textarea में एक अनुवाद बटन जोड़ता है",
 							general_sendOriginalMessage:				"आपके भेजे गए संदेश का अनुवाद करते समय मूल संदेश भी भेजता है",
 							general_showOriginalMessage:				"प्राप्त संदेश का अनुवाद करते समय मूल संदेश भी दिखाता है",
@@ -2124,6 +2136,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Dosegnuto je mjesečno ograničenje zahtjeva.",
 							error_serverdown:					"Translation Server možda je offline.",
 							exception_text:						"Riječi koje počinju s {{var0}} bit će zanemarene",
+							general_addQuickTranslateButton:			"Dodaje gumb za brzo prevođenje u traku Akcija poruka",
 							general_addTranslateButton:				"Dodaje gumb Prevedi tekstualnom području kanala",
 							general_sendOriginalMessage:				"Također šalje izvornu poruku prilikom prijevoda vaše poslane poruke",
 							general_showOriginalMessage:				"Također prikazuje izvornu poruku prilikom prijevoda primljene poruke",
@@ -2160,6 +2173,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Elérte a havi igénylési limitet.",
 							error_serverdown:					"Lehet, hogy a Fordítószerver offline állapotban van.",
 							exception_text:						"A(z) {{var0}} kezdetű szavak figyelmen kívül maradnak",
+							general_addQuickTranslateButton:			"Hozzáad egy gyors lefordítást a Művelet Művelet sávban",
 							general_addTranslateButton:				"Fordítási gombot ad a csatorna szövegterületéhez",
 							general_sendOriginalMessage:				"Az eredeti üzenetet is elküldi az elküldött üzenet fordítása során",
 							general_showOriginalMessage:				"A fogadott üzenet lefordításakor az eredeti üzenetet is megjeleníti",
@@ -2196,6 +2210,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Limite di richieste mensili raggiunto.",
 							error_serverdown:					"Il server di traduzione potrebbe essere offline.",
 							exception_text:						"Le parole che iniziano con {{var0}} verranno ignorate",
+							general_addQuickTranslateButton:			"Aggiunge un pulsante di traduzione rapida nella barra delle azioni del messaggio",
 							general_addTranslateButton:				"Aggiunge un pulsante Traduci all'area di testo del canale",
 							general_sendOriginalMessage:				"Invia anche il messaggio originale durante la traduzione del messaggio inviato",
 							general_showOriginalMessage:				"Mostra anche il messaggio originale durante la traduzione di un messaggio ricevuto",
@@ -2232,6 +2247,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"月間リクエスト制限に達しました。",
 							error_serverdown:					"翻訳サーバーがオフラインになっている可能性があります。",
 							exception_text:						"{{var0}} で始まる単語は無視されます",
+							general_addQuickTranslateButton:			"メッセージアクションバーにクイック翻訳ボタンを追加します",
 							general_addTranslateButton:				"チャンネルのテキストエリアに翻訳ボタンを追加します",
 							general_sendOriginalMessage:				"送信したメッセージを翻訳するときに元のメッセージも送信します",
 							general_showOriginalMessage:				"受信したメッセージを翻訳するときに元のメッセージも表示します",
@@ -2268,6 +2284,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"월간 요청 한도에 도달했습니다.",
 							error_serverdown:					"번역 서버가 오프라인일 수 있습니다.",
 							exception_text:						"{{var0}}로 시작하는 단어는 무시됩니다.",
+							general_addQuickTranslateButton:			"메시지 동작 막대에서 빠른 번역 버튼 추가",
 							general_addTranslateButton:				"채널 텍스트 영역에 번역 버튼 추가",
 							general_sendOriginalMessage:				"또한 보낸 메시지를 번역할 때 원본 메시지를 보냅니다.",
 							general_showOriginalMessage:				"또한 수신된 메시지를 번역할 때 원본 메시지를 표시합니다.",
@@ -2304,6 +2321,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Pasiektas mėnesio užklausų limitas.",
 							error_serverdown:					"Vertimo serveris gali būti neprisijungęs.",
 							exception_text:						"Žodžiai, prasidedantys {{var0}}, bus ignoruojami",
+							general_addQuickTranslateButton:			"Prideda greito vertimo mygtuką pranešimo veiksmų juostoje",
 							general_addTranslateButton:				"Prie kanalo teksto srities pridedamas vertimo mygtukas",
 							general_sendOriginalMessage:				"Taip pat siunčia originalų pranešimą verčiant jūsų išsiųstą žinutę",
 							general_showOriginalMessage:				"Taip pat rodomas pradinis pranešimas, kai verčiamas gautas pranešimas",
@@ -2340,6 +2358,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Maandelijkse aanvraaglimiet bereikt.",
 							error_serverdown:					"Vertaalserver is mogelijk offline.",
 							exception_text:						"Woorden die beginnen met {{var0}} worden genegeerd",
+							general_addQuickTranslateButton:			"Voegt een snel vertalende knop toe in de Bericht Acties Bar",
 							general_addTranslateButton:				"Voegt een vertaalknop toe aan het kanaaltekstgebied",
 							general_sendOriginalMessage:				"Verzendt ook het originele bericht bij het vertalen van uw verzonden bericht",
 							general_showOriginalMessage:				"Toont ook het originele bericht bij het vertalen van een ontvangen bericht",
@@ -2376,6 +2395,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Månedlig forespørselsgrense nådd.",
 							error_serverdown:					"Oversettelsesserveren kan være frakoblet.",
 							exception_text:						"Ord som begynner med {{var0}} vil bli ignorert",
+							general_addQuickTranslateButton:			"Legger til en rask oversettelsesknapp i meldingslinjen",
 							general_addTranslateButton:				"Legger til en oversettknapp til kanaltekstområdet",
 							general_sendOriginalMessage:				"Sender også den originale meldingen når du oversetter den sendte meldingen",
 							general_showOriginalMessage:				"Viser også den originale meldingen når du oversetter en mottatt melding",
@@ -2412,6 +2432,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Osiągnięto miesięczny limit żądań.",
 							error_serverdown:					"Serwer tłumaczeń może być w trybie offline.",
 							exception_text:						"Słowa zaczynające się od {{var0}} będą ignorowane",
+							general_addQuickTranslateButton:			"Dodaje szybki przycisk Tłumacz na pasku akcji wiadomości",
 							general_addTranslateButton:				"Dodaje przycisk Tłumacz do obszaru tekstowego kanału",
 							general_sendOriginalMessage:				"Wysyła również oryginalną wiadomość podczas tłumaczenia wysłanej wiadomości",
 							general_showOriginalMessage:				"Pokazuje również oryginalną wiadomość podczas tłumaczenia otrzymanej wiadomości",
@@ -2448,6 +2469,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Limite de solicitação mensal atingido.",
 							error_serverdown:					"O servidor de tradução pode estar offline.",
 							exception_text:						"Palavras que começam com {{var0}} serão ignoradas",
+							general_addQuickTranslateButton:			"Adiciona um botão de tradução rápida na barra de ações da mensagem",
 							general_addTranslateButton:				"Adiciona um botão de tradução à área de texto do canal",
 							general_sendOriginalMessage:				"Também envia a Mensagem original ao traduzir sua Mensagem enviada",
 							general_showOriginalMessage:				"Também mostra a Mensagem original ao traduzir uma Mensagem recebida",
@@ -2484,6 +2506,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Limita lunară de solicitare a fost atinsă.",
 							error_serverdown:					"Serverul de traducere ar putea fi offline.",
 							exception_text:						"Cuvintele care încep cu {{var0}} vor fi ignorate",
+							general_addQuickTranslateButton:			"Adaugă un buton de traducere rapidă în bara de acțiuni de mesaje",
 							general_addTranslateButton:				"Adaugă un buton de traducere în zona de text a canalului",
 							general_sendOriginalMessage:				"De asemenea, trimite mesajul original atunci când traduceți mesajul trimis",
 							general_showOriginalMessage:				"Afișează, de asemenea, mesajul original atunci când traduceți un mesaj primit",
@@ -2520,6 +2543,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Достигнут месячный лимит запросов.",
 							error_serverdown:					"Сервер переводов может быть отключен.",
 							exception_text:						"Слова, начинающиеся с {{var0}}, будут игнорироваться.",
+							general_addQuickTranslateButton:			"Добавляет кнопку быстрого перевода в панель действий сообщений",
 							general_addTranslateButton:				"Добавляет кнопку перевода в текстовую область канала",
 							general_sendOriginalMessage:				"Также отправляет исходное сообщение при переводе отправленного сообщения.",
 							general_showOriginalMessage:				"Также показывает исходное сообщение при переводе полученного сообщения.",
@@ -2556,6 +2580,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Gränsen för månatlig begäran har nåtts.",
 							error_serverdown:					"Översättningsservern kan vara offline.",
 							exception_text:						"Ord som börjar med {{var0}} kommer att ignoreras",
+							general_addQuickTranslateButton:			"Lägger till en snabb translate -knapp i meddelanden om meddelanden om meddelanden om meddelanden",
 							general_addTranslateButton:				"Lägger till en Översätt-knapp i kanaltextområdet",
 							general_sendOriginalMessage:				"Skickar också det ursprungliga meddelandet när du översätter ditt skickade meddelande",
 							general_showOriginalMessage:				"Visar även det ursprungliga meddelandet när ett mottaget meddelande översätts",
@@ -2592,6 +2617,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"ถึงขีดจำกัดคำขอรายเดือนแล้ว",
 							error_serverdown:					"เซิร์ฟเวอร์การแปลอาจออฟไลน์อยู่",
 							exception_text:						"คำที่ขึ้นต้นด้วย {{var0}} จะถูกละเว้น",
+							general_addQuickTranslateButton:			"เพิ่มปุ่มแปลอย่างรวดเร็วในแถบการกระทำข้อความ",
 							general_addTranslateButton:				"เพิ่มปุ่มแปลภาษาไปยัง Textarea ของช่อง",
 							general_sendOriginalMessage:				"ส่งข้อความต้นฉบับเมื่อแปลข้อความที่ส่งของคุณ",
 							general_showOriginalMessage:				"ยังแสดงข้อความต้นฉบับเมื่อแปลข้อความที่ได้รับ",
@@ -2628,6 +2654,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Aylık İstek Sınırına ulaşıldı.",
 							error_serverdown:					"Çeviri Sunucusu çevrimdışı olabilir.",
 							exception_text:						"{{var0}} ile başlayan kelimeler yok sayılacak",
+							general_addQuickTranslateButton:			"Mesaj Eylemleri çubuğuna hızlı bir çeviri düğmesi ekler",
 							general_addTranslateButton:				"Kanal Metin Alanına Çevir Düğmesi Ekler",
 							general_sendOriginalMessage:				"Gönderilen Mesajınızı çevirirken orijinal Mesajı da gönderir",
 							general_showOriginalMessage:				"Alınan bir Mesajı tercüme ederken orijinal Mesajı da gösterir.",
@@ -2664,6 +2691,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Досягнуто місячного ліміту запитів.",
 							error_serverdown:					"Сервер перекладу може бути офлайн.",
 							exception_text:						"Слова, що починаються з {{var0}}, ігноруватимуться",
+							general_addQuickTranslateButton:			"Додає кнопку швидкого перекладу в панелі дій Message",
 							general_addTranslateButton:				"Додає кнопку перекладу до текстової області каналу",
 							general_sendOriginalMessage:				"Також надсилає оригінальне повідомлення під час перекладу вашого надісланого повідомлення",
 							general_showOriginalMessage:				"Також показує оригінальне повідомлення під час перекладу отриманого повідомлення",
@@ -2700,6 +2728,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Đã đạt đến Giới hạn Yêu cầu Hàng tháng.",
 							error_serverdown:					"Máy chủ dịch có thể ngoại tuyến.",
 							exception_text:						"Các từ bắt đầu bằng {{var0}} sẽ bị bỏ qua",
+							general_addQuickTranslateButton:			"Thêm nút dịch nhanh vào thanh hành động tin nhắn",
 							general_addTranslateButton:				"Thêm nút dịch vào vùng văn bản của kênh",
 							general_sendOriginalMessage:				"Đồng thời gửi Tin nhắn gốc khi dịch Tin nhắn đã gửi của bạn",
 							general_showOriginalMessage:				"Đồng thời hiển thị Tin nhắn gốc khi dịch một Tin nhắn đã nhận",
@@ -2736,6 +2765,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"已达到每月请求限制。",
 							error_serverdown:					"翻译服务器可能离线。",
 							exception_text:						"以 {{var0}} 开头的单词将被忽略",
+							general_addQuickTranslateButton:			"在消息操作栏中添加一个快速翻译按钮",
 							general_addTranslateButton:				"将翻译按钮添加到频道文本区域",
 							general_sendOriginalMessage:				"翻译您发送的消息时也会发送原始消息",
 							general_showOriginalMessage:				"翻译收到的消息时还显示原始消息",
@@ -2772,6 +2802,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"已達到每月請求限制。",
 							error_serverdown:					"翻譯服務器可能離線。",
 							exception_text:						"以 {{var0}} 開頭的單詞將被忽略",
+							general_addQuickTranslateButton:			"在消息操作欄中添加一個快速翻譯按鈕",
 							general_addTranslateButton:				"將翻譯按鈕添加到頻道文本區域",
 							general_sendOriginalMessage:				"翻譯您發送的消息時也會發送原始消息",
 							general_showOriginalMessage:				"翻譯收到的消息時還顯示原始消息",
@@ -2808,6 +2839,7 @@ module.exports = (_ => {
 							error_monthlylimit:					"Monthly Request Limit reached.",
 							error_serverdown:					"Translation Server might be offline.",
 							exception_text:						"Words starting with {{var0}} will be ignored",
+							general_addQuickTranslateButton:			"Adds a Quick Translate Button in the Message Actions Bar",
 							general_addTranslateButton:				"Adds a Translate Button to the Channel Textarea",
 							general_sendOriginalMessage:				"Also sends the original Message when translating your sent Message",
 							general_showOriginalMessage:				"Also shows the original Message when translating a received Message",
