@@ -3081,9 +3081,13 @@ body:has(#app-mount)::after {
 
 /* ~~~~		12.		GUILDSETTINGS					~~~~ */
 
-#app-mount .container_fcf29c {
+#app-mount .container_fcf29c:not([data-emphasized="true"]} {
 	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
 	background-color: rgb(var(--accentcolor_v));
+}
+#app-mount .container_fcf29c[data-emphasized="true"] {
+	background-color: rgb(var(--dangercolor_v));
+	border-color: rgb(var(--dangercolor_v));
 }
 
 .roles__9e177 {										/* rolesettings				intro roles							*/
