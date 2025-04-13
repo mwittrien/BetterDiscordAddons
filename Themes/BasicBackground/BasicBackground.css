@@ -1210,10 +1210,10 @@ body:has(#app-mount)::after {
 	opacity: calc(1 - var(--usechatbubbles));
 }
 
-.hasMore__8db19:hover {
+#app-mount .hasMore__8db19:hover {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.jumpToPresentBar__0f481 {								/* bar					jumptopresent							*/
+#app-mount .jumpToPresentBar__0f481 {							/* bar					jumptopresent							*/
 	bottom: -8px;
 	background-color: transparent;
 	border-bottom: 1px solid var(--background-modifier-accent);
@@ -1243,6 +1243,9 @@ body:has(#app-mount)::after {
 .messagesWrapper__36d07:has(.jumpToPresentBar__0f481) ~ .form_f75fb0 .scrollableContainer__74017 {
 	border-top-right-radius: 0;
 	border-top-left-radius: 0;
+}
+#app-mount .bottomBar__0f481 {
+	background-color: transparent;
 }
 
 /* ====		6.2.1.		MESSAGE						==== */
@@ -4458,7 +4461,7 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .wrapper_f7ecac:not(.buttonsInner__5126c) {					/* popout				actions								*/
-	background: var(--custom-status-bubble-background, transparent);
+	background: var(--custom-status-bubble-background-color, var(--theme-base-color-dark, transparent));
 	box-shadow: unset;
 	overflow: visible;
 }
