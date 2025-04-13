@@ -1650,7 +1650,7 @@ body:has(#app-mount)::after {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 
-.buttonsInner__5126c {									/* message				buttons								*/
+#app-mount .buttonsInner__5126c {							/* message				buttons								*/
 	position: relative;
 	background: transparent;
 }
@@ -4457,16 +4457,13 @@ body:has(#app-mount)::after {
 	box-sizing: content-box;
 }
 
-#app-mount .popover_c97e55,								/* status bubble			my actions							*/
-#app-mount .popover__2d0ab {								/* status bobble			other actions							*/
+#app-mount .wrapper_f7ecac:not(.buttonsInner__5126c) {					/* popout				actions								*/
 	background: var(--custom-status-bubble-background, transparent);
 	box-shadow: unset;
 	overflow: visible;
 }
-.popover_c97e55::before,
-.popover_c97e55::after,
-.popover__2d0ab::before,
-.popover__2d0ab::after {
+.wrapper_f7ecac:not(.buttonsInner__5126c)::before,
+.wrapper_f7ecac:not(.buttonsInner__5126c)::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4479,20 +4476,16 @@ body:has(#app-mount)::after {
 	pointer-events: none;
 	z-index: -1;
 }
-.popover_c97e55::before,
-.popover__2d0ab::before {
+.wrapper_f7ecac:not(.buttonsInner__5126c)::before {
 	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
 	background-attachment: fixed;
 }
-.popover_c97e55::after,
-.popover__2d0ab::after {
+.wrapper_f7ecac:not(.buttonsInner__5126c)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.5));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
-.outer_c0bea0.custom-user-profile-theme .popover_c97e55::before,
-.outer_c0bea0.custom-user-profile-theme .popover_c97e55::after,
-.outer_c0bea0.custom-user-profile-theme .popover__2d0ab::before,
-.outer_c0bea0.custom-user-profile-theme .popover__2d0ab::after {
+.outer_c0bea0.custom-user-profile-theme .wrapper_f7ecac:not(.buttonsInner__5126c)::before,
+.outer_c0bea0.custom-user-profile-theme .wrapper_f7ecac:not(.buttonsInner__5126c)::after {
 	display: none;
 }
 
