@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.3
+ * @version 1.4.4
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -188,7 +188,7 @@ module.exports = (_ => {
 			}
 			
 			parse (string) {
-				if (!string.length || /<[#@][!&]{0,1}\d+>|@here|@everyone|:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) return string;
+				if (!string.length) return string;
 				let newString = string, stop = false;
 				let language = BDFDB.LanguageUtils.getLanguage().id;
 				for (let space of spaces) for (let symbol of symbols) if (!stop) {
