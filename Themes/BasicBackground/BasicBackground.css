@@ -361,7 +361,6 @@ body,											/* body													*/
 #app-mount .wrapper__61a6b,								/* app					errorscreen							*/
 #app-mount .bg__960e4,									/* app					background							*/
 #app-mount .layer__960e4,								/* layer				container							*/
-#app-mount .container_c8ffbb,								/* layer				container							*/
 #app-mount .container_f37cb1,								/* channels				header								*/
 #app-mount .header_f37cb1,								/* channels				header inner							*/
 #app-mount .container__2637a,								/* channels				inner								*/
@@ -377,6 +376,7 @@ body,											/* body													*/
 #app-mount .wrapper__0d1ef,								/* chat					messages loading						*/
 #app-mount .pageBody__41ed7,								/* chat					channel search							*/
 #app-mount .noChannel__01d5c,								/* nochannel												*/
+#app-mount .container_c8ffbb,								/* members				container							*/
 #app-mount .members_c8ffbb,								/* members												*/
 #app-mount .members_c8ffbb > div,							/* members				content								*/
 #app-mount .content_a154bf,								/* unavailable												*/
@@ -403,6 +403,7 @@ body,											/* body													*/
 #app-mount .app_a3002d {
 	color: transparent;
 }
+#app-mount .container_c8ffbb,								/* members				container							*/
 #app-mount .scroller__7d20c {								/* peoples				activity scroller						*/
 	border: none;
 }
@@ -1065,7 +1066,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .scrollerContainer_c6b11b,
 #app-mount .emptyPage__5d7c9 {
-	background: var(--bg-overlay-chat,var(--background-primary));
+	background: transparent;
 }
 #app-mount .scrollerContainer_c6b11b .prompt__5d7c9 {
 	background: var(--background-secondary);
@@ -2102,6 +2103,9 @@ body:has(#app-mount)::after {
 
 /* ----		6.7.		CHAT SIDEBAR					---- */
 
+#app-mount .resizeHandle__01ae2 {
+	background: transparent;
+}
 .container__01ae2 {									/* chat					sidebar								*/ 
 	border-radius: 0;
 }
@@ -3473,10 +3477,10 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-.questionNumber__5d756 {								/* communitysettings			intro				question			*/
-	color: var(--header-primary) !important;
-}
-.optionsHeader__5d756 {									/* communitysettings			intro				options				*/
+.questionNumber__5d756,									/* communitysettings			intro				question			*/
+.optionsHeader__5d756,									/* communitysettings			intro				options				*/
+.categoryText_e4503a,									/* communitysettings			intro				category			*/
+.selectAll_e4503a [style*="color: var(--text-muted);"] {				/* communitysettings			intro				category			*/
 	color: var(--header-primary) !important;
 }
 .optionCard_b96967:hover {								/* communitysettings			intro				option card			*/
