@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.4
+ * @version 7.3.5
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -538,10 +538,16 @@ module.exports = (_ => {
 						opacity: 0.5 !important;
 						z-index: 10000 !important;
 					}
-					${BDFDB.dotCN.channels + BDFDB.notCN.channelshidden}:has(${BDFDB.dotCN.guilds}) {
-						display: flex !important;
-						flex-direction: row !important;
-						width: auto !important;
+					${BDFDB.dotCNS._serverfoldersfoldercontentisopen + BDFDB.dotCN.chatbase} {
+						grid-template-columns: [start] min-content [guildsEnd] min-content [guildsEnd] min-content [channelsEnd] 1fr [end];
+						grid-template-rows: [top] var(--custom-app-top-bar-height) [titleBarEnd] min-content [noticeEnd] 1fr [end];
+						grid-template-areas:
+						"titleBar titleBar titleBar titleBar"
+						"guildsList guildsFolderList notice notice"
+						"guildsList guildsFolderList channelsList page";
+					}
+					${BDFDB.dotCN._serverfoldersfoldercontent} {
+						grid-area: guildsFolderList !important;
 					}
 					${BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.notCN.guildswrapperhidden} {
 						transition: width 0.25s cubic-bezier(.44,1.04,1,1.01) !important;
