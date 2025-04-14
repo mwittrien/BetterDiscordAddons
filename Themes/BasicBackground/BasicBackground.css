@@ -2706,6 +2706,9 @@ body:has(#app-mount)::after {
 #app-mount .container_cec934:hover .container__956c6 {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
+#app-mount .overlay_b5b7aa {
+	background: linear-gradient(0deg, rgba(var(--transparencycolor_v)) 0, rgba(var(--transparencycolor_v), .4) 20.31%, rgba(var(--transparencycolor_v), 0));
+}
 
 #app-mount .cardPlaceholder__6e28f {							/* guildcard				placeholder							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -4420,9 +4423,10 @@ body:has(#app-mount)::after {
 
 /* ----		14.1.		CONTEXTMENU					---- */
 
-.menu_c1e9c4,										/* contextmenu				fixed								*/
-.submenu_c1e9c4 {									/* contextmenu				submenu								*/
+#app-mount .menu_c1e9c4,								/* contextmenu				fixed								*/
+#app-mount .submenu_c1e9c4 {								/* contextmenu				submenu								*/
 	background: transparent;
+	border: unset;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
 .menu_c1e9c4::before,
@@ -4453,6 +4457,7 @@ body:has(#app-mount)::after {
 .submenuPaddingContainer_af7fb7 .scroller_c1e9c4::after,
 .submenu_c1e9c4::after {
 	background: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.3));
+	border: 1px solid var(--border-subtle);
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 .submenuPaddingContainer_af7fb7 .menu_c1e9c4::before,
