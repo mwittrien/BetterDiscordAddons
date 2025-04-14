@@ -389,6 +389,7 @@ body,											/* body													*/
 #app-mount .shop__08415,								/* shop					inner								*/
 #app-mount .pageWrapper__6db1d,								/* shop					buyall								*/
 #app-mount .containerSidenav_dc2e0e,							/* family control											*/
+#app-mount .container__551b0,								/* discovery				list								*/
 #app-mount .scroller__23746,								/* discovery				apps/quests							*/
 #app-mount .container_cbd375,								/* discovery				guilds								*/
 #app-mount .pageContainer__09fde,							/* unihub												*/
@@ -420,8 +421,7 @@ body,											/* body													*/
 	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
 	margin-bottom: 0;
 }
-#app-mount .sidebar_c48ade,								/* channels				container							*/
-#app-mount .container__551b0 {								/* discoverylist			container							*/
+#app-mount .sidebarList_c48ade {							/* channels				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
 }
 #app-mount .sidebar_c48ade:after {
@@ -451,7 +451,7 @@ body,											/* body													*/
 	background-attachment: fixed;
 }
 #app-mount .container__9293f.themed__9293f.headerBar__80679::after {
-	background-color: var(--bg-overlay-2,var(--__header-bar-background));
+	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 #app-mount .chatHeaderBar__3e137 {							/* channelheader			sub header							*/
