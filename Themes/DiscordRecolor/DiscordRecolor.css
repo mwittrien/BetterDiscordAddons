@@ -2030,11 +2030,11 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v), .6), 0 2px 10px 0 rgba(0,0,0, .2);
 }
 
-#app-mount .card_e90879 {
+#app-mount .card__84e3e {
 	box-shadow: var(--elevation-medium);
 }
-#app-mount .card_e90879:focus,
-#app-mount .card_e90879:hover {
+#app-mount .card__84e3e:focus,
+#app-mount .card__84e3e:hover {
 	box-shadow: var(--elevation-high);
 }
 
