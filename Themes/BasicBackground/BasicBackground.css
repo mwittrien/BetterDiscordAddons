@@ -4522,6 +4522,7 @@ body:has(#app-mount)::after {
 .outer_c0bea0:not(.custom-user-profile-theme),
 .outer_c0bea0:not(.custom-user-profile-theme) .inner_c0bea0 {
 	background: transparent !important;
+	--user-profile-overlay-background: rgba(var(--transparencycolor_v), .2);
 }
 .outer_c0bea0:not(.custom-user-profile-theme)::before,
 .outer_c0bea0:not(.custom-user-profile-theme)::after {
@@ -4589,6 +4590,9 @@ body:has(#app-mount)::after {
 	display: block !important;
 }
 
+.outer_c0bea0.custom-user-profile-theme {
+	--user-profile-overlay-background: rgba(var(--transparencycolor_v, .2));
+}
 .outer_c0bea0.custom-user-profile-theme .inner_c0bea0::after {
 	content: "";
 	position: absolute;
