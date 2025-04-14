@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.2
+ * @version 2.1.3
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -216,8 +216,9 @@ module.exports = (_ => {
 						const user = BDFDB.LibraryStores.UserStore.getUser(e.methodArguments[0].userId);
 						if (!loadedUsers[user.id]) processUser(e.methodArguments[0].userId, {user: user || {}, flags: user ? user.publicFlags : 0});
 					}
-					else if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "USER_PROFILE_FETCH_SUCCESS" && e.methodArguments[0].user) {
-						processUser(e.methodArguments[0].user.id, e.methodArguments[0]);
+					else if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "USER_PROFILE_FETCH_SUCCESS") {
+						let userProfile = e.methodArguments[0].userProfile || e.methodArguments[0];
+						if (userProfile && userProfile.user) processUser(userProfile.user.id, userProfile);
 					}
 				}});
 
