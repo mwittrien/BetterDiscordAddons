@@ -3503,6 +3503,12 @@ body:has(#app-mount)::after {
 	border-color: var(--header-primary) !important;
 	color: var(--header-primary) !important;
 }
+#app-mount .pageBody__5d7c9 h2 + [style*="color: var(--text-muted);"] {
+	color: var(--header-secondary) !important;
+}
+#app-mount .prompt__5d7c9 {
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
 
 .upsellContainer__4cfe2 {								/* communitysettings			general				upsellcontainer			*/
 	background-color: rgba(var(--transparencycolor_v), .2);
