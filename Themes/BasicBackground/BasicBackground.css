@@ -6976,11 +6976,9 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		15.8.		NOTIFICATIONBAR					---- */
 
-.base_c48ade .notice__5fd4c powercord-announcement {
+#app-mount .notice__6e2b9 {
+	border: none;
 	border-radius: 0;
-}
-#app-mount .notice-2FJMB4 {
-	box-shadow: 0 1px 5px 0 rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .notice_c5cd6a {
 	background-color: rgba(var(--transparencycolor_v), .6);
