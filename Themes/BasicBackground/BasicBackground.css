@@ -5614,9 +5614,16 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 	position: relative;
 }
+#app-mount .resultsListParent__6ae25 {							/* resultslist												*/
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
+}
 .quickSelectPopout_ebaca5::before,
+.resultsListParent__6ae25::before,
 .popoutList__92efc::before,
 .quickSelectPopout_ebaca5::after,
+.resultsListParent__6ae25::after,
 .popoutList__92efc::after {
 	content: "";
 	position: absolute;
@@ -5631,14 +5638,25 @@ body:has(#app-mount)::after {
 	z-index: -1;
 }
 .quickSelectPopout_ebaca5::before,
+.resultsListParent__6ae25::before,
 .popoutList__92efc::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
 .quickSelectPopout_ebaca5::after,
+.resultsListParent__6ae25::after,
 .popoutList__92efc::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
+}
+.searchRowLabel__6ae25 {
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+.searchRowLabel__6ae25:hover {
+	background-color: rgb(var(--accentcolor_v));
+}
+.searchRowLabel__6ae25:hover * {
+	color: #fff;
 }
 #app-mount .selectableItem_eb626b {
 	color: var(--header-primary);
