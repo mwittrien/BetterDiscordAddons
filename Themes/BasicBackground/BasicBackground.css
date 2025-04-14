@@ -742,6 +742,8 @@ body:has(#app-mount)::after {
 
 #app-mount .panels_c48ade {								/* account/voice			container							*/
 	background-color: transparent;
+	border-radius: 0;
+	border-color: unset;
 	overflow: hidden;
 }
 #app-mount .container__2637a ~ .panels_c48ade {
@@ -751,6 +753,7 @@ body:has(#app-mount)::after {
 .panels_c48ade::after {
 	content: "";
 	position: absolute;
+	border-radius: var(--radius-sm);
 	top: 0;
 	bottom: 0;
 	right: 0;
@@ -764,6 +767,7 @@ body:has(#app-mount)::after {
 }
 .panels_c48ade::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2.5 + var(--transparencyalpha_v)));
+	border: 1px solid var(--border-faint);
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 .container__2637a ~ .panels_c48ade::before,
