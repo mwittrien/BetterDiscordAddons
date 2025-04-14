@@ -1913,6 +1913,9 @@ a.metadataDownload_cf09d8 {
 	background-color: rgb(var(--accentcolor_v));
 	color: var(--header-primary);
 }
+.custom-user-profile-theme .menuItemColor_af7fb7:hover {
+	background-color: var(--user-profile-overlay-background-hover, rgb(var(--accentcolor_v)));
+}
 .colorBrand_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorDefault_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4 {
 	color: rgb(var(--accentcolor_v));
