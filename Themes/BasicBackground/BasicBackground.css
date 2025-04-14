@@ -419,6 +419,7 @@ body,											/* body													*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
 }
 .sidebar_c48ade .wrapper_ef3116 {
+	padding-top: 6px;
 	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
 	margin-bottom: 0;
 }
@@ -7227,6 +7228,13 @@ html .powercord-toast .contents .inner {
 /* ~~~~		18.		PLUGINSUPPORT					~~~~ */
 
 /* ----		18.1.		BDFDB						---- */
+
+.label_caf933 {
+	color: var(--header-secondary);
+}
+.label_caf933:hover {
+	color: var(--header-primary);
+}
 
 html .colorDefault_67c5da .bg_67c5da {
 	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
