@@ -2071,6 +2071,12 @@ body:has(#app-mount)::after {
 .avatar__44b0c::before {								/* emptyavatar												*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
+.container__0f2e8 {
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+.container__0f2e8:hover {
+	background-color: rgba(var(--transparencycolor_v), .4);
+}
 .memberGroupsPlaceholder_c8ffbb,							/* loadingplaceholders											*/
 .placeholderAvatar__27cc6,
 .placeholderUsername__74df5 {
@@ -6090,10 +6096,13 @@ body:has(#app-mount)::after {
 .clickable__91a9d:hover .layout__91a9d {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
+#app-mount .container__0f2e8 {
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
 .selected__0f2e8,
 .selected__0f2e8:hover,
 .selected__0f2e8:active,
-.container__0f2e8:hover,
+#app-mount .container__0f2e8:hover,
 .clickable__91a9d:active .childContainer__91a9d,
 .clickable__91a9d:active .layout__91a9d {
 	background: rgb(var(--accentcolor_v));
@@ -6413,6 +6422,15 @@ input.input_dd8655:hover:not(:focus) {
 }
 #app-mount .item__001a7[aria-checked=false]:hover .radioBar__001a7[style*="--radio-bar-accent-color"] {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
+}
+#app-mount .item__001a7[aria-checked=false]:hover .radioBar__001a7[style*="--radio-bar-accent-color"] .refreshIconStroke__001a7 {
+	fill: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
+}
+#app-mount .item__001a7 .radioBar__001a7[style*="--radio-bar-accent-color"] .radioIndicatorChecked__001a7 .refreshIconFill__001a7 {
+	fill: var(--radio-bar-accent-color);
+}
+#app-mount .item__001a7 .radioBar__001a7[style*="--radio-bar-accent-color"] .radioIndicatorChecked__001a7 .refreshIconStroke__001a7 {
+	stroke: var(--radio-bar-accent-color);
 }
 
 #app-mount .checkboxContainer_db81c6::before {						/* checkbox				container							*/
