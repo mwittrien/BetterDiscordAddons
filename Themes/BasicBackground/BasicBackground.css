@@ -3396,6 +3396,33 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
+.questionNumber__5d756 {								/* communitysettings			intro				question			*/
+	color: var(--header-primary) !important;
+}
+.optionsHeader__5d756 {									/* communitysettings			intro				options				*/
+	color: var(--header-primary) !important;
+}
+.optionCard_b96967:hover {								/* communitysettings			intro				option card			*/
+	border-color: var(--header-secondary);
+}
+.addPrompt_e34850,									/* communitysettings			intro				add prompt			*/
+.addActionItem_d2b0e4 {									/* communitysettings			intro				add action			*/
+	border-color: rgb(var(--accentcolor_v));
+	opacity: 0.8;
+}
+.addPrompt_e34850:hover,
+.addActionItem_d2b0e4:hover {
+	opacity: 1;
+}
+.cta__28e57 {
+	border-color: var(--header-secondary) !important;
+	color: var(--header-secondary) !important;
+}
+.cta__28e57:hover {
+	border-color: var(--header-primary) !important;
+	color: var(--header-primary) !important;
+}
+
 .upsellContainer__4cfe2 {								/* communitysettings			general				upsellcontainer			*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
