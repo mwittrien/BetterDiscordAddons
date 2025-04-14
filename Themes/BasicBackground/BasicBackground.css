@@ -381,6 +381,7 @@ body,											/* body													*/
 #app-mount .members_c8ffbb > div,							/* members				content								*/
 #app-mount .content_a154bf,								/* unavailable												*/
 #app-mount .container__133bf,								/* peoples												*/
+#app-mount .tabBody__133bf,								/* peoples				tab body							*/
 #app-mount .container__7d20c,								/* peoples				activity list							*/
 #app-mount .applicationStore_f07d62,							/* nitro												*/
 #app-mount .homeWrapper__0920e,								/* nitro												*/
@@ -1185,9 +1186,10 @@ body:has(#app-mount)::after {
 	pointer-events: none;
 	z-index: -1;
 }
-.content__908e2 {									/* divider				content								*/
+#app-mount .content__908e2 {								/* divider				content								*/
 	position: absolute;
 	background-color: transparent;
+	color: var(--header-secondary);
 	padding: 2px 8px;
 	width: unset;
 }
@@ -2274,22 +2276,27 @@ body:has(#app-mount)::after {
 .container_a14595:hover {
 	background-color: var(--background-floating);
 }
-.peopleListItem_cc6179 .actionButton_f8fa06 {						/* peoples				actionbutton							*/
+#app-mount .peopleListItem_cc6179 {
+	margin-left: var(--space-16);
+	padding-left: var(--space-8);
+	border-radius: 8px;
+}
+#app-mount .peopleListItem_cc6179.active_cc6179,
+#app-mount .peopleListItem_cc6179:hover {
+	background-color: rgba(var(--transparencycolor_v), .3);
+}
+#app-mount .peopleListItem_cc6179.active_cc6179 .actionButton_f8fa06,
+#app-mount .peopleListItem_cc6179:hover .actionButton_f8fa06 {
+	background-color: rgba(var(--transparencycolor_v), .3);
+}
+#app-mount .peopleListItem_cc6179 .actionButton_f8fa06 {				/* peoples				actionbutton							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
 }
-.peopleListItem_cc6179 .actionButton_f8fa06:hover {
+#app-mount .peopleListItem_cc6179 .actionButton_f8fa06:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
-.peopleListItem_cc6179 .actionButton_f8fa06:hover svg{
+#app-mount .peopleListItem_cc6179 .actionButton_f8fa06:hover svg{
 	filter: drop-shadow(1px 1px var(--textshadow_v));
-}
-.peopleListItem_cc6179.active_cc6179,
-.peopleListItem_cc6179:hover {
-	background-color: rgba(var(--transparencycolor_v), .3);
-}
-.peopleListItem_cc6179.active_cc6179 .actionButton_f8fa06,
-.peopleListItem_cc6179:hover .actionButton_f8fa06 {
-	background-color: rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .outer_bf1984,								/* playing				card								*/
 #app-mount .wrapper__00943 {								/* playing				card								*/
