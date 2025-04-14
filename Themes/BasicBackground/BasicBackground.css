@@ -2944,6 +2944,10 @@ body:has(#app-mount)::after {
 	background-color: transparent;
 }
 
+#app-mount .box_f8c98c {								/* familycenter				box								*/
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+
 .connectContainer_c7f964 {								/* connections				container							*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
@@ -6469,9 +6473,6 @@ input.input_dd8655:hover:not(:focus) {
 	border-color: var(--header-primary);
 	box-shadow: 0 3px 1px 0 rgba(var(--transparencycolor_v), .05), 0 2px 2px 0 rgba(var(--transparencycolor_v), .1), 0 3px 3px 0 rgba(var(--transparencycolor_v), .05);
 }
-#app-mount .markValue_a562c8 {								/* slider				markvalue							*/
-	color: var(--text-muted);
-}
 #app-mount .defaultValue_a562c8 .markValue_a562c8 {
 	color: #43b581;
 }
@@ -6491,10 +6492,10 @@ input.input_dd8655:hover:not(:focus) {
 	width: 2px;
 }
 #app-mount .markDash_a562c8::before {
-	top: 14px;
+	top: calc(28px - var(--bar-size)/2);
 }
 #app-mount .markDash_a562c8::after {
-	top: 30px;
+	top: calc(36px + var(--bar-size)/2);
 }
 #app-mount .bubble_f7877e {								/* slider				bubble								*/
 	background-color: rgb(var(--accentcolor_v));
