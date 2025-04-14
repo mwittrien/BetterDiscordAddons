@@ -2377,6 +2377,14 @@ body:has(#app-mount)::after {
 #app-mount .shopCard_c3d04b:hover {							/* store				card hover							*/
 	box-shadow: 0 0 15px 1px var(--background-secondary) !important;
 }
+#app-mount .darkCardBackground_c3d04b,
+#app-mount .lightCardBackground_c3d04b {
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+#app-mount .shopCard_c3d04b:hover .darkCardBackground_c3d04b,
+#app-mount .shopCard_c3d04b:hover .lightCardBackground_c3d04b {
+	background-color: rgba(var(--transparencycolor_v), .4);
+}
 
 #app-mount .loading__6f73d {								/* loading												*/
 	background: transparent;
