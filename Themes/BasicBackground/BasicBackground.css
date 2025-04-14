@@ -452,7 +452,7 @@ body,											/* body													*/
 	background-attachment: fixed;
 }
 #app-mount .container__9293f.themed__9293f.headerBar__80679::after {
-	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) + 0.125)) !important;
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 #app-mount .chatHeaderBar__3e137 {							/* channelheader			sub header							*/
@@ -2616,8 +2616,37 @@ body:has(#app-mount)::after {
 
 /* ~~~~		10.		DISCOVERY/UNIHUB				~~~~ */
 
-.container_a592e1 {									/* guilddiscovery												*/
+.container_a592e1 {									/* guilddiscovery											*/
 	border-top: 0 !important;
+}
+#app-mount .headerBar__8a7fc {								/* guilddiscovery			header								*/
+	background-color: transparent !important;
+	box-shadow: 0 1px 0 rgba(var(--transparencycolor_v), .2), 0 1.5px 0 rgba(var(--transparencycolor_v), .05), 0 2px 0 rgba(var(--transparencycolor_v), .05);
+	border-bottom-right-radius: 10px;
+}
+#app-mount .headerBar__8a7fc .backdrop__8a7fc {
+	display: none;
+}
+#app-mount .headerBar__8a7fc::before,
+#app-mount .headerBar__8a7fc::after {
+	content: "";
+	position: absolute;
+	height: unset;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	border-bottom-right-radius: inherit;
+	z-index: -1;
+}
+#app-mount .headerBar__8a7fc::before {
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	background-attachment: fixed;
+}
+#app-mount .headerBar__8a7fc::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) + 0.125)) !important;
+	backdrop-filter: blur(var(--backgroundblur_v));
 }
 #app-mount .card__84e3e,								/* guilddiscovery			card								*/
 #app-mount .card__0c0bf {								/* unihub				card								*/
