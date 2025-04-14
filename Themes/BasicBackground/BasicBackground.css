@@ -7024,18 +7024,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ~~~~		16.		BDSUPPORT					~~~~ */
 
-
 #bd-notices {
-	display: block;
-	width: 100vw;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
+	grid-area: notice;
 }
-.base_c48ade:has(#bd-notices .bd-notice) {
-	margin-top: 36px;
-}
+
 html .bd-toast {
 	background-color: rgb(var(--accentcolor_v));
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
