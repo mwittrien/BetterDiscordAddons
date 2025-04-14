@@ -2602,16 +2602,16 @@ body:has(#app-mount)::after {
 #app-mount .pageContainer__09fde .searchBox_a7218d {					/* unihub				searchbox							*/
 	background-color: #fff;
 }
-#app-mount .card_e90879,								/* guilddiscovery			card								*/
+#app-mount .card__84e3e,								/* guilddiscovery			card								*/
 #app-mount .card__0c0bf {								/* unihub				card								*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .iconMask_e90879,								/* guilddiscovery			iconmask							*/
+#app-mount .iconMask__84e3e,								/* guilddiscovery			iconmask							*/
 #app-mount .iconMask__0c0bf {								/* unihub				iconmask							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-#app-mount .card_e90879:hover,
-#app-mount .iconMask_e90879:hover,
+#app-mount .card__84e3e:hover,
+#app-mount .iconMask__84e3e:hover,
 #app-mount .card__0c0bf:hover,
 #app-mount .iconMask__0c0bf:hover {
 	background-color: rgba(var(--transparencycolor_v), .4);
@@ -2621,6 +2621,17 @@ body:has(#app-mount)::after {
 }
 #app-mount .loading_e90879 {								/* guildcard				loading								*/
 	background-color: rgba(var(--transparencycolor_v), .5);
+}
+.category_fe77d6:hover {
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+.category_fe77d6.selected_fe77d6,
+.category_fe77d6.selected_fe77d6:hover {
+	background-color: rgb(var(--accentcolor_v));
+}
+.category_fe77d6.selected_fe77d6 .count_fe77d6,
+.category_fe77d6:hover .count_fe77d6 {
+	color: var(--header-primary) !important;
 }
 .footerImage_a3a4ce {
 	opacity: .5;
