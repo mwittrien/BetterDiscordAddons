@@ -2719,6 +2719,14 @@ body:has(#app-mount)::after {
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow_v);
 }
+#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026 div[style*="color: var(--text-muted)"],
+#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026 div[style*="color: var(--text-muted)"],
+#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:active div[style*="color: var(--text-muted)"],
+#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:active div[style*="color: var(--text-muted)"],
+#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover div[style*="color: var(--text-muted)"],
+#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover div[style*="color: var(--text-muted)"] {
+	color: #ddd !important;
+}
 .sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026::after {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
@@ -3086,14 +3094,23 @@ body:has(#app-mount)::after {
 
 /* ~~~~		12.		GUILDSETTINGS					~~~~ */
 
-#app-mount .container_fcf29c:not([data-emphasized="true"]) {
-	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
-	background-color: rgb(var(--accentcolor_v));
+#app-mount .container_fcf29c:not([data-emphasized="true"]),
+#app-mount .container__4a4f2 {
+	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25))) !important;
+	background-color: rgb(var(--accentcolor_v)) !important;
 }
 #app-mount .container_fcf29c[data-emphasized="true"] {
-	background-color: rgb(var(--dangercolor_v));
-	border-color: rgb(var(--dangercolor_v));
+	background-color: rgb(var(--dangercolor_v)) !important;
+	border-color: rgb(var(--dangercolor_v)) !important;
 }
+
+.educationUpsell__4a4f2 {
+	background-color: rgb(var(--accentcolor_v)) !important;
+}
+.educationUpsellArrow__4a4f2 {
+	border-bottom-color: rgb(var(--accentcolor_v)) !important;
+}
+
 .emojiWrapper__4cbea {
 	border-color: transparent;
 }
