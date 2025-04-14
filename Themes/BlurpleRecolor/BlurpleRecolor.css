@@ -1264,6 +1264,7 @@
 .exampleWumpus_b34334::after {
 	content: "";
 	position: absolute;
+	left: 0;
 	width: 82px;
 	height: 72px;
 	pointer-events: none;
