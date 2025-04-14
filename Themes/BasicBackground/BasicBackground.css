@@ -4225,17 +4225,17 @@ body:has(#app-mount)::after {
 
 /* ----		13.13.		GUILDFEEDBACKMODAL				---- */
 
-.root__66e7e {										/* modal				items								*/
+#app-mount .root__66e7e {								/* modal				items								*/
 	background-color: transparent;
 	border-radius: 0;
 }
-.option__66e7e {									/* modal				item								*/
+#app-mount .option__66e7e {								/* modal				item								*/
 	background-color: rgb(var(--transparencycolor_v), .2);
 	border: none;
 	border-radius: 8px;
 	margin-bottom: 8px;
 }
-.option__66e7e:hover {
+#app-mount .option__66e7e:hover {
 	background-color: rgb(var(--transparencycolor_v), .4);
 }
 
