@@ -389,7 +389,8 @@ body,											/* body													*/
 #app-mount .shop__08415,								/* shop					inner								*/
 #app-mount .pageWrapper__6db1d,								/* shop					buyall								*/
 #app-mount .containerSidenav_dc2e0e,							/* family control											*/
-#app-mount .pageWrapper_a3a4ce,								/* guilddiscovery											*/
+#app-mount .scroller__23746,								/* discovery				apps/quests							*/
+#app-mount .container_cbd375,								/* discovery				guilds								*/
 #app-mount .pageContainer__09fde,							/* unihub												*/
 #app-mount .scrollerBase__99f8c,							/* scroller												*/
 #app-mount .standardSidebarView__23e6b,							/* settings												*/
@@ -2602,14 +2603,6 @@ body:has(#app-mount)::after {
 
 .container_a592e1 {									/* guilddiscovery												*/
 	border-top: 0 !important;
-}
-#app-mount .pageWrapper_a3a4ce,								/* guilddiscovery			container							*/
-#app-mount .pageContainer__09fde {							/* unihub				container							*/
-	color: var(--header-primary);
-}
-#app-mount .pageWrapper_a3a4ce .searchBox_f69601,					/* guilddiscovery			searchbox							*/
-#app-mount .pageContainer__09fde .searchBox_a7218d {					/* unihub				searchbox							*/
-	background-color: #fff;
 }
 #app-mount .card__84e3e,								/* guilddiscovery			card								*/
 #app-mount .card__0c0bf {								/* unihub				card								*/
