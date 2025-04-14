@@ -2600,6 +2600,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		10.		DISCOVERY/UNIHUB				~~~~ */
 
+.container_a592e1 {									/* guilddiscovery												*/
+	border-top: 0 !important;
+}
 #app-mount .pageWrapper_a3a4ce,								/* guilddiscovery			container							*/
 #app-mount .pageContainer__09fde {							/* unihub				container							*/
 	color: var(--header-primary);
