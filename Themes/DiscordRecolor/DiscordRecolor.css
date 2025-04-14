@@ -1374,6 +1374,11 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: #fff;
 }
 
+#app-mount .separator_f84418 {
+	width: 2px;
+	background: rgba(var(--textbright), .1);
+}
+
 #app-mount .spoilerContent__54ab5 {
 	background-color: rgba(var(--textbrightest_v), .1);
 }
