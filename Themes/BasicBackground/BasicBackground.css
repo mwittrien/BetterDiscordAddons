@@ -456,6 +456,17 @@ body,											/* body													*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) + 0.125)) !important;
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
+#app-mount .container__9293f.themed__9293f .icon__9293f {
+	color: var(--text-normal);
+}
+#app-mount .container__9293f.themed__9293f .returnButton__0b563 {
+	border-color: var(--header-secondary) !important;
+	color: var(--header-secondary) !important;
+}
+#app-mount .container__9293f.themed__9293f .returnButton__0b563:hover {
+	border-color: var(--header-primary) !important;
+	color: var(--header-primary) !important;
+}
 #app-mount .chatHeaderBar__3e137 {							/* channelheader			sub header							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
 }
@@ -919,6 +930,14 @@ body:has(#app-mount)::after {
 
 .memberRowContainer__71c22:hover td {							/* members channel			row								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
+}
+
+#app-mount .bar__7aaec {
+	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
+	background-color: rgb(var(--accentcolor_v));
+}
+#app-mount .bar__7aaec:hover {
+	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1)));
 }
 
 /* ----		5.3.		DMCHANNELS					---- */
