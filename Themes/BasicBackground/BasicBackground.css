@@ -2062,6 +2062,9 @@ body:has(#app-mount)::after {
 
 /* ----		6.5.		MEMBERLIST					---- */
 
+.membersGroup_c8ffbb {
+	color: var(--header-secondary);
+}
 .member_c8ffbb {									/* member												*/
 	background: transparent;
 }
@@ -2076,15 +2079,15 @@ body:has(#app-mount)::after {
 
 /* ----		6.6.		SEARCHPAGE					---- */
 
-.searchResultsWrap_a9e706 {								/* searchpage				container							*/
+#app-mount .searchResultsWrap_a9e706 {							/* searchpage				container							*/
 	background-color: transparent;
 }
-.searchHeader_f3b986,									/* searchpage				header								*/
-.searchHeader_f3b986 ~ .container__3f123 {						/* searchpage				pagination (BSP)						*/
+#app-mount .searchHeader_f3b986,							/* searchpage				header								*/
+#app-mount .searchHeader_f3b986 ~ .container__3f123 {					/* searchpage				pagination (BSP)						*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 0.8));
 	border-radius: 0 0 0 8px;
 }
-.searchResult__02a39 {									/* searchpage				searchresult							*/
+#app-mount .searchResult__02a39 {							/* searchpage				searchresult							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 .button__02a39 {									/* searchpage				jumpbutton							*/ 
