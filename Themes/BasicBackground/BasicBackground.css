@@ -3126,10 +3126,10 @@ body:has(#app-mount)::after {
 }
 #app-mount .lastPlayed_cc46f0,								/* games				lastplayed							*/
 #app-mount .overlayStatusText__668e1 {							/* games				overlaystatustext						*/
-	color: var(--text-muted);
+	color: var(--header-secondary);
 }
 #app-mount .toggleIconOn_cc46f0 .fill_cc46f0 {						/* games				overlaystatusicon						*/
-	fill: var(--text-muted);
+	fill: var(--header-secondary);
 }
 #app-mount .nowPlayingAdd_cc46f0 {							/* games				descriptionhint							*/
 	color: var(--header-secondary);
