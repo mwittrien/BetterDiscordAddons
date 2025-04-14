@@ -3568,15 +3568,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 /* ~~~~		13.		BDSUPPORT					~~~~ */
 
 #bd-notices {
-	display: block;
-	width: 100vw;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-}
-.base_c48ade:has(#bd-notices .bd-notice) {
-	margin-top: 36px;
+	grid-area: notice;
 }
 
 html .toast,
