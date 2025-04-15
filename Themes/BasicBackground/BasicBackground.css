@@ -420,9 +420,11 @@ body,											/* body													*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
 }
 .sidebar_c48ade .wrapper_ef3116 {
-	padding-top: 6px;
 	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
 	margin-bottom: 0;
+}
+.sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 {
+	padding-top: 6px;
 }
 #app-mount .sidebarList_c48ade {							/* channels				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
