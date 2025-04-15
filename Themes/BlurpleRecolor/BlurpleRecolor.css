@@ -2407,12 +2407,13 @@ a.metadataDownload_cf09d8 {
 
 #app-mount .tooltipBrand__382e7 {
 	background-color: rgb(var(--accentcolor_v));
+	--tooltip-pointer-bg: rgb(var(--accentcolor_v));
 }
 #app-mount .tooltipBrand__382e7 a {
 	filter: brightness(50%);
 }
-#app-mount .tooltipBrand__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
-	border-top-color: rgb(var(--accentcolor_v));
+#app-mount .tooltipBrand__382e7 .tooltipPointer__382e7 {
+	border-top-color: var(--tooltip-pointer-bg);
 }
 
 .contentPremium_b00844 {
