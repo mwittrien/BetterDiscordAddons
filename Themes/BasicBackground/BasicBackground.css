@@ -2454,6 +2454,10 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
+#app-mount .rowBottomBorder_e4ef5c {
+	border-color: var(--border-subtle);
+}
+
 #app-mount .loading__6f73d {								/* loading												*/
 	background: transparent;
 }
