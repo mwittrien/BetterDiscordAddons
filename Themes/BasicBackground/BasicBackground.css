@@ -7015,6 +7015,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: rgb(var(--accentcolor_v));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow_v);
+	--tooltip-pointer-bg: rgb(var(--accentcolor_v));
 }
 #app-mount .tooltipPrimary__382e7 .note_dc56aa,
 #app-mount .tooltipGrey__382e7 .note_dc56aa,
@@ -7026,10 +7027,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .tooltipBlack__382e7 a {
 	filter: brightness(50%);
 }
-#app-mount .tooltipPrimary__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7),
-#app-mount .tooltipGrey__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7),
-#app-mount .tooltipBlack__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
-	border-top-color: rgb(var(--accentcolor_v));
+#app-mount .tooltipPrimary__382e7 .tooltipPointer__382e7,
+#app-mount .tooltipGrey__382e7 .tooltipPointer__382e7,
+#app-mount .tooltipBlack__382e7 .tooltipPointer__382e7 {
+	border-top-color: var(--tooltip-pointer-bg);
 }
 .emptyUser__183c2 {
 	background: rgba(var(--transparencycolor_v), .5);
