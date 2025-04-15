@@ -4726,8 +4726,15 @@ body:has(#app-mount)::after {
 	z-index: 1;
 }
 
-.textarea_dde0a8:focus {								/* body					note 								*/
+#app-mount .textarea_dde0a8:focus {							/* body					note 								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
+}
+
+#app-mount .inlineContainer__74017 {							/* body					message 							*/
+	border-color: var(--input-border);
+}
+#app-mount .inlineContainer__74017:focus-within {
+	border-color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .wumpusTooltip_db70b7 {
