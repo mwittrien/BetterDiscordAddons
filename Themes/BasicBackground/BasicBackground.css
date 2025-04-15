@@ -6447,6 +6447,9 @@ input.input_dd8655:hover:not(:focus) {
 #app-mount .item__001a7[aria-checked=false]:hover .radioBar__001a7[style*="--radio-bar-accent-color"] {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
 }
+#app-mount .item__001a7 .radioBar__001a7[style*="--radio-bar-accent-color"] .refreshIconStroke__001a7 {
+	stroke: var(--header-secondary);
+}
 #app-mount .item__001a7 .radioBar__001a7[style*="--radio-bar-accent-color"] .radioIndicatorChecked__001a7 .refreshIconFill__001a7 {
 	fill: var(--radio-bar-accent-color);
 }
