@@ -432,31 +432,6 @@ body,											/* body													*/
 #app-mount .sidebar_c48ade:after {
 	display: none;
 }
-#app-mount .container__9293f.themed__9293f {						/* channelheader			container							*/
-	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
-}
-#app-mount .headerBar__80679,								/* channelheader			shop								*/
-#app-mount .headerBar__8a7fc {								/* channelheader			discovery							*/
-	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
-	position: static !important;
-}
-#app-mount .backdrop__8a7fc {
-	display: none !important;;
-}
-#app-mount .container__9293f.themed__9293f .icon__9293f {
-	color: var(--text-normal);
-}
-#app-mount .container__9293f.themed__9293f .returnButton__0b563 {
-	border-color: var(--header-secondary) !important;
-	color: var(--header-secondary) !important;
-}
-#app-mount .container__9293f.themed__9293f .returnButton__0b563:hover {
-	border-color: var(--header-primary) !important;
-	color: var(--header-primary) !important;
-}
-#app-mount .chatHeaderBar__3e137 {							/* channelheader			sub header							*/
-	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
-}
 #app-mount .membersWrap_c8ffbb {							/* members				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--memberlisttransparency_v));
 }
@@ -1089,8 +1064,29 @@ body:has(#app-mount)::after {
 
 /* ----		6.1.		CHANNELHEADER					---- */
 
-.container__9293f.themed__9293f {							/* header				themedcontainer							*/
-	box-shadow: 0 1px 0 rgba(var(--transparencycolor_v), .2), 0 1.5px 0 rgba(var(--transparencycolor_v), .05), 0 2px 0 rgba(var(--transparencycolor_v), .05);
+#app-mount .container__9293f.themed__9293f,						/* channelheader			channels							*/
+#app-mount .headerBar__80679,								/* channelheader			shop								*/
+#app-mount .headerBar__8a7fc {								/* channelheader			discovery							*/
+	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
+	border-bottom: 1px solid var(--border-subtle) !important;
+	position: static !important;
+}
+#app-mount .backdrop__8a7fc {
+	display: none !important;;
+}
+#app-mount .container__9293f.themed__9293f .icon__9293f {
+	color: var(--text-normal);
+}
+#app-mount .container__9293f.themed__9293f .returnButton__0b563 {
+	border-color: var(--header-secondary) !important;
+	color: var(--header-secondary) !important;
+}
+#app-mount .container__9293f.themed__9293f .returnButton__0b563:hover {
+	border-color: var(--header-primary) !important;
+	color: var(--header-primary) !important;
+}
+#app-mount .chatHeaderBar__3e137 {							/* channelheader			sub header							*/
+	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
 }
 
 .input__4f074:focus {									/* header				dmchannelinput							*/
