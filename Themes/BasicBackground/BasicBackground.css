@@ -189,6 +189,8 @@
 	--border-faint: rgba(var(--transparencycolor_v), .1);
 	--border-subtle: rgba(var(--transparencycolor_v), .2);
 	--border-strong: rgba(var(--transparencycolor_v), .3);
+	--divider-subtle: rgba(var(--transparencycolor_v), .2);
+	--divider-strong: rgba(var(--transparencycolor_v), .3);
 	
 	--card-gradient-bg: var(--background-tertiary);
 	--card-primary-bg: var(--background-primary);
@@ -6089,7 +6091,6 @@ body:has(#app-mount)::after {
 .highlight {
 	background: rgba(var(--accentcolor_v), .3);
 }
-
 
 .clickable__91a9d .childContainer__91a9d .layout__91a9d,
 .selected__91a9d .childContainer__91a9d .layout__91a9d {
