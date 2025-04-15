@@ -1934,8 +1934,9 @@ body:has(#app-mount)::after {
 	display: none;
 }
 
-.channelTextArea_f75fb0 {								/* textarea				channeltextarea							*/
+#app-mount .channelTextArea_f75fb0 {							/* textarea				channeltextarea							*/
 	background-color: transparent;
+	border: none;
 }
 
 .container__183e8 .banner__183e8,							/* textarea				say hi, etc.							*/
@@ -1961,7 +1962,7 @@ body:has(#app-mount)::after {
 	background: transparent;
 }
 
-.scrollableContainer__74017 {								/* textarea				container							*/
+#app-mount .themedBackground__74017 {							/* textarea				container							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
