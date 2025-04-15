@@ -13,6 +13,7 @@
  * 
  * @var text				transparencycolor_s		"Transparency Color: [default] = 0, 0, 0"		0, 0, 0
  * @var range				transparencyalpha_s		"Transparency Alpha: [default] = 0.15"			[0.15, 0, 1, 0.05]
+ * @var text				bordercolor_s			"Border Color: [default] = 0, 0, 0"			0, 0, 0
  * @var range				messagetransparency_s		"Messages: [default] = 0.5, 0 = No Boxes"		[0.5, 0, 1, 0.05]
  * @var range				guildchanneltransparency_s	"Guilds/Channels: [default] = 0.15"			[0.15, 0, 1, 0.05]
  * @var range				chatinputtransparency_s		"Chat Input: [default] = 0"				[0, 0, 1, 0.05]
@@ -48,6 +49,7 @@
 :root {
 	--transparencycolor:		0, 0, 0;			/* default: 0, 0, 0															*/
 	--transparencyalpha:		0.15;				/* default: 0.15				(general darkness of the app)								*/
+	--bordercolor:			0, 0, 0;			/* default: 0, 0, 0				(color of most borders/dividers)							*/
 	--messagetransparency:		0.5;				/* default: 0.5					(additional shadows behind messages, set to 0 to remove boxes)				*/
 	--guildchanneltransparency:	0.15;				/* default: 0.15				(additional darkness for guild/channel list)						*/
 	--chatinputtransparency:	0.0;				/* default: 0.0					(additional darkness for chat input container)						*/
