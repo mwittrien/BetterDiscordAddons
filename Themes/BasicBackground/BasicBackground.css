@@ -3743,6 +3743,7 @@ body:has(#app-mount)::after {
 #app-mount .footer__49fc1,
 #app-mount .footer_c33701 {								/* modal				footer								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
+	border-radius: 0;
 	z-index: 0;
 }
 #app-mount .footerSeparator__49fc1 {
