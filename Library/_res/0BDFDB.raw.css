@@ -1488,12 +1488,6 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 [REPLACE_CLASS_tooltiplistitem][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipnote] {
 	color: #bbb;
 }
-[REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltippointer][REPLACE_CLASS_tooltippointerbg]:after {
-	border-color: transparent !important;
-}
-[REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltippointer] {
-	border-top-color: inherit !important;
-}
 [REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipguildnametext],
 [REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipmutetext] {
 	color: inherit;
