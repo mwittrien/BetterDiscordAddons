@@ -752,9 +752,10 @@ body:has(#app-mount)::after {
 	display: none;
 }
 
-.header_f37cb1,										/* header				inner								*/
-.searchBar__35e86 {									/* header				searchbar							*/
-	box-shadow: 0 1px 0 rgba(var(--transparencycolor_v), .2), 0 1.5px 0 rgba(var(--transparencycolor_v), .05), 0 2px 0 rgba(var(--transparencycolor_v), .05);
+#app-mount .header_f37cb1,								/* header				channels							*/
+#app-mount .header__551b0,								/* header				discovery							*/
+#app-mount .searchBar__35e86 {								/* header				searchbar							*/
+	border-bottom-color: rgba(var(--transparencycolor_v), .2);
 }
 .searchBar__35e86 .searchBarComponent__35e86 {						/* header				searchbarinner							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -1070,7 +1071,7 @@ body:has(#app-mount)::after {
 #app-mount .container__9293f.themed__9293f,						/* channelheader			channels							*/
 #app-mount .headerBar__8a7fc {								/* channelheader			discovery							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
-	border-bottom: 1px solid var(--border-subtle) !important;
+	border-bottom: 1px solid rgba(var(--transparencycolor_v), .2) !important;
 	position: static !important;
 }
 #app-mount .container__9293f.headerBar__80679 {						/* channelheader			shop								*/
@@ -1092,7 +1093,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .container__9293f.headerBar__80679::before {
 	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
-	border-bottom: 1px solid var(--border-subtle) !important;
+	border-bottom: 1px solid rgba(var(--transparencycolor_v), .2) !important;
 	background-attachment: fixed;
 }
 #app-mount .container__9293f.headerBar__80679::after {
