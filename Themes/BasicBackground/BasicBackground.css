@@ -437,7 +437,11 @@ body,											/* body													*/
 }
 #app-mount .headerBar__80679,								/* channelheader			shop								*/
 #app-mount .headerBar__8a7fc {								/* channelheader			discovery							*/
+	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
 	position: static !important;
+}
+#app-mount .backdrop__8a7fc {
+	display: none !important;;
 }
 #app-mount .container__9293f.themed__9293f .icon__9293f {
 	color: var(--text-normal);
