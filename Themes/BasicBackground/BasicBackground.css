@@ -2441,7 +2441,6 @@ body:has(#app-mount)::after {
 }
 #app-mount .shopCard_c3d04b {								/* store				card								*/
 	background-color: var(--background-secondary) !important;
-	border-color: var(--background-tertiary) !important;
 }
 #app-mount .shopCard_c3d04b:hover {							/* store				card hover							*/
 	box-shadow: 0 0 15px 1px var(--background-secondary) !important;
