@@ -4674,6 +4674,9 @@ body:has(#app-mount)::after {
 	padding: 0 5px;
 	position: relative;
 }
+#app-mount .outer_c0bea0.custom-user-profile-theme .role_dfa8b6 {
+	border-color: var(--user-profile-border);
+}
 #app-mount .role_dfa8b6[style*="border-color: rgba(185, 187, 190, .6)"] {
 	border-color: rgba(var(--textbrighter_v), .6) !important;
 }
