@@ -169,18 +169,18 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonframe} {
 						--guildbar-avatar-size: 48px;
-						height: 24px;
 						margin-bottom: 10px;
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonframe}:active {
 						transform: translateY(1px);
 					}
-					#app-mount ${BDFDB.dotCN._readallnotificationsbuttoninner} {
+					#app-mount ${BDFDB.dotCN._readallnotificationsbuttonframe},
+					#app-mount ${BDFDB.dotCN._readallnotificationsbuttoninner},
+					#app-mount ${BDFDB.dotCN._readallnotificationsbuttonbutton} {
 						height: 24px;
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonbutton} {
 						border-radius: 4px;
-						height: 24px;
 						font-size: 12px;
 						line-height: 1.3;
 						white-space: nowrap;
