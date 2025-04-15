@@ -6995,6 +6995,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		15.9.		TOOLTIPS					---- */
 
+
 #app-mount .guildNameText_b1f768 {
 	color: #fff;
 }
@@ -7018,9 +7019,9 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .tooltipBlack__382e7 a {
 	filter: brightness(50%);
 }
-#app-mount .tooltipPrimary__382e7 .tooltipPointer__382e7,
-#app-mount .tooltipGrey__382e7 .tooltipPointer__382e7,
-#app-mount .tooltipBlack__382e7 .tooltipPointer__382e7 {
+#app-mount .tooltipPrimary__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7),
+#app-mount .tooltipGrey__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7),
+#app-mount .tooltipBlack__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
 	border-top-color: rgb(var(--accentcolor_v));
 }
 .emptyUser__183c2 {
