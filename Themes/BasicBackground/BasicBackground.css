@@ -2370,6 +2370,12 @@ body:has(#app-mount)::after {
 #app-mount .inset_bf1984 {								/* playing				card inner							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
+#app-mount .body__00943.inset_bf1984 {
+	background-color: transparent;
+}
+#app-mount .section__00943 {								/* playing				card section							*/
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
 .emptyCard__7e549 {									/* playing				empty card							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
@@ -6440,9 +6446,6 @@ input.input_dd8655:hover:not(:focus) {
 }
 #app-mount .item__001a7[aria-checked=false]:hover .radioBar__001a7[style*="--radio-bar-accent-color"] {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
-}
-#app-mount .item__001a7[aria-checked=false]:hover .radioBar__001a7[style*="--radio-bar-accent-color"] .refreshIconStroke__001a7 {
-	fill: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
 }
 #app-mount .item__001a7 .radioBar__001a7[style*="--radio-bar-accent-color"] .radioIndicatorChecked__001a7 .refreshIconFill__001a7 {
 	fill: var(--radio-bar-accent-color);
