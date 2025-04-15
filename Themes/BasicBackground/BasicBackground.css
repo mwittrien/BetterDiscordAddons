@@ -1065,11 +1065,36 @@ body:has(#app-mount)::after {
 /* ----		6.1.		CHANNELHEADER					---- */
 
 #app-mount .container__9293f.themed__9293f,						/* channelheader			channels							*/
-#app-mount .headerBar__80679,								/* channelheader			shop								*/
 #app-mount .headerBar__8a7fc {								/* channelheader			discovery							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
 	border-bottom: 1px solid var(--border-subtle) !important;
 	position: static !important;
+}
+#app-mount .container__9293f.headerBar__80679 {						/* channelheader			shop								*/
+	background: transparent !important;
+	border: unset !important;
+	position: sticky !important;
+}
+#app-mount .container__9293f.headerBar__80679::before,
+#app-mount .container__9293f.headerBar__80679::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	border-bottom-right-radius: inherit;
+	z-index: -1;
+}
+#app-mount .container__9293f.headerBar__80679::before {
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	border-bottom: 1px solid var(--border-subtle) !important;
+	background-attachment: fixed;
+}
+#app-mount .container__9293f.headerBar__80679::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) + var(--transparencyalpha) * 0.85)) !important;
+	backdrop-filter: blur(var(--backgroundblur_v));
 }
 #app-mount .backdrop__8a7fc {
 	display: none !important;;
