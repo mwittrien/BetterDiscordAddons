@@ -1050,7 +1050,7 @@ body:has(#app-mount)::after {
 	border-color: var(--background-floating);
 }
 .divider_ee23ac {									/* forum				fat divider							*/
-	background: var(--background-floating);
+	background: var(--border-strong);
 }
 #app-mount .container__9a337.isOpen__9a337 {						/* forum				selected post							*/
 	background-color: rgb(var(--accentcolor_v));
@@ -1262,7 +1262,7 @@ body:has(#app-mount)::after {
 #app-mount .jumpToPresentBar__0f481 {							/* bar					jumptopresent							*/
 	bottom: -8px;
 	background-color: transparent;
-	border-bottom: 1px solid var(--background-modifier-accent);
+	border-bottom: 1px solid var(--border-subtle);
 	overflow: hidden;
 	opacity: 1;
 }
@@ -1939,7 +1939,7 @@ body:has(#app-mount)::after {
 .stackedBars__74017 {									/* textarea				reply								*/
 	background: rgba(var(--transparencycolor_v), .3);
 	border: none;
-	border-bottom: 1px solid var(--background-modifier-accent);
+	border-bottom: 1px solid var(--border-subtle);
 }
 .container__183e8 + .form_f75fb0 {
 	padding-top: 0;
@@ -2326,6 +2326,7 @@ body:has(#app-mount)::after {
 #app-mount .peopleListItem_cc6179 {
 	margin-left: var(--space-16);
 	padding-left: var(--space-8);
+	border-top-color: var(--border-subtle);
 	border-radius: 8px;
 }
 #app-mount .peopleListItem_cc6179.active_cc6179,
@@ -2447,7 +2448,7 @@ body:has(#app-mount)::after {
 
 #app-mount .categoryHeader__15de0,							/* categoryheader											*/
 #app-mount .premiumApplicationsHeader__1f431 {
-	border-color: var(--background-modifier-accent);
+	border-color: var(--border-subtle);
 	color: var(--header-primary);
 }
 
@@ -2480,7 +2481,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .section__26095 {								/* gameinfo				subsection							*/
-	border-bottom-color: var(--background-modifier-accent);
+	border-bottom-color: var(--border-subtle);
 }
 #app-mount .playerOverflow__450d3 {
 	background-color: rgba(var(--transparencycolor_v), .3);
@@ -2525,7 +2526,7 @@ body:has(#app-mount)::after {
 
 #app-mount .bodySection_ae0d90 {							/* sidebar				section								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
-	border-top-color: var(--background-modifier-accent);
+	border-top-color: var(--border-subtle);
 }
 #app-mount .actionText__1ae94 {								/* sidebar				header								*/
 	color: var(--text-normal);
@@ -2541,7 +2542,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .skuNormal__1aa9d {								/* sidebar				pricerow							*/
-	border-bottom-color: var(--background-modifier-accent);
+	border-bottom-color: var(--border-subtle);
 }
 #app-mount .name__71fd4 {								/* sidebar				pricename							*/
 	color: var(--header-secondary);
@@ -2590,7 +2591,7 @@ body:has(#app-mount)::after {
 }
 .header_adb41f {									/* library				table header							*/
 	background-color: transparent;
-	border-bottom-color: var(--background-modifier-accent);
+	border-bottom-color: var(--border-subtle);
 	position: relative;
 }
 .header_adb41f::before,
@@ -2623,7 +2624,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 .rowWrapper_adb41f + .rowWrapper_adb41f .row_adb41f {
-	border-top-color: var(--background-modifier-accent);
+	border-top-color: var(--border-subtle);
 }
 
 #app-mount .rate__7eeec {
@@ -2991,7 +2992,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .paymentHeader_e9cb00 {							/* boostsettings			past transactions header					*/
 	color: var(--header-primary);
-	border-color: var(--background-modifier-accent);
+	border-color: var(--border-subtle);
 }
 #app-mount .expandedInfo_e9cb00 {							/* boostsettings			past transactions expandedinfo					*/
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -3094,7 +3095,7 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .row__740f2 {								/* hotkeys				row								*/
-	box-shadow: inset 0 -1px 0 var(--background-modifier-accent);
+	box-shadow: inset 0 -1px 0 var(--border-subtle);
 }
 
 #app-mount .card_b846e5::before {							/* settingscard				backdrop							*/
@@ -3110,7 +3111,7 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .game_cc46f0 {								/* games				card								*/
-	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
+	box-shadow: 0 1px 0 0 var(--border-subtle);
 }
 #app-mount .gameNameInput_cc46f0:focus,
 #app-mount .gameNameInput_cc46f0:hover {
@@ -3303,7 +3304,7 @@ body:has(#app-mount)::after {
 }
 .roleRow__5f97b::before,
 .roleRow__5f97b:last-child::after {
-	background-color: var(--background-modifier-accent);
+	background-color: var(--border-subtle);
 }
 .memberRow__9a73f:hover {								/* rolesettings				member row							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -3359,7 +3360,7 @@ body:has(#app-mount)::after {
 	color: var(--header-secondary);
 }
 #app-mount .divider__43dab {								/* auditlogs				loginnerdivider							*/
-	background-color: var(--background-modifier-accent);
+	background-color: var(--border-subtle);
 }
 #app-mount .changeDetails__43dab {							/* auditlogs				logdetails							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -3747,7 +3748,7 @@ body:has(#app-mount)::after {
 	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor_v), .3), 0 1px 2px 0 rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .divider__33f29 {
-	border-color: var(--background-modifier-accent);
+	border-color: var(--border-subtle);
 }
 
 #app-mount .message_fcc792 {
@@ -3772,7 +3773,7 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .divider__65336 {
-	border-color: var(--background-modifier-accent);
+	border-color: var(--border-subtle);
 }
 #app-mount .backButtonColor__4cae5 {
 	color: var(--header-primary);
@@ -3911,7 +3912,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .modalSubtitle_f061f6 {							/* modal				subtitle							*/
-	border-color: var(--background-modifier-accent);
+	border-color: var(--border-subtle);
 	color: var(--text-normal);
 }
 #app-mount .keyboardShortcutList_f061f6 .keybindGroup_f061f6 .keybindDescription_c0b6a8 {
@@ -4398,8 +4399,9 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
-#app-mount .divider__65336 {								/* popout				divider								*/
-	border-color: var(--background-modifier-accent);
+#app-mount .divider__65336,								/* popout				divider								*/
+#app-mount .divider_d9c882 {								/* popout				divider								*/
+	border-color: var(--border-subtle);
 }
 
 /* ----		14.1.		CONTEXTMENU					---- */
@@ -5023,7 +5025,7 @@ body:has(#app-mount)::after {
 }
 .messageGroupWrapper__45690 + .messageGroupWrapper__45690::before {
 	content: "";
-	border-top: 1px solid var(--background-modifier-accent);
+	border-top: 1px solid var(--border-subtle);
 	position: absolute;
 	top: -3px;
 	left: 0;
@@ -5187,7 +5189,7 @@ body:has(#app-mount)::after {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 #app-mount .queryContainer__55c99 {
-	border-bottom-color: var(--background-modifier-accent);
+	border-bottom-color: var(--border-subtle);
 	color: var(--header-secondary);
 }
 #app-mount .queryContainer__55c99 strong {
@@ -5197,7 +5199,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 #app-mount .resultsGroup__56fec::before {
-	border-top-color: var(--background-modifier-accent);
+	border-top-color: var(--border-subtle);
 }
 #app-mount .resultsGroup__56fec .header__56fec,
 #app-mount .resultsGroup__56fec .plusIcon__56fec,
@@ -5315,7 +5317,7 @@ body:has(#app-mount)::after {
 	padding: 20px;
 	display: flex;
 	justify-content: center;
-	border-top-color: var(--background-modifier-accent);
+	border-top-color: var(--border-subtle);
 }
 #app-mount .datePicker__56fec .datePickerHint__56fec .hint__56fec {
 	color: var(--text-normal);
