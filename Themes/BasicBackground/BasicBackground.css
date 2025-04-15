@@ -4459,7 +4459,6 @@ body:has(#app-mount)::after {
 .submenuPaddingContainer_af7fb7 .scroller_c1e9c4::after,
 .submenu_c1e9c4::after {
 	background: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.3));
-	border: 1px solid rgba(var(--transparencycolor_v), .2);
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 .submenuPaddingContainer_af7fb7 .menu_c1e9c4::before,
