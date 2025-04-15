@@ -1123,8 +1123,8 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 /* ~~~~		2.		GUILDLIST					~~~~ */
 
 .sidebar_c48ade .wrapper_ef3116 {
-	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
-	margin-bottom: 0;
+	margin-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
+	padding-bottom: 0;
 }
 .sidebar_c48ade:after {
 	display: none;
