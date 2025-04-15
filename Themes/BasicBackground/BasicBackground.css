@@ -5004,7 +5004,6 @@ body:has(#app-mount)::after {
 #app-mount .header__45690,								/* popout				header								*/
 #app-mount .header_d9c882 {								/* popout				header								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
-	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor_v), .2);
 	border: none;
 }
 
