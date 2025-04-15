@@ -2329,7 +2329,7 @@ body:has(#app-mount)::after {
 #app-mount .peopleListItem_cc6179 {
 	margin-left: var(--space-16);
 	padding-left: var(--space-8);
-	border: 0;
+	border: unset;
 	border-radius: 8px;
 }
 #app-mount .peopleListItem_cc6179.active_cc6179,
