@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.7
+ * @version 2.2.8
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,10 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"improved": {
-			"Message Actions": "Button is back in the Message Actions Toolbar",
-			"Disable Option": "Added an Option to disable it, since some of y'all are ungrateful brats"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -288,7 +285,7 @@ module.exports = (_ => {
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCNS.messagespopouttabbarheader + BDFDB.disCN.messagespopoutheader,
-							style: {paddingBottom: 4},
+							style: {paddingBottom: 0},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 								children: [
@@ -329,6 +326,7 @@ module.exports = (_ => {
 												className: BDFDB.disCN.messagespopouttabbarinner,
 												itemClassName: BDFDB.disCN.messagespopouttabbartab,
 												type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+												look: BDFDB.LibraryComponents.TabBar.Looks.BRAND,
 												selectedItem: popoutProps.selectedFilter.value,
 												items: filterKeys.map(option => _this.getPopoutValue(option, "filter")),
 												style: {marginRight: "auto"},
