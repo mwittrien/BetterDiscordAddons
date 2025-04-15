@@ -2011,7 +2011,7 @@ module.exports = (_ => {
 					const itemLayerContainer = document.querySelector(BDFDB.dotCN.app + " ~ " + BDFDB.dotCN.itemlayercontainer) || document.querySelector(BDFDB.dotCN.itemlayercontainer);
 					if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 					const id = BDFDB.NumberUtils.generateId(Tooltips);
-					const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${BDFDB.disCN.tooltippointer}" style="margin: 0 !important;"></div></div></div>`);
+					const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${BDFDB.disCNS.tooltippointer + BDFDB.disCN.tooltippointerbg}"></div><div class="${BDFDB.disCN.tooltippointer}"></div></div></div>`);
 					itemLayerContainer.appendChild(itemLayer);
 					
 					const tooltip = itemLayer.firstElementChild;
