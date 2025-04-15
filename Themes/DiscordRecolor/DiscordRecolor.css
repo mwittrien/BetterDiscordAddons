@@ -199,6 +199,9 @@
 	--border-faint: rgba(var(--backgroundaccent_v), .2);
 	--border-subtle: rgba(var(--backgroundaccent_v), .4);
 	--border-strong: rgba(var(--backgroundaccent_v), .6);
+	--divider-faint: rgba(var(--backgroundaccent_v), .2);
+	--divider-subtle: rgba(var(--backgroundaccent_v), .4);
+	--divider-strong: rgba(var(--backgroundaccent_v), .6);
 	
 	--background-modifier-hover: rgba(var(--backgroundaccent_v), .3);
 	--background-modifier-active: rgba(var(--backgroundaccent_v), .4);
