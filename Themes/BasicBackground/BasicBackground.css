@@ -4399,9 +4399,11 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
-#app-mount .divider__65336,								/* popout				divider								*/
-#app-mount .divider_d9c882 {								/* popout				divider								*/
+#app-mount .divider__65336 {								/* popout				divider								*/
 	border-color: var(--border-subtle);
+}
+#app-mount .divider_d9c882 {								/* popout				divider								*/
+	background-color: var(--border-subtle);
 }
 
 /* ----		14.1.		CONTEXTMENU					---- */
