@@ -6,6 +6,7 @@
 	
 	--transparencycolor:			0, 0, 0;
 	--transparencyalpha:			0.15;
+	--bordercolor:				0, 0, 0;
 	--messagetransparency:			0.5;
 	--guildchanneltransparency:		0.15;
 	--chatinputtransparency:		0.0;
@@ -41,6 +42,7 @@
 	
 	--transparencycolor_v:			var(--transparencycolor_s, var(--transparencycolor));
 	--transparencyalpha_v:			var(--transparencyalpha_s, var(--transparencyalpha));
+	--bordercolor_v:			var(--bordercolor_s, var(--bordercolor));
 	--messagetransparency_v:		var(--messagetransparency_s, var(--messagetransparency));
 	--guildchanneltransparency_v:		var(--guildchanneltransparency_s, var(--guildchanneltransparency));
 	--chatinputtransparency_v:		var(--chatinputtransparency_s, var(--chatinputtransparency));
@@ -186,12 +188,12 @@
 	--chat-background-default: rgba(var(--transparencycolor_v), .3);
 	
 	--app-border-frame: transparent;
-	--border-faint: rgba(var(--transparencycolor_v), .1);
-	--border-subtle: rgba(var(--transparencycolor_v), .2);
-	--border-strong: rgba(var(--transparencycolor_v), .3);
-	--divider-faint: rgba(var(--transparencycolor_v), .1);
-	--divider-subtle: rgba(var(--transparencycolor_v), .2);
-	--divider-strong: rgba(var(--transparencycolor_v), .3);
+	--border-faint: rgba(var(--bordercolor_v), .1);
+	--border-subtle: rgba(var(--bordercolor_v), .2);
+	--border-strong: rgba(var(--bordercolor_v), .3);
+	--divider-faint: rgba(var(--bordercolor_v), .1);
+	--divider-subtle: rgba(var(--bordercolor_v), .2);
+	--divider-strong: rgba(var(--bordercolor_v), .3);
 	
 	--card-gradient-bg: var(--background-tertiary);
 	--card-primary-bg: var(--background-primary);
