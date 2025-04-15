@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.0
+ * @version 1.8.1
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -175,7 +175,7 @@ module.exports = (_ => {
 					${BDFDB.dotCN._readallnotificationsbuttonframe}:active {
 						transform: translateY(1px);
 					}
-					${BDFDB.dotCN._readallnotificationsbuttoninner} {
+					#app-mount ${BDFDB.dotCN._readallnotificationsbuttoninner} {
 						height: 24px;
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonbutton} {
