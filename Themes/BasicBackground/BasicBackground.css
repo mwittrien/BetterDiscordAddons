@@ -424,7 +424,7 @@ body,											/* body													*/
 	margin-bottom: 0;
 }
 .sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 {
-	padding-top: 6px;
+	padding-top: 4px;
 }
 #app-mount .sidebarList_c48ade {							/* channels				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
