@@ -189,6 +189,7 @@
 	--border-faint: rgba(var(--transparencycolor_v), .1);
 	--border-subtle: rgba(var(--transparencycolor_v), .2);
 	--border-strong: rgba(var(--transparencycolor_v), .3);
+	--divider-faint: rgba(var(--transparencycolor_v), .1);
 	--divider-subtle: rgba(var(--transparencycolor_v), .2);
 	--divider-strong: rgba(var(--transparencycolor_v), .3);
 	
