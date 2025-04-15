@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.5
+ * @version 1.2.6
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -368,7 +368,7 @@ module.exports = (_ => {
 						type: "right",
 						guild: e.instance.props.guild,
 						list: true,
-						offset: 12
+						offset: 4
 					}),
 					text: (instance, event) => BDFDB.ReactUtils.createElement(GuildDetailsComponent, {
 						shiftKey: event.shiftKey,

@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.5
+ * @version 7.3.6
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -891,7 +891,7 @@ module.exports = (_ => {
 						className: BDFDB.disCN.guildlistitemtooltip,
 						type: "right",
 						list: true,
-						offset: 12,
+						offset: 4,
 						backgroundColor: data.color3,
 						fontColor: data.color4
 					},
@@ -926,7 +926,7 @@ module.exports = (_ => {
 								type: "right",
 								list: true,
 								guild: e.instance.props.guild,
-								offset: 12
+								offset: 4
 							}, data.copyTooltipColor && {
 								backgroundColor: data.color3,
 								fontColor: data.color4,

@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.6
+ * @version 2.4.7
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -249,7 +249,7 @@ module.exports = (_ => {
 								type: "right",
 								guild: e.instance.props.guild,
 								list: true,
-								offset: 12,
+								offset: 4,
 								backgroundColor: data.color3,
 								fontColor: data.color4
 							},
