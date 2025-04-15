@@ -6994,11 +6994,9 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		15.9.		TOOLTIPS					---- */
 
+
 #app-mount .tooltip__382e7 {
 	border: unset;
-}
-#app-mount .tooltipPointer__382e7 {
-	margin: 0 !important;
 }
 #app-mount .tooltipPointer__382e7.tooltipPointerBg__382e7 {
 	display: none;
@@ -7031,6 +7029,19 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .tooltipGrey__382e7 .tooltipPointer__382e7,
 #app-mount .tooltipBlack__382e7 .tooltipPointer__382e7 {
 	border-top-color: var(--tooltip-pointer-bg);
+}
+#app-mount .tooltipTop__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+	margin-top: 0
+}
+#app-mount .tooltipLeft__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+	margin-left: 0
+}
+#app-mount .tooltipRight__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+	margin-right: 0;
+}
+#app-mount .tooltipBottom__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7),
+#app-mount .tooltipCenter__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+	margin-bottom: 0;
 }
 .emptyUser__183c2 {
 	background: rgba(var(--transparencycolor_v), .5);
