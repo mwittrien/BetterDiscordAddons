@@ -2213,6 +2213,10 @@ a.metadataDownload_cf09d8 {
 	border-color: transparent !important;
 }
 
+#app-mount .container_a45028:focus-within {
+	border-color: rgb(var(--accentcolor_v));
+}
+
 .checkbox_f525d3.checked_f525d3[style*="background-color: hsl(227, "],
 .checkbox_f525d3.checked_f525d3[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor_v)) !important;
