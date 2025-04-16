@@ -687,6 +687,9 @@
 	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
 }
+.image__44df5[src="/assets/f13bb5d4ef6ec865.svg"] {					/* textarea				official message						*/
+	filter: grayscale(.8);
+}
 
 .animation__44df5 path[stroke="rgb(123,162,255)"],					/* textarea				wave hand icon							*/
 .animation__44df5 path[stroke="rgb(123, 162, 255)"],
