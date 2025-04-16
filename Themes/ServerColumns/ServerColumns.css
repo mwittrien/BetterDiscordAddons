@@ -14,6 +14,12 @@
 .visual-refresh .wrapper_ef3116 .listItem__650eb {
 	--guildgap_v: 		0;
 }
+.wrapper_ef3116 #sort-button,
+.wrapper_ef3116 .friendsOnlineWrap_aa9717,
+.wrapper_ef3116 .serverCountWrap_1dcf05,
+.wrapper_ef3116 .frame_aa90f4 {
+	--guildgap_v: 		var(--guildgap_s, var(--guildgap));
+}
 
 .titleBar__421ed.typeMacOS__421ed,
 .titleBar__421ed.typeMacOS__421ed .macButtons__421ed,
@@ -198,8 +204,8 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116 .label_caf933 {
 	display: flex !important;
 	justify-content: center !important;
+	align-items: center !important;
 	height: calc(1px * ((var(--guildsize_v)/5) + 5)) !important;
-	line-height: calc(1px * ((var(--guildsize_v)/5) + 5)) !important;
 	font-size: calc(1px * ((var(--guildsize_v)/8) + 3)) !important;
 	margin: 0 !important;
 }
