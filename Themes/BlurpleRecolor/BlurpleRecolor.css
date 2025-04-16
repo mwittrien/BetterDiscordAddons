@@ -2196,14 +2196,14 @@ a.metadataDownload_cf09d8 {
 
 /* ----		12.3.		INPUTS						---- */
 
-.input_dd8655:not(.error_dd8655):not(.success_dd8655):not(.focused_dd8655):not(:focus):hover {
+.input__0f084:not(.error__0f084):not(.success__0f084):not(.focused__0f084):not(:focus):hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
-.input_dd8655:not(.error_dd8655):not(.success_dd8655).focused_dd8655,
-.input_dd8655:not(.error_dd8655):not(.success_dd8655):focus {
+.input__0f084:not(.error__0f084):not(.success__0f084).focused__0f084,
+.input__0f084:not(.error__0f084):not(.success__0f084):focus {
 	border-color: rgb(var(--accentcolor_v));
 }
-.focused_dd8655 {
+.focused__0f084 {
 	border-color: rgb(var(--accentcolor_v));
 }
 #app-mount .prefixInput__9d137:not(.error__9d137).focused__9d137 {
@@ -2212,7 +2212,7 @@ a.metadataDownload_cf09d8 {
 .addFriendInputWrapper__72ba7:focus-within {
 	border-color: rgb(var(--accentcolor_v));
 }
-.addFriendInputWrapper__72ba7 .input_dd8655 {
+.addFriendInputWrapper__72ba7 .input__0f084 {
 	background-color: transparent !important;
 	border-color: transparent !important;
 }
