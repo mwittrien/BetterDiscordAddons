@@ -432,11 +432,16 @@ body,											/* body													*/
 .sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 {
 	padding-top: 4px;
 }
+#app-mount .sidebar_c48ade:after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
+	width: var(--custom-guild-list-width);
+	height: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
+}
+.folderContentIsOpen_ac0584 #app-mount .sidebar_c48ade:after {
+	width: calc(2 * var(--custom-guild-list-width));
+}
 #app-mount .sidebarList_c48ade {							/* channels				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
-}
-#app-mount .sidebar_c48ade:after {
-	display: none;
 }
 #app-mount .membersWrap_c8ffbb {							/* members				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--memberlisttransparency_v));
@@ -541,14 +546,9 @@ body:has(#app-mount)::after {
 
 /* ~~~~		3.		TITLEBAR					~~~~ */
 
-#app-mount:not(:has(.base_c48ade .bar_c38106)) {
-	--custom-app-top-bar-height: 0px;
-}
-.titleBar__421ed,
 .bar_c38106 {
 	z-index: 5001;
 }
-.titleBar__421ed::after,
 .bar_c38106::after {
 	content: "";
 	pointer-events: none;
@@ -556,28 +556,9 @@ body:has(#app-mount)::after {
 	z-index: -1;
 	top: 0;
 	left: 0;
+	height: var(--custom-app-top-bar-height);
 	width: 100%;
 	background-color: rgba(var(--transparencycolor_v), calc(0.1 + var(--guildchanneltransparency_v) * 2));
-}
-.bar_c38106::after {
-	height: var(--custom-app-top-bar-height);
-}
-.titleBar__421ed:not(.typeMacOS__421ed)::after {
-	height: 22px;
-}
-.titleBar__421ed.typeMacOS__421ed::after {
-	height: 28px;
-	width: calc(100% - 4px);
-	margin: 2px;
-	border-radius: 5px;
-}
-.titleBar__421ed.typeMacOS__421ed,
-.titleBar__421ed.typeMacOS__421ed .macButtons__421ed {
-	width: 72px;
-}
-.titleBar__421ed.typeMacOS__421ed.typeMacOSWithFrame__421ed .macButtons__421ed {
-	margin-top: 0;
-	margin-right: 0;
 }
 .platform-osx .wrapper_ef3116 {
 	margin-top: 0;
