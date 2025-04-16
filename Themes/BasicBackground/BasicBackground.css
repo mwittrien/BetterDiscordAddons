@@ -707,40 +707,6 @@ body:has(#app-mount)::after {
 	border-radius: 0;
 }
 
-#app-mount .panels_c48ade {								/* account/voice			container							*/
-	background-color: transparent;
-	border-radius: 0;
-	border-color: unset;
-	overflow: hidden;
-}
-#app-mount .container__2637a ~ .panels_c48ade {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) / 1.5));
-}
-.panels_c48ade::before,
-.panels_c48ade::after {
-	content: "";
-	position: absolute;
-	border-radius: var(--radius-sm);
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	pointer-events: none;
-	z-index: -1;
-}
-.panels_c48ade::before {
-	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
-	background-attachment: fixed;
-}
-.panels_c48ade::after {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2.5 + var(--transparencyalpha_v)));
-	backdrop-filter: blur(var(--backgroundblur_v));
-}
-.container__2637a ~ .panels_c48ade::before,
-.container__2637a ~ .panels_c48ade::after {
-	display: none;
-}
-
 /* ----		5.1.		GUILDHEADER					---- */
 
 .container_f37cb1 .animatedContainer_f37cb1 {						/* banner				wrap								*/
@@ -935,13 +901,58 @@ body:has(#app-mount)::after {
 
 /* ----		5.4.		ACCOUNT/VOICE/GOLIVE				---- */
 
+#app-mount .panels_c48ade {								/* account/voice			container							*/
+	background-color: transparent;
+	border: unset;
+	border-radius: unset;
+	overflow: hidden;
+}
+.panels_c48ade > * {
+	position: relative;
+}
+.panels_c48ade > *::before,
+.panels_c48ade > *::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: -2;
+}
+.panels_c48ade > *::before {
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	background-attachment: fixed;
+}
+.panels_c48ade > *::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2.5 + var(--transparencyalpha_v)));
+	backdrop-filter: blur(var(--backgroundblur_v));
+}
+.panels_c48ade::before,
+.panels_c48ade::after {
+	display: none;
+}
+.panels_c48ade > *:first-child::before,
+.panels_c48ade > *:first-child::after,
+.panels_c48ade > *:first-child:empty + *::before,
+.panels_c48ade > *:first-child:empty + *::after {
+	border-top-left-radius: var(--radius-sm);
+	border-top-right-radius: var(--radius-sm);
+}
+.panels_c48ade > *:last-child::before,
+.panels_c48ade > *:last-child::after {
+	border-bottom-left-radius: var(--radius-sm);
+	border-bottom-right-radius: var(--radius-sm);
+}
+
 .panels_c48ade > *,									/* account/voice			inner								*/
 .panels_c48ade .wrapper_e131a9 > * {							/* account/voice			inner								*/
 	background: none;
 	border: none;
 }
 .panels_c48ade > *:not(:empty) ~ *:not(:empty) {
-	border-top: 1px solid rgba(var(--transparencycolor_v), .2);
+	border-top: 1px solid var(--border-subtle);
 }
 
 #app-mount button.button__67645.enabled__67645 {					/* account/voice			panel button							*/
