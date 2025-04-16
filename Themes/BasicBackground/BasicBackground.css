@@ -426,8 +426,8 @@ body,											/* body													*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
 }
 .sidebar_c48ade .wrapper_ef3116 {
-	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
-	margin-bottom: 0;
+	margin-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
+	padding-bottom: 0;
 }
 .sidebar_c48ade .wrapper_ef3116 .scroller_ef3116 {
 	padding-top: 4px;
@@ -7665,33 +7665,13 @@ html:only-child > head + body div.app_a3002d > div.app__160d8::before {
 
 /* ~~~~		20.		WATERMARK					~~~~ */
 
-html:only-child > head + body div.typeWindows__421ed.titleBar__421ed > div.wordmark__421ed {
-	display: block !important;
-	position: absolute !important;
-	max-width: unset !important;
-	min-width: unset !important;
-	width: 55px !important;
-	max-height: unset !important;
-	min-height: unset !important;
-	height: 16px !important;
-	margin: 0 !important;
-	padding: 3px 9px 3px !important;
-	top: 0 !important;
-	left: 0 !important;
-	bottom: unset !important;
-	right: unset !important;
-	opacity: 1 !important;
-	visibility: visible !important;
-	transform: unset !important;
-	animation: unset !important;
+.bar_c38106 .title_c38106 {
+	position: static;
+	top: -10px !important;
+	left: calc(-20px - (50% - calc(var(--custom-guild-list-width) + var(--space-8)))) !important;
+	background-image: unset !important;
+	margin-left: calc(50% - calc(var(--custom-guild-list-width) + var(--space-8)));
 }
-html:only-child > head + body div.typeWindows__421ed.titleBar__421ed > div.wordmark__421ed[style*="display: none"] {
-	display: none !important;
-}
-html:only-child > head + body div.typeWindows__421ed.titleBar__421ed > div.wordmark__421ed > * {
-	display: none !important;
-}
-html:only-child > head + body div.typeWindows__421ed.titleBar__421ed > div.wordmark__421ed::before,
 html:only-child > head + body div.bar_c38106 > div.title_c38106::before {
 	content: "" !important;
 	background: rgb(125,125,125) !important;
@@ -7718,7 +7698,6 @@ html:only-child > head + body div.bar_c38106 > div.title_c38106::before {
 	position: fixed !important;
 	left: 10px !important;
 }
-html:only-child > head + body div.typeWindows__421ed.titleBar__421ed > div.wordmark__421ed::after,
 html:only-child > head + body div.bar_c38106 > div.title_c38106::after {
 	content: "" !important;
 	background: rgb(125,125,125) !important;
@@ -7746,7 +7725,6 @@ html:only-child > head + body div.bar_c38106 > div.title_c38106::after {
 	position: fixed !important;
 	left: 80px !important;
 }
-html:only-child > head + body div.typeWindows__421ed.titleBar__421ed:hover > div.wordmark__421ed::after,
 html:only-child > head + body div.bar_c38106:hover > div.title_c38106::after {
 	opacity: 1 !important;
 }
