@@ -6381,10 +6381,10 @@ body:has(#app-mount)::after {
 
 /* ----		15.3.		INPUTS						---- */
 
-input.input_dd8655 {									/* valueinput				bordered							*/
+input.input__0f084 {									/* valueinput				bordered							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
 }
-input.input_dd8655:hover:not(:focus) {
+input.input__0f084:hover:not(:focus) {
 	border-color: rgb(var(--transparencycolor_v));
 }
 
