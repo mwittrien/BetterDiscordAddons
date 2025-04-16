@@ -706,6 +706,12 @@ body:has(#app-mount)::after {
 #app-mount .searchBar__35e86 {								/* header				searchbar							*/
 	border-bottom-color: rgba(var(--transparencycolor_v), .2);
 }
+#app-mount .communityInfoVisible_f37cb1 .header_f37cb1,
+#app-mount .communityInfoVisible_f37cb1 .header_f37cb1:hover,
+#app-mount .hasBanner_f37cb1 .header_f37cb1,
+#app-mount .hasBanner_f37cb1 .header_f37cb1:hover {
+	border-bottom-color: transparent;
+}
 .searchBar__35e86 .searchBarComponent__35e86 {						/* header				searchbarinner							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
