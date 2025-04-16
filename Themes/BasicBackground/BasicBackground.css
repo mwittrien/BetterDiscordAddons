@@ -1316,6 +1316,9 @@ body:has(#app-mount)::after {
 .message__02a39 .wrapper_c19a55 {							/* message				searchpage							*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 0.8)) !important;
 }
+#app-mount .message__5126c {
+	border-radius: 0;
+}
 .message__5126c.selected__5126c,
 .mouse-mode .message__5126c:hover,
 .mouse-mode.full-motion .message__5126c:hover,
@@ -1323,12 +1326,12 @@ body:has(#app-mount)::after {
 .mouse-mode.full-motion .wrapper_fc8177:hover {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 1.2 * var(--usechatbubbles) + 0.3 * (1 - var(--usechatbubbles)))) !important;
 }
-.messageListItem__5126c > .message__5126c.groupStart__5126c {
+#app-mount .messageListItem__5126c > .message__5126c.groupStart__5126c {
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
 }
-.messageListItem__5126c:has(+ .messageListItem__5126c > .message__5126c.groupStart__5126c) > .message__5126c,
-.messageListItem__5126c:has(+ :not(.messageListItem__5126c)) > .message__5126c {
+#app-mount .messageListItem__5126c:has(+ .messageListItem__5126c > .message__5126c.groupStart__5126c) > .message__5126c,
+#app-mount .messageListItem__5126c:has(+ :not(.messageListItem__5126c)) > .message__5126c {
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 }
