@@ -494,7 +494,15 @@
 
 /* ----		3.1.		MESSAGES					---- */
 
-.newMessagesBar__0f481 {								/* new messagesbar											*/
+#app-mount .newMessagesBar__0f481 {							/* new messagesbar											*/
+	background-color: rgb(var(--accentcolor_v));
+}
+#app-mount .barButtonAlt__0f481 {
+	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
+	background-color: rgb(var(--accentcolor_v));
+}
+#app-mount .barButtonAlt__0f481:hover {
+	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1)));
 	background-color: rgb(var(--accentcolor_v));
 }
 
