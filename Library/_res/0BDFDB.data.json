@@ -516,6 +516,7 @@
 		"ModalFooter": {"strings": [".footerSeparator", ".separator", "Direction.HORIZONTAL_REVERSE"]},
 		"ModalRoot": {"strings": ["rootWithShadow", "ImpressionTypes.MODAL", "transitionState:"]},
 		"NameContainer": {"strings": ["\"listitem\"", "wrappedName", "innerClassName"], "noSearch": true},
+		"NameContainerDecorators": {"strings": ["lostPermissionTooltipText", "premiumSince", "isOwner"], "noSearch": true},
 		"NameContainerInner": {"strings": ["primaryGuild", ".clanTag", "hideClanTag"], "noSearch": true},
 		"NameTag": {"strings": ["invertColor:", "usernameClass", "discriminatorClass"]},
 		"NavItem": {"strings": [".selected", ".acronym", "fontSize:"]},
