@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.7
+ * @version 3.1.8
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -82,10 +82,10 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"MessageUsername",
-						"NameContainer"
+						"MessageUsername"
 					],
 					after: [
+						"NameContainerDecorators",
 						"VoiceUser"
 					]
 				};
@@ -173,10 +173,9 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
-			processNameContainer (e) {
-				if (!this.settings.places.memberList) return;
-				let user = BDFDB.LibraryStores.UserStore.getUser(BDFDB.ReactUtils.findValue(e.instance.props.name, "userId"));
-				if (user) this.injectRoleTag(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), user, "member", 3, {
+			processNameContainerDecorators (e) {
+				if (!this.settings.places.memberList || !e.instance.props.user) return;
+				this.injectRoleTag(e.returnvalue.props.children, e.instance.props.user, "member", 3, {
 					tagClass: BDFDB.disCN.bottagmember
 				});
 			}
