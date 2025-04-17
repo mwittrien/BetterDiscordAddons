@@ -1651,6 +1651,10 @@ body:has(#app-mount)::after {
 	border-color: var(--background-secondary);
 }
 
+#app-mount .message__5126c .channelTextArea__74017 {					/* message				editor								*/
+	border: none;
+}
+
 #app-mount .wrapper_d852db {								/* message				loading wrapper							*/
 	background: transparent;
 }
