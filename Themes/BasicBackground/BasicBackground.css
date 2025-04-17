@@ -627,15 +627,15 @@ body:has(#app-mount)::after {
 #app-mount .folder__48112.hover__48112 {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-.expandedFolderBackground__48112 {							/* folder				background							*/
+#app-mount .expandedFolderBackground__48112 {						/* folder				background							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
-	border-radius: 15px 15px 24px 24px;
+	border-radius: 15px;
 	top: 0;
-	bottom: 0;
+	bottom: -16px;
 	margin-bottom: 8px;
 	transition: border-radius 3s ease, background-color 1s ease;
 }
-.expandedFolderBackground__48112.hover__48112 {
+#app-mount .expandedFolderBackground__48112.hover__48112 {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
