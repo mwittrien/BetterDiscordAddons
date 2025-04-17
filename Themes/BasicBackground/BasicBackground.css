@@ -4456,7 +4456,6 @@ body:has(#app-mount)::after {
 	left: 0;
 	width: unset;
 	height: unset;
-	border-radius: 4px;
 	pointer-events: none;
 	z-index: -1;
 }
