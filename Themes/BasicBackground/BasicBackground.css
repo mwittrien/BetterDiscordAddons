@@ -4641,9 +4641,11 @@ body:has(#app-mount)::after {
 .outer_c0bea0.custom-user-profile-theme .inner_c0bea0 > * {
 	z-index: 3;
 }
-.outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .header__5be3e,
-.outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .wrapper_da5890 {
+.outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .header__5be3e {
 	z-index: 4;
+}
+.outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .wrapper_da5890 {
+	z-index: 5;
 }
 .userProfileInnerThemedWithBanner_c69a7b::after {
 	height: 120px;
