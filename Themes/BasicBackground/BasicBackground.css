@@ -618,9 +618,6 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-.wrapper__48112 {									/* folder				outerwrap							*/
-	margin-bottom: 8px;
-}
 #app-mount .folder__48112 {								/* folder				iconwrap							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
@@ -629,21 +626,10 @@ body:has(#app-mount)::after {
 }
 #app-mount .expandedFolderBackground__48112 {						/* folder				background							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
-	border-radius: 15px;
-	top: 0;
-	bottom: -16px;
-	margin-bottom: 8px;
 	transition: border-radius 3s ease, background-color 1s ease;
 }
 #app-mount .expandedFolderBackground__48112.hover__48112 {
 	background-color: rgba(var(--transparencycolor_v), .4);
-}
-
-.wrapper_ef3116:not(.content_ac0584) .wrapper__48112 [role="group"] {			/* folder				guildwrap							*/
-	margin-bottom: -8px;
-}
-.wrapper_ef3116:not(.content_ac0584) .wrapper__48112 [role="group"] .listItem__650eb:last-child {
-	margin-bottom: 0;
 }
 
 .bar__3b95d {										/* guild/channelbar			inner								*/
