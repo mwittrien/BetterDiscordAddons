@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.3
+ * @version 2.1.4
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -85,10 +85,10 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"MessageUsername",
-						"NameContainer"
+						"MessageUsername"
 					],
 					after: [
+						"NameContainerDecorators",
 						"PrivateChannel",
 						"UserBadges"
 					]
@@ -328,9 +328,9 @@ module.exports = (_ => {
 				this.injectBadges(e.instance.props.decorations[index], author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 
-			processNameContainer (e) {
-				let user = BDFDB.LibraryStores.UserStore.getUser(BDFDB.ReactUtils.findValue(e.instance.props.name, "userId"));
-				if (user) this.injectBadges(BDFDB.ObjectUtils.get(e.instance, "props.decorators.props.children"), user, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), "memberList");
+			processNameContainerDecorators (e) {
+				if (!e.instance.props.user) return;
+				this.injectBadges(e.returnvalue.props.children, e.instance.props.user, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), "memberList");
 			}
 
 			processPrivateChannel (e) {
