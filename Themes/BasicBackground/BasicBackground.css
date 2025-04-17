@@ -1970,6 +1970,9 @@ body:has(#app-mount)::after {
 #app-mount .themedBackground__74017 {							/* textarea				container							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
+#app-mount .inlineContainer__74017 .themedBackground__74017 {				/* textarea				container popout						*/
+	background-color: transparent;
+}
 
 .sprite__04eed {									/* textarea				emojibutton							*/
 	transform: none !important;
