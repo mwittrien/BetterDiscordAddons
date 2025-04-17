@@ -6426,10 +6426,14 @@ input.input__0f084:hover:not(:focus) {
 	fill: rgb(var(--transparencycolor_v)) !important;
 }
 
-#app-mount .item__001a7 {								/* radiogroup				container							*/
+#app-mount .item__001a7,								/* radiogroup				container							*/
+#app-mount .radioItemStyles__837b7,							/* radiogroup				container							*/
+#app-mount .banReasonOtherClickable__837b7 {						/* radiogroup				container							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-#app-mount .item__001a7:hover {
+#app-mount .item__001a7:hover,
+#app-mount .radioItemStyles__837b7:hover,
+#app-mount .banReasonOtherClickable__837b7:hover {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 #app-mount .item__001a7[aria-checked=true] .radioBar__001a7 {
@@ -6589,7 +6593,6 @@ input.input__0f084:hover:not(:focus) {
 	background-color: rgba(var(--transparencycolor_v), .3);
 	color: var(--interactive-hover);
 }
-.option__3f413:focus,
 .option__3f413.focused__3f413,
 .option__3f413.focused__3f413:hover,
 .option__3f413[aria-selected=true]:not(.option__3f413.multi__3f413),
@@ -6600,10 +6603,15 @@ input.input__0f084:hover:not(:focus) {
 	background-color: rgba(var(--transparencycolor_v), .5);
 	color: var(--interactive-active);
 }
+#app-mount .option__3f413[aria-selected=true] {
+	background-color: rgb(var(--accentcolor_v));
+	color: var(--interactive-active);
+	text-shadow: 1px 1px var(--textshadow_v);
+}
 .popout__3f413::-webkit-scrollbar {
 	display: none;
 }
-.popout__3f413,
+#app-mount .popout__3f413,
 .select_d48ec6 > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 	background-color: transparent;
 	border: 1px solid rgba(var(--transparencycolor_v), .3);
