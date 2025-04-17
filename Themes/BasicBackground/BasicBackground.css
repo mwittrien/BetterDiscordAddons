@@ -4605,6 +4605,10 @@ body:has(#app-mount)::after {
 .outer_c0bea0.custom-user-profile-theme .container_ab8609.editable_ab8609:hover {
 	--custom-status-bubble-background-color: linear-gradient(rgba(var(--transparencycolor_v), .3), rgba(var(--transparencycolor_v), .3)) var(--profile-gradient-secondary-color) !important;
 }
+.outer_c0bea0.custom-user-profile-theme .button_f7ecac:hover,
+.outer_c0bea0.custom-user-profile-theme .button_f7ecac.selected_f7ecac {
+	background: linear-gradient(rgba(var(--transparencycolor_v), .3), rgba(var(--transparencycolor_v), .3)) var(--profile-gradient-secondary-color) !important;
+}
 
 .outer_c0bea0:not(.custom-user-profile-theme) .note_fcb628 textarea:focus {
 	background: var(--input-background);
