@@ -4584,12 +4584,26 @@ body:has(#app-mount)::after {
 	background-color: var(--profile-gradient-secondary-color) !important;
 }
 
+#app-mount .wrapper_f7ecac:not(.buttonsInner__5126c) {					/* popout				actions								*/
+	background: var(--custom-status-bubble-background-color, var(--background-surface-highest));
+	box-shadow: unset;
+	overflow: visible;
+}
+.outer_c0bea0:not(.custom-user-profile-theme) .wrapper_f7ecac,
 .outer_c0bea0:not(.custom-user-profile-theme) .container_ab8609 {
 	--custom-status-bubble-background-color: linear-gradient(rgba(var(--transparencycolor_v), .5), rgba(var(--transparencycolor_v), .5)) rgb(var(--accentcolor)) !important;
 	transition: background .2s ease;
 }
 .outer_c0bea0:not(.custom-user-profile-theme) .container_ab8609.editable_ab8609:hover {
 	--custom-status-bubble-background-color: linear-gradient(rgba(var(--transparencycolor_v), 0), rgba(var(--transparencycolor_v), 0)) rgb(var(--accentcolor)) !important;
+}
+.outer_c0bea0.custom-user-profile-theme .wrapper_f7ecac,
+.outer_c0bea0.custom-user-profile-theme .container_ab8609 {
+	--custom-status-bubble-background-color: linear-gradient(rgba(var(--transparencycolor_v), .5), rgba(var(--transparencycolor_v), .5)) var(--profile-gradient-secondary-color) !important;
+	transition: background .2s ease;
+}
+.outer_c0bea0.custom-user-profile-theme .container_ab8609.editable_ab8609:hover {
+	--custom-status-bubble-background-color: linear-gradient(rgba(var(--transparencycolor_v), .3), rgba(var(--transparencycolor_v), .3)) var(--profile-gradient-secondary-color) !important;
 }
 
 .outer_c0bea0:not(.custom-user-profile-theme) .note_fcb628 textarea:focus {
@@ -4635,38 +4649,6 @@ body:has(#app-mount)::after {
 	background-color: transparent;
 	border-color: transparent;
 	box-sizing: content-box;
-}
-
-#app-mount .wrapper_f7ecac:not(.buttonsInner__5126c) {					/* popout				actions								*/
-	background: var(--custom-status-bubble-background, var(--theme-base-color-dark, transparent));
-	box-shadow: unset;
-	overflow: visible;
-}
-.wrapper_f7ecac:not(.buttonsInner__5126c)::before,
-.wrapper_f7ecac:not(.buttonsInner__5126c)::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: unset;
-	height: unset;
-	border-radius: 100px;
-	pointer-events: none;
-	z-index: -1;
-}
-.wrapper_f7ecac:not(.buttonsInner__5126c)::before {
-	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
-	background-attachment: fixed;
-}
-.wrapper_f7ecac:not(.buttonsInner__5126c)::after {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.5));
-	backdrop-filter: blur(var(--backgroundblur_v));
-}
-.outer_c0bea0.custom-user-profile-theme .wrapper_f7ecac:not(.buttonsInner__5126c)::before,
-.outer_c0bea0.custom-user-profile-theme .wrapper_f7ecac:not(.buttonsInner__5126c)::after {
-	display: none;
 }
 
 .root__48c1c {										/* body					roles								*/
