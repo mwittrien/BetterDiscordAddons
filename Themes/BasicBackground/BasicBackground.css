@@ -5458,6 +5458,9 @@ body:has(#app-mount)::after {
 #app-mount .header_d5f35b {
 	background: rgba(var(--transparencycolor_v), .3);
 }
+#app-mount .icon_d0b769 {
+	color: var(--header-secondary);
+}
 .channelContainer_d5f35b {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
