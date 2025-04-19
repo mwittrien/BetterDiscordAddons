@@ -606,7 +606,7 @@
 		"UserProfileMutualGuilds": {"strings": ["mutualGuilds", ".listScroller", ".emptyText"]},
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
 		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},
-		"UserThemeContainer": {"strings": ["shouldTrackView", "\"VIEW\"", ".Provider"], "noSearch": true},
+		"UserThemeContainer": {"strings": ["profileUi", "\"VIEW\"", ".Provider"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
 		"VoiceUser": {"strings": [".voiceUser", ".content", "userNameClassName"]},
 		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", ".MOVE_MEMBERS"]}
