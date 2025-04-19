@@ -2310,8 +2310,11 @@ body:has(#app-mount)::after {
 
 /* ~~~~		7.		PEOPLES						~~~~ */
 
-.container__133bf {										/* chat													*/
+.container__133bf {									/* peoples												*/
 	border-top: 0 !important;
+}
+#app-mount .dot__9293f {
+	color: inherit;
 }
 .addFriendInputWrapper__72ba7 {								/* peoples				add friend							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
