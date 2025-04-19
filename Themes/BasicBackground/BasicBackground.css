@@ -4429,9 +4429,11 @@ body:has(#app-mount)::after {
 
 #app-mount .menu_c1e9c4,								/* contextmenu				fixed								*/
 #app-mount .submenu_c1e9c4 {								/* contextmenu				submenu								*/
+	position: relative;
 	background: transparent;
 	border: unset;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
+	overflow: hidden;
 }
 .menu_c1e9c4::before,
 .submenuPaddingContainer_af7fb7 .scroller_c1e9c4::before,
