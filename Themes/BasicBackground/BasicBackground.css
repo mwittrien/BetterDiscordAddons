@@ -1968,9 +1968,10 @@ body:has(#app-mount)::after {
 	transform: none !important;
 }
 
-.wrapper__44df5 {									/* textarea				placeholder							*/
+#app-mount .wrapper__44df5 {								/* textarea				placeholder							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 	color: var(--text-normal);
+	border: unset;
 }
 
 .toolbar_bba883 {									/* textarea				formattoolbar							*/
