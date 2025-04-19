@@ -6704,6 +6704,15 @@ input.input__0f084:hover:not(:focus) {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
+.textBadge__2b1f5 {									/* textbadge				regular								*/
+	background-color: rgb(var(--accentcolor_v)) !important;
+	color: #fff !important;
+	text-shadow: 1px 1px var(--textshadow_v);
+}
+.textBadge__2b1f5 svg {
+	filter: drop-shadow(1px 1px var(--textshadow_v));
+}
+
 /* ----		15.6.		IMAGES						---- */
 
 #app-mount .image__7184c {
