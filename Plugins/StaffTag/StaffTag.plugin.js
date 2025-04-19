@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.6
+ * @version 1.6.7
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -158,6 +158,9 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN.memberownericon} {
 						top: 0px;
+					}
+					${BDFDB.dotCN.memberownericon} + ${BDFDB.dotCN.memberownericon} {
+						display: none;
 					}
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 						top: 2px;
