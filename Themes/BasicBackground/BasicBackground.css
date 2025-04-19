@@ -5458,9 +5458,6 @@ body:has(#app-mount)::after {
 #app-mount .header_d5f35b {
 	background: rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .separator__49fc1 {
-	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor_v), .3), 0 1px 2px 0 rgba(var(--transparencycolor_v), .3);
-}
 .channelContainer_d5f35b {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
