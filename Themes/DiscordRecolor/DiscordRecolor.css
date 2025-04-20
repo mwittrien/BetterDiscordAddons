@@ -38,6 +38,7 @@
 	--textdarker_v:				var(--textdarker_s, var(--textdarker));
 	--textdarkest_v:			var(--textdarkest_s, var(--textdarkest));
 	
+	--backgroundcode_v:			var(--backgroundcode_s, var(--backgroundcode));
 	--backgroundaccent_v:			var(--backgroundaccent_s, var(--backgroundaccent));
 	--backgroundprimary_v:			var(--backgroundprimary_s, var(--backgroundprimary));
 	--backgroundsecondary_v:		var(--backgroundsecondary_s, var(--backgroundsecondary));
@@ -161,6 +162,8 @@
 	
 	--modal-background: rgb(var(--backgroundprimary_v));
 	--modal-footer-background: rgb(var(--backgroundsecondary_v));
+	
+	--background-code: rgb(var(--backgroundcode_v));
 	
 	--background-primary: rgb(var(--backgroundprimary_v));
 	--background-secondary: rgb(var(--backgroundsecondary_v));
