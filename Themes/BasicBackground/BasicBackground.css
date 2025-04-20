@@ -6703,9 +6703,12 @@ input.input__0f084:hover:not(:focus) {
 
 /* ----		15.5.		TAGS						---- */
 
+.chipletContainerInner__4a25c:not([style]),						/* clantag				regular								*/
 .botTagRegular_c89c9a:not([style]) {							/* bottag				regular								*/
+	background-color: rgb(var(--accentcolor_v)) !important;
 	text-shadow: 1px 1px var(--textshadow_v);
 }
+.chipletContainerInner__4a25c:not([style]) svg,
 .botTagRegular_c89c9a:not([style]) svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
