@@ -7107,6 +7107,17 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background: rgba(var(--transparencycolor_v), .5);
 }
 
+#app-mount .content_e12757 {
+	background-color: rgb(var(--accentcolor_v));
+	border: unset;
+}
+#app-mount .pointer_e12757 {
+	border-right-color: transparent;
+}
+#app-mount .pointer_e12757:after {
+	border-right-color: rgb(var(--accentcolor_v));
+}
+
 
 /* ~~~~		16.		BDSUPPORT					~~~~ */
 
