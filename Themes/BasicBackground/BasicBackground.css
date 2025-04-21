@@ -1739,6 +1739,9 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
+#app-mount .hasWallpaper_f75fb0 .buttonsInner__5126c {
+	--background_v: rgb(var(--transparencycolor_v));
+}
 #app-mount .popoverReactionHoverBar_f84418,
 #app-mount .popoverReactionHoverBar_f84418:hover {
 	border: unset;
