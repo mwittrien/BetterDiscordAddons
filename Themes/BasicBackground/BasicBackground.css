@@ -330,6 +330,7 @@ html {
 		24.	SERVERSURVEY
 		25.	APPPICKER
 		26.	ACTIVITYENTRYPOPOUT
+		27.	DM-BACKGROUNDPICKER
 	15.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -6126,6 +6127,13 @@ body:has(#app-mount)::after {
 .popout_af3b89::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
+}
+
+/* ----		14.27.		DM-BACKGROUNDPICKER				---- */
+
+#app-mount .container_f86e69 {								/* popout												*/
+	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
+	background-color: rgb(var(--accentcolor_v));
 }
 
 
