@@ -202,7 +202,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-											style: {marginBottom: 1},
+											style: {marginBottom: 4},
 											onClick: _ => {
 												for (let input of settingsPanel.props._node.querySelectorAll(".input-newquote " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new quote.", {type: "danger"});
 												let key = settingsPanel.props._node.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
