@@ -1739,7 +1739,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
-#app-mount .hasWallpaper_f75fb0 .buttonsInner__5126c {
+#app-mount .wallpaperContainer__5fa7b[style*="background"] ~ * .buttonsInner__5126c {
 	--background_v: rgb(var(--transparencycolor_v));
 }
 #app-mount .popoverReactionHoverBar_f84418,
