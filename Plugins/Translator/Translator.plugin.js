@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.4
+ * @version 2.7.5
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,10 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"improved": {
-			"Message Actions": "Button is back in the Message Actions Toolbar",
-			"Disable Option": "Added an Option to disable it, since some of y'all are ungrateful brats"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -1327,11 +1324,15 @@ module.exports = (_ => {
 			
 			deepLTranslate (data, callback) {
 				BDFDB.LibraryRequires.request(authKeys.deepl && authKeys.deepl.paid ? "https://api.deepl.com/v2/translate" : "https://api-free.deepl.com/v2/translate", {
-					form: Object.assign({
-						"auth_key": authKeys.deepl && authKeys.deepl.key || "75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx",
-						"text": encodeURIComponent(data.text),
+					method: "post",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `DeepL-Auth-Key ${authKeys.deepl && authKeys.deepl.key || "75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx"}`
+					},
+					body: JSON.stringify(Object.assign({
+						"text": [encodeURIComponent(data.text)],
 						"target_lang": data.output.id
-					}, data.input.auto ? {} : {"source_lang": data.input.id})
+					}, data.input.auto ? {} : {"source_lang": data.input.id}))
 				}, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) {
 						try {
