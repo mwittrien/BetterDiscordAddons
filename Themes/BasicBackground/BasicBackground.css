@@ -941,7 +941,7 @@ body:has(#app-mount)::after {
 	background: none;
 	border: none;
 }
-.panels_c48ade > *:not(:empty) ~ *:not(:empty) {
+.panels_c48ade > *:not(:empty) ~ *:not(:empty):after {
 	border-top: 1px solid var(--border-subtle);
 }
 
