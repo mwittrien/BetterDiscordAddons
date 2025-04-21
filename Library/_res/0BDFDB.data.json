@@ -139,8 +139,8 @@
 		"ChatRestrictionUtils": {"strings": ["dispatch({type:\"MESSAGE_LENGTH_UPSELL\"", "Message Too Long Alert"], "exported": false, "value": "exports", "map": {
 			"applyChatRestrictions": ["Message Too Long Alert"]
 		}},
-		"ClipboardUtils": {"strings": ["ClipboardUtils.copy", "execCommand(\"copy\")"], "exported": false, "value": "exports", "map": {
-			"copy": ["ClipboardUtils.copy", "execCommand(\"copy\")"]
+		"ClipboardUtils": {"strings": ["clipboard.writeText", "Clipboard API not supported"], "exported": false, "value": "exports", "map": {
+			"copy": ["clipboard.writeText", "Clipboard API not supported"]
 		}},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
