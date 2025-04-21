@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.0
+ * @version 5.6.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		improved: {
+			"Download locations": "You can now add a \\* to your Download locations, allowing you to save an image in the location or one of its subfolders"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -611,7 +613,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-											style: {marginBottom: 1},
+											style: {marginBottom: 4},
 											onClick: _ => {
 												for (let key in locationInputs) if (!locationInputs[key] || !locationInputs[key].trim()) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new Location", {type: "danger"});
 												let name = locationInputs.name.trim();
@@ -655,6 +657,7 @@ module.exports = (_ => {
 												})
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												grow: 1,
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													value: ownLocations[locationName].location,
 													placeholder: ownLocations[locationName].location,
@@ -875,7 +878,6 @@ module.exports = (_ => {
 				
 				let isVideo = this.isValid(urlData.file, "video");
 				let type = isVideo ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-				
 				return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
 						urlData.original && urlData.original.indexOf("data:") != 0 && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -958,11 +960,20 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-file-as"),
 							action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, null, urlData.alternativeName),
 							children: locations.length && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-								children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
-									label: name,
-									action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, ownLocations[name].location, urlData.alternativeName)
-								}))
+								children: locations.map((name, i) => {
+									let path = ownLocations[name].location.replace(/\\\*$/, "");
+									let subpaths = !/\\\*$/.test(ownLocations[name].location) ? null : BDFDB.LibraryRequires.fs.readdirSync(path).filter(n => n.indexOf(".") == -1);
+									return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
+										label: name,
+										action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, path, urlData.alternativeName),
+										children: subpaths && subpaths.length && subpaths.map(subname => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+											id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, subname),
+											label: subname,
+											action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, path + "\\" + subname, urlData.alternativeName)
+										}))
+									})
+								})
 							})
 						}),
 						!this.isValid(urlData.original, "searchable") || !engineKeys.length ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
