@@ -318,7 +318,7 @@ module.exports = (_ => {
 				auto: true,
 				funcName: "deepSeekTranslate",
 				languages: googleLanguages,
-				key: "your_deepseek_api_key"
+				key: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 			},
 			itranslate: {
 				name: "iTranslate",
@@ -1371,13 +1371,6 @@ module.exports = (_ => {
 			}
 
 			deepSeekTranslate(data, callback) {
-				const apiKey = authKeys.deepseek && authKeys.deepseek.key || "";
-				const apiUrl = "https://api.deepseek.com/v1/chat/completions";
-
-				const processedText = data.text
-					.replace(/\n/g, " [NEWLINE] ")
-					.replace(/\s+/g, ' ');
-
 				const translationPrompt = `
 				You are a professional localization expert. Translate the following ${data.input.auto ? "" : data.input.name + " "}content to ${data.output.name} following these rules:
 				1. Return ONLY the translation without any explanations
@@ -1390,30 +1383,27 @@ module.exports = (_ => {
 				8. Convert [NEWLINE] markers to actual line breaks (don't show them literally)
 				
 				Text to translate:
-				${processedText}
+				${data.text.replace(/\n/g, " [NEWLINE] ").replace(/\s+/g, " ")}
 				`;
 
 				const requestData = {
 					model: "deepseek-chat",
-					messages: [
-						{
-							role: "system",
-							content: "You are a senior bilingual localization specialist"
-						},
-						{
-							role: "user",
-							content: translationPrompt
-						}
-					],
+					messages: [{
+						role: "system",
+						content: "You are a senior bilingual localization specialist"
+					}, {
+						role: "user",
+						content: translationPrompt
+					}],
 					temperature: 0.2,
 					top_p: 0.8
 				};
 
-				BDFDB.LibraryRequires.request(apiUrl, {
+				BDFDB.LibraryRequires.request("https://api.deepseek.com/v1/chat/completions", {
 					method: "post",
 					headers: {
 						"Content-Type": "application/json",
-						"Authorization": `Bearer ${apiKey}`
+						"Authorization": `Bearer ${authKeys.deepseek && authKeys.deepseek.key || ""}`
 					},
 					body: JSON.stringify(requestData)
 				}, (error, response, body) => {
