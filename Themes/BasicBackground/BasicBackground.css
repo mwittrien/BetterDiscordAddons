@@ -129,6 +129,7 @@
 	--text-normal: rgb(var(--textbrighter_v));
 	--text-muted: rgb(var(--textdarker_v));
 	--text-dark: rgb(var(--textdarkest_v));
+	--chat-text-muted: rgb(var(--textdark_v));
 	--channels-default: rgb(var(--textdark_v));
 	--channel-icon: rgb(var(--textdark_v));
 	
