@@ -313,6 +313,13 @@ module.exports = (_ => {
 				premium: true,
 				key: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx:fx"
 			},
+			deepseek: {
+				name: "DeepSeek",
+				auto: true,
+				funcName: "deepSeekTranslate",
+				languages: googleLanguages,
+				key: "your_deepseek_api_key"
+			},
 			itranslate: {
 				name: "iTranslate",
 				auto: true,
@@ -1355,9 +1362,88 @@ module.exports = (_ => {
 							position: "center"
 						});
 						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}`, {
-							type: "danger",
-							position: "center"
-						});
+								type: "danger",
+								position: "center"
+							});
+						callback("");
+					}
+				});
+			}
+
+			deepSeekTranslate(data, callback) {
+				const apiKey = authKeys.deepseek && authKeys.deepseek.key || "";
+				const apiUrl = "https://api.deepseek.com/v1/chat/completions";
+
+				const processedText = data.text
+					.replace(/\n/g, " [NEWLINE] ")
+					.replace(/\s+/g, ' ');
+
+				const translationPrompt = `
+				You are a professional localization expert. Translate the following ${data.input.auto ? "" : data.input.name + " "}content to ${data.output.name} following these rules:
+				1. Return ONLY the translation without any explanations
+				2. Use natural, fluent language
+				3. Maintain consistent terminology for technical/game terms  
+				4. Preserve the original tone and style
+				5. Use concise sentence structures
+				6. Handle numbers/units/proper nouns correctly
+				7. Use community-approved expressions for game content
+				8. Convert [NEWLINE] markers to actual line breaks (don't show them literally)
+				
+				Text to translate:
+				${processedText}
+				`;
+
+				const requestData = {
+					model: "deepseek-chat",
+					messages: [
+						{
+							role: "system",
+							content: "You are a senior bilingual localization specialist"
+						},
+						{
+							role: "user",
+							content: translationPrompt
+						}
+					],
+					temperature: 0.2,
+					top_p: 0.8
+				};
+
+				BDFDB.LibraryRequires.request(apiUrl, {
+					method: "post",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${apiKey}`
+					},
+					body: JSON.stringify(requestData)
+				}, (error, response, body) => {
+					if (!error && body && response.statusCode == 200) {
+						try {
+							body = JSON.parse(body);
+							let translatedText = body.choices[0].message.content;
+							translatedText = translatedText.replace(/\[NEWLINE\]/g, '\n');
+							callback(translatedText);
+						} catch (err) {
+							console.error("DeepSeek translation error:", err);
+							callback("");
+						}
+					} else {
+						if (response.statusCode == 401 || response.statusCode == 403) {
+							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_keyoutdated}`, {
+								type: "danger",
+								position: "center"
+							});
+						} else if (response.statusCode == 429) {
+							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_dailylimit}`, {
+								type: "danger",
+								position: "center"
+							});
+						} else {
+							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}`, {
+								type: "danger",
+								position: "center"
+							});
+						}
 						callback("");
 					}
 				});
