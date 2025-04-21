@@ -936,10 +936,11 @@ body:has(#app-mount)::after {
 	border-bottom-right-radius: var(--radius-sm);
 }
 
-.panels_c48ade > *,									/* account/voice			inner								*/
-.panels_c48ade .wrapper_e131a9 > * {							/* account/voice			inner								*/
+#app-mount .panels_c48ade > *,								/* account/voice			inner								*/
+#app-mount .panels_c48ade .wrapper_e131a9 > * {						/* account/voice			inner								*/
 	background: none;
 	border: none;
+	margin: 0;
 }
 .panels_c48ade > *:not(:empty) ~ *:not(:empty):after {
 	border-top: 1px solid var(--border-subtle);
