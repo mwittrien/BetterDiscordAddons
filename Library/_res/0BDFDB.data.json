@@ -472,6 +472,7 @@
 		"GuildItemIcon": {"strings": ["\"always\"", ".acronym", "width:48,height:48"], "noSearch": true},
 		"GuildItemWrapper": {"strings": [".pauseBackground", ".isUnavailable", "guildJoinRequestStatus"]},
 		"GuildsBar": {"strings": ["unreadMentionsIndicatorTop", "disableAppDownload", "GUILD_DISCOVERY"], "noSearch": true},
+		"GuildsBarHeader": {"strings": ["GUILD_MEMBER_VERIFICATION_FOR_HUB", "isCurrentUserGuest", "hideDms"], "noSearch": true},
 		"GuildsBarTree": {"strings": ["guildDiscoveryButton", "disableAppDownload", "getGuildsTree"], "noSearch": true},
 		"GuildSidebar": {"strings": ["\"guildsnav\"", "unreadMentionsIndicatorBottom"]},
 		"GuildTooltip": {"strings": ["tooltipClassName", "includeActivity", "listItemTooltip"]},
