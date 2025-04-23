@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.5
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -200,8 +200,8 @@ module.exports = (_ => {
 						let sentence = sentences[i];
 						let lowSentence = sentence.toLocaleLowerCase(language);
 						let first = sentence.charAt(0);
-						if (first === first.toLocaleUpperCase(language) && (lowSentence.indexOf("http") == 0 || lowSentence.indexOf("s/") == 0)) sentences[i] = sentence.charAt(0).toLocaleLowerCase(language) + sentence.slice(1);
-						else if (first === first.toLocaleLowerCase(language) && first !== first.toLocaleUpperCase(language) && lowSentence.indexOf("http") != 0 && lowSentence.indexOf("s/") != 0) sentences[i] = sentence.charAt(0).toLocaleUpperCase(language) + sentence.slice(1);
+						if (first === first.toLocaleUpperCase(language) && (lowSentence.indexOf("http") == 0 || lowSentence.indexOf("discord.gg") == 0 || lowSentence.indexOf("s/") == 0)) sentences[i] = sentence.charAt(0).toLocaleLowerCase(language) + sentence.slice(1);
+						else if (first === first.toLocaleLowerCase(language) && first !== first.toLocaleUpperCase(language) && lowSentence.indexOf("http") != 0 && lowSentence.indexOf("discord.gg") != 0 && lowSentence.indexOf("s/") != 0) sentences[i] = sentence.charAt(0).toLocaleUpperCase(language) + sentence.slice(1);
 						if (sentence.indexOf("```") > -1) stop = true;
 					}
 					newString = sentences.join(symbol + space);
