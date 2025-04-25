@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.2
+ * @version 1.8.3
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -152,7 +152,7 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					after: [
-						"GuildsBarHeader",
+						"UnreadDMs",
 						"InboxHeader"
 					]
 				};
@@ -279,9 +279,9 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
-			processGuildsBarHeader (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UnreadDMs"});
-				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(ReadAllButtonComponent, {}));
+			processUnreadDMs (e) {
+				e.returnvalue = [e.returnvalue].flat(10);
+				e.returnvalue.push(BDFDB.ReactUtils.createElement(ReadAllButtonComponent, {}));
 			}
 
 			processInboxHeader (e) {
