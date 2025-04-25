@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.7
+ * @version 2.0.8
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -241,7 +241,7 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					after: [
-						"GuildsBarHeader"
+						"UnreadDMs"
 					]
 				};
 		
@@ -741,10 +741,10 @@ module.exports = (_ => {
 				}
 			}
 			
-			processGuildsBarHeader (e) {
+			processUnreadDMs (e) {
 				if (!this.settings.general.addOnlineCount) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UnreadDMs"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
+				e.returnvalue = [e.returnvalue].flat(10);
+				e.returnvalue.unshift(BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
 					amount: this.getOnlineCount()
 				}));
 			}
