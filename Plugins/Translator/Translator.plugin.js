@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.5
+ * @version 2.7.6
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1337,7 +1337,7 @@ module.exports = (_ => {
 						"Authorization": `DeepL-Auth-Key ${authKeys.deepl && authKeys.deepl.key || "75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx"}`
 					},
 					body: JSON.stringify(Object.assign({
-						"text": [encodeURIComponent(data.text)],
+						"text": [data.text],
 						"target_lang": data.output.id
 					}, data.input.auto ? {} : {"source_lang": data.input.id}))
 				}, (error, response, body) => {
