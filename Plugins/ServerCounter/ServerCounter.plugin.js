@@ -2,7 +2,7 @@
  * @name ServerCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Adds a Server Counter to the Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -65,9 +65,11 @@ module.exports = (_ => {
 			onLoad () {
 				this.modulePatches = {
 					after: [
-						"GuildsBarHeader"
+						"UnreadDMs"
 					]
 				};
+				
+				this.patchPriority = 4;
 			}
 			
 			onStart () {
@@ -78,9 +80,9 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.rerenderAll();
 			}
 		
-			processGuildsBarHeader (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UnreadDMs"});
-				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
+			processUnreadDMs (e) {
+				e.returnvalue = [e.returnvalue].flat(10);
+				e.returnvalue.push(BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCNS.guildouter + BDFDB.disCN._servercounterservercountwrap,
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
