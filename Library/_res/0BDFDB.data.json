@@ -1292,7 +1292,8 @@
 			"themeCustomBackground": "custom-theme-background",
 			"themeDark": "theme-dark",
 			"themeLight": "theme-light",
-			"themeUndefined": "theme-undefined"
+			"themeUndefined": "theme-undefined",
+			"visualRefresh": "visual-refresh"
 		},
 		"Toast": {
 			"avatar": "avatar_67c5da",
@@ -3240,6 +3241,7 @@
 		"usersummaryemptyuser": ["UserSummaryItem", "emptyUser"],
 		"usersummaryicon": ["UserSummaryItem", "icon"],
 		"usersummarymoreUsers": ["UserSummaryItem", "moreUsers"],
+		"visualrefresh": ["NotFound", "visualRefresh"],
 		"voiceavatar": ["VoiceChannel", "avatar"],
 		"voiceavatarcontainer": ["VoiceChannel", "avatarContainer"],
 		"voiceavatarlarge": ["VoiceChannel", "avatarLarge"],
