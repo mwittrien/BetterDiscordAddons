@@ -1601,7 +1601,7 @@
 		"UserProfileSection": {"props": ["section", "heading"], "length": 2},
 		"UserProfileUsernameSection": {"props": ["customStatusSoloEmoji", "nameTag", "discriminator"]},
 		"UserSummaryItem": {"props": ["avatarContainerMasked", "container"]},
-		"UserTheme": {"props": ["biteSize", "outer"]},
+		"UserTheme": {"props": ["overlay", "outer", "inner"]},
 		"VoiceChannel": {"props": ["avatarSpeaking", "voiceUser"]},
 		"VoiceChannelLimit": {"props": ["total", "users", "wrapper"]},
 		"VoiceChannelList": {"props": ["list", "collapsed"]},
