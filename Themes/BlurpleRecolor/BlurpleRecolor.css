@@ -2345,6 +2345,11 @@ a.metadataDownload_cf09d8 {
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_details.svg) center/contain no-repeat !important;
 }
+[style*="/icons/890718070321057795/a74a73aa22480b3eecaf57849c511235.webp"],
+[src*="/icons/890718070321057795/a74a73aa22480b3eecaf57849c511235.webp"] {		/* icons				uni hub								*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor_v)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/unihub_details.svg) center/contain no-repeat !important;
+}
 
 .image__52eda[src="/assets/ce3bc1396de73afe.svg"] {					/* warnings				locked channel message jump					*/
 	object-position: -999999px -999999px;
