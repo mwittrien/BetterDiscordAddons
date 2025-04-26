@@ -910,6 +910,8 @@ body:has(#app-mount)::after {
 	bottom: 0;
 	right: 0;
 	left: 0;
+	max-width: 100%;
+	max-height: 100%;
 	pointer-events: none;
 	z-index: -2;
 }
