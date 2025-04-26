@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.0
+ * @version 1.9.1
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -441,6 +441,12 @@ module.exports = (_ => {
 				BDFDB.DOMUtils.appendLocalStyle("DSACStyle" + this.name, `
 					:root, ${BDFDB.dotCN.visualrefresh} {
 						--custom-guild-list-width: ${this.settings.amounts.serverListWidth}px;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.channels} {
+						width: unset !important;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.channelslist} {
+						width: calc(var(--custom-guild-sidebar-width) - (calc(var(--guildbar-avatar-size) + var(--custom-guild-list-padding)*2))) !important;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.stack} {
 						margin: unset !important;
