@@ -1984,6 +1984,7 @@
 		"channels": ["AppBase", "sidebar"],
 		"channelselected": ["ChannelContainer", "selected"],
 		"channelshidden": ["AppBase", "hidden"],
+		"channelslist": ["AppBase", "sidebarList"],
 		"channelsscroller": ["GuildChannels", "scroller"],
 		"channelsunreadbar": ["GuildChannels", "unreadBar"],
 		"channelsunreadbarcontainer": ["GuildChannels", "positionedContainer"],
