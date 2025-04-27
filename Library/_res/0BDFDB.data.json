@@ -601,7 +601,7 @@
 		"UserPopout": {"strings": ["{user:", "userId:", "\"Unexpected missing user\")", "getUser"], "noSearch": true},
 		"UserPopoutHeader": {"strings": ["PRESS_VIEW_PROFILE", "PROFILE_POPOUT"], "noSearch": true},
 		"UserPopoutStatusBubble": {"strings": [".statusText,", "ringClassName", "action:\"HOVER_CUSTOM_STATUS\""], "noSearch": true},
-		"UserPopoutStatusBubbleEmpty": {"strings": [".biteSize", "PRESS_ADD_CUSTOM_STATUS"], "noSearch": true},
+		"UserPopoutStatusBubbleEmpty": {"strings": [".addStatusPrompt", "PRESS_ADD_CUSTOM_STATUS"], "noSearch": true},
 		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"], "noSearch": true},
 		"UserProfileHeader": {"strings": ["\"header\"", "user", "PROFILE_MODAL"], "noSearch": true},
 		"UserProfileInfoSection": {"strings": ["trackUserProfileAction:", "\"PRESS_APP_CONNECTION\"", "onUpdate"], "noSearch": true},
