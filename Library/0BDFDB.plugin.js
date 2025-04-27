@@ -8108,11 +8108,11 @@ module.exports = (_ => {
 						"EmojiPickerListRow",
 						"Menu",
 						"MessageHeader",
-						"NameContainer",
 						"SearchBar"
 					],
 					after: [
 						"DiscordTag",
+						"NameContainerAvatar",
 						"UserHeaderAvatar",
 						"UserPanelHeader",
 						"UserProfileHeader"
@@ -8311,10 +8311,9 @@ module.exports = (_ => {
 				Internal.processEmojiPickerListRow = function (e) {
 					if (e.instance.props.emojiDescriptors && Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) for (let i in e.instance.props.emojiDescriptors) e.instance.props.emojiDescriptors[i] = Object.assign({}, e.instance.props.emojiDescriptors[i], {isDisabled: false});
 				};
-				Internal.processNameContainer = function (e) {
-					if (!e.instance.props.avatar) return;
-					let userId = BDFDB.ReactUtils.findValue(e.instance.props.name, "userId");
-					if (userId) e.instance.props.avatar = Internal._processAvatarRender(BDFDB.LibraryStores.UserStore.getUser(userId), e.instance.props.avatar) || e.instance.props.avatar;
+				Internal.processNameContainerAvatar = function (e) {
+					if (!e.instance.props.user) return;
+					e.returnvalue = Internal._processAvatarRender(e.instance.props.user, e.returnvalue) || e.returnvalue;
 				};
 				Internal.processMenu = function (e) {
 					if (e.instance.props && (e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && e.instance.props.children.length)) {
