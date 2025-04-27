@@ -571,12 +571,10 @@ html .iconBadge__0c126 {
 	background-color: var(--header-primary);
 }
 
-#app-mount .lookFilled__201d5.colorPrimary__201d5:hover,
-#app-mount .lookFilled__201d5.hoverPrimary_c2c623.hasHover_dfa15e:hover {
+#app-mount .lookFilled__201d5.colorPrimary__201d5:hover {
 	background-image: linear-gradient(0deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .15));
 }
-#app-mount .lookFilled__201d5.colorPrimary__201d5:active,
-#app-mount .lookFilled__201d5.hoverPrimary_c2c623.hasHover_dfa15e:active {
+#app-mount .lookFilled__201d5.colorPrimary__201d5:active {
 	background-image: linear-gradient(0deg, rgba(255, 255, 255, .3), rgba(255, 255, 255, .3));
 }
 #app-mount .lookFilled__201d5.colorPrimary__201d5,
@@ -585,12 +583,10 @@ html .iconBadge__0c126 {
 	color: #FFF;
 }
 
-#app-mount .lookInverted_a299dc.colorPrimary__201d5:hover,
-#app-mount .lookInverted_a299dc.hoverPrimary_c2c623.hasHover_dfa15e:hover {
+#app-mount .lookInverted_a299dc.colorPrimary__201d5:hover {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1));
 }
-#app-mount .lookInverted_a299dc.colorPrimary__201d5:active,
-#app-mount .lookInverted_a299dc.hoverPrimary_c2c623.hasHover_dfa15e:active {
+#app-mount .lookInverted_a299dc.colorPrimary__201d5:active {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2));
 }
 #app-mount .lookInverted_a299dc.colorPrimary__201d5,
@@ -599,12 +595,10 @@ html .iconBadge__0c126 {
 	color: var(--background-accent);
 }
 
-#app-mount .lookOutlined__201d5.colorPrimary__201d5:hover,
-#app-mount .lookOutlined__201d5.hoverPrimary_c2c623.hasHover_dfa15e:hover {
+#app-mount .lookOutlined__201d5.colorPrimary__201d5:hover {
 	border-color: rgba(var(--textbrightest_v), .6);
 }
-#app-mount .lookOutlined__201d5.colorPrimary__201d5:active,
-#app-mount .lookOutlined__201d5.hoverPrimary_c2c623.hasHover_dfa15e:active {
+#app-mount .lookOutlined__201d5.colorPrimary__201d5:active {
 	background-color: rgba(var(--textbrightest_v), .1);
 	border-color: var(--header-primary);
 }
@@ -617,8 +611,7 @@ html .iconBadge__0c126 {
 #app-mount .lookLink__201d5.colorPrimary__201d5 {
 	color: var(--header-primary);
 }
-#app-mount .lookLink__201d5.colorPrimary__201d5:hover .contents__201d5,
-#app-mount .lookLink__201d5.hoverPrimary_c2c623.hasHover_dfa15e:hover .contents__201d5 {
+#app-mount .lookLink__201d5.colorPrimary__201d5:hover .contents__201d5 {
 	--button--underline-color: var(--header-primary);
 	color: var(--header-primary);
 }
@@ -636,12 +629,10 @@ html .iconBadge__0c126 {
 	background-color: var(--header-primary);
 }
 
-#app-mount .lookFilled__201d5.colorTransparent__201d5:hover,
-#app-mount .lookFilled__201d5.hoverTransparent__31061.hasHover_dfa15e:hover {
+#app-mount .lookFilled__201d5.colorTransparent__201d5:hover {
 	background-color: rgba(var(--textbrightest_v), .05);
 }
-#app-mount .lookFilled__201d5.colorTransparent__201d5:active,
-#app-mount .lookFilled__201d5.hoverTransparent__31061.hasHover_dfa15e:active  {
+#app-mount .lookFilled__201d5.colorTransparent__201d5:active  {
 	background-color: rgba(var(--textbrightest_v), .01);
 }
 #app-mount .lookFilled__201d5.colorTransparent__201d5,
@@ -650,12 +641,10 @@ html .iconBadge__0c126 {
 	color: var(--header-primary);
 }
 
-#app-mount .lookInverted_a299dc.colorTransparent__201d5:hover,
-#app-mount .lookInverted_a299dc.hoverTransparent__31061.hasHover_dfa15e:hover {
+#app-mount .lookInverted_a299dc.colorTransparent__201d5:hover {
 	background-color: rgba(var(--textbrightest_v), .05);
 }
-#app-mount .lookInverted_a299dc.colorTransparent__201d5:active,
-#app-mount .lookInverted_a299dc.hoverTransparent__31061.hasHover_dfa15e:active {
+#app-mount .lookInverted_a299dc.colorTransparent__201d5:active {
 	background-color: rgba(var(--textbrightest_v), .1);
 }
 #app-mount .lookInverted_a299dc.colorTransparent__201d5,
@@ -664,13 +653,11 @@ html .iconBadge__0c126 {
 	color: rgba(var(--textbrightest_v), .1);
 }
 
-#app-mount .lookOutlined__201d5.colorTransparent__201d5:hover,
-#app-mount .lookOutlined__201d5.hoverTransparent__31061.hasHover_dfa15e:hover {
+#app-mount .lookOutlined__201d5.colorTransparent__201d5:hover {
 	background-color: rgba(var(--textbrighter_v), .1);
 	border-color: var(--interactive-hover);
 }
-#app-mount .lookOutlined__201d5.colorTransparent__201d5:active,
-#app-mount .lookOutlined__201d5.hoverTransparent__31061.hasHover_dfa15e:active {
+#app-mount .lookOutlined__201d5.colorTransparent__201d5:active {
 	background-color: rgba(var(--textbrightest_v), .1);
 	border-color: var(--header-primary);
 }
@@ -683,10 +670,17 @@ html .iconBadge__0c126 {
 #app-mount .lookLink__201d5.colorTransparent__201d5 {
 	color: var(--text-normal);
 }
-#app-mount .lookLink__201d5.colorTransparent__201d5:hover .contents__201d5,
-#app-mount .lookLink__201d5.hoverTransparent__31061.hasHover_dfa15e:hover .contents__201d5 {
+#app-mount .lookLink__201d5.colorTransparent__201d5:hover .contents__201d5 {
 	--button--underline-color: var(--text-normal);
 	color: var(--text-normal);
+}
+
+#app-mount .lookLink__201d5.colorLink__201d5 {
+	color: var(--text-link);
+}
+#app-mount .lookLink__201d5.colorLink__201d5:hover .contents__201d5 {
+	--button--underline-color: var(--text-link);
+	color: var(--text-link);
 }
 
 #app-mount .borderTransparent_c5801e {
