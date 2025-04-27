@@ -593,7 +593,7 @@
 		"UserGenericContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".USER_GENERIC_MENU"], "noSearch": true},
 		"UserHeaderAvatar": {"strings": ["onOpenProfile", "PRESS_VIEW_PROFILE", "avatarDecorationSrc"], "noSearch": true},
 		"UserHeaderStatus": {"strings": ["PROFILE_CUSTOM_STATUS", "placeholderText"], "noSearch": true},
-		"UserHeaderUsername": {"strings": [".pronouns", "FULL_SIZE", "discriminatorClass"], "noSearch": true},
+		"UserHeaderUsername": {"strings": [".pronouns", "nicknameIcons", "discriminatorClass"], "noSearch": true},
 		"UserInfo": {"strings": [".botTag", "isMobile:", ".discordTag"]},
 		"UserMemberContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".GUILD_CHANNEL_USER_MENU"], "noSearch": true},
 		"UserMention": {"strings": ["inlinePreview", "\"@\"", "renderPopout:"]},
