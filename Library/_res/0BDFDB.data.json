@@ -103,7 +103,7 @@
 		"MessageTypes": ["THREAD_CREATED", "CHAT_INPUT_COMMAND"],
 		"MessageTypeGroups": ["USER_MESSAGE", "UNDELETABLE"],
 		"Permissions": ["MOVE_MEMBERS", "ADD_REACTIONS", "USE_EXTERNAL_APPS", "VIEW_CREATOR_MONETIZATION_ANALYTICS"],
-		"ProfileTypes": ["BITE_SIZE", "FULL_SIZE", "PANEL"],
+		"ProfileTypes": ["POPOUT", "MODAL", "SIDEBAR"],
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "SUGGESTION"],
 		"Routes": ["CHANNEL", "APP", "QUESTS"],
