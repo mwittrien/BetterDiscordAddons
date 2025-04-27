@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -324,7 +324,7 @@ module.exports = (_ => {
 			}
 			
 			processUserHeaderUsername (e) {
-				if (!e.instance.props.user || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE && !this.settings.tagPlaces.userPopout || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.FULL_SIZE && !this.settings.tagPlaces.userProfile) return;
+				if (!e.instance.props.user || (e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.POPOUT || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.SIDEBAR) && !this.settings.tagPlaces.userPopout || (e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL_V2) && !this.settings.tagPlaces.userProfile) return;
 				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 				if (!userType) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userheadernickname]]});
