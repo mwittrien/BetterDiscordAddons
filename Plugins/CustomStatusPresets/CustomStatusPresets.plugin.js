@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.1
+ * @version 1.3.2
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -93,8 +93,8 @@ module.exports = (_ => {
 							key: "TEXTINPUT",
 							inputClassName: BDFDB.disCN.emojiinput,
 							maxLength: 128,
-							value: this.props.text && this.props.text.text || this.props.text,
-							placeholder: this.props.text && this.props.text.text || this.props.text,
+							value: this.props.text,
+							placeholder: this.props.text,
 							onChange: value => {
 								this.props.text = value;
 								this.props.onChange(this.props);
@@ -202,7 +202,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									wrap: true,
 									children: BDFDB.ReactUtils.createElement(CustomStatusInputComponent, {
-										text: presets[id].text && presets[id].text.text || presets[id].text,
+										text: presets[id].text,
 										emoji: presets[id].emojiInfo,
 										onChange: value => {
 											presets[id].text = value.text;
@@ -333,18 +333,20 @@ module.exports = (_ => {
 			
 			forceUpdateAll () {
 				presets = BDFDB.DataUtils.load(this, "presets");
+				for (let i in presets) if (presets[i].text && presets[i].text.text) presets[i] = Object.assign({}, presets[i], presets[i].text);
+				BDFDB.DataUtils.save(presets, this, "presets");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
 			processUserPopoutStatusBubble (e) {
-				let container = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutstatusbubbleeditable]]});
-				if (container) this.processUserPopoutStatusBubbleEmpty(Object.assign({}, e, {returnvalue: container}));
+				this.processUserPopoutStatusBubbleEmpty(Object.assign({}, e, {returnvalue: BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutstatusbubbleeditable]]})}));
 			}
 			
 			processUserPopoutStatusBubbleEmpty (e) {
-				if (e.instance.props.profileType != BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE) return;
+				if (e.instance.returnvalue) return;
 				let bubble = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutstatusbubbleeditable]]}) || e.returnvalue;
+				if (!bubble) return;
 				let onContextMenu = bubble.props.onContextMenu;
 				bubble.props.onContextMenu = BDFDB.TimeUtils.suppress(event => {
 					onContextMenu && onContextMenu(event);
@@ -383,10 +385,6 @@ module.exports = (_ => {
 												})
 											})
 										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {
-											className: BDFDB.disCN._customstatuspresetsstatus,
-											status: presets[id].status || BDFDB.LibraryComponents.StatusComponents.Types.ONLINE
-										}),
 										!imageUrl ? null : BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.menuiconcontainer,
 											children: BDFDB.ReactUtils.createElement("img", {
@@ -396,7 +394,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-											children: presets[id].text && presets[id].text.text || presets[id].text
+											children: presets[id].text
 										})
 									]
 								}),
@@ -439,10 +437,9 @@ module.exports = (_ => {
 							let id = BDFDB.NumberUtils.generateId(Object.keys(presets));
 							presets[id] = {
 								pos: Object.keys(presets).length,
-								clearAfter: e2.methodArguments[2],
-								emojiInfo: e2.methodArguments[1],
-								status: e2.methodArguments[3],
-								text: e2.methodArguments[0]
+								clearAfter: e2.methodArguments[0].clearAfter,
+								emojiInfo: e2.methodArguments[0].emojiInfo,
+								text: e2.methodArguments[0].text
 							};
 							BDFDB.DataUtils.save(presets, this, "presets");
 							if (!event.shiftKey) e.instance.props.onClose();
