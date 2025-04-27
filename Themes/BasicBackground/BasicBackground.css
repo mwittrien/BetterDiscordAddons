@@ -6276,16 +6276,10 @@ body:has(#app-mount)::after {
 /* ----		15.2.		BUTTONS						---- */
 
 .btn__51085.btnPrimary__96a11,
-.lookFilled__201d5.hoverBrand__252e8.hasHover_dfa15e:hover,
-.lookFilled__201d5.hoverBrandNew__5984d.hasHover_dfa15e:hover,
-.lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):not([style*="background-color"]),
-.lookFilled__201d5.colorBrandNew__8872c:not(.buttonColor_e131a9):not([style*="background-color"]) {
+.lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):not([style*="background-color"]) {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.lookFilled__201d5.hoverBrand__252e8.hasHover_dfa15e:hover svg,
-.lookFilled__201d5.hoverBrandNew__5984d.hasHover_dfa15e:hover svg,
-.lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):not([style*="background-color"]) svg,
-.lookFilled__201d5.colorBrandNew__8872c:not(.buttonColor_e131a9):not([style*="background-color"]) svg {
+.lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):not([style*="background-color"]) svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
@@ -6297,12 +6291,10 @@ body:has(#app-mount)::after {
 	background-color: rgb(var(--textdarkest_v));
 }
 
-#app-mount .lookFilled__201d5.colorPrimary__201d5:hover,
-#app-mount .lookFilled__201d5.hoverPrimary_c2c623.hasHover_dfa15e:hover {
+#app-mount .lookFilled__201d5.colorPrimary__201d5:hover {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-#app-mount .lookFilled__201d5.colorPrimary__201d5:active,
-#app-mount .lookFilled__201d5.hoverPrimary_c2c623.hasHover_dfa15e:active {
+#app-mount .lookFilled__201d5.colorPrimary__201d5:active {
 	background-color: rgba(var(--transparencycolor_v), .6);
 }
 #app-mount .lookFilled__201d5.colorPrimary__201d5,
@@ -6311,12 +6303,10 @@ body:has(#app-mount)::after {
 	color: #FFF;
 }
 
-#app-mount .lookInverted_a299dc.colorPrimary__201d5:hover,
-#app-mount .lookInverted_a299dc.hoverPrimary_c2c623.hasHover_dfa15e:hover {
+#app-mount .lookInverted_a299dc.colorPrimary__201d5:hover {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1));
 }
-#app-mount .lookInverted_a299dc.colorPrimary__201d5:active,
-#app-mount .lookInverted_a299dc.hoverPrimary_c2c623.hasHover_dfa15e:active {
+#app-mount .lookInverted_a299dc.colorPrimary__201d5:active {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2));
 }
 #app-mount .lookInverted_a299dc.colorPrimary__201d5,
@@ -6325,13 +6315,11 @@ body:has(#app-mount)::after {
 	color: var(--text-dark);
 }
 
-#app-mount .lookOutlined__201d5.colorPrimary__201d5:hover,
-#app-mount .lookOutlined__201d5.hoverPrimary_c2c623.hasHover_dfa15e:hover {
+#app-mount .lookOutlined__201d5.colorPrimary__201d5:hover {
 	background-color: rgba(var(--textdarkest_v), .05);
 	border-color: rgba(var(--textdarkest_v), .6);
 }
-#app-mount .lookOutlined__201d5.colorPrimary__201d5:active,
-#app-mount .lookOutlined__201d5.hoverPrimary_c2c623.hasHover_dfa15e:active {
+#app-mount .lookOutlined__201d5.colorPrimary__201d5:active {
 	background-color: rgba(var(--textdarkest_v), .1);
 	border-color: rgb(var(--textdarkest_v));
 }
@@ -6344,8 +6332,7 @@ body:has(#app-mount)::after {
 #app-mount .lookLink__201d5.colorPrimary__201d5 {
 	color: rgb(var(--textdarkest_v));
 }
-#app-mount .lookLink__201d5.colorPrimary__201d5:hover .contents__201d5,
-#app-mount .lookLink__201d5.hoverPrimary_c2c623.hasHover_dfa15e:hover .contents__201d5 {
+#app-mount .lookLink__201d5.colorPrimary__201d5:hover .contents__201d5 {
 	--button--underline-color: rgb(var(--textdarkest_v));
 	color: rgb(var(--textdarkest_v));
 }
@@ -6363,12 +6350,10 @@ body:has(#app-mount)::after {
 	background-color: rgb(var(--textbrightest_v));
 }
 
-#app-mount .lookFilled__201d5.colorTransparent__201d5:hover,
-#app-mount .lookFilled__201d5.hoverTransparent__31061.hasHover_dfa15e:hover {
+#app-mount .lookFilled__201d5.colorTransparent__201d5:hover {
 	background-color: rgba(var(--textbrightest_v), .05);
 }
-#app-mount .lookFilled__201d5.colorTransparent__201d5:active,
-#app-mount .lookFilled__201d5.hoverTransparent__31061.hasHover_dfa15e:active  {
+#app-mount .lookFilled__201d5.colorTransparent__201d5:active {
 	background-color: rgba(var(--textbrightest_v), .01);
 }
 #app-mount .lookFilled__201d5.colorTransparent__201d5,
@@ -6377,12 +6362,10 @@ body:has(#app-mount)::after {
 	color: rgb(var(--textbrightest_v));
 }
 
-#app-mount .lookInverted_a299dc.colorTransparent__201d5:hover,
-#app-mount .lookInverted_a299dc.hoverTransparent__31061.hasHover_dfa15e:hover {
+#app-mount .lookInverted_a299dc.colorTransparent__201d5:hover {
 	background-color: rgba(var(--textbrightest_v), .05);
 }
-#app-mount .lookInverted_a299dc.colorTransparent__201d5:active,
-#app-mount .lookInverted_a299dc.hoverTransparent__31061.hasHover_dfa15e:active {
+#app-mount .lookInverted_a299dc.colorTransparent__201d5:active {
 	background-color: rgba(var(--textbrightest_v), .1);
 }
 #app-mount .lookInverted_a299dc.colorTransparent__201d5,
@@ -6391,14 +6374,6 @@ body:has(#app-mount)::after {
 	color: rgba(var(--textbrightest_v), .1);
 }
 
-#app-mount .lookOutlined__201d5.hoverTransparent__31061.hasHover_dfa15e:hover {
-	background-color: rgba(var(--textbrighter_v), .1);
-	border-color: rgb(var(--textbrightest_v));
-}
-#app-mount .lookOutlined__201d5.hoverTransparent__31061.hasHover_dfa15e:active {
-	background-color: rgba(var(--textbrightest_v), .1);
-	border-color: rgb(var(--textbrightest_v));
-}
 #app-mount .lookOutlined__201d5.colorTransparent__201d5,
 #app-mount .lookOutlined__201d5.colorTransparent__201d5:disabled {
 	background-color: transparent;
@@ -6408,8 +6383,7 @@ body:has(#app-mount)::after {
 #app-mount .lookLink__201d5.colorTransparent__201d5 {
 	color: rgb(var(--textbright_v));
 }
-#app-mount .lookLink__201d5.colorTransparent__201d5:hover .contents__201d5,
-#app-mount .lookLink__201d5.hoverTransparent__31061.hasHover_dfa15e:hover .contents__201d5 {
+#app-mount .lookLink__201d5.colorTransparent__201d5:hover .contents__201d5 {
 	--button--underline-color: rgb(var(--textbright_v));
 	color: rgb(var(--textbright_v));
 }

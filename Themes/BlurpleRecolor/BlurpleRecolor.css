@@ -2110,81 +2110,49 @@ a.metadataDownload_cf09d8 {
 
 #app-mount .lookInverted_a299dc.colorBrand__201d5 .spinnerItem__201d5,
 #app-mount .lookOutlined__201d5.colorBrand__201d5 .spinnerItem__201d5,
-#app-mount .lookLink__201d5.colorBrand__201d5 .spinnerItem__201d5,
-#app-mount .lookInverted_a299dc.colorBrandNew__8872c .spinnerItem__201d5,
-#app-mount .lookOutlined__201d5.colorBrandNew__8872c .spinnerItem__201d5,
-#app-mount .lookLink__201d5.colorBrandNew__8872c .spinnerItem__201d5 {
+#app-mount .lookLink__201d5.colorBrand__201d5 .spinnerItem__201d5 {
 	background-color: rgb(var(--accentcolor_v));
 }
 
 #app-mount .btn__51085.btnPrimary__96a11:hover:not(:disabled),
-#app-mount .lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):hover,
-#app-mount .lookFilled__201d5.hoverBrand__252e8.hasHover_dfa15e:hover,
-#app-mount .lookFilled__201d5.colorBrandNew__8872c:not(.buttonColor_e131a9):hover,
-#app-mount .lookFilled__201d5.hoverBrandNew__5984d.hasHover_dfa15e:hover {
+#app-mount .lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):hover {
 	background: var(--accentcolor-hover);
 }
-#app-mount .lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):active,
-#app-mount .lookFilled__201d5.hoverBrand__252e8.hasHover_dfa15e:active,
-#app-mount .lookFilled__201d5.colorBrandNew__8872c:not(.buttonColor_e131a9):active,
-#app-mount .lookFilled__201d5.hoverBrandNew__5984d.hasHover_dfa15e:active {
+#app-mount .lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):active {
 	background: var(--accentcolor-active);
 }
 #app-mount .btn__51085.btnPrimary__96a11,
 #app-mount .lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9),
-#app-mount .lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):disabled,
-#app-mount .lookFilled__201d5.colorBrandNew__8872c:not(.buttonColor_e131a9),
-#app-mount .lookFilled__201d5.colorBrandNew__8872c:not(.buttonColor_e131a9):disabled {
+#app-mount .lookFilled__201d5.colorBrand__201d5:not(.buttonColor_e131a9):disabled {
 	background: rgb(var(--accentcolor_v));
 }
 
-#app-mount .lookInverted_a299dc.colorBrand__201d5:hover,
-#app-mount .lookInverted_a299dc.hoverBrand__252e8.hasHover_dfa15e:hover,
-#app-mount .lookInverted_a299dc.colorBrandNew__8872c:hover,
-#app-mount .lookInverted_a299dc.hoverBrandNew__5984d.hasHover_dfa15e:hover {
+#app-mount .lookInverted_a299dc.colorBrand__201d5:hover {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
 }
-#app-mount .lookInverted_a299dc.colorBrand__201d5:active,
-#app-mount .lookInverted_a299dc.hoverBrand__252e8.hasHover_dfa15e:active,
-#app-mount .lookInverted_a299dc.colorBrandNew__8872c:active,
-#app-mount .lookInverted_a299dc.hoverBrandNew__5984d.hasHover_dfa15e:active {
+#app-mount .lookInverted_a299dc.colorBrand__201d5:active {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
 }
 #app-mount .lookInverted_a299dc.colorBrand__201d5,
-#app-mount .lookInverted_a299dc.colorBrand__201d5:disabled,
-#app-mount .lookInverted_a299dc.colorBrandNew__8872c,
 #app-mount .lookInverted_a299dc.colorBrand__201d5:disabled {
 	color: rgb(var(--accentcolor_v));
 }
 
-#app-mount .lookOutlined__201d5.colorBrand__201d5:hover,
-#app-mount .lookOutlined__201d5.colorBrandNew__8872c:hover,
-#app-mount .lookOutlined__201d5.hoverBrand__252e8.hasHover_dfa15e:hover,
-#app-mount .lookOutlined__201d5.hoverBrandNew__5984d.hasHover_dfa15e:hover {
+#app-mount .lookOutlined__201d5.colorBrand__201d5:hover {
 	border-color: rgba(var(--accentcolor_v), 0.6);
 }
-#app-mount .lookOutlined__201d5.colorBrand__201d5:active,
-#app-mount .lookOutlined__201d5.colorBrandNew__8872c:active,
-#app-mount .lookOutlined__201d5.hoverBrand__252e8.hasHover_dfa15e:active,
-#app-mount .lookOutlined__201d5.hoverBrandNew__5984d.hasHover_dfa15e:active {
+#app-mount .lookOutlined__201d5.colorBrand__201d5:active {
 	background-color: rgba(var(--accentcolor_v), 0.1);
 	border-color: rgb(var(--accentcolor_v));
 }
 #app-mount .lookOutlined__201d5.colorBrand__201d5,
-#app-mount .lookOutlined__201d5.colorBrand__201d5:disabled,
-#app-mount .lookOutlined__201d5.colorBrandNew__8872c,
-#app-mount .lookOutlined__201d5.colorBrandNew__8872c:disabled {
+#app-mount .lookOutlined__201d5.colorBrand__201d5:disabled {
 	border-color: rgba(var(--accentcolor_v), 0.1);
 	color: rgb(var(--accentcolor_v));
 }
 
-#app-mount .lookLink__201d5.colorBrand__201d5,
-#app-mount .lookLink__201d5.colorBrandNew__8872c {
+#app-mount .lookLink__201d5.colorBrand__201d5 {
 	color: rgb(var(--accentcolor_v));
-}
-#app-mount .lookLink__201d5.hoverBrand__252e8.hasHover_dfa15e:hover .contents__201d5,
-#app-mount .lookLink__201d5.hoverBrandNew__5984d.hasHover_dfa15e:hover .contents__201d5 {
-	--button--underline-color: rgb(var(--accentcolor_v));
 }
 #app-mount .lookLink__201d5.colorLink__201d5 svg [fill*="hsl"] {
 	fill: currentColor !important;
