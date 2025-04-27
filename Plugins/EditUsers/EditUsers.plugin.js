@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.2
+ * @version 5.0.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -602,7 +602,7 @@ module.exports = (_ => {
 			}
 			
 			processUserHeaderUsername (e) {
-				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.PANEL && !this.settings.places.userPanel || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.BITE_SIZE && !this.settings.places.userPopout || e.instance.props.profileType == BDFDB.DiscordConstants.ProfileTypes.FULL_SIZE && !this.settings.places.userProfile) return;
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.SIDEBAR && !this.settings.places.userPanel || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.POPOUT && !this.settings.places.userPopout || (e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL_V2) && !this.settings.places.userProfile) return;
 				let data = changedUsers[e.instance.props.user.id];
 				if (!e.returnvalue) {
 					let nickname = this.getUserNick(e.instance.props.user.id, e.instance.props.nickname || e.instance.props.user.globalName);
