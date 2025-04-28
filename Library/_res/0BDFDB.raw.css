@@ -811,10 +811,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	color: var(--interactive-active);
 }
 [REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
-	border-color: var(--status-danger);
+	border-color: var(--status-danger) !important;
 }
 [REPLACE_CLASS_input][REPLACE_CLASS_inputsuccess] {
-	border-color: var(--status-positive);
+	border-color: var(--status-positive) !important;
 }
 input[REPLACE_CLASS_input][REPLACE_CLASS_inputsuccess],
 input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
