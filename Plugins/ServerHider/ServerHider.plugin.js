@@ -249,7 +249,7 @@ module.exports = (_ => {
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 											className: BDFDB.disCN.guildfoldericonwrapper,
 											children: BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+												className: BDFDB.disCN.guildfoldericon,
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 													name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
 													color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || "var(--bdfdb-blurple)"
