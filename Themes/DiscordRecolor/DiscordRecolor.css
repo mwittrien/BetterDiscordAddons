@@ -1132,19 +1132,19 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .guildSeparator__252b6 {
 	background-color: var(--border-subtle, var(--background-modifier-accent));
 }
-#app-mount .folder__48112,
+#app-mount .folderGroup__48112,
 #app-mount .expandedFolderBackground__48112 {
 	background-color: var(--background-secondary);
 }
-#app-mount .folder__48112.hover__48112,
+#app-mount .folderGroup__48112.hover__48112,
 #app-mount .childWrapper_a6ce15,
 #app-mount .circleIconButton__5bc7e {
 	background-color: var(--background-primary);
 }
-#app-mount .sidebar_c48ade .folder__48112.hover__48112 {
+#app-mount .sidebar_c48ade .folderGroup__48112.hover__48112 {
 	background-color: transparent;
 }
-#app-mount .sidebar_c48ade .hasSidebar_ac0584 .folder__48112.hover__48112 {
+#app-mount .sidebar_c48ade .hasSidebar_ac0584 .folderGroup__48112.hover__48112 {
 	background-color: var(--background-primary);
 }
 #app-mount .wrapper__8436d.selected_ae80f7 .childWrapper_a6ce15,

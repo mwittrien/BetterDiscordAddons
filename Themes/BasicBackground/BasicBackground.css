@@ -621,10 +621,10 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-#app-mount .folder__48112 {								/* folder				iconwrap							*/
+#app-mount .folderGroup__48112 {								/* folder				iconwrap							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-#app-mount .folder__48112.hover__48112 {
+#app-mount .folderGroup__48112.hover__48112 {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 #app-mount .expandedFolderBackground__48112 {						/* folder				background							*/

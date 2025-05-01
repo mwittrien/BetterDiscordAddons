@@ -255,7 +255,7 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116.content_ac0584 .wrapper__48112 > .listItem__650eb {
 	margin: calc(1px * var(--guildgap_v)) calc(5px * var(--guildsize_v)/50) calc(1px * var(--guildgap_v)) 0 !important;
 }
-.wrapper_ef3116.content_ac0584 .folder__48112,
+.wrapper_ef3116.content_ac0584 .folderGroup__48112,
 .wrapper_ef3116.content_ac0584 .folderIconWrapper__48112,
 .wrapper_ef3116.content_ac0584 .expandedFolderIconWrapper__48112 {
 	width: calc(var(--guildsize_v) * (var(--guildbar-avatar-size, calc(1px * var(--guildsize_v)))/calc(var(--guildsize_v)))) !important;
