@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.6
+ * @version 7.3.7
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -121,27 +121,39 @@ module.exports = (_ => {
 											let folderIcons = _this.loadAllIcons();
 											folderIcon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? _this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
 											folderIcon = folderIcon ? BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.guildfoldericonwrapper,
+												className: BDFDB.disCN.guildfolderbutton,
 												onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
 												children: BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN.guildfoldericon,
-													style: {background: `url(${folderIcon}) center/cover no-repeat`}
+													className: BDFDB.disCN.guildfolderbuttoncontent,
+													children: BDFDB.ReactUtils.createElement("div", {
+														className: BDFDB.disCN.guildfoldericonwrapper,
+														children: BDFDB.ReactUtils.createElement("div", {
+															className: BDFDB.disCN.guildfoldericon,
+															style: {background: `url(${folderIcon}) center/cover no-repeat`}
+														})
+													})
 												})
 											}) : BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.guildfoldericonwrapper,
+												className: BDFDB.disCN.guildfolderbutton,
 												onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
 												children: BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN.guildfoldericon,
-													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-														name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
-														style: {color: BDFDB.ColorUtils.convert(folder.folderColor || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
+													className: BDFDB.disCN.guildfolderbuttoncontent,
+													children: BDFDB.ReactUtils.createElement("div", {
+														className: BDFDB.disCN.guildfoldericonwrapper,
+														children: BDFDB.ReactUtils.createElement("div", {
+															className: BDFDB.disCN.guildfoldericon,
+															children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+																name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
+																style: {color: BDFDB.ColorUtils.convert(folder.folderColor || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
+															})
+														})
 													})
 												})
 											});
 										}
 										return BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCNS.stack + BDFDB.disCN.guildfolderwrapper,
-											style: {"--folder-color": folder.folderColor ? BDFDB.ColorUtils.convert(folder.folderColor, "RGB") : null},
+											className: BDFDB.disCNS.stack + BDFDB.disCNS.guildfolderwrapper + BDFDB.disCN.guildfolderisexpanded,
+											style: {"--custom-folder-color": folder.folderColor ? BDFDB.ColorUtils.convert(folder.folderColor, "RGB") : null},
 											children: [
 												_this.settings.general.addFolderBackground && BDFDB.ReactUtils.createElement("span", {
 													className: BDFDB.disCN.guildfolderexpandedbackground
@@ -563,14 +575,14 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildfolder},
 					${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildfolder}:hover {
 						background-color: var(--background-secondary);
-					}
-					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
 						border-radius: 25%;
 					}
-					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder},
-					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfoldericonwrapper} {
+					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
 						width: var(--guildbar-avatar-size, var(--guildbar-folder-size));
 						height: var(--guildbar-avatar-size, var(--guildbar-folder-size));
+					}
+					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfoldericonwrapper} {
+						padding: 0;
 					}
 					${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildfoldericon} {
 						margin-bottom: 0 !important;
@@ -825,10 +837,10 @@ module.exports = (_ => {
 			}
 			
 			processFolderItemWrapper (e) {
-				if (!e.instance.props.folderNode && e.returnvalue.props.style["--folder-color"]) return;
+				if (!e.instance.props.folderNode && e.returnvalue.props.style["--custom-folder-color"]) return;
 				let folderColor = this.settings.general.addFolderBackground && BDFDB.LibraryStores.ExpandedGuildFolderStore.isFolderExpanded(e.instance.props.folderNode.id) && (BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB"));
 				if (folderColor) e.returnvalue = BDFDB.ReactUtils.createElement("div", {
-					style: {"--folder-color": folderColor},
+					style: {"--custom-folder-color": folderColor},
 					children: e.returnvalue
 				});
 			}
