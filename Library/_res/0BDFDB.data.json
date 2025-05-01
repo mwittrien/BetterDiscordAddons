@@ -2249,6 +2249,8 @@
 		"guildfavoritesicon": ["GuildFavorites", "favoriteIcon"],
 		"guildfavoritesring": ["GuildFavorites", "ring"],
 		"guildfolder": ["GuildFolder", "folderHeader"],
+		"guildfolderbutton": ["GuildFolder", "folderButton"],
+		"guildfolderbuttoncontent": ["GuildFolder", "folderButtonContent"],
 		"guildfolderexpandedbackground": ["GuildFolder", "folderGroupBackground"],
 		"guildfolderexpandedbackgroundhover": ["GuildFolder", "isHover"],
 		"guildfolderguildicon": ["GuildFolder", "folderPreviewGuildIcon"],
