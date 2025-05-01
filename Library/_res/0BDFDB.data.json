@@ -2474,7 +2474,7 @@
 		"listguildavatarwithouticon": ["UserProfileListGuild", "guildAvatarWithoutIcon"],
 		"listname": ["UserProfileList", "listName"],
 		"listrow": ["UserProfileList", "listRow"],
-		"listrowcontent": ["UserProfileList", "listRowContent"],
+		"listrowcontent": ["UserProfileList", "details"],
 		"listrowwrapper": ["BDFDB", "listRow"],
 		"listscroller": ["UserProfileList", "listScroller"],
 		"livetag": ["LiveTag", "live"],
