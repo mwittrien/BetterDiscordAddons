@@ -124,14 +124,14 @@ module.exports = (_ => {
 												className: BDFDB.disCN.guildfoldericonwrapper,
 												onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
 												children: BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+													className: BDFDB.disCN.guildfoldericon,
 													style: {background: `url(${folderIcon}) center/cover no-repeat`}
 												})
 											}) : BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCN.guildfoldericonwrapper,
 												onClick: _ => BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId),
 												children: BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+													className: BDFDB.disCN.guildfoldericon,
 													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 														name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
 														style: {color: BDFDB.ColorUtils.convert(folder.folderColor || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
@@ -842,7 +842,7 @@ module.exports = (_ => {
 					if (parseInt(data.iconID) == -1 && (e.instance.props.expanded || data.useClosedIcon && !e.instance.props.expanded)) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.guildfoldericonwrapper,
 						children: BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+							className: BDFDB.disCN.guildfoldericon,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
 								style: {color: BDFDB.ColorUtils.convert(data.color1 || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
@@ -856,7 +856,7 @@ module.exports = (_ => {
 							children[index] = BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.guildfoldericonwrapper,
 								children: BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+									className: BDFDB.disCN.guildfoldericon,
 									style: {background: `url(${icon}) center/cover no-repeat`}
 								})
 							});
