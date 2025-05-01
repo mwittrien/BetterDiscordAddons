@@ -621,7 +621,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-#app-mount .folderHeader__48112 {								/* folder				iconwrap							*/
+#app-mount .folderHeader__48112 {							/* folder				iconwrap							*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 #app-mount .folderHeader__48112.isHover__48112 {
