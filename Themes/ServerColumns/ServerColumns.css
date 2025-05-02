@@ -233,7 +233,12 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	left: 0 !important;
 	margin-bottom: 0 !important;
 }
-.wrapper_ef3116 .folderGroup__48112.isExpanded__48112 .folderHeader__48112 svg {
+.wrapper_ef3116 .folderHeader__48112,
+.wrapper_ef3116 .folderButton__48112 {
+	height: calc(1px * var(--guildsize_v)) !important;
+	width: calc(1px * var(--guildsize_v)) !important;
+}
+.wrapper_ef3116 .folderGroup__48112 .folderHeader__48112 svg {
 	width: 24px;
 	height: 24px;
 }
