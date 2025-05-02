@@ -355,6 +355,7 @@ html {
 		9.	CHANNELTABS
 		10.	TYPINGINDICATOR
 		11.	CHANNELDMS
+		12.	SERVERFOLDERS
 	19.	UPDATENOTICE
 	20.	WATERMARK
 */
@@ -7649,6 +7650,15 @@ html .typingindicator-folder {
 
 .ChannelDms-channelmembers-wrap .ChannelDms-channelmembers-header {
 	background-color: rgba(var(--transparencycolor_v), var(--memberlisttransparency_v));
+}
+
+/* ----		18.12		SERVERFOLDERS					---- */
+
+.iconSwatch_ac0584:hover {
+	background-color: rgba(var(--transparencycolor_v), .3);
+}
+.iconSwatch_ac0584.selected_ac0584 {
+	background-color: rgb(var(--accentcolor));
 }
 
 
