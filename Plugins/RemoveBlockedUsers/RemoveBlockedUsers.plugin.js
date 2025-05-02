@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.5
+ * @version 1.7.6
  * @description Removes blocked/ignored Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"improved": {
-			"Blocked/Ignored/Spammers": "Added option to also hide ignored Users or Messages from Spammers"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -114,6 +112,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"BlockedMessageGroup",
+						"ChannelMembersThread",
 						"ChannelPins",
 						"DirectMessage",
 						"PrivateChannel",
@@ -391,6 +390,41 @@ module.exports = (_ => {
 					let message = BDFDB.LibraryStores.MessageStore.getMessage(children[index].props.channel.id, children[index].props.channel.lastMessageId);
 					if (message && this.shouldHide(message.author.id)) children[index] = null;
 				}
+			}
+			
+			processChannelMembersThread (e) {
+				if (!this.settings.places.threads) return;
+				let child = BDFDB.ReactUtils.findChild(e.returnvalue, {props: ["children", "navigator"]});
+				if (!child) return;
+				let childrenRender = child.props.children.props.children;
+				child.props.children.props.children = BDFDB.TimeUtils.suppress((...args) => {
+					let children = childrenRender(...args);
+					let hiddenCounts = {};
+					let sectionTitles = {};
+					let renderRow = children.props.children.props.renderRow;
+					children.props.children.props.renderRow = BDFDB.TimeUtils.suppress((...args) => {
+						let row = renderRow(...args);
+						let hidden = this.shouldHide(row.props.userId);
+						if (hidden) {
+							if (!hiddenCounts[row.props.sectionId]) hiddenCounts[row.props.sectionId] = 1;
+							else hiddenCounts[row.props.sectionId] += 1;
+							if (sectionTitles[row.props.sectionId]) BDFDB.ReactUtils.forceUpdate(sectionTitles[row.props.sectionId]);
+						}
+						return hidden ? null : row;
+					}, "Error in renderRow of ChannelMembersThread!", this);
+					let renderSection = children.props.children.props.renderSection;
+					children.props.children.props.renderSection = BDFDB.TimeUtils.suppress((...args) => {
+						let section = renderSection(...args);
+						let count = section.props.count;
+						section.props.count = BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
+							render() {return count - (hiddenCounts[section.props.id] ? hiddenCounts[section.props.id] : 0);}
+						});
+						sectionTitles[section.props.id] = section.props.count;
+						return section;
+					}, "Error in renderSection of ChannelMembersThread!", this);
+
+					return children;
+				}, "Error in Children Render of ChannelMembersThread!", this);
 			}
 			
 			processChannelMembers (e) {
