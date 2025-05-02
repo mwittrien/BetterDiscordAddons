@@ -119,8 +119,8 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 .wrapper_ef3116 .placeholderMask__6629f,
 .wrapper_ef3116 .svg_cc5dd2,
 .wrapper_ef3116 .wrapper_cc5dd2 {
-	height: calc(1px * var(--guildsize_v)) !important;
 	width: calc(1px * var(--guildsize_v)) !important;
+	height: calc(1px * var(--guildsize_v)) !important;
 }
 .wrapper_ef3116 .svg_cc5dd2 {
 	top: 0 !important;
@@ -167,8 +167,8 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 	display: block !important;
 }
 .wrapper_ef3116 .guildsError__32e67 {
-	height: calc(1px * var(--guildsize_v)) !important;
 	width: calc(1px * var(--guildsize_v)) !important;
+	height: calc(1px * var(--guildsize_v)) !important;
 	font-size: calc(1px * (var(--guildsize_v)/4 + 7.5)) !important;
 	line-height: calc(1px * (var(--guildsize_v)/4 + 6.5)) !important;
 }
@@ -235,12 +235,12 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 }
 .wrapper_ef3116 .folderHeader__48112,
 .wrapper_ef3116 .folderButton__48112 {
-	height: calc(1px * var(--guildsize_v)) !important;
 	width: calc(1px * var(--guildsize_v)) !important;
+	height: calc(1px * var(--guildsize_v)) !important;
 }
-.wrapper_ef3116 .folderGroup__48112 .folderHeader__48112 svg {
-	width: 24px;
-	height: 24px;
+.wrapper_ef3116 .folderGroup__48112 .folderHeader__48112 .svg_cc5dd2 svg {
+	width: 24px !important;
+	height: 24px !important;
 }
 
 /* SERVERFOLDERS */
