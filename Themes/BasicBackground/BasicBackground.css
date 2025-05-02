@@ -921,7 +921,7 @@ body:has(#app-mount)::after {
 	background-attachment: fixed;
 }
 .panels_c48ade > *::after {
-	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2.5 + var(--transparencyalpha_v)));
+	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2.5 + var(--transparencyalpha_v) * 0.7));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 .panels_c48ade::before,
