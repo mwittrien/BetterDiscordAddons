@@ -4616,7 +4616,6 @@ module.exports = (_ => {
 								i++;
 								try {returnvalue = formatter && BDFDB.ArrayUtils.is(stringObj) ? formatter(LanguageStringFormattersObj[InternalData.LanguageStringHashes[item]], formatVars) : stringObj.format(formatVars, false);}
 								catch (err) {
-									window.temp1 = err;
 									returnvalue = null;
 									let value = values.shift();
 									value = value != null ? (value === 0 ? "0" : value) : "undefined";
