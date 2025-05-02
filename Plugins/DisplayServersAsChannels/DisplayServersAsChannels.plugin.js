@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.1
+ * @version 1.9.2
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -85,7 +85,7 @@ module.exports = (_ => {
 					after: [
 						"CircleIconButton",
 						"DirectMessage",
-						"FolderHeader",
+						"FolderIconWrapper",
 						"FolderItemWrapper",
 						"GuildBadge",
 						"GuildFavorites",
@@ -267,7 +267,7 @@ module.exports = (_ => {
 				}, `Error in Ref of ${type} Badge`, this);
 			}
 			
-			processFolderHeader (e) {
+			processFolderIconWrapper (e) {
 				if (!e.instance.props.folderNode) return;
 				e.returnvalue = this.removeMask(e.returnvalue);
 				let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB");
@@ -279,11 +279,10 @@ module.exports = (_ => {
 					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
 					if (index > -1) children[index] = null;
 				}
-				e.returnvalue.props.children = [e.returnvalue.props.children].flat(10);
-				e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+				children.unshift(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 					children: []
-				});
-				this.addElementName(e.returnvalue.props.children, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
+				}));
+				this.addElementName(children, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
 					wrap: true,
 					index: 0,
 					backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
@@ -297,10 +296,10 @@ module.exports = (_ => {
 			}
 			
 			processFolderItemWrapper (e) {
-				if (!e.instance.props.folderNode && e.returnvalue.props.style["--folder-color"]) return;
+				if (!e.instance.props.folderNode && e.returnvalue.props.style["--custom-folder-color"]) return;
 				let folderColor = this.settings.general.addFolderColor && BDFDB.LibraryStores.ExpandedGuildFolderStore.isFolderExpanded(e.instance.props.folderNode.id) && (BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB"));
 				if (folderColor) e.returnvalue = BDFDB.ReactUtils.createElement("div", {
-					style: {"--folder-color": folderColor},
+					style: {"--custom-folder-color": folderColor},
 					children: e.returnvalue
 				});
 			}
@@ -392,7 +391,7 @@ module.exports = (_ => {
 				let [children, index] = options.index != null ? [parent, options.index] : BDFDB.ReactUtils.findParent(parent, {
 					name: ["NavItem", "Clickable"],
 					someProps: true,
-					props: [["className", BDFDB.disCN.guildserrorinner], ["className", BDFDB.disCN.guildbuttoninner]],
+					props: [["className", BDFDB.disCN.guildserror], ["className", BDFDB.disCN.guildbuttoninner]],
 					filter: c => c && c.props && (c.props.id == "home" || !isNaN(parseInt(c.props.id)))
 				});
 				if (index == -1) return;
@@ -421,7 +420,7 @@ module.exports = (_ => {
 					delete returnvalue.props.name;
 					if (options.wrap) for (let i = children.slice(index + 1).length; i > 0; i--) children[index + i] = null;
 					returnvalue.props.children = options.wrap ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym,
+						className: BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCNS.guildiconchildwrappernohoverbg + BDFDB.disCN.guildiconacronym,
 						style: {backgroundColor: options.backgroundColor},
 						children: childEles
 					}) : childEles;
@@ -565,12 +564,17 @@ module.exports = (_ => {
 						width: auto;
 						margin-bottom: 10px;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder} {
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder},
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderbutton} {
 						display: flex;
 						align-items: center;
 						height: ${this.settings.amounts.serverElementHeight}px;
 						width: ${this.settings.amounts.serverListWidth - 20}px;
 						transform: unset;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder}:hover {
+						background: transparent;
+						border-radius: 4px;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder}[data-folder-name]::after {
 						content: attr(data-folder-name);
@@ -595,10 +599,9 @@ module.exports = (_ => {
 						background-position: center center !important;
 						transform: unset;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfoldericonwrapper},
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfoldericonwrapperexpanded} {
-						height: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px;
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfoldericonwrapper} {
 						width: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px;
+						height: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px;
 						transform: unset;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandedbackground} {
@@ -615,6 +618,15 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.notCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolderwrapper + BDFDB.notCN.guildfolderisexpanded} > ${BDFDB.dotCN.guildouter},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.notCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolderwrapper} [role="group"] > ${BDFDB.dotCN.guildouter}:last-child {
 						margin-bottom: 0;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
+						background-color: var(--background-secondary);
+						padding: 0 8px 0 6px;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolderbutton},
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfoldericon} {
+						width: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px;
+						height: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px;
 					}
 
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildbuttoninner} {
