@@ -8103,7 +8103,6 @@ module.exports = (_ => {
 				
 				Internal.modulePatches = {
 					before: [
-						"BlobMaskInner",
 						"EmojiPickerListRow",
 						"Menu",
 						"MessageHeader",
@@ -8203,106 +8202,6 @@ module.exports = (_ => {
 					const avatar = e.instance.props.section != Internal.DiscordConstants.AnalyticsSections.PROFILE_POPOUT && e.node.querySelector(BDFDB.dotCN.avatarwrapper);
 					const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopoutouter + BDFDB.dotCN.userprofilemodal) || e.node;
 					if (avatar) Internal._processAvatarMount(user, avatar, wrapper);
-				};
-				Internal.processBlobMaskInner = function (e) {
-					if (!e.component.prototype || BDFDB.PatchUtils.isPatched(BDFDB, e.component.prototype, "render")) return;
-					
-					let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
-					let extraDefaultProps = {};
-					for (let type of newBadges) {
-						extraDefaultProps[`${type}`] = null;
-						extraDefaultProps[`${type}Size`] = {width: 16};
-					}
-					
-					BDFDB.PatchUtils.patch(BDFDB, e.component.prototype, "render", {
-						before: e2 => {
-							e2.instance.props = Object.assign({}, e.component.defaultProps, extraDefaultProps, e2.instance.props);
-							for (let type of newBadges) if (!e2.instance.state[`${type}Mask`]) e2.instance.state[`${type}Mask`] = new Internal.LibraryComponents.Animations.Controller({spring: 0});
-						},
-						after: e2 => {
-							let [tChildren, tIndex] = BDFDB.ReactUtils.findParent(e2.returnValue, {name: "TransitionGroup"});
-							if (tIndex > -1) {
-								tChildren[tIndex].props.children.push(!e2.instance.props.lowerLeftBadge ? null : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.BadgeAnimationContainer, {
-									className: BDFDB.disCN.guildlowerleftbadge,
-									key: "lower-left-badge",
-									animatedStyle: _ => {
-										const spring = e2.instance.state.lowerLeftBadgeMask.springs.spring;
-										return {
-											opacity: spring.to([0, .5, 1], [0, 0, 1]),
-											transform: spring.to(value => "translate(" + -1 * (16 - 16 * value) + "px, " + (16 - 16 * value) + "px)")
-										};
-									},
-									children: e2.instance.props.lowerLeftBadge
-								}));
-								tChildren[tIndex].props.children.push(!e2.instance.props.upperLeftBadge ? null : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.BadgeAnimationContainer, {
-									className: BDFDB.disCN.guildupperleftbadge,
-									key: "upper-left-badge",
-									animatedStyle: _ => {
-										const spring = e2.instance.state.upperLeftBadgeMask.springs.spring;
-										return {
-											opacity: spring.to([0, .5, 1], [0, 0, 1]),
-											transform: spring.to(value => "translate(" + -1 * (16 - 16 * value) + "px, " + -1 * (16 - 16 * value) + "px)")
-										};
-									},
-									children: e2.instance.props.upperLeftBadge
-								}));
-							}
-							let [mChildren, mIndex] = BDFDB.ReactUtils.findParent(e2.returnValue, {type: "mask"});
-							if (mIndex > -1) {
-								mChildren[mIndex].props.children.push(BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.rect, {
-									x: -4,
-									y: -4,
-									width: e2.instance.props.upperLeftBadgeSize.width ? (e2.instance.props.upperLeftBadgeSize.width + 8) : 24,
-									height: e2.instance.props.upperLeftBadgeSize.height ? (e2.instance.props.upperLeftBadgeSize.height + 8) : 24,
-									rx: 12,
-									ry: 12,
-									transform: e2.instance.state.upperLeftBadgeMask.springs.spring.to([0, 1], [20, 0]).to(value => `translate(${value * -1} ${value * -1})`),
-									fill: "black"
-								}));
-								mChildren[mIndex].props.children.push(BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.rect, {
-									x: -4,
-									y: 28,
-									width: e2.instance.props.lowerLeftBadgeSize.width ? (e2.instance.props.lowerLeftBadgeSize.width + 8) : 24,
-									height: e2.instance.props.lowerLeftBadgeSize.height ? (e2.instance.props.lowerLeftBadgeSize.height + 8) : 24,
-									rx: 12,
-									ry: 12,
-									transform: e2.instance.state.lowerLeftBadgeMask.springs.spring.to([0, 1], [20, 0]).to(value => `translate(${value * -1} ${value * 1})`),
-									fill: "black"
-								}));
-							}
-						}
-					}, {name: "BlobMask"});
-					BDFDB.PatchUtils.patch(BDFDB, e.component.prototype, "componentDidMount", {
-						after: e2 => {
-							for (let type of newBadges) e2.instance.state[`${type}Mask`].update({
-								spring: e2.instance.props[type] != null ? 1 : 0,
-								immediate: true
-							}).start();
-						}
-					}, {name: "BlobMask"});
-					BDFDB.PatchUtils.patch(BDFDB, e.component.prototype, "componentWillUnmount", {
-						after: e2 => {
-							for (let type of newBadges) if (e2.instance.state[`${type}Mask`]) e2.instance.state[`${type}Mask`].dispose();
-						}
-					});
-					BDFDB.PatchUtils.patch(BDFDB, e.component.prototype, "componentDidUpdate", {
-						after: e2 => {
-							for (let type of newBadges) if (e2.instance.props[type] != null && e2.methodArguments[0][type] == null) {
-								e2.instance.state[`${type}Mask`].update({
-									spring: 1,
-									immediate: !document.hasFocus(),
-									config: {friction: 30, tension: 900, mass: 1}
-								}).start();
-							}
-							else if (e2.instance.props[type] == null && e2.methodArguments[0][type] != null) {
-								e2.instance.state[`${type}Mask`].update({
-									spring: 0,
-									immediate: !document.hasFocus(),
-									config: {duration: 150, friction: 10, tension: 100, mass: 1}
-								}).start();
-							}
-						}
-					}, {name: "BlobMask"});
 				};
 				Internal.processDiscordTag = function (e) {
 					if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
@@ -8423,15 +8322,17 @@ module.exports = (_ => {
 							else if (parentModule.type && typeof parentModule.type.render == "function") parentModule = parentModule.type, patchFunction = "render";
 							if (patchFunction) for (const type in PluginStores.modulePatches.after) if (Internal.isCorrectModule(renderFunction, type, true)) {
 								for (let plugin of PluginStores.modulePatches.after[type].flat(10)) if (!BDFDB.PatchUtils.isPatched(plugin, parentModule, patchFunction)) {
-									BDFDB.PatchUtils.patch(plugin, parentModule, patchFunction, {after: e2 => Internal.initiatePatch(plugin, type, {
-										arguments: e2.methodArguments,
-										instance: e2.instance,
-										returnvalue: e2.returnValue,
-										component: e.methodArguments[0],
-										name: type,
-										methodname: patchFunction,
-										patchtypes: ["after"]
-									})}, {name: type});
+									BDFDB.PatchUtils.patch(plugin, parentModule, patchFunction, {after: e2 => {
+										Internal.initiatePatch(plugin, type, {
+											arguments: e2.methodArguments,
+											instance: e2.instance,
+											returnvalue: e2.returnValue,
+											component: e.methodArguments[0],
+											name: type,
+											methodname: patchFunction,
+											patchtypes: ["after"]
+										});
+									}}, {name: type});
 								}
 								break;
 							}
