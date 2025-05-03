@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.2
+ * @version 1.9.3
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,7 +86,7 @@ module.exports = (_ => {
 						"CircleIconButton",
 						"DirectMessage",
 						"FolderIconWrapper",
-						"FolderItemWrapper",
+						"FolderItem",
 						"GuildBadge",
 						"GuildFavorites",
 						"GuildItem",
@@ -267,6 +267,10 @@ module.exports = (_ => {
 				}, `Error in Ref of ${type} Badge`, this);
 			}
 			
+			processFolderItem (e) {
+				if (this.settings.general.addFolderColor) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._displayserversaschannelscolored);
+			}
+			
 			processFolderIconWrapper (e) {
 				if (!e.instance.props.folderNode) return;
 				e.returnvalue = this.removeMask(e.returnvalue);
@@ -292,15 +296,6 @@ module.exports = (_ => {
 						height: folderSize,
 						name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER
 					})
-				});
-			}
-			
-			processFolderItemWrapper (e) {
-				if (!e.instance.props.folderNode && e.returnvalue.props.style["--custom-folder-color"]) return;
-				let folderColor = this.settings.general.addFolderColor && BDFDB.LibraryStores.ExpandedGuildFolderStore.isFolderExpanded(e.instance.props.folderNode.id) && (BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB"));
-				if (folderColor) e.returnvalue = BDFDB.ReactUtils.createElement("div", {
-					style: {"--custom-folder-color": folderColor},
-					children: e.returnvalue
 				});
 			}
 			
@@ -611,6 +606,9 @@ module.exports = (_ => {
 						left: 6px;
 						width: auto;
 						border-radius: 4px;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._displayserversaschannelscolored}[style*="--custom-folder-color"] ${BDFDB.dotCN.guildfolderexpandedbackground} {
+						background-color: color-mix(in srgb,var(--custom-folder-color), transparent 75%) !important;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] {
 						height: auto !important;
