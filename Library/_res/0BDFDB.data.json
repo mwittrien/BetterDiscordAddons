@@ -457,7 +457,7 @@
 		"FolderContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "navId:\"guild", "folderId:"], "noSearch": true},
 		"FolderIcon": {"strings": ["folderNode:", "folderPreviewWrapper", "folderButtonContent"]},
 		"FolderIconWrapper": {"strings": ["folderNode:", "folderIconWrapper", "isMentionLow"]},
-		"FolderItem": {"strings": ["folderNode:", "pendingFolderButtonIcon", "onExpandCollapse"]},
+		"FolderItem": {"strings": ["folderNode:", "--custom-folder-color", "folderGuildsList"]},
 		"FolderItemWrapper": {"strings": ["folderNode:", "isFolderExpanded", "defaultFolderName:"]},
 		"FolderSettingsModal": {"strings": [".handleNameChange", ".handleSubmit", "folderName:"], "noSearch": true},
 		"GuildBadge": {"strings": ["foregroundDarkColor", "getBadgeCategory"]},
@@ -1098,6 +1098,7 @@
 		},
 		"DisplayServersAsChannels": {
 			"badge": "badge_71509e",
+			"colored": "colored_71509e",
 			"muted": "muted_71509e",
 			"name": "name_71509e",
 			"styled": "styledGuildsAsChannels_71509e"
@@ -1643,6 +1644,7 @@
 		"_customstatuspresetssortdivider": ["CustomStatusPresets", "sortDivider"],
 		"_customstatuspresetsstatus": ["CustomStatusPresets", "status"],
 		"_displayserversaschannelsbadge": ["DisplayServersAsChannels", "badge"],
+		"_displayserversaschannelscolored": ["DisplayServersAsChannels", "colored"],
 		"_displayserversaschannelsmuted": ["DisplayServersAsChannels", "muted"],
 		"_displayserversaschannelsname": ["DisplayServersAsChannels", "name"],
 		"_displayserversaschannelsstyled": ["DisplayServersAsChannels", "styled"],
