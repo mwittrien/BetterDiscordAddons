@@ -489,7 +489,6 @@ module.exports = (_ => {
 						"TooltipContainer"
 					],
 					after: [
-						"BlobMaskInner",
 						"FolderIconWrapper",
 						"FolderSettingsModal",
 						"GuildItem",
