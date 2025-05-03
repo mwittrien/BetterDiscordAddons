@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.8
+ * @version 7.3.9
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -489,8 +489,8 @@ module.exports = (_ => {
 						"TooltipContainer"
 					],
 					after: [
+						"BlobMaskInner",
 						"FolderIconWrapper",
-						"FolderItemWrapper",
 						"FolderSettingsModal",
 						"GuildItem",
 						"GuildsBar"
@@ -836,15 +836,6 @@ module.exports = (_ => {
 				folderStates[e.instance.props.folderNode.id] = state;
 			}
 			
-			processFolderItemWrapper (e) {
-				if (!e.instance.props.folderNode && e.returnvalue.props.style["--custom-folder-color"]) return;
-				let folderColor = this.settings.general.addFolderBackground && BDFDB.LibraryStores.ExpandedGuildFolderStore.isFolderExpanded(e.instance.props.folderNode.id) && (BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB"));
-				if (folderColor) e.returnvalue = BDFDB.ReactUtils.createElement("div", {
-					style: {"--custom-folder-color": folderColor},
-					children: e.returnvalue
-				});
-			}
-			
 			processFolderIconWrapper (e) {
 				if (!e.instance.props.folderNode) return;
 				let data = this.getFolderConfig(e.instance.props.folderNode.id);
@@ -877,9 +868,9 @@ module.exports = (_ => {
 					}
 					if (this.settings.general.showCountBadge) {
 						let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
-						if (mask) {
-							mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
-							mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+						if (mask && !mask.props.upperBadge) {
+							mask.props.upperBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
+							mask.props.upperBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 								count: e.instance.props.folderNode.children.length,
 								style: {backgroundColor: "var(--bdfdb-blurple)"}
 							});
