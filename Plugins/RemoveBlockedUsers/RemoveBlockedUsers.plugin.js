@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.6
+ * @version 1.7.7
  * @description Removes blocked/ignored Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -273,7 +273,7 @@ module.exports = (_ => {
 			processMessages (e) {
 				if (!this.settings.places.messages && !this.settings.places.spamMessages && !this.settings.places.ignoredMessages && !this.settings.places.repliesToBlocked) return;
 				if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) {
-					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.repliesToBlocked && n.content.messageReference && this.shouldHide((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id, n.type == "MESSAGE_GROUP_SPAMMER")));
+					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.repliesToBlocked && n.content.messageReference && this.shouldHide((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id, n.type == "MESSAGE_GROUP_SPAMMER")) && !(n.type == "MESSAGE_GROUP_BLOCKED" && n.content && n.content[0] && n.content[0].content && this.shouldHide(n.content[0].content.author.id)));
 					let newStream = [];
 					if (oldStream.length != e.instance.props.channelStream.length) {
 						for (let i in oldStream) {
@@ -298,7 +298,12 @@ module.exports = (_ => {
 					let messages = e.instance.props.messages;
 					e.instance.props.messages = new BDFDB.DiscordObjects.Messages(messages);
 					for (let key in messages) e.instance.props.messages[key] = messages[key];
-					e.instance.props.messages._array = [].concat(e.instance.props.messages._array.filter(n => !n.author || !this.shouldHide(n.author.id)));
+					e.instance.props.messages._array = [].concat(e.instance.props.messages._array.filter(n => !n.author || (!this.shouldHide(n.author.id) && !(this.settings.places.repliesToBlocked && n.messageReference && this.shouldHide((BDFDB.LibraryStores.MessageStore.getMessage(n.messageReference.channel_id, n.messageReference.message_id) || {author: {}}).author.id)))));
+					let previousAuthorid = null;
+					for (let i in e.instance.props.messages._array) {
+						if (previousAuthorid && previousAuthorid != e.instance.props.messages._array[i].author.id) e.instance.props.messages._array[i].type = 19;
+						previousAuthorid = e.instance.props.messages._array[i].author.id;
+					}
 					if (e.instance.props.oldestUnreadMessageId && e.instance.props.messages._array.every(n => n.id != e.instance.props.oldestUnreadMessageId)) e.instance.props.oldestUnreadMessageId = null;
 				}
 			}
