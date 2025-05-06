@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.7
+ * @version 4.0.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2553,7 +2553,7 @@ module.exports = (_ => {
 				LibraryModules.LanguageStore = (LanguageStores.find(n => n && n.exports && n.exports[InternalData.LanguageStringHashes.DISCORD]) || LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD]) || {}).exports;
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
-				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
+				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
 				Internal.LibraryModules = new Proxy(LibraryModules, {
 					get: function (_, item) {
 						if (LibraryModules[item]) return LibraryModules[item];
@@ -2679,7 +2679,7 @@ module.exports = (_ => {
 				MyReact.findDOMNode = function (instance) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
-					let node = Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ObjectUtils.get(instance, "child.stateNode");
+					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ObjectUtils.get(instance, "child.stateNode");
 					return Node.prototype.isPrototypeOf(node) ? node : null;
 				};
 				MyReact.findParent = function (nodeOrInstance, config) {
@@ -3000,7 +3000,12 @@ module.exports = (_ => {
 				MyReact.render = function (component, node, ignoreErrors = false) {
 					if (!BDFDB.ReactUtils.isValidElement(component) || !Node.prototype.isPrototypeOf(node)) return;
 					try {
-						Internal.LibraryModules.ReactDOM.render(component, node);
+						let root;
+						if (Internal.LibraryModules.ReactDOM.render) Internal.LibraryModules.ReactDOM.render(component, node);
+						else {
+							root = Internal.LibraryModules.ReactDOM.createRoot(node);
+							root.render(component);
+						}
 						let observer = new MutationObserver(changes => changes.forEach(change => {
 							let nodes = Array.from(change.removedNodes);
 							if (nodes.indexOf(node) > -1 || nodes.some(n =>  n.contains(node))) {
@@ -3009,8 +3014,11 @@ module.exports = (_ => {
 							}
 						}));
 						observer.observe(document.body, {subtree: true, childList: true});
+						if (root) node.root = root;
 					}
-					catch (err) {!ignoreErrors && BDFDB.LogUtils.error(["Could not render React Element!", err]);}
+					catch (err) {
+						!ignoreErrors && BDFDB.LogUtils.error(["Could not render React Element!", err]);
+					}
 				};
 				MyReact.hookCall = function (callback, args, ignoreErrors = false) {
 					if (typeof callback != "function") return null;
@@ -3021,6 +3029,9 @@ module.exports = (_ => {
 					}, {}, false, ignoreErrors), tempNode, ignoreErrors);
 					BDFDB.ReactUtils.unmountComponentAtNode(tempNode);
 					return returnValue;
+				};
+				MyReact.unmountComponentAtNode = function (node) {
+					node && node.root && node.root.unmount ? node.root.unmount() : (Internal.LibraryModules.ReactDOM.unmountComponentAtNode && Internal.LibraryModules.ReactDOM.unmountComponentAtNode(node));
 				};
 				BDFDB.ReactUtils = new Proxy({}, {
 					get: function (_, item) {
