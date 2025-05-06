@@ -1133,7 +1133,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--border-subtle, var(--background-modifier-accent));
 }
 #app-mount .folderGroupBackground__48112 {
-	background-color: var(--background-secondary);
+	background-color: var(--custom-folder-background, var(--background-secondary));
 }
 #app-mount .childWrapper_a6ce15,
 #app-mount .circleIconButton__5bc7e {
