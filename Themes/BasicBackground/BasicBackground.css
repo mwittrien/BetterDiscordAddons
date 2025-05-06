@@ -629,11 +629,11 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 #app-mount .folderGroupBackground__48112 {						/* folder				background							*/
-	background-color: rgba(var(--transparencycolor_v), .2);
+	background-color: var(--custom-folder-background, rgba(var(--transparencycolor_v), .2));
 	transition: border-radius 3s ease, background-color 1s ease;
 }
 #app-mount .folderGroupBackground__48112.isHover__48112 {
-	background-color: rgba(var(--transparencycolor_v), .4);
+	background-color: var(--custom-folder-background, rgba(var(--transparencycolor_v), .4));
 }
 
 .bar__3b95d {										/* guild/channelbar			inner								*/
