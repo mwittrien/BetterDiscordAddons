@@ -66,8 +66,7 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						showGuildIcon:					{value: true, 	description: "Adds the Server Icon"},
-						showGuildBadge:					{value: true, 	description: "Adds the Server Badge (partnered, verified, etc)"},
-						addFolderColor:					{value: true, 	description: "Recolors the Folder's Server List Background to the Folder Color"},
+						showGuildBadge:					{value: true, 	description: "Adds the Server Badge (partnered, verified, etc)"}
 					},
 					amounts: {
 						serverListWidth:				{value: 240, 	min: 45,		description: "Server List Width in px: "},
@@ -86,7 +85,6 @@ module.exports = (_ => {
 						"CircleIconButton",
 						"DirectMessage",
 						"FolderIconWrapper",
-						"FolderItem",
 						"GuildBadge",
 						"GuildFavorites",
 						"GuildItem",
@@ -265,10 +263,6 @@ module.exports = (_ => {
 					let node = BDFDB.ReactUtils.findDOMNode(instance);
 					if (node) for (let path of node.querySelectorAll("path")) path.style.setProperty("d", `path("${path.getAttribute("d")}")`, "important");
 				}, `Error in Ref of ${type} Badge`, this);
-			}
-			
-			processFolderItem (e) {
-				if (this.settings.general.addFolderColor) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._displayserversaschannelscolored);
 			}
 			
 			processFolderIconWrapper (e) {
