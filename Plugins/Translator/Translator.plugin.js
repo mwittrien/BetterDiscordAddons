@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.6
+ * @version 2.7.7
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1066,7 +1066,12 @@ module.exports = (_ => {
 							special: true,
 							name: "Morse",
 							id: "morse"
-						}
+						},
+                        hex: {
+                            special: true,
+                            name: "Hexadecimal",
+                            id: "hex"
+                        },
 					}
 				);
 				for (let id in languages) languages[id].fav = favorites.includes(id) ? 0 : 1;
@@ -1194,6 +1199,7 @@ module.exports = (_ => {
 							case "binary": newText = this.binary2string(newText); break;
 							case "braille": newText = this.braille2string(newText); break;
 							case "morse": newText = this.morse2string(newText); break;
+                            case "hex": newText = this.hex2string(newText); break;
 						}
 					}
 					if (output.special) {
@@ -1201,6 +1207,7 @@ module.exports = (_ => {
 							case "binary": newText = this.string2binary(newText); break;
 							case "braille": newText = this.string2braille(newText); break;
 							case "morse": newText = this.string2morse(newText); break;
+                            case "hex": newText = this.string2hex(newText); break;
 						}
 						finishTranslation(newText);
 					}
@@ -1717,9 +1724,13 @@ module.exports = (_ => {
 					else if (/^[/|·−._-]*$/.test(text.replace(/\s/g, ""))) {
 						return {id: "morse", name: "Morse"};
 					}
+					else if (/^(0x[0-9a-fA-F]{2}\s*)+$/.test(text.replace(/\s/g, ""))) {
+						return {id: "hex", name: "Hexadecimal"};
+					}
 				}
 				return null;
 			}
+
 
 			string2binary (string) {
 				let binary = "";
@@ -1740,6 +1751,11 @@ module.exports = (_ => {
 				morse = morse.split("\n");
 				for (let i in morse) morse[i] = morse[i].trim();
 				return morse.join("\n").replace(/% % % % % % % % % % /g, "/ ");
+			}
+			string2hex (string) {
+				let hex = "";
+				for (let character of string) hex += "0x" + parseInt(character.charCodeAt(0).toString(16).toUpperCase()).toPrecision(2).split(".").reverse().join("") + " ";
+				return hex;
 			}
 
 			binary2string (binary) {
@@ -1779,6 +1795,19 @@ module.exports = (_ => {
 				}
 				return string.trim();
 			}
+
+			hex2string(hex) {
+				let string = "";
+				for (let part of hex.trim().split(/\s+/)) {
+					if (part.startsWith("0x") || part.startsWith("0X")) {
+						part = part.slice(2);
+					}
+					if (part.length === 2 && /^[0-9a-fA-F]{2}$/.test(part)) {
+						string += String.fromCharCode(parseInt(part, 16));
+					}
+				}
+				return string;
+			}			
 
 			addExceptions (string, excepts) {
 				for (let count in excepts) {
