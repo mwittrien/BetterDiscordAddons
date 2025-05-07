@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.8
+ * @version 4.0.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2554,6 +2554,7 @@ module.exports = (_ => {
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
+				LibraryModules.ReactPortal = BDFDB.ModuleUtils.findByProperties("flushSync", "createPortal");
 				Internal.LibraryModules = new Proxy(LibraryModules, {
 					get: function (_, item) {
 						if (LibraryModules[item]) return LibraryModules[item];
@@ -2679,7 +2680,7 @@ module.exports = (_ => {
 				MyReact.findDOMNode = function (instance) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
-					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ObjectUtils.get(instance, "child.stateNode");
+					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.findValue(instance[BDFDB.ReactUtils.instanceKey] || instance, "containerInfo", {up: true}) || BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, "child.stateNode");
 					return Node.prototype.isPrototypeOf(node) ? node : null;
 				};
 				MyReact.findParent = function (nodeOrInstance, config) {
@@ -3003,8 +3004,8 @@ module.exports = (_ => {
 						let root;
 						if (Internal.LibraryModules.ReactDOM.render) Internal.LibraryModules.ReactDOM.render(component, node);
 						else {
-							root = Internal.LibraryModules.ReactDOM.createRoot(node);
-							root.render(component);
+							root = BDFDB.ReactUtils.createRoot(node);
+							BDFDB.ReactUtils.flushSync(_ => root.render(component));
 						}
 						let observer = new MutationObserver(changes => changes.forEach(change => {
 							let nodes = Array.from(change.removedNodes);
@@ -3038,6 +3039,7 @@ module.exports = (_ => {
 						if (MyReact[item]) return MyReact[item];
 						else if (LibraryModules.React[item]) return LibraryModules.React[item];
 						else if (LibraryModules.ReactDOM[item]) return LibraryModules.ReactDOM[item];
+						else if (LibraryModules.ReactPortal[item]) return LibraryModules.ReactPortal[item];
 						else return null;
 					}
 				});
