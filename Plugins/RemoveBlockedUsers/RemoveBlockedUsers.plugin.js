@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.7
+ * @version 1.7.8
  * @description Removes blocked/ignored Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -301,7 +301,7 @@ module.exports = (_ => {
 					e.instance.props.messages._array = [].concat(e.instance.props.messages._array.filter(n => !n.author || (!this.shouldHide(n.author.id) && !(this.settings.places.repliesToBlocked && n.messageReference && this.shouldHide((BDFDB.LibraryStores.MessageStore.getMessage(n.messageReference.channel_id, n.messageReference.message_id) || {author: {}}).author.id)))));
 					let previousAuthorid = null;
 					for (let i in e.instance.props.messages._array) {
-						if (previousAuthorid && previousAuthorid != e.instance.props.messages._array[i].author.id) e.instance.props.messages._array[i].type = 19;
+						if (previousAuthorid && previousAuthorid != e.instance.props.messages._array[i].author.id && e.instance.props.messages._array[i].type == 0) e.instance.props.messages._array[i].type = 19;
 						previousAuthorid = e.instance.props.messages._array[i].author.id;
 					}
 					if (e.instance.props.oldestUnreadMessageId && e.instance.props.messages._array.every(n => n.id != e.instance.props.oldestUnreadMessageId)) e.instance.props.oldestUnreadMessageId = null;
