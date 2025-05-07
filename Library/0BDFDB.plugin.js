@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.9
+ * @version 4.1.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3929,8 +3929,8 @@ module.exports = (_ => {
 							if (child.type == Internal.LibraryComponents.ModalComponents.ModalTabContent) {
 								if (!tabBarItems.length) child.props.open = true;
 								else delete child.props.open;
-								let ref = typeof child.ref == "function" ? child.ref : (_ => {});
-								child.ref = instance => {
+								let ref = typeof child.props.ref == "function" ? child.props.ref : (_ => {});
+								child.props.ref = instance => {
 									ref(instance);
 									if (instance) tabIns[child.props.tab] = instance;
 								};
@@ -3946,13 +3946,7 @@ module.exports = (_ => {
 									itemClassName: BDFDB.disCN.tabbaritem,
 									type: Internal.LibraryComponents.TabBar.Types.TOP,
 									items: tabBarItems,
-									onItemSelect: value => {
-										for (let key in tabIns) {
-											if (key == value) tabIns[key].props.open = true;
-											else delete tabIns[key].props.open;
-										}
-										BDFDB.ReactUtils.forceUpdate(BDFDB.ObjectUtils.toArray(tabIns));
-									}
+									onItemSelect: value => {for (let key in tabIns) tabIns[key].setState({open: key == value});}
 								}),
 								config.tabBarChildren
 							].flat(10).filter(n => n)
@@ -5165,88 +5159,92 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.Checkbox = reactInitialized && class BDFDB_Checkbox extends Internal.LibraryModules.React.Component {
-					handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
-					handleMouseUp(e) {if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);}
-					handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
-					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
-					getInputMode() {
-						return this.props.disabled ? "disabled" : this.props.readOnly ? "readonly" : "default";
-					}
-					getStyle() {
-						let style = this.props.style || {};
-						if (!this.props.value) return style;
-						style = Object.assign({}, style);
-						this.props.color = typeof this.props.getColor == "function" ? this.props.getColor(this.props.value) : this.props.color;
-						if (Internal.LibraryComponents.Checkbox.Types) switch (this.props.type) {
-							case Internal.LibraryComponents.Checkbox.Types.DEFAULT:
-								style.borderColor = this.props.color;
-								break;
-							case Internal.LibraryComponents.Checkbox.Types.GHOST:
-								let color = BDFDB.ColorUtils.setAlpha(this.props.color, 0.15, "RGB");
-								style.backgroundColor = color;
-								style.borderColor = color;
-								break;
-							case Internal.LibraryComponents.Checkbox.Types.INVERTED:
-								style.backgroundColor = this.props.color;
-								style.borderColor = this.props.color;
-						}
-						return style;
-					}
-					getColor() {
-						return this.props.value ? (Internal.LibraryComponents.Checkbox.Types && this.props.type === Internal.LibraryComponents.Checkbox.Types.INVERTED ? Internal.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
-					}
-					handleChange(e) {
-						this.props.value = typeof this.props.getValue == "function" ? this.props.getValue(this.props.value, e, this) : !this.props.value;
-						if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					render() {
-						let label = this.props.children ? BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkboxlabel, this.props.disabled ? BDFDB.disCN.checkboxlabeldisabled : BDFDB.disCN.checkboxlabelclickable, this.props.reverse ? BDFDB.disCN.checkboxlabelreversed : BDFDB.disCN.checkboxlabelforward),
-							style: {
-								lineHeight: this.props.size + "px"
-							},
-							children: this.props.children
-						}) : null;
-						return BDFDB.ReactUtils.createElement("label", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.disabled ? BDFDB.disCN.checkboxwrapperdisabled : BDFDB.disCN.checkboxwrapper, this.props.align, this.props.className),
-							children: [
-								this.props.reverse && label,
-								!this.props.displayOnly && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FocusRingScope, {
-									children: BDFDB.ReactUtils.createElement("input", {
-										className: BDFDB.disCN["checkboxinput" + this.getInputMode()],
-										type: "checkbox",
-										onClick: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
-										onContextMenu: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
-										onMouseUp: !this.props.disabled && this.handleMouseDown.bind(this),
-										onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
-										onMouseEnter: !this.props.disabled && this.handleMouseEnter.bind(this),
-										onMouseLeave: !this.props.disabled && this.handleMouseLeave.bind(this),
-										checked: this.props.value,
-										style: {
-											width: this.props.size,
-											height: this.props.size
-										}
-									})
-								}),
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkbox, BDFDB.disCN["checkbox" + this.props.shape], this.props.value && BDFDB.disCN.checkboxchecked),
-									style: Object.assign({
-										width: this.props.size,
-										height: this.props.size,
-										borderColor: this.props.checkboxColor
-									}, this.getStyle()),
-									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Checkmark, {
-										size: "null",
-										width: 18,
-										height: 18,
-										color: this.getColor(),
-										"aria-hidden": true
-									})
-								}),
-								!this.props.reverse && label
-							].filter(n => n)
-						});
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
+							handleMouseUp(e) {if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);}
+							handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+							handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
+							getInputMode() {
+								return this.props.disabled ? "disabled" : this.props.readOnly ? "readonly" : "default";
+							}
+							getStyle() {
+								let style = this.props.style || {};
+								if (!this.props.value) return style;
+								style = Object.assign({}, style);
+								this.props.color = typeof this.props.getColor == "function" ? this.props.getColor(this.props.value) : this.props.color;
+								if (Internal.LibraryComponents.Checkbox.Types) switch (this.props.type) {
+									case Internal.LibraryComponents.Checkbox.Types.DEFAULT:
+										style.borderColor = this.props.color;
+										break;
+									case Internal.LibraryComponents.Checkbox.Types.GHOST:
+										let color = BDFDB.ColorUtils.setAlpha(this.props.color, 0.15, "RGB");
+										style.backgroundColor = color;
+										style.borderColor = color;
+										break;
+									case Internal.LibraryComponents.Checkbox.Types.INVERTED:
+										style.backgroundColor = this.props.color;
+										style.borderColor = this.props.color;
+								}
+								return style;
+							}
+							getColor() {
+								return this.props.value ? (Internal.LibraryComponents.Checkbox.Types && this.props.type === Internal.LibraryComponents.Checkbox.Types.INVERTED ? Internal.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
+							}
+							handleChange(e) {
+								this.props.value = typeof this.props.getValue == "function" ? this.props.getValue(this.props.value, e, this) : !this.props.value;
+								if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							render() {
+								let label = this.props.children ? BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkboxlabel, this.props.disabled ? BDFDB.disCN.checkboxlabeldisabled : BDFDB.disCN.checkboxlabelclickable, this.props.reverse ? BDFDB.disCN.checkboxlabelreversed : BDFDB.disCN.checkboxlabelforward),
+									style: {
+										lineHeight: this.props.size + "px"
+									},
+									children: this.props.children
+								}) : null;
+								return BDFDB.ReactUtils.createElement("label", {
+									className: BDFDB.DOMUtils.formatClassName(this.props.disabled ? BDFDB.disCN.checkboxwrapperdisabled : BDFDB.disCN.checkboxwrapper, this.props.align, this.props.className),
+									children: [
+										this.props.reverse && label,
+										!this.props.displayOnly && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FocusRingScope, {
+											children: BDFDB.ReactUtils.createElement("input", {
+												className: BDFDB.disCN["checkboxinput" + this.getInputMode()],
+												type: "checkbox",
+												onClick: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
+												onContextMenu: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
+												onMouseUp: !this.props.disabled && this.handleMouseDown.bind(this),
+												onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
+												onMouseEnter: !this.props.disabled && this.handleMouseEnter.bind(this),
+												onMouseLeave: !this.props.disabled && this.handleMouseLeave.bind(this),
+												checked: this.props.value,
+												style: {
+													width: this.props.size,
+													height: this.props.size
+												}
+											})
+										}),
+										BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkbox, BDFDB.disCN["checkbox" + this.props.shape], this.props.value && BDFDB.disCN.checkboxchecked),
+											style: Object.assign({
+												width: this.props.size,
+												height: this.props.size,
+												borderColor: this.props.checkboxColor
+											}, this.getStyle()),
+											children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Checkmark, {
+												size: "null",
+												width: 18,
+												height: 18,
+												color: this.getColor(),
+												"aria-hidden": true
+											})
+										}),
+										!this.props.reverse && label
+									].filter(n => n)
+								});
+							}
+						}, this.props);
 					}
 				};
 				CustomComponents.Checkbox.Types = {
@@ -6383,42 +6381,46 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.KeybindRecorder = reactInitialized && class BDFDB_KeybindRecorder extends Internal.LibraryModules.React.Component {
-					handleChange(arrays) {
-						this.props.value = arrays.map(platformKey => Internal.LibraryModules.KeyEvents.codes[Internal.LibraryModules.KeyCodeUtils.codeToKey(platformKey)] || platformKey[1]);
-						if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
-					}
-					handleReset() {
-						this.props.value = [];
-						if (this.recorder) this.recorder.setState({codes: []});
-						if (typeof this.props.onChange == "function") this.props.onChange([], this);
-						if (typeof this.props.onReset == "function") this.props.onReset(this);
-					}
-					componentDidMount() {
-						if (!this.recorder) this.recorder = BDFDB.ReactUtils.findOwner(this, {name: "KeybindRecorder"});
-					}
-					render() {
-						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
-							className: BDFDB.disCN.hotkeywrapper,
-							direction: Internal.LibraryComponents.Flex.Direction.HORIZONTAL,
-							align: Internal.LibraryComponents.Flex.Align.CENTER,
-							children: [
-								BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.KeybindRecorder, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-									defaultValue: [this.props.defaultValue || this.props.value].flat(10).filter(n => n).map(keyCode => [Internal.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]),
-									onChange: this.handleChange.bind(this)
-								}), "reset", "onReset")),
-								this.props.reset || this.props.onReset ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
-									text: BDFDB.LanguageUtils.LanguageStrings.REMOVE_KEYBIND,
-									tooltipConfig: {type: "top"},
-									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
-										className: BDFDB.disCN.hotkeyresetbutton,
-										onClick: this.handleReset.bind(this),
-										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
-											iconSVG: `<svg height="20" width="20" viewBox="0 0 20 20"><path fill="currentColor" d="M 14.348 14.849 c -0.469 0.469 -1.229 0.469 -1.697 0 l -2.651 -3.030 -2.651 3.029 c -0.469 0.469 -1.229 0.469 -1.697 0 -0.469 -0.469 -0.469 -1.229 0 -1.697l2.758 -3.15 -2.759 -3.152 c -0.469 -0.469 -0.469 -1.228 0 -1.697 s 1.228 -0.469 1.697 0 l 2.652 3.031 2.651 -3.031 c 0.469 -0.469 1.228 -0.469 1.697 0 s 0.469 1.229 0 1.697l -2.758 3.152 2.758 3.15 c 0.469 0.469 0.469 1.229 0 1.698 z"></path></svg>`,
-										})
-									})
-								}) : null
-							].filter(n => n)
-						});
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange(arrays) {
+								this.props.value = arrays.map(platformKey => Internal.LibraryModules.KeyEvents.codes[Internal.LibraryModules.KeyCodeUtils.codeToKey(platformKey)] || platformKey[1]);
+								if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
+							}
+							handleReset() {
+								this.props.value = [];
+								if (this.recorder) this.recorder.setState({codes: []});
+								if (typeof this.props.onChange == "function") this.props.onChange([], this);
+								if (typeof this.props.onReset == "function") this.props.onReset(this);
+							}
+							componentDidMount() {
+								if (!this.recorder) this.recorder = BDFDB.ReactUtils.findOwner(this, {name: "KeybindRecorder"});
+							}
+							render() {
+								return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+									className: BDFDB.disCN.hotkeywrapper,
+									direction: Internal.LibraryComponents.Flex.Direction.HORIZONTAL,
+									align: Internal.LibraryComponents.Flex.Align.CENTER,
+									children: [
+										BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.KeybindRecorder, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+											defaultValue: [this.props.defaultValue || this.props.value].flat(10).filter(n => n).map(keyCode => [Internal.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]),
+											onChange: this.handleChange.bind(this)
+										}), "reset", "onReset")),
+										this.props.reset || this.props.onReset ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
+											text: BDFDB.LanguageUtils.LanguageStrings.REMOVE_KEYBIND,
+											tooltipConfig: {type: "top"},
+											children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
+												className: BDFDB.disCN.hotkeyresetbutton,
+												onClick: this.handleReset.bind(this),
+												children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+													iconSVG: `<svg height="20" width="20" viewBox="0 0 20 20"><path fill="currentColor" d="M 14.348 14.849 c -0.469 0.469 -1.229 0.469 -1.697 0 l -2.651 -3.030 -2.651 3.029 c -0.469 0.469 -1.229 0.469 -1.697 0 -0.469 -0.469 -0.469 -1.229 0 -1.697l2.758 -3.15 -2.759 -3.152 c -0.469 -0.469 -0.469 -1.228 0 -1.697 s 1.228 -0.469 1.697 0 l 2.652 3.031 2.651 -3.031 c 0.469 -0.469 1.228 -0.469 1.697 0 s 0.469 1.229 0 1.697l -2.758 3.152 2.758 3.15 c 0.469 0.469 0.469 1.229 0 1.698 z"></path></svg>`,
+												})
+											})
+										}) : null
+									].filter(n => n)
+								});
+							}
+						}, this.props);
 					}
 				};
 				
@@ -6617,9 +6619,13 @@ module.exports = (_ => {
 				Internal.setDefaultProps(CustomComponents.ModalComponents.ModalContent, {scroller: true, content: true});
 				
 				CustomComponents.ModalComponents.ModalTabContent = reactInitialized && class BDFDB_ModalTabContent extends Internal.LibraryModules.React.Component {
+					constructor(props) {
+						super(props);
+						this.state = {open: props.open};
+					}
 					render() {
-						return !this.props.open ? null : BDFDB.ReactUtils.createElement(this.props.scroller ? Internal.LibraryComponents.Scrollers.Thin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open"), {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open && BDFDB.disCN.modaltabcontentopen, this.props.className),
+						return !this.state.open ? null : BDFDB.ReactUtils.createElement(this.props.scroller ? Internal.LibraryComponents.Scrollers.Thin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open"), {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.state.open && BDFDB.disCN.modaltabcontentopen, this.props.className),
 							children: this.props.children
 						}));
 					}
@@ -6668,43 +6674,47 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.ListInput = reactInitialized && class BDFDB_ListInput extends Internal.LibraryModules.React.Component {
-					handleChange() {
-						if (typeof this.props.onChange) this.props.onChange(this.props.items, this);
-					}
-					render() {
-						if (!BDFDB.ArrayUtils.is(this.props.items)) this.props.items = [];
-						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.MultiInput, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							className: BDFDB.disCN.inputlist,
-							innerClassName: BDFDB.disCN.inputlistitems,
-							onKeyDown: e => {
-								if (e.which == 13 && e.target.value && e.target.value.trim()) {
-									let value = e.target.value.trim();
-									this.props.value = "";
-									if (!this.props.items.includes(value)) {
-										this.props.items.push(value);
-										BDFDB.ReactUtils.forceUpdate(this);
-										this.handleChange.apply(this, []);
-									}
-								}
-							},
-							children: this.props.items.map(item => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Badges.TextBadge, {
-								className: BDFDB.disCN.inputlistitem,
-								color: "var(--bdfdb-blurple)",
-								style: {borderRadius: "3px"},
-								text: [
-									item,
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.inputlistdelete,
-										name: Internal.LibraryComponents.SvgIcon.Names.CLOSE,
-										onClick: _ => {
-											BDFDB.ArrayUtils.remove(this.props.items, item);
-											BDFDB.ReactUtils.forceUpdate(this);
-											this.handleChange.apply(this, []);
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange() {
+								if (typeof this.props.onChange) this.props.onChange(this.props.items, this);
+							}
+							render() {
+								if (!BDFDB.ArrayUtils.is(this.props.items)) this.props.items = [];
+								return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.MultiInput, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+									className: BDFDB.disCN.inputlist,
+									innerClassName: BDFDB.disCN.inputlistitems,
+									onKeyDown: e => {
+										if (e.which == 13 && e.target.value && e.target.value.trim()) {
+											let value = e.target.value.trim();
+											this.props.value = "";
+											if (!this.props.items.includes(value)) {
+												this.props.items.push(value);
+												BDFDB.ReactUtils.forceUpdate(this);
+												this.handleChange.apply(this, []);
+											}
 										}
-									})
-								]
-							}))
-						}), "items"));
+									},
+									children: this.props.items.map(item => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Badges.TextBadge, {
+										className: BDFDB.disCN.inputlistitem,
+										color: "var(--bdfdb-blurple)",
+										style: {borderRadius: "3px"},
+										text: [
+											item,
+											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+												className: BDFDB.disCN.inputlistdelete,
+												name: Internal.LibraryComponents.SvgIcon.Names.CLOSE,
+												onClick: _ => {
+													BDFDB.ArrayUtils.remove(this.props.items, item);
+													BDFDB.ReactUtils.forceUpdate(this);
+													this.handleChange.apply(this, []);
+												}
+											})
+										]
+									}))
+								}), "items"));
+							}
+						}, this.props);
 					}
 				};
 				
@@ -6916,70 +6926,78 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.QuickSelect = reactInitialized && class BDFDB_QuickSelect extends Internal.LibraryModules.React.Component {
-					handleChange(option) {
-						this.props.value = option;
-						if (typeof this.props.onChange == "function") this.props.onChange(option.value || option.key, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					render() {
-						let options = (BDFDB.ArrayUtils.is(this.props.options) ? this.props.options : [{}]).filter(n => n);
-						let selectedOption = BDFDB.ObjectUtils.is(this.props.value) ? this.props.value : (options[0] || {});
-						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
-							children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
-								className: BDFDB.disCN.quickselect,
-								align: Internal.LibraryComponents.Flex.Align.CENTER,
-								children: [
-									BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN.quickselectlabel,
-										children: this.props.label
-									}),
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange(option) {
+								this.props.value = option;
+								if (typeof this.props.onChange == "function") this.props.onChange(option.value || option.key, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							render() {
+								let options = (BDFDB.ArrayUtils.is(this.props.options) ? this.props.options : [{}]).filter(n => n);
+								let selectedOption = BDFDB.ObjectUtils.is(this.props.value) ? this.props.value : (options[0] || {});
+								return BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
+									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+										className: BDFDB.disCN.quickselect,
 										align: Internal.LibraryComponents.Flex.Align.CENTER,
-										className: BDFDB.disCN.quickselectclick,
-										onClick: event => {
-											Internal.LibraryModules.ContextMenuUtils.openContextMenu(event, _ => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Menu, {
-												navId: "bdfdb-quickselect",
-												onClose: Internal.LibraryModules.ContextMenuUtils.closeContextMenu,
-												className: this.props.popoutClassName,
-												children: BDFDB.ContextMenuUtils.createItem(Internal.LibraryComponents.MenuItems.MenuGroup, {
-													children: options.map((option, i) => {
-														let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
-														return BDFDB.ContextMenuUtils.createItem(Internal.LibraryComponents.MenuItems.MenuItem, {
-															label: option.label,
-															id: BDFDB.ContextMenuUtils.createItemId("option", option.key || option.value || i),
-															action: selected ? null : event2 => this.handleChange.bind(this)(option)
-														});
-													})
-												})
-											}));
-										},
 										children: [
 											BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.quickselectvalue,
-												children: typeof this.props.renderValue == "function" ? this.props.renderValue(this.props.value) : this.props.value.label
+												className: BDFDB.disCN.quickselectlabel,
+												children: this.props.label
 											}),
-											BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.quickselectarrow
+											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+												align: Internal.LibraryComponents.Flex.Align.CENTER,
+												className: BDFDB.disCN.quickselectclick,
+												onClick: event => {
+													Internal.LibraryModules.ContextMenuUtils.openContextMenu(event, _ => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Menu, {
+														navId: "bdfdb-quickselect",
+														onClose: Internal.LibraryModules.ContextMenuUtils.closeContextMenu,
+														className: this.props.popoutClassName,
+														children: BDFDB.ContextMenuUtils.createItem(Internal.LibraryComponents.MenuItems.MenuGroup, {
+															children: options.map((option, i) => {
+																let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
+																return BDFDB.ContextMenuUtils.createItem(Internal.LibraryComponents.MenuItems.MenuItem, {
+																	label: option.label,
+																	id: BDFDB.ContextMenuUtils.createItemId("option", option.key || option.value || i),
+																	action: selected ? null : event2 => this.handleChange.bind(this)(option)
+																});
+															})
+														})
+													}));
+												},
+												children: [
+													BDFDB.ReactUtils.createElement("div", {
+														className: BDFDB.disCN.quickselectvalue,
+														children: typeof this.props.renderValue == "function" ? this.props.renderValue(this.props.value) : this.props.value.label
+													}),
+													BDFDB.ReactUtils.createElement("div", {
+														className: BDFDB.disCN.quickselectarrow
+													})
+												]
 											})
 										]
 									})
-								]
-							})
-						});
+								});
+							}
+						}, this.props);
 					}
 				};
 				
 				CustomComponents.RadioGroup = reactInitialized && class BDFDB_RadioGroup extends Internal.LibraryModules.React.Component {
-					handleChange(value) {
-						this.props.value = value.value;
-						if (typeof this.props.onChange == "function") this.props.onChange(value, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					render() {
-						return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.RadioGroup, Object.assign({}, this.props, {
-							onChange: this.handleChange.bind(this)
-						}));
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange(value) {
+								this.props.value = value.value;
+								if (typeof this.props.onChange == "function") this.props.onChange(value, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							render() {
+								return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.RadioGroup, Object.assign({}, this.props, {
+									onChange: this.handleChange.bind(this)
+								}));
+							}
+						}, this.props);
 					}
 				};
 				
@@ -7015,24 +7033,28 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.Select = reactInitialized && class BDFDB_Select extends Internal.LibraryModules.React.Component {
-					handleChange(value) {
-						this.props.value = value.value || value;
-						if (typeof this.props.onChange == "function") this.props.onChange(value, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					render() {
-						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.selectwrapper),
-							children: BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.SearchableSelect, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-								className: this.props.inputClassName,
-								autoFocus: this.props.autoFocus ? this.props.autoFocus : false,
-								maxVisibleItems: this.props.maxVisibleItems || 7,
-								renderOptionLabel: this.props.optionRenderer,
-								select: this.handleChange.bind(this),
-								serialize: typeof this.props.serialize == "function" ? this.props.serialize : _ => {},
-								isSelected: typeof this.props.isSelected == "function" ? this.props.isSelected : (value => this.props.value == value)
-							}), "inputClassName", "optionRenderer"))
-						});
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange(value) {
+								this.props.value = value.value || value;
+								if (typeof this.props.onChange == "function") this.props.onChange(value, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							render() {
+								return BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.selectwrapper),
+									children: BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.SearchableSelect, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+										className: this.props.inputClassName,
+										autoFocus: this.props.autoFocus ? this.props.autoFocus : false,
+										maxVisibleItems: this.props.maxVisibleItems || 7,
+										renderOptionLabel: this.props.optionRenderer,
+										select: this.handleChange.bind(this),
+										serialize: typeof this.props.serialize == "function" ? this.props.serialize : _ => {},
+										isSelected: typeof this.props.isSelected == "function" ? this.props.isSelected : (value => this.props.value == value)
+									}), "inputClassName", "optionRenderer"))
+								});
+							}
+						}, this.props);
 					}
 				};
 				
@@ -7412,41 +7434,45 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.Slider = reactInitialized && class BDFDB_Slider extends Internal.LibraryModules.React.Component {
-					handleMarkerRender(marker) {
-						let newMarker = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, marker);
-						if (typeof this.props.digits == "number") newMarker = Math.round(newMarker * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-						return newMarker;
-					}
-					handleValueChange(value) {
-						let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
-						if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-						this.props.defaultValue = this.props.value = newValue;
-						if (typeof this.props.onValueChange == "function") this.props.onValueChange(newValue, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					handleValueRender(value) {
-						let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
-						if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-						if (typeof this.props.onValueRender == "function") {
-							let tempReturn = this.props.onValueRender(newValue, this);
-							if (tempReturn != undefined) newValue = tempReturn;
-						}
-						return newValue;
-					}
-					render() {
-						let value = this.props.value || this.props.defaultValue || 0;
-						if (!BDFDB.ArrayUtils.is(this.props.edges) || this.props.edges.length != 2) this.props.edges = [this.props.min || this.props.minValue || 0, this.props.max || this.props.maxValue || 100];
-						this.props.minValue = 0;
-						this.props.maxValue = 100;
-						let defaultValue = BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], value);
-						if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-						return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							initialValue: defaultValue,
-							markers: typeof this.props.markerAmount == "number" ? Array.from(Array(this.props.markerAmount).keys()).map((_, i) => i * (this.props.maxValue - this.props.minValue)/10) : undefined,
-							onMarkerRender: this.handleMarkerRender.bind(this),
-							onValueChange: this.handleValueChange.bind(this),
-							onValueRender: this.handleValueRender.bind(this)
-						}), "digits", "edges", "max", "min", "markerAmount"));
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleMarkerRender(marker) {
+								let newMarker = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, marker);
+								if (typeof this.props.digits == "number") newMarker = Math.round(newMarker * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+								return newMarker;
+							}
+							handleValueChange(value) {
+								let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
+								if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+								this.props.defaultValue = this.props.value = newValue;
+								if (typeof this.props.onValueChange == "function") this.props.onValueChange(newValue, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							handleValueRender(value) {
+								let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
+								if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+								if (typeof this.props.onValueRender == "function") {
+									let tempReturn = this.props.onValueRender(newValue, this);
+									if (tempReturn != undefined) newValue = tempReturn;
+								}
+								return newValue;
+							}
+							render() {
+								let value = this.props.value || this.props.defaultValue || 0;
+								if (!BDFDB.ArrayUtils.is(this.props.edges) || this.props.edges.length != 2) this.props.edges = [this.props.min || this.props.minValue || 0, this.props.max || this.props.maxValue || 100];
+								this.props.minValue = 0;
+								this.props.maxValue = 100;
+								let defaultValue = BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], value);
+								if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+								return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+									initialValue: defaultValue,
+									markers: typeof this.props.markerAmount == "number" ? Array.from(Array(this.props.markerAmount).keys()).map((_, i) => i * (this.props.maxValue - this.props.minValue)/10) : undefined,
+									onMarkerRender: this.handleMarkerRender.bind(this),
+									onValueChange: this.handleValueChange.bind(this),
+									onValueRender: this.handleValueRender.bind(this)
+								}), "digits", "edges", "max", "min", "markerAmount"));
+							}
+						}, this.props);
 					}
 				};
 				Internal.setDefaultProps(CustomComponents.Slider, {hideBubble: false, digits: 3});
@@ -7606,15 +7632,19 @@ module.exports = (_ => {
 					});
 				};
 				CustomComponents.Switch = reactInitialized && class BDFDB_Switch extends Internal.LibraryModules.React.Component {
-					handleChange() {
-						this.props.value = !this.props.value;
-						if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					render() {
-						return BDFDB.ReactUtils.createElement(SwitchInner, Object.assign({}, this.props, {
-							onChange: this.handleChange.bind(this)
-						}));
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange() {
+								this.props.value = !this.props.value;
+								if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							render() {
+								return BDFDB.ReactUtils.createElement(SwitchInner, Object.assign({}, this.props, {
+									onChange: this.handleChange.bind(this)
+								}));
+							}
+						}, this.props);
 					}
 				};
 				CustomComponents.Switch.Sizes = {
@@ -7683,19 +7713,23 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.TextArea = reactInitialized && class BDFDB_TextArea extends Internal.LibraryModules.React.Component {
-					handleChange(e) {
-						this.props.value = e;
-						if (typeof this.props.onChange == "function") this.props.onChange(e, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
-					handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
-					render() {
-						return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.TextArea, Object.assign({}, this.props, {
-							onChange: this.handleChange.bind(this),
-							onBlur: this.handleBlur.bind(this),
-							onFocus: this.handleFocus.bind(this)
-						}));
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange(e) {
+								this.props.value = e;
+								if (typeof this.props.onChange == "function") this.props.onChange(e, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
+							handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
+							render() {
+								return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.TextArea, Object.assign({}, this.props, {
+									onChange: this.handleChange.bind(this),
+									onBlur: this.handleBlur.bind(this),
+									onFocus: this.handleFocus.bind(this)
+								}));
+							}
+						}, this.props);
 					}
 				};
 				
@@ -7718,129 +7752,133 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.TextInput = reactInitialized && class BDFDB_TextInput extends Internal.LibraryModules.React.Component {
-					handleChange(e, e2) {
-						let value = e = BDFDB.ObjectUtils.is(e) ? (e.currentTarget || e.target).value : e;
-						if (this.props.type == "number") value = parseInt(value);
-						this.props.value = this.props.valuePrefix && !value.startsWith(this.props.valuePrefix) ? (this.props.valuePrefix + value) : value;
-						this.props.file = e2 = BDFDB.ObjectUtils.is(e2) ? (e2.currentTarget || e2.target).value : e2;
-						if (typeof this.props.onChange == "function") this.props.onChange(this.props.type == "file" ? this.props.file : this.props.value, this);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-					handleInput(e) {if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? (e.currentTarget || e.target).value : e, this);}
-					handleKeyDown(e) {if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);}
-					handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
-					handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
-					handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
-					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
-					handleNumberButton(ins, value) {
-						BDFDB.TimeUtils.clear(this.pressedTimeout);
-						this.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {
-							delete this.props.focused;
-							BDFDB.ReactUtils.forceUpdate(this);
-						}, 1000);
-						this.props.focused = true;
-						this.handleChange.apply(this, [value]);
-						this.handleInput.apply(this, [value]);
-					}
-					componentDidMount() {
-						if (this.props.type == "file") {
-							let navigatorInstance = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_FileButton"});
-							if (navigatorInstance) navigatorInstance.refInput = this;
-						}
-						let input = BDFDB.ReactUtils.findDOMNode(this);
-						if (!input) return;
-						input = input.querySelector("input") || input;
-						if (input && !input.patched) {
-							input.addEventListener("keydown", e => {
-								this.handleKeyDown.apply(this, [e]);
-								e.stopImmediatePropagation();
-							});
-							input.patched = true;
-						}
-					}
-					render() {
-						let inputChildren = [
-							BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-								className: BDFDB.DOMUtils.formatClassName(this.props.size || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
-								type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
-								onChange: this.handleChange.bind(this),
-								onInput: this.handleInput.bind(this),
-								onKeyDown: this.handleKeyDown.bind(this),
-								onBlur: this.handleBlur.bind(this),
-								onFocus: this.handleFocus.bind(this),
-								onMouseEnter: this.handleMouseEnter.bind(this),
-								onMouseLeave: this.handleMouseLeave.bind(this),
-								maxLength: this.props.type == "file" ? false : this.props.maxLength,
-								style: this.props.width ? {width: `${this.props.width}px`} : {},
-								ref: this.props.inputRef
-							}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "colorPickerOpen", "noAlpha", "filter")),
-							this.props.inputChildren,
-							this.props.type == "color" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
-								wrap: true,
-								children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.ColorSwatches, {
-									colors: [],
-									color: this.props.value && this.props.mode == "comp" ? BDFDB.ColorUtils.convert(this.props.value.split(","), "RGB") : this.props.value,
-									onColorChange: color => this.handleChange.apply(this, [!color ? "" : (this.props.mode == "comp" ? BDFDB.ColorUtils.convert(color, "RGBCOMP").slice(0, 3).join(",") : BDFDB.ColorUtils.convert(color, this.props.noAlpha ? "RGB" : "RGBA"))]),
-									pickerOpen: this.props.colorPickerOpen,
-									onPickerOpen: _ => this.props.colorPickerOpen = true,
-									onPickerClose: _ => delete this.props.colorPickerOpen,
-									ref: this.props.controlsRef,
-									pickerConfig: {gradient: false, alpha: this.props.mode != "comp" && !this.props.noAlpha}
-								})
-							}) : null,
-							this.props.type == "file" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FileButton, {
-								filter: this.props.filter,
-								mode: this.props.mode,
-								ref: this.props.controlsRef
-							}) : null
-						].flat(10).filter(n => n);
-						
-						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && Internal.LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
-							style: this.props.style,
-							children: [
-								this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
-									className: BDFDB.disCN.inputprefix
-								}) : null,
-								this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.inputnumberbuttons,
-									children: [
-										BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.inputnumberbuttonup,
-											onClick: e => {
-												let min = parseInt(this.props.min);
-												let max = parseInt(this.props.max);
-												let newV = parseInt(this.props.value) + 1 || min || 0;
-												if (isNaN(max) || !isNaN(max) && newV <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newV >= min ? newV : min);
-											}
-										}),
-										BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.inputnumberbuttondown,
-											onClick: e => {
-												let min = parseInt(this.props.min);
-												let max = parseInt(this.props.max);
-												let newV = parseInt(this.props.value) - 1 || min || 0;
-												if (isNaN(min) || !isNaN(min) && newV >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newV <= max ? newV : max);
-											}
+					render () {
+						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							handleChange(e, e2) {
+								let value = e = BDFDB.ObjectUtils.is(e) ? (e.currentTarget || e.target).value : e;
+								if (this.props.type == "number") value = parseInt(value);
+								this.props.value = this.props.valuePrefix && !value.startsWith(this.props.valuePrefix) ? (this.props.valuePrefix + value) : value;
+								this.props.file = e2 = BDFDB.ObjectUtils.is(e2) ? (e2.currentTarget || e2.target).value : e2;
+								if (typeof this.props.onChange == "function") this.props.onChange(this.props.type == "file" ? this.props.file : this.props.value, this);
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+							handleInput(e) {if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? (e.currentTarget || e.target).value : e, this);}
+							handleKeyDown(e) {if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);}
+							handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
+							handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
+							handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+							handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
+							handleNumberButton(ins, value) {
+								BDFDB.TimeUtils.clear(this.pressedTimeout);
+								this.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {
+									delete this.props.focused;
+									BDFDB.ReactUtils.forceUpdate(this);
+								}, 1000);
+								this.props.focused = true;
+								this.handleChange.apply(this, [value]);
+								this.handleInput.apply(this, [value]);
+							}
+							componentDidMount() {
+								if (this.props.type == "file") {
+									let navigatorInstance = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_FileButton"});
+									if (navigatorInstance) navigatorInstance.refInput = this;
+								}
+								let input = BDFDB.ReactUtils.findDOMNode(this);
+								if (!input) return;
+								input = input.querySelector("input") || input;
+								if (input && !input.patched) {
+									input.addEventListener("keydown", e => {
+										this.handleKeyDown.apply(this, [e]);
+										e.stopImmediatePropagation();
+									});
+									input.patched = true;
+								}
+							}
+							render() {
+								let inputChildren = [
+									BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+										className: BDFDB.DOMUtils.formatClassName(this.props.size || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
+										type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
+										onChange: this.handleChange.bind(this),
+										onInput: this.handleInput.bind(this),
+										onKeyDown: this.handleKeyDown.bind(this),
+										onBlur: this.handleBlur.bind(this),
+										onFocus: this.handleFocus.bind(this),
+										onMouseEnter: this.handleMouseEnter.bind(this),
+										onMouseLeave: this.handleMouseLeave.bind(this),
+										maxLength: this.props.type == "file" ? false : this.props.maxLength,
+										style: this.props.width ? {width: `${this.props.width}px`} : {},
+										ref: this.props.inputRef
+									}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "colorPickerOpen", "noAlpha", "filter")),
+									this.props.inputChildren,
+									this.props.type == "color" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
+										wrap: true,
+										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.ColorSwatches, {
+											colors: [],
+											color: this.props.value && this.props.mode == "comp" ? BDFDB.ColorUtils.convert(this.props.value.split(","), "RGB") : this.props.value,
+											onColorChange: color => this.handleChange.apply(this, [!color ? "" : (this.props.mode == "comp" ? BDFDB.ColorUtils.convert(color, "RGBCOMP").slice(0, 3).join(",") : BDFDB.ColorUtils.convert(color, this.props.noAlpha ? "RGB" : "RGBA"))]),
+											pickerOpen: this.props.colorPickerOpen,
+											onPickerOpen: _ => this.props.colorPickerOpen = true,
+											onPickerClose: _ => delete this.props.colorPickerOpen,
+											ref: this.props.controlsRef,
+											pickerConfig: {gradient: false, alpha: this.props.mode != "comp" && !this.props.noAlpha}
 										})
-									]
-								}) : null,
-								inputChildren.length == 1 ? inputChildren[0] : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
-									wrap: Internal.LibraryComponents.Flex.Wrap.NO_WRAP,
-									align: Internal.LibraryComponents.Flex.Align.CENTER,
-									children: inputChildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
-										shrink: 0,
-										children: child
-									}) : child)
-								}),
-								this.props.errorMessage ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextElement, {
-									className: BDFDB.disCN.margintop8,
-									size: Internal.LibraryComponents.TextElement.Sizes.SIZE_12,
-									color: Internal.LibraryComponents.TextElement.Colors.STATUS_RED,
-									children: this.props.errorMessage
-								}) : null
-							].filter(n => n)
-						});
+									}) : null,
+									this.props.type == "file" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FileButton, {
+										filter: this.props.filter,
+										mode: this.props.mode,
+										ref: this.props.controlsRef
+									}) : null
+								].flat(10).filter(n => n);
+								
+								return BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && Internal.LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
+									style: this.props.style,
+									children: [
+										this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
+											className: BDFDB.disCN.inputprefix
+										}) : null,
+										this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.inputnumberbuttons,
+											children: [
+												BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN.inputnumberbuttonup,
+													onClick: e => {
+														let min = parseInt(this.props.min);
+														let max = parseInt(this.props.max);
+														let newV = parseInt(this.props.value) + 1 || min || 0;
+														if (isNaN(max) || !isNaN(max) && newV <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newV >= min ? newV : min);
+													}
+												}),
+												BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN.inputnumberbuttondown,
+													onClick: e => {
+														let min = parseInt(this.props.min);
+														let max = parseInt(this.props.max);
+														let newV = parseInt(this.props.value) - 1 || min || 0;
+														if (isNaN(min) || !isNaN(min) && newV >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newV <= max ? newV : max);
+													}
+												})
+											]
+										}) : null,
+										inputChildren.length == 1 ? inputChildren[0] : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+											wrap: Internal.LibraryComponents.Flex.Wrap.NO_WRAP,
+											align: Internal.LibraryComponents.Flex.Align.CENTER,
+											children: inputChildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
+												shrink: 0,
+												children: child
+											}) : child)
+										}),
+										this.props.errorMessage ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextElement, {
+											className: BDFDB.disCN.margintop8,
+											size: Internal.LibraryComponents.TextElement.Sizes.SIZE_12,
+											color: Internal.LibraryComponents.TextElement.Colors.STATUS_RED,
+											children: this.props.errorMessage
+										}) : null
+									].filter(n => n)
+								});
+							}
+						}, this.props);
 					}
 				};
 				
