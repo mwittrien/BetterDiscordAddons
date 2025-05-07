@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.3.9
+ * @version 7.4.0
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -969,14 +969,7 @@ module.exports = (_ => {
 									{value: this.labels.modal_tabheader3},
 									{value: this.labels.modal_tabheader4}
 								],
-								onItemSelect: (value, instance) => {
-									let tabsArray = BDFDB.ObjectUtils.toArray(tabs);
-									for (let ins of tabsArray) {
-										if (ins.props.tab == value) ins.props.open = true;
-										else delete ins.props.open;
-									}
-									BDFDB.ReactUtils.forceUpdate(tabsArray);
-								}
+								onItemSelect: value => {for (let key in tabs) tabs[key].setState({open: key == value});}
 							})
 						})
 					}));
