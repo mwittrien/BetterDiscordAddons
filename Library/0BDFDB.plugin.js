@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.0
+ * @version 4.1.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2982,7 +2982,7 @@ module.exports = (_ => {
 								let key = keys[i];
 								if (key && !blacklist[key]) {
 									let value = instance[key];
-									if (searchKey === key && (config.value === undefined || BDFDB.equals(config.value, value))) result = value;
+									if (searchKey === key && (config.notNull === undefined || value !== null) && (config.value === undefined || BDFDB.equals(config.value, value))) result = value;
 									else if ((typeof value === "object" || typeof value == "function") && (whitelist[key] || key[0] == "." || !isNaN(key[0]))) result = getKey(value);
 								}
 							}
@@ -6829,7 +6829,7 @@ module.exports = (_ => {
 						this.toggle = this.toggle.bind(this);
 						this.onDocumentClicked = this.onDocumentClicked.bind(this);
 						this.domElementRef = BDFDB.ReactUtils.createRef();
-						this.domElementRef.current = BDFDB.ReactUtils.findDOMNode(this);
+						this.domElementRef.current = BDFDB.ReactUtils.findDOMNode(this) || BDFDB.ReactUtils.findValue(this[BDFDB.ReactUtils.instanceKey], "ref", {notNull: true});
 					}
 					onDocumentClicked() {
 						const node = BDFDB.ReactUtils.findDOMNode(this.popout);
