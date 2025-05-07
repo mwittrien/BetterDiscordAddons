@@ -2680,7 +2680,7 @@ module.exports = (_ => {
 				MyReact.findDOMNode = function (instance) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
-					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.findValue(instance[BDFDB.ReactUtils.instanceKey] || instance, "containerInfo", {up: true}) || BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, "child.stateNode");
+					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, "child.stateNode") || BDFDB.ReactUtils.findValue(instance[BDFDB.ReactUtils.instanceKey] || instance, "containerInfo", {up: true});
 					return Node.prototype.isPrototypeOf(node) ? node : null;
 				};
 				MyReact.findParent = function (nodeOrInstance, config) {
@@ -6199,7 +6199,7 @@ module.exports = (_ => {
 					render() {
 						let filter = this.props.filter && [this.props.filter].flat(10).filter(n => typeof n == "string") || [];
 						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							onClick: e => {e.currentTarget.querySelector("input").click();},
+							onClick: e => {(e.currentTarget || e.target).querySelector("input").click();},
 							children: [
 								BDFDB.LanguageUtils.LibraryStrings.file_navigator_text,
 								BDFDB.ReactUtils.createElement("input", {
@@ -6207,7 +6207,7 @@ module.exports = (_ => {
 									accept: filter.length && (filter.join("/*,") + "/*"),
 									style: {display: "none"},
 									onChange: e => {
-										let file = e.currentTarget.files[0];
+										let file = (e.currentTarget || e.target).files[0];
 										if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
 											let reader = new FileReader();
 											reader.onload = _ => {
@@ -7597,7 +7597,7 @@ module.exports = (_ => {
 								},
 								onChange: e => {
 									state[1](false);
-									if (typeof props.onChange == "function") props.onChange(e.currentTarget.checked, e);
+									if (typeof props.onChange == "function") props.onChange((e.currentTarget || e.target).checked, e);
 								},
 								checked: props.value,
 								disabled: props.disabled
@@ -7719,14 +7719,15 @@ module.exports = (_ => {
 				
 				CustomComponents.TextInput = reactInitialized && class BDFDB_TextInput extends Internal.LibraryModules.React.Component {
 					handleChange(e, e2) {
-						let value = e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
+						let value = e = BDFDB.ObjectUtils.is(e) ? (e.currentTarget || e.target).value : e;
 						if (this.props.type == "number") value = parseInt(value);
 						this.props.value = this.props.valuePrefix && !value.startsWith(this.props.valuePrefix) ? (this.props.valuePrefix + value) : value;
-						this.props.file = e2 = BDFDB.ObjectUtils.is(e2) ? e2.currentTarget.value : e2;
+						this.props.file = e2 = BDFDB.ObjectUtils.is(e2) ? (e2.currentTarget || e2.target).value : e2;
 						if (typeof this.props.onChange == "function") this.props.onChange(this.props.type == "file" ? this.props.file : this.props.value, this);
+						console.log(this.props.value);
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
-					handleInput(e) {if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e, this);}
+					handleInput(e) {if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? (e.currentTarget || e.target).value : e, this);}
 					handleKeyDown(e) {if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);}
 					handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
 					handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
@@ -7888,7 +7889,8 @@ module.exports = (_ => {
 								if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 							},
 							onMouseEnter: e => {
-								if (BDFDB.DOMUtils.getRects(e.currentTarget).width < BDFDB.DOMUtils.getRects(e.currentTarget.firstElementChild).width || e.currentTarget.firstElementChild.style.getPropertyValue("display") != "inline") {
+								let target = e.currentTarget || e.target;
+								if (BDFDB.DOMUtils.getRects(target).width < BDFDB.DOMUtils.getRects(target.firstElementChild).width || target.firstElementChild.style.getPropertyValue("display") != "inline") {
 									scrolling = true;
 									scroll(1);
 								}
@@ -7922,9 +7924,10 @@ module.exports = (_ => {
 						let childProps = Object.assign({}, child.props);
 						let shown = false;
 						child.props.onMouseEnter = (e, childThis) => {
-							if (!shown && !e.currentTarget.__BDFDBtooltipShown && !(this.props.onlyShowOnShift && !e.shiftKey) && !(this.props.onlyShowOnCtrl && !e.ctrlKey)) {
-								e.currentTarget.__BDFDBtooltipShown = shown = true;
-								this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this, e) : this.props.text, Object.assign({
+							let target = e.currentTarget || e.target;
+							if (!shown && !target.__BDFDBtooltipShown && !(this.props.onlyShowOnShift && !e.shiftKey) && !(this.props.onlyShowOnCtrl && !e.ctrlKey)) {
+								target.__BDFDBtooltipShown = shown = true;
+								this.tooltip = BDFDB.TooltipUtils.create(target, typeof this.props.text == "function" ? this.props.text(this, e) : this.props.text, Object.assign({
 									note: this.props.note,
 									delay: this.props.delay
 								}, this.props.tooltipConfig, {
