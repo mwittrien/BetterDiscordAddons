@@ -6821,6 +6821,10 @@ module.exports = (_ => {
 				Internal.setDefaultProps(CustomComponents.Popout, {themed: true, wrap: true});
 				
 				CustomComponents.PopoutContainer = reactInitialized && class BDFDB_PopoutContainer extends Internal.LibraryModules.React.Component {
+					constructor(props) {
+						super(props);
+						this.state = {open: props.open};
+					}
 					componentDidMount() {
 						this.toggle = this.toggle.bind(this);
 						this.onDocumentClicked = this.onDocumentClicked.bind(this);
@@ -6832,8 +6836,7 @@ module.exports = (_ => {
 						if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) this.toggle(false);
 					}
 					toggle(forceState) {
-						this.props.open = forceState != undefined ? forceState : !this.props.open;
-						BDFDB.ReactUtils.forceUpdate(this);
+						this.setState({open: forceState != undefined ? forceState : !this.state.open});
 					}
 					render() {
 						if (!this.props._rendered) {
@@ -6858,7 +6861,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
 							children: [
 								this.props.children,
-								this.props.open && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.AppReferencePositionLayer, {
+								this.state.open && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.AppReferencePositionLayer, {
 									onMount: _ => BDFDB.TimeUtils.timeout(_ => document.addEventListener("click", this.onDocumentClicked)),
 									onUnmount: _ => document.removeEventListener("click", this.onDocumentClicked),
 									position: this.props.position,
