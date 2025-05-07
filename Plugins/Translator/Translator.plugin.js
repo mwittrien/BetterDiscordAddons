@@ -1752,12 +1752,13 @@ module.exports = (_ => {
 				for (let i in morse) morse[i] = morse[i].trim();
 				return morse.join("\n").replace(/% % % % % % % % % % /g, "/ ");
 			}
-			string2hex (string) {
+			string2hex(string) {
 				let hex = "";
-				for (let character of string) hex += "0x" + parseInt(character.charCodeAt(0).toString(16).toUpperCase()).toPrecision(2).split(".").reverse().join("") + " ";
-				return hex;
-			}
-
+				for (let character of string) {
+					hex += "0x" + character.charCodeAt(0).toString(16).toUpperCase().padStart(2, "0") + " ";
+				}
+				return hex.trim();
+			}			
 			binary2string (binary) {
 				let string = "";
 				binary = binary.replace(/\n/g, "00001010").replace(/\r/g, "00001101").replace(/\t/g, "00001001").replace(/\s/g, "");
