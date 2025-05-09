@@ -932,7 +932,10 @@ body:has(#app-mount)::after {
 #app-mount .panels_c48ade .wrapper_e131a9 > * {						/* account/voice			inner								*/
 	background: none;
 	border: none;
-	margin: 0;
+}
+#app-mount .container__37e49 {								/* account/voice			inner								*/
+	border-bottom-right-radius: var(--radius-sm);
+	border-bottom-left-radius: var(--radius-sm);
 }
 
 #app-mount button.button__67645.enabled__67645 {					/* account/voice			panel button							*/
