@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.4.0
+ * @version 7.4.1
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -82,10 +82,14 @@ module.exports = (_ => {
 			closedicon: `<path d="M 160,400 V 253 h 440 v 147 z" fill="REPLACE_FILL2"/><path d="M 186,799 c -24.2,0 -34,-8 -39.7,-13.6 C 140.8,779.9 134,769.1 134,747 V 372 c 0,-21.5 13,-32 13,-32 V 252 c 0,-20.2 2.8,-27.2 10.5,-36.4 C 165.1,206.5 172.8,200 199,200 h 173 l 54,53 H 225 c -17.3,0 -29.1,6 -39.6,16.5 C 175.8,279.1 173,290.4 173,305 l -0.4,19 c 0,0 9.6,-4 20.9,-4 H 494 L 614,200 h 186 c 17.7,0 26.6,7.1 36,14.2 C 846.5,222 852,233.6 852,252 v 495 c 0,16.1 -7.5,30.2 -14.1,36.7 C 831.4,790.2 815.9,799 800,799 Z" fill="REPLACE_FILL1"/>`}
 		];
 		
-		var folderGuildContent = null;
+		var folderGuildContent = null, scrollPosition = 0;
 		const FolderGuildContentComponent = class FolderGuildContent extends BdApi.React.Component {
 			componentDidMount() {
 				folderGuildContent = this;
+			}
+			componentDidUpdate() {
+				let scroller = BDFDB.ReactUtils.findDOMNode(this).querySelector(BDFDB.dotCN.guildsscroller);
+				if (scroller && scroller.scrollTop != scrollPosition) scroller.scrollTo({top: scrollPosition});
 			}
 			render() {
 				let closing = this.props.closing;
@@ -99,7 +103,6 @@ module.exports = (_ => {
 				}, 300);
 				
 				BDFDB.DOMUtils.toggleClass(document.body, BDFDB.disCN._serverfoldersfoldercontentisopen, !(!folders.length || closing));
-				
 				return BDFDB.ReactUtils.createElement("nav", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildswrapper, BDFDB.disCN.guilds, this.props.isAppFullscreen && BDFDB.disCN.guildswrapperhidden, this.props.themeOverride && BDFDB.disCN.themedark, BDFDB.disCN._serverfoldersfoldercontent, (!folders.length || closing) && BDFDB.disCN._serverfoldersfoldercontentclosed),
 					children: BDFDB.ReactUtils.createElement("ul", {
@@ -111,6 +114,7 @@ module.exports = (_ => {
 							className: BDFDB.disCN.guildswrapperitems,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.None, {
 								className: BDFDB.disCNS.stack + BDFDB.disCN.guildsscroller,
+								onScroll: e => scrollPosition = e.target.scrollTop,
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.stack,
 									"aria-label": BDFDB.LanguageUtils.LanguageStrings.SERVERS,
