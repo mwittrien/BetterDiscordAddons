@@ -2681,12 +2681,8 @@ module.exports = (_ => {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
 					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance);
-					if (!node) {
-						node = BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, "child.stateNode");
-						node = Node.prototype.isPrototypeOf(node) ? node : null;
-					}
-					if (!node) {
-						node = BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, "return.stateNode");
+					for (let path of ["child.stateNode", "child.ref.current", "return.stateNode"]) if (!node) {
+						node = BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, path);
 						node = Node.prototype.isPrototypeOf(node) ? node : null;
 					}
 					if (!node) node = BDFDB.ReactUtils.findValue(instance[BDFDB.ReactUtils.instanceKey] || instance, "containerInfo", {up: true});
