@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.8
+ * @version 1.7.9
  * @description Removes blocked/ignored Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -273,7 +273,7 @@ module.exports = (_ => {
 			processMessages (e) {
 				if (!this.settings.places.messages && !this.settings.places.spamMessages && !this.settings.places.ignoredMessages && !this.settings.places.repliesToBlocked) return;
 				if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) {
-					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.repliesToBlocked && n.content.messageReference && this.shouldHide((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id, n.type == "MESSAGE_GROUP_SPAMMER")) && !(n.type == "MESSAGE_GROUP_BLOCKED" && n.content && n.content[0] && n.content[0].content && this.shouldHide(n.content[0].content.author.id)));
+					let oldStream = e.instance.props.channelStream.filter(n => !(this.settings.places.repliesToBlocked && n.content.messageReference && this.shouldHide((BDFDB.LibraryStores.MessageStore.getMessage(n.content.messageReference.channel_id, n.content.messageReference.message_id) || {author: {}}).author.id, n.type == "MESSAGE_GROUP_SPAMMER")) && !((n.type == "MESSAGE_GROUP_BLOCKED" || n.type == "MESSAGE_GROUP_SPAMMER" || n.type == "MESSAGE_GROUP_IGNORED") && n.content && n.content[0] && n.content[0].content && this.shouldHide(n.content[0].content.author.id, n.type == "MESSAGE_GROUP_SPAMMER")));
 					let newStream = [];
 					if (oldStream.length != e.instance.props.channelStream.length) {
 						for (let i in oldStream) {
@@ -309,8 +309,7 @@ module.exports = (_ => {
 			}
 		
 			processBlockedMessageGroup (e) {
-				if (!this.settings.places.messages || !(this.settings.types.blocked && e.instance.props.messages.type == "MESSAGE_GROUP_BLOCKED") && !(this.settings.types.spammers && e.instance.props.messages.type == "MESSAGE_GROUP_SPAMMER") && !(this.settings.types.ignored && e.instance.props.messages.type == "MESSAGE_GROUP_IGNORED")) return;
-				return null;
+				if (this.settings.places.messages && (this.settings.types.blocked && e.instance.props.messages.type == "MESSAGE_GROUP_BLOCKED" || this.settings.types.spammers && e.instance.props.messages.type == "MESSAGE_GROUP_SPAMMER" || this.settings.types.ignored && e.instance.props.messages.type == "MESSAGE_GROUP_IGNORED")) return null;
 			}
 			
 			processMessage (e) {
