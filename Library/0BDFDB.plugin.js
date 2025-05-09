@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.1
+ * @version 4.1.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2016,7 +2016,7 @@ module.exports = (_ => {
 					
 					const tooltip = itemLayer.firstElementChild;
 					const tooltipContent = itemLayer.querySelector(BDFDB.dotCN.tooltipcontent);
-					const tooltipPointer = itemLayer.querySelector(BDFDB.dotCN.tooltippointer);
+					const tooltipPointers = Array.from(itemLayer.querySelectorAll(BDFDB.dotCN.tooltippointer));
 					
 					if (config.id) tooltip.id = config.id.split(" ").join("");
 					
@@ -2160,8 +2160,8 @@ module.exports = (_ => {
 						itemLayer.style.setProperty("top", `${top}px`, "important");
 						itemLayer.style.setProperty("left", `${left}px`, "important");
 						
-						tooltipPointer.style.removeProperty("margin-left");
-						tooltipPointer.style.removeProperty("margin-top");
+						for (let pointer of tooltipPointers) pointer.style.removeProperty("margin-left");
+						for (let pointer of tooltipPointers) pointer.style.removeProperty("margin-top");
 						if (type == "top" || type == "bottom") {
 							if (left < 0) {
 								itemLayer.style.setProperty("left", "5px", "important");
@@ -2171,7 +2171,7 @@ module.exports = (_ => {
 								const rightMargin = aRects.width - (left + iRects.width);
 								if (rightMargin < 0) {
 									itemLayer.style.setProperty("left", `${aRects.width - iRects.width - 5}px`, "important");
-									tooltipPointer.style.setProperty("margin-left", `${-1*rightMargin}px`, "important");
+									for (let pointer of tooltipPointers) pointer.style.setProperty("margin-left", `${-1*rightMargin}px`, "important");
 								}
 							}
 						}
@@ -2180,13 +2180,13 @@ module.exports = (_ => {
 								const bRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.titlebar));
 								const barCorrection = (bRects.width || 0) >= Math.round(75 * window.outerWidth / aRects.width) ? (bRects.height + 5) : 0;
 								itemLayer.style.setProperty("top", `${5 + barCorrection}px`, "important");
-								tooltipPointer.style.setProperty("margin-top", `${top - 10 - barCorrection}px`, "important");
+								for (let pointer of tooltipPointers) pointer.style.setProperty("margin-top", `${top - 10 - barCorrection}px`, "important");
 							}
 							else {
 								const bottomMargin = aRects.height - (top + iRects.height);
 								if (bottomMargin < 0) {
 									itemLayer.style.setProperty("top", `${aRects.height - iRects.height - 5}px`, "important");
-									tooltipPointer.style.setProperty("margin-top", `${-1*bottomMargin}px`, "important");
+									for (let pointer of tooltipPointers) pointer.style.setProperty("margin-top", `${-1*bottomMargin}px`, "important");
 								}
 							}
 						}
@@ -2680,7 +2680,12 @@ module.exports = (_ => {
 				MyReact.findDOMNode = function (instance) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
-					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, "child.stateNode") || BDFDB.ReactUtils.findValue(instance[BDFDB.ReactUtils.instanceKey] || instance, "containerInfo", {up: true});
+					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance);
+					if (!node) {
+						node = BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, "child.stateNode");
+						node = Node.prototype.isPrototypeOf(node) ? node : null;
+					}
+					if (!node) node = BDFDB.ReactUtils.findValue(instance[BDFDB.ReactUtils.instanceKey] || instance, "containerInfo", {up: true});
 					return Node.prototype.isPrototypeOf(node) ? node : null;
 				};
 				MyReact.findParent = function (nodeOrInstance, config) {
