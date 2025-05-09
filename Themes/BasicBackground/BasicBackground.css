@@ -917,7 +917,6 @@ body:has(#app-mount)::after {
 	overflow: hidden;
 	pointer-events: none;
 	z-index: -2;
-	display: block !important;
 }
 .panels_c48ade::before {
 	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
