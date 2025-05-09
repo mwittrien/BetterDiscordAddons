@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.3
+ * @version 5.0.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1053,7 +1053,22 @@ module.exports = (_ => {
 				if (!e.instance.props.user) return;
 				let channelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
 				if (!this.settings.places.memberList || !this.shouldChangeInChat(channelId)) return;
-				this.changeUserColor(e.returnvalue.props.children[0], e.instance.props.user.id, {e: e, guildId: e.instance.props.guildId});
+				let data = changedUsers[e.instance.props.user.id] || {};
+				if (data.color1) {
+					let className = e.returnvalue.props.children[0].props.className;
+					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.disCNS.membername + BDFDB.disCN.membernameuser,
+						children: e.returnvalue.props.children[0].props.name
+					});
+					this.changeUserColor(e.returnvalue.props.children[0], e.instance.props.user.id, {e: e, guildId: e.instance.props.guildId});
+					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.membernameouter),
+						children: BDFDB.ReactUtils.createElement("span", {
+							className: BDFDB.disCN.membernamecontainer,
+							children: e.returnvalue.props.children[0]
+						})
+					});
+				}
 				this.injectBadge(e.returnvalue.props.children, e.instance.props.user.id, e.instance.props.guildId, 2, {
 					tagClass: BDFDB.disCN.bottagmember
 				});
