@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.6
+ * @version 1.2.7
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -79,7 +79,7 @@ module.exports = (_ => {
 				}
 			}
 			componentDidMount() {
-				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._serverdetailstooltip);
+				if (!_this.settings.amounts.tooltipDelay && (!_this.settings.general.onlyShowOnShift || _this.settings.general.onlyShowOnShift && this.props.shiftKey)) BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._serverdetailstooltip);
 			}
 			render() {
 				if (_this.settings.general.onlyShowOnShift) {
