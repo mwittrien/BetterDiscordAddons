@@ -370,6 +370,7 @@ body,											/* body													*/
 #app-mount .wrapper__61a6b,								/* app					errorscreen							*/
 #app-mount .bg__960e4,									/* app					background							*/
 #app-mount .layer__960e4,								/* layer				container							*/
+#app-mount .itemsContainer_ef3116,							/* guilds				inner (custom theme)						*/
 #app-mount .container_f37cb1,								/* channels				header								*/
 #app-mount .header_f37cb1,								/* channels				header inner							*/
 #app-mount .container__2637a,								/* channels				inner								*/
@@ -437,6 +438,7 @@ body,											/* body													*/
 	padding-top: 4px;
 }
 #app-mount .sidebar_c48ade:after {
+	display: block !important;
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
 	width: var(--custom-guild-list-width);
 	height: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
@@ -1964,6 +1966,7 @@ body:has(#app-mount)::after {
 	border-top-right-radius: 0;
 }
 #app-mount .replyBar__841c8,
+#app-mount .scheduledMessageBar_ba21b4,
 #app-mount .threadSuggestionBar__841c8 {
 	background: transparent;
 }
@@ -3210,7 +3213,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 
-.preview__3e443 {									/* appearance				preview								*/
+#app-mount .preview__3e443 {							/* appearance				preview								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border-color: rgba(var(--transparencycolor_v), .2);
 }
