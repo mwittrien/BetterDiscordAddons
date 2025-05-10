@@ -165,6 +165,10 @@ module.exports = (_ => {
 						padding-top: 4px;
 					}
 					
+					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.channelheaderdiscovery} {
+						padding-right: 0;
+					}
+					
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.settingswindowstandardsidebarview}:before {
 						display: none;
 					}
@@ -267,7 +271,6 @@ module.exports = (_ => {
 			}
 			
 			processHeaderBarDiscovery (e) {
-				e.instance.props.style = Object.assign({}, e.instance.props.style, {paddingRight: 0});
 				this.injectButtons(e.instance.props.children);
 			}
 			
