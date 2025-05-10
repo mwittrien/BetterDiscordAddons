@@ -2249,6 +2249,7 @@ body:has(#app-mount)::after {
 #app-mount .wrapper_cb9592 {								/* call					root								*/
 	background: transparent;
 	color: var(--header-primary);
+	border-left: 0 !important;
 }
 #app-mount .buttonSection__1405b {
 	background: rgba(var(--transparencycolor_v), .3);
