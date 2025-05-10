@@ -7007,7 +7007,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount ::-webkit-scrollbar-thumb {
 	border-radius: 10px;
 	border: none;
-	background-color: rgb(var(--accentcolor_v)) !important;
+	background: rgb(var(--accentcolor_v)) !important;
 }
 .none__99f8c::-webkit-scrollbar-corner,
 .none__99f8c::-webkit-scrollbar-thumb,
