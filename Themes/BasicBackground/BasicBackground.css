@@ -2247,11 +2247,11 @@ body:has(#app-mount)::after {
 #app-mount .root_bfe55a,								/* call					root								*/
 #app-mount .callContainer_cb9592,							/* call					root								*/
 #app-mount .wrapper_cb9592 {								/* call					root								*/
-	background: rgba(var(--transparencycolor_v), 0);
+	background: transparent;
 	color: var(--header-primary);
 }
 #app-mount .buttonSection__1405b {
-	background: rgba(var(--transparencycolor_v), 0.3);
+	background: rgba(var(--transparencycolor_v), .3);
 }
 
 :not(:root):fullscreen::backdrop {
