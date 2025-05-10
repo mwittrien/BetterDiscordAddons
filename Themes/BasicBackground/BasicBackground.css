@@ -1231,7 +1231,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .content__908e2 {								/* divider				content								*/
 	position: absolute;
-	background-color: transparent;
+	background: transparent;
 	color: var(--header-secondary);
 	padding: 2px 8px;
 	width: unset;
@@ -1982,10 +1982,10 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .themedBackground__74017 {							/* textarea				container							*/
-	background-color: rgba(var(--transparencycolor_v), .3);
+	background: rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .inlineContainer__74017 .themedBackground__74017 {				/* textarea				container popout						*/
-	background-color: transparent;
+	background: transparent;
 }
 
 .sprite__04eed {									/* textarea				emojibutton							*/
