@@ -165,8 +165,9 @@ module.exports = (_ => {
 						padding-top: 4px;
 					}
 					
+					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.channelheaderheaderbar},
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.channelheaderdiscovery} {
-						padding-right: 0;
+						padding-right: 8px;
 					}
 					
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.settingswindowstandardsidebarview}:before {
