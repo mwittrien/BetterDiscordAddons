@@ -167,6 +167,9 @@
 #app-mount .layer__960e4 ~ .layer__960e4 .guildsSection__337a8 {
 	max-width: calc(var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) !important;
 }
+#app-mount .layer__960e4 ~ .layer__960e4 .container__9293f.headerBar__80679 {
+	position: static !important;
+}
 
 #app-mount .root__5c9fc {
 	position: fixed !important;
