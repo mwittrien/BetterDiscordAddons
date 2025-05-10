@@ -87,6 +87,9 @@
 	--settingsicons-delete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
 
+body #app-mount .sidebarRegion__23e6b:has(.item_b3f026:not([data-tab-id]) ~ .item_b3f026:not([data-tab-id]) ~ .item_b3f026:not([data-tab-id])) {
+	--use-settingsicons: 0 !important;
+}
 body #app-mount .sidebarRegion__23e6b {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
