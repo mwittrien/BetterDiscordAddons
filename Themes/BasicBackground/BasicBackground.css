@@ -784,7 +784,7 @@ body:has(#app-mount)::after {
 	color: var(--channels-default);
 }
 
-.wrapper__260e1 {									/* voicechat				limit								*/
+#app-mount .wrapper__260e1 {								/* voicechat				limit								*/
 	background-color: rgba(var(--transparencycolor_v), .15);
 	display: flex !important;
 	align-items: center !important;
