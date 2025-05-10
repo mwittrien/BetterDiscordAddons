@@ -381,6 +381,7 @@ body,											/* body													*/
 #app-mount .chatContent_f75fb0,								/* chat					channel								*/
 #app-mount .container_f369db,								/* chat					forums								*/
 #app-mount .container__89463,								/* chat					boosts								*/
+#app-mount .contentContainer__89463,							/* chat					boosts inner							*/
 #app-mount .container__0b563,								/* chat					search								*/
 #app-mount .container_c2efea,								/* chat					search inner							*/
 #app-mount .container__01ae2,								/* chat					thread sidebar							*/
@@ -454,6 +455,9 @@ body,											/* body													*/
 	background-color: rgba(var(--transparencycolor_v), var(--memberlisttransparency_v));
 }
 #app-mount .nowPlayingColumn__133bf {							/* peoples				now playing							*/
+	background-color: rgba(var(--transparencycolor_v), var(--memberlisttransparency_v));
+}
+#app-mount .sidebarContainer__89463 {							/* chat					boosts sidepanel						*/
 	background-color: rgba(var(--transparencycolor_v), var(--memberlisttransparency_v));
 }
 
