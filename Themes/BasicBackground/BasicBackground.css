@@ -905,7 +905,6 @@ body:has(#app-mount)::after {
 	background-color: transparent;
 	border: unset;
 	border-radius: unset;
-	overflow: hidden;
 }
 #app-mount .panels_c48ade > *:not(:empty) ~ *:not(:empty) {
 	border-top: 1px solid var(--border-subtle);
