@@ -481,6 +481,7 @@
 		"HeaderBar": {"strings": [".hamburger", "scrollable", "themed"]},
 		"HeaderBarChannelName": {"strings": ["onDoubleClick", ".setName", "maxLen:"]},
 		"HeaderBarContainer": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
+		"HeaderBarDiscovery": {"strings": [".headerBar", "\"overlay\""]},
 		"HeaderBarRecipient": {"strings": ["getRecipientId", ".avatar", "getName"]},
 		"HeaderBarTitle": {"strings": [".titleWrapper", ",onContextMenu", "forceLevel:"]},
 		"HeaderBarTitleIcon": {"strings": ["HEADER_BAR_BADGE", ".iconBadge", "iconClassName:"]},
