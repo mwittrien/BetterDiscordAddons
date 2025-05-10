@@ -1009,6 +1009,10 @@ body:has(#app-mount)::after {
 .chat_f75fb0.threadSidebarOpen_f75fb0 {							/* chat					threadsidebar open						*/
 	border-radius: 0;
 }
+#app-mount .content_f75fb0,
+#app-mount .subtitleContainer_f75fb0 {
+	border-left: 0 !important;
+}
 .editor__2a891 {									/* chat					editor								*/
 	border: none;
 }
