@@ -1077,7 +1077,7 @@ body:has(#app-mount)::after {
 
 #app-mount .container__9293f.themed__9293f,						/* channelheader			channels							*/
 #app-mount .headerBar__8a7fc {								/* channelheader			discovery							*/
-	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
+	background: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v)) !important;
 	border-bottom: 1px solid rgba(var(--transparencycolor_v), .2) !important;
 	position: static !important;
 }
@@ -1140,8 +1140,8 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-.searchBar__97492 {									/* header				searchbar							*/
-	background-color: rgba(var(--transparencycolor_v), .3);
+#app-mount .searchBar__97492 {								/* header				searchbar							*/
+	background: rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .public-DraftEditorPlaceholder-root {
 	color: var(--text-muted);
@@ -2339,6 +2339,9 @@ body:has(#app-mount)::after {
 }
 #app-mount .dot__9293f {
 	color: inherit;
+}
+#app-mount .searchBar__5ec2f {								/* peoples				search							*/
+	background: rgba(var(--transparencycolor_v), .1);
 }
 .addFriendInputWrapper__72ba7 {								/* peoples				add friend							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
