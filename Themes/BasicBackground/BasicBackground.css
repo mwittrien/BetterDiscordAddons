@@ -809,7 +809,11 @@ body:has(#app-mount)::after {
 }
 
 .listDefault__07f91 .clickable__07f91:hover .content__07f91 {
-	background-color: rgba(var(--transparencycolor_v), .2);
+	background: rgba(var(--transparencycolor_v), .2);
+}
+.optionsActive__07f91,
+.optionsButton__07f91:hover {
+	background: rgb(var(--accentcolor_v));
 }
 
 #app-mount .streamPreview__6da2d {
