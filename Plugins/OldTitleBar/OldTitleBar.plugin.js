@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.5
+ * @version 1.8.6
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -136,6 +136,7 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"HeaderBar",
+						"HeaderBarDiscovery",
 						"TitleBar"
 					],
 					after: [
@@ -265,7 +266,12 @@ module.exports = (_ => {
 				titleBarButton = e.instance.props.trailing;
 			}
 			
+			processHeaderBarDiscovery (e) {
+				this.injectButtons(e.instance.props.children);
+			}
+			
 			processHeaderBar (e) {
+				if (e.instance.props.className && e.instance.props.className.indexOf("fullscreen") > -1) return;
 				let wrapper = BDFDB.ReactUtils.findChild(e.instance, {props: ["toolbar", "children"]});
 				if (!wrapper) return;
 				let children = BDFDB.ArrayUtils.is(wrapper.props.toolbar) ? wrapper.props.toolbar : BDFDB.ObjectUtils.get(wrapper, "props.toolbar.props.children");
@@ -276,7 +282,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {children})
 					];
 				}
-				if (document.querySelector(BDFDB.dotCN.titlebarthick)) children.push(titleBarButton);
+				children.push(titleBarButton);
 				this.injectButtons(children, true);
 			}
 
