@@ -1140,7 +1140,8 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 
-#app-mount .searchBar__97492 {								/* header				searchbar							*/
+#app-mount .searchBar__97492,								/* header				searchbar							*/
+#app-mount .searchBar__1ac1c {								/* header				searchbar							*/
 	background: rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .public-DraftEditorPlaceholder-root {
