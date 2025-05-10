@@ -170,6 +170,10 @@ module.exports = (_ => {
 						padding-right: 8px;
 					}
 					
+					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.channelheaderdiscoverysearchfloating} {
+						position: static;
+					}
+					
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.settingswindowstandardsidebarview}:before {
 						display: none;
 					}
