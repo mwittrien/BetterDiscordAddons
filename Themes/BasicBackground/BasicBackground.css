@@ -942,6 +942,10 @@ body:has(#app-mount)::after {
 	border-bottom-right-radius: var(--radius-sm);
 	border-bottom-left-radius: var(--radius-sm);
 }
+#app-mount .wrapper_e131a9:first-child:empty + .container__37e49 {
+	border-top-right-radius: var(--radius-sm);
+	border-top-left-radius: var(--radius-sm);
+}
 
 #app-mount button.button__67645.enabled__67645 {					/* account/voice			panel button							*/
 	opacity: 0.7;
