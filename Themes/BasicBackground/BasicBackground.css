@@ -2339,6 +2339,9 @@ body:has(#app-mount)::after {
 .container__133bf {									/* peoples												*/
 	border-top: 0 !important;
 }
+.tabBody__133bf {									/* peoples												*/
+	border-left: 0 !important;
+}
 #app-mount .dot__9293f {
 	color: inherit;
 }
@@ -2466,6 +2469,26 @@ body:has(#app-mount)::after {
 	position: static !important;
 	margin-top: unset !important;
 }
+
+.mainPageScroller_ca1a02 {
+	opacity: 1;
+	transition: opacity .75s ease-in-out;
+}
+.homeWrapper__0920e:has(.allPerksScroller_ca1a02.open_ca1a02) .mainPageScroller_ca1a02 {
+	opacity: 0;
+}
+#app-mount .inactiveArrow__3cf14 {
+	background: rgba(var(--transparencycolor_v), .2);
+}
+#app-mount .leftArrow__3cf14,
+#app-mount .rightArrow__3cf14 {
+	background: rgba(var(--transparencycolor_v), .4);
+}
+#app-mount .leftArrow__3cf14:hover,
+#app-mount .rightArrow__3cf14:hover {
+	background: rgb(var(--accentcolor_v));
+}
+
 #app-mount .shopCard_c3d04b {								/* store				card								*/
 	background-color: var(--background-secondary) !important;
 }
