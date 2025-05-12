@@ -75,21 +75,6 @@ module.exports = (_ => {
 			}
 			render() {
 				let children = [];
-				if (_this.settings.general.reloadButton) {
-					children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD,
-						tooltipConfig: {type: "bottom"},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-							onClick: _ => location.reload(),
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.channelheadericon,
-								iconSVG: `<svg width="24" height="24"><path fill="currentColor" d="M 21,10.875658 V 3 L 18.354245,5.6442048 C 16.727955,4.0125396 14.482176,3 11.994724,3 7.0187617,3 3,7.0280088 3,12 c 0,4.97199 4.0187617,9 8.994724,9 4.192893,0 7.705089,-2.868863 8.701336,-6.750263 h -2.341815 c -0.928705,2.621 -3.416159,4.500526 -6.360578,4.500526 -3.7317064,0 -6.7542205,-3.020742 -6.7542205,-6.750263 0,-3.7295207 3.0225141,-6.7502637 6.7542205,-6.7502637 1.862689,0 3.534359,0.7762803 4.75645,1.9966015 L 13.119724,10.874604 H 21 Z"/></svg>`
-							})
-						})
-					}));
-					children.push(BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}));
-				};
 				if (_this.settings.general.minimizeButton) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
 					onClick: _ => BDFDB.LibraryModules.WindowUtils.minimize(),
@@ -114,7 +99,22 @@ module.exports = (_ => {
 						iconSVG: `<svg width="24" height="24"><path fill="currentColor" d="M 19.2,3 12,10.2 4.8,3 3,4.8 10.2,12 3,19.2 4.8,21 12,13.8 19.2,21 21,19.2 13.8,12 21,4.8 Z"/></svg>`
 					})
 				}));
-				return children && BDFDB.ReactUtils.createElement("div", {
+				if (_this.settings.general.reloadButton) {
+					if (children.length) children.unshift(BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}));
+					children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD,
+						tooltipConfig: {type: "bottom"},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
+							onClick: _ => location.reload(),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.channelheadericon,
+								iconSVG: `<svg width="24" height="24"><path fill="currentColor" d="M 21,10.875658 V 3 L 18.354245,5.6442048 C 16.727955,4.0125396 14.482176,3 11.994724,3 7.0187617,3 3,7.0280088 3,12 c 0,4.97199 4.0187617,9 8.994724,9 4.192893,0 7.705089,-2.868863 8.701336,-6.750263 h -2.341815 c -0.928705,2.621 -3.416159,4.500526 -6.360578,4.500526 -3.7317064,0 -6.7542205,-3.020742 -6.7542205,-6.750263 0,-3.7295207 3.0225141,-6.7502637 6.7542205,-6.7502637 1.862689,0 3.534359,0.7762803 4.75645,1.9966015 L 13.119724,10.874604 H 21 Z"/></svg>`
+							})
+						})
+					}));
+				};
+				return !children.length ? null : BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN._oldtitlebartoolbar,
 					children: [
 						this.props.addFirstDivider && BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}),
