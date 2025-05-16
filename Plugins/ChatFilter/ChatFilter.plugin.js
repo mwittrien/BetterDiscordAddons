@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.0
+ * @version 3.6.1
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -541,8 +541,7 @@ module.exports = (_ => {
 								if (!values.wordValue) instance.props.errorMessage = "Choose a Word Value";
 								else if (words[values.choice][values.wordValue]) instance.props.errorMessage = `Word Value already used, saving will overwrite old ${values.choice} word`;
 								else delete instance.props.errorMessage;
-								values.addButton.props.disabled = !values.wordValue;
-								BDFDB.ReactUtils.forceUpdate(values.addButton);
+								values.addButton.setState({disabled: !Object.keys(values).every(valueName => values[valueName])});
 							}
 						})
 					}),
