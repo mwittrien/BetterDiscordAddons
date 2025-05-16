@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.9
+ * @version 2.5.0
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -372,8 +372,7 @@ module.exports = (_ => {
 								if (!values.wordValue) instance.props.errorMessage = "Choose a Word Value";
 								else if (aliases[values.wordValue]) instance.props.errorMessage = "Word Value already used, saving will overwrite old Alias";
 								else delete instance.props.errorMessage;
-								values.addButton.props.disabled = !Object.keys(values).every(valueName => values[valueName]);
-								BDFDB.ReactUtils.forceUpdate(values.addButton);
+								values.addButton.setState({disabled: !Object.keys(values).every(valueName => values[valueName])});
 							}
 						})
 					}),
@@ -390,8 +389,7 @@ module.exports = (_ => {
 								values.replaceValue = value.trim();
 								if (!values.replaceValue) instance.props.errorMessage = "Choose a Replacement Value";
 								else delete instance.props.errorMessage;
-								values.addButton.props.disabled = !Object.keys(values).every(valueName => values[valueName]);
-								BDFDB.ReactUtils.forceUpdate(values.addButton);
+								values.addButton.setState({disabled: !Object.keys(values).every(valueName => values[valueName])});
 							}
 						})
 					})
