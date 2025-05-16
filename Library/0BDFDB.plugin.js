@@ -4970,6 +4970,12 @@ module.exports = (_ => {
 				};
 				
 				CustomComponents.Button = reactInitialized && class BDFDB_Button extends Internal.LibraryModules.React.Component {
+					constructor(props) {
+						super(props);
+						if (!this.state) this.state = {};
+						this.state.disabled = props.disabled;
+						this.state.submitting = props.submitting;
+					}
 					handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 					handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 					handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
@@ -4977,22 +4983,22 @@ module.exports = (_ => {
 					handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
 					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 					render() {
-						let processingAndListening = (this.props.disabled || this.props.submitting) && (null != this.props.onMouseEnter || null != this.props.onMouseLeave);
+						let processingAndListening = (this.state.disabled || this.state.submitting) && (null != this.props.onMouseEnter || null != this.props.onMouseLeave);
 						let props = BDFDB.ObjectUtils.exclude(this.props, "look", "color", "hover", "size", "fullWidth", "grow", "disabled", "submitting", "type", "style", "wrapperClassName", "className", "innerClassName", "onClick", "onContextMenu", "onMouseDown", "onMouseUp", "onMouseEnter", "onMouseLeave", "children", "rel");
-						let button = BDFDB.ReactUtils.createElement("button", Object.assign({}, !this.props.disabled && !this.props.submitting && props, {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.button, this.props.look != null ? this.props.look : Internal.LibraryComponents.Button.Looks.FILLED, this.props.color != null ? this.props.color : Internal.LibraryComponents.Button.Colors.BRAND, this.props.hover, this.props.size != null ? this.props.size : Internal.LibraryComponents.Button.Sizes.MEDIUM, processingAndListening && this.props.wrapperClassName, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, (this.props.grow === undefined || this.props.grow) && BDFDB.disCN.buttongrow, this.props.submitting && BDFDB.disCN.buttonsubmitting),
-							onClick: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleClick.bind(this),
-							onContextMenu: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleContextMenu.bind(this),
-							onMouseUp: !this.props.disabled && this.handleMouseDown.bind(this),
-							onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
+						let button = BDFDB.ReactUtils.createElement("button", Object.assign({}, !this.state.disabled && !this.state.submitting && props, {
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.button, this.props.look != null ? this.props.look : Internal.LibraryComponents.Button.Looks.FILLED, this.props.color != null ? this.props.color : Internal.LibraryComponents.Button.Colors.BRAND, this.props.hover, this.props.size != null ? this.props.size : Internal.LibraryComponents.Button.Sizes.MEDIUM, processingAndListening && this.props.wrapperClassName, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, (this.props.grow === undefined || this.props.grow) && BDFDB.disCN.buttongrow, this.state.submitting && BDFDB.disCN.buttonsubmitting),
+							onClick: (this.state.disabled || this.state.submitting) ? e => {return e.preventDefault();} : this.handleClick.bind(this),
+							onContextMenu: (this.state.disabled || this.state.submitting) ? e => {return e.preventDefault();} : this.handleContextMenu.bind(this),
+							onMouseUp: !this.state.disabled && this.handleMouseDown.bind(this),
+							onMouseDown: !this.state.disabled && this.handleMouseUp.bind(this),
 							onMouseEnter: this.handleMouseEnter.bind(this),
 							onMouseLeave: this.handleMouseLeave.bind(this),
 							type: !this.props.type ? "button" : this.props.type,
-							disabled: this.props.disabled,
+							disabled: this.state.disabled,
 							style: this.props.style,
 							rel: this.props.rel,
 							children: [
-								this.props.submitting && !this.props.disabled ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SpinnerComponents.Spinner, {
+								this.state.submitting && !this.state.disabled ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SpinnerComponents.Spinner, {
 									type: Internal.LibraryComponents.SpinnerComponents.Types.PULSING_ELLIPSIS,
 									className: BDFDB.disCN.buttonspinner,
 									itemClassName: BDFDB.disCN.buttonspinneritem
