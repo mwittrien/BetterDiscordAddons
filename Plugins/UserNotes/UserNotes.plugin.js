@@ -2,7 +2,7 @@
  * @name UserNotes
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.1
+ * @version 1.1.2
  * @description Allows you to write User Notes locally
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -107,7 +107,6 @@ module.exports = (_ => {
 
 			openNotesModal (user) {
 				let note = BDFDB.DataUtils.load(this, "notes", user.id);
-				let textarea;
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "LARGE",
@@ -119,7 +118,7 @@ module.exports = (_ => {
 							value: note,
 							placeholder: note,
 							autoFocus: true,
-							ref: instance => {if (instance) textarea = instance;}
+							onChange: value => note = value
 						})
 					],
 					buttons: [{
@@ -127,7 +126,6 @@ module.exports = (_ => {
 						color: "BRAND",
 						close: true,
 						onClick: _ => {
-							note = textarea.props.value;
 							if (note) BDFDB.DataUtils.save(note, this, "notes", user.id);
 							else BDFDB.DataUtils.remove(this, "notes", user.id);
 						}
