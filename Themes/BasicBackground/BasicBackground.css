@@ -2380,6 +2380,10 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .5);
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
+.boostContainer__823e1.boostContainerActive__823e1::before,
+.boostContainer__823e1.boostContainerActive__823e1::after {
+	display: none;
+}
 
 
 /* ~~~~		7.		PEOPLES						~~~~ */
