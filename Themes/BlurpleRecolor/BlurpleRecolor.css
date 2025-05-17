@@ -618,6 +618,10 @@
 .buttonInner__34c2c:hover {
 	border-color: rgba(var(--accentcolor_v), .5);
 }
+#app-mount .reaction__23977.reactionMe__23977 .reactionCount__23977 {
+	color: #fff;
+	opacity: .6;
+}
 .progressBar__89dcd[style*="background-color: hsl(227, "],				/* attachment				upload bar							*/
 .progressBar__89dcd[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor_v)) !important;
