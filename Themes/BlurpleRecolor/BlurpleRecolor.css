@@ -609,17 +609,20 @@
 	color: #fff;
 }
 
+#app-mount .pill_a2c9e8.selected_a2c9e8,
 #app-mount .reaction__23977.reactionMe__23977 {						/* reaction				wrapper me							*/
 	background-color: rgba(var(--accentcolor_v), .3);
 	border-color: rgb(var(--accentcolor_v));
 }
+#app-mount .pill_a2c9e8:hover,
 #app-mount .reaction__23977:hover,							/* reaction				add react							*/
 .addReactButton__34c2c:hover,								/* reaction				add new react							*/
 .buttonInner__34c2c:hover {
 	border-color: rgba(var(--accentcolor_v), .5);
 }
+#app-mount .pill_a2c9e8.selected_a2c9e8 > div,
 #app-mount .reaction__23977.reactionMe__23977 .reactionCount__23977 {
-	color: #fff;
+	color: #fff !important;
 	opacity: .6;
 }
 .progressBar__89dcd[style*="background-color: hsl(227, "],				/* attachment				upload bar							*/
