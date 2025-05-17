@@ -419,6 +419,7 @@ body,											/* body													*/
 	color: transparent;
 }
 #app-mount .container_c8ffbb,								/* members				container							*/
+#app-mount .sidebarContainer__89463,							/* chat					boosts sidebar							*/
 #app-mount .scroller__7d20c {								/* peoples				activity scroller						*/
 	border: none;
 }
