@@ -278,6 +278,7 @@ html {
 		7.	CHAT SIDEBAR
 		8.	CALL
 		9.	UNAVAILABLESCREEN
+		10.	BOOSTSPAGE
 	7.	PEOPLES
 	8.	STORE/NITRO
 	9.	LIBRARY
@@ -2342,6 +2343,42 @@ body:has(#app-mount)::after {
 }
 .splashImage_a154bf {									/* screen				image								*/
 	opacity: 0.7;
+}
+
+/* ----		6.10.		BOOSTSPAGE					---- */
+
+.parentContainer__98cbd .container__98cbd {
+	transform: unset !important;
+	top: 0;
+	transition: border-width .2s ease,border-color .2s ease,box-shadow .2s ease,top .2s ease-in-out;
+}
+.parentContainer__98cbd:hover .container__98cbd {
+	top: -4px;
+}
+.boostContainer__823e1 {
+	background: transparent;
+	border-color: rgba(var(--transparencycolor_v), .2);
+	z-index: 2;
+}
+.boostContainer__823e1::before,
+.boostContainer__823e1::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: -1;
+}
+.boostContainer__823e1::before {
+	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	background-attachment: fixed;
+}
+.boostContainer__823e1::after {
+	background-color: rgba(var(--transparencycolor_v), .5);
+	backdrop-filter: blur(var(--backgroundblur_v));
 }
 
 
