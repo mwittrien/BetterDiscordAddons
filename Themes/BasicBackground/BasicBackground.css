@@ -419,9 +419,11 @@ body,											/* body													*/
 #app-mount .app_a3002d {
 	color: transparent;
 }
+#app-mount .chat_f75fb0.threadSidebarOpen_f75fb0,					/* chat					sidebar open							*/
+#app-mount .sidebarContainer__89463,							/* chat					boosts sidebar							*/
+#app-mount .container__01ae2,								/* chat					forum sidepanel							*/
 #app-mount .container_c8ffbb,								/* members				container							*/
 #app-mount .container__7641b,								/* members				threads								*/
-#app-mount .sidebarContainer__89463,							/* chat					boosts sidebar							*/
 #app-mount .scroller__7d20c {								/* peoples				activity scroller						*/
 	border: none;
 }
@@ -2214,7 +2216,7 @@ body:has(#app-mount)::after {
 	display: block;
 	top: 10px;
 	bottom: 10px;
-	left: -3.5px;
+	left: -4.3px;
 	width: 1px;
 	background: var(--background-modifier-accent);
 	pointer-events: none;
