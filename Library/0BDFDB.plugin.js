@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.6
+ * @version 4.1.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -28,6 +28,7 @@ module.exports = (_ => {
 		started: true,
 		changeLog: {}
 	};
+	window.BDFDB = BDFDB;
 	
 	return class BDFDB_Frame {
 		constructor (meta) {for (let key in meta) {
@@ -1195,7 +1196,7 @@ module.exports = (_ => {
 						if (!Internal.getWebModuleReq.req) {
 							const id = "BDFDB-WebModules_" + Math.floor(Math.random() * 10000000000000000);
 							let req;
-							webpackChunkdiscord_app.push([[id], {}, r => {if (r.c) req = r;}]);
+							webpackChunkdiscord_app.push([[id], {}, r => {if ("b" in r) req = r;}]);
 							delete req.m[id];
 							delete req.c[id];
 							Internal.getWebModuleReq.req = req;
@@ -1997,7 +1998,8 @@ module.exports = (_ => {
 							BDFDB.DOMUtils.remove(notice);
 						}, 500);
 					};
-					notice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", notice.close);
+					let dismiss = notice.querySelector(BDFDB.dotCN.noticedismiss);
+					if (dismiss) dismiss.addEventListener("click", notice.close);
 					return notice;
 				};
 				BDFDB.NotificationUtils.alert = function (header, body) {
@@ -2550,7 +2552,7 @@ module.exports = (_ => {
 					}
 				};
 				const LanguageStores = BDFDB.ModuleUtils.find(m => m[InternalData.LanguageStringHashes.DISCORD] && m, {all: true, defaultExport: false});
-				LibraryModules.LanguageStore = (LanguageStores.find(n => n && n.exports && n.exports[InternalData.LanguageStringHashes.DISCORD]) || LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD]) || {}).exports;
+				LibraryModules.LanguageStore = (LanguageStores.find(n => n && n.exports && n.exports[InternalData.LanguageStringHashes.DISCORD]) || LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD]) || {}).exports || {};
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
@@ -4407,7 +4409,7 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.getLanguage = function () {
-					return Internal.LibraryModules.LanguageUtils && (Internal.LibraryModules.LanguageUtils.chosenLocale || Internal.LibraryModules.LanguageUtils._chosenLocale) || Internal.LibraryModules.LanguageIntlUtils.getSystemLocale && (Internal.LibraryModules.LanguageIntlUtils.getSystemLocale && Internal.LibraryModules.LanguageIntlUtils.getSystemLocale()) || document.querySelector("html[lang]").getAttribute("lang");
+					return Internal.LibraryModules.LanguageUtils && (Internal.LibraryModules.LanguageUtils.chosenLocale || Internal.LibraryModules.LanguageUtils._chosenLocale) || Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.getSystemLocale && (Internal.LibraryModules.LanguageIntlUtils.getSystemLocale && Internal.LibraryModules.LanguageIntlUtils.getSystemLocale()) || document.querySelector("html[lang]").getAttribute("lang");
 				};
 				BDFDB.DiscordUtils.getBuild = function () {
 					if (BDFDB.DiscordUtils.getBuild.build) return BDFDB.DiscordUtils.getBuild.build;
@@ -5270,16 +5272,18 @@ module.exports = (_ => {
 						}, this.props);
 					}
 				};
-				CustomComponents.Checkbox.Types = {
+				if (CustomComponents.Checkbox) {
+					CustomComponents.Checkbox.Types = {
 					DEFAULT: "DEFAULT",
 					GHOST: "GHOST",
 					INVERTED: "INVERTED"
-				};
-				CustomComponents.Checkbox.Shapes = {
-					BOX: "box",
-					ROUND: "round"
-				};
-				Internal.setDefaultProps(CustomComponents.Checkbox, {type: CustomComponents.Checkbox.Types.INVERTED, shape: CustomComponents.Checkbox.Shapes.ROUND});
+					};
+					CustomComponents.Checkbox.Shapes = {
+						BOX: "box",
+						ROUND: "round"
+					};
+					Internal.setDefaultProps(CustomComponents.Checkbox, {type: CustomComponents.Checkbox.Types.INVERTED, shape: CustomComponents.Checkbox.Shapes.ROUND});
+				}
 				
 				CustomComponents.Clickable = reactInitialized && class BDFDB_Clickable extends Internal.LibraryModules.React.Component {
 					handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
@@ -5783,7 +5787,7 @@ module.exports = (_ => {
 					}
 				};
 
-				CustomComponents.DateInput = class BDFDB_DateInput extends Internal.LibraryModules.React.Component {
+				CustomComponents.DateInput = reactInitialized && class BDFDB_DateInput extends Internal.LibraryModules.React.Component {
 					renderFormatButton(props) {
 						const button = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.dateinputbutton,
@@ -6012,110 +6016,112 @@ module.exports = (_ => {
 						}), "onChange", "label", "formatString", "dateString", "timeString", "timeOffset", "language", "noPreview", "prefix", "suffix"));
 					}
 				};
-				CustomComponents.DateInput.getDefaultString = function (language) {
-					language = language || BDFDB.LanguageUtils.getLanguage().id;
-					const date = new Date();
-					return date.toLocaleString(language).replace(date.toLocaleDateString(language), "$date").replace(date.toLocaleTimeString(language, {hourCycle: "h12"}), "$time12").replace(date.toLocaleTimeString(language, {hourCycle: "h11"}), "$time12").replace(date.toLocaleTimeString(language, {hourCycle: "h24"}), "$time").replace(date.toLocaleTimeString(language, {hourCycle: "h23"}), "$time");
-				};
-				CustomComponents.DateInput.parseDate = function (date, offset) {
-					let timeObj = date;
-					if (typeof timeObj == "string") {
-						const language = BDFDB.LanguageUtils.getLanguage().id;
-						for (let i = 0; i < 12; i++) {
-							const tempDate = new Date();
-							tempDate.setMonth(i);
-							timeObj = timeObj.replace(tempDate.toLocaleDateString(language, {month:"long"}), tempDate.toLocaleDateString("en", {month:"short"}));
+				if (CustomComponents.DateInput) {
+					CustomComponents.DateInput.getDefaultString = function (language) {
+						language = language || BDFDB.LanguageUtils.getLanguage().id;
+						const date = new Date();
+						return date.toLocaleString(language).replace(date.toLocaleDateString(language), "$date").replace(date.toLocaleTimeString(language, {hourCycle: "h12"}), "$time12").replace(date.toLocaleTimeString(language, {hourCycle: "h11"}), "$time12").replace(date.toLocaleTimeString(language, {hourCycle: "h24"}), "$time").replace(date.toLocaleTimeString(language, {hourCycle: "h23"}), "$time");
+					};
+					CustomComponents.DateInput.parseDate = function (date, offset) {
+						let timeObj = date;
+						if (typeof timeObj == "string") {
+							const language = BDFDB.LanguageUtils.getLanguage().id;
+							for (let i = 0; i < 12; i++) {
+								const tempDate = new Date();
+								tempDate.setMonth(i);
+								timeObj = timeObj.replace(tempDate.toLocaleDateString(language, {month:"long"}), tempDate.toLocaleDateString("en", {month:"short"}));
+							}
+							timeObj = new Date(timeObj);
 						}
-						timeObj = new Date(timeObj);
-					}
-					else if (typeof timeObj == "number") timeObj = new Date(timeObj);
-					
-					if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(date));
-					if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") timeObj = new Date();
-					offset = offset != null && parseFloat(offset);
-					if ((offset || offset === 0) && !isNaN(offset)) timeObj = new Date(timeObj.getTime() + ((offset - timeObj.getTimezoneOffset() * (-1/60)) * 60*60*1000));
-					return timeObj;
-				};
-				CustomComponents.DateInput.format = function (data, time) {
-					if (typeof data == "string") data = {formatString: data};
-					if (data && typeof data.formatString != "string") data.formatString = "";
-					if (!data || typeof data.formatString != "string" || !time) return "";
-					
-					const language = data.language || BDFDB.LanguageUtils.getLanguage().id;
-					const timeObj = Internal.LibraryComponents.DateInput.parseDate(time, data.timeOffset);
-					const now = new Date();
-					const daysAgo = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
-					const date = data.dateString && typeof data.dateString == "string" ? Internal.LibraryComponents.DateInput.formatDate({dateString: data.dateString, language: language}, timeObj) : timeObj.toLocaleDateString(language);
-					
-					return (data.formatString || Internal.LibraryComponents.DateInput.getDefaultString(language))
-						.replace(/\$date/g, date)
-						.replace(/\$time12/g, data.timeString && typeof data.timeString == "string" ? Internal.LibraryComponents.DateInput.formatTime({timeString: data.timeString, language: language}, timeObj, true) : timeObj.toLocaleTimeString(language, {hourCycle: "h12"}))
-						.replace(/\$time/g, data.timeString && typeof data.timeString == "string" ? Internal.LibraryComponents.DateInput.formatTime({timeString: data.timeString, language: language}, timeObj) : timeObj.toLocaleTimeString(language, {hourCycle: "h23"}))
-						.replace(/\$monthS/g, timeObj.toLocaleDateString(language, {month: "short"}))
-						.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
-						.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
-						.replace(/\$day/g, timeObj.toLocaleDateString(language, {weekday: "long"}))
-						.replace(/\$agoAmount/g, daysAgo < 0 || daysAgo > 1 ? Internal.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-						.replace(/\$agoWeekdayS/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "short"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-						.replace(/\$agoWeekday/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "long"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-						.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_DAYS`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-						.replace(/\$agoDate/g, daysAgo < 0 || daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-						.replace(/\(\)|\[\]/g, "").replace(/,\s*$|^\s*,/g, "").replace(/ +/g, " ").trim();
-				};
-				CustomComponents.DateInput.formatDate = function (data, time) {
-					if (typeof data == "string") data = {dateString: data};
-					if (data && typeof data.dateString != "string") return "";
-					if (!data || typeof data.dateString != "string" || !data.dateString || !time) return "";
-					
-					const language = data.language || BDFDB.LanguageUtils.getLanguage().id;
-					const timeObj = Internal.LibraryComponents.DateInput.parseDate(time, data.timeOffset);
-					
-					return data.dateString
-						.replace(/\$monthS/g, timeObj.toLocaleDateString(language, {month: "short"}))
-						.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
-						.replace(/\$dd/g, timeObj.toLocaleDateString(language, {day: "2-digit"}))
-						.replace(/\$d/g, timeObj.toLocaleDateString(language, {day: "numeric"}))
-						.replace(/\$mm/g, timeObj.toLocaleDateString(language, {month: "2-digit"}))
-						.replace(/\$m/g, timeObj.toLocaleDateString(language, {month: "numeric"}))
-						.replace(/\$yyyy/g, timeObj.toLocaleDateString(language, {year: "numeric"}))
-						.replace(/\$yy/g, timeObj.toLocaleDateString(language, {year: "2-digit"}))
-						.trim();
-				};
-				CustomComponents.DateInput.formatTime = function (data, time, hour12) {
-					if (typeof data == "string") data = {timeString: data};
-					if (data && typeof data.timeString != "string") return "";
-					if (!data || typeof data.timeString != "string" || !data.timeString || !time) return "";
-					
-					const language = data.language || BDFDB.LanguageUtils.getLanguage().id;
-					const timeObj = Internal.LibraryComponents.DateInput.parseDate(time, data.timeOffset);
-					
-					let hours = timeObj.getHours();
-					if (hour12) {
-						hours = hours == 0 ? 12 : hours;
-						if (hours > 12) hours -= 12;
-					}
-					const minutes = timeObj.getMinutes();
-					const seconds = timeObj.getSeconds();
-					const milli = timeObj.getMilliseconds();
-					
-					let string = data.timeString
-						.replace(/\$hh/g, hours < 10 ? `0${hours}` : hours)
-						.replace(/\$h/g, hours)
-						.replace(/\$mm/g, minutes < 10 ? `0${minutes}` : minutes)
-						.replace(/\$m/g, minutes)
-						.replace(/\$ss/g, seconds < 10 ? `0${seconds}` : seconds)
-						.replace(/\$s/g, seconds)
-						.replace(/\$uu/g, milli < 10 ? `00${milli}` : milli < 100 ? `0${milli}` : milli)
-						.replace(/\$u/g, milli)
-						.trim();
+						else if (typeof timeObj == "number") timeObj = new Date(timeObj);
+						
+						if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(date));
+						if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") timeObj = new Date();
+						offset = offset != null && parseFloat(offset);
+						if ((offset || offset === 0) && !isNaN(offset)) timeObj = new Date(timeObj.getTime() + ((offset - timeObj.getTimezoneOffset() * (-1/60)) * 60*60*1000));
+						return timeObj;
+					};
+					CustomComponents.DateInput.format = function (data, time) {
+						if (typeof data == "string") data = {formatString: data};
+						if (data && typeof data.formatString != "string") data.formatString = "";
+						if (!data || typeof data.formatString != "string" || !time) return "";
+						
+						const language = data.language || BDFDB.LanguageUtils.getLanguage().id;
+						const timeObj = Internal.LibraryComponents.DateInput.parseDate(time, data.timeOffset);
+						const now = new Date();
+						const daysAgo = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
+						const date = data.dateString && typeof data.dateString == "string" ? Internal.LibraryComponents.DateInput.formatDate({dateString: data.dateString, language: language}, timeObj) : timeObj.toLocaleDateString(language);
+						
+						return (data.formatString || Internal.LibraryComponents.DateInput.getDefaultString(language))
+							.replace(/\$date/g, date)
+							.replace(/\$time12/g, data.timeString && typeof data.timeString == "string" ? Internal.LibraryComponents.DateInput.formatTime({timeString: data.timeString, language: language}, timeObj, true) : timeObj.toLocaleTimeString(language, {hourCycle: "h12"}))
+							.replace(/\$time/g, data.timeString && typeof data.timeString == "string" ? Internal.LibraryComponents.DateInput.formatTime({timeString: data.timeString, language: language}, timeObj) : timeObj.toLocaleTimeString(language, {hourCycle: "h23"}))
+							.replace(/\$monthS/g, timeObj.toLocaleDateString(language, {month: "short"}))
+							.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
+							.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
+							.replace(/\$day/g, timeObj.toLocaleDateString(language, {weekday: "long"}))
+							.replace(/\$agoAmount/g, daysAgo < 0 || daysAgo > 1 ? Internal.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoWeekdayS/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "short"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoWeekday/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "long"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_DAYS`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoDate/g, daysAgo < 0 || daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\(\)|\[\]/g, "").replace(/,\s*$|^\s*,/g, "").replace(/ +/g, " ").trim();
+					};
+					CustomComponents.DateInput.formatDate = function (data, time) {
+						if (typeof data == "string") data = {dateString: data};
+						if (data && typeof data.dateString != "string") return "";
+						if (!data || typeof data.dateString != "string" || !data.dateString || !time) return "";
+						
+						const language = data.language || BDFDB.LanguageUtils.getLanguage().id;
+						const timeObj = Internal.LibraryComponents.DateInput.parseDate(time, data.timeOffset);
+						
+						return data.dateString
+							.replace(/\$monthS/g, timeObj.toLocaleDateString(language, {month: "short"}))
+							.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
+							.replace(/\$dd/g, timeObj.toLocaleDateString(language, {day: "2-digit"}))
+							.replace(/\$d/g, timeObj.toLocaleDateString(language, {day: "numeric"}))
+							.replace(/\$mm/g, timeObj.toLocaleDateString(language, {month: "2-digit"}))
+							.replace(/\$m/g, timeObj.toLocaleDateString(language, {month: "numeric"}))
+							.replace(/\$yyyy/g, timeObj.toLocaleDateString(language, {year: "numeric"}))
+							.replace(/\$yy/g, timeObj.toLocaleDateString(language, {year: "2-digit"}))
+							.trim();
+					};
+					CustomComponents.DateInput.formatTime = function (data, time, hour12) {
+						if (typeof data == "string") data = {timeString: data};
+						if (data && typeof data.timeString != "string") return "";
+						if (!data || typeof data.timeString != "string" || !data.timeString || !time) return "";
+						
+						const language = data.language || BDFDB.LanguageUtils.getLanguage().id;
+						const timeObj = Internal.LibraryComponents.DateInput.parseDate(time, data.timeOffset);
+						
+						let hours = timeObj.getHours();
+						if (hour12) {
+							hours = hours == 0 ? 12 : hours;
+							if (hours > 12) hours -= 12;
+						}
+						const minutes = timeObj.getMinutes();
+						const seconds = timeObj.getSeconds();
+						const milli = timeObj.getMilliseconds();
+						
+						let string = data.timeString
+							.replace(/\$hh/g, hours < 10 ? `0${hours}` : hours)
+							.replace(/\$h/g, hours)
+							.replace(/\$mm/g, minutes < 10 ? `0${minutes}` : minutes)
+							.replace(/\$m/g, minutes)
+							.replace(/\$ss/g, seconds < 10 ? `0${seconds}` : seconds)
+							.replace(/\$s/g, seconds)
+							.replace(/\$uu/g, milli < 10 ? `00${milli}` : milli < 100 ? `0${milli}` : milli)
+							.replace(/\$u/g, milli)
+							.trim();
 
-					let digits = "\\d";
-					if (BDFDB.LanguageUtils.languages[language] && BDFDB.LanguageUtils.languages[language].numberMap) {
-						digits = Object.entries(BDFDB.LanguageUtils.languages[language].numberMap).map(n => n[1]).join("");
-						for (let number in BDFDB.LanguageUtils.languages[language].numberMap) string = string.replace(new RegExp(number, "g"), BDFDB.LanguageUtils.languages[language].numberMap[number]);
-					}
-					return hour12 ? timeObj.toLocaleTimeString(language, {hourCycle: "h12"}).replace(new RegExp(`[${digits}]{1,2}[^${digits}][${digits}]{1,2}[^${digits}][${digits}]{1,2}`, "g"), string) : string;
-				};
+						let digits = "\\d";
+						if (BDFDB.LanguageUtils.languages[language] && BDFDB.LanguageUtils.languages[language].numberMap) {
+							digits = Object.entries(BDFDB.LanguageUtils.languages[language].numberMap).map(n => n[1]).join("");
+							for (let number in BDFDB.LanguageUtils.languages[language].numberMap) string = string.replace(new RegExp(number, "g"), BDFDB.LanguageUtils.languages[language].numberMap[number]);
+						}
+						return hour12 ? timeObj.toLocaleTimeString(language, {hourCycle: "h12"}).replace(new RegExp(`[${digits}]{1,2}[^${digits}][${digits}]{1,2}[^${digits}][${digits}]{1,2}`, "g"), string) : string;
+					};
+				}
 				
 				CustomComponents.EmojiPickerButton = reactInitialized && class BDFDB_EmojiPickerButton extends Internal.LibraryModules.React.Component {
 					handleEmojiChange(emoji) {
@@ -6912,23 +6918,25 @@ module.exports = (_ => {
 						});
 					}
 				};
-				CustomComponents.PopoutContainer.Align = {
-					BOTTOM: "bottom",
-					CENTER: "center",
-					LEFT: "left",
-					RIGHT: "right",
-					TOP: "top"
-				};
-				CustomComponents.PopoutContainer.Positions = {
-					BOTTOM: "bottom",
-					CENTER: "center",
-					LEFT: "left",
-					RIGHT: "right",
-					TOP: "top",
-					WINDOW_CENTER: "window_center"
-				};
-				CustomComponents.PopoutContainer.ObjectProperties = ["Animation"];
-				Internal.setDefaultProps(CustomComponents.PopoutContainer, {wrap: true});
+				if (CustomComponents.PopoutContainer) {
+					CustomComponents.PopoutContainer.Align = {
+						BOTTOM: "bottom",
+						CENTER: "center",
+						LEFT: "left",
+						RIGHT: "right",
+						TOP: "top"
+					};
+					CustomComponents.PopoutContainer.Positions = {
+						BOTTOM: "bottom",
+						CENTER: "center",
+						LEFT: "left",
+						RIGHT: "right",
+						TOP: "top",
+						WINDOW_CENTER: "window_center"
+					};
+					CustomComponents.PopoutContainer.ObjectProperties = ["Animation"];
+					Internal.setDefaultProps(CustomComponents.PopoutContainer, {wrap: true});
+				}
 				
 				CustomComponents.PopoutCSSAnimator = function (props) {
 					let positionState = BDFDB.ReactUtils.useState(props.position != null);
@@ -6942,7 +6950,7 @@ module.exports = (_ => {
 						children: props.children
 					})
 				};
-				CustomComponents.PopoutCSSAnimator.Types = {
+				if (CustomComponents.PopoutCSSAnimator) CustomComponents.PopoutCSSAnimator.Types = {
 					"1": "TRANSLATE",
 					"2": "SCALE",
 					"3": "FADE",
@@ -7533,7 +7541,7 @@ module.exports = (_ => {
 						return null;
 					}
 				};
-				CustomComponents.SvgIcon.Names = InternalData.SvgIcons || {};
+				if (CustomComponents.SvgIcon) CustomComponents.SvgIcon.Names = InternalData.SvgIcons || {};
 				
 				const SwitchIconPaths = {
 					a: {
@@ -7679,15 +7687,17 @@ module.exports = (_ => {
 						}, this.props);
 					}
 				};
-				CustomComponents.Switch.Sizes = {
-					DEFAULT: "default",
-					MINI: "mini",
-				};
-				Internal.setDefaultProps(CustomComponents.Switch, {
-					size: CustomComponents.Switch.Sizes.DEFAULT,
-					uncheckedColor: Internal.DiscordConstants.Colors.PRIMARY_400,
-					checkedColor: Internal.DiscordConstants.Colors.BRAND
-				});
+				if (CustomComponents.Switch) {
+					CustomComponents.Switch.Sizes = {
+						DEFAULT: "default",
+						MINI: "mini",
+					};
+					Internal.setDefaultProps(CustomComponents.Switch, {
+						size: CustomComponents.Switch.Sizes.DEFAULT,
+						uncheckedColor: Internal.DiscordConstants.Colors.PRIMARY_400,
+						checkedColor: Internal.DiscordConstants.Colors.BRAND
+					});
+				}
 				
 				CustomComponents.TabBar = reactInitialized && class BDFDB_TabBar extends Internal.LibraryModules.React.Component {
 					handleItemSelect(item) {
@@ -7714,16 +7724,18 @@ module.exports = (_ => {
 						}), "itemClassName", "items", "renderItem"));
 					}
 				};
-				CustomComponents.TabBar.Types = {
-					SIDE: "side",
-					TOP: "top",
-					TOP_PILL: "top-pill"
-				};
-				CustomComponents.TabBar.Looks = {
-					GREY: "grey",
-					BRAND: "brand",
-					CUSTOM: "custom"
-				};
+				if (CustomComponents.TabBar) {
+					CustomComponents.TabBar.Types = {
+						SIDE: "side",
+						TOP: "top",
+						TOP_PILL: "top-pill"
+					};
+					CustomComponents.TabBar.Looks = {
+						GREY: "grey",
+						BRAND: "brand",
+						CUSTOM: "custom"
+					};
+				}
 				
 				CustomComponents.Table = reactInitialized && class BDFDB_Table extends Internal.LibraryModules.React.Component {
 					render() {
@@ -8029,7 +8041,7 @@ module.exports = (_ => {
 						});
 					}
 				};
-				CustomComponents.TooltipContainer.Positions = {
+				if (CustomComponents.TooltipContainer) CustomComponents.TooltipContainer.Positions = {
 					BOTTOM: "bottom",
 					CENTER: "center",
 					LEFT: "left",
