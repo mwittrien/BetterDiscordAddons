@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.0
+ * @version 1.8.1
  * @description Removes blocked/ignored Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -127,6 +127,12 @@ module.exports = (_ => {
 						"VoiceUsers"
 					]
 				};
+				
+				this.css = `
+					${BDFDB.dotCN.messagegroupstart}:empty {
+						display: none;
+					}
+				`;
 				
 				this.patchPriority = 8;
 			}
@@ -317,7 +323,7 @@ module.exports = (_ => {
 			}
 		
 			processBlockedMessageGroup (e) {
-				if (this.settings.places.messages && (this.settings.types.blocked && e.instance.props.messages.type == "MESSAGE_GROUP_BLOCKED" || this.settings.types.spammers && e.instance.props.messages.type == "MESSAGE_GROUP_SPAMMER" || this.settings.types.ignored && e.instance.props.messages.type == "MESSAGE_GROUP_IGNORED")) return null;
+				if (this.settings.places.messages && (this.settings.types.blocked && e.instance.props.messages.type == "MESSAGE_GROUP_BLOCKED" || this.settings.types.spammers && e.instance.props.messages.type == "MESSAGE_GROUP_SPAMMER" || this.settings.types.ignored && e.instance.props.messages.type == "MESSAGE_GROUP_IGNORED")) e.returnvalue.props.children = null;
 			}
 			
 			processMessage (e) {
