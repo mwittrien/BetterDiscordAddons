@@ -28,7 +28,6 @@ module.exports = (_ => {
 		started: true,
 		changeLog: {}
 	};
-	window.BDFDB = BDFDB;
 	
 	return class BDFDB_Frame {
 		constructor (meta) {for (let key in meta) {
