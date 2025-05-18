@@ -1174,9 +1174,6 @@
 			"frame": "frame_aa90f4",
 			"innerFrame": "innerFrame_aa90f4"
 		},
-		"RemoveBlockedUsers": {
-			"hideBlockedMessages": "hideBlockedMessages_bf4a90"
-		},
 		"ServerCounter": {
 			"serverCount": "serverCount_1dcf05",
 			"serverCountWrap": "serverCountWrap_1dcf05"
@@ -1706,7 +1703,6 @@
 		"_readallnotificationsbuttonbutton": ["ReadAllNotificationsButton", "button"],
 		"_readallnotificationsbuttonframe": ["ReadAllNotificationsButton", "frame"],
 		"_readallnotificationsbuttoninner": ["ReadAllNotificationsButton", "innerFrame"],
-		"_removeblockedusershideblockedmessages": ["RemoveBlockedUsers", "hideBlockedMessages"],
 		"_repochangelogbutton": ["BDFDB", "changeLogButton"],
 		"_servercounterservercount": ["ServerCounter", "serverCount"],
 		"_servercounterservercountwrap": ["ServerCounter", "serverCountWrap"],
