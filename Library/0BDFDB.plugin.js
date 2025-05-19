@@ -8306,8 +8306,7 @@ module.exports = (_ => {
 					if (e.instance.props.emojiDescriptors && Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) for (let i in e.instance.props.emojiDescriptors) e.instance.props.emojiDescriptors[i] = Object.assign({}, e.instance.props.emojiDescriptors[i], {isDisabled: false});
 				};
 				Internal.processNameContainerAvatar = function (e) {
-					if (!e.instance.props.user) return;
-					e.returnvalue = Internal._processAvatarRender(e.instance.props.user, e.returnvalue) || e.returnvalue;
+					if (e.returnvalue && Array.isArray(e.returnvalue.props.children) && e.returnvalue.props.children[0]) e.returnvalue.props.children[0] = Internal._processAvatarRender(e.instance.props.user, e.returnvalue.props.children[0]) || e.returnvalue.props.children[0];
 				};
 				Internal.processMenu = function (e) {
 					if (e.instance.props && (e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && e.instance.props.children.length)) {
