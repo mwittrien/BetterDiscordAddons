@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.7
+ * @version 4.1.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1353,7 +1353,7 @@ module.exports = (_ => {
 					for (let i in req.m) if (req.m.hasOwnProperty(i)) {
 						let m = req.m[i];
 						if (m && isSearchable(m)) {
-							if (req.c[i] && !onlySearchUnloaded && filter(m)) {
+							if (req.c[i] && isSearchable(req.c[i].exports, true) && (!config.exportsFilter || config.exportsFilter(req.c[i].exports)) && !onlySearchUnloaded && filter(m)) {
 								if (all) found.push(defaultExport ? req.c[i].exports : req.c[i]);
 								else return defaultExport ? req.c[i].exports : req.c[i];
 							}
@@ -4592,7 +4592,7 @@ module.exports = (_ => {
 				});
 				
 				const LanguageStringsObj = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore.Messages || Internal.LibraryModules.LanguageStore || {};
-				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", "de:") || {}).Z;
+				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", "de:", {exportsFilter: m => !m.messagesLoader}) || {}).Z;
 				const LibraryStrings = Object.assign({}, InternalData.LibraryStrings);
 				BDFDB.LanguageUtils = {};
 				BDFDB.LanguageUtils.languages = Object.assign({}, InternalData.Languages);
@@ -4643,10 +4643,12 @@ module.exports = (_ => {
 						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]];
 						if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) {
 							let i = 0, returnvalue, formatVars = {};
+							let error = "\n";
 							while (!returnvalue && i < 10) {
 								i++;
 								try {returnvalue = formatter && BDFDB.ArrayUtils.is(stringObj) ? formatter(LanguageStringFormattersObj[InternalData.LanguageStringHashes[item]], formatVars) : stringObj.format(formatVars, false);}
 								catch (err) {
+									error += "Error 1 " + err + "\n";
 									returnvalue = null;
 									let value = values.shift();
 									value = value != null ? (value === 0 ? "0" : value) : "undefined";
@@ -4654,17 +4656,17 @@ module.exports = (_ => {
 									formatVars[valueName] = valueName.endsWith("Hook") ? (_ => value) : value;
 									if (stringObj.intMessage) {
 										try {for (let hook of stringObj.intMessage.format(formatVars).match(/\([^\(\)]+\)/gi)) formatVars[hook.replace(/[\(\)]/g, "")] = n => n;}
-										catch (err2) {}
+										catch (err2) {error += "Error 2 " + err2 + "\n";}
 									}
 									if (stringObj.intlMessage) {
 										try {for (let hook of stringObj.intlMessage.format(formatVars).match(/\([^\(\)]+\)/gi)) formatVars[hook.replace(/[\(\)]/g, "")] = n => n;}
-										catch (err2) {}
+										catch (err3) {error += "Error 3 " + err3 + "\n";}
 									}
 								}
 							}
 							if (returnvalue) return parseLanguageStringObj(returnvalue);
 							else {
-								BDFDB.LogUtils.warn([item, "failed to format string in BDFDB.LanguageUtils.LanguageStrings"]);
+								BDFDB.LogUtils.warn([item, "failed to format string in BDFDB.LanguageUtils.LanguageStrings", error]);
 								return "";
 							}
 						}
