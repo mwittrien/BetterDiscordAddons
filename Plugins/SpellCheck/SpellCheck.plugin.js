@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.0
+ * @version 1.7.1
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -249,20 +249,21 @@ module.exports = (_ => {
 				let newText = BDFDB.SlateUtils.toTextValue(e.instance.props.richValue);
 				if (newText != currentText) {
 					currentText = newText;
-					BDFDB.DOMUtils.remove(e.node.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
+					let textarea = e.node.parentElement.querySelector(BDFDB.dotCN.textarea);
+					BDFDB.DOMUtils.remove(textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
 					BDFDB.TimeUtils.clear(checkTimeout);
 					checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-						let overlay = e.node.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, e.node);
+						let overlay = textarea.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, textarea);
 						BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
-						let style = Object.assign({}, getComputedStyle(e.node));
+						let style = Object.assign({}, getComputedStyle(textarea));
 						for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
 						overlay.style.setProperty("color", "transparent", "important");
 						overlay.style.setProperty("background", "none", "important");
 						overlay.style.setProperty("mask", "none", "important");
 						overlay.style.setProperty("pointer-events", "none", "important");
 						overlay.style.setProperty("position", "absolute", "important");
-						overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(e.node).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
-						overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(e.node).width - style.paddingLeft - style.paddingRight + "px", "important");
+						overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(textarea).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
+						overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(textarea).width - style.paddingLeft - style.paddingRight + "px", "important");
 						overlay.style.setProperty("height", style.height, "important");
 						for (let child of overlay.querySelectorAll("*")) {
 							child.style.setProperty("color", "transparent", "important");
@@ -278,7 +279,7 @@ module.exports = (_ => {
 								if (newline) child.appendChild(newline);
 							}
 						}
-						e.node.parentElement.appendChild(overlay);
+						textarea.parentElement.appendChild(overlay);
 					}, 300);
 				}
 			}
@@ -465,245 +466,245 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							context_nosimilarwords:				"Няма подобни думи",
+							context_nosimilarwords:					"Няма подобни думи",
 							context_spellcheck:					"Добавяне към речника",
 							toast_dictionary:					"Опит за извличане на речник ({{var0}})",
-							toast_dictionary_fail:				"Извличането на речника не бе успешно ({{var0}})",
-							toast_dictionary_success:			"Речник ({{var0}}) е извлечен успешно",
+							toast_dictionary_fail:					"Извличането на речника не бе успешно ({{var0}})",
+							toast_dictionary_success:				"Речник ({{var0}}) е извлечен успешно",
 							toast_wordadd:						"Думата '{{var0}}' е добавена към речника ({{var1}})"
 						};
 					case "da":		// Danish
 						return {
-							context_nosimilarwords:				"Ingen lignende ord",
+							context_nosimilarwords:					"Ingen lignende ord",
 							context_spellcheck:					"Føj til ordbog",
 							toast_dictionary:					"Forsøger at hente ordbog ({{var0}})",
-							toast_dictionary_fail:				"Ordbogen ({{var0}}) kunne ikke hentes",
-							toast_dictionary_success:			"Ordbogen ({{var0}}) hentet med succes",
+							toast_dictionary_fail:					"Ordbogen ({{var0}}) kunne ikke hentes",
+							toast_dictionary_success:				"Ordbogen ({{var0}}) hentet med succes",
 							toast_wordadd:						"Ordet '{{var0}}' blev føjet til ordbogen ({{var1}})"
 						};
 					case "de":		// German
 						return {
-							context_nosimilarwords:				"Keine ähnlichen Wörter",
+							context_nosimilarwords:					"Keine ähnlichen Wörter",
 							context_spellcheck:					"Zum Wörterbuch hinzufügen",
 							toast_dictionary:					"Versuch, das Wörterbuch abzurufen ({{var0}})",
-							toast_dictionary_fail:				"Fehler beim Abrufen des Wörterbuchs ({{var0}})",
-							toast_dictionary_success:			"Wörterbuch ({{var0}}) erfolgreich abgerufen",
+							toast_dictionary_fail:					"Fehler beim Abrufen des Wörterbuchs ({{var0}})",
+							toast_dictionary_success:				"Wörterbuch ({{var0}}) erfolgreich abgerufen",
 							toast_wordadd:						"Wort '{{var0}}' zum Wörterbuch ({{var1}}) hinzugefügt"
 						};
 					case "el":		// Greek
 						return {
-							context_nosimilarwords:				"Δεν υπάρχουν παρόμοιες λέξεις",
+							context_nosimilarwords:					"Δεν υπάρχουν παρόμοιες λέξεις",
 							context_spellcheck:					"Προσθήκη στο λεξικό",
 							toast_dictionary:					"Προσπάθεια λήψης λεξικού ({{var0}})",
-							toast_dictionary_fail:				"Αποτυχία ανάκτησης λεξικού ({{var0}})",
-							toast_dictionary_success:			"Το λεξικό ({{var0}}) ανακτήθηκε με επιτυχία",
+							toast_dictionary_fail:					"Αποτυχία ανάκτησης λεξικού ({{var0}})",
+							toast_dictionary_success:				"Το λεξικό ({{var0}}) ανακτήθηκε με επιτυχία",
 							toast_wordadd:						"Προστέθηκε η λέξη '{{var0}}' στο λεξικό ({{var1}})"
 						};
 					case "es":		// Spanish
 						return {
-							context_nosimilarwords:				"No hay palabras similares",
+							context_nosimilarwords:					"No hay palabras similares",
 							context_spellcheck:					"Agregar al diccionario",
 							toast_dictionary:					"Intentando obtener el diccionario ({{var0}})",
-							toast_dictionary_fail:				"No se pudo recuperar el diccionario ({{var0}})",
-							toast_dictionary_success:			"Diccionario ({{var0}}) obtenido correctamente",
+							toast_dictionary_fail:					"No se pudo recuperar el diccionario ({{var0}})",
+							toast_dictionary_success:				"Diccionario ({{var0}}) obtenido correctamente",
 							toast_wordadd:						"Se agregó la palabra '{{var0}}' al diccionario ({{var1}})"
 						};
 					case "fi":		// Finnish
 						return {
-							context_nosimilarwords:				"Ei vastaavia sanoja",
+							context_nosimilarwords:					"Ei vastaavia sanoja",
 							context_spellcheck:					"Lisää sanakirjaan",
 							toast_dictionary:					"Sanaa yritetään noutaa ({{var0}})",
-							toast_dictionary_fail:				"Sanakirjan noutaminen epäonnistui ({{var0}})",
-							toast_dictionary_success:			"Sanakirjan ({{var0}}) haku onnistui",
+							toast_dictionary_fail:					"Sanakirjan noutaminen epäonnistui ({{var0}})",
+							toast_dictionary_success:				"Sanakirjan ({{var0}}) haku onnistui",
 							toast_wordadd:						"Sana '{{var0}}' lisättiin sanakirjaan ({{var1}})"
 						};
 					case "fr":		// French
 						return {
-							context_nosimilarwords:				"Pas de mots similaires",
+							context_nosimilarwords:					"Pas de mots similaires",
 							context_spellcheck:					"Ajouter au dictionnaire",
 							toast_dictionary:					"Tentative de récupération du dictionnaire ({{var0}})",
-							toast_dictionary_fail:				"Échec de la récupération du dictionnaire ({{var0}})",
-							toast_dictionary_success:			"Le dictionnaire ({{var0}}) a bien été récupéré",
+							toast_dictionary_fail:					"Échec de la récupération du dictionnaire ({{var0}})",
+							toast_dictionary_success:				"Le dictionnaire ({{var0}}) a bien été récupéré",
 							toast_wordadd:						"Mot '{{var0}}' ajouté au dictionnaire ({{var1}})"
 						};
 					case "hr":		// Croatian
 						return {
-							context_nosimilarwords:				"Nema sličnih riječi",
+							context_nosimilarwords:					"Nema sličnih riječi",
 							context_spellcheck:					"Dodaj u rječnik",
 							toast_dictionary:					"Pokušaj dohvaćanja Rječnika ({{var0}})",
-							toast_dictionary_fail:				"Dohvaćanje Rječnika nije uspjelo ({{var0}})",
-							toast_dictionary_success:			"Rječnik ({{var0}}) je uspješno dohvaćen",
+							toast_dictionary_fail:					"Dohvaćanje Rječnika nije uspjelo ({{var0}})",
+							toast_dictionary_success:				"Rječnik ({{var0}}) je uspješno dohvaćen",
 							toast_wordadd:						"Riječ '{{var0}}' dodana je u rječnik ({{var1}})"
 						};
 					case "hu":		// Hungarian
 						return {
-							context_nosimilarwords:				"Nincsenek hasonló szavak",
+							context_nosimilarwords:					"Nincsenek hasonló szavak",
 							context_spellcheck:					"Hozzáadás a szótárhoz",
 							toast_dictionary:					"Szótár lekérése próbálkozik ({{var0}})",
-							toast_dictionary_fail:				"Nem sikerült beolvasni a Szótárt ({{var0}})",
-							toast_dictionary_success:			"A szótár ({{var0}}) letöltése sikeresen megtörtént",
+							toast_dictionary_fail:					"Nem sikerült beolvasni a Szótárt ({{var0}})",
+							toast_dictionary_success:				"A szótár ({{var0}}) letöltése sikeresen megtörtént",
 							toast_wordadd:						"A '{{var0}}' szó hozzáadva a ({{var1}}) szótárhoz"
 						};
 					case "it":		// Italian
 						return {
-							context_nosimilarwords:				"Nessuna parola simile",
+							context_nosimilarwords:					"Nessuna parola simile",
 							context_spellcheck:					"Aggiungi al dizionario",
 							toast_dictionary:					"Tentativo di recupero del dizionario ({{var0}})",
-							toast_dictionary_fail:				"Impossibile recuperare il dizionario ({{var0}})",
-							toast_dictionary_success:			"Dizionario ({{var0}}) recuperato correttamente",
+							toast_dictionary_fail:					"Impossibile recuperare il dizionario ({{var0}})",
+							toast_dictionary_success:				"Dizionario ({{var0}}) recuperato correttamente",
 							toast_wordadd:						"Parola '{{var0}}' aggiunta al dizionario ({{var1}})"
 						};
 					case "ja":		// Japanese
 						return {
-							context_nosimilarwords:				"同様の言葉はありません",
+							context_nosimilarwords:					"同様の言葉はありません",
 							context_spellcheck:					"辞書に追加",
 							toast_dictionary:					"辞書を取得しようとしています （{{var0}}） ",
-							toast_dictionary_fail:				"辞書の取得に失敗しました （{{var0}}） ",
-							toast_dictionary_success:			"辞書 （{{var0}}） が正常にフェッチされました",
+							toast_dictionary_fail:					"辞書の取得に失敗しました （{{var0}}） ",
+							toast_dictionary_success:				"辞書 （{{var0}}） が正常にフェッチされました",
 							toast_wordadd:						"単語 '{{var0}}' が辞書 ({{var1}}) に追加されました"
 						};
 					case "ko":		// Korean
 						return {
-							context_nosimilarwords:				"유사한 단어 없음",
+							context_nosimilarwords:					"유사한 단어 없음",
 							context_spellcheck:					"사전에 추가",
 							toast_dictionary:					"사전 ({{var0}}) 을 가져 오는 중",
-							toast_dictionary_fail:				"사전 ({{var0}}) 을 가져 오지 못했습니다.",
-							toast_dictionary_success:			"사전 ({{var0}}) 을 성공적으로 가져 왔습니다.",
+							toast_dictionary_fail:					"사전 ({{var0}}) 을 가져 오지 못했습니다.",
+							toast_dictionary_success:				"사전 ({{var0}}) 을 성공적으로 가져 왔습니다.",
 							toast_wordadd:						"단어  '{{var0}}' 이 ({{var1}}) 사전에 추가되었습니다"
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_nosimilarwords:				"Jokių panašių žodžių",
+							context_nosimilarwords:					"Jokių panašių žodžių",
 							context_spellcheck:					"Pridėti prie žodyno",
 							toast_dictionary:					"Bandoma gauti žodyną ({{var0}})",
-							toast_dictionary_fail:				"Nepavyko gauti žodyno ({{var0}})",
-							toast_dictionary_success:			"Žodynas ({{var0}}) sėkmingai gautas",
+							toast_dictionary_fail:					"Nepavyko gauti žodyno ({{var0}})",
+							toast_dictionary_success:				"Žodynas ({{var0}}) sėkmingai gautas",
 							toast_wordadd:						"Žodis '{{var0}}' pridėtas prie žodyno ({{var1}})"
 						};
 					case "nl":		// Dutch
 						return {
-							context_nosimilarwords:				"Geen vergelijkbare woorden",
+							context_nosimilarwords:					"Geen vergelijkbare woorden",
 							context_spellcheck:					"Toevoegen aan woordenboek",
 							toast_dictionary:					"Probeert woordenboek op te halen ({{var0}})",
-							toast_dictionary_fail:				"Ophalen van woordenboek ({{var0}}) is mislukt",
-							toast_dictionary_success:			"Woordenboek ({{var0}}) succesvol opgehaald",
+							toast_dictionary_fail:					"Ophalen van woordenboek ({{var0}}) is mislukt",
+							toast_dictionary_success:				"Woordenboek ({{var0}}) succesvol opgehaald",
 							toast_wordadd:						"Woord '{{var0}}' toegevoegd aan woordenboek ({{var1}})"
 						};
 					case "no":		// Norwegian
 						return {
-							context_nosimilarwords:				"Ingen lignende ord",
+							context_nosimilarwords:					"Ingen lignende ord",
 							context_spellcheck:					"Legg til ordbok",
 							toast_dictionary:					"Prøver å hente ordbok ({{var0}})",
-							toast_dictionary_fail:				"Kunne ikke hente ordboken ({{var0}})",
-							toast_dictionary_success:			"Ordbok ({{var0}}) hentet",
+							toast_dictionary_fail:					"Kunne ikke hente ordboken ({{var0}})",
+							toast_dictionary_success:				"Ordbok ({{var0}}) hentet",
 							toast_wordadd:						"Ordet '{{var0}}' ble lagt til ordboken ({{var1}})"
 						};
 					case "pl":		// Polish
 						return {
-							context_nosimilarwords:				"Brak podobnych słów",
+							context_nosimilarwords:					"Brak podobnych słów",
 							context_spellcheck:					"Dodaj do słownika",
 							toast_dictionary:					"Próba pobrania słownika ({{var0}})",
-							toast_dictionary_fail:				"Nie udało się pobrać słownika ({{var0}})",
-							toast_dictionary_success:			"Słownik ({{var0}}) został pobrany pomyślnie",
+							toast_dictionary_fail:					"Nie udało się pobrać słownika ({{var0}})",
+							toast_dictionary_success:				"Słownik ({{var0}}) został pobrany pomyślnie",
 							toast_wordadd:						"Słowo '{{var0}}' zostało dodane do słownika ({{var1}})"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_nosimilarwords:				"Sem palavras semelhantes",
+							context_nosimilarwords:					"Sem palavras semelhantes",
 							context_spellcheck:					"Adicionar ao Dicionário",
 							toast_dictionary:					"Tentando obter Dicionário ({{var0}})",
-							toast_dictionary_fail:				"Falha ao buscar dicionário ({{var0}})",
-							toast_dictionary_success:			"Dicionário ({{var0}}) obtido com sucesso",
+							toast_dictionary_fail:					"Falha ao buscar dicionário ({{var0}})",
+							toast_dictionary_success:				"Dicionário ({{var0}}) obtido com sucesso",
 							toast_wordadd:						"Palavra '{{var0}}' adicionada ao dicionário ({{var1}})"
 						};
 					case "ro":		// Romanian
 						return {
-							context_nosimilarwords:				"Fără cuvinte similare",
+							context_nosimilarwords:					"Fără cuvinte similare",
 							context_spellcheck:					"Adăugați la dicționar",
 							toast_dictionary:					"Încercarea de a prelua dicționar ({{var0}})",
-							toast_dictionary_fail:				"Eroare la preluarea dicționarului ({{var0}})",
-							toast_dictionary_success:			"Dicționarul ({{var0}}) a fost preluat cu succes",
+							toast_dictionary_fail:					"Eroare la preluarea dicționarului ({{var0}})",
+							toast_dictionary_success:				"Dicționarul ({{var0}}) a fost preluat cu succes",
 							toast_wordadd:						"Cuvântul '{{var0}}' a fost adăugat în dicționar ({{var1}})"
 						};
 					case "ru":		// Russian
 						return {
-							context_nosimilarwords:				"Нет похожих слов",
+							context_nosimilarwords:					"Нет похожих слов",
 							context_spellcheck:					"Добавить в словарь",
 							toast_dictionary:					"Попытка получить словарь ({{var0}})",
-							toast_dictionary_fail:				"Не удалось получить словарь ({{var0}})",
-							toast_dictionary_success:			"Словарь ({{var0}}) получен успешно",
+							toast_dictionary_fail:					"Не удалось получить словарь ({{var0}})",
+							toast_dictionary_success:				"Словарь ({{var0}}) получен успешно",
 							toast_wordadd:						"Слово '{{var0}}' добавлено в словарь ({{var1}})"
 						};
 					case "sv":		// Swedish
 						return {
-							context_nosimilarwords:				"Inga liknande ord",
+							context_nosimilarwords:					"Inga liknande ord",
 							context_spellcheck:					"Lägg till ordbok",
 							toast_dictionary:					"Försöker hämta ordbok ({{var0}})",
-							toast_dictionary_fail:				"Det gick inte att hämta ordboken ({{var0}})",
-							toast_dictionary_success:			"Ordbok ({{var0}}) hämtades framgångsrikt",
+							toast_dictionary_fail:					"Det gick inte att hämta ordboken ({{var0}})",
+							toast_dictionary_success:				"Ordbok ({{var0}}) hämtades framgångsrikt",
 							toast_wordadd:						"Ordet '{{var0}}' har lagts till i ordboken ({{var1}})"
 						};
 					case "th":		// Thai
 						return {
-							context_nosimilarwords:				"ไม่มีคำที่คล้ายกัน",
+							context_nosimilarwords:					"ไม่มีคำที่คล้ายกัน",
 							context_spellcheck:					"เพิ่มในพจนานุกรม",
 							toast_dictionary:					"กำลังพยายามดึงพจนานุกรม ({{var0}})",
-							toast_dictionary_fail:				"ไม่สามารถดึงพจนานุกรม ({{var0}})",
-							toast_dictionary_success:			"ดึงพจนานุกรม ({{var0}}) สำเร็จ",
+							toast_dictionary_fail:					"ไม่สามารถดึงพจนานุกรม ({{var0}})",
+							toast_dictionary_success:				"ดึงพจนานุกรม ({{var0}}) สำเร็จ",
 							toast_wordadd:						"เพิ่มคำ '{{var0}}' ในพจนานุกรม ({{var1}}) แล้ว"
 						};
 					case "tr":		// Turkish
 						return {
-							context_nosimilarwords:				"Benzer kelime yok",
+							context_nosimilarwords:					"Benzer kelime yok",
 							context_spellcheck:					"Sözlüğe Ekle",
 							toast_dictionary:					"Sözlük ({{var0}}) getirilmeye çalışılıyor",
-							toast_dictionary_fail:				"Sözlük ({{var0}}) getirilemedi",
-							toast_dictionary_success:			"Sözlük ({{var0}}) başarıyla getirildi",
+							toast_dictionary_fail:					"Sözlük ({{var0}}) getirilemedi",
+							toast_dictionary_success:				"Sözlük ({{var0}}) başarıyla getirildi",
 							toast_wordadd:						"'{{var0}}' kelimesi, ({{var1}}) sözlüğüne eklendi"
 						};
 					case "uk":		// Ukrainian
 						return {
-							context_nosimilarwords:				"Немає подібних слів",
+							context_nosimilarwords:					"Немає подібних слів",
 							context_spellcheck:					"Додати до словника",
 							toast_dictionary:					"Спроба отримати словник ({{var0}})",
-							toast_dictionary_fail:				"Не вдалося отримати словник ({{var0}})",
-							toast_dictionary_success:			"Словник ({{var0}}) отримано успішно",
+							toast_dictionary_fail:					"Не вдалося отримати словник ({{var0}})",
+							toast_dictionary_success:				"Словник ({{var0}}) отримано успішно",
 							toast_wordadd:						"Слово '{{var0}}' додано до словника ({{var1}})"
 						};
 					case "vi":		// Vietnamese
 						return {
-							context_nosimilarwords:				"Không có từ tương tự",
+							context_nosimilarwords:					"Không có từ tương tự",
 							context_spellcheck:					"Thêm vào từ điển",
 							toast_dictionary:					"Đang cố gắng tìm nạp Từ điển ({{var0}})",
-							toast_dictionary_fail:				"Không tìm nạp được Từ điển ({{var0}})",
-							toast_dictionary_success:			"Từ điển ({{var0}}) được tìm nạp thành công",
+							toast_dictionary_fail:					"Không tìm nạp được Từ điển ({{var0}})",
+							toast_dictionary_success:				"Từ điển ({{var0}}) được tìm nạp thành công",
 							toast_wordadd:						"Đã thêm từ '{{var0}}' vào từ điển ({{var1}})"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_nosimilarwords:				"没有类似的词",
+							context_nosimilarwords:					"没有类似的词",
 							context_spellcheck:					"添加到字典",
 							toast_dictionary:					"尝试获取字典 （{{var0}}） ",
-							toast_dictionary_fail:				"无法获取字典 （{{var0}}） ",
-							toast_dictionary_success:			"已成功获取字典 （{{var0}}） ",
+							toast_dictionary_fail:					"无法获取字典 （{{var0}}） ",
+							toast_dictionary_success:				"已成功获取字典 （{{var0}}） ",
 							toast_wordadd:						"将单词 '{{var0}}' 添加到字典 ({{var1}}) 中"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_nosimilarwords:				"沒有類似的詞",
+							context_nosimilarwords:					"沒有類似的詞",
 							context_spellcheck:					"添加到字典",
 							toast_dictionary:					"嘗試獲取字典 （{{var0}}） ",
-							toast_dictionary_fail:				"無法獲取字典 （{{var0}}） ",
-							toast_dictionary_success:			"已成功獲取字典 （{{var0}}） ",
+							toast_dictionary_fail:					"無法獲取字典 （{{var0}}） ",
+							toast_dictionary_success:				"已成功獲取字典 （{{var0}}） ",
 							toast_wordadd:						"將單詞 '{{var0}}' 添加到字典 ({{var1}}) 中"
 						};
 					default:		// English
 						return {
-							context_nosimilarwords:				"No similar Words",
+							context_nosimilarwords:					"No similar Words",
 							context_spellcheck:					"Add to Dictionary",
 							toast_dictionary:					"Trying to fetch Dictionary ({{var0}})",
-							toast_dictionary_fail:				"Failed to fetch Dictionary ({{var0}})",
-							toast_dictionary_success:			"Dictionary ({{var0}}) fetched successfully",
+							toast_dictionary_fail:					"Failed to fetch Dictionary ({{var0}})",
+							toast_dictionary_success:				"Dictionary ({{var0}}) fetched successfully",
 							toast_wordadd:						"Word '{{var0}}' added to Dictionary ({{var1}})"
 						};
 				}
