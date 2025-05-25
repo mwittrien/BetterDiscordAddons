@@ -278,7 +278,6 @@ module.exports = (_ => {
 					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
 					if (index > -1) children[index] = null;
 				}
-				console.log(e);
 				children.unshift(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 					children: []
 				}));
