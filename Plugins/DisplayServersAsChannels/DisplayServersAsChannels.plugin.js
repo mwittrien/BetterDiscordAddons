@@ -96,7 +96,8 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCN.guildlistitemtooltip} {
+					${BDFDB.dotCN.guildlistitemtooltip},
+					${BDFDB.dotCN._displayserversaschannelsname} ~ ${BDFDB.dotCN.guildfolderbuttoninner} {
 						display: none;
 					}
 					${BDFDB.dotCN.forumpagelist} {
@@ -271,12 +272,13 @@ module.exports = (_ => {
 				let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || BDFDB.ColorUtils.convert(BDFDB.DiscordConstants.Colors.BRAND, "RGB");
 				let folderSize = Math.round(this.settings.amounts.serverElementHeight * 0.725);
 				let badge = null;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.guildfoldericonwrapper]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.guildfolderbuttoninner]]});
 				if (index > -1 && children[index] && children[index].props && children[index].props.style && children[index].props.style.background) badge = children[index];
 				else {
 					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
 					if (index > -1) children[index] = null;
 				}
+				console.log(e);
 				children.unshift(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 					children: []
 				}));
@@ -609,8 +611,8 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] {
 						height: auto !important;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.notCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolderwrapper + BDFDB.notCN.guildfolderisexpanded} > ${BDFDB.dotCN.guildouter},
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.notCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolderwrapper} [role="group"] > ${BDFDB.dotCN.guildouter}:last-child {
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderwrapper} > ${BDFDB.dotCN.guildouter},
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderwrapper} [role="group"] > ${BDFDB.dotCN.guildouter}:last-child {
 						margin-bottom: 0;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
