@@ -98,7 +98,7 @@ module.exports = (_ => {
 				this.css = `
 					${BDFDB.dotCN.guildlistitemtooltip},
 					${BDFDB.dotCN._displayserversaschannelsname} ~ ${BDFDB.dotCN.guildfolderbuttoninner} {
-						display: none;
+						display: none !important;
 					}
 					${BDFDB.dotCN.forumpagelist} {
 						justify-content: flex-start;
