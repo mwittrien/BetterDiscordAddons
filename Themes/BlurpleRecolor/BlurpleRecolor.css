@@ -54,7 +54,7 @@
 	--mention-background: rgba(var(--accentcolor_v),.3) !important;
 	--mention-foreground: var(--brand-experiment-200) !important;
 	
-	--background-message-highlight: rgba(var(--accentcolor_v),.3) !important;
+	--background-message-highlight: rgba(var(--accentcolor_v),.2) !important;
 	
 	--brand-experiment-100: #fdfdfd !important;
 	--brand-experiment-130: #f2f2f2 !important;
