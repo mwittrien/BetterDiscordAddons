@@ -1380,7 +1380,7 @@ body:has(#app-mount)::after {
 .backgroundFlash__5126c .message__5126c::before {
 	content: "";
 	position: absolute;
-	background: var(--message-background-flash, transparent);
+	background: var(--background-message-highlight, transparent);
 	top: 0;
 	right: 0;
 	bottom: 0;
