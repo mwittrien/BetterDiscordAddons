@@ -195,6 +195,8 @@
 	
 	--premium-perk-blue: rgb(var(--accentcolor_v)) !important;
 	--premium-perk-pink: rgb(var(--accentcolor2_v)) !important;
+	--premium-tier-0-blue: rgb(var(--accentcolor_v)) !important;
+	--premium-tier-0-blue-for-gradients: rgb(var(--accentcolor_v)) !important;
 	--premium-tier-0-purple: rgb(var(--accentcolor2_v)) !important;
 	--premium-tier-0-purple-for-gradients: rgb(var(--accentcolor2_v)) !important;
 	--premium-tier-1-blue: rgb(var(--accentcolor_v)) !important;
@@ -209,8 +211,8 @@
 	--premium-tier-2-purple: rgb(var(--accentcolor2_v)) !important;
 	--premium-tier-2-purple-for-gradients: rgb(var(--accentcolor2_v)) !important;
 	--premium-tier-2-purple-for-gradients-2: rgb(var(--accentcolor2_v)) !important;
-	--guild-boosting-pink: rgb(var(--accentcolor2_v)) !important;
-	--guild-boosting-pink-rgb: var(--accentcolor2_v) !important;
+	--guild-boosting-pink: rgb(var(--accentcolor_v)) !important;
+	--guild-boosting-pink-rgb: var(--accentcolor_v) !important;
 	--guild-boosting-purple: rgb(var(--accentcolor2_v)) !important;
 	--guild-boosting-purple-rgb: var(--accentcolor2_v) !important;
 	--guild-boosting-blue: rgb(var(--accentcolor2_v)) !important;
