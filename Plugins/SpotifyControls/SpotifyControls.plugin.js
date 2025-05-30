@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.8
+ * @version 1.4.9
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -144,7 +144,6 @@ module.exports = (_ => {
 					stopTime = new Date();
 				}
 				if (!lastSong) return null;
-				
 				let coverSrc = (BDFDB.ReactUtils.hookCall(BDFDB.LibraryModules.ApplicationAssetUtils.getAssetImage, lastSong) || {largeImage: {}}).largeImage.src;
 				let connection = (BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
@@ -298,7 +297,7 @@ module.exports = (_ => {
 												type: "volume",
 												player: this,
 												icon: Math.ceil(currentVolume/34),
-												disabled: socketDevice.device.is_restricted,
+												disabled: socketDevice.device.is_restricted || !socketDevice.device.supports_volume,
 												onContextMenu: _ => {
 													if (currentVolume == 0) {
 														if (lastVolume) this.request(socketDevice.socket, socketDevice.device, "volume", {
@@ -358,6 +357,7 @@ module.exports = (_ => {
 		};
 		const SpotifyControlsButtonComponent = class SpotifyControlsButton extends BdApi.React.Component {
 			render() {
+				if (_this.settings.general.hideDisabled && this.props.disabled) return null;
 				let playerSize = this.props.player.props.maximized ? "big" : "small";
 				if (!playerSize || !_this.settings.buttons[this.props.type] || !_this.settings.buttons[this.props.type][playerSize]) return null;
 				let button = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
@@ -452,6 +452,7 @@ module.exports = (_ => {
 						addBy: 			{value: true,		description: "Adds the Word 'by' infront of the Author Name"},
 						addTimeline: 		{value: true,		description: "Shows the Song Timeline in the Controls"},
 						addActivityButton: 	{value: true,		description: "Shows the Activity Status Toggle Button in the Controls"},
+						hideDisabled: 		{value: false,		description: "Hides Buttons which are unclickable, (e.g. Volume on Mobile or Previous without Premium)"},
 						doubleBack: 		{value: true,		description: "Requires the User to press the Back Button twice to go to previous Track"}
 					},
 					buttons: {
