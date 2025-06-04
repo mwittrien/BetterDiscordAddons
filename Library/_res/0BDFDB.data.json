@@ -402,7 +402,7 @@
 	"PatchModules": {
 		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "isCopiedStreakGodlike"]},
 		"AccountButtons": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "isEligibleForPomelo"]},
-		"AccountPopout": {"strings": ["SIMPLIFIED_ACCOUNT_POPOUT", ".menus"]},
+		"AccountPopout": {"strings": ["UserProfileAccountPopout", ".menus"]},
 		"AccountName": {"strings": ["accountProfilePopoutWrapper", ".avatarWrapper", "renderNameTag"]},
 		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
 		"AuditLogEntry": {"protos": ["renderRoleUpdate", "renderChangeDetails", "getActionTypeColor", "renderPermissionUpdate"]},
