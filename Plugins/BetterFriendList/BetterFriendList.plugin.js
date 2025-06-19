@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.1
+ * @version 1.6.2
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -232,7 +232,7 @@ module.exports = (_ => {
 			
 			processTabBar (e) {
 				if (e.instance.props.children && e.instance.props.children.some(c => c && c.props && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
-					let relationships = BDFDB.LibraryStores.RelationshipStore.getRelationships(), relationshipCount = {};
+					let relationships = BDFDB.LibraryStores.RelationshipStore.getMutableRelationships(), relationshipCount = {};
 					for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
 					for (let id in relationships) if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || relationships[id] != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[relationships[id]]++;
 					relationshipCount.IGNORED = BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs().length;
