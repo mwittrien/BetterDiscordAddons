@@ -3070,8 +3070,6 @@
 		"tabularnumbers": ["Text2", "tabularNumbers"],
 		"textarea": ["ChannelTextArea", "textArea"],
 		"textareaaccessorybar": ["ChannelTextArea", "accessoryBar"],
-		"textareaaccessorybarleft": ["ChannelTextArea", "accessoryBarLeft"],
-		"textareaaccessorybarright": ["ChannelTextArea", "accessoryBarRight"],
 		"textareaattachbutton": ["ChannelTextAreaAttachButton", "attachButton"],
 		"textareaattachbuttoninner": ["ChannelTextAreaAttachButton", "attachButtonInner"],
 		"textareaattachbuttonplus": ["ChannelTextAreaAttachButton", "attachButtonPlus"],
