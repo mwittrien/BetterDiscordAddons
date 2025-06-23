@@ -1456,7 +1456,7 @@
 		"HeaderBar": {"props": ["container", "children", "toolbar"]},
 		"HeaderBarDiscovery": {"props": ["headerBar", "icon", "backdrop"]},
 		"HeaderBarDiscoverySearch": {"props": ["searchFloating", "search"]},
-		"HeaderBarExtras": {"props": ["forumOrHome", "search"]},
+		"HeaderBarExtras": {"props": ["updateIconForeground", "search"]},
 		"HeaderBarSearch": {"props": ["search", "searchBar", "open"]},
 		"HeaderBarTopic": {"props": ["topic", "expandable", "content"]},
 		"Heading": {"props": ["eyebrow", "code"]},
