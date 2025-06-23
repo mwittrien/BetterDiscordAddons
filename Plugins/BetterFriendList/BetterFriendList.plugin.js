@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.2
+ * @version 1.6.3
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"added": {
-			"Blocked and Ignored Tab": "Brought back the Blocked Tab and added the Ignored Tab, can be disabled in the Plugin Settings"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -234,7 +232,9 @@ module.exports = (_ => {
 				if (e.instance.props.children && e.instance.props.children.some(c => c && c.props && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
 					let relationships = BDFDB.LibraryStores.RelationshipStore.getMutableRelationships(), relationshipCount = {};
 					for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
-					for (let id in relationships) if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || relationships[id] != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[relationships[id]]++;
+					relationships.forEach((type, id) => {
+						if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || type != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[type]++;
+					});
 					relationshipCount.IGNORED = BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs().length;
 					currentSection = e.instance.props.selectedItem;
 					let hasFriends = relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.FRIEND] > 0;
@@ -273,10 +273,10 @@ module.exports = (_ => {
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.FRIEND]));
 										break;
 									case customSections.FAVORITES:
-										newChildren.push(this.createBadge(favorizedFriends.filter(id => relationships[id] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
+										newChildren.push(this.createBadge(favorizedFriends.filter(id => relationships.get(id) == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
 										break;
 									case BDFDB.DiscordConstants.FriendsSections.ONLINE:
-										newChildren.push(this.createBadge(Object.entries(relationships).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && !(this.settings.general.addHiddenCategory && hiddenFriends.indexOf(n[0]) > -1) && BDFDB.LibraryStores.PresenceStore.getStatus(n[0]) != BDFDB.LibraryComponents.StatusComponents.Types.OFFLINE).length));
+										newChildren.push(this.createBadge(Array.from(relationships).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && !(this.settings.general.addHiddenCategory && hiddenFriends.indexOf(n[0]) > -1) && BDFDB.LibraryStores.PresenceStore.getStatus(n[0]) != BDFDB.LibraryComponents.StatusComponents.Types.OFFLINE).length));
 										break;
 									case BDFDB.DiscordConstants.FriendsSections.PENDING:
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming, relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING] > 0));
@@ -289,7 +289,7 @@ module.exports = (_ => {
 										newChildren.push(this.createBadge(relationshipCount.IGNORED));
 										break;
 									case customSections.HIDDEN:
-										newChildren.push(this.createBadge(hiddenFriends.filter(id => relationships[id] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
+										newChildren.push(this.createBadge(hiddenFriends.filter(id => relationships.get(id) == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
 										break;
 								}
 								child.props.children = newChildren;
