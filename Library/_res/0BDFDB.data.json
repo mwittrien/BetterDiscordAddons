@@ -199,9 +199,9 @@
 			"getMessageAuthor": [".channel_id);return"]
 		}},
 		"MessageComponentUtils": {"strings": [".UNBLOCK_TO_JUMP_BODY", ".altKey"]},
-		"MessageManageUtils": {"strings": ["showMentionToggle", ".TEXTAREA_FOCUS", "message-actions"], "exported": false, "value": "exports", "map": {
+		"MessageManageUtils": {"strings": ["showMentionToggle", "message-actions"], "exported": false, "value": "exports", "map": {
 			"copyLink": ["MESSAGE_LINK_COPIED"],
-			"replyToMessage": ["showMentionToggle", ".TEXTAREA_FOCUS"]
+			"replyToMessage": ["showMentionToggle"]
 		}},
 		"MessageParser": {"props": ["parseEmbedTitle", "defaultRules"]},
 		"MessagePinUtils": {"props": ["pinMessage", "unpinMessage"]},
