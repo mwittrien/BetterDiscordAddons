@@ -494,7 +494,7 @@ module.exports = (_ => {
 			}
 			
 			getBlockedIDs () {
-				return Object.entries(BDFDB.LibraryStores.RelationshipStore.getMutableRelationships()).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED).map(n => n[0]);
+				return Array.from(BDFDB.LibraryStores.RelationshipStore.getMutableRelationships()).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED).map(n => n[0]);
 			}
 			
 			rerenderList () {
