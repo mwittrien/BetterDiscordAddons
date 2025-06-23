@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -184,14 +184,8 @@ module.exports = (_ => {
 			processChannelTextAreaContainer (e) {
 				let editorContainer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelTextAreaEditor"});
 				if (editorContainer && editorContainer.props.type && !editorContainer.props.disabled) {
-					let accessoryBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.textareaaccessorybarright]]});
-					if (accessoryBar) {
-						this.injectCounter(e.returnvalue, accessoryBar.props.children, editorContainer.props.type.analyticsName || editorContainer.props.type, BDFDB.dotCN.textarea);
-					}
-					else {
-						if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
-						this.injectCounter(e.returnvalue, e.returnvalue.props.children, editorContainer.props.type.analyticsName || editorContainer.props.type, BDFDB.dotCN.textarea);
-					}
+					if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
+					this.injectCounter(e.returnvalue, e.returnvalue.props.children, editorContainer.props.type.analyticsName || editorContainer.props.type, BDFDB.dotCN.textarea);
 				}
 			}
 
