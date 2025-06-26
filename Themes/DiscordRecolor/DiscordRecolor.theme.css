@@ -45,26 +45,26 @@
 	--settingsicons:		1;				/*	Use Settings Icons in User Settings: 1 = yes, 0 = no							*/
 	--font:				"gg sans", "Noto Sans";		/*	General Font												*/
 	
-	--accentcolor: 			88,101,242;			/*	Blurple			-	default:	88,101,242		-	hex:	#5865f2		*/
-	--accentcolor2: 		255,115,250;			/*	Boostpink		-	default:	255,115,250		-	hex:	#ff73fa		*/
-	--linkcolor: 			0,176,244;			/*	Link Color		-	default:	0,176,244		-	hex:	#00b0f4		*/
-	--mentioncolor: 		250,166,26;			/*	Highlight Color		-	default:	250,166,26		-	hex:	#faa61a		*/
-	--successcolor: 		59,165,92;			/*	Success Color		-	default:	59,165,92		-	hex:	#3ba55c		*/
+	--accentcolor: 			247,106,135;			/*	Blurple			-	default:	88,101,242		-	hex:	#5865f2		*/
+	--accentcolor2: 		232,118,224;			/*	Boostpink		-	default:	255,115,250		-	hex:	#ff73fa		*/
+	--linkcolor: 			247,208,12;			/*	Link Color		-	default:	0,176,244		-	hex:	#00b0f4		*/
+	--mentioncolor: 		247,176,10;			/*	Highlight Color		-	default:	250,166,26		-	hex:	#faa61a		*/
+	--successcolor: 		181,196,79;			/*	Success Color		-	default:	59,165,92		-	hex:	#3ba55c		*/
 	--warningcolor: 		250,166,26;			/*	Warning Color		-	default:	250,166,26		-	hex:	#faa61a		*/
-	--dangercolor:  		237,66,69;			/*	Danger Color		-	default:	237,66,69		-	hex:	#ed4245		*/
+	--dangercolor:  		171,6,0;			/*	Danger Color		-	default:	237,66,69		-	hex:	#ed4245		*/
 	
-	--textbrightest: 		255,255,255;			/*	Text Color 1		-	default:	255,255,255		-	hex:	#ffffff		*/
-	--textbrighter: 		222,222,222;			/*	Text Color 2		-	default:	220,221,222		-	hex:	#dcddde		*/
-	--textbright: 			185,185,185;			/*	Text Color 3		-	default:	185,187,190		-	hex:	#b9bbbe		*/
-	--textdark: 			140,140,140;			/*	Text Color 4		-	default:	142,146,151		-	hex:	#8e9297		*/
-	--textdarker: 			115,115,115;			/*	Text Color 5		-	default:	114,118,125		-	hex:	#72767d		*/
-	--textdarkest: 			80,80,80;			/*	Text Color 6		-	default:	79,84,92		-	hex:	#4f545c		*/
+	--textbrightest: 		250,245,210;			/*	Text Color 1		-	default:	255,255,255		-	hex:	#ffffff		*/
+	--textbrighter: 		250,234,155;			/*	Text Color 2		-	default:	220,221,222		-	hex:	#dcddde		*/
+	--textbright: 			250,273,112;			/*	Text Color 3		-	default:	185,187,190		-	hex:	#b9bbbe		*/
+	--textdark: 			250,187,78;			/*	Text Color 4		-	default:	142,146,151		-	hex:	#8e9297		*/
+	--textdarker: 			250,150,0;			/*	Text Color 5		-	default:	114,118,125		-	hex:	#72767d		*/
+	--textdarkest: 			219,135,9;			/*	Text Color 6		-	default:	79,84,92		-	hex:	#4f545c		*/
 	
 	--backgroundcode: 		30,30,30;			/*	Background Code		-	default:	60,62,79		-	hex:	#3c3e4f		*/
 	--backgroundaccent: 		50,50,50;			/*	Background Accent	-	default:	64,68,75		-	hex:	#40444b		*/
-	--backgroundprimary: 		30,30,30;			/*	Background 1		-	default:	54,57,63		-	hex:	#36393f		*/
-	--backgroundsecondary: 		20,20,20;			/*	Background 2		-	default:	47,49,54		-	hex:	#2f3136		*/
-	--backgroundsecondaryalt: 	15,15,15;			/*	Background 3		-	default:	41,43,47		-	hex:	#292b2f		*/
-	--backgroundtertiary: 		10,10,10;			/*	Background 4		-	default:	32,34,37		-	hex:	#202225		*/
-	--backgroundfloating: 		0,0,0;				/*	Background Elevated	-	default:	24,25,28		-	hex:	#18191c		*/
+	--backgroundprimary: 		153,51,0;			/*	Background 1		-	default:	54,57,63		-	hex:	#36393f		*/
+	--backgroundsecondary: 		120,29,1;			/*	Background 2		-	default:	47,49,54		-	hex:	#2f3136		*/
+	--backgroundsecondaryalt: 	201,74,0;			/*	Background 3		-	default:	41,43,47		-	hex:	#292b2f		*/
+	--backgroundtertiary: 		107,48,9;			/*	Background 4		-	default:	32,34,37		-	hex:	#202225		*/
+	--backgroundfloating: 		54,6,0;				/*	Background Elevated	-	default:	24,25,28		-	hex:	#18191c		*/
 }
