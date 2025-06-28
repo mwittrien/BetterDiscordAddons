@@ -3118,13 +3118,6 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .activity_f00225 {
 	--bg-surface-overlay: var(--background-secondary-alt);
 }
-#app-mount .biteSizeOverlayBackground_c69a7b,
-#app-mount .fullSizeOverlayBackground_c69a7b,
-#app-mount .outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .activity_f00225,
-#app-mount .overlay_c0bea0 {
-	--bg-mod-faint: var(--background-base-low);
-	--border-faint: var(--background-base-low);
-}
 
 .outer_c0bea0:not(.custom-user-profile-theme) .container__8061a,
 .outer_c0bea0:not(.custom-user-profile-theme) .statusBubble_af9888,
