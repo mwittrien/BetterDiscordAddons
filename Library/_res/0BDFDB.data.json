@@ -363,7 +363,7 @@
 			"LinkButton": [".apply(this"]
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "getScrollerState"]},
-		"SearchResultsPagination": {"strings": ["changePage", "maxVisiblePages"]},
+		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "container"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
@@ -566,7 +566,7 @@
 		"SearchResults": {"strings": ["renderNoResults", "emptyResultsText", "isSearching"], "noSearch": true},
 		"SearchResultsHeader": {"strings": [".MOST_RELEVANT", "searchByMode"]},
 		"SearchResultsInner": {"strings": ["totalResults", "resultsBlocked", "\"search-results\""], "noSearch": true},
-		"SearchResultsPagination": {"strings": ["changePage", "maxVisiblePages"]},
+		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "container"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
 		"Spoiler": {"strings": [".removeObscurity", "onReveal:"]},
