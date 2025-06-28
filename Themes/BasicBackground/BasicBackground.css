@@ -1293,6 +1293,7 @@ body:has(#app-mount)::after {
 }
 .jumpToPresentBar__0f481::before,
 .jumpToPresentBar__0f481::after {
+	all: unset;
 	content: "";
 	position: absolute;
 	top: 0;
