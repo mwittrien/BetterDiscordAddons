@@ -363,7 +363,7 @@
 			"LinkButton": [".apply(this"]
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "getScrollerState"]},
-		"SearchResultsPagination": {"strings": ["pageLength", "changePage", "maxVisiblePages"]},
+		"SearchResultsPagination": {"strings": ["changePage", "maxVisiblePages"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
@@ -566,7 +566,7 @@
 		"SearchResults": {"strings": ["renderNoResults", "emptyResultsText", "isSearching"], "noSearch": true},
 		"SearchResultsHeader": {"strings": [".MOST_RELEVANT", "searchByMode"]},
 		"SearchResultsInner": {"strings": ["totalResults", "resultsBlocked", "\"search-results\""], "noSearch": true},
-		"SearchResultsPagination": {"strings": ["pageLength", "changePage", "maxVisiblePages"]},
+		"SearchResultsPagination": {"strings": ["changePage", "maxVisiblePages"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
 		"Spoiler": {"strings": [".removeObscurity", "onReveal:"]},
@@ -903,6 +903,7 @@
 			"changeLogButton": "changeLogButton_b6d233",
 			"charCounter": "counter_89de42",
 			"changeLogModal": "changeLogModal_bad42d",
+			"channelHeaderDivider": "divider_348c72",
 			"collapseContainer": "container_54728c",
 			"collapseContainerCollapsed": "collapsed_54728c",
 			"collapseContainerHeader": "header_54728c",
@@ -1964,7 +1965,7 @@
 		"channelheaderdiscovery": ["HeaderBarDiscovery", "headerBar"],
 		"channelheaderdiscoverysearch": ["HeaderBarDiscoverySearch", "searchBar"],
 		"channelheaderdiscoverysearchfloating": ["HeaderBarDiscoverySearch", "searchFloating"],
-		"channelheaderdivider": ["HeaderBar", "divider"],
+		"channelheaderdivider": ["BDFDB", "channelHeaderDivider"],
 		"channelheaderheaderbar": ["HeaderBar", "container"],
 		"channelheaderheaderbarthemed": ["HeaderBar", "themed"],
 		"channelheaderheaderbartitle": ["HeaderBar", "title"],
