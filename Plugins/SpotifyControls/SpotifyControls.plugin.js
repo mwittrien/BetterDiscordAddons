@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.9
+ * @version 1.5.0
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -56,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -525,7 +525,7 @@ module.exports = (_ => {
 						height: 100%;
 						min-width: 4px;
 						border-radius: 2px;
-						background: var(--text-normal);
+						background: var(--text-secondary);
 					}
 					${BDFDB.dotCN._spotifycontrolstimeline}:hover ${BDFDB.dotCN._spotifycontrolsbarfill} {
 						background: var(--SC-spotify-green);
@@ -539,7 +539,7 @@ module.exports = (_ => {
 						height: var(--grabber-size);
 						margin-top: calc(-1 * (var(--grabber-size) - var(--bar-size)) / 2);
 						margin-left: calc(-1 * var(--grabber-size) / 2);
-						background: var(--text-normal);
+						background: var(--text-secondary);
 						border-radius: 50%;
 					}
 					${BDFDB.dotCN._spotifycontrolstimeline}:hover ${BDFDB.dotCN._spotifycontrolsbargrabber} {
@@ -565,7 +565,7 @@ module.exports = (_ => {
 						display: block;
 						width: 100%;
 						height: 100%;
-						color: var(--header-primary);
+						color: var(--text-primary);
 						object-fit: cover;
 					}
 					${BDFDB.dotCN._spotifycontrolscovermaximizer} {
