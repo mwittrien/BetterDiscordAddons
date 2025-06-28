@@ -176,8 +176,8 @@
 	--background-surface-highest: rgb(var(--backgroundaccent_v)) !important;
 	--background-surface-higher: rgb(var(--backgroundprimary_v)) !important;
 	--background-surface-high: rgb(var(--backgroundprimary_v)) !important;
-	--background-nested-floating: rgb(var(--backgroundfloating_v)) !important;
 	--background-secondary-alt: rgb(var(--backgroundsecondaryalt_v)) !important;
+	--background-nested-floating: rgb(var(--backgroundfloating_v)) !important;
 	--chat-background-default: rgb(var(--backgroundprimary_v)) !important;
 	
 	--background-mobile-primary: rgb(var(--backgroundprimary_v)) !important;
