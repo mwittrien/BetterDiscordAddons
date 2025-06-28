@@ -103,10 +103,6 @@ module.exports = (_ => {
 						z-index: 10;
 						pointer-events: none;
 					}
-					${BDFDB.dotCNS.textareaaccessorybarright + BDFDB.dotCN._charcountercounter} {
-						position: static;
-						margin-left: 8px;
-					}
 					${BDFDB.dotCN._charcounterchatcounter} {
 						right: 0;
 						bottom: 0.3em;
