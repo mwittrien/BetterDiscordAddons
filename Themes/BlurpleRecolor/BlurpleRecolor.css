@@ -392,7 +392,7 @@
 	background-color: rgb(var(--accentcolor_v));
 }
 .wrapper__8436d rect[fill] {
-	fill: var(--background-primary);
+	fill: var(--background-base-low);
 }
 .wrapper__8436d rect[fill="#6370f4"] {
 	fill: rgb(var(--accentcolor_v));
@@ -681,7 +681,7 @@
 }
 
 .premium__6c5a1 path[fill] {
-	fill: var(--text-normal);
+	fill: var(--text-secondary);
 }
 
 .comboNameplate__257af[style^="color: hsl(227, "],
@@ -1892,7 +1892,7 @@ a.metadataDownload_cf09d8 {
 .colorDefault_c1e9c4.focused_c1e9c4,
 .colorDefault_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(var(--accentcolor_v));
-	color: var(--header-primary);
+	color: var(--text-primary);
 }
 .custom-user-profile-theme .menuItemColor_af7fb7:hover {
 	background-color: var(--user-profile-overlay-background-hover, rgb(var(--accentcolor_v)));
@@ -1916,7 +1916,7 @@ a.metadataDownload_cf09d8 {
 .colorPremium_c1e9c4.focused_c1e9c4,
 .colorPremium_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(var(--accentcolor2_v));
-	color: var(--header-primary);
+	color: var(--text-primary);
 }
 .colorPremium_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorPremium_c1e9c4:not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -1935,7 +1935,7 @@ a.metadataDownload_cf09d8 {
 .colorPremiumGradient_c1e9c4.focused_c1e9c4,
 .colorPremiumGradient_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background: linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgb(var(--accentcolor_v)));
-	color: var(--header-primary);
+	color: var(--text-primary);
 }
 .colorPremiumGradient_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorPremiumGradient_c1e9c4not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -1952,7 +1952,7 @@ a.metadataDownload_cf09d8 {
 .colorDanger_c1e9c4.focused_c1e9c4,
 .colorDanger_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: var(--status-danger);
-	color: var(--header-primary);
+	color: var(--text-primary);
 }
 .colorDanger_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorDanger_c1e9c4:not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -1969,7 +1969,7 @@ a.metadataDownload_cf09d8 {
 .colorSuccess_c1e9c4.focused_c1e9c4,
 .colorSuccess_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: var(--status-success);
-	color: var(--header-primary);
+	color: var(--text-primary);
 }
 .colorSuccess_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorSuccess_c1e9c4:not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -2407,7 +2407,7 @@ html #bd-modal-container {
 	color: transparent;
 }
 html #bd-modal-container > * {
-	color: var(--header-secondary);
+	color: var(--text-secondary);
 }
 
 .bd-modal-wrapper .footer button {
@@ -2450,14 +2450,14 @@ html #bd-modal-container > * {
 }
 
 .bd-description-wrap .banner {
-	background: var(--background-primary);
-	border-color: var(--background-secondary);
-	color: var(--header-secondary);
+	background: var(--background-base-low);
+	border-color: var(--background-base-lower);
+	color: var(--text-secondary);
 	font-size: 14px;
 	line-height: 18px;
 }
 .banner.banner-danger {
-	background: var(--background-secondary);
+	background: var(--background-base-lower);
 	border-color: var(--status-danger);
 }
 .banner-danger .bd-icon {
@@ -2511,7 +2511,7 @@ html #bd-modal-container > * {
 	pointer-events: none;
 }
 #bd-editor-controls .checkboxElement-1qV33p:not(:checked) + span {
-	border: 1px solid var(--header-primary);
+	border: 1px solid var(--text-primary);
 }
 #bd-editor-controls .checkboxElement-1qV33p:checked + span {
 	background: rgb(var(--accentcolor_v));
@@ -2719,14 +2719,14 @@ html .powercord-updater .debug-info b {
 /* ----		15.3.		SERVERSEARCH					---- */
 
 #server-search .wrapper-28eC3z {
-	background-color: var(--background-primary) !important;
+	background-color: var(--background-base-low) !important;
 	transition: background-color .16s ease-out;
 }
 #server-search .wrapper-28eC3z:hover {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 #server-search .wrapper-28eC3z [fill="white"] {
-	fill: var(--header-primary);
+	fill: var(--text-primary);
 }
 #server-search .wrapper-28eC3z:hover [fill="white"] {
 	fill: #fff;
