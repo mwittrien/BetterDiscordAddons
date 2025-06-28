@@ -231,6 +231,14 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-bottom: 1px solid var(--background-modifier-accent);
 }
 
+[REPLACE_CLASS_channelheaderdivider] {
+	background-color: var(--border-subtle);
+	border-radius: 1px;
+	width: 1px;
+	height: 24px;
+	margin: 0 6px;
+}
+
 [REPLACE_CLASS_pagination] {
 	display: flex;
 	justify-content: center;
