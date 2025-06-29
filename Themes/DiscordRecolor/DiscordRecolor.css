@@ -9,6 +9,8 @@
 	--warningcolor: 			250, 166, 26;
 	--dangercolor: 				237, 66, 69;
 	
+	--framecolor: 				151, 151, 159, 0.121;
+	
 	--textbrightest: 			255, 255, 255;
 	--textbrighter: 			220, 221, 222;
 	--textbright: 				185, 187, 190;
@@ -31,6 +33,8 @@
 	--successcolor_v:			var(--successcolor_s, var(--successcolor));
 	--warningcolor_v:			var(--warningcolor_s, var(--warningcolor));
 	--dangercolor_v:			var(--dangercolor_s, var(--dangercolor));
+	
+	--framecolor_v:				var(--framecolor_s, var(--framecolor));
 	
 	--textbrightest_v:			var(--textbrightest_s, var(--textbrightest));
 	--textbrighter_v:			var(--textbrighter_s, var(--textbrighter));
@@ -189,7 +193,7 @@
 	--bg-surface-overlay: rgb(var(--backgroundprimary_v)) !important;
 	--bg-surface-raised: rgb(var(--backgroundprimary_v)) !important;
 	
-	--app-border-frame: transparent !important;
+	--app-border-frame: rgba(var(--framecolor_v)) !important;
 	--border-faint: rgba(var(--backgroundaccent_v), .2) !important;
 	--border-subtle: rgba(var(--backgroundaccent_v), .4) !important;
 	--border-strong: rgba(var(--backgroundaccent_v), .6) !important;
