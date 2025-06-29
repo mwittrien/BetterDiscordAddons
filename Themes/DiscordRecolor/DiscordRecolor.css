@@ -1233,10 +1233,6 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		4.1.		CHANNELHEADER					---- */
 
-#app-mount .container__9293f.themed__9293f {
-	box-shadow: var(--elevation-low);
-}
-
 #app-mount .back__8b3a3 {
 	color: var(--interactive-normal);
 }
@@ -1645,6 +1641,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 #app-mount .container__133bf {
 	background-color: var(--background-base-low);
+}
+#app-mount .container__7d20c {
+	background-color: var(--background-base-lower);
+	border-left: 1px solid var(--border-subtle);
 }
 
 #app-mount .scroller__7d20c {
