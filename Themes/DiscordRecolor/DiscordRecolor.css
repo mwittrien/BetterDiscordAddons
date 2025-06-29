@@ -1222,13 +1222,67 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .scrollerContainer_c6b11b .prompt__5d7c9 {
 	background: var(--background-base-lower);
 }
-#app-mount .sortDropdown_f369db,
-#app-mount .tagsButton_f369db {
+
+
+.noChannel__01d5c {
 	background-color: var(--background-base-lower);
 }
+#app-mount .wrapper_d852db,
+#app-mount .wrapper_fc8177 {
+	background-color: var(--background-base-low);
+}
+.content_f75fb0::before {
+	display: none;
+}
+#app-mount .background_c54132,
+#app-mount .container_f369db,
+#app-mount .container__0b563,
+#app-mount .header__0b563,
+#app-mount .container_c2efea {
+	background-color: var(--background-base-lower);
+}
+#app-mount .background_c54132 .container_c68a2c,
+#app-mount .background_c54132 .container__29699,
+#app-mount .background_c54132 .container__60371,
+#app-mount .background_c54132 .icon_ac2d0d,
+#app-mount .background_c54132 .containerCard__95c7a,
+#app-mount .background_c54132 .containerCard__95c7a:hover,
+#app-mount .background_c54132 .interactiveCard_d92364,
+#app-mount .background_c54132 .emptyStateContainer__08276,
+#app-mount .background_c54132 .card_d4f6c7,
+#app-mount .container_f369db .mainCard_f369db,
+#app-mount .container_f369db .sidebarCard__7449f,
+#app-mount .container__0b563 .channelRow_e4503a {
+	background-color: var(--background-base-low);
+}
+#app-mount .action_c66e86,
+#app-mount .row_d13feb {
+	background-color: var(--background-base-lowe);
+}
+#app-mount .background_c54132 .icon_ac2d0d {
+	border-color: var(--background-base-low);
+}
+@media (max-width: 1300px) {
+	.container__29699,
+	.container__60371 {
+		background: none !important;
+	}
+}
+#app-mount .background_c54132 .containerCard__95c7a {
+	border-color: var(--background-base-low);
+}
+#app-mount .container_f369db .pill_a2c9e8,
+#app-mount .sortDropdown_f369db,
+#app-mount .tagsButton_f369db {
+	background-color: var(--background-base-low);
+}
+#app-mount .container_f369db .mainCard_f369db:hover,
+#app-mount .container_f369db .pill_a2c9e8:hover,
+#app-mount .background_c54132 .container__55cc1:hover,
+#app-mount .container__0b563 .channelRow_e4503a:hover,
 #app-mount .sortDropdown_f369db:hover,
 #app-mount .tagsButton_f369db:hover {
-	background-color: var(--background-base-lowest);
+	background-color: var(--background-surface-highest);
 }
 
 /* ----		4.1.		CHANNELHEADER					---- */
@@ -1248,58 +1302,6 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		4.2.		MESSAGES					---- */
 
-.noChannel__01d5c {
-	background-color: var(--background-base-low);
-}
-#app-mount .wrapper_d852db,
-#app-mount .wrapper_fc8177 {
-	background-color: var(--background-base-lower);
-}
-.content_f75fb0::before {
-	display: none;
-}
-#app-mount .background_c54132,
-#app-mount .container_f369db,
-#app-mount .container__0b563,
-#app-mount .header__0b563,
-#app-mount .container_c2efea {
-	background-color: var(--background-base-low);
-}
-#app-mount .background_c54132 .container_c68a2c,
-#app-mount .background_c54132 .container__29699,
-#app-mount .background_c54132 .container__60371,
-#app-mount .background_c54132 .icon_ac2d0d,
-#app-mount .background_c54132 .containerCard__95c7a,
-#app-mount .background_c54132 .containerCard__95c7a:hover,
-#app-mount .background_c54132 .interactiveCard_d92364,
-#app-mount .background_c54132 .emptyStateContainer__08276,
-#app-mount .background_c54132 .card_d4f6c7,
-#app-mount .container_f369db .mainCard_f369db,
-#app-mount .container_f369db .sidebarCard__7449f,
-#app-mount .container__0b563 .channelRow_e4503a {
-	background-color: var(--background-base-lower);
-}
-#app-mount .action_c66e86,
-#app-mount .row_d13feb {
-	background-color: var(--background-base-lower);
-}
-#app-mount .background_c54132 .icon_ac2d0d {
-	border-color: var(--background-base-lower);
-}
-@media (max-width: 1300px) {
-	.container__29699,
-	.container__60371 {
-		background: none !important;
-	}
-}
-#app-mount .background_c54132 .containerCard__95c7a {
-	border-color: var(--background-base-lower);
-}
-#app-mount .background_c54132 .container__55cc1:hover,
-#app-mount .container_f369db .pill_a2c9e8,
-#app-mount .container__0b563 .channelRow_e4503a:hover {
-	background: var(--background-base-lowest);
-}
 #app-mount .textContentFooter__9a337 {
 	background: linear-gradient(0deg, rgba(var(--backgroundsecondary_v), 1), rgba(var(--backgroundsecondary_v), .97) 36px, rgba(var(--backgroundsecondary_v), .4));
 }
