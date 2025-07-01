@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.9
+ * @version 3.2.0
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -214,7 +214,7 @@ module.exports = (_ => {
 				if (this.settings.general.showOwnerRole && user.id == guild.ownerId) role = Object.assign({}, role, {name: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER, ownerRole: true});
 				if (role && !role.colorString && !this.settings.general.includeColorless && !role.ownerRole) {
 					let member = BDFDB.LibraryStores.GuildMemberStore.getMember(guild.id, user.id);
-					if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => BDFDB.LibraryStores.GuildStore.getRole(guild.id, roleId)), "position").reverse()) if (sortedRole.colorString) {
+					if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => BDFDB.LibraryStores.GuildRoleStore.getRole(guild.id, roleId)), "position").reverse()) if (sortedRole.colorString) {
 						role = sortedRole;
 						break;
 					}
