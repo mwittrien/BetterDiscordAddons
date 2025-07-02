@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.8
+ * @version 1.3.9
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -379,7 +379,7 @@ module.exports = (_ => {
 							return `@ ${userMember && userMember.nick || user.globalName || user.username}`;
 						}
 						else if (channel.guild_id) {
-							let roles = guild.roles || BDFDB.LibraryStores.GuildStore.getRoles(guild.id);
+							let roles = guild.roles || BDFDB.LibraryStores.GuildRoleStore.getRoles(guild.id);
 							if (roles[match] && roles[match].name) return `${roles[match].name.indexOf("@") == 0 ? "" : "@"} ${roles[match].name}`;
 						}
 						return string;
