@@ -1618,7 +1618,6 @@
 	"DiscordClasses": {
 		"_bdmodal": ["BD", "bdModal"],
 		"_bdmodalcontent": ["BD", "bdModalContent"],
-		"_bdminimalmode": ["BD", "bdMinimalMode"],
 		"_betterfriendlistmutualguilds": ["BetterFriendList", "mutualGuilds"],
 		"_betterfriendlistnamecell": ["BetterFriendList", "nameCell"],
 		"_betterfriendlisttitle": ["BetterFriendList", "title"],
