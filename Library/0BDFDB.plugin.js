@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.9
+ * @version 4.2.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7306,7 +7306,7 @@ module.exports = (_ => {
 					}
 					renderHeaderOption(props) {
 						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.colorbase, BDFDB.disCN.size10, props.clickable && BDFDB.disCN.cursorpointer),
+							className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.eyebrow, props.clickable && BDFDB.disCN.cursorpointer),
 							onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(props.label, this);},
 							onContextMenu: _ => {if (typeof this.props.onHeaderContextMenu == "function") this.props.onHeaderContextMenu(props.label, this);},
 							children: BDFDB.ReactUtils.createElement("span", {
@@ -7776,6 +7776,31 @@ module.exports = (_ => {
 							}
 						}, this.props);
 					}
+				};
+				
+				CustomComponents.TextElement = reactInitialized && class BDFDB_TextScroller extends Internal.LibraryModules.React.Component {
+					render() {
+						let color = this.props.color && CustomComponents.TextElement.Colors[this.props.color] != undefined ? (CustomComponents.TextElement.Colors[this.props.color] && Internal.DiscordConstants.ColorsCSS[CustomComponents.TextElement.Colors[this.props.color]]) : Internal.DiscordConstants.ColorsCSS[CustomComponents.TextElement.Colors.STANDARD];
+						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Text, {
+							variant: `${this.props.size && CustomComponents.TextElement.Sizes[this.props.size] || CustomComponents.TextElement.Sizes.SIZE_12}/${this.props.weight || "normal"}`,
+							style: color ? {color: color} : {},
+							color: "",
+							children: this.props.children
+						});
+					}
+				};
+				CustomComponents.TextElement.Colors = {
+					"CUSTOM": "",
+					"MUTED": "TEXT_MUTED",
+					"STANDARD": "TEXT_DEFAULT",
+					"STATUS_RED": "STATUS_DANGER"
+				};
+				CustomComponents.TextElement.Sizes = {
+					"SIZE_10": "text-xxs",
+					"SIZE_12": "text-xs",
+					"SIZE_14": "text-sm",
+					"SIZE_16": "text-md",
+					"SIZE_20": "text-lg"
 				};
 				
 				CustomComponents.TextGradientElement = reactInitialized && class BDFDB_TextGradientElement extends Internal.LibraryModules.React.Component {
