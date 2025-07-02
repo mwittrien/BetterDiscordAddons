@@ -196,6 +196,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 											className: BDFDB.disCN._spotifycontrolssong,
+											color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 												children: lastSong.details
 											})
