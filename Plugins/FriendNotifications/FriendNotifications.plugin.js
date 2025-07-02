@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.0
+ * @version 2.1.1
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -56,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--text-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -87,20 +87,24 @@ module.exports = (_ => {
 			playing: {
 				value: false,
 				checkActivity: true,
+				specialStatus: true,
 				sound: true
 			},
 			listening: {
 				value: false,
 				checkActivity: true,
+				specialStatus: true,
 				sound: true
 			},
 			streaming: {
 				value: false,
 				checkActivity: true,
+				specialStatus: true,
 				sound: true
 			},
 			screensharing: {
 				value: false,
+				specialStatus: true,
 				sound: true
 			},
 			offline: {
@@ -118,6 +122,8 @@ module.exports = (_ => {
 				value: false
 			}
 		};
+		
+		const specialStatuses = Object.entries(statuses).filter(n => n[1].specialStatus).map(n => n[0]);
 		
 		const notificationTypes = {
 			DISABLED: {
@@ -786,7 +792,7 @@ module.exports = (_ => {
 					let isCustom = activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS;
 					let activityName = isCustom ? "custom" : BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
 					if (statuses[activityName] && config[activityName]) {
-						Object.assign(status, {name: isCustom ? status.name : activityName, activity: Object.assign({}, activity), custom: isCustom, screensharing: false});
+						Object.assign(status, {activity: Object.assign({}, activity), custom: isCustom, [activityName]: true});
 						if (activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING || activity.type == BDFDB.DiscordConstants.ActivityTypes.LISTENING) delete status.activity.name;
 						else if (activity.type == BDFDB.DiscordConstants.ActivityTypes.PLAYING) {
 							delete status.activity.details;
@@ -832,13 +838,13 @@ module.exports = (_ => {
 						let user = BDFDB.LibraryStores.UserStore.getUser(id);
 						let status = this.getStatusWithMobileAndActivity(id, observedUsers[id], clientStatuses);
 						let transitionChannelId = null;
-						let customChanged = false, loginNotice = false, screensharingNotice = false;
+						let customChanged = false, loginNotice = false, specialNotice = false;
 						if (user && (!observedUsers[id][status.name] && observedUsers[id].login && status.name != BDFDB.LibraryComponents.StatusComponents.Types.OFFLINE && userStatusStore[id].name == BDFDB.LibraryComponents.StatusComponents.Types.OFFLINE && (loginNotice = true) || observedUsers[id][status.name] && (
 							observedUsers[id].custom && (
 								userStatusStore[id].custom != status.custom && ((customChanged = status.custom) || true) ||
 								(customChanged = status.custom && !this.activityIsSame(id, status))
 							) ||
-							observedUsers[id].screensharing && status.screensharing && userStatusStore[id].screensharing != status.screensharing  && (screensharingNotice = true) ||
+							specialStatuses.some(special => observedUsers[id][special] && status[special] && userStatusStore[id][special] != status[special] && (specialNotice = special)) ||
 							observedUsers[id].mobile && userStatusStore[id].mobile != status.mobile ||
 							statuses[status.name].checkActivity && !this.activityIsSame(id, status) ||
 							userStatusStore[id].name != status.name
@@ -852,7 +858,7 @@ module.exports = (_ => {
 							let statusName = this.getStatusName(id, status);
 							let oldStatusName = this.getStatusName(id, userStatusStore[id]);
 							
-							let string = this.settings.notificationStrings[screensharingNotice ? "screensharing" : customChanged ? "custom" : loginNotice ? "login" : status.name] || "'$user' changed status to '$status'";
+							let string = this.settings.notificationStrings[specialNotice ? specialNotice : customChanged ? "custom" : loginNotice ? "login" : status.name] || "'$user' changed status to '$status'";
 							let hasUserPlaceholder = string.indexOf("$user") > -1;
 							let toastString = BDFDB.StringUtils.htmlEscape(string)
 								.replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${this.settings.general.showDiscriminator && !user.isPomelo() ? ("#" + user.discriminator) : ""}`)
