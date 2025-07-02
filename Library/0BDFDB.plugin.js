@@ -7782,6 +7782,7 @@ module.exports = (_ => {
 					render() {
 						let color = this.props.color && CustomComponents.TextElement.Colors[this.props.color] != undefined ? (CustomComponents.TextElement.Colors[this.props.color] && Internal.DiscordConstants.ColorsCSS[CustomComponents.TextElement.Colors[this.props.color]]) : Internal.DiscordConstants.ColorsCSS[CustomComponents.TextElement.Colors.STANDARD];
 						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Text, {
+							className: this.props.className,
 							variant: `${this.props.size && CustomComponents.TextElement.Sizes[this.props.size] || CustomComponents.TextElement.Sizes.SIZE_12}/${this.props.weight || "normal"}`,
 							style: color ? {color: color} : {},
 							color: "",
