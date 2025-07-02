@@ -147,6 +147,7 @@
 	--text-primary: rgb(var(--textbrightest_v)) !important;
 	--text-secondary: rgb(var(--textbrighter_v)) !important;
 	--text-tertiary: rgb(var(--textbright_v)) !important;
+	--text-default: rgb(var(--textbrighter_v)) !important;
 	--text-muted: rgb(var(--textdarker_v)) !important;
 	--chat-text-muted: rgb(var(--textdark_v)) !important;
 	--channels-default: rgb(var(--textdark_v)) !important;
