@@ -7793,6 +7793,7 @@ module.exports = (_ => {
 				CustomComponents.TextElement.Colors = {
 					"CUSTOM": "",
 					"MUTED": "TEXT_MUTED",
+					"PRIMARY": "TEXT_PRIMARY",
 					"STANDARD": "TEXT_DEFAULT",
 					"STATUS_RED": "STATUS_DANGER"
 				};
