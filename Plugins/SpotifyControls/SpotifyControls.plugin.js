@@ -430,11 +430,11 @@ module.exports = (_ => {
 							className: BDFDB.disCN._spotifycontrolsbartext,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
+									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_10,
 									children: this.formatTime(currentTime)
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
+									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_10,
 									children: this.formatTime(maxTime)
 								})
 							]
