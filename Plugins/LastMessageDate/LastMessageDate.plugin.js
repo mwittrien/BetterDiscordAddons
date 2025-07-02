@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.0
+ * @version 1.5.1
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -56,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--text-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -108,7 +108,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
 							className: BDFDB.disCN.userprofilesectionheading,
 							variant: "text-xs/semibold",
-							style: {color: "var(--text-secondary)"},
+							style: {color: "var(--header-secondary)"},
 							color: null,
 							children: _this.labels.last_message
 						}),
@@ -120,8 +120,8 @@ module.exports = (_ => {
 									text: channel.guild_id ? "#" + channel.name : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES,
 									children: icon
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Text, {
-									variant: "text-sm/normal",
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_14,
 									children: loadedUsers[this.props.guildId][this.props.user.id] ? BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.lastMessageDate, new Date(loadedUsers[this.props.guildId][this.props.user.id].timestamp)) : "---"
 								})
 							]
