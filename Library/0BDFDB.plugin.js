@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.0
+ * @version 4.2.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3189,10 +3189,10 @@ module.exports = (_ => {
 					let keys = Object.keys(guild);
 					return guild instanceof Internal.DiscordObjects.Guild || Object.keys(new Internal.DiscordObjects.Guild({})).every(key => keys.indexOf(key) > -1);
 				};
-				BDFDB.GuildUtils.getIcon = function (id) {
+				BDFDB.GuildUtils.getIcon = function (id, size, canAnimate) {
 					let guild = Internal.LibraryStores.GuildStore.getGuild(id);
 					if (!guild || !guild.icon) return "";
-					return Internal.LibraryModules.IconUtils.getGuildIconURL(guild).split("?")[0];
+					return size ? Internal.LibraryModules.IconUtils.getGuildIconURL({id, size, canAnimate, icon: guild.icon}) : Internal.LibraryModules.IconUtils.getGuildIconURL({id, size, canAnimate, icon: guild.icon}).split("?")[0];
 				};
 				BDFDB.GuildUtils.getBanner = function (id) {
 					let guild = Internal.LibraryStores.GuildStore.getGuild(id);

@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -119,7 +119,7 @@ module.exports = (_ => {
 					return null;
 				}
 				else {
-					let src = this.props.guild.getIconURL(4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
+					let src = BDFDB.GuildUtils.getIcon(this.props.guild.id, 4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
 					let roles = this.props.guild.roles || BDFDB.LibraryStores.GuildRoleStore.getRoles(this.props.guild.id);
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,

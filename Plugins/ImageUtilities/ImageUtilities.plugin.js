@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.1
+ * @version 5.6.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		improved: {
-			"Download locations": "You can now add a \\* to your Download locations, allowing you to save an image in the location or one of its subfolders"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -744,7 +742,9 @@ module.exports = (_ => {
 					let banner = BDFDB.GuildUtils.getBanner(e.instance.props.guild.id);
 					if (banner) this.injectItem(e, [banner.replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.banner) && banner.replace(/\.webp|\.png/, ".gif")], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildbanner, id: "banner"});
 				}
-				else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.channels, e.instance.props.target)) this.injectItem(e, [(e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true)], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildicon, id: "icon"});
+				else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildchannels, e.instance.props.target)) {
+					this.injectItem(e, [(BDFDB.GuildUtils.getIcon(e.instance.props.guild.id, 4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && BDFDB.GuildUtils.getIcon(e.instance.props.guild.id, 4096, true)], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildicon, id: "icon"});
+				}
 			}
 
 			onUserContextMenu (e) {
