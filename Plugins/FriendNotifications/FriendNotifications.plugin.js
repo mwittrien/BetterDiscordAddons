@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.1
+ * @version 2.1.2
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -894,8 +894,7 @@ module.exports = (_ => {
 										else {
 											let DMid = BDFDB.LibraryStores.ChannelStore.getDMFromUserId(user.id)
 											if (DMid) BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel(DMid);
-											else BDFDB.LibraryModules.PrivateChannelUtils.openPrivateChannel(user.id);
-											BDFDB.LibraryModules.WindowUtils.focus();
+											else BDFDB.LibraryModules.PrivateChannelUtils.getDMChannel(user.id).then(BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel);
 										}
 									}
 								};
