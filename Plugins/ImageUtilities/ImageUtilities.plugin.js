@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.2
+ * @version 5.6.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -367,6 +367,9 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.imagemodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} img {
 						object-fit: contain;
 						width: unset;
+					}
+					${BDFDB.dotCNS.imagemodal + BDFDB.dotCN.imagemodalimagemediawrapper}:has(video) {
+						pointer-events: none !important;
 					}
 					${BDFDB.dotCN.imagemodalnavbutton} {
 						background: rgba(0, 0, 0, 0.3);
@@ -1196,15 +1199,14 @@ module.exports = (_ => {
 					if (e.instance.props.resized) {
 						let selectors = ["embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"];
 
-						if (this.settings.rescaleSettings.rescaleEmbeds)
-							selectors.push("embedfull", "embedinlinemedia")
+						if (this.settings.rescaleSettings.rescaleEmbeds) selectors.push("embedfull", "embedinlinemedia");
 
 						for (let selector of selectors) {
 							let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN[selector], e.node);
 							if (parent) parent.style.setProperty("max-width", "unset", "important");
 							if (parent) parent.style.setProperty("max-height", "unset", "important");
 						}
-						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:']")].filter(n => n)) {
+						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:'], video")].filter(n => n)) {
 							ele.style.setProperty("width", e.instance.props.width + "px");
 							ele.style.setProperty("max-width", e.instance.props.width + "px");
 							ele.style.setProperty("height", e.instance.props.height + "px");
@@ -1332,7 +1334,6 @@ module.exports = (_ => {
 					}
 				}
 				else {
-					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
 					if (this.settings.rescaleSettings.imageViewer != "NONE" && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimagemedia) > -1) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (this.settings.viewerSettings.galleryMode ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
@@ -1348,14 +1349,14 @@ module.exports = (_ => {
 							e.instance.props.resized = true;
 						}
 					}
+					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
 					if (this.settings.rescaleSettings.messages != "NONE" && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedvideoimagecomponent, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true}) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(reactInstance, "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length < 2)) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
 						if (mRects.width || mwRects.width) {
 							let embed = BDFDB.ReactUtils.findValue(reactInstance, "embed", {up: true});
-							if (embed && !this.settings.rescaleSettings.rescaleEmbeds)
-								return;
+							if (embed && !this.settings.rescaleSettings.rescaleEmbeds) return;
 
 							let ratio = ((mRects.width || (mwRects.width - 120)) - (embed && embed.color ? 100 : 0)) / e.instance.props.width;
 							ratio = this.settings.rescaleSettings.messages == "ORIGINAL" && ratio > 1 ? 1 : ratio;
@@ -1654,6 +1655,7 @@ module.exports = (_ => {
 				switchedImageProps = {
 					animated: !!isVideo,
 					children: !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
+						className: BDFDB.disCNS.embedvideo + BDFDB.disCN.embedmedia,
 						ignoreMaxSize: true,
 						poster: this.getPosterUrl(thisViewedImage.proxy_url),
 						src: thisViewedImage.proxy_url,
@@ -1667,12 +1669,12 @@ module.exports = (_ => {
 					height: thisViewedImage.height,
 					original: thisViewedImage.url,
 					sourceMetadata: {
-						identifier: {type: "attachment", attachmentId: thisViewedImage.id},
+						identifier: {type: isVideo ? "embed" : "attachment", [isVideo ? "embedIndex" : "attachmentId"]: thisViewedImage.id ? thisViewedImage.id : 0},
 						message: thisViewedImage.message
 					},
-					srcIsAnimated: !!isVideo,
+					srcIsAnimated: undefined,
 					trigger: "CLICK",
-					type: isVideo ? "VIDEO" : "IMAGE",
+					type: "IMAGE",
 					url: thisViewedImage.url,
 					width: thisViewedImage.width,
 					zoomThumbnailPlaceholder: thisViewedImage.proxy_url,
