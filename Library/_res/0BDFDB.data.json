@@ -2390,6 +2390,7 @@
 		"imagemodalimagedownloadlink": ["ImageModalInner", "downloadLink"],
 		"imagemodalimageforward": ["ImageModalInner", "forward"],
 		"imagemodalimagemedia": ["ImageModalMedia", "media"],
+		"imagemodalimagemediawrapper": ["ImageModalMedia", "wrapper"],
 		"imagemodalimageoptionscontainer": ["ImageModalInner", "optionsContainer"],
 		"imagemodalimagezoomedfit": ["ImageModalInner", "zoomedMediaFitWrapper"],
 		"imagemodalnavbutton": ["ModalCarouselNav", "nav"],
