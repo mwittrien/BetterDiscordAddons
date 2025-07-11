@@ -286,7 +286,7 @@ module.exports = (_ => {
 			processInboxHeader (e) {
 				if (!this.settings.general.addClearButton || e.instance.props.tab != BDFDB.DiscordConstants.InboxTabs.MENTIONS) return;
 				let mentionedMessages = BDFDB.LibraryStores.RecentMentionsStore.getMentions();
-				if (!mentionedMessages) return;
+				if (!mentionedMessages || !mentionedMessages.length) return;
 				let controls = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagespopoutcontrols]]});
 				if (controls) controls.props.children = [
 					controls.props.children,
