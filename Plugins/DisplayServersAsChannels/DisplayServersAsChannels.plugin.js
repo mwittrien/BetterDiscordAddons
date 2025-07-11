@@ -474,6 +474,7 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildpillwrapper} {
 						left: -8px;
 						transform: scaleY(calc(${this.settings.amounts.serverElementHeight}/40));
+						overflow: visible;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildiconchildwrapper} {
 						width: ${this.settings.amounts.serverListWidth - 20}px;
