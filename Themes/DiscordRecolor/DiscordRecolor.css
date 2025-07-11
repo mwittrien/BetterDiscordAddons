@@ -332,8 +332,6 @@ html {
 		5.	MEMBERLIST
 		6.	CALL
 	5.	PEOPLES
-		1.	SHOP
-		2.	FAMILY CENTER
 	6.	STORE/NITRO
 		1.	BIRTHDAY PAGE
 	7.	LIBRARY
@@ -1715,14 +1713,6 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-color: var(--background-secondary-alt);
 }
 
-/* ----		5.1.		SHOP						---- */
-
-#app-mount .shop__6db1d {
-	background: var(--background-base-low);
-}
-
-/* ----		5.2.		FAMILY CENTER					---- */
-
 .contentPanel_dc2e0e::-webkit-scrollbar {
 	width: 16px;
 	height: 16px;
@@ -1747,6 +1737,9 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ~~~~		6.		STORE/NITRO					~~~~ */
 
+#app-mount .mainPageScroller_ca1a02 {
+	background-color: var(--background-base-lower) !important;
+}
 #app-mount .headerBarTransparentDarkBackground__80679 {
 	background-color: var(--background-base-low) !important;
 	opacity: 0.8;
@@ -1969,7 +1962,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 /* ----		6.1.		BIRTHDAY PAGE					---- */
 
 #app-mount .outerContainer_f12976 {
-	background-color: var(--background-base-low);
+	background-color: var(--background-base-lower);
 }
 #app-mount .outerContainer_f12976 .heroWrapper__5f3c1 {
 	overflow: hidden;
@@ -1979,7 +1972,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .outerContainer_f12976 .flipCardOpened_f12976,
 #app-mount .outerContainer_f12976 .activityCard_f12976,
 #app-mount .outerContainer_f12976 .celebrateCardContainer_f12976 {
-	background-color: var(--background-base-lower);
+	background-color: var(--background-base-low);
 }
 
 
