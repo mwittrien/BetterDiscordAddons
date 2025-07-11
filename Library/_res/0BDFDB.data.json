@@ -563,7 +563,7 @@
 		"SearchPopoutOption": {"strings": [".plusIcon", ".option,", ".filter"]},
 		"SearchResult": {"strings": ["onJump:", "message:", "handleMessageClick"]},
 		"SearchResults": {"strings": ["renderNoResults", "emptyResultsText", "isSearching"], "noSearch": true},
-		"SearchResultsHeader": {"strings": [".MOST_RELEVANT", "searchByMode"]},
+		"SearchResultsHeader": {"strings": [".MOST_RELEVANT", "searchMode"]},
 		"SearchResultsInner": {"strings": ["totalResults", "resultsBlocked", "\"search-results\""], "noSearch": true},
 		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "container"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
