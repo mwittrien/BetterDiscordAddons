@@ -436,7 +436,7 @@
 		"ChannelTextAreaEditor": {"strings": ["onHideAutocomplete", "onMaybeShowAutocomplete", "uploadPromptCharacterCount", "_focusBlurQueue"]},
 		"ChannelTextAreaForm": {"strings": ["renderApplicationCommandIcon", "handleTextareaChange", "handleSendMessage"]},
 		"ChannelThreadItem": {"strings": [".typeThread", ".modeUnread", ".GUILD_CHANNEL_LIST"]},
-		"CircleIconButton": {"strings": ["circleIconButton", "lowerBadge", "ButtonListItem"]},
+		"CircleIconButton": {"strings": ["circleIconButton", "lowerBadge"]},
 		"Clickable": {"strings": [".ENTER", "renderNonInteractive", ".handleKeyPress"]},
 		"CloseButton": {"strings": [".closeButton", ".closeIcon", "offset:{"]},
 		"ConnectedLazyImageZoomable": {"strings": ["isWindowFocused:", ",appContext:"]},
