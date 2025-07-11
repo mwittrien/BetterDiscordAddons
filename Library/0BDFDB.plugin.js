@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.1
+ * @version 4.2.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2089,8 +2089,8 @@ module.exports = (_ => {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext),
 												children: fontColorIsGradient ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextGradientElement, {
 													gradient: BDFDB.ColorUtils.createGradient(config.fontColor),
-													children: config.guild.toString()
-												}) : config.guild.toString()
+													children: config.guild.name
+												}) : config.guild.name
 											}),
 										]
 									}),
