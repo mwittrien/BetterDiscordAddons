@@ -56,6 +56,15 @@
 	
 	--background-message-highlight: rgba(var(--accentcolor_v),.2) !important;
 	
+	--control-background-primary-active: rgb(var(--accentcolor_v)) !important;
+	--control-background-primary-default: rgb(var(--accentcolor_v)) !important;
+	--control-background-primary-hover: rgb(var(--accentcolor_v)) !important;
+	--control-background-primary-loading: rgb(var(--accentcolor_v)) !important;
+	--control-text-primary-active: #FFF !important;
+	--control-text-primary-default: #FFF !important;
+	--control-text-primary-hover: #FFF !important;
+	--control-text-primary-loading: #FFF !important;
+	
 	--brand-experiment-100: #fdfdfd !important;
 	--brand-experiment-130: #f2f2f2 !important;
 	--brand-experiment-160: #ebebeb !important;
@@ -501,12 +510,19 @@
 #app-mount .newMessagesBar__0f481 {							/* new messagesbar											*/
 	background-color: rgb(var(--accentcolor_v));
 }
-#app-mount .barButtonAlt__0f481 {
-	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25)));
+#app-mount .barButtonAlt__0f481,
+#app-mount .primary__6af3a {
+	background-image: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25));
 	background-color: rgb(var(--accentcolor_v));
 }
-#app-mount .barButtonAlt__0f481:hover {
-	background-image: linear-gradient(rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1)), rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1)));
+#app-mount .barButtonAlt__0f481:hover,
+#app-mount .primary__6af3a:hover {
+	background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1));
+	background-color: rgb(var(--accentcolor_v));
+}
+#app-mount .barButtonAlt__0f481:active,
+#app-mount .primary__6af3a:active {
+	background-image: unset;
 	background-color: rgb(var(--accentcolor_v));
 }
 
