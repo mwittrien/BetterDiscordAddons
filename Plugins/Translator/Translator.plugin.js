@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.7
+ * @version 2.7.8
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -783,7 +783,7 @@ module.exports = (_ => {
 											foundTranslation
 										].map(n => BDFDB.ReactUtils.createElement("div", {children: n})), {
 											type: "right",
-											color: foundTranslation ? "black" : "red",
+											color: foundTranslation ? "primary" : "red",
 											className: "googletranslate-tooltip"
 										});
 									};
