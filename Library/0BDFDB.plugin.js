@@ -7951,7 +7951,7 @@ module.exports = (_ => {
 					}
 				};
 				CustomComponents.TextInput.Sizes = {
-					MINI: BDFDB.discN.inputmini
+					MINI: BDFDB.disCN.inputmini
 				};
 				
 				CustomComponents.TextScroller = reactInitialized && class BDFDB_TextScroller extends Internal.LibraryModules.React.Component {
