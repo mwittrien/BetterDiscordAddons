@@ -131,6 +131,9 @@
 		}},
 		"AppUtils": {"props": ["clipboard", "os"]},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
+		"AvatarUtils": {"strings": ["avatarPlaceholderSrc:", "default.getUser"], "exported": false, "value": "exports", "map": {
+			"getAvatarProps": ["avatarPlaceholderSrc:", "default.getUser"]
+		}},
 		"CategoryCollapseUtils": {"strings": [".dispatch({type:\"CATEGORY_EXPAND\"", ".dispatch({type:\"CATEGORY_COLLAPSE\""], "exported": false, "value": "exports", "map": {
 			"categoryCollapse": [".dispatch({type:\"CATEGORY_COLLAPSE\""],
 			"categoryExpand": [".dispatch({type:\"CATEGORY_EXPAND\""]
