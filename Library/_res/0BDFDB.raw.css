@@ -725,7 +725,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	color: var(--channels-default);
 }
 
-#app-mount [REPLACE_CLASS_inputmini] {
+[REPLACE_CLASS_inputmini] {
 	height: 26px;
 	line-height: 16px;
 	padding: 4px 7px;
