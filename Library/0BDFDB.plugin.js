@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.3
+ * @version 4.2.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7869,7 +7869,7 @@ module.exports = (_ => {
 							render() {
 								let inputChildren = [
 									BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-										className: BDFDB.DOMUtils.formatClassName(this.props.size || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.input, this.props.size, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
 										type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
 										onChange: this.handleChange.bind(this),
 										onInput: this.handleInput.bind(this),
@@ -7881,7 +7881,7 @@ module.exports = (_ => {
 										maxLength: this.props.type == "file" ? false : this.props.maxLength,
 										style: this.props.width ? {width: `${this.props.width}px`} : {},
 										ref: this.props.inputRef
-									}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "colorPickerOpen", "noAlpha", "filter")),
+									}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "size", "editable", "inputRef", "style", "mode", "colorPickerOpen", "noAlpha", "filter")),
 									this.props.inputChildren,
 									this.props.type == "color" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 										wrap: true,
@@ -7907,9 +7907,6 @@ module.exports = (_ => {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && Internal.LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
 									style: this.props.style,
 									children: [
-										this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
-											className: BDFDB.disCN.inputprefix
-										}) : null,
 										this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.inputnumberbuttons,
 											children: [
