@@ -1336,11 +1336,11 @@ body:has(#app-mount)::after {
 .message__89466 .wrapper_c19a55,							/* message				settings preview						*/
 .messageGroupCozy__45690,								/* message				pin popout							*/
 .message__02a39 .wrapper_c19a55 {							/* message				searchpage							*/
-	background: rgba(var(--transparencycolor_v), var(--messagetransparency_v)) !important;
+	background-color: rgba(var(--transparencycolor_v), var(--messagetransparency_v)) !important;
 	contain: unset;
 }
 .message__02a39 .wrapper_c19a55 {							/* message				searchpage							*/
-	background: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 0.8)) !important;
+	background-color: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 0.8)) !important;
 }
 #app-mount .message__5126c {
 	border-radius: 0;
