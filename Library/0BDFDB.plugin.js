@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.4
+ * @version 4.2.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1655,10 +1655,10 @@ module.exports = (_ => {
 						plugin.globalKeybinds = {};
 					}
 					else {
-						BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[id]);
+						if (plugin.globalKeybinds[id]) BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[id]);
 						delete plugin.globalKeybinds[id];
 						const alternativeId = id + "___ALTERNATIVE";
-						BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[alternativeId]);
+						if (plugin.globalKeybinds[alternativeId]) BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[alternativeId]);
 						delete plugin.globalKeybinds[alternativeId];
 					}
 				};
@@ -4301,7 +4301,7 @@ module.exports = (_ => {
 				};
 				BDFDB.NumberUtils.generateId = function (array) {
 					array = BDFDB.ArrayUtils.is(array) ? array : [];
-					let id = Math.floor(Math.random() * 10000000000000000);
+					let id = Math.floor(Math.random() * 1000000000);
 					if (array.includes(id)) return BDFDB.NumberUtils.generateId(array);
 					else {
 						array.push(id);
