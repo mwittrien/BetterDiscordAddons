@@ -2408,6 +2408,7 @@
 		"imagezoom": ["ImageWrapper", "imageZoom"],
 		"itemlayer": ["ItemLayerContainer", "layer"],
 		"itemlayercontainer": ["ItemLayerContainer", "layerContainer"],
+		"itemlayercontainerclicktrap": ["ItemLayerContainer", "clickTrapContainer"],
 		"itemlayercontainerzindexdisabled": ["BDFDB", "layerContainerZIndexDisabled"],
 		"itemlayerdisabledpointerevents": ["ItemLayerContainer", "disabledPointerEvents"],
 		"input": ["Input", "input"],
