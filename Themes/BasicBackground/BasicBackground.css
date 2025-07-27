@@ -518,6 +518,12 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), var(--transparencyalpha_v));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
+.root__9c3be {
+	box-shadow: none !important;
+}
+.root__9c3be::before, .root__9c3be::after {
+	display: none !important;
+}
 .uploadArea_dbca3c,
 .backdrop__7b2e0,
 .backdrop__1a911 {
@@ -4736,17 +4742,6 @@ body:has(#app-mount)::after {
 
 .outer_c0bea0.custom-user-profile-theme {
 	--user-profile-overlay-background: rgba(var(--transparencycolor_v, .2));
-}
-.outer_c0bea0.custom-user-profile-theme .inner_c0bea0::after {
-	content: "";
-	position: absolute;
-	display: block;
-	background: var(--profile-gradient-primary-color);
-	top: 4px;
-	right: 4px;
-	left: 4px;
-	height: 60px;
-	z-index: 1;
 }
 .outer_c0bea0.custom-user-profile-theme .inner_c0bea0::before {
 	z-index: 2;
