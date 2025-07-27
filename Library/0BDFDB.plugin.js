@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.5
+ * @version 4.2.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2009,15 +2009,16 @@ module.exports = (_ => {
 				BDFDB.TooltipUtils = {};
 				BDFDB.TooltipUtils.create = function (anker, text, config = {}) {
 					if (!text && !config.guild) return null;
-					const itemLayerContainer = document.querySelector(BDFDB.dotCN.app + " ~ " + BDFDB.dotCN.itemlayercontainer) || document.querySelector(BDFDB.dotCN.itemlayercontainer);
+					const itemLayerContainer = document.querySelector(`${BDFDB.dotCN.app} ~ ${BDFDB.dotCN.itemlayercontainer}:has(${BDFDB.dotCN.itemlayercontainerclicktrap})`) || document.querySelector(`${BDFDB.dotCN.app} ~ ${BDFDB.dotCN.itemlayercontainer}`) || document.querySelector(BDFDB.dotCN.itemlayercontainer);
 					if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 					const id = BDFDB.NumberUtils.generateId(Tooltips);
-					const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${BDFDB.disCNS.tooltippointer + BDFDB.disCN.tooltippointerbg}"></div><div class="${BDFDB.disCN.tooltippointer}"></div></div></div>`);
-					itemLayerContainer.appendChild(itemLayer);
+					const wrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.itemlayercontainerclicktrap}"><div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${BDFDB.disCNS.tooltippointer + BDFDB.disCN.tooltippointerbg}"></div><div class="${BDFDB.disCN.tooltippointer}"></div></div></div></div>`);
+					itemLayerContainer.appendChild(wrapper);
 					
-					const tooltip = itemLayer.firstElementChild;
-					const tooltipContent = itemLayer.querySelector(BDFDB.dotCN.tooltipcontent);
-					const tooltipPointers = Array.from(itemLayer.querySelectorAll(BDFDB.dotCN.tooltippointer));
+					const itemLayer = wrapper.firstElementChild;
+					const tooltip = wrapper.querySelector(BDFDB.dotCN.tooltip);
+					const tooltipContent = wrapper.querySelector(BDFDB.dotCN.tooltipcontent);
+					const tooltipPointers = Array.from(wrapper.querySelectorAll(BDFDB.dotCN.tooltippointer));
 					
 					if (config.id) tooltip.id = config.id.split(" ").join("");
 					
@@ -2063,11 +2064,11 @@ module.exports = (_ => {
 						document.removeEventListener("wheel", wheel);
 						document.removeEventListener("mousemove", mouseMove);
 						document.removeEventListener("mouseleave", mouseLeave);
-						BDFDB.DOMUtils.remove(itemLayer);
+						BDFDB.DOMUtils.remove(wrapper);
 						BDFDB.ArrayUtils.remove(Tooltips, id);
 						observer.disconnect();
 						if (zIndexed) BDFDB.DOMUtils.removeClass(itemLayerContainer, BDFDB.disCN.itemlayercontainerzindexdisabled);
-						if (typeof config.onHide == "function") config.onHide(itemLayer, anker);
+						if (typeof config.onHide == "function") config.onHide(wrapper, anker);
 					};
 					const setText = newText => {
 						if (BDFDB.ObjectUtils.is(config.guild)) {
@@ -2166,7 +2167,7 @@ module.exports = (_ => {
 						if (type == "top" || type == "bottom") {
 							if (left < 0) {
 								itemLayer.style.setProperty("left", "5px", "important");
-								tooltipPointer.style.setProperty("margin-left", `${left - 10}px`, "important");
+								for (let pointer of tooltipPointers) pointer.style.setProperty("margin-left", `${left - 10}px`, "important");
 							}
 							else {
 								const rightMargin = aRects.width - (left + iRects.width);
@@ -2214,27 +2215,27 @@ module.exports = (_ => {
 					
 					const observer = new MutationObserver(changes => changes.forEach(change => {
 						const nodes = Array.from(change.removedNodes);
-						if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n =>  n.contains(anker))) removeTooltip();
+						if (nodes.indexOf(wrapper) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n =>  n.contains(anker))) removeTooltip();
 					}));
 					observer.observe(document.body, {subtree: true, childList: true});
 					
-					tooltip.removeTooltip = itemLayer.removeTooltip = removeTooltip;
-					tooltip.setText = itemLayer.setText = setText;
-					tooltip.update = itemLayer.update = update;
+					tooltip.removeTooltip = wrapper.removeTooltip = removeTooltip;
+					tooltip.setText = wrapper.setText = setText;
+					tooltip.update = wrapper.update = update;
 					setText(text);
 					update();
 					
 					if (config.delay) {
-						BDFDB.DOMUtils.toggle(itemLayer);
+						BDFDB.DOMUtils.toggle(wrapper);
 						BDFDB.TimeUtils.timeout(_ => {
-							BDFDB.DOMUtils.toggle(itemLayer);
-							if (typeof config.onShow == "function") config.onShow(itemLayer, anker);
+							BDFDB.DOMUtils.toggle(wrapper);
+							if (typeof config.onShow == "function") config.onShow(wrapper, anker);
 						}, config.delay);
 					}
 					else {
-						if (typeof config.onShow == "function") config.onShow(itemLayer, anker);
+						if (typeof config.onShow == "function") config.onShow(wrapper, anker);
 					}
-					return itemLayer;
+					return wrapper;
 				};
 				
 				Internal.addModulePatches = function (plugin) {
