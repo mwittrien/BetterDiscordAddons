@@ -4767,6 +4767,9 @@ body:has(#app-mount)::after {
 	border-color: transparent;
 	box-sizing: content-box;
 }
+.root__9c3be .outer_c0bea0:not(.custom-user-profile-theme) .profile__9c3be {
+	background-color: rgba(var(--transparencycolor_v), .3);
+}
 
 .root__48c1c {										/* body					roles								*/
 	max-height: 100px;
