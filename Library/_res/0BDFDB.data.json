@@ -233,9 +233,8 @@
 			"getRoleIconData": ["customIconSrc:"]
 		}},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
-		"SearchPageUtils": {"strings": ["dispatch({type:\"SEARCH_CLEAR_HISTORY\"", "*"], "exported": false, "value": "exports", "map": {
-			"changePage": ["*"],
-			"clearHistory": ["dispatch({type:\"SEARCH_CLEAR_HISTORY\""]
+		"SearchPageUtils": {"strings": ["SEARCH_RESULT_PAGE_CHANGED", "newPageIndex", "refreshSearch"], "exported": false, "value": "exports", "map": {
+			"changePage": ["SEARCH_RESULT_PAGE_CHANGED"]
 		}},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
 		"SlateRichUtils": {"strings": ["{type:\"line\",children", "textValue:", "richValue:", "map"], "exported": false, "value": "exports", "map": {
