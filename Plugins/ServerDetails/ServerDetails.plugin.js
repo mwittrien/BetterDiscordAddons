@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -120,7 +120,7 @@ module.exports = (_ => {
 				}
 				else {
 					let src = BDFDB.GuildUtils.getIcon(this.props.guild.id, 4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
-					let roles = this.props.guild.roles || BDFDB.LibraryStores.GuildRoleStore.getRoles(this.props.guild.id);
+					let roles = BDFDB.LibraryStores.GuildRoleStore.getSortedRoles(this.props.guild.id);
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
@@ -156,9 +156,9 @@ module.exports = (_ => {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 								string: BDFDB.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id).count
 							}),
-							_this.settings.items.roles && roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+							_this.settings.items.roles && roles && roles.length && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
-								string: Object.keys(BDFDB.ObjectUtils.filter(roles, n => n.id != this.props.guild.id)).length
+								string: roles.filter(n => n.id != this.props.guild.id).length
 							}),
 							_this.settings.items.language && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 								prefix: BDFDB.LanguageUtils.LanguageStrings.LANGUAGE,
