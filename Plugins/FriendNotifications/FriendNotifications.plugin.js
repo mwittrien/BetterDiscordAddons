@@ -582,7 +582,7 @@ module.exports = (_ => {
 								children: [
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											placeholder: "user (id, accountname or name#discriminator)",
+											placeholder: "user (id or accountname)",
 											value: "",
 											onChange: value => strangerId = value
 										})
