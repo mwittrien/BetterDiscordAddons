@@ -1165,7 +1165,7 @@ module.exports = (_ => {
 				for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name && changedUsers[id].name.toLocaleLowerCase().indexOf(e.instance.props.query.toLocaleLowerCase()) > -1 && !e.instance.props.results.find(n => n.record && n.record.id == id && n.type == BDFDB.DiscordConstants.AutocompleterResultTypes.USER)) {
 					let user = BDFDB.LibraryStores.UserStore.getUser(id);
 					if (user) e.instance.props.results.splice(1, 0, {
-						comparator: user.isPomelo() ? user.username : `${user.username}#${user.discriminator}`,
+						comparator: `${user.username}#${user.discriminator}`,
 						record: user,
 						score: 30000,
 						type: BDFDB.DiscordConstants.AutocompleterResultTypes.USER

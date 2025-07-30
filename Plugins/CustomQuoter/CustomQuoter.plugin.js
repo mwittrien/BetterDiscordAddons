@@ -392,7 +392,7 @@ module.exports = (_ => {
 					.replace("$mention", channel.isDM() ? "" : `<@!${message.author.id}>`)
 					.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
 					.replace("$authorName", member && member.nick || message.author.globalName || message.author.username || "")
-					.replace("$authorAccount", message.author.isPomelo() ? message.author.username : `${message.author.username}#${message.author.discriminator}`)
+					.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
 					.replace("$authorId", message.author.id || "")
 					.replace("$channelName", channel.name || "")
 					.replace("$channelId", channel.id || "")
