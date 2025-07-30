@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.0
+ * @version 3.2.1
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -210,11 +210,11 @@ module.exports = (_ => {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
 				let guild = BDFDB.LibraryStores.GuildStore.getGuild(BDFDB.LibraryStores.SelectedGuildStore.getGuildId());
 				if (!guild || user.bot && this.settings.general.disableForBots) return;
-				let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, user.id);
+				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(guild.id, user.id);
+				let role = member && BDFDB.LibraryStores.GuildRoleStore.getRole(guild.id, member.highestRoleId);
 				if (this.settings.general.showOwnerRole && user.id == guild.ownerId) role = Object.assign({}, role, {name: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER, ownerRole: true});
 				if (role && !role.colorString && !this.settings.general.includeColorless && !role.ownerRole) {
-					let member = BDFDB.LibraryStores.GuildMemberStore.getMember(guild.id, user.id);
-					if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => BDFDB.LibraryStores.GuildRoleStore.getRole(guild.id, roleId)), "position").reverse()) if (sortedRole.colorString) {
+					for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => BDFDB.LibraryStores.GuildRoleStore.getRole(guild.id, roleId)), "position").reverse()) if (sortedRole.colorString) {
 						role = sortedRole;
 						break;
 					}

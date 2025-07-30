@@ -79,16 +79,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.PermissionRoleUtils, "getHighestRole", {after: e => {
-					if (e.returnValue && changedRoles[e.returnValue.id]) {
-						let data = changedRoles[e.returnValue.id];
-						e.returnValue = Object.assign({}, e.returnValue, {
-							name: data.name || e.returnValue.name,
-							color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : e.returnValue.color,
-							colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : e.returnValue.colorString
-						});
-					}
-				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.GuildMemberStore, "getMember", {after: e => {
 					if (e.returnValue) {
 						let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.methodArguments[0]);

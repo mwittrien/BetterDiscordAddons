@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.9
+ * @version 2.3.0
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -145,8 +145,6 @@ module.exports = (_ => {
 				if (!message || !channel) return null;
 				let channelName = channel.name;
 				let guild = channel.guild_id && BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id);
-				let role = guild && BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, message.author.id);
-				if (role) message.colorString = role.colorString;
 				if (popoutProps.selectedFilter.value != "channel" && !channelName && channel.recipients.length > 0) {
 					for (let dmuser_id of channel.recipients) {
 						let user = (BDFDB.LibraryStores.UserStore.getUser(dmuser_id) || {});

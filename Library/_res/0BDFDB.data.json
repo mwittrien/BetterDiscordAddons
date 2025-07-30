@@ -217,9 +217,8 @@
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUsePremiumGuildMemberProfile"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"props": ["isAndroid", "isWindows"]},
-		"PermissionRoleUtils": {"strings": [".roles.indexOf(", ".getMember", "excludeGuildPermissions"], "exported": false, "value": "exports", "map": {
-			"can": ["excludeGuildPermissions", "permission:"],
-			"getHighestRole": [".roles.indexOf(", ".getMember"]
+		"PermissionRoleUtils": {"strings": ["permission:", ".getMember", "excludeGuildPermissions"], "exported": false, "value": "exports", "map": {
+			"can": ["excludeGuildPermissions", "permission:"]
 		}},
 		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"], "exported": false, "value": "exports", "map": {
 			"AccessibilityPreferencesContext": ["[object Object]"]
@@ -606,7 +605,7 @@
 		"UserPopoutHeader": {"strings": ["PRESS_VIEW_PROFILE", "PROFILE_POPOUT"], "noSearch": true},
 		"UserPopoutStatusBubble": {"strings": [".statusText,", "ringClassName", "action:\"HOVER_CUSTOM_STATUS\""], "noSearch": true},
 		"UserPopoutStatusBubbleEmpty": {"strings": [".addStatusPrompt", "PRESS_ADD_CUSTOM_STATUS"], "noSearch": true},
-		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"], "noSearch": true},
+		"UserProfile": {"strings": [".Provider", "themeType:", "secondaryColor"]},
 		"UserProfileHeader": {"strings": ["\"header\"", "user", "PROFILE_MODAL"], "noSearch": true},
 		"UserProfileInfoSection": {"strings": ["trackUserProfileAction:", "\"PRESS_APP_CONNECTION\"", "onUpdate"], "noSearch": true},
 		"UserProfileMutualGuilds": {"strings": ["mutualGuilds", ".listScroller", ".emptyText"]},
