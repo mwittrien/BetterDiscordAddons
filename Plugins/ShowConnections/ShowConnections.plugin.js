@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"improved": {
-			"Themed Popups": "Icons now adapt to the Color of Custom User Popups. Meaning bright Colors -> dark Icons and dark Colors -> bright Icons"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
