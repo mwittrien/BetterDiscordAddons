@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.3
+ * @version 1.2.4
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,7 +86,7 @@ module.exports = (_ => {
 							let colorRole, iconRole;
 							for (let id of e.returnValue.roles) {
 								let role = BDFDB.LibraryStores.GuildRoleStore.getRole(guild.id, id);
-								if (role (role.colorString || changedRoles[id] && changedRoles[id].color) && (!colorRole || colorRole.position < role.position)) colorRole = role;
+								if (role && (role.colorString || changedRoles[id] && changedRoles[id].color) && (!colorRole || colorRole.position < role.position)) colorRole = role;
 								if (role && (role.icon || changedRoles[id] && changedRoles[id].icon) && (!iconRole || iconRole.position < role.position)) iconRole = role;
 							}
 							let color = colorRole && changedRoles[colorRole.id] && changedRoles[colorRole.id].color;
