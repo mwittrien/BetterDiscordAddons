@@ -563,7 +563,7 @@
 		"SearchPopout": {"strings": [".handleHintClick", ".selectedIndex", "token.start"]},
 		"SearchPopoutOption": {"strings": [".plusIcon", ".option,", ".filter"]},
 		"SearchResult": {"strings": ["onJump:", "message:", "handleMessageClick"]},
-		"SearchResults": {"strings": ["renderNoResults", "emptyResultsText", "isSearching"], "noSearch": true},
+		"SearchResults": {"strings": ["paginationLimitHeader", "searchResultsWrap", "isSearching"], "noSearch": true},
 		"SearchResultsHeader": {"strings": [".MOST_RELEVANT", "searchMode"]},
 		"SearchResultsInner": {"strings": ["totalResults", "resultsBlocked", "\"search-results\""], "noSearch": true},
 		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "container"]},
