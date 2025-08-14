@@ -176,7 +176,7 @@ module.exports = (_ => {
 					#app-mount ${BDFDB.dotCN._readallnotificationsbuttonframe},
 					#app-mount ${BDFDB.dotCN._readallnotificationsbuttoninner},
 					#app-mount ${BDFDB.dotCN._readallnotificationsbuttonbutton} {
-						height: 24px;
+						height: 24px !important;
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonbutton} {
 						border-radius: 4px;
