@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
+ * @version 1.3.3
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -263,6 +263,11 @@ module.exports = (_ => {
 						min-width: 440px;
 						width: unset;
 					}
+					${BDFDB.dotCN.modalcontainer}:has(${BDFDB.dotCN.customstatusmodalprofilepreview}) {
+						min-width: 640px;
+						max-width: unset;
+						width: unset;
+					}
 					${BDFDB.dotCN.animationcontainerscale + BDFDB.dotCN.animationcontainerrender} {
 						transform: unset !important;
 					}
@@ -426,12 +431,8 @@ module.exports = (_ => {
 			}
 			
 			processCustomStatusModalWithPreview (e) {
-				let footer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ModalFooter"});
-				if (!footer) return;
-				footer.props.children.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-					color: BDFDB.disCN.modalcancelbutton,
-					look: BDFDB.LibraryComponents.Button.Looks.LINK,
-					style: {marginLeft: "auto"},
+				e.returnvalue.props.actions.splice(-1, 0, {
+					text: this.labels.modal_savepreset,
 					onClick: event => {
 						BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CustomStatusStore, "update", {instead: e2 => {
 							let id = BDFDB.NumberUtils.generateId(Object.keys(presets));
@@ -445,10 +446,9 @@ module.exports = (_ => {
 							if (!event.shiftKey) e.instance.props.onClose();
 							else id = BDFDB.NumberUtils.generateId(Object.keys(presets));
 						}}, {once: true});
-						footer.props.children.props.children[2].props.onClick();
-					},
-					children: this.labels.modal_savepreset
-				}));
+						e.returnvalue.props.actions[e.returnvalue.props.actions.length-1].onClick();
+					}
+				});
 			}
 			
 			processCustomStatusModal (e) {
