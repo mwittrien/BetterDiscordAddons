@@ -295,7 +295,7 @@
 		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
 		"Animations": {"props": ["Controller", "Spring", "animated"]},
 		"AppReferencePositionLayer": {"strings": ["\"App\"", "layerContext:"], "funcStrings": ["{children:(", "{ref:"]},
-		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\""], "exported": false, "value": "exports", "map": {
+		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\"", "HIGH"], "exported": false, "value": "exports", "map": {
 			"AvatarSizes": ["\"SIZE_20\"", "\"SIZE_32\""]
 		}},
 		"Avatars": {"strings": [".UNKNOWN", "foreignObject", "fromIsMobile"], "exported": false, "value": "exports", "map": {
