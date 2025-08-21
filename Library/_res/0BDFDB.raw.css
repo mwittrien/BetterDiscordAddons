@@ -1225,23 +1225,6 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	border-radius: 4px;
 	box-shadow: var(--elevation-high)
 }
-[REPLACE_CLASS_colorpickerhexinputcontainer] {
-	display: flex;
-	align-items: center;
-	gap: 12px
-}
-[REPLACE_CLASS_colorpickereyedropper] {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	width: 16px;
-	height: 16px;
-	margin: 0
-}
-[REPLACE_CLASS_colorpickerhexinput] {
-	flex: 1
-}
 [REPLACE_CLASS_colorpickerrow] {
 	margin-top: 10px;
 	display: flex;

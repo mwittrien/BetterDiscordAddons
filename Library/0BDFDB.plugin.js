@@ -5609,7 +5609,7 @@ module.exports = (_ => {
 									].filter(n => n)
 								}),
 								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextInput, {
-									className: BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8,
+									className: BDFDB.disCN.margintop8,
 									maxLength: this.props.alpha ? 9 : 7,
 									valuePrefix: "#",
 									value: hexColor,
