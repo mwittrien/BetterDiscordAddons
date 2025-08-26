@@ -1025,19 +1025,6 @@ module.exports = (_ => {
 				let data = changedUsers[e.instance.props.user.id];
 				if (data) {
 					let member = BDFDB.LibraryStores.GuildMemberStore.getMember(e.instance.props.channel.guild_id, e.instance.props.user.id);
-					if (data.color1) {
-						if (BDFDB.LibraryStores.AccessibilityStore.roleStyle != "dot") {
-							e.instance.props.colorString = null;
-							if (e.instance.props.colorStrings) for (let key in e.instance.props.colorStrings) e.instance.props.colorStrings[key] = null;
-						}
-						else {
-							let color1 = data.color1 && data.useRoleColor && (member || {}).colorString || data.color1;
-							if (color1) {
-								e.instance.props.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
-								if (e.instance.props.colorStrings) e.instance.props.colorStrings.primaryColor = e.instance.props.colorString;
-							}
-						}
-					}
 					if (data.name) {
 						e.instance.props.nick = this.getUserNick(e.instance.props.user.id, member && member.nick || e.instance.props.user.globalName);
 					}
