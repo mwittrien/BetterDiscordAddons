@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.6
+ * @version 4.2.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4593,7 +4593,9 @@ module.exports = (_ => {
 				});
 				
 				const LanguageStringsObj = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore.Messages || Internal.LibraryModules.LanguageStore || {};
-				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", "de:", {exportsFilter: m => !m.messagesLoader}) || {}).Z;
+				const LanguageStringFormatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.formatToPlainString;
+				const LanguageStringFormattersObj = BDFDB.ModuleUtils.findByString("use strict", "createLoader:", "de:", {exportsFilter: m => !m.messagesLoader, all: true}).find(n => n && n.Z && LanguageStringFormatter(n.Z[InternalData.LanguageStringHashes.FRIENDS_ONLINE_HEADER], {online: 0})).Z;
+				
 				const LibraryStrings = Object.assign({}, InternalData.LibraryStrings);
 				BDFDB.LanguageUtils = {};
 				BDFDB.LanguageUtils.languages = Object.assign({}, InternalData.Languages);
@@ -4640,14 +4642,13 @@ module.exports = (_ => {
 				};
 				BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 					if (item) {
-						let formatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.formatToPlainString;
 						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]];
 						if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) {
 							let i = 0, returnvalue, formatVars = {};
 							let error = "\n";
 							while (!returnvalue && i < 10) {
 								i++;
-								try {returnvalue = formatter && BDFDB.ArrayUtils.is(stringObj) ? formatter(LanguageStringFormattersObj[InternalData.LanguageStringHashes[item]], formatVars) : stringObj.format(formatVars, false);}
+								try {returnvalue = BDFDB.ArrayUtils.is(stringObj) ? LanguageStringFormatter(LanguageStringFormattersObj[InternalData.LanguageStringHashes[item]], formatVars) : stringObj.format(formatVars, false);}
 								catch (err) {
 									error += "Error 1 " + err + "\n";
 									returnvalue = null;
@@ -7824,7 +7825,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				CustomComponents.TextInput = reactInitialized && class BDFDB_TextInput extends Internal.LibraryModules.React.Component {
+				CustomComponents.TextInput = reactInitialized && class BDFDB_TextInputInner extends Internal.LibraryModules.React.Component {
 					handleChange(e, e2) {
 						let value = e = BDFDB.ObjectUtils.is(e) ? (e.currentTarget || e.target).value : e;
 						if (this.props.type == "number") value = parseInt(value);
