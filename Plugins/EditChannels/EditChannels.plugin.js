@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.1
+ * @version 4.6.2
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -724,7 +724,7 @@ module.exports = (_ => {
 				let color = this.getChannelDataColor(channelId);
 				if (color) {
 					color = modify ? this.chooseColor(color, modify) : BDFDB.ColorUtils.convert(color, "RGBA");
-					let childProp = child.props.children ? "children" : "text";
+					let childProp = child.props.children ? "children" : child.props.name ? "name" : "text";
 					let fontGradient = BDFDB.ObjectUtils.is(color);
 					if (fontGradient) child.props[childProp] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
 						gradient: BDFDB.ColorUtils.createGradient(color),
