@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -189,7 +189,7 @@ module.exports = (_ => {
 				if (!tooltipWrapper) return;
 				let childClassName = BDFDB.ObjectUtils.get(e, "instance.props.children.props.className");
 				if (childClassName && childClassName.indexOf(BDFDB.disCN.messageedited) > -1) {
-					if (this.settings.tooltips.edit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+					if (this.settings.tooltips.edit) tooltipWrapper.props.text = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
 				}
 				else {
 					if (!e.instance.props.cozyAlt) {
@@ -208,9 +208,8 @@ module.exports = (_ => {
 						}
 					}
 					if (this.settings.tooltips.chat) {
-						let timestamp = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
-						if (tooltipWrapper.props.text && tooltipWrapper.props.text.props && BDFDB.ArrayUtils.is(tooltipWrapper.props.text.props.children)) tooltipWrapper.props.text.props.children[0] = timestamp;
-						else tooltipWrapper.props.text = timestamp;
+						if (tooltipWrapper.props.text && tooltipWrapper.props.text.props && BDFDB.ArrayUtils.is(tooltipWrapper.props.text.props.children)) tooltipWrapper.props.text.props.children[0] = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+						else tooltipWrapper.props.text = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
 					}
 				}
 			}
