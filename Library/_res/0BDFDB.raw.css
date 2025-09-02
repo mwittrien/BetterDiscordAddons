@@ -33,7 +33,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	position: absolute !important;
 	z-index: unset !important;
 }
-[REPLACE_CLASS_itemlayercontainerzindexdisabled] > * {
+[REPLACE_CLASS_itemlayercontainerzindexdisabled] > *:not([REPLACE_CLASS_itemlayercontainerclicktrap]) {
 	z-index: 1002;
 }
 [REPLACE_CLASS_itemlayer] ~ [REPLACE_CLASS_itemlayer] [REPLACE_CLASS_menu] {
