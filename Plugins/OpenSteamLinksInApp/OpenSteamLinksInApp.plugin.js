@@ -2,7 +2,7 @@
  * @name OpenSteamLinksInApp
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.7
+ * @version 1.1.8
  * @description Opens Steam Links in Steam instead of your Browser
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -105,16 +105,11 @@ module.exports = (_ => {
 				return false;
 			}
 
-			openInSteam (url) {
-				const xhr = new XMLHttpRequest();
-				xhr.open("GET", url, true);
-				xhr.onreadystatechange = function () {
-					if (xhr.readyState != 4) return;
-					let responseUrl = xhr.responseURL || url;
-					if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + responseUrl));
-					else BDFDB.DiscordUtils.openLink(responseUrl);
-				};
-				xhr.send(null);
+			async openInSteam (url) {
+				const res = await BdApi.Net.fetch(url)
+				let responseUrl = res.url || url;
+				if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + responseUrl));
+				else BDFDB.DiscordUtils.openLink(responseUrl);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
