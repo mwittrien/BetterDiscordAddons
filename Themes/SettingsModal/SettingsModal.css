@@ -15,12 +15,14 @@
 	opacity: 1 !important;
 	transform: unset !important;
 	will-change: unset !important;
+	visibility: unset !important;
 }
 #app-mount .stop-animations * {
 	transition-property: inherit !important;
 	animation: inherit !important;
 }
-#app-mount .layer__960e4.stop-animations:first-child::after {
+#app-mount .layer__960e4.stop-animations:first-child::after,
+#app-mount .BA__layerContainer .BA__layer--hidden:first-child::after {
 	content: "" !important;
 	position: fixed !important;
 	background: rgb(0, 0, 0) !important;
@@ -35,7 +37,8 @@
 	pointer-events: none !important;
 }
 
-#app-mount .layer__960e4 ~ .layer__960e4 {
+#app-mount .layer__960e4 ~ .layer__960e4,
+#app-mount .BA__layerContainer ~ .BA__layerContainer {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -53,8 +56,17 @@
 	z-index: 1000 !important;
 	--settingsiconsadditionalsize: var(--use-settingsicons, 0) * (var(--settingsicons-size, 0px) + var(--settingsicons-gap, 0px));
 }
+#app-mount .BA__layerContainer ~ .BA__layerContainer > .layer__960e4 {
+	position: unset !important;
+	padding: unset !important;
+	overflow: unset !important;
+	contain: unset !important;
+	height: 100% !important;
+}
 #app-mount .layer__960e4 ~ .layer__960e4 > div,
-#app-mount .layer__960e4 ~ .layer__960e4 .standardSidebarView__23e6b {
+#app-mount .layer__960e4 ~ .layer__960e4 .standardSidebarView__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer > .layer__960e4 > div,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .standardSidebarView__23e6b {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -64,31 +76,42 @@
 	overflow: hidden !important;
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .sidebarRegion__23e6b,
-#app-mount .layer__960e4 ~ .layer__960e4 .sidebarRegionScroller__23e6b {
+#app-mount .layer__960e4 ~ .layer__960e4 .sidebarRegionScroller__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebarRegion__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebarRegionScroller__23e6b {
 	flex: 0 0 auto !important;
 	margin-top: 0 !important;
+	z-index: 3 !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
+#app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebar__23e6b {
 	width: 218px !important;
 	padding: 20px 6px 20px 20px !important;
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .contentColumnDefault__23e6b,
-#app-mount .layer__960e4 ~ .layer__960e4 .contentColumnWide__23e6b {
+#app-mount .layer__960e4 ~ .layer__960e4 .contentColumnWide__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .contentColumnDefault__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .contentColumnWide__23e6b {
 	padding: 20px 40px !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .wrapper_e5cdf3 {
+#app-mount .layer__960e4 ~ .layer__960e4 .wrapper_e5cdf3,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .wrapper_e5cdf3 {
 	width: calc(var(--settingswidth_v) - 420px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .contentRegionScroller__23e6b {
+#app-mount .layer__960e4 ~ .layer__960e4 .contentRegionScroller__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .contentRegionScroller__23e6b {
 	margin-top: 0 !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .sidebar_e29cd7 {
+#app-mount .layer__960e4 ~ .layer__960e4 .sidebar_e29cd7,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebar_e29cd7 {
 	height: var(--settingsheight_v) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .standardSidebarView__23e6b .editor {
+#app-mount .layer__960e4 ~ .layer__960e4 .standardSidebarView__23e6b .editor,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .standardSidebarView__23e6b .editor {
 	height: calc(var(--settingsheight_v) - 120px) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b {
+#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b {
 	position: fixed !important;
 	inset: 0 !important;
 	width: 100% !important;
@@ -99,11 +122,13 @@
 	padding-top: 0 !important;
 	opacity: 0 !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .tools__23e6b {
+#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .tools__23e6b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .tools__23e6b {
 	width: 100% !important;
 	height: 100% !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141 {
+#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .closeButton_c2b141 {
 	border: none !important;
 	border-radius: 0 !important;
 	width: 100% !important;
@@ -114,11 +139,13 @@
 	flex: unset !important;
 	transition: unset !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141:hover {
+#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141:hover,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .closeButton_c2b141:hover {
 	transition: unset !important;
 	background: unset !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141 > svg {
+#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141 > svg,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .closeButton_c2b141 > svg {
 	display: none !important;
 }
 #app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion__23e6b .toolsContainer__23e6b .container_c2b141 {
@@ -127,47 +154,65 @@
 #app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion__23e6b .toolsContainer__23e6b .keybind_c2b141 {
 	display: none !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .settingsToolbar_8227b0 {
+#app-mount .layer__960e4 ~ .layer__960e4 .settingsToolbar_8227b0,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .settingsToolbar_8227b0 {
 	display: none !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .accountProfileCard__1fed1 {
+#app-mount .layer__960e4 ~ .layer__960e4 .accountProfileCard__1fed1,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .accountProfileCard__1fed1 {
 	max-width: calc(var(--settingswidth_v) - 332px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 {
+#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 {
 	gap: 30px !important;
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .sectionsContainer__722a8,
 #app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .sectionsContainer_def11f,
 #app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .editor__9d295,
-#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 {
+#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 .sectionsContainer__722a8,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 .sectionsContainer_def11f,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 .editor__9d295,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 {
 	min-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .sectionsContainer__722a8,
 #app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .sectionsContainer_def11f,
 #app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .editor__9d295,
-#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 {
+#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .preview__44061,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .sectionsContainer__722a8,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .sectionsContainer_def11f,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .editor__9d295,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 {
 	min-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 	max-width: calc((var(--settingswidth_v) - 364px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutOuter_c69a7b {
+#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutOuter_c69a7b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutOuter_c69a7b {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 .userPopoutOuter_c69a7b {
+#app-mount .layer__960e4 ~ .layer__960e4 .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 .userPopoutOuter_c69a7b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 .userPopoutOuter_c69a7b {
 	width: calc((var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) / 2) !important;
 }
 #app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutOuter_c69a7b,
-#app-mount .layer__960e4 ~ .layer__960e4 .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 .userPopoutOuter_c69a7b {
+#app-mount .layer__960e4 ~ .layer__960e4 .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 .userPopoutOuter_c69a7b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutOuter_c69a7b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .baseLayout__44061.tryItOutLayout__9d295 .preview__44061 .userPopoutOuter_c69a7b {
 	min-width: unset !important;
 	max-width: 340px !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutInner_c69a7b {
+#app-mount .layer__960e4 ~ .layer__960e4 .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutInner_c69a7b,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .profileCustomizationSection__44061 .baseLayout__44061 .preview__44061 .userPopoutInner_c69a7b {
 	overflow: hidden !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .guildsSection__337a8 {
+#app-mount .layer__960e4 ~ .layer__960e4 .guildsSection__337a8,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .guildsSection__337a8 {
 	max-width: calc(var(--settingswidth_v) - 352px - var(--settingsiconsadditionalsize)) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .container__9293f.headerBar__80679 {
+#app-mount .layer__960e4 ~ .layer__960e4 .container__9293f.headerBar__80679.
+#app-mount .BA__layerContainer ~ .BA__layerContainer .container__9293f.headerBar__80679 {
 	position: static !important;
 }
 
