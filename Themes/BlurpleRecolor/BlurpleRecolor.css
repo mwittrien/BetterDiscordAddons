@@ -2158,14 +2158,14 @@ a.metadataDownload_cf09d8 {
 
 /* ----		12.3.		INPUTS						---- */
 
-.input__0f084:not(.error__0f084):not(.success__0f084):not(.focused__0f084):not(:focus):hover {
+.input__0ed4f:not(.error__0ed4f):not(.success__0ed4f):not(.focused__0ed4f):not(:focus):hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
-.input__0f084:not(.error__0f084):not(.success__0f084).focused__0f084,
-.input__0f084:not(.error__0f084):not(.success__0f084):focus {
+.input__0ed4f:not(.error__0ed4f):not(.success__0ed4f).focused__0ed4f,
+.input__0ed4f:not(.error__0ed4f):not(.success__0ed4f):focus {
 	border-color: rgb(var(--accentcolor_v));
 }
-.focused__0f084 {
+.focused__0ed4f {
 	border-color: rgb(var(--accentcolor_v));
 }
 #app-mount .prefixInput__9d137:not(.error__9d137).focused__9d137 {
@@ -2174,7 +2174,7 @@ a.metadataDownload_cf09d8 {
 .addFriendInputWrapper__72ba7:focus-within {
 	border-color: rgb(var(--accentcolor_v));
 }
-.addFriendInputWrapper__72ba7 .input__0f084 {
+.addFriendInputWrapper__72ba7 .input__0ed4f {
 	background-color: transparent !important;
 	border-color: transparent !important;
 }

@@ -3446,7 +3446,7 @@ body:has(#app-mount)::after {
 #app-mount .colorPickerSwatch__459fb.noColor_e34214 {					/* rolesettings				colorswatch nocolor						*/
 	border-color: rgba(var(--textbrightest_v), .3);
 }
-#app-mount .colorPickerSwatch__459fb.noColor_e34214 .colorPickerDropperFg__0d1bc {
+#app-mount .colorPickerSwatch__459fb.noColor_e34214 .colorPickerDropper__0d1bc {
 	fill: var(--header-primary);
 }
 #app-mount .colorPickerSwatch__459fb.noColor_e34214 polyline {
@@ -6473,10 +6473,10 @@ body:has(#app-mount)::after {
 
 /* ----		15.3.		INPUTS						---- */
 
-input.input__0f084 {									/* valueinput				bordered							*/
+input.input__0ed4f {									/* valueinput				bordered							*/
 	background-color: rgba(var(--transparencycolor_v), .1);
 }
-input.input__0f084:hover:not(:focus) {
+input.input__0ed4f:hover:not(:focus) {
 	border-color: rgb(var(--transparencycolor_v));
 }
 
