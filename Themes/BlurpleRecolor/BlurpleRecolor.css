@@ -2196,24 +2196,24 @@ a.metadataDownload_cf09d8 {
 	fill: rgb(var(--accentcolor_v)) !important;
 }
 
-.container__87bf1 {									/* switch				unchecked							*/
+.container__6f89e {									/* switch				unchecked							*/
 	background-color: rgb(114, 118, 125) !important;
 	transition: background-color .1s ease-out;
 }											/* switch				checked								*/
-.container__87bf1.checked__87bf1 {
+.container__6f89e.checked__6f89e {
 	background-color: rgba(var(--accentcolor_v), 0.8) !important;
 }
-.container__87bf1.checked__87bf1:hover {
+.container__6f89e.checked__6f89e:hover {
 	background: var(--accentcolor-hover) !important;
 }
-#app-mount .container__87bf1:active {
+#app-mount .container__6f89e:active {
 	background: var(--accentcolor-active) !important;
 }
-.container__87bf1 path[fill] {
+.container__6f89e path[fill] {
 	fill: rgb(114, 118, 125) !important;
 }
-.container__87bf1.checked__87bf1 path[fill],
-.container__87bf1:active path[fill] {
+.container__6f89e.checked__6f89e path[fill],
+.container__6f89e:active path[fill] {
 	fill: rgb(var(--accentcolor_v)) !important;
 }
 

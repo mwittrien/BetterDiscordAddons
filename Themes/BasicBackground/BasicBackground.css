@@ -6519,13 +6519,13 @@ input.input__0f084:hover:not(:focus) {
 	color: rgba(var(--textbrightest_v), .3);
 }
 
-.container__87bf1 {									/* checkboxswitch											*/
+.container__6f89e {									/* checkboxswitch											*/
 	background-color: rgba(var(--transparencycolor_v), .3) !important;
 }
-.container__87bf1 rect[fill] {
+.container__6f89e rect[fill] {
 	fill: var(--header-primary) !important;
 }
-.container__87bf1 path[fill] {
+.container__6f89e path[fill] {
 	fill: rgb(var(--transparencycolor_v)) !important;
 }
 
