@@ -316,7 +316,7 @@
 		"FlowerStar": {"strings": ["flowerStarContainer", ".jsx)"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FormDivider": {"strings": ["let{className:", ".divider", ",style:", "=e;return"]},
-		"FormText": {"strings": ["DESCRIPTION", "INPUT_PLACEHOLDER", "selectable"], "exported": false, "value": "exports", "map": {
+		"FormText": {"strings": ["DESCRIPTION", "INPUT_PLACEHOLDER", ".DEFAULT"], "exported": false, "value": "exports", "map": {
 			"Text": ["selectable", "className"],
 			"Types": ["\"DESCRIPTION\"", "\"INPUT_PLACEHOLDER\""]
 		}},
