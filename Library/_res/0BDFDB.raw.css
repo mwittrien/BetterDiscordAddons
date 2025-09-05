@@ -1263,9 +1263,6 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	top: 4px;
 	right: 4px
 }
-[REPLACE_CLASS_colorpickerswatch] [REPLACE_CLASS_colorpickerswatchdropperfg] {
-	fill: var(--text-secondary)
-}
 [REPLACE_CLASS_colorpickersuggestedcolors] {
 	display: flex;
 	justify-content: center;
@@ -1519,9 +1516,6 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS_colorpickerswatch][style*="background: rgb(255, 255, 255)"] {
 	border-color: var(--text-primary) !important;
-}
-[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchnocolor] [REPLACE_CLASS_colorpickerswatchdropperfg] {
-	border-color: var(--text-muted);
 }
 [REPLACE_CLASS_colorpickerswatch]:not([REPLACE_CLASS_colorpickerswatchnocolor]):not([REPLACE_CLASS_colorpickerswatchdefault]):not([REPLACE_CLASS_colorpickerswatchdisabled]) {
 	overflow: hidden;

@@ -5696,7 +5696,6 @@ module.exports = (_ => {
 							children: [
 								props.isCustom || props.isSingle ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.colorpickerswatchdropper,
-									foreground: BDFDB.disCN.colorpickerswatchdropperfg,
 									name: Internal.LibraryComponents.SvgIcon.Names.DROPPER,
 									width: props.isCustom ? 14 : 10,
 									height: props.isCustom ? 14 : 10,
