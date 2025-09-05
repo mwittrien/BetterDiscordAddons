@@ -206,6 +206,9 @@
 	
 	--input-background: rgba(var(--transparencycolor_v), .1);
 	--input-border: rgba(var(--transparencycolor_v), .1);
+	--input-background-default: rgba(var(--transparencycolor_v), .1);
+	--input-foreground-default: var(--text-secondary);
+	--input-border-default: rgba(var(--transparencycolor_v), .1);
 	
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor_v), .3);
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
@@ -239,9 +242,6 @@
 	
 	--deprecated-card-bg: rgba(var(--transparencycolor_v), .6);
 	--deprecated-card-editable-bg: rgba(var(--transparencycolor_v), .3);
-	--deprecated-text-input-bg: rgba(var(--transparencycolor_v), .1);
-	--deprecated-text-input-border: rgba(var(--transparencycolor_v), .1);
-	--deprecated-text-input-border-hover: rgba(var(--transparencycolor_v), .3);
 }
 
 html {
@@ -3962,7 +3962,7 @@ body:has(#app-mount)::after {
 	background: transparent;
 }
 .inputInner__991a0 {									/* modal				invite input inner						*/
-	border: 1px solid var(--deprecated-text-input-border);
+	border: 1px solid var(--input-border-default);
 }
 
 /* ----		13.3.		UPLOADMODAL					---- */
@@ -6505,10 +6505,10 @@ input.input__0ed4f:hover:not(:focus) {
 }
 
 #app-mount .copyInput_fffc15 {
-	background-color: var(--deprecated-text-input-bg);
+	background-color: var(--input-background-default);
 }
 #app-mount .copyInputDefault_e19ebf {
-	border-color: var(--deprecated-text-input-border);
+	border-color: var(--input-border-default);
 }
 #app-mount .hiddenMessage_e7355b,
 #app-mount .inputDefault__591c7 {
@@ -6670,7 +6670,7 @@ input.input__0ed4f:hover:not(:focus) {
 }
 .select_d48ec6 [class*="css-"][class*="-control"]:hover,
 .select_d48ec6 [class*="css-"][class*="-control"]:not(:last-child) {
-	border-color: var(--deprecated-text-input-border-hover);
+	border-color: var(--input-border-default-hover);
 }
 .select_d48ec6.languageSelector_f69601 [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--transparencycolor_v), .3);

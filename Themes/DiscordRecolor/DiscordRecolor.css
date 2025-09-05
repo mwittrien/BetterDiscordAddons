@@ -142,6 +142,10 @@
 	--button-outline-primary-border-hover: rgba(var(--textbrightest_v), .6) !important;
 	--button-outline-primary-border-active: rgb(var(--textbrightest_v)) !important;
 	
+	--input-background-default: rgba(0,0,0, .1) !important;
+	--input-foreground-default: var(--text-secondary) !important;
+	--input-border-default: rgba(0,0,0, .3) !important;
+	
 	--header-primary: rgb(var(--textbrightest_v)) !important;
 	--header-secondary: rgb(var(--textbright_v)) !important;
 	--text-primary: rgb(var(--textbrightest_v)) !important;
@@ -291,11 +295,6 @@
 	--deprecated-store-bg: rgb(var(--backgroundprimary_v)) !important;
 	--deprecated-quickswitcher-input-background: rgb(var(--backgroundaccent_v)) !important;
 	--deprecated-quickswitcher-input-placeholder: rgb(var(--textdarker_v)) !important;
-	--deprecated-text-input-bg: rgba(0,0,0, .1) !important;
-	--deprecated-text-input-border: rgba(0,0,0, .3) !important;
-	--deprecated-text-input-border-hover: #040405 !important;
-	--deprecated-text-input-border-disabled: #202225 !important;
-	--deprecated-text-input-prefix: rgb(var(--textbrighter_v)) !important;
 	
 	--font-primary: var(--font_v) !important;
 	--font-display: var(--font_v) !important;
@@ -733,22 +732,22 @@ html .iconBadge__0c126 {
 }
 
 .lookFilled__3f413.select__3f413 {
-	background-color: var(--deprecated-text-input-bg);
-	border-color: var(--deprecated-text-input-border);
+	background-color: var(--input-background-default);
+	border-color: var(--input-border-default);
 }
 .searchInput__3f413 {
 	background-color: transparent;
 }
 .lookFilled__3f413.select__3f413:hover {
-	border-color: var(--deprecated-text-input-border-hover);
+	border-color: var(--input-border-default-hover);
 }
 
 #app-mount .container_f89b2c {
-	background-color: var(--deprecated-text-input-bg);
-	border-color: var(--deprecated-text-input-border);
+	background-color: var(--input-background-default);
+	border-color: var(--input-border-default);
 }
 #app-mount .container_f89b2c:hover {
-	border-color: var(--deprecated-text-input-border-hover);
+	border-color: var(--input-border-default-hover);
 }
 
 #app-mount .checkbox_f525d3 {
@@ -769,10 +768,10 @@ html .iconBadge__0c126 {
 }
 
 #app-mount .copyInput_fffc15 {
-	background-color: var(--deprecated-text-input-bg);
+	background-color: var(--input-background-default);
 }
 #app-mount .copyInputDefault_e19ebf {
-	border-color: var(--deprecated-text-input-border);
+	border-color: var(--input-border-default);
 }
 #app-mount .hiddenMessage_e7355b,
 #app-mount .inputDefault__591c7 {
@@ -798,13 +797,13 @@ html .iconBadge__0c126 {
 }
 
 .select_d48ec6 [class*="css-"][class*="-control"] {
-	background-color: var(--deprecated-text-input-bg);
-	border-color: var(--deprecated-text-input-border);
+	background-color: var(--input-background-default);
+	border-color: var(--input-border-default);
 	color: var(--text-secondary);
 }
 .select_d48ec6 [class*="css-"][class*="-control"]:hover,
 .select_d48ec6 [class*="css-"][class*="-control"]:not(:last-child) {
-	border-color: var(--deprecated-text-input-border-hover);
+	border-color: var(--input-border-default-hover);
 }
 .select_d48ec6.languageSelector_f69601 [class*="css-"][class*="-control"] {
 	background-color: var(--background-base-lowest);
@@ -2361,13 +2360,13 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 }
 
 #app-mount .emojiAliasInput_e7d73e .emojiInput_e7d73e {
-	background-color: var(--deprecated-text-input-bg);
-	border: 1px solid var(--deprecated-text-input-border);
+	background-color: var(--input-background-default);
+	border: 1px solid var(--input-border-default);
 	margin-top: -1px;
 	margin-left: -8px;
 }
 #app-mount .emojiAliasInput_e7d73e .emojiInput_e7d73e:hover {
-	border-color: var(--deprecated-text-input-border-hover);
+	border-color: var(--input-border-default-hover);
 }
 #app-mount .emojiAliasInput_e7d73e .emojiInput_e7d73e:focus {
 	border-color: rgb(var(--accentcolor_v));
@@ -2682,7 +2681,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background: transparent;
 }
 .inputInner__991a0 {
-	border: 1px solid var(--deprecated-text-input-border);
+	border: 1px solid var(--input-border-default);
 }
 
 /* ----		11.3.		UPLOADMODAL					---- */
@@ -2948,7 +2947,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 #app-mount .paypalInput_a76d33,
 #app-mount .paypalInput_a76d33:focus,
 #app-mount .paypalInput_a76d33:hover {
-	border-color: var(--deprecated-text-input-border);
+	border-color: var(--input-border-default);
 }
 
 #app-mount .description__43963 {
