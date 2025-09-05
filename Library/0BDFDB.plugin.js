@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.7
+ * @version 4.2.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -5696,6 +5696,7 @@ module.exports = (_ => {
 							children: [
 								props.isCustom || props.isSingle ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.colorpickerswatchdropper,
+									foreground: BDFDB.disCN.colorpickerswatchdropperfg,
 									name: Internal.LibraryComponents.SvgIcon.Names.DROPPER,
 									width: props.isCustom ? 14 : 10,
 									height: props.isCustom ? 14 : 10,
@@ -8081,6 +8082,7 @@ module.exports = (_ => {
 							wrap: false,
 							renderPopout: instance => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserPopout, {
 								user: Internal.LibraryStores.UserStore.getUser(this.props.userId),
+								currentUser: Internal.LibraryStores.UserStore.getUser(BDFDB.UserUtils.me.id),
 								userId: this.props.userId,
 								channelId: this.props.channelId,
 								guildId: this.props.guildId

@@ -376,7 +376,7 @@
 		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"], "funcStrings": ["defaultColor"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
 		"UserBadges": {"strings": ["QUEST_CONTENT_VIEWED", "\"PRESS_BADGE\"", "badgeClassName"]},
-		"UserPopout": {"strings": ["location:", "userId:", "user:", "user cannot be undefined", "Popout"]},
+		"UserPopout": {"strings": ["t.isNonUserBot()", "onHide", "user:"]},
 		"UserPopoutItem": {"strings": [".menuItemLabel", ".menuItemInner", "renderSubmenu"]},
 		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
 		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
