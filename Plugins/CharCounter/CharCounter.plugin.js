@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.9
+ * @version 1.7.0
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -104,8 +104,9 @@ module.exports = (_ => {
 						pointer-events: none;
 					}
 					${BDFDB.dotCN._charcounterchatcounter} {
-						right: 0;
-						bottom: 0.3em;
+						right: 0.15em;
+						bottom: 0.75em;
+						font-size: 12px;
 					}
 					${BDFDB.dotCN._charcountereditcounter} {
 						right: 0;
