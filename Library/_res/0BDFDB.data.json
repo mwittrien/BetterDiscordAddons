@@ -1517,7 +1517,7 @@
 		"MessageSystem": {"props": ["container", "actionAnchor"]},
 		"MessageSystemAccessories": {"props": ["name", "spine", "cta"]},
 		"MessageToolbar": {"props": ["container", "isHeader"]},
-		"MessageToolbarExtras": {"props": ["popoverReactionHoverBar", "icon", "popover"]},
+		"MessageToolbarExtras": {"props": ["hoverBarButton", "icon", "popover"]},
 		"MessageToolbarItems": {"props": ["wrapper", "button", "separator"]},
 		"Modal": {"props": ["root", "small", "medium"]},
 		"ModalCarouselNav": {"props": ["navPrev", "navNext", "slide"]},
