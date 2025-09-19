@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.4
+ * @version 1.2.5
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -70,7 +70,8 @@ module.exports = (_ => {
 						"AutocompleteRoleResult",
 						"ChannelMembers",
 						"MemberListItem",
-						"MessageContent"
+						"MessageContent",
+						"RichRoleMention"
 					],
 					after: [
 						"RichRoleMention"
@@ -232,9 +233,14 @@ module.exports = (_ => {
 			}
 			
 			processRichRoleMention (e) {
-				if (!e.instance.props.id || !changedRoles[e.instance.props.id]) return;
-				e.returnvalue.props.color = changedRoles[e.instance.props.id].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.id].color, "int") : e.returnvalue.props.color;
-				e.returnvalue.props.children[2] = changedRoles[e.instance.props.id].name || e.returnvalue.props.children[1];
+				if (!e.instance.props.roleId || !changedRoles[e.instance.props.roleId]) return;
+				if (!e.returnvalue) {
+					e.instance.props.color = changedRoles[e.instance.props.roleId].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.roleId].color, "int") : e.returnvalue.props.color;
+					e.instance.props.roleColor = e.instance.props.color;
+					e.instance.props.colorString = BDFDB.ColorUtils.convert(e.instance.props.color, "hex");
+					e.instance.props.children = ["@" + changedRoles[e.instance.props.roleId].name] || e.instance.props.children;
+				}
+				else e.returnvalue.props.children.props.color = e.instance.props.color;
 			}
 			
 			processAutocompleteRoleResult (e) {
