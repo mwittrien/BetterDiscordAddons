@@ -371,6 +371,7 @@ body,											/* body													*/
 #app-mount .header_f37cb1,								/* channels				header inner							*/
 #app-mount .container__2637a,								/* channels				inner								*/
 #app-mount .privateChannels__35e86,							/* dmchannels												*/
+#app-mount .scroller__99e7c,								/* dmchannels				inner								*/
 #app-mount .directoryContainer_da3f59,							/* server app directory											*/
 #app-mount .panels_c48ade > *,								/* account/voice			inner								*/
 #app-mount .chat_f75fb0,								/* chat					container							*/
@@ -967,26 +968,8 @@ body:has(#app-mount)::after {
 	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .avatarWrapper__37e49 {
-	background: transparent !important;
-	position: relative;
-}
-#app-mount .avatarWrapper__37e49:hover {
-	text-shadow: 1px 1px var(--textshadow_v);
-}
-#app-mount .avatarWrapper__37e49::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 20px;
-	border-top-right-radius: inherit;
-	border-bottom-right-radius: inherit;
-	transition: background-color .2s ease;
-	z-index: -1;
-}
-#app-mount .avatarWrapper__37e49:hover::after {
 	background: rgb(var(--accentcolor));
+	position: relative;
 }
 #app-mount button.button__67645.enabled__67645:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
