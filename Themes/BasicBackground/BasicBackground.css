@@ -7764,8 +7764,6 @@ html:only-child > head + body div.app_a3002d > div.app__160d8::before {
 /* ~~~~		20.		WATERMARK					~~~~ */
 
 .bar_c38106 .title_c38106 {
-	position: static;
-	top: -10px !important;
 	left: calc(-20px - (50% - calc(var(--custom-guild-list-width) + var(--space-8)))) !important;
 	background-image: unset !important;
 	margin-left: calc(50% - calc(var(--custom-guild-list-width) + var(--space-8)));
