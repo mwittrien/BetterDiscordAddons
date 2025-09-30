@@ -548,7 +548,7 @@
 		"QuickSwitchGroupDMResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "dmIconContainer"]},
 		"QuickSwitchGuildResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "guildIconContainer"]},
 		"QuickSwitchUserResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "getDisplayNickname"]},
-		"Reactions": {"strings": ["showImmediate:", ".BURST", "reactions:", ".emoji.name"], "noSearch": true},
+		"Reactions": {"strings": ["\"reaction\"", "showImmediate:", "emojiSize:"], "noSearch": true},
 		"ReactionsModal": {"strings": [".BURST", ".reactions", ".emoji.name", "selectedReaction"], "noSearch": true},
 		"ReactionsModalUser": {"strings": ["currentUser cannot be undefined", "reactorDefault"]},
 		"ReactionsModalUsers": {"strings": ["hasMore", "emoji", "spinnerMore"], "noSearch": true},
