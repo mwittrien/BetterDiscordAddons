@@ -968,8 +968,10 @@ body:has(#app-mount)::after {
 	background-color: rgb(var(--accentcolor_v));
 }
 #app-mount .avatarWrapper__37e49 {
-	background: rgb(var(--accentcolor));
 	position: relative;
+}
+#app-mount .avatarWrapper__37e49:hover {
+	background: rgb(var(--accentcolor));
 }
 #app-mount button.button__67645.enabled__67645:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
