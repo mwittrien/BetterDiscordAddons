@@ -1907,7 +1907,7 @@ module.exports = (_ => {
 						}
 					};
 					
-					if (!("Notification" in window)) {}
+					if (!("Notification" in window)) {BDFDB.NotificationUtils.toast(content, config);}
 					else if (Notification.permission === "granted") queue();
 					else if (Notification.permission !== "denied") Notification.requestPermission(function (response) {if (response === "granted") queue();});
 				};
