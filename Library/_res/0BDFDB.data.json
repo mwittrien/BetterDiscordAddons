@@ -280,7 +280,7 @@
 		"Clickable": {"strings": [".ENTER", "renderNonInteractive", ".handleKeyPress"]},
 		"KeybindRecorder": {"strings": [".RECORDING", ".DEFAULT", "toggleRecordMode"]},
 		"PopoutContainer": {"strings": ["Unsupported animation config"]},
-		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"]},
+		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"], "funcStrings": ["\"description\""]},
 		"SearchBar": {"strings": ["this.inputRef", ".containerRef", ".handleOnChange"]},
 		"SearchableSelect": {"strings": ["serialize", "haspopup", "maxVisibleItems"]},
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},

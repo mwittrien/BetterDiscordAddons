@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.1
+ * @version 3.6.2
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -171,7 +171,7 @@ module.exports = (_ => {
 									label: "Pick a Word Value and Replacement Value",
 									disabled: !Object.keys(values).every(valuename => values[valuename]),
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
-									ref: instance => {if (instance) values.addButton = instance;},
+									ref: instance => {if (instance) values.addButton = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_Button"});},
 									onClick: _ => {
 										this.saveWord(values);
 										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
