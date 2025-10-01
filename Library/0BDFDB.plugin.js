@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.9
+ * @version 4.3.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -5035,6 +5035,10 @@ module.exports = (_ => {
 								!this.props.noRemove ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
 									"aria-label": BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 									className: BDFDB.disCNS.hovercardbutton + BDFDB.disCNS.hovercardremovebutton + BDFDB.disCN.hovercardremovebuttondefault,
+									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+										nativeClass: true,
+										name: Internal.LibraryComponents.SvgIcon.Names.REMOVE
+									}),
 									onClick: e => {
 										if (typeof this.props.onRemove == "function") this.props.onRemove(e, this);
 										BDFDB.ListenerUtils.stopEvent(e);
@@ -5278,9 +5282,9 @@ module.exports = (_ => {
 				};
 				if (CustomComponents.Checkbox) {
 					CustomComponents.Checkbox.Types = {
-					DEFAULT: "DEFAULT",
-					GHOST: "GHOST",
-					INVERTED: "INVERTED"
+						DEFAULT: "DEFAULT",
+						GHOST: "GHOST",
+						INVERTED: "INVERTED"
 					};
 					CustomComponents.Checkbox.Shapes = {
 						BOX: "box",
@@ -7355,7 +7359,7 @@ module.exports = (_ => {
 									})).flat(10).filter(n => n)
 								})
 							]
-						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "getCheckboxColor",  "getCheckboxValue", "onCheckboxChange", "configWidth", "biggestWidth", "pagination"));
+						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "getCheckboxColor", "getCheckboxValue", "onCheckboxChange", "configWidth", "biggestWidth", "pagination"));
 					}
 					render() {
 						this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];
