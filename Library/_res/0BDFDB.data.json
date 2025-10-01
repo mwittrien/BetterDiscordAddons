@@ -852,6 +852,9 @@
 		"RAW_TEXT": {
 			"icon": "<svg name='RawText' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M 2,2.9181818 V 5.6454545 H 7.4545455 V 21.1 H 10.181818 V 5.6454545 h 5.454546 V 2.9181818 Z M 12,9.281818 v 2.727273 h 3.636364 V 21.1 h 2.727272 V 12.009091 H 22 V 9.281818 Z'/></svg>"
 		},
+		"REMOVE": {
+			"icon": "<svg name='Remove' width='%%width' height='%%height' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='transparent'/><path fill='%%color' fill-rule='evenodd' d='M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm4.7-15.7a1 1 0 0 0-1.4 0L12 10.58l-3.3-3.3a1 1 0 0 0-1.4 1.42L10.58 12l-3.3 3.3a1 1 0 1 0 1.42 1.4L12 13.42l3.3 3.3a1 1 0 0 0 1.4-1.42L13.42 12l3.3-3.3a1 1 0 0 0 0-1.4Z' clip-rule='evenodd'/></svg>"
+		},
 		"RIGHT_CARET": {
 			"icon": "<svg name='RightCaret' width='%%width' height='%%height' viewBox='0 0 24 24'><g fill='none' fill-rule='evenodd'><polygon fill='%%color' fill-rule='nonzero' points='8.47 2 6.12 4.35 13.753 12 6.12 19.65 8.47 22 18.47 12'></polygon><polygon points='0 0 24 0 24 24 0 24'></polygon></g></svg>"
 		},
