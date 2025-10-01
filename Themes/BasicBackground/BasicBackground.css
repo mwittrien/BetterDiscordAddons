@@ -3221,13 +3221,6 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border-color: rgba(var(--transparencycolor_v), .1);
 }
-#app-mount .button_e18686 {								/* settingscard				removebutton							*/
-	background-color: rgba(var(--transparencycolor_v), .3);
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .6), 0 1px 5px 0 rgba(var(--transparencycolor_v), .3);
-}
-#app-mount .button_e18686:hover {
-	background-color: rgba(var(--transparencycolor_v), .7);
-}
 
 #app-mount .game_cc46f0 {								/* games				card								*/
 	box-shadow: 0 1px 0 0 var(--border-subtle);
