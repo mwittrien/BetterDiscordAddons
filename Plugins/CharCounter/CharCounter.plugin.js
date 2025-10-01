@@ -135,7 +135,7 @@ module.exports = (_ => {
 						bottom: -10px !important;
 						font-size: 12px !important;
 					}
-					${BDFDB.dotCN.channelsettingstopiccontainer) ~ ${BDFDB.dotCN._charcountercounter},
+					${BDFDB.dotCN.channelsettingstopiccontainer} ~ ${BDFDB.dotCN._charcountercounter},
 					${BDFDB.dotCN.usernotetextarea}:not(:focus) ~ ${BDFDB.dotCN._charcountercounter},
 					${BDFDB.dotCNS.userpopoutouter + BDFDB.dotCN.textareawrapall}:not(:focus-within) ~ ${BDFDB.dotCN._charcountercounter} {
 						display: none;
