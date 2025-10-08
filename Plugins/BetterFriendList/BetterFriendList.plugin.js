@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.3
+ * @version 1.6.4
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"added": {
+			"Relationship Age": "Added Info when the relationship was added, sortable"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -94,6 +96,7 @@ module.exports = (_ => {
 						addFavorizedCategory:		{value: true, 	description: "Adds Favorites Category"},
 						addHiddenCategory:		{value: true, 	description: "Adds Hidden Category"},
 						addSortOptions:			{value: true, 	description: "Adds Sort Options"},
+						addRelationshipDate:		{value: true, 	description: "Adds Relationship Date"},
 						addMutualGuild:			{value: true, 	description: "Adds mutual Servers in Friend List"}
 					}
 				};
@@ -126,7 +129,7 @@ module.exports = (_ => {
 						width: 200px;
 					}
 					${BDFDB.dotCN._betterfriendlistnamecell} {
-						width: 200px;
+						width: 170px;
 					}
 					${BDFDB.dotCNS.peoplespeoplecolumn + BDFDB.dotCN.searchbar} {
 						padding-bottom: 0;
@@ -339,7 +342,8 @@ module.exports = (_ => {
 							}),
 							this.settings.general.addSortOptions && [
 								{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
-								{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
+								{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status},
+								{key: "date", label: BDFDB.LanguageUtils.LanguageStrings.DATE},
 							].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
 								children: BDFDB.ReactUtils.createElement("div", {
@@ -420,6 +424,7 @@ module.exports = (_ => {
 				if (sortKey && e.instance.props.rows.flat(10).length) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => {
 					let newSection = [].concat(section);
 					newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {
+						date: new Date(BDFDB.LibraryStores.RelationshipStore.getSince(entry.userId)).getTime(),
 						statusIndex: statusSortOrder[entry.status],
 						nicknameLower: entry.nickname ? entry.nickname.toLowerCase() : entry.usernameLower
 					})), sortKey);
@@ -456,9 +461,21 @@ module.exports = (_ => {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let returnValue = childrenRender(...args);
-						if (BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.user.id) || BDFDB.LibraryStores.RelationshipStore.isIgnored(e.instance.props.user.id)) {
-							let actions = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.peoplesactions]]});
-							if (actions) actions.props.children.pop();
+						let actions = BDFDB.ReactUtils.findChild(returnValue, {filter: n => n && n.props && n.props.className && n.props.className.indexOf("actions") == 0});
+						if (actions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.user.id) || BDFDB.LibraryStores.RelationshipStore.isIgnored(e.instance.props.user.id)) actions.props.children.pop();
+						if (actions && this.settings.general.addRelationshipDate) {
+							actions.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: new Date(BDFDB.LibraryStores.RelationshipStore.getSince(e.instance.props.user.id)).toLocaleString(),
+								tooltipConfig: {type: "top"},
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.peoplesactionbutton,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										width: 20,
+										height: 20,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.CLOCK
+									})
+								})
+							}));
 						}
 						if (this.settings.general.addMutualGuild) {
 							let mutualGuilds = BDFDB.ArrayUtils.removeCopies([].concat(BDFDB.LibraryStores.GuildMemberStore.memberOf(e.instance.props.user.id), (BDFDB.LibraryStores.UserProfileStore.getMutualGuilds(e.instance.props.user.id) || []).map(n => n && n.guild && n.guild.id)).flat()).filter(n => n);
