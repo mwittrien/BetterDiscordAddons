@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.2
+ * @version 1.7.3
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -185,7 +185,7 @@ module.exports = (_ => {
 			}
 			
 			processMessageTimestamp (e) {
-				let tooltipWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "TooltipContainer"});
+				let tooltipWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {name: ["TooltipContainer", "TooltipContainerWithShortcut"]});
 				if (!tooltipWrapper) return;
 				let childClassName = BDFDB.ObjectUtils.get(e, "instance.props.children.props.className");
 				if (childClassName && childClassName.indexOf(BDFDB.disCN.messageedited) > -1) {
@@ -196,20 +196,28 @@ module.exports = (_ => {
 						if (this.settings.places.chat) {
 							if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
 							let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
-							let renderChildren = tooltipWrapper.props.children;
-							tooltipWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
-								let renderedChildren = renderChildren(...args);
-								let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {props: [["className", BDFDB.disCN.messagetimestampseparator]]});
-								if (index > -1) children[index + 1] = timestamp;
-								else renderedChildren.props.children = timestamp;
-								return renderedChildren;
-							}, "Error in Children Render of TooltipContainer in MessageTimestamp!", this);
+							if (typeof tooltipWrapper.props.children == "function") {
+								let renderChildren = tooltipWrapper.props.children;
+								tooltipWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+									let renderedChildren = renderChildren(...args);
+									let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {props: [["className", BDFDB.disCN.messagetimestampseparator]]});
+									if (index > -1) children[index + 1] = timestamp;
+									else renderedChildren.props.children = timestamp;
+									return renderedChildren;
+								}, "Error in Children Render of TooltipContainer in MessageTimestamp!", this);
+							}
+							else if (tooltipWrapper.props.children && tooltipWrapper.props.children.props && tooltipWrapper.props.children.props.timeFormatted) {
+								tooltipWrapper.props.children.props.timeFormatted = timestamp;
+							}
 							this.setMaxWidth(e.returnvalue, e.instance.props.compact);
 						}
 					}
 					if (this.settings.tooltips.chat) {
 						if (tooltipWrapper.props.text && tooltipWrapper.props.text.props && BDFDB.ArrayUtils.is(tooltipWrapper.props.text.props.children)) tooltipWrapper.props.text.props.children[0] = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
-						else tooltipWrapper.props.text = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+						else {
+							if (tooltipWrapper.props.text) tooltipWrapper.props.text = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+							else tooltipWrapper.props.__unsupportedReactNodeAsText = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+						}
 					}
 				}
 			}
