@@ -87,6 +87,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_settingsrowcontainer][REPLACE_CLASS_marginbottom40] {
 	margin-bottom: 40px;
 }
+[REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrow] {
+	align-items: center;
+}
 [REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrowcontrol] {
 	margin-left: 8px;
 }
