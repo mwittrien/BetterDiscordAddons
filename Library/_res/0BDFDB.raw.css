@@ -98,6 +98,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	font-size: 12px;
 	font-weight: 400;
 }
+[REPLACE_CLASS_settingspanel] [REPLACE_CLASS_settingsrowtitle] {
+	color: var(--text-default);
+}
 [REPLACE_CLASS_h5][REPLACE_CLASS_marginreset] {
 	flex: 1 1 auto;
 }
