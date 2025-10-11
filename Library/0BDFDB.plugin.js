@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.2
+ * @version 4.3.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6291,6 +6291,19 @@ module.exports = (_ => {
 					}
 				};
 				
+				CustomComponents.FormTitle = reactInitialized && class BDFDB_FormTitle extends Internal.LibraryModules.React.Component {
+					render() {
+						return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.FormTitle, this.props);
+					}
+				};
+				CustomComponents.FormTitle.Title = CustomComponents.FormTitle;
+				CustomComponents.FormTitle.Tags = new Proxy({}, {
+					get: function (_, item) {
+						let tag = item && item.toLowerCase();
+						return tag.startsWith("h") && tag.length == 2 ? tag : "h5";
+					}
+				});
+				
 				CustomComponents.GuildSummaryItem = reactInitialized && class BDFDB_GuildSummaryItem extends Internal.LibraryModules.React.Component {
 					defaultRenderGuild(guild, isLast) {
 						if (!guild) return BDFDB.ReactUtils.createElement("div", {
@@ -7798,7 +7811,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				CustomComponents.TextElement = reactInitialized && class BDFDB_TextScroller extends Internal.LibraryModules.React.Component {
+				CustomComponents.TextElement = reactInitialized && class BDFDB_TextElement extends Internal.LibraryModules.React.Component {
 					render() {
 						let color = this.props.color != undefined ? this.props.color && Internal.DiscordConstants.ColorsCSS[this.props.color] : Internal.DiscordConstants.ColorsCSS[CustomComponents.TextElement.Colors.STANDARD];
 						return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Text, {
