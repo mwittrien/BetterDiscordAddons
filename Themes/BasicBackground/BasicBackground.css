@@ -2906,34 +2906,34 @@ body:has(#app-mount)::after {
 .visual-refresh.platform-win .sidebarRegionScroller__23e6b {
 	margin-top: var(--custom-app-top-bar-height);
 }
-#app-mount .top_b3f026 .item_b3f026.selected_b3f026 {
+#app-mount .top_aa8da2 .item_aa8da2.selected_aa8da2 {
 	color: var(--text-primary);
 }
-#app-mount .side_b3f026 .themed_b3f026.item_b3f026:active:not(.disabled_b3f026),	/* sideitems												*/
-#app-mount .topPill_b3f026 .themed_b3f026.item_b3f026:active:not(.disabled_b3f026),	/* tabitems												*/
-#app-mount .side_b3f026 .themed_b3f026.item_b3f026:hover:not(.disabled_b3f026),		/* sideitems												*/
-#app-mount .topPill_b3f026 .themed_b3f026.item_b3f026:hover:not(.disabled_b3f026) {	/* tabitems												*/
+#app-mount .side_aa8da2 .themed_aa8da2.item_aa8da2:active:not(.disabled_aa8da2),	/* sideitems												*/
+#app-mount .topPill_aa8da2 .themed_aa8da2.item_aa8da2:active:not(.disabled_aa8da2),	/* tabitems												*/
+#app-mount .side_aa8da2 .themed_aa8da2.item_aa8da2:hover:not(.disabled_aa8da2),		/* sideitems												*/
+#app-mount .topPill_aa8da2 .themed_aa8da2.item_aa8da2:hover:not(.disabled_aa8da2) {	/* tabitems												*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026,
-#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026,
-#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:active,
-#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:active,
-#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover,
-#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover {
+#app-mount .side_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2,
+#app-mount .topPill_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2,
+#app-mount .side_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:active,
+#app-mount .topPill_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:active,
+#app-mount .side_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:hover,
+#app-mount .topPill_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:hover {
 	background-color: rgb(var(--accentcolor_v));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026 div[style*="color: var(--text-muted)"],
-#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026 div[style*="color: var(--text-muted)"],
-#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:active div[style*="color: var(--text-muted)"],
-#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:active div[style*="color: var(--text-muted)"],
-#app-mount .side_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover div[style*="color: var(--text-muted)"],
-#app-mount .topPill_b3f026 .themed_b3f026.selected_b3f026.item_b3f026:hover div[style*="color: var(--text-muted)"] {
+#app-mount .side_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2 div[style*="color: var(--text-muted)"],
+#app-mount .topPill_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2 div[style*="color: var(--text-muted)"],
+#app-mount .side_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:active div[style*="color: var(--text-muted)"],
+#app-mount .topPill_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:active div[style*="color: var(--text-muted)"],
+#app-mount .side_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:hover div[style*="color: var(--text-muted)"],
+#app-mount .topPill_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:hover div[style*="color: var(--text-muted)"] {
 	color: #ddd !important;
 }
-.sidebar__23e6b:has(.socialLinks__7df54) .side_b3f026 .item_b3f026::after {
+.sidebar__23e6b:has(.socialLinks__7df54) .side_aa8da2 .item_aa8da2::after {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
@@ -7837,10 +7837,10 @@ html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e
 	pointer-events: none !important;
 	z-index: -1 !important;
 }
-html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_b3f026 div.info__2debe {
+html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_aa8da2 div.info__2debe {
 	position: relative !important;
 }
-html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_b3f026 div.info__2debe::after {
+html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_aa8da2 div.info__2debe::after {
 	content: "BasicBackground by" !important;
 	font-size: 12px !important;
 	color: var(--text-muted) !important;
@@ -7859,7 +7859,7 @@ html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e
 	transform: unset !important;
 	animation: unset !important;
 }
-html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_b3f026 div.info__2debe::before {
+html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e4.layers__160d8 > div.layer__960e4.baseLayer__960e4 + div.layer__960e4 > div.standardSidebarView__23e6b > div.sidebarRegion__23e6b > div.sidebarRegionScroller__23e6b.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.sidebar__23e6b > div.side_aa8da2 div.info__2debe::before {
 	content: "DevilBro" !important;
 	font-size: 12px !important;
 	font-weight: 600 !important;

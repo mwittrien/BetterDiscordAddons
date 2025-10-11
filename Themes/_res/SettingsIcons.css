@@ -87,498 +87,498 @@
 	--settingsicons-delete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
 
-body #app-mount .sidebarRegion__23e6b:has(.item_b3f026:not([data-tab-id]) ~ .item_b3f026:not([data-tab-id]) ~ .item_b3f026:not([data-tab-id])) {
+body #app-mount .sidebarRegion__23e6b:has(.item_aa8da2:not([data-tab-id]) ~ .item_aa8da2:not([data-tab-id]) ~ .item_aa8da2:not([data-tab-id])) {
 	--use-settingsicons: 0 !important;
 }
 body #app-mount .sidebarRegion__23e6b {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
 body #app-mount .sidebar__23e6b,
-body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
+body #app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
 	width: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026 {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2 {
 	--settingsicons-icon: var(--settingsicons-default);
 	display: flex;
 	align-items: center;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026 > div {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2 > div {
 	flex: 1 1 auto;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026::before,
-.sidebar__23e6b .side_b3f026 .item_b3f026::after {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::before,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::after {
 	content: "";
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	height: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	margin-right: calc(var(--use-settingsicons) * var(--settingsicons-size)/2);
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026::before {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::before {
 	background: currentColor;
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026::after {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::after {
 	position: absolute;
 	z-index: 1;
 	background: var(--settingsicons-icon) center/contain no-repeat;
 }
 
-.sidebar__23e6b .side_b3f026 .item_b3f026.bd-settings-tab,
-.sidebar__23e6b .side_b3f026 .item_b3f026.vc-settings,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-settings-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-settings,
 #app-mount .standardSidebarView__23e6b:has(.bd-settings-tab[aria-selected="true"]) .contentColumn__23e6b,
 #app-mount .standardSidebarView__23e6b:has(.vc-settings[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-settings) !important;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026.bd-updates-tab,
-.sidebar__23e6b .side_b3f026 .item_b3f026.vc-updater,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-updates-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-updater,
 #app-mount .standardSidebarView__23e6b:has(.bd-updates-tab[aria-selected="true"]) .contentColumn__23e6b,
 #app-mount .standardSidebarView__23e6b:has(.bd-updater[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-updates) !important;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026.bd-customcss-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-customcss-tab,
 #app-mount .standardSidebarView__23e6b:has(.bd-customcss-tab[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-customcss) !important;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026.bd-plugins-tab,
-.sidebar__23e6b .side_b3f026 .item_b3f026.vc-plugins ,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-plugins-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-plugins ,
 #app-mount .standardSidebarView__23e6b:has(.bd-plugins-tab[aria-selected="true"]) .contentColumn__23e6b,
 #app-mount .standardSidebarView__23e6b:has(.vc-plugins[aria-selected="true"]) .contentColumn__23e6b{
 	--settingsicons-icon: var(--settingsicons-bd-plugins) !important;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026.bd-themes-tab,
-.sidebar__23e6b .side_b3f026 .item_b3f026.vc-themes,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-themes-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-themes,
 #app-mount .standardSidebarView__23e6b:has(.bd-themes-tab[aria-selected="true"]) .contentColumn__23e6b,
 #app-mount .standardSidebarView__23e6b:has(.vc-themes[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-themes) !important;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026.vc-cloud,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-cloud,
 #app-mount .standardSidebarView__23e6b:has(.vc-cloud[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-vc-cloud) !important;
 }
-.sidebar__23e6b .side_b3f026 .item_b3f026.vc-backup-restore,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-backup-restore,
 #app-mount .standardSidebarView__23e6b:has(.vc-backup-restore[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-vc-backup-restore) !important;
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="My Account" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="my-account-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="My Account" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="my-account-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="my-account-tab" i] {
 	--settingsicons-icon: var(--settingsicons-myaccount);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Profile Customization" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="profile-customization-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Profile Customization" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-customization-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-customization-tab" i] {
 	--settingsicons-icon: var(--settingsicons-profile);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Content & Social" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="content-&-social-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Content & Social" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="content-&-social-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="content-&-social-tab" i] {
 	--settingsicons-icon: var(--settingsicons-social);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Data & Privacy" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="data-&-privacy-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Data & Privacy" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="data-&-privacy-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="data-&-privacy-tab" i] {
 	--settingsicons-icon: var(--settingsicons-privacy);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Family Center" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="family-center-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Family Center" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="family-center-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="family-center-tab" i] {
 	--settingsicons-icon: var(--settingsicons-family);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Authorized Apps" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="authorized-apps-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Authorized Apps" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="authorized-apps-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="authorized-apps-tab" i] {
 	--settingsicons-icon: var(--settingsicons-apps);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Sessions" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="sessions-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Sessions" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="sessions-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="sessions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-sessions);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Connections" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="connections-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Connections" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="connections-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="connections-tab" i] {
 	--settingsicons-icon: var(--settingsicons-connections);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Settings Clips" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="settings-clips-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Settings Clips" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="settings-clips-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="settings-clips-tab" i] {
 	--settingsicons-icon: var(--settingsicons-clips);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Discord Nitro" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="discord-nitro-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Discord Nitro" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="discord-nitro-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="discord-nitro-tab" i] {
 	--settingsicons-icon: var(--settingsicons-nitro);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Nitro Server Boost" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="nitro-server-boost-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Nitro Server Boost" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="nitro-server-boost-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="nitro-server-boost-tab" i] {
 	--settingsicons-icon: var(--settingsicons-boosts);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Subscriptions" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="subscriptions-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Subscriptions" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="subscriptions-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="subscriptions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-subscriptions);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Library Inventory" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="library-inventory-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Library Inventory" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="library-inventory-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="library-inventory-tab" i] {
 	--settingsicons-icon: var(--settingsicons-gifts);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Billing" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="billing-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Billing" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="billing-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="billing-tab" i] {
 	--settingsicons-icon: var(--settingsicons-billing);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Appearance" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="appearance-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Appearance" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="appearance-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="appearance-tab" i] {
 	--settingsicons-icon: var(--settingsicons-appearance);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Accessibility" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="accessibility-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Accessibility" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="accessibility-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="accessibility-tab" i] {
 	--settingsicons-icon: var(--settingsicons-accessibility);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Voice & Video" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="voice-&-video-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Voice & Video" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="voice-&-video-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="voice-&-video-tab" i] {
 	--settingsicons-icon: var(--settingsicons-voice);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Clicker Game Settings" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="clicker-game-settings-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Clicker Game Settings" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="clicker-game-settings-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="clicker-game-settings-tab" i] {
 	--settingsicons-icon: var(--settingsicons-clickergame);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Powermode Settings" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="powermode-settings-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Powermode Settings" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="powermode-settings-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="powermode-settings-tab" i] {
 	--settingsicons-icon: var(--settingsicons-powermode);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Text & Images" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="text-&-images-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text & Images" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-&-images-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-&-images-tab" i] {
 	--settingsicons-icon: var(--settingsicons-text);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Notifications" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="notifications-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Notifications" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="notifications-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="notifications-tab" i] {
 	--settingsicons-icon: var(--settingsicons-notifications);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Keybinds" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="keybinds-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Keybinds" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="keybinds-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="keybinds-tab" i] {
 	--settingsicons-icon: var(--settingsicons-keybinds);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Language" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="language-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Language" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="language-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="language-tab" i] {
 	--settingsicons-icon: var(--settingsicons-language);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Windows" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="windows-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Windows" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="windows-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="windows-tab" i] {
 	--settingsicons-icon: var(--settingsicons-windows);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Linux" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="linux-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Linux" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="linux-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="linux-tab" i] {
 	--settingsicons-icon: var(--settingsicons-linux);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Streamer Mode" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="streamer-mode-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Streamer Mode" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="streamer-mode-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="streamer-mode-tab" i] {
 	--settingsicons-icon: var(--settingsicons-streamermode);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Advanced" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="advanced-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Advanced" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="advanced-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="advanced-tab" i] {
 	--settingsicons-icon: var(--settingsicons-advanced);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Activity Privacy" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="activity-privacy-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Activity Privacy" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="activity-privacy-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="activity-privacy-tab" i] {
 	--settingsicons-icon: var(--settingsicons-activityprivacy);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Game Activity" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="game-activity-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Game Activity" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="game-activity-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="game-activity-tab" i] {
 	--settingsicons-icon: var(--settingsicons-games);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Overlay" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="overlay-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Overlay" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="overlay-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="overlay-tab" i] {
 	--settingsicons-icon: var(--settingsicons-overlay);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Changelog" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="changelog-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Changelog" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="changelog-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="changelog-tab" i] {
 	--settingsicons-icon: var(--settingsicons-changelog);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Merchandise" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="merchandise-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Merchandise" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="merchandise-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="merchandise-tab" i] {
 	--settingsicons-icon: var(--settingsicons-merchandise);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Hypesquad Online" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="hypesquad-online-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hypesquad Online" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hypesquad-online-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hypesquad-online-tab" i] {
 	--settingsicons-icon: var(--settingsicons-hypesquad);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Experiments" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="experiments-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Experiments" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="experiments-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="experiments-tab" i] {
 	--settingsicons-icon: var(--settingsicons-experiments);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Developer Options" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="developer-options-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Developer Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="developer-options-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="developer-options-tab" i] {
 	--settingsicons-icon: var(--settingsicons-developer);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Hotspot Options" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="hotspot-options-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hotspot Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hotspot-options-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hotspot-options-tab" i] {
 	--settingsicons-icon: var(--settingsicons-hotspots);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Dismissible Content Options" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="dismissible-content-options-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Dismissible Content Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="dismissible-content-options-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="dismissible-content-options-tab" i] {
 	--settingsicons-icon: var(--settingsicons-dismissable);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Payment Flow Modals" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="payment-flow-modals-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Payment Flow Modals" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="payment-flow-modals-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="payment-flow-modals-tab" i] {
 	--settingsicons-icon: var(--settingsicons-paymentmodals);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Revenue Storybook" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="revenue-storybook-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Revenue Storybook" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="revenue-storybook-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="revenue-storybook-tab" i] {
 	--settingsicons-icon: var(--settingsicons-revenue);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Virtual Currency Configuration" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="virtual-currency-configuration-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Virtual Currency Configuration" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="virtual-currency-configuration-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="virtual-currency-configuration-tab" i] {
 	--settingsicons-icon: var(--settingsicons-virtualcurrency);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Design System" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="design-system-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Design System" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="design-system-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="design-system-tab" i] {
 	--settingsicons-icon: var(--settingsicons-designsystem);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Text Playground" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="text-playground-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text Playground" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-playground-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-playground-tab" i] {
 	--settingsicons-icon: var(--settingsicons-textplayground);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Text Component" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="text-component-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text Component" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-component-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-component-tab" i] {
 	--settingsicons-icon: var(--settingsicons-textcomponent);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Intl Testing" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="intl-testing-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Intl Testing" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="intl-testing-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="intl-testing-tab" i] {
 	--settingsicons-icon: var(--settingsicons-messagelink);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Profile Effects Preview Tool" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="profile-effects-preview-tool-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Profile Effects Preview Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-effects-preview-tool-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-effects-preview-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-profilepreview);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Nameplates Preview Tool" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="nameplates-preview-tool-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Nameplates Preview Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="nameplates-preview-tool-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="nameplates-preview-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-nameplates);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Web Setting Tree Tool" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="web-setting-tree-tool-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Web Setting Tree Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="web-setting-tree-tool-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="web-setting-tree-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-settingstree);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Changelog" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="changelog-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Changelog" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="changelog-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="changelog-tab" i] {
 	--settingsicons-icon: var(--settingsicons-changelog);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Merchandise" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="merchandise-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Merchandise" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="merchandise-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="merchandise-tab" i] {
 	--settingsicons-icon: var(--settingsicons-merchandise);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Hypesquad Online" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="hypesquad-online-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hypesquad Online" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hypesquad-online-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hypesquad-online-tab" i] {
 	--settingsicons-icon: var(--settingsicons-hypesquad);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="Logout" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="logout-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Logout" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="logout-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="logout-tab" i] {
 	--settingsicons-icon: var(--settingsicons-logout);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="PROFILE" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="profile-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="PROFILE" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-tab" i] {
 	--settingsicons-icon: var(--settingsicons-overview);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="OVERVIEW" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="overview-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="OVERVIEW" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="overview-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="overview-tab" i] {
 	--settingsicons-icon: var(--settingsicons-overview);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ENGAGEMENT" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="engagement-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ENGAGEMENT" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="engagement-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="engagement-tab" i] {
 	--settingsicons-icon: var(--settingsicons-engagement);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="BOOST_PERKS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="boost_perks-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="BOOST_PERKS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="boost_perks-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="boost_perks-tab" i] {
 	--settingsicons-icon: var(--settingsicons-boostperks);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="EMOJI" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="emoji-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="EMOJI" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="emoji-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="emoji-tab" i] {
 	--settingsicons-icon: var(--settingsicons-emotes);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="STICKERS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="stickers-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="STICKERS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="stickers-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="stickers-tab" i] {
 	--settingsicons-icon: var(--settingsicons-stickers);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="SOUNDBOARD" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="soundboard-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="SOUNDBOARD" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="soundboard-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="soundboard-tab" i] {
 	--settingsicons-icon: var(--settingsicons-soundboard);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="MEMBERS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="members-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="MEMBERS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="members-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="members-tab" i] {
 	--settingsicons-icon: var(--settingsicons-members);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ROLES" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="roles-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ROLES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="roles-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="roles-tab" i] {
 	--settingsicons-icon: var(--settingsicons-roles);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="PERMISSIONS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="permissions-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="PERMISSIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="permissions-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="permissions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-roles);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="INVITES" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="invites-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INVITES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="invites-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="invites-tab" i] {
 	--settingsicons-icon: var(--settingsicons-invites);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="INSTANT_INVITES" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="instant_invites-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INSTANT_INVITES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="instant_invites-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="instant_invites-tab" i] {
 	--settingsicons-icon: var(--settingsicons-invites);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ACCESS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="access-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ACCESS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="access-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="access-tab" i] {
 	--settingsicons-icon: var(--settingsicons-access);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="INTEGRATIONS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="integrations-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INTEGRATIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="integrations-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="integrations-tab" i] {
 	--settingsicons-icon: var(--settingsicons-widgets);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="APP_DIRECTORY" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="app_directory-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="APP_DIRECTORY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="app_directory-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="app_directory-tab" i] {
 	--settingsicons-icon: var(--settingsicons-appdirectory);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="SAFETY" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="safety-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="SAFETY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="safety-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="safety-tab" i] {
 	--settingsicons-icon: var(--settingsicons-moderation);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="MODERATION" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="moderation-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="MODERATION" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="moderation-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="moderation-tab" i] {
 	--settingsicons-icon: var(--settingsicons-moderation);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="AUDIT_LOG" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="audit_log-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="AUDIT_LOG" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="audit_log-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="audit_log-tab" i] {
 	--settingsicons-icon: var(--settingsicons-audit);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="BANS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="bans-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="BANS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="bans-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="bans-tab" i] {
 	--settingsicons-icon: var(--settingsicons-bans);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="GUILD_AUTOMOD" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="guild_automod-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_AUTOMOD" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_automod-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_automod-tab" i] {
 	--settingsicons-icon: var(--settingsicons-automod);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="COMMUNITY" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="community-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="COMMUNITY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="community-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community-tab" i] {
 	--settingsicons-icon: var(--settingsicons-community);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ONBOARDING" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="onboarding-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ONBOARDING" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="onboarding-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="onboarding-tab" i] {
 	--settingsicons-icon: var(--settingsicons-introductions);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ANALYTICS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="analytics-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ANALYTICS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="analytics-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="analytics-tab" i] {
 	--settingsicons-icon: var(--settingsicons-analytics);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="COMMUNITY_WELCOME" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="community_welcome-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="COMMUNITY_WELCOME" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="community_welcome-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community_welcome-tab" i] {
 	--settingsicons-icon: var(--settingsicons-welcome);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="ROLE_SUBSCRIPTIONS" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="role_subscriptions-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ROLE_SUBSCRIPTIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="role_subscriptions-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="role_subscriptions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-monetization);
 }
 
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="GUILD_PREMIUM" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="guild_premium-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_PREMIUM" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_premium-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_premium-tab" i] {
 	--settingsicons-icon: var(--settingsicons-booststatus);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="GUILD_TEMPLATES" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="guild_templates-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_TEMPLATES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_templates-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_templates-tab" i] {
 	--settingsicons-icon: var(--settingsicons-template);
 }
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[data-tab-id="DELETE" i],
-#app-mount .sidebar__23e6b .side_b3f026 .item_b3f026[aria-controls="delete-tab" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="DELETE" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="delete-tab" i],
 #app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="delete-tab" i] {
 	--settingsicons-icon: var(--settingsicons-delete);
 }
 
 
-.bd-server-search ~ .item_b3f026::before {
+.bd-server-search ~ .item_aa8da2::before {
 	display: none;
 }
-.sidebar__23e6b .side_b3f026 .premiumLabel_e681d1 > svg,
-.sidebar__23e6b .side_b3f026 .premiumLabel_e681d1 img,
-.sidebar__23e6b .side_b3f026 .tabBarItemContainer_c7e907 > svg,
-.sidebar__23e6b .side_b3f026 .tabBarItemContainer_c7e907 img {
+.sidebar__23e6b .side_aa8da2 .premiumLabel_e681d1 > svg,
+.sidebar__23e6b .side_aa8da2 .premiumLabel_e681d1 img,
+.sidebar__23e6b .side_aa8da2 .tabBarItemContainer_c7e907 > svg,
+.sidebar__23e6b .side_aa8da2 .tabBarItemContainer_c7e907 img {
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
 }
 
@@ -611,6 +611,7 @@ body #app-mount .layer_d4b6c5 ~ .layer_d4b6c5 .sidebar__23e6b {
 	margin-left: calc(var(--use-settingsicons) * 30px);
 }
 .standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
+.standardSidebarView__23e6b .contentColumnWide__23e6b .settingsPage_f131e9 > h3:first-child::before,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1::before,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1::before,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child::before,
