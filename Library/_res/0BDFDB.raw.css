@@ -158,12 +158,13 @@ img:not([src]), img[src=""], img[src="null"] {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	color: var(--text-secondary);
 	text-transform: uppercase;
 	cursor: pointer;
 	order: 1;
 }
 [REPLACE_CLASS_collapsecontainertitle]:hover {
-	color: var(--text-secondary);
+	color: var(--text-primary);
 }
 [REPLACE_CLASS_collapsecontainertitle]::before {
 	content: "";
