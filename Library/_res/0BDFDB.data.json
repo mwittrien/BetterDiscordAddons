@@ -278,6 +278,7 @@
 	"NativeSubComponents": {
 		"Button": {"props": ["Colors", "Link", "Looks"]},
 		"Clickable": {"strings": [".ENTER", "renderNonInteractive", ".handleKeyPress"]},
+		"FormTitle": {"strings": [".errorSeparator", "defaultMargin", "required"]},
 		"KeybindRecorder": {"strings": [".RECORDING", ".DEFAULT", "toggleRecordMode"]},
 		"PopoutContainer": {"strings": ["Unsupported animation config"]},
 		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"], "funcStrings": ["\"description\""]},
@@ -318,10 +319,6 @@
 		"FormText": {"strings": ["DESCRIPTION",".Text",".DEFAULT"], "exported": false, "value": "exports", "map": {
 			"Text": [".DEFAULT", "className"],
 			"Types": ["\"DESCRIPTION\"", "\"DEFAULT\""]
-		}},
-		"FormTitle": {"strings": ["errorSeparator", "defaultMargin", ".LEGEND"], "exported": false, "value": "exports", "map": {
-			"Tags": ["\"H1\"", "\"H5\""],
-			"Title": ["errorSeparator", "legend"]
 		}},
 		"GuildBadge": {"strings": ["foregroundDarkColor", ".tooltipRemovePadding"]},
 		"GuildChild": {"strings": ["selected", ",fontSize:", ".acronym"]},
