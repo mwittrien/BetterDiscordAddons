@@ -582,8 +582,11 @@ body #app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
 }
 
-.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > fieldset:first-child > legend:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle_e335a7:first-child,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .stack_dbd263:first-child > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > .stack_dbd263 > h2:first-child,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child,
@@ -612,8 +615,11 @@ body #app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
 }
 .standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
 .standardSidebarView__23e6b .contentColumnWide__23e6b .settingsPage_f131e9 > h3:first-child::before,
-.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle__7bffb:first-child .title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > fieldset:first-child > legend:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle_e335a7:first-child::before,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .stack_dbd263:first-child > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > .stack_dbd263 > h2:first-child::before,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child::before,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child::before,
 .standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child::before,
@@ -651,7 +657,7 @@ body #app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
 	display: none !important;
 }
 
-.standardSidebarView__23e6b .contentColumnDefault__23e6b .title_b717a1 .lockIcon__0eeee {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b h2 .lockIcon__0eeee {
 	width: calc((1 - var(--use-settingsicons)) * 24px);
 	margin-right: calc((1 - var(--use-settingsicons)) * 8px);
 }
