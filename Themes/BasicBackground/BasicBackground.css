@@ -2340,12 +2340,17 @@ body:has(#app-mount)::after {
 
 /* ----		6.10.		BOOSTSPAGE					---- */
 
-.parentContainer__98cbd .container__98cbd {
+.container__5573a.active__5573a,
+.container__5573a.warning__5573a,
+.parentContainer__5573a:hover .container__5573a.active__5573a {
+	background-color: var(--background-base-lowest);
+}
+.parentContainer__5573a .container__5573a {
 	transform: unset !important;
 	top: 0;
 	transition: border-width .2s ease,border-color .2s ease,box-shadow .2s ease,top .2s ease-in-out;
 }
-.parentContainer__98cbd:hover .container__98cbd {
+.parentContainer__5573a:hover .container__5573a {
 	top: -4px;
 }
 .boostContainer__823e1 {
