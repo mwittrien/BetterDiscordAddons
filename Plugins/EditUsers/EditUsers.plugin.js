@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.7
+ * @version 5.0.8
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -733,6 +733,14 @@ module.exports = (_ => {
 							}, "Error in Children Render of Account Button!", this);
 						}
 					};
+					if (e.returnvalue.props.children && e.returnvalue.props.children[0] && e.returnvalue.props.children[0].props && typeof e.returnvalue.props.children[0].props.children == "function") {
+						let childrenRender = e.returnvalue.props.children[0].props.children;
+						e.returnvalue.props.children[0].props.children = BDFDB.TimeUtils.suppress((...args) => {
+							let renderedChildren = childrenRender(...args);
+							changeAccountName(renderedChildren);
+							return renderedChildren;
+						}, "Error in Children Render in Account!", this);
+					}
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
 						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
@@ -741,7 +749,7 @@ module.exports = (_ => {
 							return renderedChildren;
 						}, "Error in Children Render in Account!", this);
 					}
-					else changeAccountName(children[index]);
+					else changeAccountName(e.returnvalue.props.children);
 				}
 			}
 
