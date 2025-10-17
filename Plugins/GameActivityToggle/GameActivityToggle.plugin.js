@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.6
+ * @version 1.3.7
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -307,7 +307,15 @@ module.exports = (_ => {
 						}
 					}
 				};
-				if (typeof e.returnvalue.props.children == "function") {
+				if (e.returnvalue.props.children && e.returnvalue.props.children[0] && e.returnvalue.props.children[0].props && typeof e.returnvalue.props.children[0].props.children == "function") {
+					let childrenRender = e.returnvalue.props.children[0].props.children;
+					e.returnvalue.props.children[0].props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let renderedChildren = childrenRender(...args);
+						insertButton(renderedChildren);
+						return renderedChildren;
+					}, "Error in Children Render in Account!", this);
+				}
+				else if (typeof e.returnvalue.props.children[0] == "function") {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedChildren = childrenRender(...args);
@@ -315,7 +323,7 @@ module.exports = (_ => {
 						return renderedChildren;
 					}, "Error in Children Render in Account!", this);
 				}
-				else insertButton(children[index]);
+				else insertButton(e.returnvalue.props.children);
 			}
 			
 			activateKeybind () {
