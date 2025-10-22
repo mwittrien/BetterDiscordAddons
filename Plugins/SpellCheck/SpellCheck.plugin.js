@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -151,7 +151,7 @@ module.exports = (_ => {
 							label: this.defaults.choices[key].description,
 							basis: "70%",
 							value: this.settings.choices[key],
-							options: (this.defaults.choices[key].force ? [] : [{value: "-", label: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_NOTHING}]).concat(BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => ({value: id, label: this.getLanguageName(lang)})))),
+							options: (this.defaults.choices[key].force ? [] : [{value: "-", label: BDFDB.LanguageUtils.LanguageStrings.NOTHING}]).concat(BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => ({value: id, label: this.getLanguageName(lang)})))),
 							searchable: true,
 							onChange: value => {
 								this.setDictionary(key, value);
