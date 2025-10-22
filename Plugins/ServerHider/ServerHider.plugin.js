@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.3.3
+ * @version 6.3.4
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -258,7 +258,7 @@ module.exports = (_ => {
 										})
 									}),
 									label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-										children: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${folders.indexOf(folder) + 1}`
+										children: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.FOLDER} #${folders.indexOf(folder) + 1}`
 									}),
 									suffix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
 										value: !hiddenFolderIds.includes(folder.folderId),
@@ -291,7 +291,7 @@ module.exports = (_ => {
 						color: "BRAND",
 						close: true
 					}, {
-						contents: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL,
+						contents: BDFDB.LanguageUtils.LanguageStrings.ALL,
 						color: "TRANSPARENT",
 						look: "LINK",
 						onClick: (modal, instance) => {
