@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"added": {
-			"Relationship Age": "Added Info when the relationship was added, sortable"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
