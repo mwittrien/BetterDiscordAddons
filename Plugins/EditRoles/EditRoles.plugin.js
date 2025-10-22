@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.5
+ * @version 1.2.6
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -188,7 +188,7 @@ module.exports = (_ => {
 			}
 
 			onDeveloperContextMenu (e) {
-				if (e.instance.props.label != BDFDB.LanguageUtils.LanguageStrings.COPY_ID_ROLE) return;
+				if (e.instance.props.label != BDFDB.LanguageUtils.LanguageStrings.COPY_ROLE_ID) return;
 				let guild = this.getGuildFromRoleId(e.instance.props.id);
 				if (guild) e.returnvalue.props.children = [
 					BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
@@ -291,7 +291,7 @@ module.exports = (_ => {
 					subHeader: role.name,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_NAME,
+							title: BDFDB.LanguageUtils.LanguageStrings.ROLE_NAME,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -306,7 +306,7 @@ module.exports = (_ => {
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_COLOR,
+							title: BDFDB.LanguageUtils.LanguageStrings.ROLE_COLOR,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -334,7 +334,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 											className: BDFDB.disCN.marginreset,
 											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
-											children: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_ICON
+											children: BDFDB.LanguageUtils.LanguageStrings.ROLE_ICON
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 											type: "Switch",
