@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.5
+ * @version 1.6.6
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -461,7 +461,7 @@ module.exports = (_ => {
 						let returnValue = childrenRender(...args);
 						let actions = BDFDB.ReactUtils.findChild(returnValue, {filter: n => n && n.props && n.props.className && n.props.className.indexOf("actions") == 0});
 						if (actions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.user.id) || BDFDB.LibraryStores.RelationshipStore.isIgnored(e.instance.props.user.id)) actions.props.children.pop();
-						if (actions && this.settings.general.addRelationshipDate) {
+						if (actions && this.settings.general.addRelationshipDate && BDFDB.ArrayUtils.is(actions.props.children)) {
 							actions.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 								text: new Date(BDFDB.LibraryStores.RelationshipStore.getSince(e.instance.props.user.id)).toLocaleString(),
 								tooltipConfig: {type: "top"},
