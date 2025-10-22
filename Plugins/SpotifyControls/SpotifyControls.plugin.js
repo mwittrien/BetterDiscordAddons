@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.1
+ * @version 1.5.2
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -174,7 +174,7 @@ module.exports = (_ => {
 											name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET
 										}),
 										this.props.maximized && this.props.activityToggle && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-											text: _ => `${BDFDB.LanguageUtils.LanguageStringsFormat("DISPLAY_ACTIVITY", "Spotify")} (${showActivity ? BDFDB.LanguageUtils.LanguageStrings.REPLY_MENTION_ON : BDFDB.LanguageUtils.LanguageStrings.REPLY_MENTION_OFF})`,
+											text: _ => `${BDFDB.LanguageUtils.LanguageStringsFormat("DISPLAY_PLACEHOLDER_AS_YOUR_STATUS", "Spotify")} (${showActivity ? BDFDB.LanguageUtils.LanguageStrings.ENABLED : BDFDB.LanguageUtils.LanguageStrings.DISABLED})`,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 												className: BDFDB.disCN._spotifycontrolsactivitybutton,
 												width: 20,
@@ -206,7 +206,7 @@ module.exports = (_ => {
 											color: BDFDB.LibraryComponents.TextElement.Colors.CUSTOM,
 											size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-												children: _this.settings.general.addBy ? BDFDB.LanguageUtils.LanguageStringsFormat("USER_ACTIVITY_LISTENING_ARTISTS", lastSong.state) : lastSong.state
+												children: _this.settings.general.addBy ? BDFDB.LanguageUtils.LanguageStringsFormat("BY_PLACEHOLDER", lastSong.state) : lastSong.state
 											})
 										})
 									]
