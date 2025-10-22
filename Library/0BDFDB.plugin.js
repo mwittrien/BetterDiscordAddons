@@ -4629,7 +4629,7 @@ module.exports = (_ => {
 						if (!stringObj) BDFDB.LogUtils.warn([item, "not found in BDFDB.LanguageUtils.LanguageStrings"]);
 						else {
 							if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) return BDFDB.LanguageUtils.LanguageStringsFormat(item);
-							else return stringObj;
+							else return (stringObj || "").replace(/:$/, "");
 						}
 						return "";
 					}
@@ -4648,7 +4648,7 @@ module.exports = (_ => {
 						else if (obj.props) string += parseLanguageStringObj(obj.props);
 					}
 					else if (BDFDB.ArrayUtils.is(obj)) for (let ele of obj) string += parseLanguageStringObj(ele);
-					return string;
+					return (string || "").replace(/:$/, "");
 				};
 				BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 					if (item) {
