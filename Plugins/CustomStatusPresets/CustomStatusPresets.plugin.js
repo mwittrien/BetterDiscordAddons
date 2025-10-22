@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -214,7 +214,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 									className: BDFDB.disCN.flexchild,
 									value: ClearAfterValues[presets[id].clearAfter] || presets[id].clearAfter,
-									options: Object.entries(ClearAfterValues).map(entry => ({value: entry[1], label: !entry[1] || entry[1] == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : entry[1] == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", entry[1]/3600000)})),
+									options: Object.entries(ClearAfterValues).map(entry => ({value: entry[1], label: !entry[1] || entry[1] == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.NEVER : entry[1] == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CLEAR_AFTER", `${entry[1]/3600000}h`)})),
 									onChange: value => {
 										presets[id].clearAfter = value;
 										BDFDB.DataUtils.save(presets, _this, "presets");
@@ -370,7 +370,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN._customstatuspresetscustomstatusitem,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-											text: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_CLEAR_CUSTOM_STATUS,
+											text: BDFDB.LanguageUtils.LanguageStrings.CLEAR_CUSTOM_STATUS,
 											tooltipConfig: {
 												zIndex: 2001
 											},
@@ -403,7 +403,7 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								hint: !clearAfter || clearAfter == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", clearAfter/3600000),
+								hint: !clearAfter || clearAfter == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.NEVER : clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("AFTER_PLACEHOLDER", `${clearAfter/3600000}h`),
 								action: _ => {
 									if (!presets[id]) return;
 									let expiresAt = clearAfter && clearAfter != ClearAfterValues.DONT_CLEAR ? clearAfter : null;
