@@ -768,7 +768,7 @@ module.exports = (_ => {
 						customIcon: `<svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M 15.46875 0.859375 C 15.772992 1.030675 16.059675 1.2229406 16.326172 1.4316406 C 17.134815 2.0640406 17.768634 2.8677594 18.208984 3.8183594 C 18.665347 4.8050594 18.913286 5.9512625 18.945312 7.2265625 L 18.945312 7.2421875 L 18.945312 7.2597656 L 18.945312 16.753906 L 18.945312 16.769531 L 18.945312 16.785156 C 18.914433 18.060356 18.666491 19.206759 18.208984 20.193359 C 17.768634 21.144059 17.135961 21.947578 16.326172 22.580078 C 16.06768 22.782278 15.790044 22.967366 15.496094 23.134766 L 16.326172 23.134766 C 20.285895 23.158766 24 20.930212 24 15.820312 L 24 8.3535156 C 24.021728 3.1431156 20.305428 0.86132812 16.345703 0.86132812 L 15.46875 0.859375 z M 0 0.8671875 L 0 10.064453 L 4.4492188 15.191406 L 4.4492188 5.4394531 L 8.4394531 5.4394531 C 11.753741 5.4394531 11.753741 9.8828125 8.4394531 9.8828125 L 7.0234375 9.8828125 L 7.0234375 14.126953 L 8.4394531 14.126953 C 11.753741 14.126953 11.753741 18.568359 8.4394531 18.568359 L 0 18.568359 L 0 23.138672 L 8.3457031 23.138672 C 12.647637 23.138672 15.987145 21.3021 16.105469 16.75 C 16.105469 14.6555 15.567688 13.090453 14.621094 12.001953 C 15.567688 10.914853 16.105469 9.3502594 16.105469 7.2558594 C 15.988351 2.7036594 12.648845 0.8671875 8.3457031 0.8671875 L 0 0.8671875 z"/></svg>`,
 						buttons: [{
 							className: BDFDB.disCN.noticeupdatebuttonall,
-							contents: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL,
+							contents: BDFDB.LanguageUtils.LanguageStrings.ALL,
 							onClick: _ => {for (let notice of updateNotice.querySelectorAll(BDFDB.dotCN.noticeupdateentry)) notice.click();}
 						}],
 						onClose: _ => vanishObserver.disconnect()
@@ -2108,7 +2108,7 @@ module.exports = (_ => {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext),
 										size: Internal.LibraryComponents.TextElement.Sizes.SIZE_12,
 										color: Internal.LibraryComponents.TextElement.Colors.MUTED,
-										children: BDFDB.LanguageUtils.LanguageStrings.VOICE_CHANNEL_MUTED
+										children: BDFDB.LanguageUtils.LanguageStrings.MUTED
 									}) : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildTooltipMutedText, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext),
 										muteConfig: muteConfig
@@ -4629,7 +4629,7 @@ module.exports = (_ => {
 						if (!stringObj) BDFDB.LogUtils.warn([item, "not found in BDFDB.LanguageUtils.LanguageStrings"]);
 						else {
 							if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) return BDFDB.LanguageUtils.LanguageStringsFormat(item);
-							else return (stringObj || "").replace(/:$/, "");
+							else return (stringObj || "").replace(/[?!:\.]$/, "");
 						}
 						return "";
 					}
@@ -4648,7 +4648,7 @@ module.exports = (_ => {
 						else if (obj.props) string += parseLanguageStringObj(obj.props);
 					}
 					else if (BDFDB.ArrayUtils.is(obj)) for (let ele of obj) string += parseLanguageStringObj(ele);
-					return (string || "").replace(/:$/, "");
+					return (string || "").replace(/[?!:\.]$/, "");
 				};
 				BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 					if (item) {
@@ -4978,7 +4978,7 @@ module.exports = (_ => {
 							onMouseLeave: this.handleMouseLeave.bind(this),
 							children: BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN.bottagtext,
-								children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
+								children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT
 							})
 						});
 					}
@@ -6077,11 +6077,11 @@ module.exports = (_ => {
 							.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
 							.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
 							.replace(/\$day/g, timeObj.toLocaleDateString(language, {weekday: "long"}))
-							.replace(/\$agoAmount/g, daysAgo < 0 || daysAgo > 1 ? Internal.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-							.replace(/\$agoWeekdayS/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "short"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-							.replace(/\$agoWeekday/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "long"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-							.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_DAYS`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-							.replace(/\$agoDate/g, daysAgo < 0 || daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoAmount/g, daysAgo < 0 || daysAgo > 1 ? Internal.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
+							.replace(/\$agoWeekdayS/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "short"}) : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
+							.replace(/\$agoWeekday/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "long"}) : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
+							.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`LAST_PLAYED_PLACEHOLDER`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
+							.replace(/\$agoDate/g, daysAgo < 0 || daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
 							.replace(/\(\)|\[\]/g, "").replace(/,\s*$|^\s*,/g, "").replace(/ +/g, " ").trim();
 					};
 					CustomComponents.DateInput.formatDate = function (data, time) {
@@ -6212,7 +6212,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.pageimagetext,
-									children: this.props.text || BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER
+									children: this.props.text || BDFDB.LanguageUtils.LanguageStrings.NO_RESULTS
 								})
 							]
 						});
