@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.9
+ * @version 2.0.0
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -428,7 +428,7 @@ module.exports = (_ => {
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type)) {
 						if (execute) {
 							BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, {});
-							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
+							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.REPLY_TO_MESSAGE), {type: "success"});
 						}
 						return true;
 					}
@@ -440,7 +440,7 @@ module.exports = (_ => {
 				if (message.content) {
 					if (execute) {
 						BDFDB.LibraryModules.WindowUtils.copy(message.content);
-						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_TEXT), {type: "success"});
+						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_MESSAGE_TEXT), {type: "success"});
 					}
 					return true;
 				}
