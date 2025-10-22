@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.3
+ * @version 2.1.4
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -71,17 +71,17 @@ module.exports = (_ => {
 		const statuses = {
 			online: {
 				value: true,
-				name: "STATUS_ONLINE",
+				name: "ONLINE",
 				sound: true
 			},
 			idle: {
 				value: false,
-				name: "STATUS_IDLE",
+				name: "IDLE",
 				sound: true
 			},
 			dnd: {
 				value: false,
-				name: "STATUS_DND",
+				name: "DO_NOT_DISTURB",
 				sound: true
 			},
 			playing: {
@@ -109,7 +109,7 @@ module.exports = (_ => {
 			},
 			offline: {
 				value: true,
-				name: "STATUS_OFFLINE",
+				name: "OFFLINE",
 				sound: true
 			},
 			login: {
@@ -152,7 +152,7 @@ module.exports = (_ => {
 					className: BDFDB.disCNS.guildouter + BDFDB.disCN._friendnotificationsfriendsonlinewrap,
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._friendnotificationsfriendsonline,
-						children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),
+						children: BDFDB.LanguageUtils.LanguageStringsFormat("ONLINE_PLACEHOLDER", this.props.amount),
 						onClick: _ => _this.showTimeLog()
 					})
 				});
@@ -970,7 +970,7 @@ module.exports = (_ => {
 							size: BDFDB.LibraryComponents.Button.Sizes.TINY,
 							look: BDFDB.LibraryComponents.Button.Looks.OUTLINE,
 							style: {marginLeft: 6, marginRight: 12},
-							children: BDFDB.LanguageUtils.LanguageStrings.BUILD_OVERRIDE_CLEAR,
+							children: BDFDB.LanguageUtils.LanguageStrings.CLEAR,
 							onClick: _ => BDFDB.ModalUtils.confirm(this, this.labels.clear_log, _ => {
 								timeLog = [];
 								timeLogList.props.entries = timeLog;
