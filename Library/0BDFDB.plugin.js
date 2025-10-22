@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.4
+ * @version 4.3.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2551,12 +2551,18 @@ module.exports = (_ => {
 						});
 					}
 				};
-				const LanguageStores = BDFDB.ModuleUtils.find(m => m[InternalData.LanguageStringHashes.DISCORD] && m, {all: true, defaultExport: false});
-				LibraryModules.LanguageStore = (LanguageStores.find(n => n && n.exports && n.exports[InternalData.LanguageStringHashes.DISCORD]) || LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD]) || {}).exports || {};
+				const LanguageStores = BDFDB.ModuleUtils.find(m => (m[InternalData.LanguageStringHashes.DISCORD] || m.default && m.default[InternalData.LanguageStringHashes.DISCORD]) && m, {all: true, defaultExport: false});
+				
+				LibraryModules.EngLanguageStore = (LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD] && typeof n.exports.default[InternalData.LanguageStringHashes.DISCORD] != "function") || {}).exports || {};
+				LibraryModules.EngLanguageStore = LibraryModules.EngLanguageStore.default || LibraryModules.EngLanguageStore;
+				
+				LibraryModules.LanguageStore = (LanguageStores.find(n => n && n.exports && n.exports[InternalData.LanguageStringHashes.DISCORD] && typeof n.exports[InternalData.LanguageStringHashes.DISCORD] != "function") || LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD] && typeof n.exports.default[InternalData.LanguageStringHashes.DISCORD] != "function") || {}).exports || {};
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
+				
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
 				LibraryModules.ReactPortal = BDFDB.ModuleUtils.findByProperties("flushSync", "createPortal");
+				
 				Internal.LibraryModules = new Proxy(LibraryModules, {
 					get: function (_, item) {
 						if (LibraryModules[item]) return LibraryModules[item];
@@ -4593,8 +4599,12 @@ module.exports = (_ => {
 				});
 				
 				const LanguageStringsObj = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore.Messages || Internal.LibraryModules.LanguageStore || {};
+				const EngLanguageStringsObj = Internal.LibraryModules.EngLanguageStore && Internal.LibraryModules.EngLanguageStore.Messages || Internal.LibraryModules.EngLanguageStore || {};
 				const LanguageStringFormatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.formatToPlainString;
 				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", {exportsFilter: m => !m.messagesLoader, all: true}).find(n => n && n.Z && LanguageStringFormatter(n.Z[InternalData.LanguageStringHashes.DISCORD])) || {}).Z || {};
+				
+				const LanguageHashes = {};
+				for (let hash of Object.keys(EngLanguageStringsObj)) LanguageHashes[EngLanguageStringsObj[hash].map(n => typeof n == "string" ? n : "PLACEHOLDER").join(" ").toUpperCase().replace(/[^a-zA-Z0-9 ]/g, "").split(" ").filter(n => n).join(" ").trim().replace(/ /g, "_")] = hash;
 				
 				const LibraryStrings = Object.assign({}, InternalData.LibraryStrings);
 				BDFDB.LanguageUtils = {};
@@ -4613,9 +4623,9 @@ module.exports = (_ => {
 					if (language.name.startsWith("Discord")) return language.name.slice(0, -1) + (language.ownlang && (BDFDB.LanguageUtils.languages[language.id] || {}).name != language.ownlang ? ` / ${language.ownlang}` : "") + ")";
 					else return language.name + (language.ownlang && language.name != language.ownlang ? ` / ${language.ownlang}` : "");
 				};
-				BDFDB.LanguageUtils.LanguageStrings = new Proxy(InternalData.LanguageStringHashes, {
+				BDFDB.LanguageUtils.LanguageStrings = new Proxy(LanguageHashes, {
 					get: function (list, item) {
-						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]];
+						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[LanguageHashes[item]];
 						if (!stringObj) BDFDB.LogUtils.warn([item, "not found in BDFDB.LanguageUtils.LanguageStrings"]);
 						else {
 							if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) return BDFDB.LanguageUtils.LanguageStringsFormat(item);
@@ -4624,9 +4634,9 @@ module.exports = (_ => {
 						return "";
 					}
 				});
-				BDFDB.LanguageUtils.LanguageStringsCheck = new Proxy(InternalData.LanguageStringHashes, {
+				BDFDB.LanguageUtils.LanguageStringsCheck = new Proxy(LanguageHashes, {
 					get: function (list, item) {
-						return !!(LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]]);
+						return !!(LanguageStringsObj[item] || LanguageStringsObj[LanguageHashes[item]]);
 					}
 				});
 				let parseLanguageStringObj = obj => {
@@ -4642,13 +4652,13 @@ module.exports = (_ => {
 				};
 				BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 					if (item) {
-						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[InternalData.LanguageStringHashes[item]];
+						let stringObj = LanguageStringsObj[item] || LanguageStringsObj[LanguageHashes[item]];
 						if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function" || BDFDB.ArrayUtils.is(stringObj)) {
 							let i = 0, returnvalue, formatVars = {};
 							let error = "\n";
 							while (!returnvalue && i < 10) {
 								i++;
-								try {returnvalue = BDFDB.ArrayUtils.is(stringObj) ? LanguageStringFormatter(LanguageStringFormattersObj[InternalData.LanguageStringHashes[item]], formatVars) : stringObj.format(formatVars, false);}
+								try {returnvalue = BDFDB.ArrayUtils.is(stringObj) ? LanguageStringFormatter(LanguageStringFormattersObj[LanguageHashes[item]], formatVars) : stringObj.format(formatVars, false);}
 								catch (err) {
 									error += "Error 1 " + err + "\n";
 									returnvalue = null;
