@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.7
+ * @version 1.8.8
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -102,7 +102,7 @@ module.exports = (_ => {
 				if (_this.settings.general.reloadButton) {
 					if (children.length) children.unshift(BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}));
 					children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD,
+						text: BDFDB.LanguageUtils.LanguageStrings.RELOAD,
 						tooltipConfig: {type: "bottom"},
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
@@ -296,7 +296,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {children})
 					];
 				}
-				children.push(titleBarButton);
+				if (titleBarButton) children.push(titleBarButton);
 				this.injectButtons(children, true);
 			}
 
