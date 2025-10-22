@@ -607,7 +607,7 @@
 		"UserProfileInfoSection": {"strings": ["trackUserProfileAction:", "\"PRESS_APP_CONNECTION\"", "onUpdate"], "noSearch": true},
 		"UserProfileMutualGuilds": {"strings": ["mutualGuilds", ".listScroller", ".emptyText"]},
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
-		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},
+		"UserSettingsAppearance": {"strings": ["handleMessageDisplayModeChange", "APPEARANCE_MESSAGE_DISPLAY_COMPACT", "handleFontSizeChange"], "noSearch": true},
 		"UserThemeContainer": {"strings": ["profileUi", "\"VIEW\"", ".Provider"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
 		"VoiceUser": {"strings": [".voiceUser", ".content", "userNameClassName"]},
