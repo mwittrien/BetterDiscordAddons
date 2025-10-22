@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.4
+ * @version 1.6.5
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -341,7 +341,7 @@ module.exports = (_ => {
 								children: customTitle ? `${customTitle} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : title.replace(users.length, filteredUsers.filter(u => u && u.key != placeHolderId).length)
 							}),
 							this.settings.general.addSortOptions && [
-								{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
+								{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USERNAME},
 								{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status},
 								{key: "date", label: BDFDB.LanguageUtils.LanguageStrings.DATE},
 							].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
