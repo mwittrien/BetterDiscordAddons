@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.0
+ * @version 2.3.1
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -166,7 +166,7 @@ module.exports = (_ => {
 							}),
 							popoutProps.selectedFilter.value == "all" ? BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN.messagespopoutguildname,
-								children: channel.guild_id ? (BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
+								children: channel.guild_id ? (BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.SERVER_UNAVAILABLE : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
 							}) : null
 						]
 					}),
@@ -363,7 +363,7 @@ module.exports = (_ => {
 							copyToBottom: true,
 							renderItem: messageData => this.renderMessage(messageData.note, messageData.message, messageData.channel).flat(10).filter(n => n)
 						}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyState, {
-							msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+							msg: BDFDB.LanguageUtils.LanguageStrings.NO_RESULTS,
 							image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
 						})
 					]
