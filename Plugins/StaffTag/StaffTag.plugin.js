@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.9
+ * @version 1.7.0
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -340,14 +340,14 @@ module.exports = (_ => {
 
 			injectStaffTag (children, user, userType, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
-				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text", [BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
+				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text", [BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.SERVER_OWNER]]]});
 				if (index > -1) children[index] = null;
 				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(config.channelId || BDFDB.LibraryStores.SelectedChannelStore.getChannelId());
 				let member = channel && this.settings.general.useRoleColor ? (BDFDB.LibraryStores.GuildMemberStore.getMember(channel.guild_id, user.id) || {}) : {};
 				
 				let fallbackLabel = this.settings.general.useCrown && this.getLabelFallback(userType);
 				let label = this.getLabel(userType, fallbackLabel);
-				let labelExtra = userType == userTypes.FORUM_CREATOR ? BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_FORUM_ORIGINAL_POSTER_TOOLTIP : userType == userTypes.MANAGEMENT && this.getManagementLabel(user);
+				let labelExtra = userType == userTypes.FORUM_CREATOR ? BDFDB.LanguageUtils.LanguageStrings.OP : userType == userTypes.MANAGEMENT && this.getManagementLabel(user);
 				
 				let tag = null;
 				if (this.settings.general.useCrown) tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -382,9 +382,9 @@ module.exports = (_ => {
 			
 			getLabelFallback (userType) {
 				switch (userType) {
-					case userTypes.OWNER: return BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER;
+					case userTypes.OWNER: return BDFDB.LanguageUtils.LanguageStrings.SERVER_OWNER;
 					case userTypes.GROUP_OWNER: return BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER;
-					case userTypes.FORUM_CREATOR: return BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_FORUM_ORIGINAL_POSTER;
+					case userTypes.FORUM_CREATOR: return BDFDB.LanguageUtils.LanguageStrings.ORIGINAL_POSTER;
 					case userTypes.THREAD_CREATOR: return this.labels.creator.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.THREAD);
 					case userTypes.ADMIN: return BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
 					case userTypes.MANAGEMENT: return this.labels.management;
@@ -404,12 +404,12 @@ module.exports = (_ => {
 					this.settings.tagTypes.managementG && BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && BDFDB.LanguageUtils.LibraryStrings.server,
 					this.settings.tagTypes.managementC && BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 					this.settings.tagTypes.managementT && BDFDB.UserUtils.can("MANAGE_THREADS", user.id) && BDFDB.LanguageUtils.LanguageStrings.THREADS,
-					this.settings.tagTypes.managementE && BDFDB.UserUtils.can("MANAGE_EVENTS", user.id) && BDFDB.LanguageUtils.LanguageStrings.GUILD_EVENTS,
+					this.settings.tagTypes.managementE && BDFDB.UserUtils.can("MANAGE_EVENTS", user.id) && BDFDB.LanguageUtils.LanguageStrings.Events,
 					this.settings.tagTypes.managementR && BDFDB.UserUtils.can("MANAGE_ROLES", user.id) && BDFDB.LanguageUtils.LanguageStrings.ROLES,
 					this.settings.tagTypes.managementU && (BDFDB.UserUtils.can("BAN_MEMBERS", user.id) || BDFDB.UserUtils.can("KICK_MEMBERS", user.id)) && BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
 					this.settings.tagTypes.managementV && (BDFDB.UserUtils.can("MUTE_MEMBERS", user.id) || BDFDB.UserUtils.can("DEAFEN_MEMBERS", user.id) || BDFDB.UserUtils.can("MOVE_MEMBERS", user.id)) && BDFDB.LanguageUtils.LanguageStrings.VOICE_AND_VIDEO,
 					this.settings.tagTypes.managementM && BDFDB.UserUtils.can("MANAGE_MESSAGES", user.id) && BDFDB.LanguageUtils.LanguageStrings.MESSAGES
-				].filter(n => n).join(", ");
+				].filter(n => n).map(BDFDB.StringUtils.upperCaseFirstChar).join(", ");
 			}
 			
 			getUserType (user, channelId) {
