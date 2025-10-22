@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.6
+ * @version 1.9.7
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -210,7 +210,7 @@ module.exports = (_ => {
 			processGuildFavorites (e) {
 				e.returnvalue = this.removeTooltip(e.returnvalue);
 				e.returnvalue = this.removeMask(e.returnvalue);
-				this.addElementName(e.returnvalue, BDFDB.LanguageUtils.LanguageStrings.FAVORITES_GUILD_NAME);
+				this.addElementName(e.returnvalue, BDFDB.LanguageUtils.LanguageStrings.FAVORITES);
 			}
 			
 			processDirectMessage (e) {
@@ -281,7 +281,7 @@ module.exports = (_ => {
 				children.unshift(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 					children: []
 				}));
-				this.addElementName(children, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
+				this.addElementName(children, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.FOLDER, {
 					wrap: true,
 					index: 0,
 					backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
