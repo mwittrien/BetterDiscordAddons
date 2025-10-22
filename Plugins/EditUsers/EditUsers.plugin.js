@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.8
+ * @version 5.0.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -419,9 +419,9 @@ module.exports = (_ => {
 						let userData = this.getUserData(user.id);
 						if (userData.globalName && userData.globalName != user.globalName || !userData.globalName && userData.username != user.username) {
 							let [muteChildren, muteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mute-channel"});
-							if (muteIndex > -1) muteChildren[muteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("MUTE_CHANNEL", `@${userData.globalName || userData.username}`);
+							if (muteIndex > -1) muteChildren[muteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("MUTE_PLACEHOLDER", `@${userData.globalName || userData.username}`);
 							let [unmuteChildren, unmuteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "unmute-channel"});
-							if (unmuteIndex > -1) unmuteChildren[unmuteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("UNMUTE_CHANNEL", `@${userData.globalName || userData.username}`);
+							if (unmuteIndex > -1) unmuteChildren[unmuteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("UNMUTE_PLACEHOLDER", `@${userData.globalName || userData.username}`);
 						}
 					}
 				}
@@ -431,13 +431,13 @@ module.exports = (_ => {
 						if (userData.globalName && userData.globalName != e.instance.props.user.globalName || !userData.globalName && userData.username != e.instance.props.user.username) {
 							let username = userData.globalName || userData.username;
 							let [timeoutChildren, timeoutIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "timeout"});
-							if (timeoutIndex > -1) timeoutChildren[timeoutIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("DISABLE_GUILD_COMMUNICATION_FOR_USER", username);
+							if (timeoutIndex > -1) timeoutChildren[timeoutIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("TIMEOUT_PLACEHOLDER", username);
 							let [removeTimeoutChildren, removeTimeoutIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "removetimeout"});
-							if (removeTimeoutIndex > -1) removeTimeoutChildren[removeTimeoutIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("ENABLE_GUILD_COMMUNICATION_FOR_USER", username);
+							if (removeTimeoutIndex > -1) removeTimeoutChildren[removeTimeoutIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("REMOVE_TIMEOUT_FROM_PLACEHOLDER", username);
 							let [kickChildren, kickIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "kick"});
-							if (kickIndex > -1) kickChildren[kickIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("KICK_USER", username);
+							if (kickIndex > -1) kickChildren[kickIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("KICK_PLACEHOLDER", username);
 							let [banChildren, banIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "ban"});
-							if (banIndex > -1) banChildren[banIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("BAN_USER", username);
+							if (banIndex > -1) banChildren[banIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("BAN_PLACEHOLDER", username);
 						}
 					}
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
@@ -476,7 +476,7 @@ module.exports = (_ => {
 			processChannelTextAreaEditor (e) {
 				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.isDM() && (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL) && this.settings.places.chatTextarea) {
 					let user = BDFDB.LibraryStores.UserStore.getUser(e.instance.props.channel.recipients[0]);
-					if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.globalName || user.username}`);
+					if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("SEND_A_MESSAGE_IN_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.globalName || user.username}`);
 				}
 			}
 
@@ -1702,7 +1702,7 @@ module.exports = (_ => {
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME,
+							tab: BDFDB.LanguageUtils.LanguageStrings.PROFILE_THEME,
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.marginbottom20,
@@ -1715,7 +1715,7 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
 													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
-													children: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
+													children: BDFDB.LanguageUtils.LanguageStrings.PROFILE_BANNER
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 													type: "Switch",
@@ -1751,7 +1751,7 @@ module.exports = (_ => {
 									]
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_BANNER_COLOR_TITLE,
+									title: BDFDB.LanguageUtils.LanguageStrings.BANNER_COLOR,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color5,
@@ -1764,7 +1764,7 @@ module.exports = (_ => {
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME_PRIMARY,
+									title: BDFDB.LanguageUtils.LanguageStrings.PRIMARY,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color6,
@@ -1777,7 +1777,7 @@ module.exports = (_ => {
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-									title: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_THEME_ACCENT,
+									title: BDFDB.LanguageUtils.LanguageStrings.ACCENT,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color7,
