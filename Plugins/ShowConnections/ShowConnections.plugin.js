@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -87,7 +87,7 @@ module.exports = (_ => {
 							let url = _this.settings.general.openWebpage && provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
 							let metadata = [];
 							if (_this.settings.general.showDetails && provider.hasMetadata && c.metadata) {
-								if (c.metadata.created_at) metadata.push(BDFDB.ReactUtils.createElement("span", {children: BDFDB.LanguageUtils.LanguageStringsFormat("CONNECTIONS_PROFILE_MEMBER_SINCE", (new Date(c.metadata.created_at)).toLocaleDateString("default", {year: "numeric", month: "long", day: "numeric"}))}));
+								if (c.metadata.created_at) metadata.push(BDFDB.ReactUtils.createElement("span", {children: BDFDB.LanguageUtils.LanguageStringsFormat("MEMBER_SINCE_PLACEHOLDER", (new Date(c.metadata.created_at)).toLocaleDateString("default", {year: "numeric", month: "long", day: "numeric"}))}));
 							}
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 								text: `${provider.name}: ${c.name}`,
@@ -104,12 +104,12 @@ module.exports = (_ => {
 										BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 											children: [
 												BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-													label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME),
+													label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USERNAME),
 													id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-name"),
 													action: _ => BDFDB.LibraryModules.WindowUtils.copy(c.name)
 												}),
 												url && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-													label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.SEARCH_ANSWER_HAS_LINK),
+													label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.COPY_LINK),
 													id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-url"),
 													action: _ => BDFDB.LibraryModules.WindowUtils.copy(url)
 												})
@@ -119,11 +119,11 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement("img", {
 											className: BDFDB.disCN._showconnectionsicon,
-											alt: BDFDB.LanguageUtils.LanguageStringsFormat("IMG_ALT_LOGO", provider.name),
+											alt: BDFDB.LanguageUtils.LanguageStringsFormat("PLACEHOLDER_LOGO", provider.name),
 											src: provider.icon[this.props.popoutColor ? (BDFDB.ColorUtils.isBright(this.props.popoutColor) ? "lightSVG" : "darkSVG") : (_this.settings.general.useColoredIcons ? (isLightTheme ? "lightSVG" : "darkSVG") : "whiteSVG")]
 										}),
 										_this.settings.general.showVerifiedBadge && c.verified && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-											text: BDFDB.LanguageUtils.LanguageStrings.CONNECTION_VERIFIED,
+											text: BDFDB.LanguageUtils.LanguageStrings.VERIFIED_CONNECTION,
 											tooltipConfig: {color: "brand", type: "bottom"},
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FlowerStar, {
 												className: BDFDB.disCN._showconnectionsverifiedbadge,
