@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.7
+ * @version 1.3.8
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -112,7 +112,7 @@ module.exports = (_ => {
 				const enabled = this.props.forceState != undefined ? this.props.forceState : BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
 				delete this.props.forceState;
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutItem, {
-					label: BDFDB.LanguageUtils.LanguageStrings.ACTIVITY_STATUS,
+					label: BDFDB.LanguageUtils.LanguageStrings.GAME_ACTIVITY,
 					id: BDFDB.ContextMenuUtils.createItemId(_this.name, "activity-toggle"),
 					icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						name: BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD,
