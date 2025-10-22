@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.4.2
+ * @version 7.4.3
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -166,7 +166,7 @@ module.exports = (_ => {
 													className: BDFDB.disCN.guildouter,
 													children: BDFDB.ReactUtils.createElement("div", {
 														className: BDFDB.disCN.guildfolder,
-														"data-folder-name": folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
+														"data-folder-name": folder.folderName || BDFDB.LanguageUtils.LanguageStrings.FOLDER,
 														children: folderIcon
 													})
 												}),
@@ -713,7 +713,7 @@ module.exports = (_ => {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-add-to-folder"),
 									disabled: !folders.length,
 									children: folders.map((folder, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
+										label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.FOLDER} #${i + 1}`,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-folder", i + 1),
 										action: _ => this.addGuildToFolder(folder.folderId, e.instance.props.guild.id)
 									}))
@@ -944,7 +944,7 @@ module.exports = (_ => {
 			}
 			
 			processModalRoot (e) {
-				if (e.instance.props["aria-label"] != BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_SETTINGS) return;
+				if (e.instance.props["aria-label"] != BDFDB.LanguageUtils.LanguageStrings.FOLDER_SETTINGS) return;
 				e.instance.props.size = BDFDB.LibraryComponents.ModalComponents.ModalSize.LARGE;
 			}
 			
@@ -986,11 +986,11 @@ module.exports = (_ => {
 						ref: instance => {if (instance) tabs[this.labels.modal_tabheader1] = instance;},
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
-								title: BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME,
+								title: BDFDB.LanguageUtils.LanguageStrings.FOLDER_NAME,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: folder.folderName,
-									placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
+									placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.FOLDER,
 									autoFocus: true,
 									onChange: value => newData.folderName = value
 								})
