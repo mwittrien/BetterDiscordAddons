@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.1
+ * @version 1.3.2
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -133,7 +133,7 @@ module.exports = (_ => {
 								children: this.props.guild.acronym
 							})),
 							_this.settings.items.owner && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-								prefix: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER,
+								prefix: BDFDB.LanguageUtils.LanguageStrings.SERVER_OWNER,
 								string: !owner ? BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER : owner.username
 							}),
 							_this.settings.items.creationDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
@@ -195,7 +195,7 @@ module.exports = (_ => {
 					},
 					items: {
 						icon:			{value: true, 	description: "icon"},
-						owner:			{value: true, 	description: "GUILD_OWNER"},
+						owner:			{value: true, 	description: "SERVER_OWNER"},
 						creationDate:		{value: true, 	description: "creation_date"},
 						joinDate:		{value: true, 	description: "join_date"},
 						members:		{value: true, 	description: "MEMBERS"},
