@@ -4839,6 +4839,31 @@ body:has(#app-mount)::after {
 	border-color: transparent rgb(var(--accentcolor_v)) transparent transparent;
 }
 
+.container_d3846c::before,								/* server tag				popout 								*/
+.container_d3846c::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 16px;
+	pointer-events: none;
+	z-index: -1;
+}
+
+.container_d3846c::before {
+	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
+	background-attachment: fixed;
+}
+
+.container_d3846c::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
+	backdrop-filter: blur(var(--popoutblur_v));
+}
+
 /* ----		14.3.		EMOJIPICKER					---- */
 
 #app-mount .contentWrapper__08434,							/* picker				expression wrapper						*/
