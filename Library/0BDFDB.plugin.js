@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.5
+ * @version 4.3.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2551,17 +2551,24 @@ module.exports = (_ => {
 						});
 					}
 				};
-				const LanguageStores = BDFDB.ModuleUtils.find(m => (m[InternalData.LanguageStringHashes.DISCORD] || m.default && m.default[InternalData.LanguageStringHashes.DISCORD]) && m, {all: true, defaultExport: false});
+				const hasDiscordStringHash = m => {
+					return m && [InternalData.LanguageStringHashes.DISCORD].flat(10).some(hash => m[hash] && typeof m[hash] != "function");
+				};
+				const LanguageStores = BDFDB.ModuleUtils.find(m => (hasDiscordStringHash(m) || hasDiscordStringHash(m.default)) && m, {all: true, defaultExport: false});
 				
-				LibraryModules.EngLanguageStore = (LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD] && typeof n.exports.default[InternalData.LanguageStringHashes.DISCORD] != "function") || {}).exports || {};
+				LibraryModules.EngLanguageStore = (LanguageStores.find(n => n && n.exports && hasDiscordStringHash(n.exports.default)) || {}).exports || {};
 				LibraryModules.EngLanguageStore = LibraryModules.EngLanguageStore.default || LibraryModules.EngLanguageStore;
 				
-				LibraryModules.LanguageStore = (LanguageStores.find(n => n && n.exports && n.exports[InternalData.LanguageStringHashes.DISCORD] && typeof n.exports[InternalData.LanguageStringHashes.DISCORD] != "function") || LanguageStores.find(n => n && n.exports && n.exports.default && n.exports.default[InternalData.LanguageStringHashes.DISCORD] && typeof n.exports.default[InternalData.LanguageStringHashes.DISCORD] != "function") || {}).exports || {};
+				LibraryModules.LanguageStore = (LanguageStores.find(n => n && hasDiscordStringHash(n.exports)) || LanguageStores.find(n => n && n.exports && hasDiscordStringHash(n.exports.default)) || {}).exports || {};
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
 				
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
 				LibraryModules.ReactPortal = BDFDB.ModuleUtils.findByProperties("flushSync", "createPortal");
+				
+				console.log(LanguageStores);
+				console.log(LibraryModules.EngLanguageStore);
+				console.log(LibraryModules.LanguageStore);
 				
 				Internal.LibraryModules = new Proxy(LibraryModules, {
 					get: function (_, item) {
@@ -4601,10 +4608,10 @@ module.exports = (_ => {
 				const LanguageStringsObj = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore.Messages || Internal.LibraryModules.LanguageStore || {};
 				const EngLanguageStringsObj = Internal.LibraryModules.EngLanguageStore && Internal.LibraryModules.EngLanguageStore.Messages || Internal.LibraryModules.EngLanguageStore || {};
 				const LanguageStringFormatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.formatToPlainString;
-				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", {exportsFilter: m => !m.messagesLoader, all: true}).find(n => n && n.Z && LanguageStringFormatter(n.Z[InternalData.LanguageStringHashes.DISCORD])) || {}).Z || {};
+				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", {exportsFilter: m => !m.messagesLoader, all: true}).find(n => n && n.Z && [InternalData.LanguageStringHashes.DISCORD].flat(10).some(hash => LanguageStringFormatter(n.Z[hash]))) || {}).Z || {};
 				
 				const LanguageHashes = {};
-				for (let hash of Object.keys(EngLanguageStringsObj)) LanguageHashes[EngLanguageStringsObj[hash].map(n => typeof n == "string" ? n : "PLACEHOLDER").join(" ").toUpperCase().replace(/[^a-zA-Z0-9 ]/g, "").split(" ").filter(n => n).join(" ").trim().replace(/ /g, "_")] = hash;
+				for (let hash of Object.keys(EngLanguageStringsObj)) LanguageHashes[(typeof EngLanguageStringsObj[hash] == "string" ? [EngLanguageStringsObj[hash]] : EngLanguageStringsObj[hash]).map(n => typeof n == "string" ? n : "PLACEHOLDER").join(" ").toUpperCase().replace(/[^a-zA-Z0-9 ]/g, "").split(" ").filter(n => n).join(" ").trim().replace(/ /g, "_")] = hash;
 				
 				const LibraryStrings = Object.assign({}, InternalData.LibraryStrings);
 				BDFDB.LanguageUtils = {};
