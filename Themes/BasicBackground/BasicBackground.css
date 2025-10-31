@@ -373,7 +373,7 @@ body,											/* body													*/
 #app-mount .privateChannels_e6b769,							/* dmchannels												*/
 #app-mount .scroller__99e7c,								/* dmchannels				inner								*/
 #app-mount .directoryContainer_da3f59,							/* server app directory											*/
-#app-mount .panels_c48ade > *,								/* account/voice			inner								*/
+#app-mount .panels__5e434 > *,								/* account/voice			inner								*/
 #app-mount .chat_f75fb0,								/* chat					container							*/
 #app-mount .chatContent_f75fb0,								/* chat					channel								*/
 #app-mount .container_f369db,								/* chat					forums								*/
@@ -909,16 +909,16 @@ body:has(#app-mount)::after {
 
 /* ----		5.4.		ACCOUNT/VOICE/GOLIVE				---- */
 
-#app-mount .panels_c48ade {								/* account/voice			container							*/
+#app-mount .panels__5e434 {								/* account/voice			container							*/
 	background: transparent;
 	border: unset;
 	border-radius: unset;
 }
-#app-mount .panels_c48ade > *:not(:empty) ~ *:not(:empty) {
+#app-mount .panels__5e434 > *:not(:empty) ~ *:not(:empty) {
 	border-top: 1px solid var(--border-subtle);
 }
-.panels_c48ade::before,
-.panels_c48ade::after {
+.panels__5e434::before,
+.panels__5e434::after {
 	content: "";
 	position: absolute;
 	border-radius: var(--radius-sm);
@@ -932,17 +932,17 @@ body:has(#app-mount)::after {
 	pointer-events: none;
 	z-index: -2;
 }
-.panels_c48ade::before {
+.panels__5e434::before {
 	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
 	background-attachment: fixed;
 }
-.panels_c48ade::after {
+.panels__5e434::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2.5 + var(--transparencyalpha_v) * 0.7));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 
-#app-mount .panels_c48ade > *,								/* account/voice			inner								*/
-#app-mount .panels_c48ade .wrapper_e131a9 > * {						/* account/voice			inner								*/
+#app-mount .panels__5e434 > *,								/* account/voice			inner								*/
+#app-mount .panels__5e434 .wrapper_e131a9 > * {						/* account/voice			inner								*/
 	background: none;
 	border: none;
 }
