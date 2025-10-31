@@ -2566,10 +2566,6 @@ module.exports = (_ => {
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
 				LibraryModules.ReactPortal = BDFDB.ModuleUtils.findByProperties("flushSync", "createPortal");
 				
-				console.log(LanguageStores);
-				console.log(LibraryModules.EngLanguageStore);
-				console.log(LibraryModules.LanguageStore);
-				
 				Internal.LibraryModules = new Proxy(LibraryModules, {
 					get: function (_, item) {
 						if (LibraryModules[item]) return LibraryModules[item];
