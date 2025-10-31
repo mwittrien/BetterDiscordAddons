@@ -396,12 +396,12 @@ body,											/* body													*/
 #app-mount .allPerksScroller_ca1a02,							/* nitro												*/
 #app-mount .applicationStore_f07d62,							/* nitro												*/
 #app-mount .homeWrapper__0920e,								/* nitro												*/
-#app-mount .containerBackground_f48ee4,						/* nitro												*/
+#app-mount .containerBackground_f48ee4,							/* nitro												*/
 #app-mount .scroller_f48ee4,								/* nitro				scroller							*/
 #app-mount .shop__6db1d,								/* shop													*/
-#app-mount .shopScroll__6db1d,								/* shop					scroller							*/
-#app-mount .shop__08415,								/* shop					inner								*/
 #app-mount .pageWrapper__6db1d,								/* shop					buyall								*/
+#app-mount .shopScroll__08415,								/* shop					scroller							*/
+#app-mount .shop__08415,								/* shop					inner								*/
 #app-mount .containerSidenav_dc2e0e,							/* family control											*/
 #app-mount .container__551b0,								/* discovery				list								*/
 #app-mount .scroller__23746,								/* discovery				apps/quests							*/
