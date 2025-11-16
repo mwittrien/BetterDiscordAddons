@@ -355,7 +355,7 @@
 		"Paginator": {"strings": ["totalPageCount", "selectedPage", "endButtonInner"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"], "funcStrings": ["{}"]},
 		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"], "funcStrings": ["impressionName"]},
-		"PrivateChannelItems": {"strings": ["getRecipientId", "isStatusIndicatorEnabled", "avatarWithText"], "exported": false, "value": "exports", "map": {
+		"PrivateChannelItems": {"strings": ["getRecipientId", "avatarWithText"], "exported": false, "value": "exports", "map": {
 			"DirectMessage": ["getUser", "getRecipientId"],
 			"LinkButton": [".apply(this"]
 		}},
