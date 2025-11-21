@@ -89,10 +89,11 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrow] {
 	display: flex;
+	flex-grow: 1;
 	align-items: center;
 }
 [REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrowlabel] {
-	flex: 1 1 auto;
+	flex-grow: 1;
 }
 [REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrowcontrol] {
 	margin-left: 8px;
