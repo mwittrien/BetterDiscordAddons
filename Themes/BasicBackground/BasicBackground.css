@@ -2939,28 +2939,6 @@ body:has(#app-mount)::after {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
-.bd-social-link[title="BD" i] .bd-social-logo,
-.bd-social-link[title="BetterDiscord" i] .bd-social-logo,
-.bd-social-link[title="BBD" i] .bd-social-logo,
-.bd-social-link[title="BandagedBD" i] .bd-social-logo {
-	background: var(--interactive-normal);
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/betterdiscord.svg) center/contain no-repeat;
-	opacity: 1;
-	transition: background .15s ease;
-}
-.bd-social-link[title="BD" i]:hover .bd-social-logo,
-.bd-social-link[title="BetterDiscord" i]:hover .bd-social-logo,
-.bd-social-link[title="BBD" i]:hover .bd-social-logo,
-.bd-social-link[title="BandagedBD" i]:hover .bd-social-logo {
-	background: var(--interactive-active);
-}
-.bd-social-link[title="BD" i] .bd-social-logo > *,
-.bd-social-link[title="BetterDiscord" i] .bd-social-logo > *,
-.bd-social-link[title="BBD" i] .bd-social-logo > *,
-.bd-social-link[title="BandagedBD" i] .bd-social-logo > * {
-	display: none;
-}
-
 #app-mount .streamerModeEnabledImage_aa3ffd {
 	background-image: url(https://discord.com/assets/c133c9df9ee4552c188a.svg);
 	opacity: .5;
