@@ -2690,7 +2690,7 @@ module.exports = (_ => {
 				};
 				MyReact.findDOMNode = function (instance, onlyChildren) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
-					if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
+					if (!instance || !instance.updater) return null;
 					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance);
 					for (let path of ["child.stateNode", "child.ref.current", !onlyChildren && "return.stateNode", !onlyChildren && "return.return.stateNode"]) if (!node && path) {
 						node = BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, path);
@@ -3017,7 +3017,7 @@ module.exports = (_ => {
 					}
 				};
 				MyReact.forceUpdate = function (...instances) {
-					for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
+					for (let ins of instances.flat(10).filter(n => n)) if (ins.updater) ins.forceUpdate();
 				};
 				MyReact.getInstance = function (node) {
 					if (!BDFDB.ObjectUtils.is(node)) return null;
@@ -5339,6 +5339,8 @@ module.exports = (_ => {
 									className: BDFDB.disCN.collapsecontainerheader,
 									align: Internal.LibraryComponents.Flex.Align.CENTER,
 									onClick: e => {
+										console.log(this);
+										console.log(e);
 										this.props.collapsed = !this.props.collapsed;
 										this.props.collapseStates[this.props.title] = this.props.collapsed;
 										if (typeof this.props.onClick == "function") this.props.onClick(this.props.collapsed, this);
