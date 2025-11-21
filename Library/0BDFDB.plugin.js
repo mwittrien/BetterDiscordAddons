@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.6
+ * @version 4.3.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -5339,8 +5339,6 @@ module.exports = (_ => {
 									className: BDFDB.disCN.collapsecontainerheader,
 									align: Internal.LibraryComponents.Flex.Align.CENTER,
 									onClick: e => {
-										console.log(this);
-										console.log(e);
 										this.props.collapsed = !this.props.collapsed;
 										this.props.collapseStates[this.props.title] = this.props.collapsed;
 										if (typeof this.props.onClick == "function") this.props.onClick(this.props.collapsed, this);
