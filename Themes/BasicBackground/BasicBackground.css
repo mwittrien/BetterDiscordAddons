@@ -433,9 +433,14 @@ body,											/* body													*/
 #app-mount {										/* app-mount												*/
 	background-color: rgba(var(--transparencycolor_v), var(--transparencyalpha_v));
 }
+.sidebar__5e434:after {
+	display: none;
+}
 #app-mount .wrapper_ef3116 {								/* guilds				container							*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
 	mask: unset !important;
+	margin-bottom: 0;
+	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs) - 16px);
 }
 .sidebar_c48ade .wrapper_ef3116 {
 	margin-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
@@ -528,6 +533,7 @@ body:has(#app-mount)::after {
 	display: none !important;
 }
 .uploadArea_dbca3c,
+.scrim__40128,
 .backdrop__7b2e0,
 .backdrop__1a911 {
 	background: transparent !important;
@@ -536,9 +542,11 @@ body:has(#app-mount)::after {
 	backdrop-filter: unset !important;
 }
 .uploadArea_dbca3c::before,
+.scrim__40128::before,
 .backdrop__7b2e0::before,
 .backdrop__1a911::before,
 .uploadArea_dbca3c::after,
+.scrim__40128::after,
 .backdrop__7b2e0::after,
 .backdrop__1a911::after {
 	content: "";
@@ -551,16 +559,19 @@ body:has(#app-mount)::after {
 	z-index: -2;
 }
 .uploadArea_dbca3c::before,
+.scrim__40128::before,
 .backdrop__7b2e0::before,
 .backdrop__1a911::before {
 	background: var(--backdrop_v) var(--backdropposition_v)/var(--backdropsize_v);
 	background-attachment: fixed;
 }
 .uploadArea_dbca3c::after,
+.scrim__40128::after,
 .backdrop__7b2e0::after,
 .backdrop__1a911::after {
 	backdrop-filter: blur(var(--backdropblur_v));
 }
+.scrim__40128,
 .withLayer__29ace {
 	z-index: -1;
 }
@@ -3744,6 +3755,7 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .root__49fc1:not(.noBackground_f061f6):not(.carouselModal_d3a6f0),		/* modal				container							*/
+#app-mount .container__8a031,								/* modal				container							*/
 #app-mount .modal__7f8f5,								/* modal				container							*/
 #app-mount .bd-modal-root {								/* modal				bd modal							*/
 	background-color: transparent;
@@ -3756,13 +3768,16 @@ body:has(#app-mount)::after {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
 .root__49fc1 > *,
+.container__8a031 > *,
 .modal__7f8f5 > * {
 	z-index: 1;
 }
 .root__49fc1::before,
+.container__8a031::before,
 .modal__7f8f5::before,
 .bd-modal-root::before,
 .root__49fc1::after,
+.container__8a031::after,
 .modal__7f8f5::after,
 .bd-modal-root::after {
 	content: "";
@@ -3778,22 +3793,26 @@ body:has(#app-mount)::after {
 	z-index: -1;
 }
 .root__49fc1::before,
+.container__8a031::before,
 .modal__7f8f5::before,
 .bd-modal-root::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
 .root__49fc1::after,
+.container__8a031::after,
 .modal__7f8f5::after,
 .bd-modal-root::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.2));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
+.root__49fc1 .container__8a031::before,
 .root__49fc1 .modal__7f8f5::before,
 .root__49fc1.noBackground_f061f6::before,
 .root__49fc1.carouselModal_d2b9a1::before,
 .root__49fc1.carouselModal_d3a6f0::before,
 .modal_b0827a::before,
+.root__49fc1 .container__8a031::after,
 .root__49fc1 .modal__7f8f5::after,
 .root__49fc1.noBackground_f061f6::after,
 .root__49fc1.carouselModal_d2b9a1::after,
