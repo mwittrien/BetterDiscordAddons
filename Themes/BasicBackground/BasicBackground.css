@@ -5577,10 +5577,38 @@ body:has(#app-mount)::after {
 
 /* ----		14.8.		EVERYONEMENTION					---- */
 
-.contentWarningPopout_be95d0 .animation_be95d0 {
+#app-mount .contentWarningPopout_d2eed6 {
+	background-color: transparent;
+	border: none;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.contentWarningPopout_d2eed6::before,
+.contentWarningPopout_d2eed6::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	border-radius: 3px;
+	z-index: -1;
+}
+.contentWarningPopout_d2eed6::before {
+	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
+	background-attachment: fixed;
+}
+.contentWarningPopout_d2eed6::after {
+	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.1));
+	backdrop-filter: blur(var(--popoutblur_v));
+}
+.contentWarningPopout_d2eed6 .animation_be95d0 {
 	opacity: 0.6;
 }
-#app-mount .footer_be95d0 {
+#app-mount .footer_d2eed6 {
 	background-color: rgba(var(--transparencycolor_v), .2);
 	color: var(--text-muted);
 }
