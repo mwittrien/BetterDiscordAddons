@@ -2950,6 +2950,20 @@ body:has(#app-mount)::after {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
+.fixedContent__409aa:after {
+	display: none;
+}
+
+.sidebar__409aa {
+	background-color: rgba(var(--transparencycolor_v), .2);
+}
+.content_e9e3ed {
+	background-color: transparent;
+}
+.contentHeader_e9e3ed {
+	background-color: transparent;
+}
+
 #app-mount .streamerModeEnabledImage_aa3ffd {
 	background-image: url(https://discord.com/assets/c133c9df9ee4552c188a.svg);
 	opacity: .5;
