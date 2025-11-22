@@ -1550,7 +1550,7 @@
 		"Peoples": {"props": ["peopleColumn", "tabBar"]},
 		"PeoplesNowPlayingMember": {"props": ["memberItem", "unknown"]},
 		"PictureInPicture": {"props": ["pictureInPicture", "pictureInPictureWindow"]},
-		"PillWrapper": {"props": ["item", "wrapper", "dimmed"]},
+		"PillWrapper": {"props": ["item", "wrapper"]},
 		"PollModal": {"props": ["voters", "emoji", "close"]},
 		"PopoutActivity": {"props": ["ellipsis", "activityActivityFeed"]},
 		"PrivateChannel": {"props": ["channel", "closeButton"]},
