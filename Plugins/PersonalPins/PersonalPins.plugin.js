@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.1
+ * @version 2.3.2
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -184,14 +184,18 @@ module.exports = (_ => {
 								className: BDFDB.disCN.messagespopoutactionbuttons,
 								children: [
 									(!channel.guild_id || BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: BDFDB.disCN.messagespopoutjumpbutton,
+										className: BDFDB.disCNS.buttonrevamp + BDFDB.disCNS.buttonrevampsm + BDFDB.disCNS.buttonrevampoverlayprimary + BDFDB.disCN.buttonrevamphastext,
 										onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
 										children: BDFDB.ReactUtils.createElement("div", {
-											children: BDFDB.LanguageUtils.LanguageStrings.JUMP
+											className: BDFDB.disCN.buttonrevampchildrenwrapper,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.buttonrevampchildren,
+												children: BDFDB.LanguageUtils.LanguageStrings.JUMP
+											})
 										})
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: BDFDB.disCN.messagespopoutjumpbutton,
+										className: BDFDB.disCNS.buttonrevamp + BDFDB.disCNS.buttonrevampsm + BDFDB.disCNS.buttonrevampoverlayprimary + BDFDB.disCN.buttonrevamphastext,
 										onClick: _ => {
 											if (message.content || message.attachments.length > 1) {
 												let text = message.content || "";
@@ -203,19 +207,31 @@ module.exports = (_ => {
 											}
 										},
 										children: BDFDB.ReactUtils.createElement("div", {
-											children: BDFDB.LanguageUtils.LanguageStrings.COPY
+											className: BDFDB.disCN.buttonrevampchildrenwrapper,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.buttonrevampchildren,
+												children: BDFDB.LanguageUtils.LanguageStrings.COPY
+											})
 										})
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-										look: BDFDB.LibraryComponents.Button.Looks.BLANK,
-										size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+										className: BDFDB.disCNS.buttonrevamp + BDFDB.disCNS.buttonrevampsm + BDFDB.disCNS.buttonrevampoverlayprimary + BDFDB.disCN.buttonrevamphastext,
 										onClick: _ => {
 											_this.removeNoteData(note);
 											BDFDB.ReactUtils.forceUpdate(this);
 										},
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-											className: BDFDB.disCN.messagespopoutclosebutton,
-											name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE
+										children: BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.buttonrevampchildrenwrapper,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.buttonrevampchildren,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													nativeClass: false,
+													className: BDFDB.disCN.buttonrevampicon,
+													width: 16,
+													height: 16,
+													name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE
+												})
+											})
 										})
 									})
 								]
