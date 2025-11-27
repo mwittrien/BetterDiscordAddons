@@ -442,6 +442,9 @@ body,											/* body													*/
 	margin-bottom: 0;
 	padding-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs) - 16px);
 }
+.unreadMentionsIndicatorBottom_ef3116 {
+	padding-bottom: calc(var(--space-xs, 8px) + (calc(var(--custom-app-panels-height, 0) + var(--space-xs))));
+}
 .sidebar_c48ade .wrapper_ef3116 {
 	margin-bottom: calc(var(--custom-app-panels-height, 0) + var(--space-xs));
 	padding-bottom: 0;
