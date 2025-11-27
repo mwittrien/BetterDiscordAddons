@@ -282,7 +282,7 @@
 		"KeybindRecorder": {"strings": [".RECORDING", ".DEFAULT", "toggleRecordMode"]},
 		"PopoutContainer": {"strings": ["Unsupported animation config"]},
 		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"], "funcStrings": ["\"description\""]},
-		"SearchBar": {"strings": ["this.inputRef", ".containerRef", ".handleOnChange"]},
+		"SearchBar": {"strings": ["onClear", "query", "inputRef"]},
 		"SearchableSelect": {"strings": ["\"SingleSelect\""]},
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
