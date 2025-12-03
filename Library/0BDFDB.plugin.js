@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.7
+ * @version 4.3.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1434,6 +1434,7 @@ module.exports = (_ => {
 							return {};
 						}
 						if (InternalData.DiscordConstants[item].strings) DiscordConstants[item] = BDFDB.ModuleUtils.findByString(InternalData.DiscordConstants[item].strings);
+						else if (InternalData.DiscordConstants[item].props) DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item].props);
 						else {
 							if (DiscordConstantsObject) DiscordConstants[item] = DiscordConstantsObject[Object.keys(DiscordConstantsObject).find(n => {
 								let keys = Object.keys(DiscordConstantsObject[n]);
@@ -1445,8 +1446,15 @@ module.exports = (_ => {
 						return DiscordConstants[item] ? DiscordConstants[item] : {};
 					}
 				});
-				const DiscordColors = BDFDB.ModuleUtils.findByProperties("spotify", "guild-boosting-blue") || {};
-				Internal.DiscordConstants.Colors = new Proxy(DiscordConstants, {
+				const ColorsCSS = Internal.DiscordConstants.ColorsCSS || {};
+				Internal.DiscordConstants.ColorsCSS = new Proxy(ColorsCSS, {
+					get: function (_, item) {
+						const color = ColorsCSS[item] || ColorsCSS[item.toLowerCase()] || ColorsCSS[item.toUpperCase()];
+						return color && color.css || color || "";
+					}
+				});
+				const DiscordColors = Internal.DiscordConstants.Colors || {};
+				Internal.DiscordConstants.Colors = new Proxy(DiscordColors, {
 					get: function (_, item) {
 						const color = DiscordColors[item] || DiscordColors[item.toLowerCase()] || DiscordColors[item.toUpperCase()];
 						if (color) return color && color.hex || color || "";
@@ -1466,7 +1474,7 @@ module.exports = (_ => {
 							}
 						}
 					}
-				})
+				});
 				BDFDB.DiscordConstants = Internal.DiscordConstants;
 				
 				Internal.DiscordObjects = new Proxy(DiscordObjects, {
