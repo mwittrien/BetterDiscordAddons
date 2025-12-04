@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.8
+ * @version 4.3.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1438,7 +1438,7 @@ module.exports = (_ => {
 						else {
 							if (DiscordConstantsObject) DiscordConstants[item] = DiscordConstantsObject[Object.keys(DiscordConstantsObject).find(n => {
 								let keys = Object.keys(DiscordConstantsObject[n]);
-								if (keys && keys.length < 10000 && InternalData.DiscordConstants[item].every(k => keys.indexOf(k) > -1)) return true;
+								if (keys && keys.length < 10000 && InternalData.DiscordConstants[item].every && InternalData.DiscordConstants[item].every(k => keys.indexOf(k) > -1)) return true;
 							})];
 							if (!DiscordConstants[item]) DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
 						}
