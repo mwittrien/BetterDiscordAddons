@@ -386,13 +386,15 @@ module.exports = (_ => {
 			componentDidMount() {
 				BDFDB.TimeUtils.clear(updateInterval);
 				updateInterval = BDFDB.TimeUtils.interval(_ => {
-					if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
-					else if (playbackState.is_playing) {
+					if (playbackState.is_playing) {
 						let song = BDFDB.LibraryStores.SpotifyStore.getActivity(false);
 						if (!song) BDFDB.ReactUtils.forceUpdate(controls);
 						else if (playbackState.is_playing) BDFDB.ReactUtils.forceUpdate(this);
 					}
 				}, 1000);
+			}
+			componentWillUnmount() {
+				BDFDB.TimeUtils.clear(updateInterval);
 			}
 			formatTime(time) {
 				let seconds = Math.floor((time / 1000) % 60);
