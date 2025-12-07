@@ -121,12 +121,10 @@
 	--status-danger-text: #fff;
 	
 	--header-primary: rgb(var(--textbrightest_v));
-	--header-secondary: rgb(var(--textbright_v));
 	--header-muted: rgb(var(--textdarker_v));
-	--text-primary: rgb(var(--textbrightest_v));
-	--text-secondary: rgb(var(--textbrighter_v));
-	--text-tertiary: rgb(var(--textbright_v));
+	--text-strong: rgb(var(--textbrightest_v));
 	--text-default: rgb(var(--textbrighter_v));
+	--text-subtle: rgb(var(--textbright));
 	--text-muted: rgb(var(--textdarker_v));
 	--text-dark: rgb(var(--textdarkest_v));
 	--chat-text-muted: rgb(var(--textdark_v));
@@ -207,7 +205,7 @@
 	--input-background: rgba(var(--transparencycolor_v), .1);
 	--input-border: rgba(var(--transparencycolor_v), .1);
 	--input-background-default: rgba(var(--transparencycolor_v), .1);
-	--input-foreground-default: var(--text-secondary);
+	--input-foreground-default: var(--text-subtle);
 	--input-border-default: rgba(var(--transparencycolor_v), .1);
 	
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor_v), .3);
@@ -619,7 +617,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .childWrapper_a6ce15 {							/* homebutton/acronym			innerwrap							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 	font-weight: 500;
 }
 #app-mount .wrapper__8436d:hover .childWrapper_a6ce15,
@@ -743,7 +741,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 .wrapper__2ea32:hover .link__2ea32 [style*="color: var(--text-muted)"] {
-	color: var(--header-secondary) !important;
+	color: var(--text-subtle) !important;
 }
 .modeSelected__2ea32 .link__2ea32,
 .modeSelected__2ea32:hover .link__2ea32,
@@ -754,7 +752,7 @@ body:has(#app-mount)::after {
 }
 .modeSelected__2ea32 .link__2ea32 [style*="color: var(--text-muted)"],
 .modeSelected__2ea32:hover .link__2ea32 [style*="color: var(--text-muted)"] {
-	color: var(--header-secondary) !important;
+	color: var(--text-subtle) !important;
 }
 .modeSelected__2ea32 .link__2ea32 svg,
 .modeSelected__2ea32:hover .link__2ea32 svg,
@@ -817,7 +815,7 @@ body:has(#app-mount)::after {
 .wrapper__260e1 .total__260e1::before {
 	content: "/";
 	padding: 0 2px;
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 	font-size: 12px;
 	font-weight: bold;
 }
@@ -836,7 +834,7 @@ body:has(#app-mount)::after {
 #app-mount .streamPreview__6da2d {
 	position: relative;
 	background-color: transparent;
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 	overflow: hidden;
 }
 .streamPreview__6da2d::before,
@@ -865,8 +863,8 @@ body:has(#app-mount)::after {
 	background-color: transparent;
 }
 #app-mount .watchButton__6da2d {
-	border-color: var(--header-secondary);
-	color: var(--header-secondary);
+	border-color: var(--text-subtle);
+	color: var(--text-subtle);
 }
 #app-mount .watchButton__6da2d:not([disabled]):hover {
 	border-color: var(--header-primary);
@@ -1082,12 +1080,12 @@ body:has(#app-mount)::after {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 #app-mount .container__9a337.isOpen__9a337 .defaultColor__77578,
-#app-mount .container__9a337.isOpen__9a337 [style*="color: var(--header-secondary)"] {
+#app-mount .container__9a337.isOpen__9a337 [style*="color: var(--text-subtle)"] {
 	color: var(--header-primary) !important;
 }
 #app-mount .container__9a337.isOpen__9a337 .author__185be a,
 #app-mount .container__9a337.isOpen__9a337 [style*="color: var(--text-muted)"] {
-	color: var(--header-secondary) !important;
+	color: var(--text-subtle) !important;
 }
 
 /* ----		6.1.		CHANNELHEADER					---- */
@@ -1129,11 +1127,11 @@ body:has(#app-mount)::after {
 	display: none !important;;
 }
 #app-mount .container__9293f.themed__9293f .icon__9293f {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .container__9293f.themed__9293f .returnButton__0b563 {
-	border-color: var(--header-secondary) !important;
-	color: var(--header-secondary) !important;
+	border-color: var(--text-subtle) !important;
+	color: var(--text-subtle) !important;
 }
 #app-mount .container__9293f.themed__9293f .returnButton__0b563:hover {
 	border-color: var(--header-primary) !important;
@@ -1166,7 +1164,7 @@ body:has(#app-mount)::after {
 	color: var(--text-muted);
 }
 #app-mount .public-DraftEditorPlaceholder-hasFocus {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .searchFilter_bd8186,
 #app-mount .searchAnswer_bd8186 {
@@ -1216,7 +1214,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .role_b4b2c3 .roleColor_b4b2c3 {						/* welcomemessage			rolecircle							*/
 	position: absolute;
-	background-color: var(--text-secondary);
+	background-color: var(--text-subtle);
 	border-radius: 3px;
 	opacity: 0.5;
 	height: 100%;
@@ -1230,7 +1228,7 @@ body:has(#app-mount)::after {
 	opacity: 0.8;
 }
 #app-mount .role_b4b2c3 .roleColor_b4b2c3[style*="background-color: rgb(185, 187, 190)"] {
-	background-color: var(--text-secondary) !important;
+	background-color: var(--text-subtle) !important;
 }
 
 .divider__908e2.hasContent__908e2 {							/* divider				hascontent							*/
@@ -1251,7 +1249,7 @@ body:has(#app-mount)::after {
 #app-mount .content__908e2 {								/* divider				content								*/
 	position: absolute;
 	background: transparent;
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 	padding: 2px 8px;
 	width: unset;
 }
@@ -1902,7 +1900,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .tagline__72090 {								/* gift					tagline								*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 /* ====		6.2.4.		INVITE						==== */
@@ -1943,7 +1941,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .moreUsers__4d3fa {
 	background-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .partyMemberEmpty__4d3fa {
 	background-color: rgba(var(--transparencycolor_v), .3);
@@ -2011,7 +2009,7 @@ body:has(#app-mount)::after {
 
 #app-mount .wrapper__44df5 {								/* textarea				placeholder							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 	border: unset;
 }
 
@@ -2121,7 +2119,7 @@ body:has(#app-mount)::after {
 /* ----		6.5.		MEMBERLIST					---- */
 
 .membersGroup_c8ffbb {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 .member_c8ffbb {									/* member												*/
 	background: transparent;
@@ -2620,17 +2618,17 @@ body:has(#app-mount)::after {
 }
 #app-mount .playerOverflow__450d3 {
 	background-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .description__450d3 {							/* gameinfo				subsectiondescription						*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .description__450d3 strong,
 #app-mount .username__450d3 {								/* gameinfo				subsectionusername						*/
 	color: var(--header-primary);
 }
 #app-mount .smallHeader__6efad {							/* gameinfo				subsectionheader						*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .text__6efad {								/* gameinfo				subsectiontext							*/
 	color: var(--header-primary);
@@ -2643,14 +2641,14 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .blurb_d77896 {								/* section				description							*/
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .description_d77896 {							/* section				subdescription							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .requirements_f1dca0 {							/* requirements												*/
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .requirementKey_f1dca0 {							/* requirements				key								*/
 	color: var(--text-muted);
@@ -2664,7 +2662,7 @@ body:has(#app-mount)::after {
 	border-top-color: var(--border-subtle);
 }
 #app-mount .actionText__1ae94 {								/* sidebar				header								*/
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .purchaseUnitOperatingSystem_f28827 {					/* sidebar				OSicon								*/
 	color: var(--text-dark);
@@ -2680,7 +2678,7 @@ body:has(#app-mount)::after {
 	border-bottom-color: var(--border-subtle);
 }
 #app-mount .name__71fd4 {								/* sidebar				pricename							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .sku_e2d34f:hover .name__71fd4 {
 	color: var(--header-primary);
@@ -2700,7 +2698,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 #app-mount .name_f1d99d {								/* invitecard				guildname							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .memberInfo_f1d99d {								/* invitecard				memberinfo							*/
 	color: var(--text-muted);
@@ -2712,10 +2710,10 @@ body:has(#app-mount)::after {
 
 #app-mount .row_c85137 {								/* features				row								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .featureIcon_c85137 {							/* features				featureicon							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 
@@ -2769,14 +2767,14 @@ body:has(#app-mount)::after {
 	stroke: rgb(var(--transparencycolor_v), .5);
 }
 #app-mount .usageInfo__27106 {								/* gamelibrary				usageinfo							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .installationPath_a6f654 {							/* library				game row path							*/
 	box-shadow: 0 1px 0 0 var(--background-accent);
 }
 #app-mount .rowTitle_a6f654 {								/* library				game row title							*/
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .rowBody_a6f654 {								/* library				game row body							*/
 	color: var(--text-muted);
@@ -2923,7 +2921,7 @@ body:has(#app-mount)::after {
 	margin-top: var(--custom-app-top-bar-height);
 }
 #app-mount .top_aa8da2 .item_aa8da2.selected_aa8da2 {
-	color: var(--text-primary);
+	color: var(--text-strong);
 }
 #app-mount .side_aa8da2 .themed_aa8da2.item_aa8da2:active:not(.disabled_aa8da2),	/* sideitems												*/
 #app-mount .topPill_aa8da2 .themed_aa8da2.item_aa8da2:active:not(.disabled_aa8da2),	/* tabitems												*/
@@ -2986,33 +2984,33 @@ body:has(#app-mount)::after {
 }
 #app-mount .closeButton_c2b141:hover {
 	background-color: rgba(var(--accentcolor_v), .2);
-	border-color: var(--header-secondary);
+	border-color: var(--text-subtle);
 }
 #app-mount .closeButton_c2b141:hover path[fill] {
-	fill: var(--header-secondary);
+	fill: var(--text-subtle);
 }
 #app-mount .closeButton_c2b141:active {
-	border-color: var(--text-secondary);
+	border-color: var(--text-subtle);
 }
 #app-mount .closeButton_c2b141:active path[fill] {
-	fill: var(--text-secondary);
+	fill: var(--text-subtle);
 }
 #app-mount .keybind_c2b141 {								/* closebutton				keybind								*/
 	color: var(--channels-default);
 }
 
 #app-mount .closeButtonBold_c2b141 {							/* closebutton				button bold							*/
-	border-color: var(--header-secondary);
+	border-color: var(--text-subtle);
 }
 #app-mount .closeButtonBold_c2b141 path[fill] {
-	fill: var(--header-secondary);
+	fill: var(--text-subtle);
 }
 #app-mount .closeButtonBold_c2b141:hover {
 	background-color: rgba(var(--accentcolor_v), .4);
-	border-color: var(--text-secondary);
+	border-color: var(--text-subtle);
 }
 #app-mount .closeButtonBold_c2b141:hover path[fill] {
-	fill: var(--text-secondary);
+	fill: var(--text-subtle);
 }
 #app-mount .closeButtonBold_c2b141:active {
 	border-color: var(--header-primary);
@@ -3021,7 +3019,7 @@ body:has(#app-mount)::after {
 	fill: var(--header-primary);
 }
 #app-mount .keybind_c2b141 {								/* closebutton				keybind bold							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 .cardPrimary_cb7a0e {									/* settingsitems			card								*/
@@ -3112,7 +3110,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .payment_e9cb00 {								/* boostsettings			past transactions payment					*/
 	background-color: transparent;
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .hoverablePayment_e9cb00:hover {
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -3125,7 +3123,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 #app-mount .paymentText_e9cb00 {							/* boostsettings			past transactions paymenttext					*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .giftIcon_e9cb00 {								/* boostsettings			past transactions gifticon					*/
 	color: var(--header-primary);
@@ -3154,7 +3152,7 @@ body:has(#app-mount)::after {
 	color: var(--text-muted);
 }
 #app-mount .externalRowHeader__01014 {							/* boostsettings			past transactions extenal row					*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .emptyStateImage_d4883c {							/* giftinventory			no gifts							*/
@@ -3243,13 +3241,13 @@ body:has(#app-mount)::after {
 }
 #app-mount .lastPlayed_cc46f0,								/* games				lastplayed							*/
 #app-mount .overlayStatusText__668e1 {							/* games				overlaystatustext						*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .toggleIconOn_cc46f0 .fill_cc46f0 {						/* games				overlaystatusicon						*/
-	fill: var(--header-secondary);
+	fill: var(--text-subtle);
 }
 #app-mount .nowPlayingAdd_cc46f0 {							/* games				descriptionhint							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .nowPlaying_cc46f0 .gameName_cc46f0 {
 	color: #fff;
@@ -3266,7 +3264,7 @@ body:has(#app-mount)::after {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .notDetected_cc46f0 .lastPlayed_cc46f0 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .addGamePopout_cc46f0 {							/* games				add game popout							*/
@@ -3473,11 +3471,11 @@ body:has(#app-mount)::after {
 #app-mount .headerClickable__43dab,							/* auditlogs				loginner							*/
 #app-mount .headerDefault__43dab {
 	background-color: rgba(var(--transparencycolor_v), .2);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .headerExpanded__43dab {
 	background-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .divider__43dab {								/* auditlogs				loginnerdivider							*/
 	background-color: var(--border-subtle);
@@ -3495,7 +3493,7 @@ body:has(#app-mount)::after {
 	color: var(--text-muted);
 }
 #app-mount .expandForeground__43dab {							/* auditlogs				expandarrow							*/
-	stroke: var(--header-secondary);
+	stroke: var(--text-subtle);
 }
 .themeOverrideLight__43dab.icon__43dab,							/* auditlogs				logicon								*/
 .themeOverrideDark__43dab.icon__43dab,
@@ -3614,7 +3612,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary) !important;
 }
 .optionCard_b96967:hover {								/* communitysettings			intro				option card			*/
-	border-color: var(--header-secondary);
+	border-color: var(--text-subtle);
 }
 .addPrompt_e34850,									/* communitysettings			intro				add prompt			*/
 .addActionItem_d2b0e4 {									/* communitysettings			intro				add action			*/
@@ -3626,15 +3624,15 @@ body:has(#app-mount)::after {
 	opacity: 1;
 }
 .cta__28e57 {
-	border-color: var(--header-secondary) !important;
-	color: var(--header-secondary) !important;
+	border-color: var(--text-subtle) !important;
+	color: var(--text-subtle) !important;
 }
 .cta__28e57:hover {
 	border-color: var(--header-primary) !important;
 	color: var(--header-primary) !important;
 }
 #app-mount .pageBody__5d7c9 h2 + [style*="color: var(--text-muted);"] {
-	color: var(--header-secondary) !important;
+	color: var(--text-subtle) !important;
 }
 #app-mount .prompt__5d7c9 {
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -3679,7 +3677,7 @@ body:has(#app-mount)::after {
 
 #app-mount .tierHeaderLocked_f15dca {							/* boostsettings			tierheaderlocked						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .tierHeaderUnlocked_f15dca {							/* boostsettings			tierheaderunlocked						*/
 	background-color: rgba(var(--transparencycolor_v), .5);
@@ -3689,7 +3687,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .tierBody_f15dca {								/* boostsettings			tierbody							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .tierInProgress_c44edb {							/* boostsettings			tiermilestone							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
@@ -3870,7 +3868,7 @@ body:has(#app-mount)::after {
 	fill: var(--background-base-lower);
 }
 #app-mount .testimonialContainer_d3081b .quotes__3e7e2 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .separator__33f29 {
@@ -3881,7 +3879,7 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .message_fcc792 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .secondaryButton_fcc792 {
 	color: var(--header-primary);
@@ -3908,7 +3906,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .checkboxLabel_a11995 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 /* ----		13.1.		USERMODAL					----- */
@@ -3936,7 +3934,7 @@ body:has(#app-mount)::after {
 }
 .text_eb2cd2,										/* create modal				text								*/
 .guildName__66057 {									/* hub modal				text								*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 .container_eb2cd2:hover .text_eb2cd2,
 .guildRow__66057:hover .guildName__66057 {
@@ -3946,7 +3944,7 @@ body:has(#app-mount)::after {
 .guildName__66057 ~ img {								/* hub modal				arrow								*/
 	object-position: -999999px -999999px;
 	-webkit-mask: url(https://discord.com/assets/ebd4163d89c2d849ec54.svg) center/cover no-repeat;
-	background: var(--header-secondary);
+	background: var(--text-subtle);
 }
 .container_eb2cd2:hover .arrow_eb2cd2,
 .guildRow__66057:hover .guildName__66057 ~ img {
@@ -4042,10 +4040,10 @@ body:has(#app-mount)::after {
 }
 #app-mount .modalSubtitle_f061f6 {							/* modal				subtitle							*/
 	border-color: var(--border-subtle);
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .keyboardShortcutList_f061f6 .keybindGroup_f061f6 .keybindDescription_c0b6a8 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .combo_fcddc1 {
 	color: var(--header-primary);
@@ -4059,7 +4057,7 @@ body:has(#app-mount)::after {
 #app-mount .combo_fcddc1 .key_fcddc1:active {
 	box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .6);
 	border: 1px solid rgb(0, 0, 0);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 /* ----		13.5.		QUICKSWITCHER					---- */
@@ -4156,7 +4154,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .friend_bbd192,								/* modal				groupdmrow							*/
 #app-mount .inviteRowName__67dba {							/* modal				username							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .friendSelected_bbd192,
 #app-mount .inviteRow__67dba:hover .inviteRowName__67dba {
@@ -4166,7 +4164,7 @@ body:has(#app-mount)::after {
 #app-mount .footerText__67dba,
 #app-mount .subtitle_cba592,
 #app-mount .subText__67dba {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 .tag_fea832 {										/* modal				added user							*/
 	background-color: rgb(var(--accentcolor_v));
@@ -4248,19 +4246,19 @@ body:has(#app-mount)::after {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 .downloadApps__4a98c .header__4a98c {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 .downloadApps__4a98c .footer__4a98c {
 	color: var(--text-muted);
 }
 .downloadApps__4a98c .platforms__4a98c .platform__4a98c {
-	border-color: var(--header-secondary);
+	border-color: var(--text-subtle);
 }
 .downloadApps__4a98c .platforms__4a98c .platform__4a98c p {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 .downloadApps__4a98c .platforms__4a98c .platform__4a98c .downloadButton__4a98c {
-	background-color: var(--header-secondary);
+	background-color: var(--text-subtle);
 }
 .downloadApps__4a98c .platforms__4a98c .platform__4a98c.active__4a98c .downloadButton__4a98c {
 	text-shadow: 1px 1px var(--textshadow_v);
@@ -4269,10 +4267,10 @@ body:has(#app-mount)::after {
 /* ----		13.9.		GUILDBOOSTMODAL					---- */
 
 #app-mount .subscriberCount_f15dca {							/* modal				subcount							*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .subscriberCount_f15dca strong {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .moreSubscribers_f15dca {							/* modal				suboverflow							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
@@ -4306,7 +4304,7 @@ body:has(#app-mount)::after {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 #app-mount .subscribersPopoutUser_f15dca {						/* subpopout				users								*/
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .iconWrapper__0d13e {							/* prebuy popout			amount icon wrapper						*/
@@ -4415,7 +4413,7 @@ body:has(#app-mount)::after {
 #app-mount .guildName_db81c6,
 #app-mount .override_db81c6,
 #app-mount .overrideHighlight_db81c6 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .override_db81c6:hover {
 	background-color: rgba(var(--backgroundtertiary), .1);
@@ -4445,7 +4443,7 @@ body:has(#app-mount)::after {
 .voteSelected__01c8c {
 	background: rgb(var(--accentcolor_v));
 }
-.voteSelected__01c8c [style*="color: var(--text-secondary)"] {
+.voteSelected__01c8c [style*="color: var(--text-subtle)"] {
 	color: var(--header-primary) !important;
 }
 
@@ -4809,7 +4807,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .role_dfa8b6 .roleCircle__4f569 {						/* body					rolecircle							*/
 	position: absolute;
-	background-color: var(--text-secondary);
+	background-color: var(--text-subtle);
 	border-radius: 3px;
 	opacity: 0.3;
 	height: 100%;
@@ -4819,7 +4817,7 @@ body:has(#app-mount)::after {
 	top: 0;
 }
 #app-mount .role_dfa8b6 .roleCircle__4f569[style*="background-color: rgb(185, 187, 190)"] {
-	background-color: var(--text-secondary) !important;
+	background-color: var(--text-subtle) !important;
 }
 #app-mount .role_dfa8b6 .roleCircle__4f569:not(:only-child):hover {
 	opacity: 1;
@@ -5090,11 +5088,11 @@ body:has(#app-mount)::after {
 	opacity: 0.6;
 }
 #app-mount .endText__2dc39 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .emptyHintCard__2dc39 {
 	background-color: rgba(var(--transparencycolor_v), .2);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .backButton_fed6d3 {								/* gifpicker				backbutton							*/
 	color: var(--interactive-normal);
@@ -5156,7 +5154,7 @@ body:has(#app-mount)::after {
 	background-color: transparent;
 }
 #app-mount .container__0f711 .body__6fddf > * {						/* popout				for you text							*/
-	color: var(--header-secondary) !important;
+	color: var(--text-subtle) !important;
 }
 
 #app-mount .header__45690,								/* popout				header								*/
@@ -5347,7 +5345,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .queryContainer__55c99 {
 	border-bottom-color: var(--border-subtle);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .queryContainer__55c99 strong {
 	color: var(--header-primary);
@@ -5362,11 +5360,11 @@ body:has(#app-mount)::after {
 #app-mount .resultsGroup__56fec .plusIcon__56fec,
 #app-mount .resultsGroup__56fec .searchClearHistory__56fec,
 #app-mount .resultsGroup__56fec .searchLearnMore__56fec a {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .resultsGroup__56fec .header__56fec,
 #app-mount .resultsGroup__56fec .plusIcon__56fec {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .option__56fec::after {
 	display: none;
@@ -5389,19 +5387,19 @@ body:has(#app-mount)::after {
 #app-mount .option__56fec .answer__56fec,
 #app-mount .option__56fec .nonText__56fec,
 #app-mount .option__56fec strong {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .option__56fec .filter__56fec {
 	color: var(--text-muted);
 }
 #app-mount .option__56fec.user__56fec .displayedNick__56fec {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .option__56fec.user__56fec .displayUsername__56fec {
 	color: var(--interactive-muted);
 }
 #app-mount .searchOption__56fec .filter__56fec {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .searchOption__56fec .answer__56fec {
 	color: var(--text-muted);
@@ -5463,7 +5461,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .calendarPicker_d27f17 .react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .calendarPicker_d27f17 .react-datepicker__day--outside-month {
 	color: var(--text-muted);
@@ -5477,7 +5475,7 @@ body:has(#app-mount)::after {
 	border-top-color: var(--border-subtle);
 }
 #app-mount .datePicker__56fec .datePickerHint__56fec .hint__56fec {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .datePicker__56fec .datePickerHint__56fec .hintValue__56fec {
 	color: var(--header-primary);
@@ -5622,7 +5620,7 @@ body:has(#app-mount)::after {
 	background: rgba(var(--transparencycolor_v), .3);
 }
 #app-mount .icon_d0b769 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 .channelContainer_d5f35b {
 	background-color: rgba(var(--transparencycolor_v), .3);
@@ -5857,7 +5855,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .debugButton__83d1b {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .krispLogo_e131a9 {
 	-webkit-mask: url(https://discord.com/assets/ea67b1321e3d4154e476.svg) center/contain no-repeat;
@@ -5871,7 +5869,7 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount .phoneFieldPopout__61a01 .countryName__61a01 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .phoneFieldPopout__61a01 .countryCode__61a01 {
 	color: var(--header-primary);
@@ -5893,7 +5891,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .verification_dede4b .body_dede4b,
 #app-mount .verification_dede4b .footer_dede4b {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .verificationBlock__2ee71 {
 	background-color: rgba(var(--transparencycolor_v), .1);
@@ -5916,7 +5914,7 @@ body:has(#app-mount)::after {
 	opacity: .5;
 }
 #app-mount .verificationBlock__2ee71 .body_dede4b {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 /* ----		14.17.		QUICKSELECTPOPOUT				---- */
@@ -6026,7 +6024,7 @@ body:has(#app-mount)::after {
 	backdrop-filter: blur(var(--popoutblur_v));
 }
 #app-mount .body_be95d0 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .header_be95d0 {
 	color: var(--header-primary);
@@ -6354,12 +6352,12 @@ body:has(#app-mount)::after {
 	color: var(--header-primary);
 }
 #app-mount h3.title_d1da5f {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount h4.title_d1da5f,
 #app-mount h5.title_d1da5f,
 #app-mount h6.title_d1da5f {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .text__0e310,
@@ -6368,11 +6366,11 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .title_d1da5f {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 #app-mount .markdown_d285a6 {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .markdown_d285a6 th {
 	background-color: var(--background-base-lowest);
@@ -6384,7 +6382,7 @@ body:has(#app-mount)::after {
 }
 #app-mount .markdown_d285a6 tr {
 	border-color: var(--interactive-muted);
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .markdown_d285a6 tr:nth-child(2n) {
 	background-color: var(--background-base-lower);
@@ -6396,7 +6394,7 @@ body:has(#app-mount)::after {
 	background-color: var(--background-base-lower);
 }
 #app-mount .markdown_d285a6 .codeInline_d285a6 {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 
 /* ----		15.2.		BUTTONS						---- */
@@ -6601,7 +6599,7 @@ input.input__0ed4f:hover:not(:focus) {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
 }
 #app-mount .item__001a7 .radioBar__001a7[style*="--radio-bar-accent-color"] .refreshIconStroke__001a7 {
-	stroke: var(--header-secondary);
+	stroke: var(--text-subtle);
 }
 #app-mount .item__001a7 .radioBar__001a7[style*="--radio-bar-accent-color"] .radioIndicatorChecked__001a7 .refreshIconFill__001a7 {
 	fill: var(--radio-bar-accent-color);
@@ -6703,7 +6701,7 @@ input.input__0ed4f:hover:not(:focus) {
 .select_d48ec6 [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--transparencycolor_v), .1);
 	border-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 .lookFilled__3f413.select__3f413:hover {
 	border-color: rgb(var(--transparencycolor_v));
@@ -6725,7 +6723,7 @@ input.input__0ed4f:hover:not(:focus) {
 .select_d48ec6 [class*="css-"][class*="-singleValue"],
 .select_d48ec6 [class*="css-"][class*="-placeholder"],
 .select_d48ec6 [class*="css-"][class*="-indicatorContainer"] {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 .option__3f413,
 .css-1gfjib6-option,
@@ -6822,7 +6820,7 @@ input.input__0ed4f:hover:not(:focus) {
 	color: var(--text-muted);
 }
 #app-mount .filterLabel__82eb8 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 #app-mount .searchBox__56feb {
 	background-color: rgba(var(--transparencycolor_v), .3);
@@ -7328,7 +7326,7 @@ html .bd-sidebar-header h2 {
 .bd-select {
 	background-color: rgba(var(--transparencycolor_v), .1);
 	border-color: rgba(var(--transparencycolor_v), .3);
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 	border: 1px solid transparent;
 	padding: 8px 8px 8px 12px;
 	cursor: pointer;
@@ -7482,7 +7480,7 @@ html .powercord-toast .header {
 html .powercord-toast .contents .inner {
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border: none;
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 
@@ -7491,7 +7489,7 @@ html .powercord-toast .contents .inner {
 /* ----		18.1.		BDFDB						---- */
 
 .label_caf933 {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 .label_caf933:hover {
 	color: var(--header-primary);
@@ -7533,7 +7531,7 @@ html .colorDefault_67c5da .bg_67c5da {
 	color: var(--header-primary);
 }
 #app-mount #dv-main .dv-date {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 	opacity: 1;
 }
 
@@ -7623,7 +7621,7 @@ html #permissions-modal-wrapper .role-side {
 	background-color: rgba(var(--transparencycolor_v), .1);
 }
 html #permissions-modal-wrapper .role-item {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 html #permissions-modal-wrapper .role-item:hover {
 	background-color: rgba(var(--transparencycolor_v), .1);
@@ -7638,7 +7636,7 @@ html #permissions-modal-wrapper .perm-item {
 	box-shadow: inset 0 -1px 0 var(--background-modifier-accent);
 }
 html #permissions-modal-wrapper .perm-name {
-	color: var(--header-secondary);
+	color: var(--text-subtle);
 }
 
 /* ----		18.6.		DIRECTDOWNLOAD					---- */
@@ -7713,7 +7711,7 @@ html #permissions-modal-wrapper .perm-name {
 	z-index: 300;
 }
 .bf-toolbar .format {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 .bf-toolbar .format:hover {
 	background-color: rgb(var(--accentcolor_v));

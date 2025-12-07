@@ -700,7 +700,7 @@
 }
 
 .premium__6c5a1 path[fill] {
-	fill: var(--text-secondary);
+	fill: var(--text-subtle);
 }
 
 .comboNameplate__257af[style^="color: hsl(227, "],
@@ -765,7 +765,7 @@
 
 .icon_c9d15c path[fill="#43a25a"],
 .icon_c9d15c path[fill="#40a258"] {
-	fill: var(--text-secondary);
+	fill: var(--text-subtle);
 }
 .premiumIcon__5d473 {
 	color: rgb(var(--accentcolor2_v));
@@ -1911,7 +1911,7 @@ a.metadataDownload_cf09d8 {
 .colorDefault_c1e9c4.focused_c1e9c4,
 .colorDefault_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(var(--accentcolor_v));
-	color: var(--text-primary);
+	color: var(--text-strong);
 }
 .custom-user-profile-theme .menuItemColor_af7fb7:hover {
 	background-color: var(--user-profile-overlay-background-hover, rgb(var(--accentcolor_v)));
@@ -1935,7 +1935,7 @@ a.metadataDownload_cf09d8 {
 .colorPremium_c1e9c4.focused_c1e9c4,
 .colorPremium_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: rgb(var(--accentcolor2_v));
-	color: var(--text-primary);
+	color: var(--text-strong);
 }
 .colorPremium_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorPremium_c1e9c4:not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -1954,7 +1954,7 @@ a.metadataDownload_cf09d8 {
 .colorPremiumGradient_c1e9c4.focused_c1e9c4,
 .colorPremiumGradient_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background: linear-gradient(90deg, rgb(var(--accentcolor2_v)), rgb(var(--accentcolor_v)));
-	color: var(--text-primary);
+	color: var(--text-strong);
 }
 .colorPremiumGradient_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorPremiumGradient_c1e9c4not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -1971,7 +1971,7 @@ a.metadataDownload_cf09d8 {
 .colorDanger_c1e9c4.focused_c1e9c4,
 .colorDanger_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: var(--status-danger);
-	color: var(--text-primary);
+	color: var(--text-strong);
 }
 .colorDanger_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorDanger_c1e9c4:not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -1988,7 +1988,7 @@ a.metadataDownload_cf09d8 {
 .colorSuccess_c1e9c4.focused_c1e9c4,
 .colorSuccess_c1e9c4:active:not(.hideInteraction_c1e9c4) {
 	background-color: var(--status-success);
-	color: var(--text-primary);
+	color: var(--text-strong);
 }
 .colorSuccess_c1e9c4:not(.focused_c1e9c4):not(:active) .radioSelection_c1e9c4,
 .colorSuccess_c1e9c4:not(.focused_c1e9c4):not(:active) .checkbox_c1e9c4,
@@ -2426,7 +2426,7 @@ html #bd-modal-container {
 	color: transparent;
 }
 html #bd-modal-container > * {
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 }
 
 .bd-modal-wrapper .footer button {
@@ -2471,7 +2471,7 @@ html #bd-modal-container > * {
 .bd-description-wrap .banner {
 	background: var(--background-base-low);
 	border-color: var(--background-base-lower);
-	color: var(--text-secondary);
+	color: var(--text-subtle);
 	font-size: 14px;
 	line-height: 18px;
 }
@@ -2530,7 +2530,7 @@ html #bd-modal-container > * {
 	pointer-events: none;
 }
 #bd-editor-controls .checkboxElement-1qV33p:not(:checked) + span {
-	border: 1px solid var(--text-primary);
+	border: 1px solid var(--text-strong);
 }
 #bd-editor-controls .checkboxElement-1qV33p:checked + span {
 	background: rgb(var(--accentcolor_v));
@@ -2745,7 +2745,7 @@ html .powercord-updater .debug-info b {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 #server-search .wrapper-28eC3z [fill="white"] {
-	fill: var(--text-primary);
+	fill: var(--text-strong);
 }
 #server-search .wrapper-28eC3z:hover [fill="white"] {
 	fill: #fff;

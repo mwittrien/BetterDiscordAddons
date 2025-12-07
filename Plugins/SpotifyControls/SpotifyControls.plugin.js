@@ -56,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--text-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -481,8 +481,8 @@ module.exports = (_ => {
 						display: flex;
 						flex-direction: column;
 					}
-					${BDFDB.dotCN.channelpanels}:has(${BDFDB.dotCN._spotifycontrolscontainer}:first-child) {
-						overflow: hidden;
+					${BDFDB.dotCN.accountinfoquestmask} {
+						order: -2;
 					}
 					${BDFDB.dotCN._spotifycontrolscontainer} {
 						display: flex;
@@ -526,7 +526,7 @@ module.exports = (_ => {
 						height: 100%;
 						min-width: 4px;
 						border-radius: 2px;
-						background: var(--text-secondary);
+						background: var(--text-subtle);
 					}
 					${BDFDB.dotCN._spotifycontrolstimeline}:hover ${BDFDB.dotCN._spotifycontrolsbarfill} {
 						background: var(--SC-spotify-green);
@@ -540,7 +540,7 @@ module.exports = (_ => {
 						height: var(--grabber-size);
 						margin-top: calc(-1 * (var(--grabber-size) - var(--bar-size)) / 2);
 						margin-left: calc(-1 * var(--grabber-size) / 2);
-						background: var(--text-secondary);
+						background: var(--text-subtle);
 						border-radius: 50%;
 					}
 					${BDFDB.dotCN._spotifycontrolstimeline}:hover ${BDFDB.dotCN._spotifycontrolsbargrabber} {
@@ -566,7 +566,7 @@ module.exports = (_ => {
 						display: block;
 						width: 100%;
 						height: 100%;
-						color: var(--text-primary);
+						color: var(--text-strong);
 						object-fit: cover;
 					}
 					${BDFDB.dotCN._spotifycontrolscovermaximizer} {
@@ -613,9 +613,15 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._spotifycontrolssong} {
 						font-weight: 500;
+						color: var(--text-strong);
 					}
 					${BDFDB.dotCN._spotifycontrolsinterpret} {
 						font-weight: 300;
+						color: var(--text-subtle);
+						white-space: nowrap;
+						text-overflow: ellipsis;
+						overflow: hidden;
+						line-height: 13px;
 					}
 					${BDFDB.dotCN._spotifycontrolsvolumeslider} {
 						height: 12px;

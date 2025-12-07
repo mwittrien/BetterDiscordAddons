@@ -1361,6 +1361,7 @@
 	"DiscordClassModules": {
 		"AccountDetails": {"props": ["avatarWrapper", "micButtonParent", "redIcon"]},
 		"AccountDetailsButtons": {"props": ["button", "enabled", "disabled"]},
+		"AccountDetailsQuest": {"props": ["mask", "wrapper", "wrapperInvisible"]},
 		"Anchor": {"props": ["anchor", "anchorUnderlineOnHover"]},
 		"AnimationContainer": {"props": ["animatorLeft", "didRender"]},
 		"Animations": {"props": ["focusSensitive", "fadeIn", "base"]},
@@ -1796,6 +1797,7 @@
 		"accountinfodetails": ["AccountDetails", "panelTitleContainer"],
 		"accountinfomicbuttonparent": ["AccountDetails", "micButtonParent"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
+		"accountinfoquestmask": ["AccountDetailsQuest", "mask"],
 		"aliasautocomplete": ["AutocompleteAliases", "autocomplete"],
 		"anchor": ["Anchor", "anchor"],
 		"anchorunderlineonhover": ["Anchor", "anchorUnderlineOnHover"],
