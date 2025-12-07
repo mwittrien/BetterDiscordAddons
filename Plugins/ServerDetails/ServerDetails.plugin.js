@@ -85,8 +85,6 @@ module.exports = (_ => {
 				if (_this.settings.general.onlyShowOnShift) {
 					let addListener = expanded => {
 						let triggered = false, listener = event => {
-							if (!this.updater.isMounted(this)) return document.removeEventListener(expanded ? "keyup" : "keydown", listener);
-							if (triggered) return;
 							if (event.which != 16 || triggered) return;
 							triggered = true;
 							document.removeEventListener(expanded ? "keyup" : "keydown", listener);
