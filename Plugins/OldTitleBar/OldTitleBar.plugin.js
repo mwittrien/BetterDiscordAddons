@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.8
+ * @version 1.8.9
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -195,7 +195,14 @@ module.exports = (_ => {
 						transform: scale(90%);
 					}
 					
-					${BDFDB.dotCNS.chatthreadsidebaropen} > *:first-child ${BDFDB.dotCN._oldtitlebartoolbar} {
+					${BDFDB.dotCN._oldtitlebarextrabuttons} {
+						display: flex;
+						gap: 5px;
+						align-items: center;
+					}
+					
+					${BDFDB.dotCN.chatthreadsidebaropen} > *:first-child ${BDFDB.dotCN._oldtitlebartoolbar},
+					${BDFDB.dotCN.chatthreadsidebaropen} ~ * ${BDFDB.dotCN._oldtitlebarextrabuttons} {
 						display: none !important;
 					}
 
@@ -296,7 +303,10 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {children})
 					];
 				}
-				if (titleBarButton) children.push(titleBarButton);
+				if (titleBarButton) children.push(BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN._oldtitlebarextrabuttons,
+					children: titleBarButton
+				}));
 				this.injectButtons(children, true);
 			}
 

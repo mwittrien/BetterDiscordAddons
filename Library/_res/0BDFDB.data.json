@@ -1148,6 +1148,7 @@
 			"icon": "icon_dba1d2"
 		},
 		"OldTitleBar": {
+			"extraButtons": "buttons_8227b0",
 			"oldTitleBarEnabled": "oldTitleBarEnabled_8227b0",
 			"settingsToolbar": "settingsToolbar_8227b0",
 			"toolbar": "toolbar_8227b0"
@@ -1691,6 +1692,7 @@
 		"_imageutilitiesviewer": ["ImageUtilities", "viewer"],
 		"_lastmessagedateicon": ["LastMessageDate", "icon"],
 		"_oldtitlebarenabled": ["OldTitleBar", "oldTitleBarEnabled"],
+		"_oldtitlebarextrabuttons": ["OldTitleBar", "extraButtons"],
 		"_oldtitlebarsettingstoolbar": ["OldTitleBar", "settingsToolbar"],
 		"_oldtitlebartoolbar": ["OldTitleBar", "toolbar"],
 		"_personalpinsmessagetag": ["PersonalPins", "messageTag"],
