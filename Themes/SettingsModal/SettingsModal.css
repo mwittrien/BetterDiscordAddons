@@ -216,7 +216,7 @@
 	position: static !important;
 }
 
-#app-mount .root__5c9fc {
+#app-mount .root__5c9fc:not(:has(.introAnimation__33f0b)) {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
