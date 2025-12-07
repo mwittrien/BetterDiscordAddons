@@ -65,7 +65,7 @@ module.exports = (_ => {
 		var loadedUsers, requestedUsers, queuedInstances;
 		var currentPopout, currentProfile;
 		
-		const LastMessageDateComponents = class LastMessageDate extends BdApi.React.Component {
+		const LastMessageDateComponent = class LastMessageDate extends BdApi.React.Component {
 			render() {
 				if (!loadedUsers[this.props.guildId]) loadedUsers[this.props.guildId] = {};
 				if (!requestedUsers[this.props.guildId]) requestedUsers[this.props.guildId] = {};
@@ -156,8 +156,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"UserHeaderUsername",
-						"UserProfile",
-						"UserProfileInfoSection"
+						"UserProfile"
 					]
 				};
 				
@@ -248,7 +247,7 @@ module.exports = (_ => {
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
 				e.returnvalue = [e.returnvalue].flat(10);
-				e.returnvalue.push(BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
+				e.returnvalue.push(BDFDB.ReactUtils.createElement(LastMessageDateComponent, {
 					isInPopout: true,
 					guildId: currentPopout.props.guildId || BDFDB.DiscordConstants.ME,
 					channelId: currentPopout.props.channelId,
@@ -261,29 +260,14 @@ module.exports = (_ => {
 				if (!currentProfile || e.instance.props.themeType != BDFDB.DiscordConstants.ProfileTypes.MODAL_V2) return;
 				let user = currentProfile.props.user || BDFDB.LibraryStores.UserStore.getUser(currentProfile.props.userId);
 				if (!user || user.isNonUserBot()) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["heading", BDFDB.LanguageUtils.LanguageStrings.MEMBER_SINCE_PLACEHOLDER]]});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["heading", BDFDB.LanguageUtils.LanguageStrings.MEMBER_SINCE]]});
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponent, {
 					isInPopout: false,
 					guildId: currentProfile.props.guildId || BDFDB.DiscordConstants.ME,
 					channelId: currentProfile.props.channelId,
 					isGuild: !!currentProfile.props.guildId,
 					user: user
 				}, true));
-			}
-			
-			processUserProfileInfoSection (e) {
-				if (!currentProfile) return;
-				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
-				if (!user || user.isNonUserBot()) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["heading", BDFDB.LanguageUtils.LanguageStrings.MEMBER_SINCE_PLACEHOLDER]]});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
-					isInPopout: false,
-					guildId: currentProfile.props.guildId || BDFDB.DiscordConstants.ME,
-					channelId: currentProfile.props.channelId,
-					isGuild: !!currentProfile.props.guildId,
-					user: user
-				}, true));
-
 			}
 
 			setLabelsByLanguage () {
