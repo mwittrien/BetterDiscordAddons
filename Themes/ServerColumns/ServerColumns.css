@@ -118,8 +118,7 @@ body.folderContentIsOpen_ac0584 .titleBar__421ed.typeMacOS__421ed .macButtons__4
 }
 .wrapper_ef3116 .placeholderMask__6629f,
 .wrapper_ef3116 .svg_cc5dd2,
-.wrapper_ef3116 .wrapper_cc5dd2, 
-.wrapper_ef3116 .wrapper__6e9f8 {
+.wrapper_ef3116 .wrapper_cc5dd2 {
 	width: calc(1px * var(--guildsize_v)) !important;
 	height: calc(1px * var(--guildsize_v)) !important;
 }
