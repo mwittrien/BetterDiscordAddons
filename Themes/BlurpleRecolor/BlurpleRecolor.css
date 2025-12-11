@@ -27,6 +27,7 @@
 }
 [data-popout-root], html, .theme-light, .theme-dark, .visual-refresh .theme-light, .visual-refresh .theme-dark, .visual-refresh.theme-light, .visual-refresh.theme-dark, .theme-amoled {
 	--bg-brand: rgb(var(--accentcolor_v));
+	--background-brand: rgb(var(--accentcolor_v));
 	--checkbox-background-checked: rgb(var(--accentcolor_v));
 	--checkbox-border-checked: rgb(var(--accentcolor_v));
 	
