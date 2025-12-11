@@ -29,7 +29,9 @@
 	--bg-brand: rgb(var(--accentcolor_v));
 	--background-brand: rgb(var(--accentcolor_v));
 	--checkbox-background-checked: rgb(var(--accentcolor_v));
+	--checkbox-background-selected-default: rgb(var(--accentcolor_v));
 	--checkbox-border-checked: rgb(var(--accentcolor_v));
+	--checkbox-border-selected-default: rgb(var(--accentcolor_v));
 	
 	--input-focused-border: rgb(var(--accentcolor_v));
 	
