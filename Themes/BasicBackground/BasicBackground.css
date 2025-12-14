@@ -7155,49 +7155,49 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 /* ----		15.9.		TOOLTIPS					---- */
 
 
-#app-mount .tooltip__382e7 {
+#app-mount .tooltip_c36707 {
 	border: unset;
 }
-#app-mount .tooltipPointer__382e7.tooltipPointerBg__382e7 {
+#app-mount .tooltipPointer_c36707.tooltipPointerBg_c36707 {
 	display: none;
 }
 #app-mount .muteText_b1f768 {
 	color: #bbb;
 }
-#app-mount .tooltipPrimary__382e7,
-#app-mount .tooltipGrey__382e7,
-#app-mount .tooltipBlack__382e7 {
+#app-mount .tooltipPrimary_c36707,
+#app-mount .tooltipGrey_c36707,
+#app-mount .tooltipBlack_c36707 {
 	background-color: rgb(var(--accentcolor_v));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow_v);
 	--tooltip-pointer-bg: rgb(var(--accentcolor_v));
 }
-#app-mount .tooltipPrimary__382e7 .note_dc56aa,
-#app-mount .tooltipGrey__382e7 .note_dc56aa,
-#app-mount .tooltipBlack__382e7 .note_dc56aa {
+#app-mount .tooltipPrimary_c36707 .note_dc56aa,
+#app-mount .tooltipGrey_c36707 .note_dc56aa,
+#app-mount .tooltipBlack_c36707 .note_dc56aa {
 	color: #bbb;
 }
-#app-mount .tooltipPrimary__382e7 a,
-#app-mount .tooltipGrey__382e7 a,
-#app-mount .tooltipBlack__382e7 a {
+#app-mount .tooltipPrimary_c36707 a,
+#app-mount .tooltipGrey_c36707 a,
+#app-mount .tooltipBlack_c36707 a {
 	filter: brightness(50%);
 }
-#app-mount .tooltipPrimary__382e7 .tooltipPointer__382e7,
-#app-mount .tooltipGrey__382e7 .tooltipPointer__382e7,
-#app-mount .tooltipBlack__382e7 .tooltipPointer__382e7 {
+#app-mount .tooltipPrimary_c36707 .tooltipPointer_c36707,
+#app-mount .tooltipGrey_c36707 .tooltipPointer_c36707,
+#app-mount .tooltipBlack_c36707 .tooltipPointer_c36707 {
 	border-top-color: var(--tooltip-pointer-bg);
 }
-#app-mount .tooltipTop__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+#app-mount .tooltipTop_c36707 .tooltipPointer_c36707:not(.tooltipPointerBg_c36707) {
 	margin-top: 0
 }
-#app-mount .tooltipLeft__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+#app-mount .tooltipLeft_c36707 .tooltipPointer_c36707:not(.tooltipPointerBg_c36707) {
 	margin-left: 0
 }
-#app-mount .tooltipRight__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+#app-mount .tooltipRight_c36707 .tooltipPointer_c36707:not(.tooltipPointerBg_c36707) {
 	margin-right: 0;
 }
-#app-mount .tooltipBottom__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7),
-#app-mount .tooltipCenter__382e7 .tooltipPointer__382e7:not(.tooltipPointerBg__382e7) {
+#app-mount .tooltipBottom_c36707 .tooltipPointer_c36707:not(.tooltipPointerBg_c36707),
+#app-mount .tooltipCenter_c36707 .tooltipPointer_c36707:not(.tooltipPointerBg_c36707) {
 	margin-bottom: 0;
 }
 .emptyUser__183c2 {

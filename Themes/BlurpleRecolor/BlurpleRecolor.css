@@ -2493,14 +2493,14 @@ a.metadataDownload_cf09d8 {
 
 /* ----		12.8.		TOOLTIPS					---- */
 
-#app-mount .tooltipBrand__382e7 {
+#app-mount .tooltipBrand_c36707 {
 	background-color: rgb(var(--accentcolor_v));
 	--tooltip-pointer-bg: rgb(var(--accentcolor_v));
 }
-#app-mount .tooltipBrand__382e7 a {
+#app-mount .tooltipBrand_c36707 a {
 	filter: brightness(50%);
 }
-#app-mount .tooltipBrand__382e7 .tooltipPointer__382e7 {
+#app-mount .tooltipBrand_c36707 .tooltipPointer_c36707 {
 	border-top-color: var(--tooltip-pointer-bg);
 }
 
