@@ -459,8 +459,7 @@ body,											/* body													*/
 .folderContentIsOpen_ac0584 #app-mount .sidebar_c48ade:after {
 	width: calc(2 * var(--custom-guild-list-width));
 }
-#app-mount .sidebarList__5e434,								/* channels				container							*/
-#app-mount .sidebarListRounded__5e434 {							/* channels				container							*/
+#app-mount .sidebarList__5e434 {							/* channels				container							*/
 	background-color: rgba(var(--transparencycolor_v), var(--guildchanneltransparency_v));
 }
 #app-mount .membersWrap_c8ffbb {							/* members				container							*/
