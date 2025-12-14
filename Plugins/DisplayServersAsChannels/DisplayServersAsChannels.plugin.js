@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.8
+ * @version 1.9.9
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -56,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -229,9 +229,11 @@ module.exports = (_ => {
 				if (!e.returnvalue) {
 					let guildcontainer = BDFDB.ReactUtils.findChild(e.instance, {props: [["className", BDFDB.disCN.guildcontainer]]});
 					if (guildcontainer) guildcontainer.props.className = BDFDB.DOMUtils.formatClassName(guildcontainer.props.className, BDFDB.LibraryStores.UserGuildSettingsStore.isMuted(e.instance.props.guild.id) && BDFDB.disCN._displayserversaschannelsmuted);
-					e.instance.props.children = this.removeMask(e.instance.props.children);
-					this.addElementName(e.instance.props.children, e.instance.props.guild.name, {
-						badges: [
+					e.instance.props.children = this.removeMask(this.removeMask(e.instance.props.children));
+					let backBadges = [e.instance.props.children.props.children].flat(10).slice(1);
+					e.instance.props.children.props.children = [[e.instance.props.children.props.children].flat(10)[0]];
+					this.addElementName([e.instance.props.children.props.children].flat(10)[0], e.instance.props.guild.name, {
+						frontBadges: [
 							this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
 								animate: e.instance.props.animatable && e.instance.state && e.instance.state.hovered,
 								guild: e.instance.props.guild,
@@ -244,7 +246,8 @@ module.exports = (_ => {
 								tooltipPosition: BDFDB.LibraryComponents.TooltipContainer.Positions.RIGHT,
 								guild: e.instance.props.guild
 							})
-						]
+						],
+						backBadges: backBadges
 					});
 				}
 				else {
@@ -285,7 +288,7 @@ module.exports = (_ => {
 					wrap: true,
 					index: 0,
 					backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
-					badges: badge || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+					frontBadges: badge || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						color: folderColor,
 						width: folderSize,
 						height: folderSize,
@@ -393,7 +396,7 @@ module.exports = (_ => {
 								src: returnvalue.props.icon,
 								size: BDFDB.LibraryComponents.AvatarConstants.AvatarSizes.SIZE_24
 							}),
-							options.badges,
+							options.frontBadges,
 						].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._displayserversaschannelsbadge,
 							children: badge
@@ -404,7 +407,7 @@ module.exports = (_ => {
 								children: name
 							})
 						}),
-						[returnvalue.props.children, options.wrap && children.slice(index + 1)].flat(10).filter(n => !(n && (n.type && n.type.displayName == "FolderIcon" || n.props && n.props.className && n.props.className.indexOf(BDFDB.disCN.guildfoldericonwrapper) > -1)))
+						[returnvalue.props.children, options.backBadges, options.wrap && children.slice(index + 1)].flat(10).filter(n => !(n && (n.type && n.type.displayName == "FolderIcon" || n.props && n.props.className && n.props.className.indexOf(BDFDB.disCN.guildfoldericonwrapper) > -1)))
 					].flat().filter(n => n);
 					delete returnvalue.props.icon;
 					delete returnvalue.props.name;
@@ -571,7 +574,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder}[data-folder-name]::after {
 						content: attr(data-folder-name);
-						color: var(--text-subtle);
+						color: var(--text-secondary);
 						display: flex;
 						justify-content: flex-start;
 						align-items: center;
@@ -714,7 +717,7 @@ module.exports = (_ => {
 					
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper} #server-search ${BDFDB.dotCN.guildinner}::before {
 						content: "Server Search";
-						color: var(--text-subtle);
+						color: var(--text-secondary);
 						display: flex;
 						align-items: center;
 						height: ${this.settings.amounts.serverElementHeight}px;
@@ -730,7 +733,7 @@ module.exports = (_ => {
 						right: 7px;
 						width: ${this.settings.amounts.serverElementHeight/32 * 20}px;
 						height: ${this.settings.amounts.serverElementHeight/32 * 20}px;
-						background: var(--text-subtle);
+						background: var(--text-secondary);
 						transform: unset;
 						-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAxOCAxOCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTMuNjAwOTE0ODEsNy4yMDI5NzMxMyBDMy42MDA5MTQ4MSw1LjIwOTgzNDE5IDUuMjA5ODM0MTksMy42MDA5MTQ4MSA3LjIwMjk3MzEzLDMuNjAwOTE0ODEgQzkuMTk2MTEyMDYsMy42MDA5MTQ4MSAxMC44MDUwMzE0LDUuMjA5ODM0MTkgMTAuODA1MDMxNCw3LjIwMjk3MzEzIEMxMC44MDUwMzE0LDkuMTk2MTEyMDYgOS4xOTYxMTIwNiwxMC44MDUwMzE0IDcuMjAyOTczMTMsMTAuODA1MDMxNCBDNS4yMDk4MzQxOSwxMC44MDUwMzE0IDMuNjAwOTE0ODEsOS4xOTYxMTIwNiAzLjYwMDkxNDgxLDcuMjAyOTczMTMgWiBNMTIuMDA1NzE3NiwxMC44MDUwMzE0IEwxMS4zNzMzNTYyLDEwLjgwNTAzMTQgTDExLjE0OTIyODEsMTAuNTg4OTA3OSBDMTEuOTMzNjc2NCw5LjY3NjM4NjUxIDEyLjQwNTk0NjMsOC40OTE3MDk1NSAxMi40MDU5NDYzLDcuMjAyOTczMTMgQzEyLjQwNTk0NjMsNC4zMjkzMzEwNSAxMC4wNzY2MTUyLDIgNy4yMDI5NzMxMywyIEM0LjMyOTMzMTA1LDIgMiw0LjMyOTMzMTA1IDIsNy4yMDI5NzMxMyBDMiwxMC4wNzY2MTUyIDQuMzI5MzMxMDUsMTIuNDA1OTQ2MyA3LjIwMjk3MzEzLDEyLjQwNTk0NjMgQzguNDkxNzA5NTUsMTIuNDA1OTQ2MyA5LjY3NjM4NjUxLDExLjkzMzY3NjQgMTAuNTg4OTA3OSwxMS4xNDkyMjgxIEwxMC44MDUwMzE0LDExLjM3MzM1NjIgTDEwLjgwNTAzMTQsMTIuMDA1NzE3NiBMMTQuODA3MzE4NSwxNiBMMTYsMTQuODA3MzE4NSBMMTIuMjEwMjUzOCwxMS4wMDk5Nzc2IEwxMi4wMDU3MTc2LDEwLjgwNTAzMTQgWiI+PC9wYXRoPjwvZz48L3N2Zz4=') center/cover no-repeat;
 					}
