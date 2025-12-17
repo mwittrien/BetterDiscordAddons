@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.3.5
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -251,7 +251,6 @@ module.exports = (_ => {
 						"ModalRoot"
 					],
 					after: [
-						"CustomStatusModal",
 						"CustomStatusModalWithPreview",
 						"UserPopoutStatusBubble",
 						"UserPopoutStatusBubbleEmpty"
@@ -259,10 +258,6 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCN.customstatusmodal} {
-						min-width: 440px;
-						width: unset;
-					}
 					${BDFDB.dotCN.modalcontainer}:has(${BDFDB.dotCN.customstatusmodalprofilepreview}) {
 						min-width: 640px;
 						max-width: unset;
@@ -449,23 +444,6 @@ module.exports = (_ => {
 						e.returnvalue.props.actions[e.returnvalue.props.actions.length-1].onClick();
 					}
 				});
-			}
-			
-			processCustomStatusModal (e) {
-				let footer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ModalFooter"});
-				if (!footer) return;
-				footer.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-					color: BDFDB.disCN.modalcancelbutton,
-					look: BDFDB.LibraryComponents.Button.Looks.LINK,
-					onClick: event => {
-						let id = BDFDB.NumberUtils.generateId(Object.keys(presets));
-						presets[id] = Object.assign({pos: Object.keys(presets).length}, BDFDB.ObjectUtils.extract(e.instance.state, "clearAfter", "emojiInfo", "status", "text"));
-						BDFDB.DataUtils.save(presets, this, "presets");
-						if (!event.shiftKey) e.instance.props.onClose();
-						else id = BDFDB.NumberUtils.generateId(Object.keys(presets));
-					},
-					children: this.labels.modal_savepreset
-				}));
 			}
 
 			setLabelsByLanguage () {

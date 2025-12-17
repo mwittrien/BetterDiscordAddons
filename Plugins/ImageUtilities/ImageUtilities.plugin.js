@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.4
+ * @version 5.6.5
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -447,30 +447,7 @@ module.exports = (_ => {
 					${BDFDB.dotCN._imageutilitiesoperations} {
 						position: absolute;
 						display: flex;
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.imagemodalimageoptionscontainer} {
-						position: static !important;
-						display: flex !important;
-						flex-wrap: unset !important;
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.imagemodalimagedownloadlink} {
-						position: relative !important;
-						white-space: nowrap !important;
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.anchor + BDFDB.dotCN.imagemodalimagedownloadlink} {
-						margin: 0 !important;
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.imagemodalimageforward} {
-						display: flex;
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.imagemodalimageforward}::before {
-						content: "|";
-						margin-right: 6px;
-						transition: opacity .15s ease
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.imagemodalimageforward}:hover::before {
-						opacity: .5;
-					}
+					5
 				`;
 			}
 			
@@ -1023,9 +1000,6 @@ module.exports = (_ => {
 				}
 				else if (e.returnvalue) {
 					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || e.instance.props.items[0].src || e.instance.props.items[0].original);
-					
-					let zoomedFitWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.imagemodalimagezoomedfit]]});
-					if (zoomedFitWrapper) zoomedFitWrapper.props.className = BDFDB.ArrayUtils.remove(zoomedFitWrapper.props.className.split(" "), BDFDB.disCN.imagemodalimagezoomedfit, true).join(" ");
 					
 					if (this.settings.viewerSettings.details) {
 						e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
