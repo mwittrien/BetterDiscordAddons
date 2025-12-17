@@ -1040,24 +1040,23 @@
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_bg.svg) center/contain no-repeat;
 }
-._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"] + * {
+._8ab7e4190786a9c3-noticeCard:has(._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"]) {
 	position: relative;
 }
-._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"] + *::before,
-._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"] + *::after {
+._8ab7e4190786a9c3-noticeCard:has(._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"])::before,
+._8ab7e4190786a9c3-noticeCard:has(._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"])::after {
 	content: "";
 	position: absolute;
-	top: 0;
-	right: -204px;
+	right: 20px;
 	width: 184px;
 	height: 110px;
 	pointer-events: none;
 }
-._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"] + *::before {
+._8ab7e4190786a9c3-noticeCard:has(._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"])::before {
 	background: rgb(var(--accentcolor_v));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_accent.svg) center/contain no-repeat;
 }
-._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"] + *::after {
+._8ab7e4190786a9c3-noticeCard:has(._8ab7e4190786a9c3-noticeImage[src="/assets/9ab158cf782b495e.svg"])::after {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_details.svg) center/contain no-repeat;
 }
 
