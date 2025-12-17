@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.0
+ * @version 1.7.1
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -80,7 +80,7 @@ module.exports = (_ => {
 				this.modulePatches = {
 					after: [
 						"ChannelTextAreaContainer",
-						"CustomStatusModal",
+						"CustomStatusModalWithPreview",
 						"Note"
 					]
 				};
@@ -205,7 +205,7 @@ module.exports = (_ => {
 				});
 			}
 
-			processCustomStatusModal (e) {
+			processCustomStatusModalWithPreview (e) {
 				let formItem = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.emojiinputcontainer]]});
 				if (formItem) this.injectCounter(formItem, formItem.props.children, "customstatus", BDFDB.dotCN.input);
 			}
