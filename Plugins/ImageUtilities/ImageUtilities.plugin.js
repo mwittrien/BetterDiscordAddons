@@ -361,7 +361,7 @@ module.exports = (_ => {
 						align-items: center;
 						min-width: 500px;
 					}
-					${BDFDB.dotCN.imagemodal + BDFDB.dotCNS.modalcarouselmodalmodern + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} {
+					${BDFDB.dotCN.imagemodal + BDFDB.dotCNS.modalcarouselmodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} {
 						min-width: unset;
 					}
 					${BDFDB.dotCNS.imagemodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} img {
@@ -1192,7 +1192,7 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.forceUpdate(e.instance);
 						}
 					}
-					if (e.methodname == "componentWillUnmount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCNC.modalcarouselmodal + BDFDB.dotCN.modalcarouselmodalmodern, e.node)) {
+					if (e.methodname == "componentWillUnmount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCN.modalcarouselmodal, e.node)) {
 						BDFDB.TimeUtils.clear(viewedImageTimeout);
 						viewedImageTimeout = BDFDB.TimeUtils.timeout(_ => {
 							firstViewedImage = null;
@@ -1200,7 +1200,7 @@ module.exports = (_ => {
 							this.cleanupListeners("Gallery");
 						}, 1000);
 					}
-					if (e.methodname == "componentDidMount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCNC.modalcarouselmodal + BDFDB.dotCN.modalcarouselmodalmodern, e.node)) {
+					if (e.methodname == "componentDidMount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCN.modalcarouselmodal, e.node)) {
 						BDFDB.TimeUtils.clear(viewedImageTimeout);
 						let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
 						if (modal) {
