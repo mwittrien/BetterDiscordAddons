@@ -359,55 +359,55 @@ html {
 /* ~~~~		1.		TRANSPARENCY					~~~~ */
 
 body,											/* body													*/
-#app-mount .a3002d7de5be5280-app,									/* app					container							*/
-#app-mount ._160d8e55254637e5-app,									/* app					inner								*/
+#app-mount .a3002d7de5be5280-app,								/* app					container							*/
+#app-mount ._160d8e55254637e5-app,								/* app					inner								*/
 #app-mount ._6ef4dfe97806d150-loading,								/* app					i18n loading							*/
 #app-mount ._61a6bac39bf12a0c-wrapper,								/* app					errorscreen							*/
-#app-mount ._960e4207cea8323e-bg,									/* app					background							*/
+#app-mount ._960e4207cea8323e-bg,								/* app					background							*/
 #app-mount ._960e4207cea8323e-layer,								/* layer				container							*/
 #app-mount .ef3116c2da186559-itemsContainer,							/* guilds				inner (custom theme)						*/
 #app-mount .f37cb1984c371ee5-container,								/* channels				header								*/
 #app-mount .f37cb1984c371ee5-header,								/* channels				header inner							*/
-#app-mount ._2637a2609f343032-container,								/* channels				inner								*/
+#app-mount ._2637a2609f343032-container,							/* channels				inner								*/
 #app-mount .e6b7699ce8339e1c-privateChannels,							/* dmchannels												*/
 #app-mount ._99e7cad8d4c55236-scroller,								/* dmchannels				inner								*/
-#app-mount .directoryContainer_da3f59,							/* server app directory											*/
-#app-mount ._5e434347c823b592-panels > *,								/* account/voice			inner								*/
+#app-mount .directoryContainer_da3f59,								/* server app directory											*/
+#app-mount ._5e434347c823b592-panels > *,							/* account/voice			inner								*/
 #app-mount .f75fb00fb7356cbe-chat,								/* chat					container							*/
-#app-mount .f75fb00fb7356cbe-chatContent,								/* chat					channel								*/
+#app-mount .f75fb00fb7356cbe-chatContent,							/* chat					channel								*/
 #app-mount .f369dba7416c67f0-container,								/* chat					forums								*/
-#app-mount ._8946359d8adb1488-container,								/* chat					boosts								*/
+#app-mount ._8946359d8adb1488-container,							/* chat					boosts								*/
 #app-mount ._8946359d8adb1488-contentContainer,							/* chat					boosts inner							*/
-#app-mount ._0b56311ebc6682e2-container,								/* chat					search								*/
-#app-mount .container_c2efea,								/* chat					search inner							*/
-#app-mount ._01ae244280823725-container,								/* chat					thread sidebar							*/
-#app-mount ._6c79861fd96f56b1-wrapper,								/* chat					messages loading						*/
+#app-mount ._0b56311ebc6682e2-container,							/* chat					search								*/
+#app-mount .container_c2efea,									/* chat					search inner							*/
+#app-mount ._01ae244280823725-container,							/* chat					thread sidebar							*/
+#app-mount .d852db00c0588eb9-wrapper,								/* chat					messages loading						*/
 #app-mount ._41ed70e52483df6d-pageBody,								/* chat					channel search							*/
-#app-mount ._01d5c7193c9f2ff4-noChannel,								/* nochannel												*/
+#app-mount ._01d5c7193c9f2ff4-noChannel,							/* nochannel												*/
 #app-mount .c8ffbb79449f399c-container,								/* members				container							*/
 #app-mount .c8ffbb79449f399c-members,								/* members												*/
 #app-mount .c8ffbb79449f399c-members > div,							/* members				content								*/
 #app-mount .a154bf72ce6f230c-content,								/* unavailable												*/
-#app-mount ._133bf5eea8e33a34-container,								/* peoples												*/
+#app-mount ._133bf5eea8e33a34-container,							/* peoples												*/
 #app-mount ._133bf5eea8e33a34-tabBody,								/* peoples				tab body							*/
-#app-mount ._7d20cf18f8a2784c-container,								/* peoples				activity list							*/
+#app-mount ._7d20cf18f8a2784c-container,							/* peoples				activity list							*/
 #app-mount .ca1a02dcad190ff8-mainPageScroller,							/* nitro												*/
 #app-mount .ca1a02dcad190ff8-allPerksScroller,							/* nitro												*/
 #app-mount .f07d62e29a48ceee-applicationStore,							/* nitro												*/
-#app-mount ._0920e02cc8fc7b7b-homeWrapper,								/* nitro												*/
-#app-mount .f48ee41a9dd2c078-containerBackground,							/* nitro												*/
+#app-mount ._0920e02cc8fc7b7b-homeWrapper,							/* nitro												*/
+#app-mount .f48ee41a9dd2c078-containerBackground,						/* nitro												*/
 #app-mount .f48ee41a9dd2c078-scroller,								/* nitro				scroller							*/
 #app-mount ._6db1d32c47b6ad72-shop,								/* shop													*/
-#app-mount .pageWrapper__6db1d,								/* shop					buyall								*/
-#app-mount ._084152b107f71237-shopScroll,								/* shop					scroller							*/
+#app-mount .pageWrapper__6db1d,									/* shop					buyall								*/
+#app-mount ._084152b107f71237-shopScroll,							/* shop					scroller							*/
 #app-mount ._084152b107f71237-shop,								/* shop					inner								*/
 #app-mount .dc2e0e7839a6713a-containerSidenav,							/* family control											*/
-#app-mount ._551b0894962ff66f-container,								/* discovery				list								*/
+#app-mount ._551b0894962ff66f-container,							/* discovery				list								*/
 #app-mount ._23746ba3de9452d8-scroller,								/* discovery				apps/quests							*/
 #app-mount .cbd375bef7ac11dc-container,								/* discovery				guilds								*/
 #app-mount ._09fdea2f9fdd085e-pageContainer,							/* unihub												*/
 #app-mount ._99f8cc7ad4790ce9-scrollerBase,							/* scroller												*/
-#app-mount ._23e6b439306f125a-standardSidebarView,							/* settings												*/
+#app-mount ._23e6b439306f125a-standardSidebarView,						/* settings												*/
 #app-mount ._23e6b439306f125a-contentRegion,							/* settings				content								*/
 #app-mount ._23e6b439306f125a-contentRegionScroller {						/* settings				content scroller						*/
 	background: transparent !important;
@@ -1328,18 +1328,18 @@ body:has(#app-mount)::after {
 	box-shadow: none;
 }
 ._5126c0cd07f243a0-message,									/* message				container							*/
-._36d072eab2b2e737-messagesWrapper .c19a557985eb7793-wrapper,						/* message				upload placeholder						*/
+._36d072eab2b2e737-messagesWrapper .c19a557985eb7793-wrapper,					/* message				upload placeholder						*/
 .card_d4f6c7 .c19a557985eb7793-wrapper,								/* message				home								*/
 .fc817765600a960a-wrapper,									/* message				loading 							*/
 ._957962c2bd49881b-message,									/* message				mention popout							*/
 ._1ccd1ba5cb2270c2-message,									/* message				inbox popout							*/
-.fd14e024a43b9049-message .c19a557985eb7793-wrapper,							/* message				settings preview						*/
+.fd14e024a43b9049-message .c19a557985eb7793-wrapper,						/* message				settings preview						*/
 .e8b59c4b335dd2fc-messageGroupCozy,								/* message				pin popout							*/
-._02a39cb2980ceaaf-message .c19a557985eb7793-wrapper {							/* message				searchpage							*/
+._02a39cb2980ceaaf-message .c19a557985eb7793-wrapper {						/* message				searchpage							*/
 	background-color: rgba(var(--transparencycolor_v), var(--messagetransparency_v)) !important;
 	contain: unset;
 }
-._02a39cb2980ceaaf-message .c19a557985eb7793-wrapper {							/* message				searchpage							*/
+._02a39cb2980ceaaf-message .c19a557985eb7793-wrapper {						/* message				searchpage							*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--messagetransparency_v) * 0.8)) !important;
 }
 #app-mount ._5126c0cd07f243a0-message {
@@ -1425,7 +1425,7 @@ body:has(#app-mount)::after {
 	top: 2px;
 	left: calc(-70px * var(--usechatbubbles) + 16px);
 }
-#app-mount .c19a557985eb7793-compact .c19a557985eb7793-avatar {						/* message				compact avatar							*/
+#app-mount .c19a557985eb7793-compact .c19a557985eb7793-avatar {					/* message				compact avatar							*/
 	position: relative;
 	top: .18em;
 	left: calc(-70px * var(--usechatbubbles) + 16px);
@@ -1576,7 +1576,7 @@ body:has(#app-mount)::after {
 }
 
 .c19a557985eb7793-cozy .c19a557985eb7793-header::after,							/* message				container header						*/
-.fc817765600a960a-cozy .fc817765600a960a-header::after {							/* message				loading header							*/
+.fc817765600a960a-cozy .fc817765600a960a-header::after {						/* message				loading header							*/
 	content: "";
 	position: absolute;
 	top: 12px;
@@ -1646,8 +1646,8 @@ body:has(#app-mount)::after {
 .fc817765600a960a-cozy .fc817765600a960a-header {
 	overflow: visible;
 }
-#app-mount ._5126c0cd07f243a0-cozyMessage,								/* message				container cozy							*/
-#app-mount ._36d072eab2b2e737-messagesWrapper .c19a557985eb7793-cozy,					/* message				upload placeholder cozy						*/
+#app-mount ._5126c0cd07f243a0-cozyMessage,							/* message				container cozy							*/
+#app-mount ._36d072eab2b2e737-messagesWrapper .c19a557985eb7793-cozy,				/* message				upload placeholder cozy						*/
 #app-mount .card_d4f6c7 .c19a557985eb7793-cozy,							/* message				home cozy							*/
 #app-mount .fc817765600a960a-cozy {								/* message				loading cozy							*/
 	margin-left: calc(80px * var(--usechatbubbles));
@@ -1690,19 +1690,16 @@ body:has(#app-mount)::after {
 	border-color: var(--background-base-lower);
 }
 
-#app-mount ._5126c0cd07f243a0-message ._740174f3d6a2c8fe-channelTextArea {					/* message				editor								*/
+#app-mount ._5126c0cd07f243a0-message ._740174f3d6a2c8fe-channelTextArea {			/* message				editor								*/
 	border: none;
 }
 
-#app-mount ._6c79861fd96f56b1-wrapper {								/* message				loading wrapper							*/
-	background: transparent;
-}
 .fc817765600a960a-avatar {									/* message				loading avatar							*/
 	background: rgba(var(--transparencycolor_v), .4);
 	opacity: 1 !important;
 }
 .fc817765600a960a-attachment,									/* message				loading attachment						*/
-.fc817765600a960a-blob {										/* message				loading blob							*/
+.fc817765600a960a-blob {									/* message				loading blob							*/
 	background: rgb(var(--accentcolor_v));
 }
 
