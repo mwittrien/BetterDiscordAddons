@@ -3960,14 +3960,14 @@ body:has(#app-mount)::after {
 
 /* ----		13.3.		UPLOADMODAL					---- */
 
-#app-mount .uploadModal_b78547 {							/* modal				container							*/
+#app-mount .dae93f2399f3b47d-uploadModal {							/* modal				container							*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	position: relative;
 	border-radius: 10px;
 }
-.uploadModal_b78547::before,
-.uploadModal_b78547::after {
+.dae93f2399f3b47d-uploadModal::before,
+.dae93f2399f3b47d-uploadModal::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -3980,11 +3980,11 @@ body:has(#app-mount)::after {
 	pointer-events: none;
 	z-index: -1;
 }
-.uploadModal_b78547::before {
+.dae93f2399f3b47d-uploadModal::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
-.uploadModal_b78547::after {
+.dae93f2399f3b47d-uploadModal::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.2));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
@@ -3996,14 +3996,14 @@ body:has(#app-mount)::after {
 .b7854763c4a57c63-uploadModalIn .b7854763c4a57c63-uploadDropModal .b7854763c4a57c63-inner .b7854763c4a57c63-instructions {
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.uploadModal_b78547 .b7854763c4a57c63-inner {							/* modal				channeltextarea							*/
+.dae93f2399f3b47d-uploadModal .b7854763c4a57c63-inner {							/* modal				channeltextarea							*/
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-.uploadModal_b78547 .footer_b78547 {							/* modal				footer								*/
+.dae93f2399f3b47d-uploadModal .footer_b78547 {							/* modal				footer								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	box-shadow: none;
 }
-.uploadModal_b78547 .b7854763c4a57c63-inner .file_b78547 .b7854763c4a57c63-icon.b7854763c4a57c63-image {
+.dae93f2399f3b47d-uploadModal .b7854763c4a57c63-inner .file_b78547 .b7854763c4a57c63-icon.b7854763c4a57c63-image {
 	box-shadow: 0 2px 8px rgba(var(--transparencycolor_v), .4);
 }
 
