@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.0
+ * @version 4.4.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4540,7 +4540,7 @@ module.exports = (_ => {
 						else notFoundAndLazyloaded = true;
 					}
 					if (notFoundAndLazyloaded) {
-						className = `${DiscordClasses[item][1]}_${InternalData.LazyloadedClassModules[DiscordClasses[item][0]]}`;
+						className = `${InternalData.LazyloadedClassModules[DiscordClasses[item][0]]}-${DiscordClasses[item][1]}`;
 						DiscordClassModules[DiscordClasses[item][0]] = Object.assign({}, DiscordClassModules[item], {[DiscordClasses[item][1]]: className});
 					}
 					else for (let prop of [DiscordClasses[item][1]].flat()) {
