@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.9
+ * @version 4.4.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4516,7 +4516,7 @@ module.exports = (_ => {
 				BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 				Internal.getDiscordClass = function (item, selector) {
 					let className, fallbackClassName, notFoundAndLazyloaded = false;
-					className = fallbackClassName = Internal.DiscordClassModules.BDFDB.BDFDBundefined + "_" + Internal.generateClassId();
+					className = fallbackClassName = Internal.generateClassId() + "-" + Internal.DiscordClassModules.BDFDB.BDFDBundefined;
 					if (DiscordClasses[item] === undefined) {
 						BDFDB.LogUtils.warn([item, "not found in DiscordClasses"]);
 						return className;
@@ -4532,7 +4532,7 @@ module.exports = (_ => {
 						}
 						else notFoundAndLazyloaded = true;
 					}
-					else if ([DiscordClasses[item][1]].flat().every(prop => Internal.DiscordClassModules[DiscordClasses[item][0]][prop] === undefined && !(JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`)) || "").split("\"")[0])) {
+					else if ([DiscordClasses[item][1]].flat().every(prop => Internal.DiscordClassModules[DiscordClasses[item][0]][prop] === undefined && !(JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`) || n.endsWith(`-${prop}`)) || "").split("\"")[0])) {
 						if (!InternalData.LazyloadedClassModules || !InternalData.LazyloadedClassModules[DiscordClasses[item][0]]) {
 							BDFDB.LogUtils.warn([DiscordClasses[item][1], "not found in", DiscordClasses[item][0], "in DiscordClassModules"]);
 							return className;
@@ -4544,7 +4544,7 @@ module.exports = (_ => {
 						DiscordClassModules[DiscordClasses[item][0]] = Object.assign({}, DiscordClassModules[item], {[DiscordClasses[item][1]]: className});
 					}
 					else for (let prop of [DiscordClasses[item][1]].flat()) {
-						className = Internal.DiscordClassModules[DiscordClasses[item][0]][prop] || (JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`)) || "").split("\"")[0];
+						className = Internal.DiscordClassModules[DiscordClasses[item][0]][prop] || (JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`) || n.endsWith(`-${prop}`)) || "").split("\"")[0];
 						if (className) break;
 						else className = fallbackClassName;
 					}
@@ -4557,7 +4557,7 @@ module.exports = (_ => {
 				const generationChars = "0123456789abcdef".split("");
 				Internal.generateClassId = function () {
 					let id = "";
-					while (id.length < 6) id += generationChars[Math.floor(Math.random() * generationChars.length)];
+					while (id.length < 16) id += generationChars[Math.floor(Math.random() * generationChars.length)];
 					return id;
 				};
 				BDFDB.disCN = new Proxy({}, {
