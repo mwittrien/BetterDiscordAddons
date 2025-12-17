@@ -1023,12 +1023,14 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS_emojiinputbuttoncontainer] {
 	display: flex;
-	align-items: center;
+	inset-inline-start: 0;
 	position: absolute;
-	left: 0;
 	top: 0;
-	margin: 0 10px;
+	-webkit-margin-end: 4px;
+	align-items: center;
 	height: 100%;
+	margin-inline-end: 4px;
+	z-index: 1;
 }
 [REPLACE_CLASS_emojiinputbuttonemoji] {
 	width: var(--custom-status-modal-emoji-size, var(--custom-emoji-sprite-size, 22px));
