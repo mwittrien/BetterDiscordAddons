@@ -9,12 +9,12 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/WhatsApp/symbols.css);
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/WhatsApp/flags.css);
 @namespace xlink 'http://www.w3.org/1999/xlink';
-.sprite__04eed {
+._04eede68d145ae81-sprite {
 	-webkit-mask: none !important;
 	background-color: transparent !important;
 	background-position: var(--custom-emoji-sprite-bg-position) !important;
 	background-size: var(--custom-emoji-sprite-bg-size) !important;
 }
-.spriteGreyscale__04eed {
+._04eede68d145ae81-spriteGreyscale {
 	filter: grayscale(1) !important;
 }
