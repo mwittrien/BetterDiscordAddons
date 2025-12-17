@@ -6827,12 +6827,12 @@ input._0ed4fc708cdbac0d-input:hover:not(:focus) {
 /* ----		15.5.		TAGS						---- */
 
 ._10651c5cfe637db6-chipletContainerInner:not([style]),						/* clantag				regular								*/
-._82f0793afa59e5dc-botTagRegular:not([style]) {							/* bottag				regular								*/
+._82f0793afa59e5dc-botTagRegular:not([style]):not(._82f0793afa59e5dc-botTagOP) {		/* bottag				regular								*/
 	background-color: rgb(var(--accentcolor_v)) !important;
 	text-shadow: 1px 1px var(--textshadow_v);
 }
 ._10651c5cfe637db6-chipletContainerInner:not([style]) svg,
-._82f0793afa59e5dc-botTagRegular:not([style]) svg {
+._82f0793afa59e5dc-botTagRegular:not([style]):not([style]):not(._82f0793afa59e5dc-botTagOP) svg {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 
