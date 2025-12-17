@@ -371,7 +371,6 @@ body,											/* body													*/
 #app-mount ._2637a2609f343032-container,							/* channels				inner								*/
 #app-mount .e6b7699ce8339e1c-privateChannels,							/* dmchannels												*/
 #app-mount ._99e7cad8d4c55236-scroller,								/* dmchannels				inner								*/
-#app-mount .directoryContainer_da3f59,								/* server app directory											*/
 #app-mount ._5e434347c823b592-panels > *,							/* account/voice			inner								*/
 #app-mount .f75fb00fb7356cbe-chat,								/* chat					container							*/
 #app-mount .f75fb00fb7356cbe-chatContent,							/* chat					channel								*/
@@ -379,7 +378,6 @@ body,											/* body													*/
 #app-mount ._8946359d8adb1488-container,							/* chat					boosts								*/
 #app-mount ._8946359d8adb1488-contentContainer,							/* chat					boosts inner							*/
 #app-mount ._0b56311ebc6682e2-container,							/* chat					search								*/
-#app-mount .container_c2efea,									/* chat					search inner							*/
 #app-mount ._01ae244280823725-container,							/* chat					thread sidebar							*/
 #app-mount .d852db00c0588eb9-wrapper,								/* chat					messages loading						*/
 #app-mount ._41ed70e52483df6d-pageBody,								/* chat					channel search							*/
@@ -398,9 +396,10 @@ body,											/* body													*/
 #app-mount .f48ee41a9dd2c078-containerBackground,						/* nitro												*/
 #app-mount .f48ee41a9dd2c078-scroller,								/* nitro				scroller							*/
 #app-mount ._6db1d32c47b6ad72-shop,								/* shop													*/
-#app-mount .pageWrapper__6db1d,									/* shop					buyall								*/
-#app-mount ._084152b107f71237-shopScroll,							/* shop					scroller							*/
+#app-mount ._1feb0fca744244ab-page,								/* shop					buyall								*/
+#app-mount ._1feb0fca744244ab-shopScroll,							/* shop					buyall scroller							*/
 #app-mount ._084152b107f71237-shop,								/* shop					inner								*/
+#app-mount ._084152b107f71237-shopScroll,							/* shop					scroller							*/
 #app-mount .dc2e0e7839a6713a-containerSidenav,							/* family control											*/
 #app-mount ._551b0894962ff66f-container,							/* discovery				list								*/
 #app-mount ._23746ba3de9452d8-scroller,								/* discovery				apps/quests							*/
