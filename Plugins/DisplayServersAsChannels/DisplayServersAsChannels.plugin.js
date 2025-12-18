@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.9
+ * @version 2.0.0
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -97,6 +97,7 @@ module.exports = (_ => {
 				
 				this.css = `
 					${BDFDB.dotCN.guildlistitemtooltip},
+					${BDFDB.dotCN.tooltip}:has(${BDFDB.dotCN.guildlistitemtooltip}),
 					${BDFDB.dotCN._displayserversaschannelsname} ~ ${BDFDB.dotCN.guildfolderbuttoninner} {
 						display: none !important;
 					}
