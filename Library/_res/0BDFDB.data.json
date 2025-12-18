@@ -1055,7 +1055,6 @@
 			"textScroller": "textScroller_72a89f",
 			"themedPopout": "themedPopout_e2c0d0",
 			"tooltipCustom": "tooltipCustom_dc56aa",
-			"tooltipListItem": "tooltipListItem_dc56aa",
 			"tooltipNote": "note_dc56aa",
 			"tooltipRowExtra": "extraRow_dc56aa"
 		},
@@ -3145,7 +3144,6 @@
 		"tooltipguildnametext": ["TooltipGuild", "guildNameText"],
 		"tooltipguildnametextlimitedsize": ["TooltipGuild", "guildNameTextLimitedSize"],
 		"tooltipleft": ["Tooltip", "tooltipLeft"],
-		"tooltiplistitem": ["BDFDB", "tooltipListItem"],
 		"tooltipmutetext": ["TooltipGuild", "muteText"],
 		"tooltipmutetextwithactivity": ["TooltipGuild", "muteTextWithActivity"],
 		"tooltipnote": ["BDFDB", "tooltipNote"],
