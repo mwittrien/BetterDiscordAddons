@@ -414,21 +414,21 @@ body,											/* body													*/
 #app-mount .a3002d7de5be5280-app {
 	color: transparent;
 }
-#app-mount .f75fb00fb7356cbe-chat.f75fb00fb7356cbe-threadSidebarOpen,					/* chat					sidebar open							*/
+#app-mount .f75fb00fb7356cbe-chat.f75fb00fb7356cbe-threadSidebarOpen,				/* chat					sidebar open							*/
 #app-mount ._8946359d8adb1488-sidebarContainer,							/* chat					boosts sidebar							*/
-#app-mount ._01ae244280823725-container,								/* chat					forum sidepanel							*/
+#app-mount ._01ae244280823725-container,							/* chat					forum sidepanel							*/
 #app-mount .c8ffbb79449f399c-container,								/* members				container							*/
-#app-mount ._7641b507c6cdbb10-container,								/* members				threads								*/
-#app-mount ._7d20cf18f8a2784c-scroller {								/* peoples				activity scroller						*/
+#app-mount ._7641b507c6cdbb10-container,							/* members				threads								*/
+#app-mount ._7d20cf18f8a2784c-scroller {							/* peoples				activity scroller						*/
 	border: none;
 }
 
 #app-mount ._23e6b439306f125a-sidebarRegionScroller,						/* settings				sidebar								*/
-#app-mount .sidebar_e62d17 {								/* sidebarlist				sidebar								*/
+#app-mount .sidebar_e62d17 {									/* sidebarlist				sidebar								*/
 	background-color: rgba(var(--transparencycolor_v), calc(0.2 * (var(--transparencyalpha_v) / (var(--transparencyalpha_v) + var(--overflowfloat)))));
 }
 
-#app-mount {										/* app-mount												*/
+#app-mount {											/* app-mount												*/
 	background-color: rgba(var(--transparencycolor_v), var(--transparencyalpha_v));
 }
 ._5e434347c823b592-sidebar:after {
@@ -4198,14 +4198,14 @@ body:has(#app-mount)::after {
 .wrapper_eebc2d .canvas_a950cf {							/* login				movingshadow							*/
 	display: none;
 }
-#app-mount ._921c50dc4baa4b4f-authBox {								/* login				modal body							*/
+#app-mount ._921c50dc4baa4b4f-authBox {							/* login				modal body							*/
 	background-color: transparent;
 	box-shadow: none;
 	color: var(--text-muted);
 	position: relative;
 	overflow: hidden;
 }
-#app-mount ._921c50dc4baa4b4f-authBox.authBoxExpanded_dc6abe {					/* login				modal body expanded						*/
+#app-mount ._921c50dc4baa4b4f-authBox.authBoxExpanded_dc6abe {				/* login				modal body expanded						*/
 	background-color: rgba(var(--transparencycolor_v), .5);
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 }
@@ -4215,7 +4215,7 @@ body:has(#app-mount)::after {
 
 /* ----		13.8.		DOWNLOADAPPMODAL				---- */
 
-#app-mount {							/* modal				container							*/
+#app-mount .downloadApps__4a98 {							/* modal				container							*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor_v), .3), 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	position: relative;
