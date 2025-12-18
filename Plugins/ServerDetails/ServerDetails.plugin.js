@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -228,6 +228,8 @@ module.exports = (_ => {
 						flex-direction: column;
 						justify-content: center;
 						align-items: center;
+						max-width: unset;
+						word-wrap: unset;
 					}
 					${BDFDB.dotCNS._serverdetailstooltip + BDFDB.dotCN._serverdetailsicon} {
 						display: flex;
