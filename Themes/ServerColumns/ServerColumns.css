@@ -92,7 +92,8 @@ body.folderContentIsOpen_ac0584 ._421edea01cb52e16-titleBar._421edea01cb52e16-ty
 	margin-top: 8px !important;
 	margin-bottom: 8px !important;
 }
-.ef3116c2da186559-wrapper ._650eb104245d257b-listItem:first-child .ed9a5f50013e19ac-pill ~ ._918165dab2b1e10b-listItemWrapper {
+.ef3116c2da186559-wrapper ._650eb104245d257b-listItem:first-child .ed9a5f50013e19ac-pill ~ ._918165dab2b1e10b-listItemWrapper,
+.ef3116c2da186559-wrapper ._650eb104245d257b-listItem:first-child .ed9a5f50013e19ac-pill ~ span {
 	margin: 0 calc(1px * ((((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2) * (1 - var(--aligndms_v)))) 0 calc(1px * (((0 * var(--aligndms_v)) + ((((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2) * (1 - var(--aligndms_v)))))) !important;
 }
 .ef3116c2da186559-wrapper .e5445cbd3ad226f2-blobContainer,
