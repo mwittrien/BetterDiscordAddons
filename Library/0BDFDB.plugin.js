@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.2
+ * @version 4.4.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7538,10 +7538,12 @@ module.exports = (_ => {
 								return newMarker;
 							}
 							handleValueChange(value) {
-								let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
+								let newValue = value;
 								if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+								if (newValue < this.props.minValue) newValue = this.props.minValue;
+								else if (newValue > this.props.maxValue) newValue = this.props.maxValue;
 								this.props.defaultValue = this.props.value = newValue;
-								if (typeof this.props.onValueChange == "function") this.props.onValueChange(newValue, this);
+								if (typeof this.props.onValueChange == "function") this.props.onValueChange(BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, newValue), this);
 								BDFDB.ReactUtils.forceUpdate(this);
 							}
 							handleValueRender(value) {
@@ -7555,10 +7557,10 @@ module.exports = (_ => {
 							}
 							render() {
 								let value = this.props.value || this.props.defaultValue || 0;
-								if (!BDFDB.ArrayUtils.is(this.props.edges) || this.props.edges.length != 2) this.props.edges = [this.props.min || this.props.minValue || 0, this.props.max || this.props.maxValue || 100];
 								this.props.minValue = 0;
 								this.props.maxValue = 100;
-								let defaultValue = BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], value);
+								if (!BDFDB.ArrayUtils.is(this.props.edges) || this.props.edges.length != 2) this.props.edges = [this.props.min || this.props.minValue, this.props.max || this.props.maxValue];
+								let defaultValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
 								if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 								return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 									initialValue: defaultValue,
