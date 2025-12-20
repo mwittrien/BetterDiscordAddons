@@ -113,6 +113,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-left: 6px;
 }
 
+[REPLACE_CLASS_settingspanel] [REPLACE_CLASS_slider] {
+	min-width: 250px;
+}
 [REPLACE_CLASS_settingspanel] [REPLACE_CLASS_slidermark] {
 	line-height: 10px;
 }
