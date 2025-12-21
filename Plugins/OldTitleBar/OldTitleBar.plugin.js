@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.0
+ * @version 1.9.1
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -146,7 +146,8 @@ module.exports = (_ => {
 					],
 					after: [
 						"AuthWrapper",
-						"SettingsView"
+						"SettingsView",
+						"TitleBar"
 					]
 				};
 				
@@ -275,7 +276,8 @@ module.exports = (_ => {
 			}
 			
 			processTitleBar (e) {
-				titleBarButton = e.instance.props.trailing;
+				if (!e.returnvalue) titleBarButton = e.instance.props.trailing;
+				else e.returnvalue = null;
 			}
 			
 			processHeaderBarDiscovery (e) {
