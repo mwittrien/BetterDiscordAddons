@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.4
+ * @version 1.8.5
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -293,12 +293,18 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.ALL})`,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCNS.messagespopoutbutton + BDFDB.disCNS.messagespopoutbuttontertiary + BDFDB.disCN.messagespopoutbuttonsize32,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								nativeClass: true,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE,
-								width: 16,
-								height: 16
+							className: BDFDB.disCNS.messagespopoutbutton + BDFDB.disCNS.messagespopoutbuttonsm + BDFDB.disCN.messagespopoutbuttonsecondary,
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.messagespopoutbuttonchildrenwrapper,
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.messagespopoutbuttonchildren,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										nativeClass: true,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE,
+										width: 16,
+										height: 16
+									})
+								})
 							}),
 							onClick: _ => {
 								let clear = _ => {
