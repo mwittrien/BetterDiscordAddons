@@ -210,6 +210,8 @@
 	--background-modifier-selected: rgba(var(--backgroundaccent_v), .6) !important;
 	--background-modifier-accent: rgba(var(--textdark_v), .1) !important;
 	
+	--message-mentioned-background-default: rgba(var(--mentioncolor, --warningcolor_v), .05) !important;
+	--message-mentioned-background-hover: rgba(var(--mentioncolor, --warningcolor_v), .08) !important;
 	--background-mentioned: rgba(var(--mentioncolor, --warningcolor_v), .05) !important;
 	--background-mentioned-hover: rgba(var(--mentioncolor, --warningcolor_v), .08) !important;
 	--background-mentioned-accent: rgb(var(--mentioncolor, --warningcolor_v)) !important;
