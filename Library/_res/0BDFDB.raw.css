@@ -996,7 +996,8 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	gap: var(--spacing-8);
 	padding-bottom: var(--spacing-12);
 }
-[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer] {
+[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer],
+[REPLACE_CLASS_modalcontainer] [REPLACE_CLASS_tabbarcontainer] {
 	background: rgba(0, 0, 0, 0.1);
 	border: none;
 	border-radius: unset;
@@ -1004,13 +1005,16 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	padding: 12px 16px 0;
 	flex: 1 1 auto;
 }
-[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbar] {
+[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbar],
+[REPLACE_CLASS_modalcontainer] [REPLACE_CLASS_tabbar] {
 	border: none;
 }
-[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbaritem] {
+[REPLACE_CLASS_modal] [REPLACE_CLASS_tabbaritem],
+[REPLACE_CLASS_modalcontainer] [REPLACE_CLASS_tabbaritem] {
 	height: 29px;
 }
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer] {
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_modal] [REPLACE_CLASS_tabbarcontainer],
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_modalcontainer] [REPLACE_CLASS_tabbarcontainer] {
 	background: rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 }
