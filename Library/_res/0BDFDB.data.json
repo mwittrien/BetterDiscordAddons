@@ -2722,6 +2722,7 @@
 		"messagewrapper": ["MessageBody", "wrapper"],
 		"messagezalgo": ["MessageBody", "zalgo"],
 		"modal": ["Modal", "root"],
+		"modalbodyinner": ["ModalNew", "bodyInner"],
 		"modalcarouselmodal": ["NotFound", "carouselModal"],
 		"modalclose": ["Modal", "close"],
 		"modalchangelogmodal": ["BDFDB", "changeLogModal"],

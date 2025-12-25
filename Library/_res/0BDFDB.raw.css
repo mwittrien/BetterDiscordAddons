@@ -954,6 +954,9 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	padding-left: 16px;
 	padding-right: 8px;
 }
+[REPLACE_CLASS_modalbodyinner] {
+	overflow-x: hidden;
+}
 [REPLACE_CLASS_modaltextcontent] {
 	margin-bottom: 10px;
 }
