@@ -4,11 +4,13 @@
 	--columns: 		3;
 	--guildsize: 		50;
 	--guildgap: 		3;
+	--badgescale: 		1;
 	--aligndms: 		1;
 
 	--columns_v: 		var(--columns_s, var(--columns));
 	--guildsize_v: 		var(--guildsize_s, var(--guildsize));
 	--guildgap_v: 		var(--guildgap_s, var(--guildgap));
+	--badgescale_v: 	var(--badgescale_s, var(--badgescale));
 	--aligndms_v: 		var(--aligndms_s, var(--aligndms));
 }
 .visual-refresh .ef3116c2da186559-wrapper ._650eb104245d257b-listItem {
@@ -127,16 +129,16 @@ body.folderContentIsOpen_ac0584 ._421edea01cb52e16-titleBar._421edea01cb52e16-ty
 	height: calc(1px * var(--guildsize_v) * (54/50)) !important;
 }
 .ef3116c2da186559-wrapper .cc5dd25190031396-upperBadge ._2b1f52e43a8f1c02-base {
-	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50 * var(--badgescale_v))) !important;
 }
 .ef3116c2da186559-wrapper .upperLeftBadge_820890 ._2b1f52e43a8f1c02-base {
-	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(-3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50 * var(--badgescale_v))) !important;
 }
 .ef3116c2da186559-wrapper .cc5dd25190031396-lowerBadge ._2b1f52e43a8f1c02-base {
-	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+	transform: translate(calc(3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50 * var(--badgescale_v))) !important;
 }
 .ef3116c2da186559-wrapper .lowerLeftBadge_820890 ._2b1f52e43a8f1c02-base {
-	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50)) !important;
+	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50 * var(--badgescale_v))) !important;
 }
 .ef3116c2da186559-wrapper ._581051df43c5ebb6-wrapper {
 	top: calc(-5px * var(--guildsize_v)/50) !important;
