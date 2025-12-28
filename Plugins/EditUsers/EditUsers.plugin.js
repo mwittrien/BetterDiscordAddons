@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.9
+ * @version 5.1.0
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -182,10 +182,12 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.bottag + BDFDB.dotCN.emojiold} + span {
 						margin-left: 2px;
 					}
-					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernickname}:has(span) {
+					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernickname}:has(span),
+					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernicknamewithstyle}:has(span) {
 						text-decoration: unset !important;
 					}
-					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernickname} > span:first-child:hover {
+					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernickname} > span:first-child:hover,
+					${BDFDB.dotCNS.userheaderclickableusername + BDFDB.dotCN.userheadernicknamewithstyle} > span:first-child:hover {
 						text-decoration: underline !important;
 					}
 					${BDFDB.dotCN.message} span[style*="--edited-user-color-gradient"] ${BDFDB.dotCN.messageusername} {
@@ -533,10 +535,7 @@ module.exports = (_ => {
 				let change = false, guildId = null;
 				let tagClass = "";
 				if (e.instance.props.className) {
-					if (e.instance.props.className.indexOf(BDFDB.disCN.guildsettingsinviteusername) > -1) {
-						change = this.settings.places.guildSettings;
-					}
-					else if (e.instance.props.className.indexOf(BDFDB.disCN.peoplesdiscordtag) > -1) {
+					if (e.instance.props.className.indexOf(BDFDB.disCN.peoplesdiscordtag) > -1) {
 						change = this.settings.places.friendList;
 						tagClass = BDFDB.disCN.bottagnametag;
 					}
@@ -610,7 +609,15 @@ module.exports = (_ => {
 				}
 				else {
 					if (data.color1 || data.tag || data.tagEmoji) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userheadernickname]]});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["textClassName", BDFDB.disCN.userheadernicknamewithstyle]]});
+						if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(children[index].props.className, children[index].props.textClassName),
+							children: BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.DOMUtils.formatClassName(!data.color1 && BDFDB.LibraryModules.UserNameFontUtils.getClass(e.instance.props.user)),
+								children: children[index].props.userName
+							})
+						});
+						else [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userheadernickname]]});
 						if (index > -1) {
 							this.changeUserColor(children[index], e.instance.props.user.id);
 							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
@@ -1289,6 +1296,7 @@ module.exports = (_ => {
 					if (BDFDB.ObjectUtils.is(child.props.style)) delete child.props.style.color;
 					if (child.props[childProp].props && BDFDB.LibraryStores.AccessibilityStore.roleStyle != "dot") delete child.props[childProp].props.color;
 					child.props[childProp] = BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.LibraryModules.UserNameFontUtils.getClass(BDFDB.LibraryStores.UserStore.getUser(userId))),
 						style: {
 							color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
 						},
@@ -1788,7 +1796,7 @@ module.exports = (_ => {
 										ref: instance => {if (instance) colorPicker7 = instance;},
 										onColorChange: value => newData.color7 = value
 									})
-								}),
+								})
 							]
 						})
 					],
