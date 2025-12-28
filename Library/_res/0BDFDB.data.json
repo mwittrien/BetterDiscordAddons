@@ -264,6 +264,9 @@
 		"UserBannerUtils": {"strings": ["displayProfile:", "bannerSrc:", "new Image"], "exported": false, "value": "exports", "map": {
 			"getBanner": ["displayProfile:", "bannerSrc:", "new Image"]
 		}},
+		"UserNameFontUtils": {"strings": [".fontId", ".dnsFont"], "exported": false, "value": "exports", "map": {
+			"getClass": [".fontId", ".dnsFont"]
+		}},
 		"UserNameUtils": {"props": ["getNickname", "getName", "useName"]},
 		"UserPopoutUtils": {"strings": ["Cannot moderate user in DM or group DM", "onCloseContext"]},
 		"UserProfileUtils": {"props": ["fetchProfile", "getUser"]},
@@ -3185,6 +3188,7 @@
 		"userheaderbottag": ["UserHeaderUsername", "bot"],
 		"userheaderclickableusername": ["UserHeaderUsername", "clickableUsername"],
 		"userheadernickname": ["UserHeaderUsername", "nickname"],
+		"userheadernicknamewithstyle": ["UserHeaderUsername", "nicknameWithDisplayNameStyles"],
 		"userheadertag": ["UserHeaderUsername", "userTag"],
 		"userpopoutavatarclickable": ["UserPopoutHeader", "clickable"],
 		"userpopoutavatarhint": ["UserPopoutHeader", "avatarHint"],
