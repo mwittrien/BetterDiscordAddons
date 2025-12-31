@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.0.5
+ * @version 4.0.6
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -252,7 +252,7 @@ module.exports = (_ => {
 				}
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "CALL_UPDATE" && !e.methodArguments[0].ringing.includes(BDFDB.UserUtils.me.id)) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && (e.methodArguments[0].type == "CALL_DELETE" || e.methodArguments[0].type == "CALL_UPDATE" && !e.methodArguments[0].ringing.includes(BDFDB.UserUtils.me.id))) {
 						["call_ringing", "call_calling"].forEach(type => {
 							if (createdAudios[type]) createdAudios[type].stop();
 						});
