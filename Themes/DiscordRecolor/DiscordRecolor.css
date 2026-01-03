@@ -191,7 +191,7 @@
 	--bg-surface-overlay: rgb(var(--backgroundprimary_v)) !important;
 	--bg-surface-raised: rgb(var(--backgroundprimary_v)) !important;
 	
-	--app-border-frame: rgba(var(--framecolor_v)) !important;
+	--app-frame-border: rgba(var(--framecolor_v)) !important;
 	--border-faint: rgba(var(--backgroundaccent_v), .2) !important;
 	--border-subtle: rgba(var(--backgroundaccent_v), .4) !important;
 	--border-strong: rgba(var(--backgroundaccent_v), .6) !important;
