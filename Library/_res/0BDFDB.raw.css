@@ -579,7 +579,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding-left: 20px;
 }
 [REPLACE_CLASS_tableheadercell] {
-	color: var(--interactive-normal);
+	color: var(--text-subtle);
 	font-size: 12px;
 	font-weight: 600;
 	text-transform: uppercase;
@@ -818,7 +818,7 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_dateinputbuttonselected] [REPLACE_CLASS_svgicon],
 [REPLACE_CLASS_dateinputbuttonselected] [REPLACE_CLASS_svgicon]:hover {
-	color: var(--interactive-active);
+	color: var(--icon-strong);
 }
 [REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	border-color: var(--status-danger) !important;
@@ -873,10 +873,10 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	display: inline-block;
 }
 [REPLACE_CLASS_inputnumberbutton] {
-	border-bottom-color: var(--interactive-normal);
+	border-bottom-color: var(--icon-subtle);
 }
 [REPLACE_CLASS_inputnumberbutton]:hover {
-	border-bottom-color: var(--interactive-active);
+	border-bottom-color: var(--icon-strong);
 }
 [REPLACE_CLASS_inputnumberbuttondown] {
 	transform: rotate(180deg);
@@ -911,13 +911,13 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	align-items: center;
 }
 [REPLACE_CLASS_svgicon] {
-	color: var(--interactive-normal);
+	color: var(--icon-subtle);
 }
 [REPLACE_CLASS_svgicon]:hover {
-	color: var(--interactive-hover);
+	color: var(--icon-default);
 }
 [REPLACE_CLASS_svgicon]:active {
-	color: var(--interactive-active);
+	color: var(--icon-strong);
 }
 
 [REPLACE_CLASS_listrowwrapper] [REPLACE_CLASS_listavatar] {
@@ -1069,7 +1069,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 [REPLACE_CLASS_emojiinputclearicon] {
 	width: 16px;
 	height: 16px;
-	color: var(--interactive-normal)
+	color: var(--icon-subtle)
 }
 
 [REPLACE_CLASS_modalmini] {
@@ -1634,18 +1634,18 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	transform: translateX(7px);
 }
 [REPLACE_CLASS_colorpickergradientbutton] {
-	color: var(--interactive-normal);
+	color: var(--icon-subtle);
 	opacity: 0.6;
 	margin-left: 6px;
 	transition: color 200ms ease, opactity 200ms ease;
 }
 [REPLACE_CLASS_colorpickergradientbutton]:hover {
-	color: var(--interactive-hover);
+	color: var(--icon-default);
 	opacity: 1;
 }
 [REPLACE_CLASS_colorpickergradientbutton][REPLACE_CLASS_colorpickergradientbuttonenabled],
 [REPLACE_CLASS_colorpickergradientbutton][REPLACE_CLASS_colorpickergradientbuttonenabled]:hover {
-	color: var(--interactive-active);
+	color: var(--icon-strong);
 	opacity: 1;
 }
 
