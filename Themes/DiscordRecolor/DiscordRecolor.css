@@ -146,7 +146,6 @@
 	--input-foreground-default: var(--text-subtle) !important;
 	--input-border-default: rgba(0,0,0, .3) !important;
 	
-	--header-primary: rgb(var(--textbrightest_v)) !important;
 	--text-strong: rgb(var(--textbrightest_v)) !important;
 	--text-default: rgb(var(--textbrighter_v)) !important;
 	--text-subtle: rgb(var(--textbright)) !important;

@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.4
+ * @version 1.5.5
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -108,7 +108,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
 							className: BDFDB.disCN.userprofilesectionheading,
 							variant: "text-xs/semibold",
-							style: {color: "var(--header-primary)"},
+							style: {color: "var(--text-strong)"},
 							color: null,
 							children: _this.labels.last_message
 						}),
@@ -164,7 +164,7 @@ module.exports = (_ => {
 					${BDFDB.dotCN._lastmessagedateicon} {
 						width: 16px;
 						height: 16px;
-						color: var(--interactive-normal);
+						color: var(--text-default);
 					}
 				`;
 			}
