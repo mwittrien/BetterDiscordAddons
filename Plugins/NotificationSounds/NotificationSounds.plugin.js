@@ -182,7 +182,7 @@ module.exports = (_ => {
 						globalVolume:		{value: 100,	description: "Global Notification Sounds Volume"}
 					},
 					toggles: {
-						playIfMuted: 		{value: false,	description: "Play Sounds Of Muted Channels/Servers"}
+						playIfChannelIsMuted: 		{value: false,	description: "Play Sounds Of Muted Channels/Servers"}
 					}
 				};
 				
@@ -270,7 +270,7 @@ module.exports = (_ => {
 							const isThread = BDFDB.ChannelUtils.isThread(channel);
 							const isCurrentAndFocused = isCurrent && document.hasFocus();
 							
-							if (!toggles.playIfMuted) {
+							if (!toggles.playIfChannelIsMuted) {
 								if ((isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id)) || (!isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id))) return;
 							}
 							
