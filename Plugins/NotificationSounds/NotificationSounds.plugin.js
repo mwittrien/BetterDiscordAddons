@@ -182,7 +182,7 @@ module.exports = (_ => {
 						globalVolume:		{value: 100,	description: "Global Notification Sounds Volume"}
 					},
 					toggles: {
-						playIfMuted: 		{value: false,	description: "Play Sounds If Muted"}
+						playIfMuted: 		{value: false,	description: "Play Sounds Of Muted Channels/Servers"}
 					}
 				};
 				
