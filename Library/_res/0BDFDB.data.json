@@ -292,7 +292,7 @@
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
 		"TextArea": {"strings": ["onKeyDown", "defaultDirty"]},
-		"TextInput": {"strings": ["onFocus", "defaultValue", "editable"]},
+		"TextInput": {"strings": ["onFocus", "defaultValue", "editable", "errorMessage"]},
 		"TooltipContainer": {"strings": ["Tooltip cannot find DOM node", "shouldShowTooltip", "clickable"]}
 	},
 	"LibraryComponents": {
@@ -336,32 +336,28 @@
 		"ImageModalOuter": {"strings": ["MEDIA_VIEWER", "numMediaItem", "LIGHTBOX"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
-			"LayerContainer": [".layerContainer", "missing parent"]
+			"LayerContainer": ["missing parent"]
 		}},
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
 		"Mask": {"props": "Masks"},
 		"Menu": {"strings": ["\"flexible\"", "onFocus:", "menuItemProps"]},
 		"MessageGroup": {"strings": ["animateAvatar:", "getMessageByReference"]},
 		"MessagesPopoutComponents": {"strings": ["canCloseAllMessages", "loadingMore"], "exported": false, "value": "exports", "map": {
-			"EmptyState": [".emptyPlaceholder", "backgroundImage"],
-			"Header": [".header", "heading"],
+			"EmptyState": ["backgroundImage"],
+			"Header": ["TEXT", "title"],
 			"Popout": ["renderHeader", "renderEmptyState"]
 		}},
 		"ModalComponents": {"strings": ["HORIZONTAL_REVERSE", "withCircleBackground", "headerIdIsManaged"], "exported": false, "value": "exports", "map": {
-			"Modal": [".content", "children"],
-			"ModalCloseButton": ["withCircleBackground", "closeIcon"],
-			"ModalFooter": ["HORIZONTAL_REVERSE", "footerSeparator"],
+			"ModalCloseButton": ["withCircleBackground", "BLANK"],
 			"ModalHeader": ["headerIdIsManaged", "Direction.HORIZONTAL"],
-			"ModalContent": ["...r", "scrollbarRef"],
 			"ModalRoot": ["fullscreenOnMobile", "ENTERING"],
 			"ModalSize": ["\"DYNAMIC\"", "\"LARGE\""]
 		}},
 		"Paginator": {"strings": ["totalPageCount", "selectedPage", "TRANSPARENT"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"], "funcStrings": ["{}"]},
-		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"], "funcStrings": ["impressionName"]},
-		"PrivateChannelItems": {"strings": ["getRecipientId", "avatarWithText"], "exported": false, "value": "exports", "map": {
-			"DirectMessage": ["getUser", "getRecipientId"],
-			"LinkButton": [".apply(this"]
+		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"]},
+		"PrivateChannelItems": {"strings": ["getRecipientId", "interactiveClassName", "avatar:"], "exported": false, "value": "exports", "map": {
+			"DirectMessage": ["getUser", "getRecipientId"]
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "getScrollerState"]},
 		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "floor"]},
@@ -373,13 +369,12 @@
 			"Status": ["status", "mask"],
 			"Types": ["\"OFFLINE\"", "\"ONLINE\""]
 		}},
-		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"], "funcStrings": ["defaultColor"]},
+		"Text": {"strings": ["lineClamp:", "fontScaling"], "funcStrings": ["fontScaling"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
 		"UserBadges": {"strings": ["QUEST_CONTENT_VIEWED", "\"PRESS_BADGE\"", "badgeClassName"]},
 		"UserPopout": {"strings": ["t.isNonUserBot()", "onHide", "user:"]},
-		"UserPopoutItem": {"strings": [".menuItemLabel", ".menuItemInner", "renderSubmenu"]},
-		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
-		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
+		"UserPopoutItem": {"strings": ["userId", "renderSubmenu"]},
+		"UserSummaryItem": {"strings": ["popoutUserId:", "dimEmptyUsers"]},
 		"VideoForwardRef": {"strings": ["HTMLSourceElement", "autoPlay"], "funcStrings": ["externalRef"]}
 	},
 	"ContextMenuTypes": {
