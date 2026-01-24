@@ -442,7 +442,7 @@
 		"DirectMessageAddPopout": {"strings": [".COPY_INSTANT_INVITE", ".handleInviteUsers=", ".selectedUsers", ".mobileToolsContainer"]},
 		"DirectMessageAddPopoutRow": {"strings": [".weightMedium", ".friendSelected", ".friendWrapper"]},
 		"DiscordTag": {"strings": ["hidePersonalInformation", "isVerifiedBot", "botType"]},
-		"Embed": {"strings": ["gridContainer", "renderEmbedContent", "hasThumbnail"]},
+		"Embed": {"strings": ["shouldShowStaticPlaceholder", "renderEmbedContent", "iconProxyURL"]},
 		"EmojiPicker": {"strings": ["emojiSize", "isBurstReactionPicker", ",emojiPaddingHorizontal:"]},
 		"EmojiPickerHeader": {"strings": ["iversitySelector", "headerClassName", "onBurstReaction"]},
 		"EmojiPickerListRow": {"strings": ["emojiSize", "surrogateCodePoint", "showEmojiFavoriteTooltip"]},
