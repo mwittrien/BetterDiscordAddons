@@ -34,6 +34,7 @@
 	--checkbox-border-selected-default: rgb(var(--accentcolor_v));
 	
 	--input-focused-border: rgb(var(--accentcolor_v));
+	--border-focus: rgb(var(--accentcolor_v));
 	
 	--text-brand: rgb(var(--accentcolor_v));
 	--text-link: rgb(var(--linkcolor_v));
