@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.8
+ * @version 1.3.9
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -111,29 +111,49 @@ module.exports = (_ => {
 			render() {
 				const enabled = this.props.forceState != undefined ? this.props.forceState : BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
 				delete this.props.forceState;
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutItem, {
-					label: BDFDB.LanguageUtils.LanguageStrings.GAME_ACTIVITY,
-					id: BDFDB.ContextMenuUtils.createItemId(_this.name, "activity-toggle"),
-					icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						name: BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD,
-						nativeClass: true,
-						width: 16,
-						height: 16
-					}),
-					onClick: _ => {
-						_this.toggle();
-						if (toggleButton) BDFDB.ReactUtils.forceUpdate(toggleButton);
-					},
-					hint: enabled ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCN.menucolordefault,
-						background: BDFDB.disCN.menucheckbox,
-						foreground: BDFDB.disCN.menucheck,
-						name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKBOX,
-						style: {background: "unset"}
-					}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCN.menucolordefault,
-						name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKBOX_EMPTY,
-						style: {background: "unset"}
+				return BDFDB.ReactUtils.createElement("li", {
+					className: BDFDB.disCN.userpopoutmenuitem,
+					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.userpopoutmenuiteminner,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN.userpopoutmenuitemcontent,
+								onClick: _ => {
+									_this.toggle();
+									if (toggleButton) BDFDB.ReactUtils.forceUpdate(toggleButton);
+								},
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.userpopoutmenuitemicon,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD,
+										nativeClass: true,
+										width: 16,
+										height: 16
+									}),
+									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.userpopoutmenuitemlabel,
+										children: BDFDB.ReactUtils.createElement("div", {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+												className: BDFDB.disCN.userpopoutmenuitemlabel,
+												size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_14,
+												children: BDFDB.LanguageUtils.LanguageStrings.GAME_ACTIVITY
+											})
+										})
+									})
+								]
+							}),
+							enabled ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.menucolordefault,
+								background: BDFDB.disCN.menucheckbox,
+								foreground: BDFDB.disCN.menucheck,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKBOX,
+								style: {background: "unset"}
+							}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.menucolordefault,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKBOX_EMPTY,
+								style: {background: "unset"}
+							})
+						]
 					})
 				});
 			}
@@ -270,22 +290,6 @@ module.exports = (_ => {
 				});
 			}
 			
-			processAccountPopout (e) {
-				if (!this.settings.general.showItem) return;
-				let userpopoutMenus = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutmenus]]});
-				if (!userpopoutMenus) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(userpopoutMenus, {props: [["id", "set-status"]]});
-				if (index == -1) return;
-				children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryModules.React.Fragment, {
-					children: [
-						BDFDB.ReactUtils.createElement(ActivityToggleItemComponent, {}),
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.userpopoutmenudivider
-						})
-					]
-				}));
-			}
-			
 			processAccount (e) {
 				if (!this.settings.general.showButton) return;
 				let insertButton = returnvalue => {
@@ -324,6 +328,18 @@ module.exports = (_ => {
 					}, "Error in Children Render in Account!", this);
 				}
 				else insertButton(e.returnvalue.props.children);
+			}
+			
+			processAccountPopout (e) {
+				if (!this.settings.general.showItem) return;
+				let userpopoutMenus = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutmenus]]});
+				if (!userpopoutMenus) return;
+				userpopoutMenus.props.children.splice(1, 0, BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCNS.userpopoutoverlay + BDFDB.disCN.userpopoutmenuoverlay,
+					children: BDFDB.ReactUtils.createElement("ul", {
+						children: BDFDB.ReactUtils.createElement(ActivityToggleItemComponent, {})
+					})
+				}));
 			}
 			
 			activateKeybind () {
