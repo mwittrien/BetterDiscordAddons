@@ -346,19 +346,20 @@ html {
 		13.	APPLICATIONINSTALLATIONMODAL
 		14.	DISPATCHERROR
 	12.	POPOUTS
-		1.	USERPOPOUT
+		1.	CONTEXTMENU
+		2.	USERPOPOUT
 		2.	EMOJIPICKER
-		3.	SEARCHPOPOUT
-		4.	EVERYONEMENTION
-		5.	CHANNELFOLLOW
-		6.	STREAMPREVIEW
-		7.	ROLEOVERFLOW
-		8.	PUBLICGUILDANNOUNCEMENT
-		9.	QUICKSELECTPOPOUT
-		10.	RTCSTATUSPOPOUT
-		11.	PHONE-/EMAILVALIDATION
-		12.	WARNINGPOPOUT
-		13.	APPPICKER
+		4.	SEARCHPOPOUT
+		5.	EVERYONEMENTION
+		6.	CHANNELFOLLOW
+		7.	STREAMPREVIEW
+		8.	ROLEOVERFLOW
+		9.	PUBLICGUILDANNOUNCEMENT
+		10.	QUICKSELECTPOPOUT
+		11.	RTCSTATUSPOPOUT
+		12.	PHONE-/EMAILVALIDATION
+		13.	WARNINGPOPOUT
+		14.	APPPICKER
 	13.	BDSUPPORT
 	14.	POWERCORDSUPPORT
 	15.	PLUGINSUPPORT
@@ -2364,7 +2365,14 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background-image: linear-gradient(90deg, var(--background-base-lowest),var(--background-accent),var(--background-base-lowest));
 }
 
-/* ----		12.1.		USERPOPOUT					---- */
+/* ----		12.1.		CONTEXTMENU					---- */
+
+#app-mount .menu_c1e9c4,
+#app-mount .submenu_c1e9c4 {
+	max-height: 95vh;
+}
+
+/* ----		12.2.		USERPOPOUT					---- */
 
 #app-mount .outer_c0bea0 {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v), .6), 0 2px 10px 0 rgba(0,0,0, .2);
@@ -2409,7 +2417,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	fill: rgb(var(--textdarkest_v)) !important;
 }
 
-/* ----		12.2.		EMOJIPICKER					---- */
+/* ----		12.3.		EMOJIPICKER					---- */
 
 #app-mount .wrapper__29ebd {
 	color: var(--text-muted);
@@ -2462,7 +2470,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-strong);
 }
 
-/* ----		12.3.		SEARCHPOPOUT					---- */
+/* ----		12.4.		SEARCHPOPOUT					---- */
 
 #app-mount .searchAnswer_bd8186,
 #app-mount .searchFilter_bd8186 {
@@ -2563,7 +2571,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: rgba(var(--textbrightest_v), .3);
 }
 
-/* ----		12.4.		EVERYONEMENTION					---- */
+/* ----		12.5.		EVERYONEMENTION					---- */
 
 .contentWarningPopout_d2eed6 .animation_d2eed6 {
 	opacity: 0.6;
@@ -2573,7 +2581,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-muted);
 }
 
-/* ----		12.5.		CHANNELFOLLOW					---- */
+/* ----		12.6.		CHANNELFOLLOW					---- */
 
 #app-mount .header__5ca14 {
 	background: var(--background-base-lowest);
@@ -2589,7 +2597,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	-webkit-mask: url(https://discord.com/assets/e9661fbf5e8e3a2e1ac9.svg) center/cover no-repeat;
 }
 
-/* ----		12.6.		STREAMPREVIEW					---- */
+/* ----		12.7.		STREAMPREVIEW					---- */
 
 #app-mount .streamPreview__6da2d {
 	background-color: var(--background-base-lowest);
@@ -2601,7 +2609,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	background: rgba(0,0,0, .6);
 }
 
-/* ----		12.7.		ROLEOVERFLOW					---- */
+/* ----		12.8.		ROLEOVERFLOW					---- */
 
 #app-mount .overflowRolesPopoutHeaderText__48c1c {
 	color: var(--text-muted);
@@ -2619,7 +2627,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: 0 2px 10px 0 rgba(0,0,0, .2), 0 0 0 1px rgba(var(--backgroundtertiary_v), .6);
 }
 
-/* ----		12.8.		PUBLICGUILDANNOUNCEMENT				---- */
+/* ----		12.9.		PUBLICGUILDANNOUNCEMENT				---- */
 
 #app-mount .popout_d5c2c4 {
 	background-color: var(--background-base-lowest);
@@ -2629,7 +2637,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-strong);
 }
 
-/* ----		12.9.		QUICKSELECTPOPOUT				---- */
+/* ----		12.10.		QUICKSELECTPOPOUT				---- */
 
 #app-mount .selectableItem_eb626b {
 	color: var(--text-strong);
@@ -2648,14 +2656,14 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-strong);
 }
 
-/* ----		12.10.		RTCSTATUSPOPOUT					---- */
+/* ----		12.11.		RTCSTATUSPOPOUT					---- */
 
 #app-mount .krispLogo_e131a9 {
 	-webkit-mask: url(https://discord.com/assets/ea67b1321e3d4154e476.svg) center/contain no-repeat;
 	background-color: var(--text-strong);
 }
 
-/* ----		12.11.		PHONE-/EMAILVALIDATION				---- */
+/* ----		12.12.		PHONE-/EMAILVALIDATION				---- */
 
 #app-mount .phoneFieldPopout__61a01 .countryName__61a01 {
 	color: var(--text-subtle);
@@ -2683,7 +2691,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-subtle);
 }
 
-/* ----		12.12.		WARNINGPOPOUT					---- */
+/* ----		12.13.		WARNINGPOPOUT					---- */
 
 #app-mount .contentWarningPopout_d2eed6 {
 	background-color: var(--background-base-low);
@@ -2696,7 +2704,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	color: var(--text-strong);
 }
 
-/* ----		12.13.		APPPICKER						---- */
+/* ----		12.14.		APPPICKER						---- */
 
 .container_cb32c7:hover,
 .keyboard-mode .container_cb32c7:focus {
