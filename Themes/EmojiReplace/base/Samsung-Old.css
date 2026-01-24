@@ -9,12 +9,12 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/symbols.css);
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Samsung-Old/flags.css);
 @namespace xlink 'http://www.w3.org/1999/xlink';
-._04eede68d145ae81-sprite {
+.sprite__04eed {
 	-webkit-mask: none !important;
 	background-color: transparent !important;
 	background-position: var(--custom-emoji-sprite-bg-position) !important;
 	background-size: var(--custom-emoji-sprite-bg-size) !important;
 }
-._04eede68d145ae81-spriteGreyscale {
+.spriteGreyscale__04eed {
 	filter: grayscale(1) !important;
 }

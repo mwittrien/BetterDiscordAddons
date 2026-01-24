@@ -87,547 +87,547 @@
 	--settingsicons-delete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
 
-body #app-mount ._23e6b439306f125a-sidebarRegion:has(.aa8da23faa27393c-item:not([data-tab-id]) ~ .aa8da23faa27393c-item:not([data-tab-id]) ~ .aa8da23faa27393c-item:not([data-tab-id])) {
+body #app-mount .sidebarRegion__23e6b:has(.item_aa8da2:not([data-tab-id]) ~ .item_aa8da2:not([data-tab-id]) ~ .item_aa8da2:not([data-tab-id])) {
 	--use-settingsicons: 0 !important;
 }
-body #app-mount ._23e6b439306f125a-sidebarRegion {
+body #app-mount .sidebarRegion__23e6b {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-body #app-mount ._23e6b439306f125a-sidebar,
-body #app-mount ._960e4207cea8323e-layer ~ ._960e4207cea8323e-layer ._23e6b439306f125a-sidebar {
+body #app-mount .sidebar__23e6b,
+body #app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
 	width: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2 {
 	--settingsicons-icon: var(--settingsicons-default);
 	display: flex;
 	align-items: center;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item > div {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2 > div {
 	flex: 1 1 auto;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item::before,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item::after {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::before,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::after {
 	content: "";
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	height: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	margin-right: calc(var(--use-settingsicons) * var(--settingsicons-size)/2);
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item::before {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::before {
 	background: currentColor;
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item::after {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::after {
 	position: absolute;
 	z-index: 1;
 	background: var(--settingsicons-icon) center/contain no-repeat;
 }
 
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.bd-settings-tab,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.vc-settings,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.bd-settings-tab[aria-selected="true"]) ._23e6b439306f125a-contentColumn,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.vc-settings[aria-selected="true"]) ._23e6b439306f125a-contentColumn {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-settings-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-settings,
+#app-mount .standardSidebarView__23e6b:has(.bd-settings-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.vc-settings[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-settings) !important;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.bd-updates-tab,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.vc-updater,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.bd-updates-tab[aria-selected="true"]) ._23e6b439306f125a-contentColumn,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.bd-updater[aria-selected="true"]) ._23e6b439306f125a-contentColumn {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-updates-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-updater,
+#app-mount .standardSidebarView__23e6b:has(.bd-updates-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.bd-updater[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-updates) !important;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.bd-customcss-tab,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.bd-customcss-tab[aria-selected="true"]) ._23e6b439306f125a-contentColumn {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-customcss-tab,
+#app-mount .standardSidebarView__23e6b:has(.bd-customcss-tab[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-customcss) !important;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.bd-plugins-tab,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.vc-plugins ,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.bd-plugins-tab[aria-selected="true"]) ._23e6b439306f125a-contentColumn,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.vc-plugins[aria-selected="true"]) ._23e6b439306f125a-contentColumn{
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-plugins-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-plugins ,
+#app-mount .standardSidebarView__23e6b:has(.bd-plugins-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.vc-plugins[aria-selected="true"]) .contentColumn__23e6b{
 	--settingsicons-icon: var(--settingsicons-bd-plugins) !important;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.bd-themes-tab,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.vc-themes,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.bd-themes-tab[aria-selected="true"]) ._23e6b439306f125a-contentColumn,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.vc-themes[aria-selected="true"]) ._23e6b439306f125a-contentColumn {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-themes-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-themes,
+#app-mount .standardSidebarView__23e6b:has(.bd-themes-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.vc-themes[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-bd-themes) !important;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.vc-cloud,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.vc-cloud[aria-selected="true"]) ._23e6b439306f125a-contentColumn {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-cloud,
+#app-mount .standardSidebarView__23e6b:has(.vc-cloud[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-vc-cloud) !important;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item.vc-backup-restore,
-#app-mount ._23e6b439306f125a-standardSidebarView:has(.vc-backup-restore[aria-selected="true"]) ._23e6b439306f125a-contentColumn {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-backup-restore,
+#app-mount .standardSidebarView__23e6b:has(.vc-backup-restore[aria-selected="true"]) .contentColumn__23e6b {
 	--settingsicons-icon: var(--settingsicons-vc-backup-restore) !important;
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="My Account" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="my-account-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="my-account-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="My Account" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="my-account-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="my-account-tab" i] {
 	--settingsicons-icon: var(--settingsicons-myaccount);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Profile Customization" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="profile-customization-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="profile-customization-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Profile Customization" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-customization-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-customization-tab" i] {
 	--settingsicons-icon: var(--settingsicons-profile);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Content & Social" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="content-&-social-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="content-&-social-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Content & Social" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="content-&-social-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="content-&-social-tab" i] {
 	--settingsicons-icon: var(--settingsicons-social);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Data & Privacy" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="data-&-privacy-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="data-&-privacy-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Data & Privacy" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="data-&-privacy-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="data-&-privacy-tab" i] {
 	--settingsicons-icon: var(--settingsicons-privacy);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Family Center" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="family-center-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="family-center-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Family Center" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="family-center-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="family-center-tab" i] {
 	--settingsicons-icon: var(--settingsicons-family);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Authorized Apps" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="authorized-apps-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="authorized-apps-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Authorized Apps" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="authorized-apps-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="authorized-apps-tab" i] {
 	--settingsicons-icon: var(--settingsicons-apps);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Sessions" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="sessions-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="sessions-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Sessions" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="sessions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="sessions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-sessions);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Connections" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="connections-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="connections-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Connections" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="connections-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="connections-tab" i] {
 	--settingsicons-icon: var(--settingsicons-connections);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Settings Clips" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="settings-clips-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="settings-clips-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Settings Clips" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="settings-clips-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="settings-clips-tab" i] {
 	--settingsicons-icon: var(--settingsicons-clips);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Discord Nitro" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="discord-nitro-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="discord-nitro-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Discord Nitro" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="discord-nitro-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="discord-nitro-tab" i] {
 	--settingsicons-icon: var(--settingsicons-nitro);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Nitro Server Boost" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="nitro-server-boost-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="nitro-server-boost-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Nitro Server Boost" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="nitro-server-boost-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="nitro-server-boost-tab" i] {
 	--settingsicons-icon: var(--settingsicons-boosts);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Subscriptions" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="subscriptions-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="subscriptions-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Subscriptions" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="subscriptions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="subscriptions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-subscriptions);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Library Inventory" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="library-inventory-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="library-inventory-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Library Inventory" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="library-inventory-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="library-inventory-tab" i] {
 	--settingsicons-icon: var(--settingsicons-gifts);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Billing" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="billing-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="billing-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Billing" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="billing-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="billing-tab" i] {
 	--settingsicons-icon: var(--settingsicons-billing);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Appearance" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="appearance-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="appearance-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Appearance" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="appearance-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="appearance-tab" i] {
 	--settingsicons-icon: var(--settingsicons-appearance);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Accessibility" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="accessibility-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="accessibility-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Accessibility" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="accessibility-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="accessibility-tab" i] {
 	--settingsicons-icon: var(--settingsicons-accessibility);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Voice & Video" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="voice-&-video-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="voice-&-video-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Voice & Video" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="voice-&-video-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="voice-&-video-tab" i] {
 	--settingsicons-icon: var(--settingsicons-voice);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Clicker Game Settings" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="clicker-game-settings-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="clicker-game-settings-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Clicker Game Settings" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="clicker-game-settings-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="clicker-game-settings-tab" i] {
 	--settingsicons-icon: var(--settingsicons-clickergame);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Powermode Settings" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="powermode-settings-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="powermode-settings-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Powermode Settings" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="powermode-settings-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="powermode-settings-tab" i] {
 	--settingsicons-icon: var(--settingsicons-powermode);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Text & Images" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="text-&-images-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="text-&-images-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text & Images" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-&-images-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-&-images-tab" i] {
 	--settingsicons-icon: var(--settingsicons-text);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Notifications" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="notifications-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="notifications-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Notifications" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="notifications-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="notifications-tab" i] {
 	--settingsicons-icon: var(--settingsicons-notifications);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Keybinds" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="keybinds-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="keybinds-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Keybinds" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="keybinds-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="keybinds-tab" i] {
 	--settingsicons-icon: var(--settingsicons-keybinds);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Language" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="language-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="language-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Language" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="language-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="language-tab" i] {
 	--settingsicons-icon: var(--settingsicons-language);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Windows" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="windows-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="windows-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Windows" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="windows-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="windows-tab" i] {
 	--settingsicons-icon: var(--settingsicons-windows);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Linux" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="linux-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="linux-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Linux" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="linux-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="linux-tab" i] {
 	--settingsicons-icon: var(--settingsicons-linux);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Streamer Mode" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="streamer-mode-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="streamer-mode-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Streamer Mode" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="streamer-mode-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="streamer-mode-tab" i] {
 	--settingsicons-icon: var(--settingsicons-streamermode);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Advanced" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="advanced-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="advanced-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Advanced" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="advanced-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="advanced-tab" i] {
 	--settingsicons-icon: var(--settingsicons-advanced);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Activity Privacy" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="activity-privacy-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="activity-privacy-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Activity Privacy" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="activity-privacy-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="activity-privacy-tab" i] {
 	--settingsicons-icon: var(--settingsicons-activityprivacy);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Game Activity" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="game-activity-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="game-activity-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Game Activity" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="game-activity-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="game-activity-tab" i] {
 	--settingsicons-icon: var(--settingsicons-games);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Overlay" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="overlay-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="overlay-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Overlay" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="overlay-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="overlay-tab" i] {
 	--settingsicons-icon: var(--settingsicons-overlay);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Changelog" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="changelog-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="changelog-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Changelog" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="changelog-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="changelog-tab" i] {
 	--settingsicons-icon: var(--settingsicons-changelog);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Merchandise" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="merchandise-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="merchandise-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Merchandise" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="merchandise-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="merchandise-tab" i] {
 	--settingsicons-icon: var(--settingsicons-merchandise);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Hypesquad Online" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="hypesquad-online-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="hypesquad-online-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hypesquad Online" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hypesquad-online-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hypesquad-online-tab" i] {
 	--settingsicons-icon: var(--settingsicons-hypesquad);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Experiments" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="experiments-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="experiments-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Experiments" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="experiments-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="experiments-tab" i] {
 	--settingsicons-icon: var(--settingsicons-experiments);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Developer Options" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="developer-options-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="developer-options-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Developer Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="developer-options-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="developer-options-tab" i] {
 	--settingsicons-icon: var(--settingsicons-developer);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Hotspot Options" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="hotspot-options-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="hotspot-options-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hotspot Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hotspot-options-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hotspot-options-tab" i] {
 	--settingsicons-icon: var(--settingsicons-hotspots);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Dismissible Content Options" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="dismissible-content-options-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="dismissible-content-options-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Dismissible Content Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="dismissible-content-options-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="dismissible-content-options-tab" i] {
 	--settingsicons-icon: var(--settingsicons-dismissable);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Payment Flow Modals" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="payment-flow-modals-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="payment-flow-modals-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Payment Flow Modals" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="payment-flow-modals-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="payment-flow-modals-tab" i] {
 	--settingsicons-icon: var(--settingsicons-paymentmodals);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Revenue Storybook" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="revenue-storybook-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="revenue-storybook-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Revenue Storybook" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="revenue-storybook-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="revenue-storybook-tab" i] {
 	--settingsicons-icon: var(--settingsicons-revenue);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Virtual Currency Configuration" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="virtual-currency-configuration-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="virtual-currency-configuration-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Virtual Currency Configuration" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="virtual-currency-configuration-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="virtual-currency-configuration-tab" i] {
 	--settingsicons-icon: var(--settingsicons-virtualcurrency);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Design System" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="design-system-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="design-system-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Design System" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="design-system-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="design-system-tab" i] {
 	--settingsicons-icon: var(--settingsicons-designsystem);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Text Playground" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="text-playground-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="text-playground-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text Playground" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-playground-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-playground-tab" i] {
 	--settingsicons-icon: var(--settingsicons-textplayground);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Text Component" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="text-component-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="text-component-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text Component" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-component-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-component-tab" i] {
 	--settingsicons-icon: var(--settingsicons-textcomponent);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Intl Testing" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="intl-testing-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="intl-testing-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Intl Testing" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="intl-testing-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="intl-testing-tab" i] {
 	--settingsicons-icon: var(--settingsicons-messagelink);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Profile Effects Preview Tool" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="profile-effects-preview-tool-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="profile-effects-preview-tool-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Profile Effects Preview Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-effects-preview-tool-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-effects-preview-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-profilepreview);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Nameplates Preview Tool" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="nameplates-preview-tool-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="nameplates-preview-tool-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Nameplates Preview Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="nameplates-preview-tool-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="nameplates-preview-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-nameplates);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Web Setting Tree Tool" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="web-setting-tree-tool-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="web-setting-tree-tool-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Web Setting Tree Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="web-setting-tree-tool-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="web-setting-tree-tool-tab" i] {
 	--settingsicons-icon: var(--settingsicons-settingstree);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Changelog" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="changelog-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="changelog-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Changelog" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="changelog-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="changelog-tab" i] {
 	--settingsicons-icon: var(--settingsicons-changelog);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Merchandise" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="merchandise-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="merchandise-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Merchandise" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="merchandise-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="merchandise-tab" i] {
 	--settingsicons-icon: var(--settingsicons-merchandise);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Hypesquad Online" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="hypesquad-online-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="hypesquad-online-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hypesquad Online" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hypesquad-online-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hypesquad-online-tab" i] {
 	--settingsicons-icon: var(--settingsicons-hypesquad);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="Logout" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="logout-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="logout-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Logout" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="logout-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="logout-tab" i] {
 	--settingsicons-icon: var(--settingsicons-logout);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="PROFILE" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="profile-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="profile-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="PROFILE" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-tab" i] {
 	--settingsicons-icon: var(--settingsicons-overview);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="OVERVIEW" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="overview-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="overview-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="OVERVIEW" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="overview-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="overview-tab" i] {
 	--settingsicons-icon: var(--settingsicons-overview);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="ENGAGEMENT" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="engagement-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="engagement-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ENGAGEMENT" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="engagement-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="engagement-tab" i] {
 	--settingsicons-icon: var(--settingsicons-engagement);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="BOOST_PERKS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="boost_perks-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="boost_perks-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="BOOST_PERKS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="boost_perks-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="boost_perks-tab" i] {
 	--settingsicons-icon: var(--settingsicons-boostperks);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="EMOJI" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="emoji-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="emoji-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="EMOJI" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="emoji-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="emoji-tab" i] {
 	--settingsicons-icon: var(--settingsicons-emotes);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="STICKERS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="stickers-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="stickers-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="STICKERS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="stickers-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="stickers-tab" i] {
 	--settingsicons-icon: var(--settingsicons-stickers);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="SOUNDBOARD" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="soundboard-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="soundboard-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="SOUNDBOARD" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="soundboard-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="soundboard-tab" i] {
 	--settingsicons-icon: var(--settingsicons-soundboard);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="MEMBERS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="members-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="members-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="MEMBERS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="members-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="members-tab" i] {
 	--settingsicons-icon: var(--settingsicons-members);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="ROLES" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="roles-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="roles-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ROLES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="roles-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="roles-tab" i] {
 	--settingsicons-icon: var(--settingsicons-roles);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="PERMISSIONS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="permissions-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="permissions-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="PERMISSIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="permissions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="permissions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-roles);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="INVITES" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="invites-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="invites-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INVITES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="invites-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="invites-tab" i] {
 	--settingsicons-icon: var(--settingsicons-invites);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="INSTANT_INVITES" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="instant_invites-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="instant_invites-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INSTANT_INVITES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="instant_invites-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="instant_invites-tab" i] {
 	--settingsicons-icon: var(--settingsicons-invites);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="ACCESS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="access-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="access-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ACCESS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="access-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="access-tab" i] {
 	--settingsicons-icon: var(--settingsicons-access);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="INTEGRATIONS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="integrations-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="integrations-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INTEGRATIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="integrations-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="integrations-tab" i] {
 	--settingsicons-icon: var(--settingsicons-widgets);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="APP_DIRECTORY" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="app_directory-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="app_directory-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="APP_DIRECTORY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="app_directory-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="app_directory-tab" i] {
 	--settingsicons-icon: var(--settingsicons-appdirectory);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="SAFETY" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="safety-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="safety-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="SAFETY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="safety-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="safety-tab" i] {
 	--settingsicons-icon: var(--settingsicons-moderation);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="MODERATION" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="moderation-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="moderation-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="MODERATION" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="moderation-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="moderation-tab" i] {
 	--settingsicons-icon: var(--settingsicons-moderation);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="AUDIT_LOG" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="audit_log-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="audit_log-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="AUDIT_LOG" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="audit_log-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="audit_log-tab" i] {
 	--settingsicons-icon: var(--settingsicons-audit);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="BANS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="bans-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="bans-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="BANS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="bans-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="bans-tab" i] {
 	--settingsicons-icon: var(--settingsicons-bans);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="GUILD_AUTOMOD" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="guild_automod-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="guild_automod-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_AUTOMOD" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_automod-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_automod-tab" i] {
 	--settingsicons-icon: var(--settingsicons-automod);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="COMMUNITY" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="community-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="community-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="COMMUNITY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="community-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community-tab" i] {
 	--settingsicons-icon: var(--settingsicons-community);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="ONBOARDING" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="onboarding-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="onboarding-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ONBOARDING" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="onboarding-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="onboarding-tab" i] {
 	--settingsicons-icon: var(--settingsicons-introductions);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="ANALYTICS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="analytics-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="analytics-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ANALYTICS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="analytics-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="analytics-tab" i] {
 	--settingsicons-icon: var(--settingsicons-analytics);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="COMMUNITY_WELCOME" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="community_welcome-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="community_welcome-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="COMMUNITY_WELCOME" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="community_welcome-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community_welcome-tab" i] {
 	--settingsicons-icon: var(--settingsicons-welcome);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="ROLE_SUBSCRIPTIONS" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="role_subscriptions-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="role_subscriptions-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ROLE_SUBSCRIPTIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="role_subscriptions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="role_subscriptions-tab" i] {
 	--settingsicons-icon: var(--settingsicons-monetization);
 }
 
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="GUILD_PREMIUM" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="guild_premium-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="guild_premium-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_PREMIUM" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_premium-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_premium-tab" i] {
 	--settingsicons-icon: var(--settingsicons-booststatus);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="GUILD_TEMPLATES" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="guild_templates-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="guild_templates-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_TEMPLATES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_templates-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_templates-tab" i] {
 	--settingsicons-icon: var(--settingsicons-template);
 }
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[data-tab-id="DELETE" i],
-#app-mount ._23e6b439306f125a-sidebar .aa8da23faa27393c-side .aa8da23faa27393c-item[aria-controls="delete-tab" i],
-#app-mount ._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumn[id="delete-tab" i] {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="DELETE" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="delete-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="delete-tab" i] {
 	--settingsicons-icon: var(--settingsicons-delete);
 }
 
 
-.bd-server-search ~ .aa8da23faa27393c-item::before {
+.bd-server-search ~ .item_aa8da2::before {
 	display: none;
 }
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .e681d139d22f277b-premiumLabel > svg,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .e681d139d22f277b-premiumLabel img,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .c7e9071ee8df9113-tabBarItemContainer > svg,
-._23e6b439306f125a-sidebar .aa8da23faa27393c-side .c7e9071ee8df9113-tabBarItemContainer img {
+.sidebar__23e6b .side_aa8da2 .premiumLabel_e681d1 > svg,
+.sidebar__23e6b .side_aa8da2 .premiumLabel_e681d1 img,
+.sidebar__23e6b .side_aa8da2 .tabBarItemContainer_c7e907 > svg,
+.sidebar__23e6b .side_aa8da2 .tabBarItemContainer_c7e907 img {
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
 }
 
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > fieldset:first-child > legend:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault div:first-child > div:first-child > .e335a78803b4d1df-sectionTitle:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault div:first-child > div:first-child > h2.b717a15017b82443-title,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .dbd2630aec71879b-stack:first-child > div:first-child > h2:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault div:first-child > .dbd2630aec71879b-stack > h2:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault main:first-child > div:first-child > h2:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > div:first-child > h2:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > h2:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnWide > h2:first-child,
-._23e6b439306f125a-standardSidebarView .e7d73e5106887df1-emojiSettings h2.b717a15017b82443-title {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > fieldset:first-child > legend:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle_e335a7:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .stack_dbd263:first-child > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > .stack_dbd263 > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child,
+.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child,
+.standardSidebarView__23e6b .emojiSettings_e7d73e h2.title_b717a1 {
 	display: flex;
 	align-items: center;
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .bd-settings-title {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title {
 	justify-content: flex-start;
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .bd-settings-title .bd-addon-title {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title .bd-addon-title {
 	flex: 1 1 auto;
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .bd-settings-title > .bd-button {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title > .bd-button {
 	margin-left: auto;
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnWide {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b,
+.standardSidebarView__23e6b .contentColumnWide__23e6b {
 	--settingsicons-icon: var(--settingsicons-default);
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .d6f9e90c3456ac40-tabBar:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .dc2e0e7839a6713a-settingsTabBar:first-child,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > *:first-child > .dc2e0e7839a6713a-settingsTabBar {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e {
 	margin-left: calc(var(--use-settingsicons) * 30px);
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .f131e93f07e2fe18-settingsPage > h3:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnWide .f131e93f07e2fe18-settingsPage > h3:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > fieldset:first-child > legend:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault div:first-child > div:first-child > .e335a78803b4d1df-sectionTitle:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault div:first-child > div:first-child > h2.b717a15017b82443-title::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .dbd2630aec71879b-stack:first-child > div:first-child > h2:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault div:first-child > .dbd2630aec71879b-stack > h2:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault main:first-child > div:first-child > h2:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > div:first-child > h2:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > h2:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnWide > h2:first-child::before,
-._23e6b439306f125a-standardSidebarView .e7d73e5106887df1-emojiSettings h2.b717a15017b82443-title::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .d6f9e90c3456ac40-tabBar:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .dc2e0e7839a6713a-settingsTabBar:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > *:first-child > .dc2e0e7839a6713a-settingsTabBar::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
+.standardSidebarView__23e6b .contentColumnWide__23e6b .settingsPage_f131e9 > h3:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > fieldset:first-child > legend:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle_e335a7:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .stack_dbd263:first-child > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > .stack_dbd263 > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b .emojiSettings_e7d73e h2.title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	content: "";
 	display: inline-block;
 	color: var(--text-strong);
@@ -641,23 +641,23 @@ body #app-mount ._960e4207cea8323e-layer ~ ._960e4207cea8323e-layer ._23e6b43930
 	z-index: 2;
 	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .d6f9e90c3456ac40-tabBar:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .dc2e0e7839a6713a-settingsTabBar:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > *:first-child > .dc2e0e7839a6713a-settingsTabBar::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
 	position: absolute;
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .d6f9e90c3456ac40-tabBar:first-child::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault > .dc2e0e7839a6713a-settingsTabBar:first-child::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before {
 	left: 40px;
 }
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .d6f9e90c3456ac40-tabBar ~ * h2::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .d6f9e90c3456ac40-tabBar ~ * .b717a15017b82443-title::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .dc2e0e7839a6713a-settingsTabBar ~ * h2::before,
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault .dc2e0e7839a6713a-settingsTabBar ~ * .b717a15017b82443-title::before {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * h2::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * .title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsTabBar_dc2e0e ~ * h2::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsTabBar_dc2e0e ~ * .title_b717a1::before {
 	display: none !important;
 }
 
-._23e6b439306f125a-standardSidebarView ._23e6b439306f125a-contentColumnDefault h2 ._0eeeeda0f47c3f1e-lockIcon {
+.standardSidebarView__23e6b .contentColumnDefault__23e6b h2 .lockIcon__0eeee {
 	width: calc((1 - var(--use-settingsicons)) * 24px);
 	margin-right: calc((1 - var(--use-settingsicons)) * 8px);
 }
