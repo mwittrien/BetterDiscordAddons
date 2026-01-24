@@ -320,7 +320,7 @@
 		"Flex": {"props": ["Wrap", "Direction", "Child", "Gutter"]},
 		"FlowerStar": {"strings": ["style:", "flowerStarClassName", "allowFullSizedIcon"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
-		"FormDivider": {"strings": ["let{className:", ".divider", ",style:", "=e;return"]},
+		"FormDivider": {"strings": ["let{className:", "gap:", ",style:", "marginTop:", "marginBottom:"]},
 		"FormText": {"strings": ["DESCRIPTION",".Text",".DEFAULT"], "exported": false, "value": "exports", "map": {
 			"Text": [".DEFAULT", "className"],
 			"Types": ["\"DESCRIPTION\"", "\"DEFAULT\""]
