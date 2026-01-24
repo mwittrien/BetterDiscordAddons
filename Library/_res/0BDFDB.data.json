@@ -395,9 +395,9 @@
 		"UserSettingsCogContextMenu": "user-settings-cog"
 	},
 	"PatchModules": {
-		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "isCopiedStreakGodlike"]},
+		"Account": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip"]},
 		"AccountButtons": {"strings": ["handleOpenSettingsContextMenu", "shouldShowSpeakingWhileMutedTooltip", "isEligibleForPomelo"]},
-		"AccountPopout": {"strings": ["UserProfileAccountPopout", ".menus"]},
+		"AccountPopout": {"strings": ["UserProfileAccountPopout", "ACCOUNT_POPOUT"]},
 		"AccountName": {"strings": ["accountProfilePopoutWrapper", ".avatarWrapper", "renderNameTag"]},
 		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
 		"AuditLogEntry": {"protos": ["renderRoleUpdate", "renderChangeDetails", "getActionTypeColor", "renderPermissionUpdate"]},
