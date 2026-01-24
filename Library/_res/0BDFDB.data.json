@@ -306,11 +306,12 @@
 			"AnimatedAvatar": ["{\"compare\":null}"],
 			"Avatar": ["statusColor", ".UNKNOWN"]
 		}},
-		"Badges": {"strings": ["disableColor", "baseShapeRound", "textBadge"], "exported": false, "value": "exports", "map": {
+		"Badges": {"strings": ["disableColor", "BADGE", "ROUND"], "exported": false, "value": "exports", "map": {
 			"BadgeShapes": ["baseShapeRoundRight", "baseShapeRoundLeft"],
-			"IconBadge": [".iconBadge"],
-			"NumberBadge": [".numberBadge"],
-			"TextBadge": [".textBadge"]
+			"IconBadge": ["icon:"],
+			"NumberBadge": ["count:"],
+			"PremiumBadge": ["text:"],
+			"TextBadge": ["color", "text:"]
 		}},
 		"Checkmark": {"strings": ["M21.7 5.3a1 1 0 0 1 0 1.4l-12 12a1 1 0 0 1-1.4 0l-6-6a1 1 0 1 1 1.4-1.4L9 16.58l11.3-11.3a1 1 0 0 1 1.4 0Z"]},
 		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["shouldAnimate"]},
@@ -369,8 +370,8 @@
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
 		}},
-		"StatusComponents": {"strings": ["OFFLINE", "mask", "isMobile", ".status"], "exported": false, "value": "exports", "map": {
-			"Status": [".status", "mask"],
+		"StatusComponents": {"strings": ["OFFLINE", "mask", "isMobile", "status"], "exported": false, "value": "exports", "map": {
+			"Status": ["status", "mask"],
 			"Types": ["\"OFFLINE\"", "\"ONLINE\""]
 		}},
 		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"], "funcStrings": ["defaultColor"]},
@@ -423,7 +424,7 @@
 		"ChannelCallVideoParticipants": {"strings": [".tileSizer", "participantTileWidth:", ".COVER"]},
 		"ChannelEmptyMessages": {"strings": [".IS_JOIN_REQUEST_INTERVIEW_CHANNEL", "showingBanner:"]},
 		"ChannelFloatingSidebar": {"strings": ["messageRequestSidebarWidth", "floatingLayer:", "chatLayerWrapper"]},
-		"ChannelItem": {"strings": ["hasActiveThreads", ".unreadImportant", "UNREAD_IMPORTANT"]},
+		"ChannelItem": {"strings": ["hasActiveThreads", "hasUsersInVoiceChannel", "UNREAD_IMPORTANT"]},
 		"ChannelItemIcon": {"strings": ["withGuildIcon:", "locked:", ".iconContainerWithGuildIcon"], "noSearch": true},
 		"ChannelMembers": {"strings": ["MEMBER_LIST_VIEWED", "getDimensions", "member-"], "noSearch": true},
 		"ChannelMembersThread": {"strings": ["MEMBER_LIST_VIEWED", "hiddenMembers", "PRIVATE_THREAD"], "noSearch": true},
