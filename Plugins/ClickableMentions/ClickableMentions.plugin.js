@@ -2,7 +2,7 @@
  * @name ClickableMentions
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Allows you to open a User Popout by clicking a Mention in your Message Input
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -81,15 +81,14 @@ module.exports = (_ => {
 			}
 			
 			processRichUserMention (e) {
-				if (!e.instance.props.id || !BDFDB.LibraryStores.UserStore.getUser(e.instance.props.id) || typeof e.returnvalue.props.children != "function") return;
-				let childrenRender = e.returnvalue.props.children;
-				e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutContainer, Object.assign({}, e.instance.props, {
+				if (!e.instance.props.id || !BDFDB.LibraryStores.UserStore.getUser(e.instance.props.id)) return;
+				e.returnvalue.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutContainer, Object.assign({}, e.instance.props, {
 					killEvent: true,
 					userId: e.instance.props.id,
 					position: BDFDB.LibraryComponents.PopoutContainer.Positions.RIGHT,
 					align: BDFDB.LibraryComponents.PopoutContainer.Align.BOTTOM,
-					children: childrenRender(...args)
-				})), "Error in Children Render of RichUserMention", this);
+					children: e.returnvalue.props.children
+				}));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
