@@ -426,7 +426,7 @@
 		"ChannelReply": {"strings": [".messageReference", ".REPLY_MENTION_OFF", ".mentionIcon"]},
 		"ChannelSidebar": {"strings": ["ACCOUNT_PANEL", "RTC_CONNECTION_PANEL", "ACCOUNT_A11Y_LABEL"]},
 		"ChannelsList": {"protos": ["isUnreadVisible", "renderBottomUnread", "getSectionRowsFromChannel"]},
-		"ChannelTextAreaButtons": {"strings": [".buttons", "\"emoji\"", "activeCommandOption"]},
+		"ChannelTextAreaButtons": {"strings": [".button", "\"emoji\"", "activeCommandOption"]},
 		"ChannelTextAreaContainer": {"strings": ["uploadPromptCharacterCount", "onSelectSticker", "handleAutocompleteVisibilityChange"], "noSearch": true},
 		"ChannelTextAreaCounter": {"strings": ["iconOnly", ".CHARACTER_COUNT"]},
 		"ChannelTextAreaEditor": {"strings": ["onHideAutocomplete", "onMaybeShowAutocomplete", "uploadPromptCharacterCount", "_focusBlurQueue"]},
