@@ -41,6 +41,7 @@
 	--info-help-background: rgba(var(--linkcolor_v),.1);
 	--info-help-foreground: rgb(var(--linkcolor_v));
 	--info-help-text: #fff;
+	--icon-link: rgb(var(--linkcolor_v));
 	--focus-primary: rgb(var(--linkcolor_v));
 	--control-brand-foreground: rgb(var(--accentcolor_v)) !important;
 	--control-brand-foreground-new: rgb(var(--accentcolor_v)) !important;
@@ -1918,14 +1919,17 @@ a.metadataDownload_cf09d8 {
 	fill: rgb(var(--accentcolor_v)) !important;
 }
 
-.container__3f21e {									/* switch				unchecked							*/
+.container__3f21e,									/* switch				unchecked							*/
+.switchIndicator_a28278 {								/* switch				unchecked							*/
 	background-color: rgb(114, 118, 125) !important;
 	transition: background-color .1s ease-out;
-}												/* switch				checked								*/
-.container__3f21e.checked__3f21e {
+}				
+.container__3f21e.checked__3f21e,							/* switch				checked								*/
+.switchIndicator_a28278:has(.thumb_a28278[style=*="left: 24px"]) {			/* switch				checked								*/
 	background-color: rgba(var(--accentcolor_v), 0.8) !important;
 }
-.container__3f21e.checked__3f21e:hover {
+.container__3f21e.checked__3f21e:hover,
+.switchIndicator_a28278:has(.thumb_a28278[style=*="left: 24px"]):hover {
 	background: var(--accentcolor-hover) !important;
 }
 #app-mount .container__3f21e:active {
