@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.3
+ * @version 4.4.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4517,7 +4517,7 @@ module.exports = (_ => {
 				BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 				Internal.getDiscordClass = function (item, selector) {
 					let className, fallbackClassName, notFoundAndLazyloaded = false;
-					className = fallbackClassName = Internal.generateClassId() + "-" + Internal.DiscordClassModules.BDFDB.BDFDBundefined;
+					className = fallbackClassName = `${Internal.DiscordClassModules.BDFDB.BDFDBundefined}_${Internal.generateClassId()}`;
 					if (DiscordClasses[item] === undefined) {
 						BDFDB.LogUtils.warn([item, "not found in DiscordClasses"]);
 						return className;
@@ -4541,7 +4541,7 @@ module.exports = (_ => {
 						else notFoundAndLazyloaded = true;
 					}
 					if (notFoundAndLazyloaded) {
-						className = `${InternalData.LazyloadedClassModules[DiscordClasses[item][0]]}-${DiscordClasses[item][1]}`;
+						className = `${DiscordClasses[item][1]}_${InternalData.LazyloadedClassModules[DiscordClasses[item][0]]}`;
 						DiscordClassModules[DiscordClasses[item][0]] = Object.assign({}, DiscordClassModules[item], {[DiscordClasses[item][1]]: className});
 					}
 					else for (let prop of [DiscordClasses[item][1]].flat()) {
@@ -4558,7 +4558,7 @@ module.exports = (_ => {
 				const generationChars = "0123456789abcdef".split("");
 				Internal.generateClassId = function () {
 					let id = "";
-					while (id.length < 16) id += generationChars[Math.floor(Math.random() * generationChars.length)];
+					while (id.length < 6) id += generationChars[Math.floor(Math.random() * generationChars.length)];
 					return id;
 				};
 				BDFDB.disCN = new Proxy({}, {
@@ -4613,7 +4613,8 @@ module.exports = (_ => {
 				const LanguageStringsObj = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore.Messages || Internal.LibraryModules.LanguageStore || {};
 				const EngLanguageStringsObj = Internal.LibraryModules.EngLanguageStore && Internal.LibraryModules.EngLanguageStore.Messages || Internal.LibraryModules.EngLanguageStore || {};
 				const LanguageStringFormatter = Internal.LibraryModules.LanguageIntlUtils && Internal.LibraryModules.LanguageIntlUtils.formatToPlainString;
-				const LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", {exportsFilter: m => !m.messagesLoader, all: true}).find(n => n && n.Z && [InternalData.LanguageStringHashes.DISCORD].flat(10).some(hash => LanguageStringFormatter(n.Z[hash]))) || {}).Z || {};
+				var LanguageStringFormattersObj = (BDFDB.ModuleUtils.findByString("use strict", "createLoader:", {exportsFilter: m => !m.messagesLoader, all: true}).find(n => n && (n.A || n.Z) && [InternalData.LanguageStringHashes.DISCORD].flat(10).some(hash => LanguageStringFormatter(n.A && n.A[hash] || n.Z && n.Z[hash]))) || {});
+				LanguageStringFormattersObj = LanguageStringFormattersObj.A || LanguageStringFormattersObj.Z;
 				
 				const LanguageHashes = {};
 				for (let hash of Object.keys(EngLanguageStringsObj)) LanguageHashes[(typeof EngLanguageStringsObj[hash] == "string" ? [EngLanguageStringsObj[hash]] : EngLanguageStringsObj[hash]).map(n => typeof n == "string" ? n : "PLACEHOLDER").join(" ").toUpperCase().replace(/[^a-zA-Z0-9 ]/g, "").split(" ").filter(n => n).join(" ").trim().replace(/ /g, "_")] = hash;
@@ -4961,7 +4962,7 @@ module.exports = (_ => {
 					getBadgeCountString(e) {return e < 1e3 ? "" + e : Math.min(Math.floor(e/1e3), 9) + "k+"}
 					render() {
 						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge, this.props.shape && Internal.LibraryComponents.Badges.BadgeShapes[this.props.shape] || Internal.LibraryComponents.Badges.BadgeShapes.ROUND),
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge, Internal.LibraryComponents.Badges && Internal.LibraryComponents.Badges.BadgeShapes && (this.props.shape && Internal.LibraryComponents.Badges.BadgeShapes[this.props.shape] || Internal.LibraryComponents.Badges.BadgeShapes.ROUND)),
 							style: Object.assign({
 								backgroundColor: !this.props.disableColor && (this.props.color || BDFDB.DiscordConstants.ColorsCSS.STATUS_DANGER),
 								width: this.getBadgeWidthForValue(this.props.count)
@@ -8204,6 +8205,7 @@ module.exports = (_ => {
 						if (CustomComponents[item]) LibraryComponents[item] = LibraryComponents[item] ? Object.assign({}, LibraryComponents[item], CustomComponents[item]) : CustomComponents[item];
 						
 						if (LibraryComponents[item] && typeof LibraryComponents[item] == "object" && LibraryComponents[item].Z && LibraryComponents[item].Z["$$typeof"]) LibraryComponents[item] = LibraryComponents[item].Z;
+						else if (LibraryComponents[item] && typeof LibraryComponents[item] == "object" && LibraryComponents[item].A && LibraryComponents[item].A["$$typeof"]) LibraryComponents[item] = LibraryComponents[item].A;
 						
 						const NativeComponent = LibraryComponents[item] && Internal.NativeSubComponents[item];
 						if (NativeComponent && typeof NativeComponent != "string") {
