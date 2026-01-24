@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.4.5
+ * @version 7.4.6
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -490,7 +490,8 @@ module.exports = (_ => {
 						"FolderItem",
 						"FolderSettingsModal",
 						"GuildsBar",
-						"TooltipContainer"
+						"TooltipContainer",
+						"TooltipContainerWithShortcut"
 					],
 					after: [
 						"FolderIconWrapper",
@@ -886,7 +887,9 @@ module.exports = (_ => {
 				
 				e.instance.props.shouldShow = false;
 				let data = this.getFolderConfig(child.props.children.props.folderNode.id);
-		
+				
+				if (!data.color3 && !data.color4) return;
+				
 				let childrenRender = e.instance.props.children;
 				e.instance.props.children = BDFDB.TimeUtils.suppress((...args) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: child.props.children.props.folderNode.name || e.instance.props.text,
@@ -900,6 +903,30 @@ module.exports = (_ => {
 					},
 					children: childrenRender(...args)
 				}), "Error in children Render of Guild Folder Tooltip!");
+			}
+			
+			processTooltipContainerWithShortcut (e) {
+				let folderNode = BDFDB.ObjectUtils.get(e.instance.props, "children.props.children.props.folderNode");
+				if (!folderNode) return;
+				
+				e.instance.props.shouldShow = false;
+				let data = this.getFolderConfig(folderNode.id);
+				
+				if (!data.color3 && !data.color4) return;
+		
+				let childrenRender = e.instance.props.children;
+				e.instance.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: folderNode.name || e.instance.props.__unsupportedReactNodeAsText && e.instance.props.__unsupportedReactNodeAsText.props.children || "",
+					tooltipConfig: {
+						contentClassName: BDFDB.disCN.guildlistitemtooltip,
+						type: "right",
+						list: true,
+						offset: 4,
+						backgroundColor: data.color3,
+						fontColor: data.color4
+					},
+					children: e.instance.props.children
+				});
 			}
 			
 			processGuildItem (e) {
