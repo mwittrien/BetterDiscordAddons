@@ -296,7 +296,7 @@
 		"TooltipContainer": {"strings": ["Tooltip cannot find DOM node", "shouldShowTooltip", "clickable"]}
 	},
 	"LibraryComponents": {
-		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
+		"Anchor": {"strings": ["useDefaultUnderlineStyles", "rel=\"noreferrer noopener\""]},
 		"Animations": {"props": ["Controller", "Spring", "animated"]},
 		"AppReferencePositionLayer": {"strings": ["\"App\"", "layerContext:"], "funcStrings": ["{children:(", "{ref:"]},
 		"AvatarConstants": {"strings": ["\"SIZE_20\"", "\"SIZE_32\"", "HIGH"], "exported": false, "value": "exports", "map": {
@@ -318,21 +318,20 @@
 		"EmojiButton": {"strings": ["renderButtonContents", "\"emojiButton\"", "spritePremiumColored"], "funcStrings": ["EMOJI_BUTTON"]},
 		"EmojiPicker": {"strings": ["emojiSize", "inspectedExpressionPosition", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
 		"Flex": {"props": ["Wrap", "Direction", "Child", "Gutter"]},
-		"FlowerStar": {"strings": ["flowerStarContainer", ".jsx)"]},
+		"FlowerStar": {"strings": ["style:", "flowerStarClassName", "allowFullSizedIcon"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FormDivider": {"strings": ["let{className:", ".divider", ",style:", "=e;return"]},
 		"FormText": {"strings": ["DESCRIPTION",".Text",".DEFAULT"], "exported": false, "value": "exports", "map": {
 			"Text": [".DEFAULT", "className"],
 			"Types": ["\"DESCRIPTION\"", "\"DEFAULT\""]
 		}},
-		"GuildBadge": {"strings": ["foregroundDarkColor", ".tooltipRemovePadding"]},
-		"GuildChild": {"strings": ["selected", ",fontSize:", ".acronym"]},
+		"GuildBadge": {"strings": ["foregroundDarkColor","GUILD_HEADER"]},
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
 		"GuildItem": {"strings": ["guildNode:", "lowerBadge:", "isUnavailable"]},
 		"GuildTooltipMutedText": {"strings": ["muteConfig:", "color:\"text-muted\""]},
-		"Heading": {"strings": ["data-excessive", ".defaultColor"], "funcStrings": ["defaultColor"]},
+		"Heading": {"strings": ["data-excessive", "tag"], "funcStrings": ["tag"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
-		"Image": {"strings": ["containerRef", "zoomable", "LOADING"]},
+		"Image": {"strings": ["innerRef", "zoomable", "LOADING"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"]},
 		"ImageModalOuter": {"strings": ["MEDIA_VIEWER", "numMediaItem", "LIGHTBOX"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
@@ -342,7 +341,7 @@
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
 		"Mask": {"props": "Masks"},
 		"Menu": {"strings": ["\"flexible\"", "onFocus:", "menuItemProps"]},
-		"MessageGroup": {"strings": [".ephemeral", "animateAvatar:", "getMessageByReference"]},
+		"MessageGroup": {"strings": ["animateAvatar:", "getMessageByReference"]},
 		"MessagesPopoutComponents": {"strings": ["canCloseAllMessages", "loadingMore"], "exported": false, "value": "exports", "map": {
 			"EmptyState": [".emptyPlaceholder", "backgroundImage"],
 			"Header": [".header", "heading"],
@@ -357,7 +356,7 @@
 			"ModalRoot": ["fullscreenOnMobile", "ENTERING"],
 			"ModalSize": ["\"DYNAMIC\"", "\"LARGE\""]
 		}},
-		"Paginator": {"strings": ["totalPageCount", "selectedPage", "endButtonInner"]},
+		"Paginator": {"strings": ["totalPageCount", "selectedPage", "TRANSPARENT"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"], "funcStrings": ["{}"]},
 		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"], "funcStrings": ["impressionName"]},
 		"PrivateChannelItems": {"strings": ["getRecipientId", "avatarWithText"], "exported": false, "value": "exports", "map": {
@@ -365,7 +364,7 @@
 			"LinkButton": [".apply(this"]
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "getScrollerState"]},
-		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "container"]},
+		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "floor"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
@@ -424,7 +423,7 @@
 		"ChannelCallVideoParticipants": {"strings": [".tileSizer", "participantTileWidth:", ".COVER"]},
 		"ChannelEmptyMessages": {"strings": [".IS_JOIN_REQUEST_INTERVIEW_CHANNEL", "showingBanner:"]},
 		"ChannelFloatingSidebar": {"strings": ["messageRequestSidebarWidth", "floatingLayer:", "chatLayerWrapper"]},
-		"ChannelItem": {"strings": ["hasActiveThreads", "hasUsersInVoiceChannel", "UNREAD_IMPORTANT"]},
+		"ChannelItem": {"strings": ["hasActiveThreads", "hasUsersInVoiceChannel", "UNREAD_IMPORTANT"], "fixed": true},
 		"ChannelItemIcon": {"strings": ["withGuildIcon:", "locked:", ".iconContainerWithGuildIcon"], "noSearch": true},
 		"ChannelMembers": {"strings": ["MEMBER_LIST_VIEWED", "getDimensions", "member-"], "noSearch": true},
 		"ChannelMembersThread": {"strings": ["MEMBER_LIST_VIEWED", "hiddenMembers", "PRIVATE_THREAD"], "noSearch": true},
@@ -462,7 +461,6 @@
 		"FolderSettingsModal": {"strings": [".handleNameChange", ".handleSubmit", "folderName:"], "noSearch": true},
 		"GuildBadge": {"strings": ["foregroundDarkColor", "getBadgeCategory"]},
 		"GuildChannelListContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "\"guild-context\",\"aria-label\""], "noSearch": true},
-		"GuildChild": {"strings": [".getAcronym", ",fontSize:", ".acronym"], "noSearch": true},
 		"GuildContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "navId:\"guild", "GuildContextMenu"], "noSearch": true},
 		"GuildFavorites": {"strings": [".favoriteIcon", "favoriteServerMuted", "liveStage"]},
 		"GuildHeader": {"strings": ["bannerVisible:", "disableBannerAnimation:", "onContextMenu"]},
@@ -565,10 +563,10 @@
 		"SearchPopout": {"strings": [".handleHintClick", ".selectedIndex", "token.start"]},
 		"SearchPopoutOption": {"strings": [".plusIcon", ".option,", ".filter"]},
 		"SearchResult": {"strings": ["onJump:", "message:", "handleMessageClick"]},
-		"SearchResults": {"strings": ["paginationLimitHeader", "searchResultsWrap", "isSearching"], "noSearch": true},
-		"SearchResultsHeader": {"strings": ["onPopoverRequestClose", "onSearchModeChange", "SearchHeader"]},
+		"SearchResults": {"strings": [".WARNING", "isSearching", "paginationTotalCount"], "noSearch": true, "fixed": true},
+		"SearchResultsHeader": {"strings": ["onPopoverRequestClose", "onSearchModeChange"], "fixed": true},
 		"SearchResultsInner": {"strings": ["totalResults", "resultsBlocked", "\"search-results\""], "noSearch": true},
-		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "container"]},
+		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "floor"], "fixed": true},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
 		"Spoiler": {"strings": [".removeObscurity", "onReveal:"]},
@@ -576,7 +574,7 @@
 		"StandardSidebarView": {"strings": ["standardSidebarView", "sidebarTheme:", "mobileSidebarHeader"]},
 		"SystemMessageThreadCreated": {"strings": ["threadOnClick:", ".SYSTEM_MESSAGE_THREAD_CREATED", "viewThreadsOnClick:"]},
 		"SystemMessageWrapper": {"strings": ["unknown message type", "\"SystemMessage\""]},
-		"TabBar": {"props": ["Item", "Header", "Panel"]},
+		"TabBar": {"props": ["Item", "Header", "Panel"], "fixed": true},
 		"TextChannelEmptyMessage": {"strings": ["MANAGE_CHANNELS", ".BEGINNING_CHANNEL_DESCRIPTION", "topicHook:"]},
 		"TextInput": {"strings": ["onFocus","defaultValue", "editable"], "noSearch": true},
 		"ThreadCard": {"strings": ["threadId:", ".container", ".threadName"]},
