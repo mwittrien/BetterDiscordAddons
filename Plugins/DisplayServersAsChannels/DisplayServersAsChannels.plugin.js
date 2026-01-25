@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.1
+ * @version 2.0.2
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -79,7 +79,8 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"GuildItem",
-						"TooltipContainer"
+						"TooltipContainer",
+						"TooltipContainerWithShortcut"
 					],
 					after: [
 						"CircleIconButton",
@@ -317,6 +318,11 @@ module.exports = (_ => {
 			
 			processTooltipContainer (e) {
 				if (!e.instance.props.tooltipClassName || e.instance.props.tooltipClassName.indexOf(BDFDB.disCN.guildlistitemtooltip) == -1) return;
+				e.instance.props.shouldShow = false;
+			}
+			
+			processTooltipContainerWithShortcut (e) {
+				if (!e.instance.props.__unsupportedReactNodeAsText || !e.instance.props.__unsupportedReactNodeAsText.props || !e.instance.props.__unsupportedReactNodeAsText.props.className || e.instance.props.__unsupportedReactNodeAsText.props.className.indexOf(BDFDB.disCN.guildlistitemtooltip) == -1) return;
 				e.instance.props.shouldShow = false;
 			}
 			
