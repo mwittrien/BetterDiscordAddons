@@ -425,7 +425,7 @@
 		"ChannelPins": {"strings": ["PINNED_MESSAGES", "renderEmptyState", "listName"]},
 		"ChannelReply": {"strings": [".messageReference", ".REPLY_MENTION_OFF", ".mentionIcon"]},
 		"ChannelSidebar": {"strings": ["ACCOUNT_PANEL", "RTC_CONNECTION_PANEL", "ACCOUNT_A11Y_LABEL"]},
-		"ChannelsList": {"protos": ["isUnreadVisible", "renderBottomUnread", "getSectionRowsFromChannel"]},
+		"ChannelsList": {"strings": ["this.jumpToVoiceChannels", "guildChannels:", "renderBottomUnread"], "noSearch": true},
 		"ChannelTextAreaButtons": {"strings": [".button", "\"emoji\"", "activeCommandOption"]},
 		"ChannelTextAreaContainer": {"strings": ["uploadPromptCharacterCount", "onSelectSticker", "handleAutocompleteVisibilityChange"], "noSearch": true},
 		"ChannelTextAreaCounter": {"strings": ["iconOnly", ".CHARACTER_COUNT"]},
