@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -237,13 +237,13 @@ module.exports = (_ => {
 
 			processUserThemeContainer (e) {
 				let popout = {props: e.instance.props.value || e.instance.props};
-				if (popout.props.layout == BDFDB.DiscordConstants.ProfileTypes.POPOUT) currentPopout = popout;
-				if (popout.props.layout == BDFDB.DiscordConstants.ProfileTypes.MODAL || popout.props.layout == BDFDB.DiscordConstants.ProfileTypes.MODAL_V2) currentProfile = popout;
+				if (popout.props.layout == "POPOUT") currentPopout = popout;
+				if (popout.props.layout == "MODAL" || popout.props.layout == "MODAL_V2") currentProfile = popout;
 			}
 
 			processUserHeaderUsername (e) {
 				let themeType = BDFDB.ObjectUtils.get(e.instance, "props.tags.props.themeType");
-				if (!currentPopout || themeType != BDFDB.DiscordConstants.ProfileTypes.SIDEBAR && themeType != BDFDB.DiscordConstants.ProfileTypes.POPOUT || e.instance.props.className) return;
+				if (!currentPopout || themeType != "SIDEBAR" && themeType != "POPOUT" || e.instance.props.className) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
 				e.returnvalue = [e.returnvalue].flat(10);
@@ -257,7 +257,7 @@ module.exports = (_ => {
 			}
 
 			processUserProfile (e) {
-				if (!currentProfile || e.instance.props.themeType != BDFDB.DiscordConstants.ProfileTypes.MODAL_V2) return;
+				if (!currentProfile || e.instance.props.themeType != "MODAL_V2") return;
 				let user = currentProfile.props.user || BDFDB.LibraryStores.UserStore.getUser(currentProfile.props.userId);
 				if (!user || user.isNonUserBot()) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["heading", BDFDB.LanguageUtils.LanguageStrings.MEMBER_SINCE]]});
