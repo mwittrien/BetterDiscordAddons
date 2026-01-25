@@ -536,7 +536,7 @@
 		"PictureInPictureVideo": {"strings": [".topControls", ".bottomControl", "screenMessage", "renderBottomLeftControls:"]},
 		"PrivateChannel": {"strings": ["isMultiUserDM", "PrivateChannel.renderAvatar", "placement:"], "noSearch": true},
 		"PrivateChannelRecipients": {"strings": [".membersWrap", "recipients"]},
-		"PrivateChannelsList": {"strings": ["privateChannelIds", "privateChannelRecipientsInviteButtonIcon"]},
+		"PrivateChannelsList": {"strings": ["privateChannelIds", "sections:"], "noSearch": true},
 		"QuickMessage": {"strings": ["QUICK_DM_USER", ".NORMAL"]},
 		"QuickSwitchChannelResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "renderVoiceStates"]},
 		"QuickSwitcher": {"protos": ["getRowId", "renderSection", "renderResults", "renderProtip", "search"]},
