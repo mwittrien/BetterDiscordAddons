@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.4.6
+ * @version 7.4.7
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -888,8 +888,6 @@ module.exports = (_ => {
 				e.instance.props.shouldShow = false;
 				let data = this.getFolderConfig(child.props.children.props.folderNode.id);
 				
-				if (!data.color3 && !data.color4) return;
-				
 				let childrenRender = e.instance.props.children;
 				e.instance.props.children = BDFDB.TimeUtils.suppress((...args) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: child.props.children.props.folderNode.name || e.instance.props.text,
@@ -911,8 +909,6 @@ module.exports = (_ => {
 				
 				e.instance.props.shouldShow = false;
 				let data = this.getFolderConfig(folderNode.id);
-				
-				if (!data.color3 && !data.color4) return;
 		
 				let childrenRender = e.instance.props.children;
 				e.instance.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
