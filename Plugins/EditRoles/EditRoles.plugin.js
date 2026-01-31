@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.6
+ * @version 1.2.7
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -70,6 +70,7 @@ module.exports = (_ => {
 						"AutocompleteRoleResult",
 						"ChannelMembers",
 						"MemberListItem",
+						"MemberRole",
 						"MessageContent",
 						"RichRoleMention"
 					],
@@ -245,10 +246,11 @@ module.exports = (_ => {
 			
 			processAutocompleteRoleResult (e) {
 				if (!e.instance.props.role || !changedRoles[e.instance.props.role.id]) return;
+				let data = changedRoles[e.instance.props.role.id];
 				e.instance.props.role = Object.assign({}, e.instance.props.role);
-				e.instance.props.role.color = changedRoles[e.instance.props.role.id].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.role.id].color, "int") : e.instance.props.role.color;
-				e.instance.props.role.colorString = changedRoles[e.instance.props.role.id].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.role.id].color, "hex") : e.instance.props.role.colorString;
-				e.instance.props.role.name = changedRoles[e.instance.props.role.id].name || e.instance.props.role.name;
+				e.instance.props.role.color = changedRoles[e.instance.props.role.id].color ? BDFDB.ColorUtils.convert(data.color, "int") : e.instance.props.role.color;
+				e.instance.props.role.colorString = data.color ? BDFDB.ColorUtils.convert(data.color, "hex") : e.instance.props.role.colorString;
+				e.instance.props.role.name = data.name || e.instance.props.role.name;
 			}
 			
 			processChannelMembers (e) {
@@ -268,6 +270,15 @@ module.exports = (_ => {
 				if (!e.instance.props.user) return;
 				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
 				if (member) e.instance.props.colorString = member.colorString;
+			}
+			
+			processMemberRole (e) {
+				if (!e.instance.props.role || !changedRoles[e.instance.props.role.id]) return;
+				let data = changedRoles[e.instance.props.role.id];
+				e.instance.props.role = Object.assign({}, e.instance.props.role);
+				e.instance.props.role.color = changedRoles[e.instance.props.role.id].color ? BDFDB.ColorUtils.convert(data.color, "int") : e.instance.props.role.color;
+				e.instance.props.role.colorString = data.color ? BDFDB.ColorUtils.convert(data.color, "hex") : e.instance.props.role.colorString;
+				e.instance.props.role.name = data.name || e.instance.props.role.name;
 			}
 			
 			getGuildFromRoleId (roleId) {
