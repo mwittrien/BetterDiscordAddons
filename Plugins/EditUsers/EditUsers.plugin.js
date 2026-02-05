@@ -586,7 +586,7 @@ module.exports = (_ => {
 			}
 			
 			processUserHeaderAvatar (e) {
-				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.SIDEBAR && !this.settings.places.userPanel || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.POPOUT && !this.settings.places.userPopout || (e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL || e.instance.props.themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL_V2) && !this.settings.places.userProfile) return;
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || e.instance.props.themeType == "SIDEBAR" && !this.settings.places.userPanel || e.instance.props.themeType == "POPOUT" && !this.settings.places.userPopout || (e.instance.props.themeType == "MODAL" || e.instance.props.themeType == "MODAL_V2") && !this.settings.places.userProfile) return;
 				e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 				if (e.instance.props.displayProfile) {
 					let data = changedUsers[e.instance.props.user.id];
@@ -601,7 +601,7 @@ module.exports = (_ => {
 			
 			processUserHeaderUsername (e) {
 				let themeType = BDFDB.ObjectUtils.get(e.instance, "props.tags.props.themeType");
-				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || themeType == BDFDB.DiscordConstants.ProfileTypes.SIDEBAR && !this.settings.places.userPanel || themeType == BDFDB.DiscordConstants.ProfileTypes.POPOUT && !this.settings.places.userPopout || (themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL || themeType == BDFDB.DiscordConstants.ProfileTypes.MODAL_V2) && !this.settings.places.userProfile) return;
+				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id] || themeType == "SIDEBAR" && !this.settings.places.userPanel || themeType == "POPOUT" && !this.settings.places.userPopout || (themeType == "MODAL" || themeType == "MODAL_V2") && !this.settings.places.userProfile) return;
 				let data = changedUsers[e.instance.props.user.id];
 				if (!e.returnvalue) {
 					let nickname = this.getUserNick(e.instance.props.user.id, e.instance.props.nickname || e.instance.props.user.globalName);

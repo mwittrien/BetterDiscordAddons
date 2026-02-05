@@ -200,7 +200,7 @@ module.exports = (_ => {
 						gap: 5px;
 						align-items: center;
 					}
-					${BDFDB.dotCN._oldtitlebarextrabuttons} a svg {
+					${BDFDB.dotCNS._oldtitlebarextrabuttons + BDFDB.dotCN.channelheadericonwrapper} > svg {
 						width: 28px !important;
 						height: 28px !important;
 					}
