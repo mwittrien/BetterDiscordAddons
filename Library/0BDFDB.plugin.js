@@ -3096,15 +3096,10 @@ module.exports = (_ => {
 							BDFDB.PatchUtils.patch({name: "BDFDB MessageUtils"}, LayerProviderPrototype, "render", {after: e => {
 								e.returnValue.props.children = typeof e.returnValue.props.children == "function" ? (_ => {return null;}) : [];
 								BDFDB.ReactUtils.forceUpdate(LayerProviderIns);
-								let messagesScroller = document.querySelector(BDFDB.dotCN.messagesscroller);
-								let scrollTop = messagesScroller.scrollTop;
-								BDFDB.TimeUtils.interval((interval, count) => {
-									let newMessagesScroller = document.querySelector(BDFDB.dotCN.messagesscroller);
-									if (newMessagesScroller != messagesScroller || count > 6000) {
-										newMessagesScroller.scrollTo({top: scrollTop});
-										BDFDB.TimeUtils.clear(interval);
-									}
-								}, 10);
+								let chatContent = document.querySelector(BDFDB.dotCN.chatcontent);
+								let messagesScroller = chatContent?.querySelector('[class*="scroller"]');
+								let scrollTop = messagesScroller?.scrollTop;
+								requestAnimationFrame(() => messagesScroller?.scrollTo({top: scrollTop}));
 							}}, {once: true});
 							BDFDB.ReactUtils.forceUpdate(LayerProviderIns);
 						}
