@@ -1079,7 +1079,6 @@ module.exports = (_ => {
 			}
 
 			getLanguageChoice (direction, place, channelId) {
-				this.setLanguages();
 				let choice;
 				let channel = channelId && BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				let guildId = channel ? (channel.guild_id ? channel.guild_id : "@me") : null;
