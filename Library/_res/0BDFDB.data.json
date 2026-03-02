@@ -483,7 +483,7 @@
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "noSearch": true},
 		"ImageModalBar": {"strings": [".topBar", "item", "closeButton"]},
 		"ImageModalButtons": {"strings": [".actionButtons", "\"IMAGE\"", "FOCUS_SENSITIVE"]},
-		"InboxHeader": {"strings": [".UNREADS", ".headerTitle", ".controls"]},
+		"InboxHeader": {"strings": ["RecentsPopout", "RecentsHeader", "badgeForYou"]},
 		"IncomingCallModal": {"strings": ["mainChannelInfo", "previewCamera", "RingingType.INCOMING"]},
 		"InviteGuildName": {"strings": ["{guild:",".guildName",".guildNameWrapper", ".name", "jsx)(\"span\","], "noSearch": true},
 		"KeybindRecorder": {"strings": [".RECORDING", ".DEFAULT", "toggleRecordMode"], "noSearch": true},
