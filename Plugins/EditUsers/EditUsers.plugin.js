@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.0
+ * @version 5.1.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -527,6 +527,7 @@ module.exports = (_ => {
 			}
 			
 			processDiscordTag (e) {
+				if (e.instance.props.user && e.returnvalue && e.returnvalue.props) e.returnvalue.props.user = e.instance.props.user;
 				this.processNameTag(e);
 			}
 			
@@ -541,7 +542,7 @@ module.exports = (_ => {
 					}
 				}
 				if (!change) return;
-				let username = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.username]]});
+				let username = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", e.instance.props.usernameClass || BDFDB.disCN.username]]});
 				if (username) this.changeUserColor(username, e.instance.props.user.id);
 				if (tagClass) this.injectBadge(e.returnvalue.props.children, e.instance.props.user.id, guildId, 2, {
 					tagClass: tagClass,
