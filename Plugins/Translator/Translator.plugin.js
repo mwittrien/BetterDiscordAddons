@@ -514,7 +514,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 											className: BDFDB.disCN.marginbottom8,
 											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
-											children: "OAI Compatible"
+											children: translationEngines[key].name || "OAI Compatible"
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 											title: "custom",
@@ -1498,13 +1498,18 @@ module.exports = (_ => {
 							callback("");
 						}
 					} else {
-						if (response.statusCode == 401 || response.statusCode == 403) {
+						if (response && response.statusCode == 401 || response.statusCode == 403) {
 							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_keyoutdated}`, {
 								type: "danger",
 								position: "center"
 							});
-						} else if (response.statusCode == 429) {
+						} else if (response && response.statusCode == 429) {
 							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_dailylimit}`, {
+								type: "danger",
+								position: "center"
+							});
+						} else if (error) {
+							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${error.message || this.labels.error_serverdown}`, {
 								type: "danger",
 								position: "center"
 							});
