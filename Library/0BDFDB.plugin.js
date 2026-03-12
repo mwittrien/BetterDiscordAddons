@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.7
+ * @version 4.4.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1305,50 +1305,50 @@ module.exports = (_ => {
 						Promise.all(BDFDB.ArrayUtils.removeCopies(imports).map(i => req.e(i))).then(_ => Promise.all(BDFDB.ArrayUtils.removeCopies(menuIndexes).map(i => req(i)))).then(callback);
 					});
 				};
-				
+
+				let _moduleIndex = null, _moduleIndexCount = 0;
+
 				BDFDB.ModuleUtils.find = function (filter, config = {}) {
 					let defaultExport = typeof config.defaultExport != "boolean" ? true : config.defaultExport;
 					let onlySearchUnloaded = typeof config.onlySearchUnloaded != "boolean" ? false : config.onlySearchUnloaded;
 					let all = typeof config.all != "boolean" ? false : config.all;
 					const req = Internal.getWebModuleReq();
 					const found = [];
-					const isSearchable = (m, checkObject) => {
-						return m && (checkObject && typeof m == "object" || typeof m == "function") && !m.constructor.toLocaleString().startsWith("function DOMTokenList()") && typeof m.toLocaleString == "function" && m.toLocaleString().indexOf("IntlMessagesProxy") == -1;
-					};
-					if (!onlySearchUnloaded) for (let i in req.c) if (req.c.hasOwnProperty(i) && req.c[i].exports != window) {
-						let m = req.c[i].exports, r = null;
-						if (isSearchable(m, true)) {
-							if (!!(r = filter(m))) {
-								if (all) found.push(defaultExport ? r : req.c[i]);
-								else return defaultExport ? r : req.c[i];
-							}
-							else if (Object.keys(m).length < 400) for (let key of Object.keys(m)) try {
-								if (m[key] && isSearchable(m[key], true) && !!(r = filter(m[key]))) {
-									if (all) found.push(defaultExport ? r : req.c[i]);
-									else return defaultExport ? r : req.c[i];
+					const isSearchable = (m, checkObject) => m && (checkObject && typeof m == "object" || typeof m == "function") && !(m instanceof DOMTokenList) && m[Symbol.toStringTag] !== "IntlMessagesProxy";
+					if (!onlySearchUnloaded) {
+						if (!_moduleIndex) {
+							_moduleIndex = []; _moduleIndexCount = 0;
+							for (let i in req.c) {
+								_moduleIndexCount++;
+								if (req.c[i].exports == window) continue;
+								let m = req.c[i].exports;
+								if (!isSearchable(m, true)) continue;
+								let subs = null, keys = Object.keys(m);
+								if (keys.length < 400) {
+									subs = [];
+									for (let ki = 0; ki < keys.length; ki++) try { let sub = m[keys[ki]]; if (sub && isSearchable(sub, true)) subs.push(sub); } catch (e) {}
+									if (!subs.length) subs = null;
 								}
-							} catch (err) {}
-						}
-						if (config.moduleName && isSearchable(m, true) && isSearchable(m[config.moduleName], true)) {
-							if (!!(r = filter(m[config.moduleName]))) {
-								if (all) found.push(defaultExport ? r : req.c[i]);
-								else return defaultExport ? r : req.c[i];
-							}
-							else if (m[config.moduleName].type && isSearchable(m[config.moduleName].type, true) && !!(r = filter(m[config.moduleName].type))) {
-								if (all) found.push(defaultExport ? r : req.c[i]);
-								else return defaultExport ? r : req.c[i];
+								let def = m.__esModule && isSearchable(m.default, true) ? m.default : null;
+								_moduleIndex.push({m, mod: req.c[i], subs, def, defType: def && isSearchable(m.default.type, true) ? m.default.type : null});
 							}
 						}
-						if (m && m.__esModule && isSearchable(m.default, true)) {
-							if (!!(r = filter(m.default))) {
-								if (all) found.push(defaultExport ? r : req.c[i]);
-								else return defaultExport ? r : req.c[i];
+						const _stale = () => { let c = 0; for (let i in req.c) c++; if (c !== _moduleIndexCount) { _moduleIndex = null; return true; } return false; };
+						if (all && _stale()) return BDFDB.ModuleUtils.find(filter, config);
+						for (let j = 0; j < _moduleIndex.length; j++) {
+							let e = _moduleIndex[j], r = null;
+							if (!!(r = filter(e.m))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
+							if (e.subs) for (let k = 0; k < e.subs.length; k++) if (!!(r = filter(e.subs[k]))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
+							if (config.moduleName && isSearchable(e.m[config.moduleName], true)) {
+								if (!!(r = filter(e.m[config.moduleName]))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
+								else if (e.m[config.moduleName].type && isSearchable(e.m[config.moduleName].type, true) && !!(r = filter(e.m[config.moduleName].type))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
 							}
-							else if (isSearchable(m.default.type, true) && !!(r = filter(m.default.type))) {
-								if (all) found.push(defaultExport ? r : req.c[i]);
-								else return defaultExport ? r : req.c[i];
+							if (e.def) {
+								if (!!(r = filter(e.def))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
+								else if (e.defType && !!(r = filter(e.defType))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
 							}
 						}
+						if (!all && _stale()) return BDFDB.ModuleUtils.find(filter, config);
 					}
 					for (let i in req.m) if (req.m.hasOwnProperty(i)) {
 						let m = req.m[i];
@@ -2265,7 +2265,7 @@ module.exports = (_ => {
 					let remaining = new Set(searchEntries.map(e => e.type));
 					if (remaining.size) {
 						const req = Internal.getWebModuleReq();
-						const isSearchable = (m, checkObject) => m && (checkObject && typeof m == "object" || typeof m == "function") && !m.constructor.toLocaleString().startsWith("function DOMTokenList()") && typeof m.toLocaleString == "function" && m.toLocaleString().indexOf("IntlMessagesProxy") == -1;
+						const isSearchable = (m, checkObject) => m && (checkObject && typeof m == "object" || typeof m == "function") && !(m instanceof DOMTokenList) && m[Symbol.toStringTag] !== "IntlMessagesProxy";
 						let moduleCache = BDFDB.DataUtils.load(BDFDB, "ModuleIdCache") || {};
 						let cacheChanged = false;
 						for (let k in moduleCache) if (moduleCache[k] === false || !InternalData.PatchModules[k]) { delete moduleCache[k]; cacheChanged = true; }
