@@ -1992,6 +1992,7 @@
 		"channelheadertoolbar": ["HeaderBar", "toolbar"],
 		"channelheadertopic": ["HeaderBarTopic", "topic"],
 		"channelheadertopicexpandable": ["HeaderBarTopic", "expandable"],
+		"channelheaderuppercontainer": ["HeaderBar", "upperContainer"],
 		"channelicon": ["Channel", "icon"],
 		"channeliconcontainer": ["Channel", "iconContainer"],
 		"channeliconitem": ["ChannelContainer", "iconItem"],
