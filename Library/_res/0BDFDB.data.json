@@ -1970,6 +1970,7 @@
 		"channelheaderchildren": ["HeaderBar", "children"],
 		"channelheadercursorpointer": ["ChatWindow", "cursorPointer"],
 		"channelheaderdiscovery": ["HeaderBarDiscovery", "headerBar"],
+		"channelheaderdiscoverybackdrop": ["HeaderBarDiscovery", "backdrop"],
 		"channelheaderdiscoverysearch": ["HeaderBarDiscoverySearch", "searchBar"],
 		"channelheaderdiscoverysearchfloating": ["HeaderBarDiscoverySearch", "searchFloating"],
 		"channelheaderdivider": ["BDFDB", "channelHeaderDivider"],
