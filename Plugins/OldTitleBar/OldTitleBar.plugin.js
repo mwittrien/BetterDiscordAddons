@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.3
+ * @version 1.9.4
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -224,13 +224,25 @@ module.exports = (_ => {
 					}
 
 					${BDFDB.dotCN.channelheaderheaderbar},
+					${BDFDB.dotCN.channelheaderdiscovery},
+					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN.channelheaderuppercontainer},
+					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN.channelheadertabbar},
 					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN.channelheaderchildren},
-					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN.channelheadertoolbar} {
+					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN.channelheadertoolbar},
+					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN._oldtitlebartoolbar},
+					${BDFDB.dotCNS.channelheaderdiscovery + BDFDB.dotCN.channelheaderuppercontainer},
+					${BDFDB.dotCNS.channelheaderdiscovery + BDFDB.dotCN.channelheadertabbar},
+					${BDFDB.dotCNS.channelheaderdiscovery + BDFDB.dotCN.channelheaderchildren},
+					${BDFDB.dotCNS.channelheaderdiscovery + BDFDB.dotCN.channelheadertoolbar},
+					${BDFDB.dotCNS.channelheaderdiscovery + BDFDB.dotCN._oldtitlebartoolbar},
+					${BDFDB.dotCNS.channelheaderdiscovery + BDFDB.dotCN.channelheaderdiscoverybackdrop} {
 						-webkit-app-region: drag !important;
 					}
 
 					${BDFDB.dotCNS.stopanimations + BDFDB.dotCN.channelheaderheaderbar},
-					${BDFDB.dotCN.channelheaderheaderbar} * {
+					${BDFDB.dotCNS.stopanimations + BDFDB.dotCN.channelheaderdiscovery},
+					${BDFDB.dotCN.channelheaderheaderbar} *,
+					${BDFDB.dotCN.channelheaderdiscovery} * {
 						-webkit-app-region: no-drag !important;
 					}
 				`;
