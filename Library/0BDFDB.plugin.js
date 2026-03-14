@@ -2584,7 +2584,10 @@ module.exports = (_ => {
 				Internal.findModuleViaData = (moduleStorage, dataStorage, item) => {
 					if (!dataStorage[item]) return;
 					let defaultExport = typeof dataStorage[item].exported != "boolean" ? true : dataStorage[item].exported;
-					if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport: defaultExport, moduleName: item});
+					if (Internal._preFound?.[item]) {
+						moduleStorage[item] = Internal._preFound[item];
+						delete Internal._preFound[item];
+					} else if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport: defaultExport, moduleName: item});
 					else if (dataStorage[item].protos) moduleStorage[item] = BDFDB.ModuleUtils.findByPrototypes(dataStorage[item].protos, {defaultExport: defaultExport, moduleName: item});
 					else if (dataStorage[item].name) moduleStorage[item] = BDFDB.ModuleUtils.findByName(dataStorage[item].name, {defaultExport: defaultExport, moduleName: item});
 					else if (dataStorage[item].strings) {
@@ -2637,9 +2640,28 @@ module.exports = (_ => {
 				LibraryModules.LanguageStore = (LanguageStores.find(n => n && hasDiscordStringHash(n.exports)) || LanguageStores.find(n => n && n.exports && hasDiscordStringHash(n.exports.default)) || {}).exports || {};
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
 				
-				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
-				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
-				LibraryModules.ReactPortal = BDFDB.ModuleUtils.findByProperties("flushSync", "createPortal");
+				const {Filters: __F, getBulkKeyed: __bulk} = BdApi.Webpack;
+				const __q = {
+					React: {filter: __F.byKeys("createElement", "cloneElement")},
+					ReactDOM: {filter: __F.byKeys("render", "findDOMNode")},
+					ReactDOM2: {filter: __F.byKeys("createRoot")},
+					ReactPortal: {filter: __F.byKeys("flushSync", "createPortal")}
+				};
+				for (let k in InternalData.LibraryModules) {
+					let c = InternalData.LibraryModules[k];
+					if (c.props) __q[k] = {filter: __F.byKeys(...c.props)};
+					else if (c.strings && !c.nonStrings) __q[k] = {filter: __F.byStrings(...[c.strings].flat(10)), defaultExport: false};
+				}
+				const __r = __bulk(__q);
+				LibraryModules.React = __r.React;
+				LibraryModules.ReactDOM = __r.ReactDOM || __r.ReactDOM2;
+				LibraryModules.ReactPortal = __r.ReactPortal;
+				Internal._preFound = {};
+				for (let k in InternalData.LibraryModules) if (__r[k]) {
+					let c = InternalData.LibraryModules[k], val = c.exported === false ? __r[k] : (__r[k].default || __r[k]);
+					if (c.value || c.assign || c.funcStrings || c.map) Internal._preFound[k] = val;
+					else if (val) LibraryModules[k] = val[k] || val;
+				}
 				
 				Internal.LibraryModules = new Proxy(LibraryModules, {
 					get: function (_, item) {
@@ -4566,16 +4588,26 @@ module.exports = (_ => {
 				};
 				
 				const DiscordClassModules = Object.assign({}, InternalData.CustomClassModules);
+				const __cq = {};
+				for (let k in InternalData.DiscordClassModules) {
+					let c = InternalData.DiscordClassModules[k], p = [c.props].flat(10);
+					__cq[k] = {filter: c.length
+						? m => (c.smaller ? Object.keys(m).length < c.length : Object.keys(m).length == c.length) && p.every(x => typeof m[x] == "string")
+						: m => p.every(x => typeof m[x] == "string")};
+				}
+				const __cr = BdApi.Webpack.getBulkKeyed(__cq);
+				for (let k in InternalData.DiscordClassModules) DiscordClassModules[k] = __cr[k] || null;
 				Internal.DiscordClassModules = new Proxy(DiscordClassModules, {
 					get: function (_, item) {
 						if (DiscordClassModules[item]) return DiscordClassModules[item];
+						if (DiscordClassModules[item] === null) return undefined;
 						if (!InternalData.DiscordClassModules[item]) return;
 						DiscordClassModules[item] = BDFDB.ModuleUtils.findStringObject(InternalData.DiscordClassModules[item].props, Object.assign({}, InternalData.DiscordClassModules[item]));
+						if (!DiscordClassModules[item]) DiscordClassModules[item] = null;
 						return DiscordClassModules[item] ? DiscordClassModules[item] : undefined;
 					}
 				});
 				BDFDB.DiscordClassModules = Internal.DiscordClassModules;
-				for (let item in InternalData.DiscordClassModules) if (!DiscordClassModules[item]) DiscordClassModules[item] = undefined;
 				
 				const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
 				BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
@@ -8629,17 +8661,17 @@ module.exports = (_ => {
 					}
 				};
 				
-				Internal.forceUpdateAll = function () {					
+				Internal.forceUpdateAll = function () {
 					BDFDB.MessageUtils.rerenderAll();
 					BDFDB.PatchUtils.forceAllUpdates(BDFDB);
 				};
-				
+
 				BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.EmojiStateUtils, "getEmojiUnavailableReason", {after: e => {
 					if (Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) return null;
 				}});
-				
+
 				Internal.forceUpdateAll();
-			
+
 				const pluginQueue = window.BDFDB_Global && BDFDB.ArrayUtils.is(window.BDFDB_Global.pluginQueue) ? window.BDFDB_Global.pluginQueue : [];
 
 				if (BDFDB.UserUtils.me.id == InternalData.myId || BDFDB.UserUtils.me.id == "350635509275557888") {
