@@ -4565,12 +4565,22 @@ module.exports = (_ => {
 					}, instant ? 0 : 1000);
 				};
 				
+				let classCache = BDFDB.DataUtils.load(BDFDB, "ClassModuleCache") || {}, classSave = null;
 				const DiscordClassModules = Object.assign({}, InternalData.CustomClassModules);
 				Internal.DiscordClassModules = new Proxy(DiscordClassModules, {
 					get: function (_, item) {
 						if (DiscordClassModules[item]) return DiscordClassModules[item];
 						if (!InternalData.DiscordClassModules[item]) return;
+						if (item in classCache) {
+							if (classCache[item] === false) return;
+							let m = Internal.getWebModuleReq().c[classCache[item]]?.exports;
+							if (m && m != window && [InternalData.DiscordClassModules[item].props].flat(10).every(p => typeof m[p] == "string")) return DiscordClassModules[item] = m;
+							delete classCache[item];
+						}
 						DiscordClassModules[item] = BDFDB.ModuleUtils.findStringObject(InternalData.DiscordClassModules[item].props, Object.assign({}, InternalData.DiscordClassModules[item]));
+						if (DiscordClassModules[item]) { let req = Internal.getWebModuleReq(); for (let i in req.c) if (req.c[i].exports === DiscordClassModules[item]) { classCache[item] = i; break; } }
+						else classCache[item] = false;
+						if (!classSave) classSave = setTimeout(() => { classSave = null; BDFDB.DataUtils.save(classCache, BDFDB, "ClassModuleCache"); }, 100);
 						return DiscordClassModules[item] ? DiscordClassModules[item] : undefined;
 					}
 				});
