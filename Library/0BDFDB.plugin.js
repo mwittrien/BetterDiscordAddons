@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.8
+ * @version 4.4.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8270,7 +8270,48 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement(VideoInner, this.props);
 					}
 				};
-				
+				CustomComponents["Flex"] = reactInitialized && (_ => {
+					const dirMap = {vertical: "column", horizontal: "row", horizontal_reverse: "row-reverse"};
+					const alignMap = {center: "center", start: "flex-start", end: "flex-end", stretch: "stretch", baseline: "baseline"};
+					const wrapMap = {no_wrap: "nowrap", wrap: "wrap", wrap_reverse: "wrap-reverse"};
+					class BDFDB_FlexChild extends Internal.LibraryModules.React.Component {
+						render() {
+							let {grow = 1, shrink = 1, basis = "auto", wrap, className, style, children, ...props} = this.props;
+							let childStyle = {flex: `${grow} ${shrink} ${basis}`};
+							if (wrap) childStyle.flexWrap = wrap;
+							return BDFDB.ReactUtils.createElement("div", Object.assign({}, props, {className, style: Object.assign(childStyle, style), children}));
+						}
+					}
+					class BDFDB_Flex extends Internal.LibraryModules.React.Component {
+						render() {
+							let {direction, align, wrap, className, style, children, ...props} = this.props;
+							let Cls = this.constructor;
+							let classList = [
+								Cls.flex,
+								direction === "vertical" && Cls.vertical,
+								direction === "horizontal" && Cls.horizontal,
+								align === "center" && Cls.alignCenter,
+								align === "start" && Cls.alignStart,
+								align === "end" && Cls.alignEnd,
+								align === "stretch" && Cls.alignStretch,
+								align === "baseline" && Cls.alignBaseline,
+								wrap === "wrap" && Cls.wrap,
+								wrap === "wrap_reverse" && Cls.wrapReverse,
+								wrap === "no_wrap" && Cls.noWrap,
+								className
+							].filter(Boolean).join(" ");
+							let flexStyle = Cls.flex ? {} : {display: "flex", flexDirection: dirMap[direction] || "column", alignItems: alignMap[align] || "flex-start", flexWrap: wrapMap[wrap] || "nowrap"};
+							return BDFDB.ReactUtils.createElement("div", Object.assign({}, props, {className: classList || undefined, style: Object.assign(flexStyle, style), children}));
+						}
+					}
+					BDFDB_Flex.Direction = {VERTICAL: "vertical", HORIZONTAL: "horizontal", HORIZONTAL_REVERSE: "horizontal_reverse"};
+					BDFDB_Flex.Align = {CENTER: "center", START: "start", END: "end", STRETCH: "stretch", BASELINE: "baseline"};
+					BDFDB_Flex.Wrap = {NO_WRAP: "no_wrap", WRAP: "wrap", WRAP_REVERSE: "wrap_reverse"};
+					BDFDB_Flex.Gutter = {NONE: 0, SMALL: 4, MEDIUM: 8, LARGE: 16};
+					BDFDB_Flex.Child = BDFDB_FlexChild;
+					return BDFDB_Flex;
+				})();
+
 				Internal.LibraryComponents = new Proxy(LibraryComponents, {
 					get: function (_, item) {
 						if (LibraryComponents[item]) return LibraryComponents[item];
