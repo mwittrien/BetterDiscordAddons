@@ -1422,7 +1422,7 @@
 		"FavButton": {"props": ["gifFavoriteButton", "selected", "icon"]},
 		"File": {"props": ["cancelButton", "fileNameLink"]},
 		"FileDownloadButton": {"props": ["downloadButton", "attachmentName"]},
-		"Flex": {"props": ["flex", "vertical", "horizontal", "noWrap"]},
+		"Flex": {"props": ["flex", "alignCenter"]},
 		"FlexProperties": {"props": ["flexHorizontal", "flexJustifyStart"]},
 		"FlowerStar": {"props": ["flowerStarContainer", "flowerStar"]},
 		"FormText": {"props": ["description", "modeDefault"]},
