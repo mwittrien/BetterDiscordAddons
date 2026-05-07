@@ -212,7 +212,6 @@
 			"getMessageAuthor": [".channel_id);return"]
 		}},
 		"MessageComponentUtils": {"strings": [".UNBLOCK_TO_JUMP_BODY", ".altKey"]},
-		"MessageForwardParser": {"strings": ["timestampLabel", "parentMessage", "getForward"]},
 		"MessageManageUtils": {"strings": ["showMentionToggle", "message-actions"], "exported": false, "value": "exports", "map": {
 			"copyLink": ["MESSAGE_LINK_COPIED"],
 			"replyToMessage": ["showMentionToggle"]
@@ -512,6 +511,7 @@
 		"MessageContent": {"strings": [".SEND_FAILED", "editedTimestamp", "isUnsupported"]},
 		"MessageContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message", "getGuildId"]},
 		"MessageGroup": {"strings": [".ephemeral", "animateAvatar:", "getMessageByReference"]},
+		"MessageForwarded": {"strings": ["originIconUrl", "getForwardInfo", "snapshot"], "noSearch": true},
 		"MessageHeader": {"strings": ["showTimestampOnHover", "usernameClassName", "isVisibleOnlyOnHover:"], "noSearch": true},
 		"MessageReply": {"strings": ["referencedMessage", "referencedUsernameProfile"]},
 		"MessageReplyHeader": {"strings": ["pollBadgeReplied", "referencedMessage"]},
