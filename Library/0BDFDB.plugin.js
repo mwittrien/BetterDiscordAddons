@@ -1358,11 +1358,12 @@ module.exports = (_ => {
 								else return defaultExport ? req.c[i].exports : req.c[i];
 							}
 							if (!req.c[i] && onlySearchUnloaded && filter(m)) {
-								req(i);
-								const resolved = req.c[i];
-								const trueResolved = resolved.exports && BDFDB.ObjectUtils.isEmpty(resolved.exports) ? resolved : resolved.exports;
-								if (all) found.push(defaultExport ? trueResolved.exports : trueResolved);
-								else return defaultExport ? trueResolved.exports : trueResolved;
+								let exp;
+								try { exp = req(i); } catch (e) {}
+								if (exp && isSearchable(exp, true) && (!config.exportsFilter || config.exportsFilter(exp))) {
+									if (all) found.push(defaultExport ? exp : req.c[i]);
+									else return defaultExport ? exp : req.c[i];
+								}
 							}
 						}
 					}
