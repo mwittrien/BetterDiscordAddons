@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.5
+ * @version 1.7.6
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -85,8 +85,11 @@ module.exports = (_ => {
 				};
 				
 				this.modulePatches = {
+					before: [
+					],
 					after: [
 						"Embed",
+						"MessageForwarded",
 						"MessageTimestamp"
 					]
 				};
@@ -109,13 +112,6 @@ module.exports = (_ => {
 					if (this.settings.tooltips.markup) {
 						e.returnValue.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, date);
 						if (e.returnValue.props.node) e.returnValue.props.node.full = e.returnValue.props.text;
-					}
-				}});
-				
-				BDFDB.LibraryModules.MessageForwardParser && BDFDB.LibraryModules.MessageForwardParser.prototype && BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageForwardParser.prototype, "getForwardInfo", {after: e => {
-					if (this.settings.places.chat) {
-						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.messageSnapshot.message.timestamp);
-						if (e.returnValue.footerInfo.timestampLabel) e.returnValue.footerInfo.timestampLabel = timestamp;
 					}
 				}});
 				
@@ -188,6 +184,11 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
+			}
+			
+			processMessageForwarded (e) {
+				if (!this.settings.places.chat || !e.instance.props.message) return;
+				e.returnvalue.props.children[2].props.children = [e.returnvalue.props.children[2].props.children.split(" ").slice(0, -1), this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.message.timestamp._i || e.instance.props.message.timestamp)].flat(10).join(" ")
 			}
 			
 			processMessageTimestamp (e) {
