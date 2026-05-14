@@ -1395,7 +1395,8 @@
 		"UserProfile": "_24502",
 		"UserProfileListScroller": "_9d78f",
 		"UserProfileSection": "bf424d",
-		"UserProfileUsernameSection": "_05e81"
+		"UserProfileUsernameSection": "_05e81",
+		"VoiceChannel": "_07f91"
 	},
 	"DiscordClassModules": {
 		"AccountDetails": {"props": ["plated", "nameTag", "panelTitleContainer"]},
