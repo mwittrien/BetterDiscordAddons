@@ -300,7 +300,7 @@
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
-		"TextArea": {"strings": ["onKeyDown", "defaultDirty"]},
+		"TextArea": {"strings": ["autosize", "defaultDirty"]},
 		"TextInput": {"strings": ["onFocus", "defaultValue", "editable", "errorMessage"]},
 		"TooltipContainer": {"strings": ["Tooltip cannot find DOM node", "shouldShowTooltip", "clickable"]}
 	},
