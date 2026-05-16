@@ -623,7 +623,7 @@
 		"UserThemeContainer": {"strings": ["profileUi", "\"VIEW\"", ".Provider"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
 		"VoiceUser": {"strings": ["speaking", "collapsed", "userNameClassName"]},
-		"VoiceUserButtons": {"strings": ["localVideoDisabled", "user", "ICON_FEEDBACK_CRITICAL"]},
+		"VoiceUserButtons": {"strings": ["localVideoDisabled", "user", "ICON_FEEDBACK_CRITICAL"], "noSearch": true},
 		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", ".MOVE_MEMBERS"]}
 	},
 	"ModuleUtilsConfig": {

@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.3
+ * @version 3.2.4
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,7 +86,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"NameContainerDecorators",
-						"VoiceUser"
+						"VoiceUserButtons"
 					]
 				};
 				
@@ -199,10 +199,10 @@ module.exports = (_ => {
 				});
 			}
 
-			processVoiceUser (e) {
+			processVoiceUserButtons (e) {
 				if (e.instance.props.user && this.settings.places.voiceList) {
-					let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
-					if (content) this.injectRoleTag(content.props.children, e.instance.props.user, "voice", 3);
+					e.returnvalue = [e.returnvalue].flat(10).filter(n => n);
+					this.injectRoleTag(e.returnvalue, e.instance.props.user, "voice", 0);
 				}
 			}
 
