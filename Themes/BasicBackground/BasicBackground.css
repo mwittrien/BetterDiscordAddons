@@ -173,7 +173,6 @@
 	--background-surface-higher: rgb(var(--transparencycolor_v));
 	--background-surface-high: rgb(var(--transparencycolor_v));
 	--background-secondary-alt: rgba(var(--transparencycolor_v), .35);
-	--background-nested-floating: rgba(var(--transparencycolor_v), .5);
 	--chat-background-default: rgba(var(--transparencycolor_v), .3);
 	--card-background-default: rgba(var(--transparencycolor_v), .3);
 	
