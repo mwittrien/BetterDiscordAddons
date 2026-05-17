@@ -341,7 +341,7 @@
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["innerRef", "zoomable", "LOADING"]},
 		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"]},
-		"ImageModalOuter": {"strings": ["MEDIA_VIEWER", "numMediaItem", "LIGHTBOX"]},
+		"ImageModalOuter": {"strings": ["numMediaItem", "LIGHTBOX"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
 			"LayerContainer": ["missing parent"]
@@ -361,7 +361,7 @@
 			"ModalRoot": ["fullscreenOnMobile", "ENTERING"],
 			"ModalSize": ["\"DYNAMIC\"", "\"LARGE\""]
 		}},
-		"Paginator": {"strings": ["totalPageCount", "selectedPage", "TRANSPARENT"]},
+		"Paginator": {"strings": ["maxVisiblePages", "pageSize", "innerClassName"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"], "funcStrings": ["{}"]},
 		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"]},
 		"PrivateChannelItems": {"strings": ["getRecipientId", "interactiveClassName", "aria-posinset"], "exported": false, "value": "exports", "map": {
@@ -369,7 +369,6 @@
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "padding-left"]},
 		"Scrollers": {"strings": ["useImperativeHandle", "disableFocusRingScope", "scrollerRef"]},
-		"SearchResultsPagination": {"strings": ["maxVisiblePages", "pageSize", "innerClassName"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
