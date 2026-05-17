@@ -2,7 +2,7 @@
  * @name BetterSearchPage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Makes the Controls in the Search Results Page sticky
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -99,7 +99,7 @@ module.exports = (_ => {
 				if (index == -1) return;
 				let onPageChange = BDFDB.ReactUtils.findValue(e.returnvalue, "onPageChange");
 				let renderPageWrapper = BDFDB.ReactUtils.findValue(e.returnvalue, "renderPageWrapper");
-				if (onPageChange && renderPageWrapper) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchResultsPagination, {
+				if (onPageChange && renderPageWrapper) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Paginator, {
 					currentPage: currentSearch.currentPage,
 					onPageChange: newPage => {
 						currentSearch.currentPage = newPage;
