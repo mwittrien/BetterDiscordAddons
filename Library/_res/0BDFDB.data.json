@@ -373,9 +373,8 @@
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
 		}},
-		"StatusComponents": {"strings": ["OFFLINE", "mask", "isMobile", "status"], "exported": false, "value": "exports", "map": {
-			"Status": ["status", "mask"],
-			"Types": ["\"OFFLINE\"", "\"ONLINE\""]
+		"StatusComponents": {"strings": ["OFFLINE", "mask", "isMobile", "1.5*"], "exported": false, "value": "exports", "map": {
+			"Status": ["status", "mask"]
 		}},
 		"Text": {"strings": ["lineClamp:", "fontScaling"], "funcStrings": ["fontScaling"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
