@@ -4,6 +4,7 @@
 		"BDFDB": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"CopyRawMessage": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/CopyRawMessage.plugin.js",
 		"CreationDate": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/CreationDate.plugin.js",
+		"EmojiStatistics": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/EmojiStatistics.plugin.js",
 		"ForceImagePreviews": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ForceImagePreviews.plugin.js",
 		"JoinedAtDate": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/JoinedAtDate.plugin.js",
 		"ShowHiddenChannels": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ShowHiddenChannels.plugin.js",
@@ -299,7 +300,6 @@
 		"SearchableSelect": {"strings": ["onSearchChange", "debounceTime"]},
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
-		"Table": {"props": ["SortDirection", "defaultProps"]},
 		"TextArea": {"strings": ["autosize", "defaultDirty"]},
 		"TextInput": {"strings": ["onFocus", "defaultValue", "editable", "errorMessage"]},
 		"TooltipContainer": {"strings": ["Tooltip cannot find DOM node", "shouldShowTooltip", "clickable"]}
@@ -1137,12 +1137,6 @@
 			"name": "name_71509e",
 			"styled": "styledGuildsAsChannels_71509e"
 		},
-		"EmojiStatistics": {
-			"amountCell": "amountCell_7741f8",
-			"iconCell": "iconCell_7741f8",
-			"nameCell": "nameCell_7741f8",
-			"statisticsButton": "statisticsButton_7741f8"
-		},
 		"FriendNotifications": {
 			"friendsOnline": "friendsOnline_aa9717",
 			"friendsOnlineWrap": "friendsOnlineWrap_aa9717",
@@ -1702,10 +1696,6 @@
 		"_displayserversaschannelsmuted": ["DisplayServersAsChannels", "muted"],
 		"_displayserversaschannelsname": ["DisplayServersAsChannels", "name"],
 		"_displayserversaschannelsstyled": ["DisplayServersAsChannels", "styled"],
-		"_emojistatisticsstatisticsbutton": ["EmojiStatistics", "statisticsButton"],
-		"_emojistatisticsamountcell": ["EmojiStatistics", "amountCell"],
-		"_emojistatisticsiconcell": ["EmojiStatistics", "iconCell"],
-		"_emojistatisticsnamecell": ["EmojiStatistics", "nameCell"],
 		"_friendnotificationslogavatar": ["FriendNotifications", "logAvatar"],
 		"_friendnotificationslogcontent": ["FriendNotifications", "logContent"],
 		"_friendnotificationslogtime": ["FriendNotifications", "logTime"],
