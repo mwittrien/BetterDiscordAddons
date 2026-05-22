@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.4
+ * @version 2.3.5
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -171,31 +171,24 @@ module.exports = (_ => {
 						]
 					}),
 					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.messagespopoutgroupwrapper,
+						className: BDFDB.disCN.recentmentionsmessage,
 						key: message.id,
 						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
-								className: BDFDB.disCN.messagespopoutgroupcozy,
-								message: message,
-								channel: channel,
-								onContextMenu: e => BDFDB.MessageUtils.openMenu(message, e, true)
-							}, true),
-							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.messagespopoutactionbuttons,
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								className: BDFDB.disCN.recentmentionsjumpbutton,
+								style: {cursor: "default"},
 								children: [
 									(!channel.guild_id || BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: BDFDB.disCNS.buttonrevamp + BDFDB.disCNS.buttonrevampsm + BDFDB.disCNS.buttonrevampoverlayprimary + BDFDB.disCN.buttonrevamphastext,
+										style: {margin: "0 8px"},
 										onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.buttonrevampchildrenwrapper,
-											children: BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.buttonrevampchildren,
-												children: BDFDB.LanguageUtils.LanguageStrings.JUMP
-											})
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+											size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
+											children: BDFDB.LanguageUtils.LanguageStrings.JUMP
 										})
 									}),
+									(!channel.guild_id || BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id)) && " | ",
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: BDFDB.disCNS.buttonrevamp + BDFDB.disCNS.buttonrevampsm + BDFDB.disCNS.buttonrevampoverlayprimary + BDFDB.disCN.buttonrevamphastext,
+										style: {margin: "0 8px"},
 										onClick: _ => {
 											if (message.content || message.attachments.length > 1) {
 												let text = message.content || "";
@@ -206,36 +199,34 @@ module.exports = (_ => {
 												BDFDB.LibraryModules.WindowUtils.copyImage(message.attachments[0].url);
 											}
 										},
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.buttonrevampchildrenwrapper,
-											children: BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.buttonrevampchildren,
-												children: BDFDB.LanguageUtils.LanguageStrings.COPY
-											})
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+											size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
+											children: BDFDB.LanguageUtils.LanguageStrings.COPY
 										})
 									}),
+									" | ",
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: BDFDB.disCNS.buttonrevamp + BDFDB.disCNS.buttonrevampsm + BDFDB.disCNS.buttonrevampoverlayprimary + BDFDB.disCN.buttonrevamphastext,
+										style: {margin: "0 8px"},
 										onClick: _ => {
 											_this.removeNoteData(note);
 											BDFDB.ReactUtils.forceUpdate(this);
 										},
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.buttonrevampchildrenwrapper,
-											children: BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.buttonrevampchildren,
-												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-													nativeClass: false,
-													className: BDFDB.disCN.buttonrevampicon,
-													width: 16,
-													height: 16,
-													name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE
-												})
-											})
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											nativeClass: false,
+											className: BDFDB.disCN.buttonrevampicon,
+											width: 16,
+											height: 16,
+											name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE
 										})
 									})
 								]
 							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
+								className: BDFDB.disCN.messagespopoutgroupcozy,
+								message: message,
+								channel: channel,
+								onContextMenu: e => BDFDB.MessageUtils.openMenu(message, e, true)
+							}, true),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP,
 								justify: BDFDB.LibraryComponents.Flex.Justify.END,

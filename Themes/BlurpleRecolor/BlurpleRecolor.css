@@ -5,11 +5,9 @@
 	--accentcolor2:				255, 115, 250;
 	--linkcolor:				0, 176, 244;
 	
-	
 	--accentcolor_v:			var(--accentcolor_s, var(--accentcolor));
 	--accentcolor2_v:			var(--accentcolor2_s, var(--accentcolor2));
 	--linkcolor_v:				var(--linkcolor_s, var(--linkcolor));
-	
 	
 	--accentcolor-hover:			rgb(var(--accentcolor_v)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
 	--accentcolor-active:			rgb(var(--accentcolor_v)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
@@ -62,7 +60,7 @@
 	--mention-background: rgba(var(--accentcolor_v),.3) !important;
 	--mention-foreground: var(--brand-experiment-200) !important;
 	
-	--background-message-highlight: rgba(var(--accentcolor_v),.2) !important;
+	--message-highlight-background-default: rgba(var(--accentcolor_v),.2) !important;
 	
 	--control-background-primary-active: rgb(var(--accentcolor_v)) !important;
 	--control-background-primary-default: rgb(var(--accentcolor_v)) !important;
