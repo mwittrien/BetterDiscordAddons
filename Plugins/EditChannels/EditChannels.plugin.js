@@ -141,6 +141,18 @@ module.exports = (_ => {
 				appTitleObserver = new MutationObserver(_ => this.changeAppTitle());
 				appTitleObserver.observe(document.head.querySelector("title"), {childList: true});
 
+				this._focusRingScopeCN = {
+					mention: BDFDB.disCN.mention,
+					categoryiconvisibility: BDFDB.disCN.categoryiconvisibility,
+					channeliconvisibility: BDFDB.disCN.channeliconvisibility,
+					searchpopoutoption: BDFDB.disCN.searchpopoutoption,
+					categoryname: BDFDB.disCN.categoryname,
+					categoryicon: BDFDB.disCN.categoryicon,
+					channelname: BDFDB.disCN.channelname,
+					searchpopoutresultchannel: BDFDB.disCN.searchpopoutresultchannel,
+					searchpopoutresultchannelicon: BDFDB.disCN.searchpopoutresultchannelicon
+				};
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryChannels", {after: e => {
 					if (!e.methodArguments[0].query) return;
 					for (let id of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(id => Object.keys(BDFDB.LibraryStores.ChannelStore.getMutableGuildChannelsForGuild(id))).flat()) {
@@ -157,11 +169,12 @@ module.exports = (_ => {
 						}
 					}
 				}});
-				
+
 				this.forceUpdateAll();
 			}
 			
 			onStop () {
+				delete this._focusRingScopeCN;
 				if (appTitleObserver) appTitleObserver.disconnect();
 				this.forceUpdateAll();
 			}
@@ -431,31 +444,42 @@ module.exports = (_ => {
 
 			processFocusRingScope (e) {
 				if (!e.returnvalue || !e.returnvalue.props.className) return;
+				const cn = e.returnvalue.props.className;
+				const _cn = this._focusRingScopeCN;
+				if (!_cn) return;
+				
+				if (
+					cn.indexOf(_cn.mention) === -1 &&
+					cn.indexOf(_cn.categoryiconvisibility) === -1 &&
+					cn.indexOf(_cn.channeliconvisibility) === -1 &&
+					cn.indexOf(_cn.searchpopoutoption) === -1
+				) return;
+
 				let change, hoveredEvents, channelId, nameClass, categoyClass, iconClass, modify = {};
-				if (this.settings.places.mentions && e.returnvalue.props.className.indexOf(BDFDB.disCN.mention) > -1 && e.instance.props["edited-mention-color"]) {
+				if (this.settings.places.mentions && cn.indexOf(_cn.mention) > -1 && e.instance.props["edited-mention-color"]) {
 					e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {"--edited-mention-color": e.instance.props["edited-mention-color"]});
 				}
-				if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1) {
+				if (this.settings.places.channelList && cn.indexOf(_cn.categoryiconvisibility) > -1) {
 					change = true;
 					hoveredEvents = true;
 					channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("___").pop();
-					nameClass = BDFDB.disCN.categoryname;
-					iconClass = BDFDB.disCN.categoryicon;
+					nameClass = _cn.categoryname;
+					iconClass = _cn.categoryicon;
 					modify = {muted: BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), channelId)};
 				}
-				if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.channeliconvisibility) > -1) {
+				if (this.settings.places.channelList && cn.indexOf(_cn.channeliconvisibility) > -1) {
 					change = true;
 					hoveredEvents = true;
 					channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("___").pop();
-					nameClass = BDFDB.disCN.channelname;
+					nameClass = _cn.channelname;
 					modify = {muted: BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), channelId)};
 				}
-				else if (this.settings.places.searchPopout && e.returnvalue.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
+				else if (this.settings.places.searchPopout && cn.indexOf(_cn.searchpopoutoption) > -1) {
 					change = true;
 					let channel = BDFDB.ReactUtils.findValue(e.returnvalue, "channel");
 					channelId = channel && channel.id;
-					nameClass = BDFDB.disCN.searchpopoutresultchannel;
-					iconClass = BDFDB.disCN.searchpopoutresultchannelicon;
+					nameClass = _cn.searchpopoutresultchannel;
+					iconClass = _cn.searchpopoutresultchannelicon;
 				}
 				if (change && channelId) {
 					if (hoveredEvents) {
