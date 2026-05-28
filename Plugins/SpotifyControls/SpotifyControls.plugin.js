@@ -144,7 +144,6 @@ module.exports = (_ => {
 					stopTime = new Date();
 				}
 				if (!lastSong) return null;
-				let coverSrc = (BDFDB.ReactUtils.hookCall(BDFDB.LibraryModules.ApplicationAssetUtils.getAssetImage, lastSong) || {largeImage: {}}).largeImage.src;
 				let connection = (BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
