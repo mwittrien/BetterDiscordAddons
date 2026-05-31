@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.5
+ * @version 2.1.6
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -64,6 +64,8 @@ module.exports = (_ => {
 		var _this;
 		var badgeConfigs = {}, loadedUsers = {}, queuedInstances = {}, requestQueue = {queue: [], timeout: null, id: null}, cacheTimeout;
 		
+		var UserBadgesComponent = null;
+		
 		const places = ["chat", "memberList", "dmsList"];
 		
 		const userBadgeFlagNameMap = {
@@ -90,7 +92,8 @@ module.exports = (_ => {
 					after: [
 						"NameContainerDecorators",
 						"PrivateChannel",
-						"UserBadges"
+						"UserBadges",
+						"UserBadgesWrapper"
 					]
 				};
 				
@@ -221,6 +224,20 @@ module.exports = (_ => {
 						if (userProfile && userProfile.user) processUser(userProfile.user.id, userProfile);
 					}
 				}});
+				
+				BDFDB.LibraryModules.UserProfileUtils.fetchProfile(BDFDB.UserUtils.me.id).then(_ => {
+					BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.createElement("div", {
+						children: [
+							"Loading Badges for ShowBadgesInChat",
+							BDFDB.ReactUtils.createElement("div", {
+								style: {"display": "none"},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadgesWrapper, {
+									displayProfile: BDFDB.LibraryModules.MemberDisplayUtils.getDisplayProfile(BDFDB.UserUtils.me.id)
+								})
+							})
+						]
+					}), {timeout: 1});
+				});
 
 				this.forceUpdateAll();
 			}
@@ -265,7 +282,7 @@ module.exports = (_ => {
 											children: cardData.key.split("_").map(n => BDFDB.StringUtils.upperCaseFirstChar(n.toLowerCase())).join(" ")
 										})
 									}),
-									badges[cardData.key] && badges[cardData.key].keys.map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadges, {
+									badges[cardData.key] && badges[cardData.key].keys.map(key => BDFDB.ReactUtils.createElement(UserBadgesComponent, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN._showbadgesinchatbadgessettings),
 										place: "settings",
 										custom: true,
@@ -354,6 +371,13 @@ module.exports = (_ => {
 				this.injectBadges(wrapper.props.decorators, instance.props.user, null, "dmsList");
 			}
 			
+			processUserBadgesWrapper (e) {
+				if (e.returnvalue && !UserBadgesComponent) {
+					UserBadgesComponent = [e.returnvalue.props.children].flat(10)[0];
+					UserBadgesComponent = UserBadgesComponent.type.__originalFunction || UserBadgesComponent.type;
+				}
+			}
+			
 			processUserBadges (e) {
 				if (!e.instance.props.custom) return;
 				let filter = e.instance.props.place != "settings";
@@ -369,19 +393,19 @@ module.exports = (_ => {
 
 			injectBadges (children, user, guildId, place) {
 				if (!BDFDB.ArrayUtils.is(children) || !user || user.isNonUserBot()) return;
-				if (!loadedUsers[user.id] || !loadedUsers[user.id].badges || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
+				if (!UserBadgesComponent || !loadedUsers[user.id] || !loadedUsers[user.id].badges || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
 					queuedInstances[user.id] = [].concat(queuedInstances[user.id]).filter(n => n);
 					if (requestQueue.queue.indexOf(user.id) == -1) requestQueue.queue.push(user.id);
 					this.runQueue();
 				}
 				children.push(BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
 					render() {
-						if (!loadedUsers[user.id] || !loadedUsers[user.id].badges || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
+						if (!UserBadgesComponent || !loadedUsers[user.id] || !loadedUsers[user.id].badges || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
 							queuedInstances[user.id] = [].concat(queuedInstances[user.id]).filter(n => n);
 							if (queuedInstances[user.id].indexOf(this) == -1) queuedInstances[user.id].push(this);
 							return null;
 						}
-						else return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadges, {
+						else return BDFDB.ReactUtils.createElement(UserBadgesComponent, {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN[`_showbadgesinchatbadges${place.toLowerCase()}`]),
 							place: place,
 							custom: true,
