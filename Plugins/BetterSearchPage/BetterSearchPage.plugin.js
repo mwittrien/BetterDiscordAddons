@@ -2,7 +2,7 @@
  * @name BetterSearchPage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.1
+ * @version 1.3.2
  * @description Makes the Controls in the Search Results Page sticky
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -103,7 +103,7 @@ module.exports = (_ => {
 					currentPage: currentSearch.currentPage,
 					onPageChange: newPage => {
 						currentSearch.currentPage = newPage;
-						!e.instance.props.search.searching && onPageChange(newPage);
+						!e.instance.props.search.searching && onPageChange(newPage-1);
 					},
 					renderPageWrapper: renderPageWrapper,
 					maxVisiblePages: 5,
