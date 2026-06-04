@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.2
+ * @version 4.5.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7687,161 +7687,31 @@ module.exports = (_ => {
 				};
 				if (CustomComponents.SvgIcon) CustomComponents.SvgIcon.Names = InternalData.SvgIcons || {};
 				
-				const SwitchIconPaths = {
-					a: {
-						TOP: "M5.13231 6.72963L6.7233 5.13864L14.855 13.2704L13.264 14.8614L5.13231 6.72963Z",
-						BOTTOM: "M13.2704 5.13864L14.8614 6.72963L6.72963 14.8614L5.13864 13.2704L13.2704 5.13864Z"
-					},
-					b: {
-						TOP: "M6.56666 11.0013L6.56666 8.96683L13.5667 8.96683L13.5667 11.0013L6.56666 11.0013Z",
-						BOTTOM: "M13.5582 8.96683L13.5582 11.0013L6.56192 11.0013L6.56192 8.96683L13.5582 8.96683Z"
-					},
-					c: {
-						TOP: "M7.89561 14.8538L6.30462 13.2629L14.3099 5.25755L15.9009 6.84854L7.89561 14.8538Z",
-						BOTTOM: "M4.08643 11.0903L5.67742 9.49929L9.4485 13.2704L7.85751 14.8614L4.08643 11.0903Z"
-					}
-				};
-				const SwitchInner = function (props) {
-					let reducedMotion = BDFDB.ReactUtils.useContext(Internal.LibraryModules.PreferencesContext.AccessibilityPreferencesContext).reducedMotion;
-					let ref = BDFDB.ReactUtils.useRef(null);
-					let state = BDFDB.ReactUtils.useState(false);
-					let animation = Internal.LibraryComponents.Animations.useSpring({
-						config: {
-							mass: 1,
-							tension: 250
-						},
-						opacity: props.disabled ? .3 : 1,
-						state: state[0] ? (props.value ? .7 : .3) : (props.value ? 1 : 0)
-					});
-					let fill = animation.state.to({
-						output: [props.uncheckedColor, props.checkedColor]
-					});
-					let mini = props.size == Internal.LibraryComponents.Switch.Sizes.MINI;
-					
-					return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.div, {
-						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch, props.value && BDFDB.disCN.switchchecked, mini && BDFDB.disCN.switchmini),
-						onMouseDown: _ => {
-							return !props.disabled && state[1](true);
-						},
-						onMouseUp: _ => {
-							return state[1](false);
-						},
-						onMouseLeave: _ => {
-							return state[1](false);
-						},
-						style: {
-							opacity: animation.opacity,
-							backgroundColor: animation.state.to({
-								output: [props.uncheckedColor, props.checkedColor]
-							})
-						},
-						tabIndex: -1,
-						children: [
-							BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.svg, {
-								className: BDFDB.disCN.switchslider,
-								viewBox: "0 0 28 20",
-								preserveAspectRatio: "xMinYMid meet",
-								style: {
-									left: animation.state.to({
-										range: [0, .3, .7, 1],
-										output: mini ? [-1, 2, 6, 9] : [-3, 1, 8, 12]
-									})
-								},
-								children: [
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.rect, {
-										fill: "white",
-										x: animation.state.to({
-											range: [0, .3, .7, 1],
-											output: [4, 0, 0, 4]
-										}),
-										y: animation.state.to({
-											range: [0, .3, .7, 1],
-											output: [0, 1, 1, 0]
-										}),
-										height: animation.state.to({
-											range: [0, .3, .7, 1],
-											output: [20, 18, 18, 20]
-										}),
-										width: animation.state.to({
-											range: [0, .3, .7, 1],
-											output: [20, 28, 28, 20]
-										}),
-										rx: "10"
-									}),
-									BDFDB.ReactUtils.createElement("svg", {
-										viewBox: "0 0 20 20",
-										fill: "none",
-										children: [
-											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.path, {
-												fill: fill,
-												d: animation.state.to({
-													range: [0, .3, .7, 1],
-													output: reducedMotion.enabled ? [SwitchIconPaths.a.TOP, SwitchIconPaths.a.TOP, SwitchIconPaths.c.TOP, SwitchIconPaths.c.TOP] : [SwitchIconPaths.a.TOP, SwitchIconPaths.b.TOP, SwitchIconPaths.b.TOP, SwitchIconPaths.c.TOP]
-												})
-											}),
-											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.path, {
-												fill: fill,
-												d: animation.state.to({
-													range: [0, .3, .7, 1],
-													output: reducedMotion.enabled ? [SwitchIconPaths.a.BOTTOM, SwitchIconPaths.a.BOTTOM, SwitchIconPaths.c.BOTTOM, SwitchIconPaths.c.BOTTOM] : [SwitchIconPaths.a.BOTTOM, SwitchIconPaths.b.BOTTOM, SwitchIconPaths.b.BOTTOM, SwitchIconPaths.c.BOTTOM]
-												})
-											})
-										]
-									})
-								]
-							}),
-							BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, props, {
-								id: props.id,
-								type: "checkbox",
-								ref: ref,
-								className: BDFDB.DOMUtils.formatClassName(props.inputClassName, BDFDB.disCN.switchinner),
-								tabIndex: props.disabled ? -1 : 0,
-								onKeyDown: e => {
-									if (!props.disabled && !e.repeat && (e.key == " " || e.key == "Enter")) state[1](true);
-								},
-								onKeyUp: e => {
-									if (!props.disabled && !e.repeat) {
-										state[1](false);
-										if (e.key == "Enter" && ref.current) ref.current.click();
-									}
-								},
-								onChange: e => {
-									state[1](false);
-									if (typeof props.onChange == "function") props.onChange((e.currentTarget || e.target).checked, e);
-								},
-								checked: props.value,
-								disabled: props.disabled
-							}), "uncheckedColor", "checkedColor", "size", "value"))
-						]
-					});
-				};
 				CustomComponents.Switch = reactInitialized && class BDFDB_Switch extends Internal.LibraryModules.React.Component {
-					render () {
-						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
-							handleChange() {
-								this.props.value = !this.props.value;
-								if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
-								BDFDB.ReactUtils.forceUpdate(this);
-							}
-							render() {
-								return BDFDB.ReactUtils.createElement(SwitchInner, Object.assign({}, this.props, {
-									onChange: this.handleChange.bind(this)
-								}));
-							}
-						}, this.props);
+					handleChange(e) {
+						this.props.value = e;
+						if (typeof this.props.onChange == "function") this.props.onChange(e, this);
+						BDFDB.ReactUtils.forceUpdate(this);
+					}
+					handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
+					handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
+					handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
+					handleMouseUp(e) {if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);}
+					handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
+					render() {
+						return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.Switch, Object.assign({}, this.props, {
+							checked: this.props.value,
+							onChange: this.handleChange.bind(this),
+							onClick: this.handleClick.bind(this),
+							onContextMenu: this.handleContextMenu.bind(this),
+							onMouseUp: this.handleMouseDown.bind(this),
+							onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
+							onMouseEnter: this.handleMouseEnter.bind(this),
+							onMouseLeave: this.handleMouseLeave.bind(this)
+						}));
 					}
 				};
-				if (CustomComponents.Switch) {
-					CustomComponents.Switch.Sizes = {
-						DEFAULT: "default",
-						MINI: "mini",
-					};
-					Internal.setDefaultProps(CustomComponents.Switch, {
-						size: CustomComponents.Switch.Sizes.DEFAULT,
-						uncheckedColor: Internal.DiscordConstants.Colors.PRIMARY_400,
-						checkedColor: Internal.DiscordConstants.Colors.BRAND
-					});
-				}
 				
 				CustomComponents.TabBar = reactInitialized && class BDFDB_TabBar extends Internal.LibraryModules.React.Component {
 					handleItemSelect(item) {
@@ -8340,6 +8210,8 @@ module.exports = (_ => {
 				const ScrollerTypes = {};
 				for (let type of Object.keys(Internal.LibraryComponents.Scrollers)) {
 					let scroller = BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Scrollers[type].render || Internal.LibraryComponents.Scrollers[type], []);
+					console.log(type);
+					console.log(scroller);
 					if (scroller && scroller.props && scroller.props.className) {
 						if (scroller.props.className.indexOf(BDFDB.disCN.scrollernone) > -1) ScrollerTypes.None = Internal.LibraryComponents.Scrollers[type];
 						if (scroller.props.className.indexOf(BDFDB.disCN.scrollerauto) > -1) ScrollerTypes.Auto = Internal.LibraryComponents.Scrollers[type];
