@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.7
+ * @version 2.0.8
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -392,7 +392,7 @@ module.exports = (_ => {
 					}, after: e2 => {
 						if (e2.methodArguments[0] != 0) {
 							let id = e.instance.props.privateChannelIds[e2.methodArguments[1]];
-							e2.returnValue = e.instance.props.channels[id] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PrivateChannelItems.DirectMessage, Object.assign({
+							e2.returnValue = e.instance.props.channels[id] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PrivateChannelItems.PrivateChannel, Object.assign({
 								key: id,
 								channel: e.instance.props.channels[id],
 								selected: e.instance.props.selectedChannelId == id
