@@ -363,10 +363,10 @@
 			"ModalSize": ["\"DYNAMIC\"", "\"LARGE\""]
 		}},
 		"Paginator": {"strings": ["maxVisiblePages", "pageSize", "innerClassName"]},
-		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"], "funcStrings": ["{}"]},
+		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"], "funcStrings": ["tooltipPositionKey"]},
 		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"]},
 		"PrivateChannelItems": {"strings": ["getRecipientId", "interactiveClassName", "aria-posinset"], "exported": false, "value": "exports", "map": {
-			"DirectMessage": ["getUser", "getRecipientId"]
+			"PrivateChannel": ["getUser", "getRecipientId"]
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "padding-left"]},
 		"Scrollers": {"strings": ["useImperativeHandle", "disableFocusRingScope", "scrollerRef", "paddingFix"]},
@@ -379,6 +379,7 @@
 		}},
 		"Text": {"strings": ["lineClamp:", "fontScaling"], "funcStrings": ["fontScaling"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
+		"UnreadDMs": {"strings": ["getMutablePrivateChannels", "selectedVoiceGuildId", "selectedVoiceChannelId:"]},
 		"UserBadgesWrapper": {"strings": ["QUEST_CONTENT_VIEWED", "\"PRESS_BADGE\"", "badgeClassName"], "funcStrings": ["shouldGlowTenureBadge"]},
 		"UserPopout": {"strings": ["t.isNonUserBot()", "onHide", "user:"]},
 		"UserPopoutItem": {"strings": ["userId", "renderSubmenu"]},
@@ -535,7 +536,6 @@
 		"Note": {"strings": [".noteRef", "handleBlur", ".SPACE"]},
 		"NowPlayingHeader": {"strings": ["ACTIVITY_FEED_NOW_PLAYING_HEADER", "partiedMembers"]},
 		"NowPlayingItem": {"strings": [".wrapper", "padded:"]},
-		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"]},
 		"ParticipantsForSelectedParticipant": {"strings": ["ACTIVITY", "maxVisibleUsers", "participantType"]},
 		"PeopleList": {"strings": [".SECTION_NO_RESULTS", ".section", "SUGGESTIONS"]},
 		"PeopleListItem": {"strings": ["height:new", "isFocused", "onOtherHover"]},
