@@ -8210,8 +8210,6 @@ module.exports = (_ => {
 				const ScrollerTypes = {};
 				for (let type of Object.keys(Internal.LibraryComponents.Scrollers)) {
 					let scroller = BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Scrollers[type].render || Internal.LibraryComponents.Scrollers[type], []);
-					console.log(type);
-					console.log(scroller);
 					if (scroller && scroller.props && scroller.props.className) {
 						if (scroller.props.className.indexOf(BDFDB.disCN.scrollernone) > -1) ScrollerTypes.None = Internal.LibraryComponents.Scrollers[type];
 						if (scroller.props.className.indexOf(BDFDB.disCN.scrollerauto) > -1) ScrollerTypes.Auto = Internal.LibraryComponents.Scrollers[type];
