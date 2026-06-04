@@ -117,16 +117,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	line-height: 10px;
 }
 
-[REPLACE_CLASS_switch][REPLACE_CLASS_switchmini] {
-	width: 26px;
-	height: 16px;
-}
-[REPLACE_CLASS_switch][REPLACE_CLASS_switchmini] [REPLACE_CLASS_switchslider] {
-	width: 16px;
-	height: 14px;
-	margin: 1px;
-}
-
 [REPLACE_CLASS_accountinfobutton][REPLACE_CLASS_accountinfobuttondisabled] {
 	opacity: .4;
 }
@@ -1456,6 +1446,10 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 .platform-osx [REPLACE_CLASS_noticewrapper] ~ * [REPLACE_CLASS_guildsscroller] {
 	padding-top: 4px;
+}
+[REPLACE_CLASS_guildsscroller] > [hidden]:has([REPLACE_CLASS_guildouter]) {
+	margin-top: unset;
+	visibility: unset;
 }
 
 [REPLACE_CLASS_tooltiprow]:has([REPLACE_CLASS_usersummarycontainer]:empty) {
