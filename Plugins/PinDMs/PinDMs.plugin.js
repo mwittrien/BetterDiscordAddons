@@ -59,6 +59,8 @@ module.exports = (_ => {
 		var hoveredCategory, draggedCategory, releasedCategory;
 		var hoveredChannel, draggedChannel, releasedChannel;
 		
+		var pinnedChannels = {};
+		
 		var channelListIsRenderendering;
 		
 		return class PinDMs extends Plugin {
@@ -175,6 +177,8 @@ module.exports = (_ => {
 						e.returnValue = BDFDB.ArrayUtils.removeCopies(dms.concat(e.returnValue));
 					}
 				}});
+				
+				pinnedChannels = BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id) || {};
 				
 				this.forceUpdateAll();
 			}
@@ -670,14 +674,13 @@ module.exports = (_ => {
 			}
 			
 			getPinnedChannels (type) {
-				return ((BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id) || {})[type] || {});
+				return pinnedChannels[type] || {};
 			}
 			
 			savePinnedChannels (channels, type) {
-				let pinned = BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id) || {};
-				if (BDFDB.ObjectUtils.is(channels) && !BDFDB.ObjectUtils.isEmpty(channels)) pinned[type] = channels;
-				else delete pinned[type];
-				if (!BDFDB.ObjectUtils.isEmpty(pinned)) BDFDB.DataUtils.save(pinned, this, "pinned", BDFDB.UserUtils.me.id);
+				if (BDFDB.ObjectUtils.is(channels) && !BDFDB.ObjectUtils.isEmpty(channels)) pinnedChannels[type] = channels;
+				else delete pinnedChannels[type];
+				if (!BDFDB.ObjectUtils.isEmpty(pinnedChannels)) BDFDB.DataUtils.save(pinnedChannels, this, "pinned", BDFDB.UserUtils.me.id);
 				else BDFDB.DataUtils.remove(this, "pinned", BDFDB.UserUtils.me.id);
 			}
 
