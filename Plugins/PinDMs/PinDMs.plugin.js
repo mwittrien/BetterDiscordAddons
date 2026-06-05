@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.8
+ * @version 2.0.10
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -10,6 +10,7 @@
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs/
  * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/PinDMs/PinDMs.plugin.js
+ * @note Console warnings about BDFDB "PrivateChannel" / list scroller classes are from the library’s class map lagging Discord; refresh `0BDFDB.plugin.js` from https://mwittrien.github.io/downloader/?library when they appear (not fixable inside PinDMs alone).
  */
 
 module.exports = (_ => {
@@ -25,10 +26,27 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
-			});
+			const url = "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js";
+			const dest = require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js");
+			const fail = () => BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			if (BdApi.Net && typeof BdApi.Net.fetch === "function") {
+				BdApi.Net.fetch(url)
+					.then((r) => (r && r.ok ? r.text() : Promise.reject()))
+					.then(
+						(b) =>
+							new Promise((resolve, reject) => {
+								require("fs").writeFile(dest, b, (err) => (err ? reject(err) : resolve()));
+							}),
+					)
+					.then(() => BdApi.UI.showToast("Finished downloading BDFDB Library", { type: "success" }))
+					.catch(fail);
+			} else {
+				require("request").get(url, (e, r, b) => {
+					if (!e && b && r.statusCode == 200)
+						require("fs").writeFile(dest, b, () => BdApi.UI.showToast("Finished downloading BDFDB Library", { type: "success" }));
+					else fail();
+				});
+			}
 		}
 		
 		load () {
@@ -51,7 +69,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -59,9 +77,8 @@ module.exports = (_ => {
 		var hoveredCategory, draggedCategory, releasedCategory;
 		var hoveredChannel, draggedChannel, releasedChannel;
 		
-		var pinnedChannels = {};
-		
 		var channelListIsRenderendering;
+		var pinnedChannels = {};
 		
 		return class PinDMs extends Plugin {
 			onLoad () {
@@ -180,10 +197,48 @@ module.exports = (_ => {
 				
 				pinnedChannels = BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id) || {};
 				
+				if (BDFDB.LibraryStores.SelectedChannelStore && BDFDB.StoreChangeUtils) {
+					BDFDB.StoreChangeUtils.add(this, BDFDB.LibraryStores.SelectedChannelStore, () => {
+						const channelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
+						const channel = channelId && BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
+						if (!channel || (!channel.isDM() && !channel.isGroupDM())) return;
+						if (this._pindmsSelectedChannelId === channelId) return;
+						this._pindmsSelectedChannelId = channelId;
+						BDFDB.TimeUtils.clear(this._pindmsSelectionRefreshTimeout);
+						this._pindmsSelectionRefreshTimeout = BDFDB.TimeUtils.timeout(_ => {
+							delete this._pindmsSelectionRefreshTimeout;
+							this.updateContainer("channelList");
+						}, 50);
+					});
+				}
+				if (BDFDB.LibraryStores.RelationshipStore && BDFDB.StoreChangeUtils) {
+					BDFDB.StoreChangeUtils.add(this, BDFDB.LibraryStores.RelationshipStore, () => {
+						if (!this.settings.preCategories.friends.enabled) return;
+						BDFDB.TimeUtils.clear(this._pindmsFriendsRefreshTimeout);
+						this._pindmsFriendsRefreshTimeout = BDFDB.TimeUtils.timeout(_ => {
+							delete this._pindmsFriendsRefreshTimeout;
+							this.updateContainer("channelList");
+						}, 200);
+					});
+				}
+				if (BDFDB.LibraryStores.PrivateChannelSortStore && BDFDB.StoreChangeUtils) {
+					BDFDB.StoreChangeUtils.add(this, BDFDB.LibraryStores.PrivateChannelSortStore, () => {
+						BDFDB.TimeUtils.clear(this._pindmsSortRefreshTimeout);
+						this._pindmsSortRefreshTimeout = BDFDB.TimeUtils.timeout(_ => {
+							delete this._pindmsSortRefreshTimeout;
+							this.updateContainer("channelList");
+						}, 200);
+					});
+				}
+				
 				this.forceUpdateAll();
 			}
 			
 			onStop () {
+				BDFDB.TimeUtils.clear(this._pindmsSelectionRefreshTimeout);
+				BDFDB.TimeUtils.clear(this._pindmsFriendsRefreshTimeout);
+				BDFDB.TimeUtils.clear(this._pindmsSortRefreshTimeout);
+				if (BDFDB.StoreChangeUtils) BDFDB.StoreChangeUtils.remove(this);
 				this.forceUpdateAll();
 			}
 
@@ -344,8 +399,11 @@ module.exports = (_ => {
 			}
 			
 			processPrivateChannelsList (e) {
+				const DMItemComp = BDFDB.LibraryComponents.PrivateChannelItems && (BDFDB.LibraryComponents.PrivateChannelItems.PrivateChannel || BDFDB.LibraryComponents.PrivateChannelItems.DirectMessage);
 				let categories = this.sortAndUpdateCategories("channelList", true);
 				if (!categories.length) return;
+				delete e.instance._pindmsSectionsInjected;
+				e.instance._pindmsDMItemComp = DMItemComp;
 				e.instance.props.channels = Object.assign({}, e.instance.props.channels);
 				e.instance.props.privateChannelIds = [].concat(e.instance.props.privateChannelIds || []);
 				e.instance.props.pinnedChannelIds = Object.assign({}, e.instance.props.pinnedChannelIds);
@@ -375,70 +433,97 @@ module.exports = (_ => {
 						releasedCategory = null;
 					}
 					e.instance.props.pinnedChannelIds = {};
+					const globalPinnedIds = new Set();
 					for (let category of [].concat(categories).reverse()) {
 						e.instance.props.pinnedChannelIds[category.id] = [];
+						const seenInCategory = new Set();
 						for (let id of this.sortDMsByTime(this.filterDMs(category.dms, !category.predefined), "channelList").reverse()) {
-							BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
-							e.instance.props.privateChannelIds.unshift(id);
-							e.instance.props.pinnedChannelIds[category.id].push(id);
+							if (!seenInCategory.has(id) && !globalPinnedIds.has(id)) {
+								seenInCategory.add(id);
+								globalPinnedIds.add(id);
+								e.instance.props.pinnedChannelIds[category.id].push(id);
+							}
 						}
+					}
+					if (globalPinnedIds.size) {
+						e.instance.props.privateChannelIds = BDFDB.ArrayUtils.removeCopies((e.instance.props.privateChannelIds || []).filter(id => !globalPinnedIds.has(id)));
 					}
 				}
 				else {
-					let pinnedIds = BDFDB.ObjectUtils.toArray(e.instance.props.pinnedChannelIds).reverse();
+					let pinnedFlat = [];
+					for (let catId in e.instance.props.pinnedChannelIds) {
+						let arr = e.instance.props.pinnedChannelIds[catId];
+						if (BDFDB.ArrayUtils.is(arr)) for (let id of arr) if (!pinnedFlat.includes(id)) pinnedFlat.push(id);
+					}
+					for (let category of categories) {
+						if (category && BDFDB.ArrayUtils.is(category.dms)) for (let id of category.dms) if (!pinnedFlat.includes(id)) pinnedFlat.push(id);
+					}
+					if (pinnedFlat.length) {
+						e.instance.props.privateChannelIds = BDFDB.ArrayUtils.removeCopies((e.instance.props.privateChannelIds || []).filter(id => !pinnedFlat.includes(id)));
+					}
+					const sectionCategories = [].concat(categories).reverse();
+					e.instance._pindmsSectionCategories = sectionCategories;
+					e.instance._pindmsDMItemComp = DMItemComp || e.instance._pindmsDMItemComp;
 					BDFDB.PatchUtils.unpatch(this, e.instance, "renderDM");
-					BDFDB.PatchUtils.patch(this, e.instance, "renderDM", {before: e2 => {
-						if (e2.methodArguments[0] != 0) e2.methodArguments[1] += pinnedIds.slice(0, e2.methodArguments[0] - 1).flat().length;
-					}, after: e2 => {
-						if (e2.methodArguments[0] != 0) {
-							let id = e.instance.props.privateChannelIds[e2.methodArguments[1]];
-							e2.returnValue = e.instance.props.channels[id] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PrivateChannelItems.PrivateChannel, Object.assign({
-								key: id,
-								channel: e.instance.props.channels[id],
-								selected: e.instance.props.selectedChannelId == id
-							}, (e.instance.props.navigator || e.instance.props.listNavigator || {getItemProps: (_ => {})}).getItemProps({
-								index: e2.methodArguments[2]
-							}))) : null;
-							
-							let category = categories[e2.methodArguments[0] - 1];
-							if (category) {
-								if (!id || (category.collapsed && e.instance.props.selectedChannelId != id) || !this.filterDMs(category.dms, !category.predefined).includes(id) || draggedCategory == category.id || draggedChannel == id) e2.returnValue = null;
-								else if (hoveredCategory == category.id && [].concat(category.dms).reverse()[0] == id) e2.returnValue = [
-									e2.returnValue,
-									BDFDB.ReactUtils.createElement("h2", {
-										className: BDFDB.disCNS.dmchannelheadercontainer + BDFDB.disCNS._pindmspinnedchannelsheadercontainer + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer
-									})
-								].filter(n => n);
-								else if (hoveredChannel == id) e2.returnValue = [
-									e2.returnValue,
-									BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.namecontainerlayout
-										})
-									})
-								].filter(n => n);
-							}
-						}
-					}}, {noCache: true});
-					this.injectCategories(e.instance, e.returnvalue, categories);
+					this.injectCategories(e.instance, e.returnvalue, categories, e.instance._pindmsDMItemComp);
+					return;
 				}
 			}
 			
-			injectCategories (instance, returnvalue, categories) {
+			renderPinnedChannelRow (instance, sectionCategories, section, row, DMItemComp) {
+				const category = sectionCategories[section - 1];
+				if (!category || category.collapsed || category.id == draggedCategory) return null;
+				const pinnedIds = instance.props.pinnedChannelIds[category.id] || [];
+				const id = pinnedIds[row];
+				if (!id || !instance.props.channels[id]) return null;
+				if (!this.filterDMs(category.dms, !category.predefined).includes(id) || draggedChannel == id) return null;
+				if (category.collapsed && instance.props.selectedChannelId != id) return null;
+				const RowComp = DMItemComp || instance._pindmsDMItemComp || (BDFDB.LibraryComponents.PrivateChannelItems && (BDFDB.LibraryComponents.PrivateChannelItems.PrivateChannel || BDFDB.LibraryComponents.PrivateChannelItems.DirectMessage));
+				if (!RowComp) return null;
+				const nav = instance.props.navigator || instance.props.listNavigator || {getItemProps: (_ => ({}))};
+				let rowElement = BDFDB.ReactUtils.createElement(RowComp, Object.assign({
+					key: id,
+					channel: instance.props.channels[id],
+					selected: instance.props.selectedChannelId == id
+				}, nav.getItemProps({index: row})));
+				if (hoveredCategory == category.id && [].concat(category.dms).reverse()[0] == id) return [
+					rowElement,
+					BDFDB.ReactUtils.createElement("h2", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheadercontainer, BDFDB.disCN._pindmspinnedchannelsheadercontainer, BDFDB.disCN._pindmsdmchannelplaceholder, BDFDB.disCN.namecontainernamecontainer)
+					})
+				].filter(n => n);
+				if (hoveredChannel == id) return [
+					rowElement,
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannel, BDFDB.disCN._pindmsdmchannelpinned, BDFDB.disCN._pindmsdmchannelplaceholder, BDFDB.disCN.namecontainernamecontainer),
+						children: BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.namecontainerlayout})
+					})
+				].filter(n => n);
+				return rowElement;
+			}
+			
+			injectCategories (instance, returnvalue, categories, DMItemComp = instance._pindmsDMItemComp) {
 				if (!returnvalue) return;
 				else if (returnvalue && returnvalue.props && BDFDB.ArrayUtils.is(returnvalue.props.sections)) {
+					if (instance._pindmsSectionsInjected) return;
+					instance._pindmsSectionsInjected = true;
+					const sectionCategories = instance._pindmsSectionCategories || [].concat(categories).reverse();
+					instance._pindmsSectionCategories = sectionCategories;
 					returnvalue.props.sections = [];
 					returnvalue.props.sections.push(instance.state.preRenderedChildren);
-					let shownPinnedIds = BDFDB.ObjectUtils.toArray(instance.props.pinnedChannelIds).reverse();
-					for (let ids of shownPinnedIds) returnvalue.props.sections.push(ids.length || 1);
-					returnvalue.props.sections.push(instance.props.privateChannelIds.length - shownPinnedIds.flat().length);
+					for (let category of sectionCategories) {
+						const ids = (instance.props.pinnedChannelIds && instance.props.pinnedChannelIds[category.id]) || [];
+						returnvalue.props.sections.push(category.collapsed || category.id == draggedCategory ? 0 : ids.length);
+					}
+					let tailDmCount = Math.max(0, (instance.props.privateChannelIds && instance.props.privateChannelIds.length) || 0);
+					returnvalue.props.sections.push(tailDmCount);
+					instance._pindmsLastSectionIndex = returnvalue.props.sections.length - 1;
 					
 					let sectionHeight = returnvalue.props.sectionHeight;
 					let sectionHeightFunc = typeof sectionHeight != "function" ? _ => sectionHeight : sectionHeight;
 					returnvalue.props.sectionHeight = BDFDB.TimeUtils.suppress((...args) => {
 						if (args[0] != 0 && args[0] != returnvalue.props.sections.length - 1) {
-							let category = categories[args[0] - 1];
+							let category = sectionCategories[args[0] - 1];
 							if (category) return 40;
 						}
 						return sectionHeightFunc(...args);
@@ -448,27 +533,32 @@ module.exports = (_ => {
 					let rowHeightFunc = typeof rowHeight != "function" ? _ => rowHeight : rowHeight;
 					returnvalue.props.rowHeight = BDFDB.TimeUtils.suppress((...args) => {
 						if (args[0] != 0 && args[0] != returnvalue.props.sections.length - 1) {
-							let category = categories[args[0] - 1];
+							let category = sectionCategories[args[0] - 1];
 							if (category && (category.collapsed || category.id == draggedCategory)) return 0;
 						}
 						return rowHeightFunc(...args);
 					}, "Error in rowHeight of PrivateChannelsList!", this);
 					
 					let renderRow = returnvalue.props.renderRow;
+					const lastSectionIndex = instance._pindmsLastSectionIndex;
 					returnvalue.props.renderRow = BDFDB.TimeUtils.suppress((...args) => {
-						let row = renderRow(...args);
-						return row && row.key == "no-private-channels" ? null : row;
+						const info = args[0] && typeof args[0] == "object" ? args[0] : {section: args[0], row: args[1]};
+						const section = info.section;
+						const row = info.row;
+						if (section != 0 && section != lastSectionIndex) return this.renderPinnedChannelRow(instance, sectionCategories, section, row, DMItemComp);
+						let rowResult = renderRow(...args);
+						return rowResult && rowResult.key == "no-private-channels" ? null : rowResult;
 					}, "Error in renderRow of PrivateChannelsList!", this);
 					
 					let renderSection = returnvalue.props.renderSection;
 					returnvalue.props.renderSection = BDFDB.TimeUtils.suppress((...args) => {
 						if (args[0].section != 0 && args[0].section != returnvalue.props.sections.length - 1) {
-							let category = categories[args[0].section - 1];
+							let category = sectionCategories[args[0].section - 1];
 							if (category && draggedCategory != category.id) {
 								let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
 								let foundDMs = this.filterDMs(category.dms, !category.predefined);
 								let unreadAmount = this.settings.general.unreadAmount && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryStores.ReadStateStore.getMentionCount(id)));
-								return category.predefined && foundDMs.length < 1 ? null : [
+								return [
 									BDFDB.ReactUtils.createElement("h2", {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheadercontainer, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
 										categoryId: category.id,
@@ -599,7 +689,7 @@ module.exports = (_ => {
 						else return renderSection(...args);
 					}, "Error in renderSection of PrivateChannelsList!", this);
 				}
-				else if (typeof returnvalue.props.children == "function") {
+				else if (!instance._pindmsSectionsInjected && typeof returnvalue.props.children == "function") {
 					let childrenRender = returnvalue.props.children;
 					returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let children = childrenRender(...args);
@@ -607,10 +697,15 @@ module.exports = (_ => {
 						return children;
 					}, "Error in Children Render of PrivateChannelsList!", this);
 				}
-				else if (BDFDB.ArrayUtils.is(returnvalue)) {
-					for (let child of returnvalue) this.injectCategories(instance, child, categories);
+				else if (!instance._pindmsSectionsInjected && BDFDB.ArrayUtils.is(returnvalue)) {
+					for (let child of returnvalue) {
+						if (child && child.props && BDFDB.ArrayUtils.is(child.props.sections)) {
+							this.injectCategories(instance, child, categories);
+							break;
+						}
+					}
 				}
-				else this.injectCategories(instance, returnvalue.props.children, categories);
+				else if (!instance._pindmsSectionsInjected && returnvalue.props && returnvalue.props.children) this.injectCategories(instance, returnvalue.props.children, categories);
 			}
 
 			processPrivateChannel (e) {
@@ -731,7 +826,37 @@ module.exports = (_ => {
 			}
 
 			sortAndUpdateCategories (type, reverse) {
-				let data = BDFDB.ObjectUtils.sort(this.getPinnedChannels(type), "pos"), newData = {};
+				let rawData = this.getPinnedChannels(type) || {};
+				if (type == "channelList" && BDFDB.ObjectUtils.is(rawData) && !BDFDB.ObjectUtils.isEmpty(rawData)) {
+					const categoryEntries = [];
+					const legacyEntries = [];
+					for (let key in rawData) {
+						const val = rawData[key];
+						if (val && typeof val === "object" && BDFDB.ArrayUtils.is(val.dms)) categoryEntries.push([key, val]);
+						else if (typeof val === "number") legacyEntries.push([key, val]);
+					}
+					if (legacyEntries.length) {
+						const sortedLegacyIds = legacyEntries.sort((a, b) => a[1] - b[1]).map(n => n[0]).filter(id => BDFDB.LibraryStores.ChannelStore.getChannel(id));
+						let migrated = {};
+						for (let [key, val] of categoryEntries) migrated[key] = val;
+						if (sortedLegacyIds.length) {
+							const legacyCategoryId = "pindms_default";
+							const existing = migrated[legacyCategoryId];
+							const legacyMerged = existing && BDFDB.ArrayUtils.is(existing.dms) ? existing.dms.concat(sortedLegacyIds) : sortedLegacyIds;
+							migrated[legacyCategoryId] = Object.assign({
+								id: legacyCategoryId,
+								name: (this.labels && this.labels.header_pinneddms) || "Pinned Direct Messages",
+								dms: [],
+								pos: Object.keys(migrated).length,
+								collapsed: false,
+								color: null
+							}, existing || {}, {dms: Array.from(new Set(legacyMerged))});
+						}
+						this.savePinnedChannels(migrated, type);
+						rawData = migrated;
+					}
+				}
+				let data = BDFDB.ObjectUtils.sort(rawData, "pos"), newData = {};
 				let sorted = [], pos = 0, sort = id => {
 					if (sorted[pos] === undefined) {
 						newData[id] = Object.assign({}, data[id], {pos});
@@ -753,14 +878,18 @@ module.exports = (_ => {
 							predefinedDMs[category].push(channelId);
 						}
 					}
-					for (let type in predefinedDMs) if (predefinedDMs[type].length) sorted.unshift({
-						predefined: true,
-						collapsed: this.settings.preCategories[type].collapsed,
-						color: null,
-						dms: predefinedDMs[type],
-						id: type,
-						name: BDFDB.LanguageUtils.LanguageStringsCheck[this.defaults.preCategories[type].description] ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[type].description] : this.defaults.preCategories[type].description
-					});
+					const preCategoryOrder = ["groups", "bots", "blocked", "friends"];
+					for (let type of preCategoryOrder) {
+						if (!this.settings.preCategories[type].enabled) continue;
+						sorted.unshift({
+							predefined: true,
+							collapsed: this.settings.preCategories[type].collapsed,
+							color: null,
+							dms: BDFDB.ArrayUtils.removeCopies(predefinedDMs[type] || []),
+							id: type,
+							name: type === "friends" ? "Favorites" : (BDFDB.LanguageUtils.LanguageStringsCheck[this.defaults.preCategories[type].description] ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[type].description] : this.defaults.preCategories[type].description)
+						});
+					}
 				}
 				return (reverse ? sorted.reverse() : sorted).filter(n => n);
 			}
@@ -880,7 +1009,7 @@ module.exports = (_ => {
 					newData[sortedDMs[pos]] = parseInt(pos);
 					if (BDFDB.LibraryStores.ChannelStore.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
 				}
-				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, this);
+				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, type);
 				return this.sortDMsByTime(existingDMs, type);
 			}
 
