@@ -880,7 +880,7 @@ module.exports = (_ => {
 					newData[sortedDMs[pos]] = parseInt(pos);
 					if (BDFDB.LibraryStores.ChannelStore.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
 				}
-				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, this);
+				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, type);
 				return this.sortDMsByTime(existingDMs, type);
 			}
 
