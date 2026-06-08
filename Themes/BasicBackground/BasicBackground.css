@@ -4730,7 +4730,7 @@ body:has(#app-mount)::after {
 }
 
 .outer_c0bea0.custom-user-profile-theme {
-	--user-profile-overlay-background: rgba(var(--transparencycolor_v, .2));
+	--user-profile-overlay-background: rgba(var(--transparencycolor_v), .2);
 }
 .outer_c0bea0.custom-user-profile-theme .inner_c0bea0::before {
 	z-index: 2;
