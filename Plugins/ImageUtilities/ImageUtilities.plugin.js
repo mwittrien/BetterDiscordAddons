@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.6
+ * @version 5.6.7
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -650,7 +650,6 @@ module.exports = (_ => {
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
 													value: ownLocations[locationName].enabled,
-													size: BDFDB.LibraryComponents.Switch.Sizes.MINI,
 													onChange: value => {
 														ownLocations[locationName].enabled = value;
 														BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
