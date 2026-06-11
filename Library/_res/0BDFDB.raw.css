@@ -1348,6 +1348,7 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 }
 [REPLACE_CLASS_popoutthemedpopout] {
 	background-color: var(--background-base-lower);
+	color: var(--text-subtle);
 	border-radius: 5px;
 	-webkit-box-shadow: var(--elevation-stroke),var(--elevation-high);
 	box-shadow: var(--elevation-stroke),var(--elevation-high);
