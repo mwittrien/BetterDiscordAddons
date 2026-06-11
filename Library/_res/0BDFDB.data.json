@@ -364,7 +364,7 @@
 		}},
 		"Paginator": {"strings": ["maxVisiblePages", "pageSize", "innerClassName"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"], "funcStrings": ["tooltipPositionKey"]},
-		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"]},
+		"PopoutFocusLock": {"strings": ["impressionName", "setFocusLockDisabled"]},
 		"PrivateChannelItems": {"strings": ["getRecipientId", "interactiveClassName", "aria-posinset"], "exported": false, "value": "exports", "map": {
 			"PrivateChannel": ["getUser", "getRecipientId"]
 		}},
