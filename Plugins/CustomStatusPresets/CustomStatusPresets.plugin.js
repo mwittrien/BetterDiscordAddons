@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.7
+ * @version 1.3.8
  * @description Allows you to save Custom Statuses as Quick Select and select them by right-clicking the Status Bubble
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -217,7 +217,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 									className: BDFDB.disCN.flexchild,
 									value: ClearAfterValues[presets[id].clearAfter] || presets[id].clearAfter,
-									options: Object.entries(ClearAfterValues).map(entry => ({value: entry[1], label: !entry[1] || entry[1] == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.NEVER : entry[1] == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CLEAR_AFTER", `${entry[1]/3600000}h`)})),
+									options: Object.entries(ClearAfterValues).map(entry => ({value: entry[1], label: !entry[1] || entry[1] == ClearAfterValues.DONT_CLEAR ? BDFDB.LanguageUtils.LanguageStrings.NEVER : entry[1] == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.TODAY : `${BDFDB.LanguageUtils.LanguageStrings.CLEAR_AFTER} ${entry[1]/3600000}h`})),
 									onChange: value => {
 										presets[id].clearAfter = value;
 										BDFDB.DataUtils.save(presets, _this, "presets");
@@ -318,13 +318,14 @@ module.exports = (_ => {
 					let newSettings = {value: undefined};
 					e.methodArguments[1](newSettings);
 					if (newSettings.customStatus) {
+						console.log(newSettings);
 						saveCustomStatus = false;
 						let id = BDFDB.NumberUtils.generateId(Object.keys(presets));
-						let clearAfter = newSettings.customStatus.expiresAtMs - newSettings.customStatus.createdAtMs;
+						let clearAfter = Object.entries(ClearAfterValues).find(n => n[1] == (newSettings.customStatus.expiresAtMs - newSettings.customStatus.createdAtMs));
 						presets[id] = {
 							pos: Object.keys(presets).length,
-							clearAfter: ClearAfterValues[clearAfter] ? clearAfter : ClearAfterValues.DONT_CLEAR,
-							emojiInfo: newSettings.customStatus.emojiInfo,
+							clearAfter: clearAfter ? clearAfter[1] : ClearAfterValues.DONT_CLEAR,
+							emojiInfo: {name: newSettings.customStatus.emojiName, id: newSettings.customStatus.emojiId != "0" && newSettings.customStatus.emojiId ? newSettings.customStatus.emojiId : null},
 							text: newSettings.customStatus.text
 						};
 						BDFDB.DataUtils.save(presets, this, "presets");
