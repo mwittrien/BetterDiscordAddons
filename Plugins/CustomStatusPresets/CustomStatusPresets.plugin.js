@@ -318,7 +318,6 @@ module.exports = (_ => {
 					let newSettings = {value: undefined};
 					e.methodArguments[1](newSettings);
 					if (newSettings.customStatus) {
-						console.log(newSettings);
 						saveCustomStatus = false;
 						let id = BDFDB.NumberUtils.generateId(Object.keys(presets));
 						let clearAfter = Object.entries(ClearAfterValues).find(n => n[1] == (newSettings.customStatus.expiresAtMs - newSettings.customStatus.createdAtMs));
