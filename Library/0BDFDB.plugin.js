@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.3
+ * @version 4.5.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6247,7 +6247,8 @@ module.exports = (_ => {
 				}
 				
 				CustomComponents.EmojiPickerButton = reactInitialized && class BDFDB_EmojiPickerButton extends Internal.LibraryModules.React.Component {
-					handleEmojiChange(emoji) {
+					handleEmojiChange(value) {
+						let emoji = value.emoji || value;
 						if (emoji != null) {
 							this.props.emoji = emoji.id ? {
 								id: emoji.id,
