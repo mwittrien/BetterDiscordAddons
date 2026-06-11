@@ -6081,7 +6081,6 @@ module.exports = (_ => {
 																		label: BDFDB.LanguageUtils.getName(BDFDB.LanguageUtils.languages[id])
 																	})),
 																	searchable: true,
-																	optionRenderer: lang => lang.label,
 																	onChange: value => {
 																		this.props.language = value == "$discord" ? undefined : value;
 																		this.handleChange.apply(this, []);
@@ -6101,7 +6100,6 @@ module.exports = (_ => {
 																	value: this.props.timeOffset != null ? this.props.timeOffset : defaultOffset,
 																	options: [-12.0, -11.0, -10.0, -9.5, -9.0, -8.0, -7.0, -6.0, -5.0, -4.0, -3.5, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 5.75, 6.0, 6.5, 7.0, 8.0, 8.75, 9.0, 9.5, 10.0, 10.5, 11.0, 12.0, 12.75, 13.0, 14.0].map(offset => ({label: offset< 0 ? offset : `+${offset}`, value: offset})),
 																	searchable: true,
-																	optionRenderer: zone => zone.label,
 																	onChange: value => {
 																		this.props.timeOffset = value == defaultOffset ? undefined : value;
 																		this.handleChange.apply(this, []);
