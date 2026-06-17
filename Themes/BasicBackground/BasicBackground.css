@@ -518,9 +518,12 @@ body:has(#app-mount)::after {
 	z-index: -1;
 }
 .container_a2f514::before,
-.layer__960e4 ~ .layer__960e4::before,
 .root__5c9fc::before {
 	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
+	background-attachment: fixed;
+}
+.layer__960e4 ~ .layer__960e4::before {
+	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
 .container_a2f514::after,
