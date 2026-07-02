@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -467,6 +467,7 @@ module.exports = (_ => {
 								tooltipConfig: {type: "top"},
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.peoplesactionbutton,
+									role: "button",
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 										width: 20,
 										height: 20,
