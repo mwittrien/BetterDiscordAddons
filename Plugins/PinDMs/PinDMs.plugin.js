@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.8
+ * @version 2.0.9
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,7 +25,7 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
 				else BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
