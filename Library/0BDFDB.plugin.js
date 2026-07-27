@@ -6179,7 +6179,7 @@ module.exports = (_ => {
 							.replace(/\$agoAmount/g, daysAgo < 0 || daysAgo > 1 ? Internal.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
 							.replace(/\$agoWeekdayS/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "short"}) : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
 							.replace(/\$agoWeekday/g, daysAgo < 0 || daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "long"}) : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
-							.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`LAST_PLAYED_PLACEHOLDER`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
+							.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`PLACEHOLDER_D_AGO`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
 							.replace(/\$agoDate/g, daysAgo < 0 || daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[daysAgo == 1 ? "YESTERDAY" : "TODAY"])
 							.replace(/\(\)|\[\]/g, "").replace(/,\s*$|^\s*,/g, "").replace(/ +/g, " ").trim();
 					};
