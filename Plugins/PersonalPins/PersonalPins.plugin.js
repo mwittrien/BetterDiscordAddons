@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.5
+ * @version 2.3.6
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -176,7 +176,7 @@ module.exports = (_ => {
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								className: BDFDB.disCN.recentmentionsjumpbutton,
-								style: {cursor: "default"},
+								style: {cursor: "default", position: "absolute", top: 0, right: 0, zIndex: 1},
 								children: [
 									(!channel.guild_id || BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 										style: {margin: "0 8px"},
