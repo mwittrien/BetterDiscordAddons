@@ -5049,7 +5049,7 @@ module.exports = (_ => {
 					getBadgeCountString(e) {return e < 1e3 ? "" + e : Math.min(Math.floor(e/1e3), 9) + "k+"}
 					render() {
 						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge, Internal.LibraryComponents.Badges && Internal.LibraryComponents.Badges.BadgeShapes && (this.props.shape && Internal.LibraryComponents.Badges.BadgeShapes[this.props.shape] || Internal.LibraryComponents.Badges.BadgeShapes.ROUND)),
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.eyebrow, BDFDB.disCN.badgenumberbadge, Internal.LibraryComponents.Badges && Internal.LibraryComponents.Badges.BadgeShapes && (this.props.shape && Internal.LibraryComponents.Badges.BadgeShapes[this.props.shape] || Internal.LibraryComponents.Badges.BadgeShapes.ROUND)),
 							style: Object.assign({
 								backgroundColor: !this.props.disableColor && (this.props.color || BDFDB.DiscordConstants.ColorsCSS.STATUS_DANGER),
 								width: this.getBadgeWidthForValue(this.props.count)
