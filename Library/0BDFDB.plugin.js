@@ -4635,7 +4635,7 @@ module.exports = (_ => {
 						else className = fallbackClassName;
 					}
 					if (selector) {
-						className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
+						className = className.split(" ").filter(n => n.indexOf("da-") != 0 && (!selector || n.indexOf("/") == -1)).join(selector ? "." : " ");
 						className = className || fallbackClassName;
 					}
 					return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ") || fallbackClassName;
