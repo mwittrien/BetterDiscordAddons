@@ -351,11 +351,6 @@
 		"Mask": {"props": "Masks"},
 		"Menu": {"strings": ["\"flexible\"", "onFocus:", "menuItemProps"]},
 		"MessageGroup": {"strings": ["animateAvatar:", "getMessageByReference"]},
-		"MessagesPopoutComponents": {"strings": ["canCloseAllMessages", "loadingMore"], "exported": false, "value": "exports", "map": {
-			"EmptyState": ["backgroundImage"],
-			"Header": ["TEXT", "title"],
-			"Popout": ["renderHeader", "renderEmptyState"]
-		}},
 		"ModalComponents": {"strings": ["HORIZONTAL_REVERSE", "withCircleBackground", "headerIdIsManaged"], "exported": false, "value": "exports", "map": {
 			"ModalCloseButton": ["withCircleBackground", "BLANK"],
 			"ModalHeader": ["headerIdIsManaged", "Direction.HORIZONTAL"],
