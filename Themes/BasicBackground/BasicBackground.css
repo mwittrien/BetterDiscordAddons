@@ -4738,7 +4738,7 @@ body:has(#app-mount)::after {
 .outer_c0bea0.custom-user-profile-theme .inner_c0bea0::before {
 	z-index: 2;
 }
-.outer_c0bea0.custom-user-profile-theme .inner_c0bea0 > * {
+.outer_c0bea0.custom-user-profile-theme .inner_c0bea0 > *:not(.profileFrameContainer__7d80f) {
 	z-index: 3;
 }
 .outer_c0bea0.custom-user-profile-theme .inner_c0bea0 .header__5be3e {
