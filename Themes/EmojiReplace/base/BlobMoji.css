@@ -1,0 +1,20 @@
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/spritesheets.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/people.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/nature.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/food.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/activity.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/travel.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/objects.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/symbols.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/BlobMoji/flags.css);
+@namespace xlink 'http://www.w3.org/1999/xlink';
+.sprite__04eed {
+	-webkit-mask: none !important;
+	background-color: transparent !important;
+	background-position: var(--custom-emoji-sprite-bg-position) !important;
+	background-size: var(--custom-emoji-sprite-bg-size) !important;
+}
+.spriteGreyscale__04eed {
+	filter: grayscale(1) !important;
+}

@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.7.4
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -91,30 +96,29 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"MessageHeader"
+						"MessageUsername"
 					],
 					after: [
-						"MemberListItem",
-						"NameTag",
-						"UsernameSection",
-						"VoiceUser"
+						"NameContainerDecorators",
+						"UserHeaderUsername",
+						"VoiceUserButtons"
 					]
 				};
 				
 				this.defaults = {
 					general: {
-						useCrown:			{value: true,	description: "Uses the Crown Icon instead of the Bot Tag Style"},
+						useCrown:		{value: true,	description: "Uses the Crown Icon instead of the Bot Tag Style"},
 						useRoleColor:		{value: true, 	description: "Uses the Role Color instead of the default Blurple"},
 						useBlackFont:		{value: false,	description: "Uses black Font instead of darkening the Role Color on bright Colors"},
-						ignoreBots:			{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for Bots"},
+						ignoreBots:		{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for Bots"},
 						ignoreMyself:		{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for yourself"}
 					},
 					tagTypes: {
-						owners:				{value: true, 	description: "Server Owner Tag"},
+						owners:			{value: true, 	description: "Server Owner Tag"},
 						groupOwners:		{value: true, 	description: "Group Owner Tag"},
 						threadCreators:		{value: true, 	description: "Thread Creator Tag"},
 						forumCreators:		{value: true, 	description: "Forum Creator Tag"},
-						admins:				{value: true, 	description: "Admin Tag (Admin Permissions)"},
+						admins:			{value: true, 	description: "Admin Tag (Admin Permissions)"},
 						managementG:		{value: true, 	description: "Management Tag (Server Management)"},
 						managementC:		{value: true, 	description: "Management Tag (Channel Management)"},
 						managementT:		{value: true, 	description: "Management Tag (Threads Management)"},
@@ -125,19 +129,19 @@ module.exports = (_ => {
 						managementM:		{value: true, 	description: "Management Tag (Message Management)"}
 					},
 					tagPlaces: {
-						chat:				{value: true, 	description: "Messages"},
-						memberList:			{value: true, 	description: "Member List"},
-						voiceList:			{value: true, 	description: "Voice User List"},
-						userPopout:			{value: true, 	description: "User Popouts"},
+						chat:			{value: true, 	description: "Messages"},
+						memberList:		{value: true, 	description: "Member List"},
+						voiceList:		{value: true, 	description: "Voice User List"},
+						userPopout:		{value: true, 	description: "User Popouts"},
 						userProfile:		{value: true, 	description: "User Profile Modal"},
 					},
 					customTitles: {
-						owner:				{value: "",		placeholder: "Owner", 		description: "Server Owner Tags"},
-						groupOwner:			{value: "",		placeholder: "Group Owner",	description: "Group Owner Tags"},
-						forumCreator:		{value: "",		placeholder: "Creator", 	description: "Forum Creator Tags"},
-						threadCreator:		{value: "",		placeholder: "Creator", 	description: "Thread Creator Tags"},
-						admin:				{value: "",		placeholder: "Admin", 		description: "Admin Tags"},
-						management:			{value: "",		placeholder: "Management", 	description: "Management Tags"}
+						owner:			{value: "",	placeholder: "Owner", 		description: "Server Owner Tags"},
+						groupOwner:		{value: "",	placeholder: "Group Owner",	description: "Group Owner Tags"},
+						forumCreator:		{value: "",	placeholder: "Creator", 	description: "Forum Creator Tags"},
+						threadCreator:		{value: "",	placeholder: "Creator", 	description: "Thread Creator Tags"},
+						admin:			{value: "",	placeholder: "Admin", 		description: "Admin Tags"},
+						management:		{value: "",	placeholder: "Management", 	description: "Management Tags"}
 					}
 				};
 			
@@ -154,6 +158,9 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN.memberownericon} {
 						top: 0px;
+					}
+					${BDFDB.dotCN.memberownericon} + ${BDFDB.dotCN.memberownericon} {
+						display: none;
 					}
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 						top: 2px;
@@ -260,89 +267,87 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
-			processMemberListItem (e) {
-				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
+			processNameContainerDecorators (e) {
+				if (!e.instance.props.user) return;
+				let channelId = e.instance.props.channel && e.instance.props.channel.id || BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
+				let userType = this.getUserType(e.instance.props.user, channelId);
 				if (userType && this.settings.tagPlaces.memberList) {
-					this.injectStaffTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
-						channelId: e.instance.props.channel && e.instance.props.channel.id,
+					this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 1, {
+						channelId: channelId,
 						tagClass: BDFDB.disCN.bottagmember
 					});
 				}
 			}
 
-			processMessageHeader (e) {
-				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (index == -1) return;
+			processMessageUsername (e) {
+				if (!e.instance.props.message || !this.settings.tagPlaces.chat || !e.instance.props.decorations) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
-				if (userType) this.injectStaffTag(children, author, userType, e.instance.props.compact ? index : (index + 2), {
+				if (!userType) return;
+				if (!BDFDB.ArrayUtils.is(e.instance.props.decorations[0])) e.instance.props.decorations[0] = [e.instance.props.decorations[0]].filter(n => n);
+				this.injectStaffTag(e.instance.props.decorations[0], author, userType, 0, {
 					channelId: e.instance.props.message.channel_id,
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
 			}
 
-			processVoiceUser (e) {
+			processVoiceUserButtons (e) {
 				if (e.instance.props.user && this.settings.tagPlaces.voiceList) {
-					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
-					if (userType) {
-						let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
-						if (content) this.injectStaffTag(content.props.children, e.instance.props.user, userType, 3, {
-							channelId: e.instance.props.channel && e.instance.props.channel.id,
-						});
-					}
+					let userType = this.getUserType(e.instance.props.user, e.instance.props.channelIdd);
+					if (!userType) return;
+					e.returnvalue = [e.returnvalue].flat(10).filter(n => n);
+					this.injectStaffTag(e.returnvalue, e.instance.props.user, userType, 0, {
+						channelId: e.instance.props.channelId,
+					});
 				}
 			}
 
 			processNameTag (e) {
-				if (e.instance.props.user && e.instance.props.className) {
-					let userType = this.getUserType(e.instance.props.user);
-					if (userType) {
-						let inject = false, tagClass = "";
-						if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutheadertagnonickname) > -1) {
-							inject = this.settings.tagPlaces.userPopout;
-							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
-						}
-						else if (e.instance.props.className.indexOf(BDFDB.disCN.userprofilenametag) > -1) {
-							inject = this.settings.tagPlaces.userProfile;
-							tagClass = BDFDB.disCN.bottagnametag;
-						}
-						if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
-							tagClass: tagClass,
-							useRem: e.instance.props.useRemSizes,
-							inverted: e.instance.props.invertBotTagColor
-						});
-					}
+				if (!e.instance.props.user || !e.instance.props.className) return;
+				let userType = this.getUserType(e.instance.props.user);
+				if (!userType) return;
+				let inject = false, tagClass = "";
+				if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutheadertagwithnickname) > -1) {
+					inject = this.settings.tagPlaces.userPopout;
+					tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 				}
+				else if (e.instance.props.className.indexOf(BDFDB.disCN.userprofilenametag) > -1) {
+					inject = this.settings.tagPlaces.userProfile;
+					tagClass = BDFDB.disCN.bottagnametag;
+				}
+				if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
+					tagClass: tagClass,
+					useRem: e.instance.props.useRemSizes,
+					inverted: e.instance.props.invertBotTagColor
+				});
 			}
 			
-			processUsernameSection (e) {
-				if (e.instance.props.user && this.settings.tagPlaces.userPopout) {
-					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
-					if (userType) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-						if (index > -1) {
-							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-							this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
-								tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-							});
-						}
-					}
+			processUserHeaderUsername (e) {
+				let themeType = BDFDB.ObjectUtils.get(e.instance, "props.trailing.props.themeType");
+				if (!e.instance.props.user || (themeType == "POPOUT" || themeType == "SIDEBAR") && !this.settings.tagPlaces.userPopout || (themeType == "MODAL" || themeType == "MODAL_V2") && !this.settings.tagPlaces.userProfile) return;
+				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
+				if (!userType) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userheadernickname]]});
+				if (index > -1) {
+					if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+					this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
+						tagClass: BDFDB.disCNS.userheaderbottag + BDFDB.disCN.bottagnametag,
+						inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
+					});
 				}
 			}
 
 			injectStaffTag (children, user, userType, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
-				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text", [BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
+				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text", [BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.SERVER_OWNER]]]});
 				if (index > -1) children[index] = null;
 				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(config.channelId || BDFDB.LibraryStores.SelectedChannelStore.getChannelId());
 				let member = channel && this.settings.general.useRoleColor ? (BDFDB.LibraryStores.GuildMemberStore.getMember(channel.guild_id, user.id) || {}) : {};
 				
 				let fallbackLabel = this.settings.general.useCrown && this.getLabelFallback(userType);
 				let label = this.getLabel(userType, fallbackLabel);
-				let labelExtra = userType == userTypes.FORUM_CREATOR ? BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_FORUM_ORIGINAL_POSTER_TOOLTIP : userType == userTypes.MANAGEMENT && this.getManagementLabel(user);
+				let labelExtra = userType == userTypes.FORUM_CREATOR ? BDFDB.LanguageUtils.LanguageStrings.OP : userType == userTypes.MANAGEMENT && this.getManagementLabel(user);
 				
 				let tag = null;
 				if (this.settings.general.useCrown) tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -377,9 +382,9 @@ module.exports = (_ => {
 			
 			getLabelFallback (userType) {
 				switch (userType) {
-					case userTypes.OWNER: return BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER;
+					case userTypes.OWNER: return BDFDB.LanguageUtils.LanguageStrings.SERVER_OWNER;
 					case userTypes.GROUP_OWNER: return BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER;
-					case userTypes.FORUM_CREATOR: return BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_FORUM_ORIGINAL_POSTER;
+					case userTypes.FORUM_CREATOR: return BDFDB.LanguageUtils.LanguageStrings.ORIGINAL_POSTER;
 					case userTypes.THREAD_CREATOR: return this.labels.creator.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.THREAD);
 					case userTypes.ADMIN: return BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
 					case userTypes.MANAGEMENT: return this.labels.management;
@@ -399,12 +404,12 @@ module.exports = (_ => {
 					this.settings.tagTypes.managementG && BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && BDFDB.LanguageUtils.LibraryStrings.server,
 					this.settings.tagTypes.managementC && BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 					this.settings.tagTypes.managementT && BDFDB.UserUtils.can("MANAGE_THREADS", user.id) && BDFDB.LanguageUtils.LanguageStrings.THREADS,
-					this.settings.tagTypes.managementE && BDFDB.UserUtils.can("MANAGE_EVENTS", user.id) && BDFDB.LanguageUtils.LanguageStrings.GUILD_EVENTS,
+					this.settings.tagTypes.managementE && BDFDB.UserUtils.can("MANAGE_EVENTS", user.id) && BDFDB.LanguageUtils.LanguageStrings.EVENTS,
 					this.settings.tagTypes.managementR && BDFDB.UserUtils.can("MANAGE_ROLES", user.id) && BDFDB.LanguageUtils.LanguageStrings.ROLES,
 					this.settings.tagTypes.managementU && (BDFDB.UserUtils.can("BAN_MEMBERS", user.id) || BDFDB.UserUtils.can("KICK_MEMBERS", user.id)) && BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
 					this.settings.tagTypes.managementV && (BDFDB.UserUtils.can("MUTE_MEMBERS", user.id) || BDFDB.UserUtils.can("DEAFEN_MEMBERS", user.id) || BDFDB.UserUtils.can("MOVE_MEMBERS", user.id)) && BDFDB.LanguageUtils.LanguageStrings.VOICE_AND_VIDEO,
 					this.settings.tagTypes.managementM && BDFDB.UserUtils.can("MANAGE_MESSAGES", user.id) && BDFDB.LanguageUtils.LanguageStrings.MESSAGES
-				].filter(n => n).join(", ");
+				].filter(n => n).map(BDFDB.StringUtils.upperCaseFirstChar).join(", ");
 			}
 			
 			getUserType (user, channelId) {

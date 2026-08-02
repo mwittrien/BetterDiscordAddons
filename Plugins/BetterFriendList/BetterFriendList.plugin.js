@@ -2,8 +2,8 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.4
- * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
+ * @version 1.7.2
+ * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,19 +56,23 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
 		var rerenderTimeout, sortKey, sortReversed;
 		
-		const favorizedFriendsSection = "FAVORIZED_FRIENDS";
-		const hiddenFriendsSection = "HIDDEN_FRIENDS";
+		const customSections = {
+			BLOCKED: "BLOCKED",
+			FAVORITES: "FAVORIZED_FRIENDS",
+			HIDDEN: "HIDDEN_FRIENDS",
+			IGNORED: "IGNORED"
+		};
 		const placeHolderId = "PLACEHOLDER_BETTERFRIENDLIST";
 		
 		var favorizedFriends = [], hiddenFriends = [];
-		var currentSection, isFavoritesSelected = false, isHiddenSelected = false;
+		var currentSection = null;
 		
 		const statusSortOrder = {
 			online: 0,
@@ -80,9 +89,12 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						addTotalAmount:			{value: true, 	description: "Adds total Amount for All/Requested/Blocked"},
-						addFavorizedCategory:	{value: true, 	description: "Adds Favorites Category"},
+						addBlockedCategory:		{value: true, 	description: "Adds Blocked Category"},
+						addIgnoredCategory:		{value: true, 	description: "Adds Ignored Category"},
+						addFavorizedCategory:		{value: true, 	description: "Adds Favorites Category"},
 						addHiddenCategory:		{value: true, 	description: "Adds Hidden Category"},
 						addSortOptions:			{value: true, 	description: "Adds Sort Options"},
+						addRelationshipDate:		{value: true, 	description: "Adds Relationship Date"},
 						addMutualGuild:			{value: true, 	description: "Adds mutual Servers in Friend List"}
 					}
 				};
@@ -115,7 +127,7 @@ module.exports = (_ => {
 						width: 200px;
 					}
 					${BDFDB.dotCN._betterfriendlistnamecell} {
-						width: 200px;
+						width: 170px;
 					}
 					${BDFDB.dotCNS.peoplespeoplecolumn + BDFDB.dotCN.searchbar} {
 						padding-bottom: 0;
@@ -137,8 +149,7 @@ module.exports = (_ => {
 			onStart () {
 				sortKey = null;
 				sortReversed = false;
-				isFavoritesSelected = false;
-				isHiddenSelected = false;
+				currentSection = null;
 
 				this.forceUpdateAll();
 			}
@@ -219,49 +230,67 @@ module.exports = (_ => {
 			}
 			
 			processTabBar (e) {
-				if (e.instance.props.children && e.instance.props.children.some(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
+				if (e.instance.props.children && e.instance.props.children.some(c => c && c.props && c.props.id == BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND)) {
+					let relationships = BDFDB.LibraryStores.RelationshipStore.getMutableRelationships(), relationshipCount = {};
+					for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
+					relationships.forEach((type, id) => {
+						if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || type != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[type]++;
+					});
+					relationshipCount.IGNORED = BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs().length;
 					currentSection = e.instance.props.selectedItem;
-					isFavoritesSelected = currentSection == favorizedFriendsSection;
-					isHiddenSelected = currentSection == hiddenFriendsSection;
+					let hasFriends = relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.FRIEND] > 0;
 					if (!e.returnvalue) {
-						e.instance.props.children = e.instance.props.children.filter(c => c && c.props.id != favorizedFriendsSection && c.props.id != hiddenFriendsSection);
-						if (this.settings.general.addFavorizedCategory) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ONLINE) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
-							id: favorizedFriendsSection,
+						e.instance.props.children = e.instance.props.children.filter(c => c && c.props.id != customSections.FAVORITES && c.props.id != customSections.HIDDEN);
+						if (this.settings.general.addFavorizedCategory && hasFriends) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ONLINE) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+							id: customSections.FAVORITES,
 							className: BDFDB.disCN.peoplestabbaritem,
 							children: this.labels.favorites
 						}));
-						if (this.settings.general.addHiddenCategory) e.instance.props.children.splice(e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.BLOCKED) + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
-							id: hiddenFriendsSection,
+						let index = e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.PENDING);
+						if (index == -1) index = e.instance.props.children.findIndex(c => c && c.props.id == customSections.FAVORITES);
+						if (index == -1) index = e.instance.props.children.findIndex(c => c && c.props.id == BDFDB.DiscordConstants.FriendsSections.ONLINE);
+						if (this.settings.general.addHiddenCategory && hasFriends) e.instance.props.children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+							id: customSections.HIDDEN,
 							className: BDFDB.disCN.peoplestabbaritem,
 							children: this.labels.hidden
+						}));
+						if (this.settings.general.addIgnoredCategory) e.instance.props.children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+							id: customSections.IGNORED,
+							className: BDFDB.disCN.peoplestabbaritem,
+							children: this.labels.ignored
+						}));
+						if (this.settings.general.addBlockedCategory) e.instance.props.children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar.Item, {
+							id: customSections.BLOCKED,
+							className: BDFDB.disCN.peoplestabbaritem,
+							children: this.labels.blocked
 						}));
 					}
 					else {
 						if (this.settings.general.addTotalAmount) {
-							let relationships = BDFDB.LibraryStores.RelationshipStore.getRelationships(), relationshipCount = {};
-							for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
-							for (let id in relationships) if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || relationships[id] != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[relationships[id]]++;
 							for (let child of e.returnvalue.props.children) if (child && child.props.id != BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND) {
 								let newChildren = [child.props.children].flat().filter(n => !n || !n.props || n.props.count == undefined);
 								switch (child.props.id) {
 									case BDFDB.DiscordConstants.FriendsSections.ALL:
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.FRIEND]));
 										break;
-									case favorizedFriendsSection:
-										newChildren.push(this.createBadge(favorizedFriends.filter(id => relationships[id] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
+									case customSections.FAVORITES:
+										newChildren.push(this.createBadge(favorizedFriends.filter(id => relationships.get(id) == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
 										break;
 									case BDFDB.DiscordConstants.FriendsSections.ONLINE:
-										newChildren.push(this.createBadge(Object.entries(relationships).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && !(this.settings.general.addHiddenCategory && hiddenFriends.indexOf(n[0]) > -1) && BDFDB.LibraryStores.PresenceStore.getStatus(n[0]) != BDFDB.LibraryComponents.StatusComponents.Types.OFFLINE).length));
+										newChildren.push(this.createBadge(Array.from(relationships).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && !(this.settings.general.addHiddenCategory && hiddenFriends.indexOf(n[0]) > -1) && BDFDB.LibraryStores.PresenceStore.getStatus(n[0]) != BDFDB.DiscordConstants.StatusTypes.OFFLINE).length));
 										break;
 									case BDFDB.DiscordConstants.FriendsSections.PENDING:
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming, relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING] > 0));
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_OUTGOING], this.labels.outgoing));
 										break;
-									case BDFDB.DiscordConstants.FriendsSections.BLOCKED:
+									case customSections.BLOCKED:
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.BLOCKED]));
 										break;
-									case hiddenFriendsSection:
-										newChildren.push(this.createBadge(hiddenFriends.filter(id => relationships[id] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
+									case customSections.IGNORED:
+										newChildren.push(this.createBadge(relationshipCount.IGNORED));
+										break;
+									case customSections.HIDDEN:
+										newChildren.push(this.createBadge(hiddenFriends.filter(id => relationships.get(id) == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
 										break;
 								}
 								child.props.children = newChildren;
@@ -273,56 +302,77 @@ module.exports = (_ => {
 			
 			processAnalyticsContext (e) {
 				if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.FRIENDS_LIST) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {filter: n => n && n.props && n.props.title && n.props.id});
-				if (index == -1) return;
-				let users = (BDFDB.ReactUtils.findChild(e.instance, {props: ["statusSections"]}) || {props: {statusSections: []}}).props.statusSections.flat(10);
+				let body = BDFDB.ReactUtils.findChild(e.instance, {filter: n => n && n.props && n.props.renderRow && n.props.rows});
+				if (!body) return;
+				let users = body.props.rows.flat(10);
 				let filteredUsers = users;
-				if (this.settings.general.addFavorizedCategory) {
-					if (isFavoritesSelected) filteredUsers = filteredUsers.filter(n => n && n.user && favorizedFriends.indexOf(n.user.id) > -1);
-				}
+				if (this.settings.general.addFavorizedCategory && currentSection == customSections.FAVORITES) filteredUsers = filteredUsers.filter(n => n && n.user && favorizedFriends.indexOf(n.user.id) > -1);
 				if (this.settings.general.addHiddenCategory) {
-					if (isHiddenSelected) filteredUsers = filteredUsers.filter(n => n && n.user && hiddenFriends.indexOf(n.user.id) > -1);
+					if (currentSection == customSections.HIDDEN) filteredUsers = filteredUsers.filter(n => n && n.user && hiddenFriends.indexOf(n.user.id) > -1);
 					else filteredUsers = filteredUsers.filter(n => n && n.user && hiddenFriends.indexOf(n.user.id) == -1);
 				}
-				children[index].props.title = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-					children: [
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._betterfriendlisttitle,
-							children: this.settings.general.addFavorizedCategory && isFavoritesSelected ? `${this.labels.favorites} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : this.settings.general.addHiddenCategory && isHiddenSelected ? `${this.labels.hidden} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : children[index].props.title.replace(users.length, filteredUsers.filter(u => u && u.key != placeHolderId).length)
-						}),
-						this.settings.general.addSortOptions && [
-							{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
-							{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
-						].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.tableheadercellcontent,
-								children: [
-									data.label,
-									sortKey == data.key && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.tableheadersorticon,
-										name: BDFDB.LibraryComponents.SvgIcon.Names[sortReversed ? "ARROW_UP" : "ARROW_DOWN"]
-									})
-								].filter(n => n)
+				if (this.settings.general.addBlockedCategory && currentSection == customSections.BLOCKED || this.settings.general.addIgnoredCategory && currentSection == customSections.IGNORED) {
+					filteredUsers = currentSection == customSections.IGNORED ? BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs() : this.getBlockedIDs();
+					for (let className of [BDFDB.disCN.peopleslistsearchbar, BDFDB.disCN.peopleslistempty]) {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["className", className]]});
+						if (index > -1) children[index] = null;
+					}
+					body.props.hasSearchQuery = false;
+				}
+				if (this.settings.general.addBlockedCategory || this.settings.general.addIgnoredCategory) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {filter: n => n.type && n.type.toLocaleString().indexOf("blockedIgnoredSettingsNotice") > -1});
+					if (index > -1) children[index] = null;
+				}
+				let renderSection = body.props.renderSection;
+				body.props.renderSection = BDFDB.TimeUtils.suppress((...args) => {
+					let returnValue = renderSection(...args);
+					let title = returnValue.props.children.props.title, customTitle = null;
+					if (this.settings.general.addFavorizedCategory && currentSection == customSections.FAVORITES) customTitle = this.labels.favorites;
+					else if (this.settings.general.addHiddenCategory && currentSection == customSections.HIDDEN) customTitle = this.labels.hidden;
+					else if (this.settings.general.addBlockedCategory && currentSection == customSections.BLOCKED) customTitle = this.labels.blocked;
+					else if (this.settings.general.addIgnoredCategory && currentSection == customSections.IGNORED) customTitle = this.labels.ignored;
+					returnValue.props.children.props.title = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._betterfriendlisttitle,
+								children: customTitle ? `${customTitle} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : title.replace(users.length, filteredUsers.filter(u => u && u.key != placeHolderId).length)
 							}),
-							onClick: event => {
-								if (sortKey == data.key) {
-									if (!sortReversed) sortReversed = true;
+							this.settings.general.addSortOptions && [
+								{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USERNAME},
+								{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status},
+								{key: "date", label: BDFDB.LanguageUtils.LanguageStrings.DATE},
+							].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.tableheadercellcontent,
+									children: [
+										data.label,
+										sortKey == data.key && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											className: BDFDB.disCN.tableheadersorticon,
+											name: BDFDB.LibraryComponents.SvgIcon.Names[sortReversed ? "ARROW_UP" : "ARROW_DOWN"]
+										})
+									].filter(n => n)
+								}),
+								onClick: event => {
+									if (sortKey == data.key) {
+										if (!sortReversed) sortReversed = true;
+										else {
+											sortKey = null;
+											sortReversed = false;
+										}
+									}
 									else {
-										sortKey = null;
+										sortKey = data.key;
 										sortReversed = false;
 									}
+									this.rerenderList();
 								}
-								else {
-									sortKey = data.key;
-									sortReversed = false;
-								}
-								this.rerenderList();
-							}
-						}))
-					].flat(10).filter(n => n)
-				});
+							}))
+						].flat(10).filter(n => n)
+					});
+					return returnValue;
+				}, "Error in Section Render of PeopleList!", this);
 			}
 
 			processPeopleListSectionedLazy (e) {
@@ -330,16 +380,49 @@ module.exports = (_ => {
 			}
 			
 			processPeopleListSectionedNonLazy (e) {
-				if (this.settings.general.addFavorizedCategory) {
-					if (isFavoritesSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
-				}
+				if (this.settings.general.addFavorizedCategory && currentSection == customSections.FAVORITES) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
 				if (this.settings.general.addHiddenCategory) {
-					if (isHiddenSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
-					else if (([].concat(e.instance.props.statusSections).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
+					if (currentSection == customSections.HIDDEN) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
+					else if (([].concat(e.instance.props.rows).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
 				}
-				if (sortKey && e.instance.props.statusSections.flat(10).length) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
+				if (this.settings.general.addBlockedCategory && currentSection == customSections.BLOCKED || this.settings.general.addIgnoredCategory && currentSection == customSections.IGNORED) {
+					let ignoredSection = currentSection == customSections.IGNORED;
+					let userIDs = ignoredSection ? BDFDB.LibraryStores.RelationshipStore.getIgnoredIDs() : this.getBlockedIDs();
+					let RelationshipConstructor = e.instance.props.rows.flat(10)[0] && e.instance.props.rows.flat(10)[0].constructor || class RelationshipConstructor {
+						get comparator() {
+							return [this.type, 1, this.nickname || this.user && this.user.global && this.user.global.toLowerCase() || this.usernameLower]
+						}
+						constructor(e) {
+							for (let prop of Object.keys(e)) this[prop] = e[prop];
+						}
+					};
+					e.instance.props.rows = [userIDs.map(id => {
+						let user = BDFDB.LibraryStores.UserStore.getUser(id);
+						return new RelationshipConstructor({
+							activities: [],
+							applicationId: undefined,
+							applicationStream: null,
+							giftIntentType: undefined,
+							ignoredUser: ignoredSection,
+							isGameRelationship: false,
+							isMobile: false,
+							key: id,
+							mutualGuilds: [],
+							mutualGuildsLength: 0,
+							nickname: undefined,
+							spam: false,
+							status: BDFDB.UserUtils.getStatus(id) || "offline",
+							type: BDFDB.DiscordConstants.RelationshipTypes.BLOCKED,
+							user: user ? user : new BDFDB.DiscordObjects.User({id: id, username: BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER}),
+							userId: id,
+							usernameLower: user ? user.username.toLowerCase() : BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER
+						});
+					})];
+				}
+				if (sortKey && e.instance.props.rows.flat(10).length) e.instance.props.rows = [].concat(e.instance.props.rows).map(section => {
 					let newSection = [].concat(section);
 					newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {
+						date: new Date(BDFDB.LibraryStores.RelationshipStore.getSince(entry.userId)).getTime(),
 						statusIndex: statusSortOrder[entry.status],
 						nicknameLower: entry.nickname ? entry.nickname.toLowerCase() : entry.usernameLower
 					})), sortKey);
@@ -373,13 +456,30 @@ module.exports = (_ => {
 				}
 				else {
 					if (e.instance.props.user.id == placeHolderId) return null;
-					else if (this.settings.general.addMutualGuild) {
-						let mutualGuilds = BDFDB.ArrayUtils.removeCopies([].concat(BDFDB.LibraryStores.GuildMemberStore.memberOf(e.instance.props.user.id), (BDFDB.LibraryStores.UserProfileStore.getMutualGuilds(e.instance.props.user.id) || []).map(n => n && n.guild && n.guild.id)).flat()).filter(n => n);
-						if (mutualGuilds && mutualGuilds.length) {
-							let guildsIds = BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds();
-							let childrenRender = e.returnvalue.props.children;
-							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-								let returnValue = childrenRender(...args);
+					let childrenRender = e.returnvalue.props.children[1].props.children;
+					e.returnvalue.props.children[1].props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let returnValue = childrenRender(...args);
+						let actions = BDFDB.ReactUtils.findChild(returnValue, {filter: n => n && n.props && n.props.className && (n.props.className.indexOf("actions_") > -1 || n.props.className.indexOf("-actions ") > -1 || n.props.className.endsWith("-actions"))});
+						if (actions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.user.id) || BDFDB.LibraryStores.RelationshipStore.isIgnored(e.instance.props.user.id)) actions.props.children.pop();
+						if (actions && this.settings.general.addRelationshipDate && BDFDB.ArrayUtils.is(actions.props.children)) {
+							actions.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: new Date(BDFDB.LibraryStores.RelationshipStore.getSince(e.instance.props.user.id)).toLocaleString(),
+								tooltipConfig: {type: "top"},
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.peoplesactionbutton,
+									role: "button",
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										width: 20,
+										height: 20,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.CLOCK
+									})
+								})
+							}));
+						}
+						if (this.settings.general.addMutualGuild) {
+							let mutualGuilds = BDFDB.ArrayUtils.removeCopies([].concat(BDFDB.LibraryStores.GuildMemberStore.memberOf(e.instance.props.user.id), (BDFDB.LibraryStores.UserProfileStore.getMutualGuilds(e.instance.props.user.id) || []).map(n => n && n.guild && n.guild.id)).flat()).filter(n => n);
+							if (mutualGuilds && mutualGuilds.length) {
+								let guildsIds = BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds();
 								let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {filter: n => n && n.props && n.props.subText && n.props.user});
 								if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
 									className: BDFDB.disCN._betterfriendlistmutualguilds,
@@ -387,10 +487,10 @@ module.exports = (_ => {
 									showTooltip: true,
 									max: 10
 								}, true));
-								return returnValue;
-							}, "", this);
+							}
 						}
-					}
+						return returnValue;
+					}, "Error in PeopleListItem Render!", this);
 				}
 			}
 			
@@ -409,6 +509,10 @@ module.exports = (_ => {
 				}) : badge;
 			}
 			
+			getBlockedIDs () {
+				return Array.from(BDFDB.LibraryStores.RelationshipStore.getMutableRelationships()).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED).map(n => n[0]);
+			}
+			
 			rerenderList () {
 				let selectedButton = document.querySelector(BDFDB.dotCNS.dmchannel + BDFDB.dotCNS.namecontainerselected + "a");
 				if (selectedButton) selectedButton.click();
@@ -418,320 +522,391 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							context_favorizefriend:				"Добавете приятел към любими",
-							context_hidefriend:					"Скрий приятел",
-							context_unfavorizefriend:			"Премахване на приятел от любимите",
-							context_unhidefriend:				"Разкрий приятел",
+							blocked:							"Блокиран",
+							context_favorizefriend:						"Добавете приятел към любими",
+							context_hidefriend:						"Скрий приятел",
+							context_unfavorizefriend:					"Премахване на приятел от любимите",
+							context_unhidefriend:						"Разкрий приятел",
 							favorites:							"Любими",
 							hidden:								"Скрити",
+							ignored:							"Игнориран",
 							incoming:							"Входящи",
 							outgoing:							"Изходящи"
 						};
 					case "cs":		// Czech
 						return {
-							context_favorizefriend:				"Přidat přítele do oblíbených",
-							context_hidefriend:					"Skrýt přítele",
-							context_unfavorizefriend:			"Odebrat přítele z oblíbených",
-							context_unhidefriend:				"Odkrýt přítele",
+							blocked:							"Blokované",
+							context_favorizefriend:						"Přidat přítele do oblíbených",
+							context_hidefriend:						"Skrýt přítele",
+							context_unfavorizefriend:					"Odebrat přítele z oblíbených",
+							context_unhidefriend:						"Odkrýt přítele",
 							favorites:							"Oblíbené",
 							hidden:								"Skrytý",
+							ignored:							"Ignorováno",
 							incoming:							"Přicházející",
 							outgoing:							"Odchozí"
 						};
 					case "da":		// Danish
 						return {
-							context_favorizefriend:				"Føj ven til favoritter",
-							context_hidefriend:					"Skjul ven",
-							context_unfavorizefriend:			"Fjern ven fra favoritter",
-							context_unhidefriend:				"Skjul ven",
+							blocked:							"Blokeret",
+							context_favorizefriend:						"Føj ven til favoritter",
+							context_hidefriend:						"Skjul ven",
+							context_unfavorizefriend:					"Fjern ven fra favoritter",
+							context_unhidefriend:						"Skjul ven",
 							favorites:							"Favoritter",
 							hidden:								"Skjult",
+							ignored:							"Ignoreret",
 							incoming:							"Indgående",
 							outgoing:							"Udgående"
 						};
 					case "de":		// German
 						return {
-							context_favorizefriend:				"Freund zu Favoriten hinzufügen",
-							context_hidefriend:					"Freund ausblenden",
-							context_unfavorizefriend:			"Freund aus Favoriten entfernen",
-							context_unhidefriend:				"Freund einblenden",
+							blocked:							"Blockiert",
+							context_favorizefriend:						"Freund zu Favoriten hinzufügen",
+							context_hidefriend:						"Freund ausblenden",
+							context_unfavorizefriend:					"Freund aus Favoriten entfernen",
+							context_unhidefriend:						"Freund einblenden",
 							favorites:							"Favoriten",
 							hidden:								"Versteckt",
+							ignored:							"Ignoriert",
 							incoming:							"Eingehend",
 							outgoing:							"Ausgehend"
 						};
 					case "el":		// Greek
 						return {
-							context_favorizefriend:				"Προσθήκη φίλου στους αγαπημένους",
-							context_hidefriend:					"Απόκρυψη φίλου",
-							context_unfavorizefriend:			"Κατάργηση φίλου από τούς αγαπημένους",
-							context_unhidefriend:				"Επανεμφάνιση φίλου",
+							blocked:							"Μπλοκαρισμένος",
+							context_favorizefriend:						"Προσθήκη φίλου στους αγαπημένους",
+							context_hidefriend:						"Απόκρυψη φίλου",
+							context_unfavorizefriend:					"Κατάργηση φίλου από τούς αγαπημένους",
+							context_unhidefriend:						"Επανεμφάνιση φίλου",
 							favorites:							"Αγαπημένοι",
 							hidden:								"Σε απόκρυψη",
+							ignored:							"Αγνοημένος",
 							incoming:							"Εισερχόμενος",
 							outgoing:							"Εξερχόμενος"
 						};
 					case "es":		// Spanish
 						return {
-							context_favorizefriend:				"Agregar amigo a favoritos",
-							context_hidefriend:					"Ocultar amigo",
-							context_unfavorizefriend:			"Quitar amigo de favoritos",
-							context_unhidefriend:				"Mostrar amigo",
+							blocked:							"Obstruido",
+							context_favorizefriend:						"Agregar amigo a favoritos",
+							context_hidefriend:						"Ocultar amigo",
+							context_unfavorizefriend:					"Quitar amigo de favoritos",
+							context_unhidefriend:						"Mostrar amigo",
 							favorites:							"Favoritos",
 							hidden:								"Oculto",
+							ignored:							"Ignorado",
 							incoming:							"Entrante",
 							outgoing:							"Saliente"
 						};
+					case "es-419":		// Spanish (Latin America)
+						return {
+							blocked:							"Obstruido",
+							context_favorizefriend:						"Agregar amigo a los favoritos",
+							context_hidefriend:						"Esconder a amigo",
+							context_unfavorizefriend:					"Eliminar amigo de los favoritos",
+							context_unhidefriend:						"Amigo dehide",
+							favorites:							"Favoritos",
+							hidden:								"Oculto",
+							ignored:							"Ignorado",
+							incoming:							"Entrante",
+							outgoing:							"Extrovertido"
+						};
 					case "fi":		// Finnish
 						return {
-							context_favorizefriend:				"Lisää ystävä suosikkeihin",
-							context_hidefriend:					"Piilota ystävä",
-							context_unfavorizefriend:			"Poista ystävä suosikeista",
-							context_unhidefriend:				"Näytä ystävä",
+							blocked:							"Estetty",
+							context_favorizefriend:						"Lisää ystävä suosikkeihin",
+							context_hidefriend:						"Piilota ystävä",
+							context_unfavorizefriend:					"Poista ystävä suosikeista",
+							context_unhidefriend:						"Näytä ystävä",
 							favorites:							"Suosikit",
 							hidden:								"Piilotettu",
+							ignored:							"Sivuutettu",
 							incoming:							"Saapuva",
 							outgoing:							"Lähtevä"
 						};
 					case "fr":		// French
 						return {
-							context_favorizefriend:				"Ajouter un ami aux favoris",
-							context_hidefriend:					"Masquer l'ami",
-							context_unfavorizefriend:			"Supprimer un ami des favoris",
-							context_unhidefriend:				"Afficher l'ami",
+							blocked:							"Bloqué",
+							context_favorizefriend:						"Ajouter un ami aux favoris",
+							context_hidefriend:						"Masquer l'ami",
+							context_unfavorizefriend:					"Supprimer un ami des favoris",
+							context_unhidefriend:						"Afficher l'ami",
 							favorites:							"Favoris",
 							hidden:								"Caché",
+							ignored:							"Ignoré",
 							incoming:							"Entrant",
 							outgoing:							"Sortant"
 						};
 					case "hi":		// Hindi
 						return {
-							context_favorizefriend:				"मित्र को पसंदीदा में जोड़ें",
-							context_hidefriend:					"दोस्त छुपाएं",
-							context_unfavorizefriend:			"मित्र को पसंदीदा से हटाएं",
-							context_unhidefriend:				"मित्र दिखाएँ",
+							blocked:							"अवरोधित",
+							context_favorizefriend:						"मित्र को पसंदीदा में जोड़ें",
+							context_hidefriend:						"दोस्त छुपाएं",
+							context_unfavorizefriend:					"मित्र को पसंदीदा से हटाएं",
+							context_unhidefriend:						"मित्र दिखाएँ",
 							favorites:							"पसंदीदा",
 							hidden:								"छिपा हुआ",
+							ignored:							"अवहेलना करना",
 							incoming:							"आने वाली",
 							outgoing:							"निवर्तमान"
 						};
 					case "hr":		// Croatian
 						return {
-							context_favorizefriend:				"Dodaj prijatelja u favorite",
-							context_hidefriend:					"Sakrij prijatelja",
-							context_unfavorizefriend:			"Ukloni prijatelja iz omiljenih",
-							context_unhidefriend:				"Otkrij prijatelja",
+							blocked:							"Blokiran",
+							context_favorizefriend:						"Dodaj prijatelja u favorite",
+							context_hidefriend:						"Sakrij prijatelja",
+							context_unfavorizefriend:					"Ukloni prijatelja iz omiljenih",
+							context_unhidefriend:						"Otkrij prijatelja",
 							favorites:							"Favoriti",
 							hidden:								"Skriven",
+							ignored:							"Zanemaren",
 							incoming:							"Dolazni",
 							outgoing:							"Odlazni"
 						};
 					case "hu":		// Hungarian
 						return {
-							context_favorizefriend:				"Ismerős hozzáadása a kedvencekhez",
-							context_hidefriend:					"Barát elrejtése",
-							context_unfavorizefriend:			"Ismerős eltávolítása a kedvencekből",
-							context_unhidefriend:				"Barát megjelenítése",
+							blocked:							"Zárolt",
+							context_favorizefriend:						"Ismerős hozzáadása a kedvencekhez",
+							context_hidefriend:						"Barát elrejtése",
+							context_unfavorizefriend:					"Ismerős eltávolítása a kedvencekből",
+							context_unhidefriend:						"Barát megjelenítése",
 							favorites:							"Kedvencek",
 							hidden:								"Rejtett",
+							ignored:							"Figyelmen kívül hagyott",
 							incoming:							"Beérkező",
 							outgoing:							"Kimenő"
 						};
 					case "it":		// Italian
 						return {
-							context_favorizefriend:				"Aggiungi amico ai preferiti",
-							context_hidefriend:					"Nascondi amico",
-							context_unfavorizefriend:			"Rimuovi amico dai preferiti",
-							context_unhidefriend:				"Scopri amico",
+							blocked:							"Bloccato",
+							context_favorizefriend:						"Aggiungi amico ai preferiti",
+							context_hidefriend:						"Nascondi amico",
+							context_unfavorizefriend:					"Rimuovi amico dai preferiti",
+							context_unhidefriend:						"Scopri amico",
 							favorites:							"Preferiti",
 							hidden:								"Nascosto",
+							ignored:							"Ignorato",
 							incoming:							"In arrivo",
 							outgoing:							"Estroverso"
 						};
 					case "ja":		// Japanese
 						return {
-							context_favorizefriend:				"お気に入りに友達を追加する",
-							context_hidefriend:					"友達を隠す",
-							context_unfavorizefriend:			"お気に入りから友達を削除する",
-							context_unhidefriend:				"友達を再表示",
+							blocked:							"ブロックされています",
+							context_favorizefriend:						"お気に入りに友達を追加する",
+							context_hidefriend:						"友達を隠す",
+							context_unfavorizefriend:					"お気に入りから友達を削除する",
+							context_unhidefriend:						"友達を再表示",
 							favorites:							"お気に入り",
 							hidden:								"隠し",
+							ignored:							"無視した",
 							incoming:							"着信",
 							outgoing:							"発信"
 						};
 					case "ko":		// Korean
 						return {
-							context_favorizefriend:				"즐겨찾기에 친구 추가",
-							context_hidefriend:					"친구 숨기기",
-							context_unfavorizefriend:			"즐겨찾기에서 친구 제거",
-							context_unhidefriend:				"친구 숨기기 해제",
+							blocked:							"막힌",
+							context_favorizefriend:						"즐겨찾기에 친구 추가",
+							context_hidefriend:						"친구 숨기기",
+							context_unfavorizefriend:					"즐겨찾기에서 친구 제거",
+							context_unhidefriend:						"친구 숨기기 해제",
 							favorites:							"즐겨찾기",
 							hidden:								"숨겨진",
+							ignored:							"무시했습니다",
 							incoming:							"들어오는",
 							outgoing:							"나가는"
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_favorizefriend:				"Pridėti draugą prie mėgstamiausių",
-							context_hidefriend:					"Slėpti draugą",
-							context_unfavorizefriend:			"Pašalinti draugą iš mėgstamiausių",
-							context_unhidefriend:				"Nerodyti draugo",
+							blocked:							"Užblokuotas",
+							context_favorizefriend:						"Pridėti draugą prie mėgstamiausių",
+							context_hidefriend:						"Slėpti draugą",
+							context_unfavorizefriend:					"Pašalinti draugą iš mėgstamiausių",
+							context_unhidefriend:						"Nerodyti draugo",
 							favorites:							"Mėgstamiausi",
 							hidden:								"Paslėpta",
+							ignored:							"Ignoruojamas",
 							incoming:							"Gaunamasis",
 							outgoing:							"Išeinantis"
 						};
 					case "nl":		// Dutch
 						return {
-							context_favorizefriend:				"Vriend toevoegen aan favorieten",
-							context_hidefriend:					"Vriend verbergen",
-							context_unfavorizefriend:			"Vriend uit favorieten verwijderen",
-							context_unhidefriend:				"Vriend zichtbaar maken",
+							blocked:							"Geblokkeerd",
+							context_favorizefriend:						"Vriend toevoegen aan favorieten",
+							context_hidefriend:						"Vriend verbergen",
+							context_unfavorizefriend:					"Vriend uit favorieten verwijderen",
+							context_unhidefriend:						"Vriend zichtbaar maken",
 							favorites:							"Favorieten",
 							hidden:								"Verborgen",
+							ignored:							"Genegeerd",
 							incoming:							"Inkomend",
 							outgoing:							"Uitgaand"
 						};
 					case "no":		// Norwegian
 						return {
-							context_favorizefriend:				"Legg til en venn i favoritter",
-							context_hidefriend:					"Skjul venn",
-							context_unfavorizefriend:			"Fjern venn fra favoritter",
-							context_unhidefriend:				"Skjul venn",
+							blocked:							"Blokkert",
+							context_favorizefriend:						"Legg til en venn i favoritter",
+							context_hidefriend:						"Skjul venn",
+							context_unfavorizefriend:					"Fjern venn fra favoritter",
+							context_unhidefriend:						"Skjul venn",
 							favorites:							"Favoritter",
 							hidden:								"Skjult",
+							ignored:							"Ignorert",
 							incoming:							"Innkommende",
 							outgoing:							"Utgående"
 						};
 					case "pl":		// Polish
 						return {
-							context_favorizefriend:				"Dodaj znajomego do ulubionych",
-							context_hidefriend:					"Ukryj znajomego",
-							context_unfavorizefriend:			"Usuń znajomego z ulubionych",
-							context_unhidefriend:				"Pokaż znajomego",
+							blocked:							"Zablokowany",
+							context_favorizefriend:						"Dodaj znajomego do ulubionych",
+							context_hidefriend:						"Ukryj znajomego",
+							context_unfavorizefriend:					"Usuń znajomego z ulubionych",
+							context_unhidefriend:						"Pokaż znajomego",
 							favorites:							"Ulubione",
 							hidden:								"Ukryci",
+							ignored:							"Ignorowane",
 							incoming:							"Przychodzące",
 							outgoing:							"Wychodzące"
 						};
-					case "pt-BR":	// Portuguese (Brazil)
+					case "pt-BR":		// Portuguese (Brazil)
 						return {
-							context_favorizefriend:				"Adicionar amigo aos favoritos",
-							context_hidefriend:					"Esconder Amigo",
-							context_unfavorizefriend:			"Remover amigo dos favoritos",
-							context_unhidefriend:				"Reexibir amigo",
+							blocked:							"Bloqueado",
+							context_favorizefriend:						"Adicionar amigo aos favoritos",
+							context_hidefriend:						"Esconder Amigo",
+							context_unfavorizefriend:					"Remover amigo dos favoritos",
+							context_unhidefriend:						"Reexibir amigo",
 							favorites:							"Favoritos",
 							hidden:								"Escondido",
+							ignored:							"Ignorado",
 							incoming:							"Entrada",
 							outgoing:							"Extrovertido"
 						};
 					case "ro":		// Romanian
 						return {
-							context_favorizefriend:				"Adaugă prieten la favorite",
-							context_hidefriend:					"Ascunde prietenul",
-							context_unfavorizefriend:			"Scoateți prietenul din favorite",
-							context_unhidefriend:				"Afișează prietenul",
+							blocked:							"Blocat",
+							context_favorizefriend:						"Adaugă prieten la favorite",
+							context_hidefriend:						"Ascunde prietenul",
+							context_unfavorizefriend:					"Scoateți prietenul din favorite",
+							context_unhidefriend:						"Afișează prietenul",
 							favorites:							"Favorite",
 							hidden:								"Ascuns",
+							ignored:							"Ignorat",
 							incoming:							"Primite",
 							outgoing:							"De ieșire"
 						};
 					case "ru":		// Russian
 						return {
-							context_favorizefriend:				"Добавить друга в избранное",
-							context_hidefriend:					"Скрыть друга",
-							context_unfavorizefriend:			"Удалить друга из избранного",
-							context_unhidefriend:				"Показать друга",
+							blocked:							"Заблокированный",
+							context_favorizefriend:						"Добавить друга в избранное",
+							context_hidefriend:						"Скрыть друга",
+							context_unfavorizefriend:					"Удалить друга из избранного",
+							context_unhidefriend:						"Показать друга",
 							favorites:							"Избранное",
 							hidden:								"Скрытый",
+							ignored:							"Игнорируется",
 							incoming:							"Входящий",
 							outgoing:							"Исходящий"
 						};
 					case "sv":		// Swedish
 						return {
-							context_favorizefriend:				"Lägg till vän till favoriter",
-							context_hidefriend:					"Dölj vän",
-							context_unfavorizefriend:			"Ta bort vän från favoriter",
-							context_unhidefriend:				"Göm din vän",
+							blocked:							"Blockerad",
+							context_favorizefriend:						"Lägg till vän till favoriter",
+							context_hidefriend:						"Dölj vän",
+							context_unfavorizefriend:					"Ta bort vän från favoriter",
+							context_unhidefriend:						"Göm din vän",
 							favorites:							"Favoriter",
 							hidden:								"Dold",
+							ignored:							"Ignorerad",
 							incoming:							"Inkommande",
 							outgoing:							"Utgående"
 						};
 					case "th":		// Thai
 						return {
-							context_favorizefriend:				"เพิ่มเพื่อนในรายการโปรด",
-							context_hidefriend:					"ซ่อนเพื่อน",
-							context_unfavorizefriend:			"ลบเพื่อนออกจากรายการโปรด",
-							context_unhidefriend:				"เลิกซ่อนเพื่อน",
+							blocked:							"ที่ถูกปิดกั้น",
+							context_favorizefriend:						"เพิ่มเพื่อนในรายการโปรด",
+							context_hidefriend:						"ซ่อนเพื่อน",
+							context_unfavorizefriend:					"ลบเพื่อนออกจากรายการโปรด",
+							context_unhidefriend:						"เลิกซ่อนเพื่อน",
 							favorites:							"รายการโปรด",
 							hidden:								"ซ่อนเร้น",
+							ignored:							"เพิกเฉย",
 							incoming:							"ขาเข้า",
 							outgoing:							"ขาออก"
 						};
 					case "tr":		// Turkish
 						return {
-							context_favorizefriend:				"Favorilere arkadaş ekle",
-							context_hidefriend:					"Arkadaşı Gizle",
-							context_unfavorizefriend:			"Arkadaşını favorilerden kaldır",
-							context_unhidefriend:				"Arkadaşı Göster",
+							blocked:							"Engellenmiş",
+							context_favorizefriend:						"Favorilere arkadaş ekle",
+							context_hidefriend:						"Arkadaşı Gizle",
+							context_unfavorizefriend:					"Arkadaşını favorilerden kaldır",
+							context_unhidefriend:						"Arkadaşı Göster",
 							favorites:							"Favoriler",
 							hidden:								"Gizli",
+							ignored:							"Göz ardı edilen",
 							incoming:							"Gelen",
 							outgoing:							"Dışa dönük"
 						};
 					case "uk":		// Ukrainian
 						return {
-							context_favorizefriend:				"Додати друга у вибране",
-							context_hidefriend:					"Сховати друга",
-							context_unfavorizefriend:			"Видалити друга з вибраного",
-							context_unhidefriend:				"Показати друга",
+							blocked:							"Заблокований",
+							context_favorizefriend:						"Додати друга у вибране",
+							context_hidefriend:						"Сховати друга",
+							context_unfavorizefriend:					"Видалити друга з вибраного",
+							context_unhidefriend:						"Показати друга",
 							favorites:							"Вибране",
 							hidden:								"Прихований",
+							ignored:							"Ігнорований",
 							incoming:							"Вхідні",
 							outgoing:							"Вихідний"
 						};
 					case "vi":		// Vietnamese
 						return {
-							context_favorizefriend:				"Thêm bạn bè vào danh sách yêu thích",
-							context_hidefriend:					"Ẩn bạn bè",
-							context_unfavorizefriend:			"Xóa bạn bè khỏi danh sách yêu thích",
-							context_unhidefriend:				"Bỏ ẩn bạn bè",
+							blocked:							"Bị chặn",
+							context_favorizefriend:						"Thêm bạn bè vào danh sách yêu thích",
+							context_hidefriend:						"Ẩn bạn bè",
+							context_unfavorizefriend:					"Xóa bạn bè khỏi danh sách yêu thích",
+							context_unhidefriend:						"Bỏ ẩn bạn bè",
 							favorites:							"Yêu thích",
 							hidden:								"Ẩn",
+							ignored:							"Bỏ qua",
 							incoming:							"Mới đến",
 							outgoing:							"Hướng ngoaị"
 						};
-					case "zh-CN":	// Chinese (China)
+					case "zh-CN":		// Chinese (China)
 						return {
-							context_favorizefriend:				"添加好友到收藏夹",
-							context_hidefriend:					"隐藏好友",
-							context_unfavorizefriend:			"从收藏夹中移除好友",
-							context_unhidefriend:				"取消隐藏好友",
+							blocked:							"阻止",
+							context_favorizefriend:						"添加好友到收藏夹",
+							context_hidefriend:						"隐藏好友",
+							context_unfavorizefriend:					"从收藏夹中移除好友",
+							context_unhidefriend:						"取消隐藏好友",
 							favorites:							"收藏夹",
 							hidden:								"隐藏",
+							ignored:							"被忽略",
 							incoming:							"导入",
 							outgoing:							"导出"
 						};
-					case "zh-TW":	// Chinese (Taiwan)
+					case "zh-TW":		// Chinese (Taiwan)
 						return {
-							context_favorizefriend:				"新增好友到我的最愛",
-							context_hidefriend:					"隱藏好友",
-							context_unfavorizefriend:			"從我的最愛中移除好友",
-							context_unhidefriend:				"取消隱藏好友",
+							blocked:							"阻止",
+							context_favorizefriend:						"新增好友到我的最愛",
+							context_hidefriend:						"隱藏好友",
+							context_unfavorizefriend:					"從我的最愛中移除好友",
+							context_unhidefriend:						"取消隱藏好友",
 							favorites:							"我的最愛",
 							hidden:								"隱藏",
+							ignored:							"被忽略",
 							incoming:							"匯入",
 							outgoing:							"匯出"
 						};
 					default:		// English
 						return {
-							context_favorizefriend:				"Add Friend to Favorites",
-							context_hidefriend:					"Hide Friend",
-							context_unfavorizefriend:			"Remove Friend from Favorites",
-							context_unhidefriend:				"Unhide Friend",
+							blocked:							"Blocked",
+							context_favorizefriend:						"Add Friend to Favorites",
+							context_hidefriend:						"Hide Friend",
+							context_unfavorizefriend:					"Remove Friend from Favorites",
+							context_unhidefriend:						"Unhide Friend",
 							favorites:							"Favorites",
 							hidden:								"Hidden",
+							ignored:							"Ignored",
 							incoming:							"Incoming",
 							outgoing:							"Outgoing"
 						};

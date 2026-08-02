@@ -9,7 +9,7 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-%23F96854.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAdhwAAHYcBj+XxZQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGBSURBVFiF7Za9ThtBFEbPBUpERWMwCorfJjY4aVLxBFHCKyCl4hWQUqVMBULmbfiRCNACqSJsDsXakjHGO8Y7ovFXrmbmO3NnZ74bqrzUeUR8HPP9mdQ60AZawCZQBwK4BC6ADnAUEZeTFhmnsxLjdfVAfXhl/rB66h/1QyUAalu9TzAe1Z26NROAutvf0VvVU7+/CUD9PKP5MMT2VADqhvqvAvOB7tQ1gIXXznpEP4HlxLEpWgH2AEInX0OLv/cUWKwQAKALbKZU4EsGc4AloJ0C8CmD+UDNFIBGRoBGCkAtI8B66i3IpccUgJuMANcpAKcZAc5SAE4yAnRSAA6BXgbzLnBUChARF8DvDAC/IuIqNYzqFYfRrVqDxDCKiL/AV6o5ikdgJyJuBrsrrcBQJX44W0/QVb+NLpoM0B/f6pdwWt2qL3NlWoD+nFV1X/2fYPxg0cCOfdJL+4ESkBqwDTQpQmuNoi2/onjAOsBxRFxPWmTqClSp9w6jOcAcYA7AE1OMk5ulhBZCAAAAAElFTkSuQmCC
 [patreon-link]: https://patreon.com/MircoWittrien
 
- - [Better Friend List](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendList) - Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
+ - [Better Friend List](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendList) - Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable Tag to NSFW Channels
  - [Better Search Page](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage) - Makes the Controls in the Search Results Page sticky
  - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Adds a Character Counter to most Inputs
@@ -23,7 +23,6 @@
  - [Edit Roles](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditRoles) - Allows you to locally edit Roles
  - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows you to locally edit Servers
  - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to locally edit Users
- - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Shows you an Overview of Emojis and Emoji Servers
  - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  - [Game Activity Toggle](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GameActivityToggle) - Adds a Quick-Toggle Game Activity Button
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a custom Search Engine
@@ -36,10 +35,9 @@
  - [Open Steam Links In App](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OpenSteamLinksInApp) - Opens Steam Links in Steam instead of your Browser
  - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Allows you to locally pin Messages
  - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs) - Allows you to pin DMs, making them appear at the top of your DMs/ServerList
- - [Plugin Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo) - Allows you to download all Plugins from BD's Website within Discord
- - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a Mention Button to the Message Options Bar
+ - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a Mention Button to the Message 3-Dot Menu
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a Clear Button to the Server List and the Mentions Popout
- - [Remove Blocked Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedUsers) - Removes blocked Messages/Users
+ - [Remove Blocked Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedUsers) - Removes blocked/ignored Messages/Users
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replaces Nicknames with Accountnames
  - [Reveal All Spoilers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilers) - Allows you to reveal all Spoilers in either a Message (Ctrl) or the Chat (Ctrl+Shift) and clicking a Spoiler
  - [Server Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerCounter) - Adds a Server Counter to the Server List
@@ -52,7 +50,6 @@
  - [Split Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SplitLargeMessages) - Allows you to enter larger Messages, which will automatically split into several smaller Messages
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a Control Panel while listening to Spotify on a connected Account
  - [Staff Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StaffTag) - Adds a Crown/Tag to Server Owners (or Admins/Management)
- - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to download all Themes from BD's Website within Discord
  - [Timed Light Dark Mode](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode) - Adds a Time Slider to the Appearance Settings
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest Role of a User as a Tag
  - [Translator](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/Translator) - Allows you to translate Messages and your outgoing Messages within Discord

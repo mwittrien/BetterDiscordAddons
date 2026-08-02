@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.4.1
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -101,17 +106,13 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"ChannelTextAreaContainer"
-					],
-					after: [
-						"MessageActionsContextMenu",
-						"MessageToolbar"
 					]
 				};
 				
 				this.defaults = {
 					general: {
-						autoAddNewLine:			{value: true, 			description: "Try to add New Lines before/after Quotes"},
-						holdShiftToolbar:		{value: false, 			description: "Need to hold Shift on a Message to show Quick Quote"},
+						autoAddNewLine:				{value: true, 			description: "Try to add New Lines before/after Quotes"},
+						holdShiftToolbar:			{value: false, 			description: "Need to hold Shift on a Message to show Quick Quote"},
 						alwaysCopy:				{value: false, 			description: "Always copy Quote to Clipboard without holding Shift"}
 					},
 					dates: {
@@ -120,7 +121,27 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart () {				
+			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageToolbarUtils, "useMessageMenu", {after: e => {
+					if (e.instance.props.message && e.instance.props.channel) {
+						let [quoteChildren, quoteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: "quote"});
+						if (quoteIndex == -1) {
+							let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnValue, {id: "mark-unread"});
+							children.splice(index > -1 ? index : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "quote"),
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN.menuicon,
+									name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
+								}),
+								action: event => {
+									this.quote(e.instance.props.channel, e.instance.props.message, event.shiftKey);
+								}
+							}));
+						}
+					}
+				}});
+				
 				this.forceUpdateAll();
 			}
 			
@@ -161,7 +182,7 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.END,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Name:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newquote input-name",
@@ -171,7 +192,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Quote:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newquote input-quote",
@@ -181,7 +202,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-											style: {marginBottom: 1},
+											style: {marginBottom: 4},
 											onClick: _ => {
 												for (let input of settingsPanel.props._node.querySelectorAll(".input-newquote " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new quote.", {type: "danger"});
 												let key = settingsPanel.props._node.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
@@ -197,7 +218,7 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.marginbottom20
 								})
 							].concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
@@ -251,8 +272,8 @@ module.exports = (_ => {
 								"$serverName will be replaced with the Name of the Server",
 								"$timestamp will be replaced with the Formatted Timestamp of the quoted Message",
 								"$unixTimestamp will be replaced with the Unix Timestamp of the quoted Message"
-							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-								type: BDFDB.LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
+							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormText.Text, {
+								type: BDFDB.LibraryComponents.FormText.Types.DESCRIPTION,
 								children: string
 							}))
 						}));
@@ -310,59 +331,15 @@ module.exports = (_ => {
 							name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
 						});
 						let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Quote_Message") : null;
-						if (hint) item.props.hint = _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+						if (hint) item.props.icon = _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 							hint: hint
 						});
 					}
 				}
 			}
-			
-			processMessageActionsContextMenu (e) {
-				if (e.instance.props.message && e.instance.props.channel) {
-					let [quoteChildren, quoteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "quote"});
-					if (quoteIndex == -1) {
-						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-unread"});
-						children.splice(index > -1 ? index : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "quote"),
-							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.menuicon,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
-							}),
-							action: event => {
-								this.quote(e.instance.props.channel, e.instance.props.message, event.shiftKey);
-							}
-						}));
-					}
-				}
-			}
-		
-			processMessageToolbar (e) {
-				if (!e.instance.props.message || !e.instance.props.channel) return;
-				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
-				if (!expanded && this.settings.general.holdShiftToolbar) return;
-				let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
-				if (!quoteButton) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: ["reply", "mark-unread"]});
-					children.splice(index > -1 ? index : (!e.instance.props.expanded ? 1 : 0), 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: "quote",
-						text: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => {
-								this.quote(e.instance.props.channel, e.instance.props.message);
-							},
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
-							})
-						})
-					}));
-				}
-			}
 		
 			processChannelTextAreaContainer (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY) ChannelTextAreaContainer = e.instance
+				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL) ChannelTextAreaContainer = e.instance
 			}
 			
 			quote (channel, message, shift) {
@@ -401,7 +378,10 @@ module.exports = (_ => {
 							let userMember = channel.guild_id && BDFDB.LibraryStores.GuildMemberStore.getMember(guild.id, match);
 							return `@ ${userMember && userMember.nick || user.globalName || user.username}`;
 						}
-						else if (channel.guild_id && guild.roles[match] && guild.roles[match].name) return `${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"} ${guild.roles[match].name}`;
+						else if (channel.guild_id) {
+							let role = BDFDB.LibraryStores.GuildRoleStore.getRole(guild.id, match);
+							if (role && role.name) return `${role.name.indexOf("@") == 0 ? "" : "@"} ${role.name}`;
+						}
 						return string;
 					});
 				}
@@ -412,7 +392,7 @@ module.exports = (_ => {
 					.replace("$mention", channel.isDM() ? "" : `<@!${message.author.id}>`)
 					.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
 					.replace("$authorName", member && member.nick || message.author.globalName || message.author.username || "")
-					.replace("$authorAccount", message.author.isPomelo() ? message.author.username : `${message.author.username}#${message.author.discriminator}`)
+					.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
 					.replace("$authorId", message.author.id || "")
 					.replace("$channelName", channel.name || "")
 					.replace("$channelId", channel.id || "")

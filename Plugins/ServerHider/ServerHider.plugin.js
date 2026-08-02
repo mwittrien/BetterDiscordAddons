@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.7
+ * @version 6.3.4
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -67,8 +72,8 @@ module.exports = (_ => {
 				};
 				
 				this.modulePatches = {
-					after: [
-						"GuildsBar"
+					before: [
+						"QuickSwitcher"
 					]
 				};
 			}
@@ -78,6 +83,15 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
 					if (e.methodArguments[0].type == "STREAMER_MODE_UPDATE") BDFDB.DiscordUtils.rerenderAll(true);
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.HistoryUtils, "transitionTo", {instead: e => {
+					if (!e.methodArguments || this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return e.callOriginalMethod();
+					if (typeof e.methodArguments[0] == "string" && e.methodArguments[0].startsWith("/channels/")) {
+						let guildId = (e.methodArguments[0].split("/channels/")[1] || e.methodArguments[0].split("/channels/")[1]).split("/")[0];
+						if (guildId && ((hiddenEles.servers || []).includes(guildId) || (hiddenEles.folders || []).includes((BDFDB.GuildUtils.getFolder(guildId) || {}).folderId))) return;
+					}
+					return e.callOriginalMethod();
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.SortedGuildStore, "getGuildFolderById", {after: e => {
@@ -90,10 +104,40 @@ module.exports = (_ => {
 					}
 				}});
 				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.SortedGuildStore, "getGuildsTree", {after: e => {
+					if (!e.returnValue || !e.returnValue.root) return;
+					
+					if (this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
+					let hiddenGuildIds = (hiddenEles.servers || []);
+					let hiddenFolderIds = (hiddenEles.folders || []);
+					if (!hiddenGuildIds.length && !hiddenFolderIds.length) return;
+					
+					e.returnValue.getRoots = BDFDB.TimeUtils.suppress((...args) => {
+						let roots = [].concat(e.returnValue.root.children);
+						
+						for (let i in roots) if (roots[i]) {
+							if (roots[i].type == "folder") {
+								if (hiddenFolderIds.includes(roots[i].id)) roots[i] = null;
+								else {
+									let guilds = [].concat(roots[i].children.filter(guild => !hiddenGuildIds.includes(guild.id)));
+									if (guilds.length) {
+										roots[i].hiddenGuildIds = [].concat(roots[i].children.filter(guild => hiddenGuildIds.includes(guild.id)));
+										roots[i] = Object.assign({}, roots[i], {children: guilds});
+									}
+									else roots[i] = null;
+								}
+							}
+							else if (roots[i].type == "guild" && hiddenGuildIds.includes(roots[i].id)) roots[i] = null;
+						}
+						
+						return roots.filter(n => n);
+					}, "Error in getRoots of Guild Tree!", this);
+				}});
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.GuildReadStateStore, "getMutableGuildStates", {after: e => {
 					if (!e.returnValue || this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
 					let hiddenGuildIds = hiddenEles && hiddenEles.servers || [];
-					if (hiddenGuildIds.length) for (let id in e.returnValue) if (hiddenGuildIds.includes(id)) e.returnValue[id] = Object.assign({}, e.returnValue[id], {mentionCount: 0, mentionCounts: {}});
+					if (hiddenGuildIds.length) for (let id in e.returnValue) if (hiddenGuildIds.includes(id)) e.returnValue[id] = Object.assign({}, e.returnValue[id], {ncMentionCount: 0, mentionCount: 0, mentionCounts: {}});
 				}});
 
 				BDFDB.DiscordUtils.rerenderAll();
@@ -165,27 +209,15 @@ module.exports = (_ => {
 					]
 				}));
 			}
-		
-			processGuildsBar (e) {
+
+			processQuickSwitcher (e) {
 				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
-				let hiddenGuildIds = hiddenEles.servers || [];
-				let hiddenFolderIds = hiddenEles.folders || [];
-				if (!hiddenGuildIds.length && !hiddenFolderIds.length) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["folderNode", "guildNode"], someProps: true});
-				if (index > -1) for (let i in children) if (children[i] && children[i].props) {
-					if (children[i].props.folderNode) {
-						if (hiddenFolderIds.includes(children[i].props.folderNode.id)) children[i] = null;
-						else {
-							let guilds = [].concat(children[i].props.folderNode.children.filter(guild => !hiddenGuildIds.includes(guild.id)));
-							if (guilds.length) {
-								children[i].props.hiddenGuildIds = [].concat(children[i].props.folderNode.children.filter(guild => hiddenGuildIds.includes(guild.id)));
-								children[i].props.folderNode = Object.assign({}, children[i].props.folderNode, {children: guilds});
-							}
-							else children[i] = null;
-						}
-					}
-					else if (children[i].props.guildNode && hiddenGuildIds.includes(children[i].props.guildNode.id)) children[i] = null;
-				}
+				e.instance.props.results = [].concat(e.instance.props.results).filter(n => {
+					if (!n) return true;
+					if (n.type == "GUILD" && n.record.id && ((hiddenEles.servers || []).includes(n.record.id) || (hiddenEles.folders || []).includes((BDFDB.GuildUtils.getFolder(n.record.id) || {}).folderId))) return false;
+					else if (n.record.guild_id && ((hiddenEles.servers || []).includes(n.record.guild_id) || (hiddenEles.folders || []).includes((BDFDB.GuildUtils.getFolder(n.record.guild_id) || {}).folderId))) return false;
+					return true;
+				});
 			}
 
 			showHideModal () {
@@ -208,7 +240,7 @@ module.exports = (_ => {
 						if (firstGuildInFolder) foldersAdded.push(folder.folderId);
 						return [
 							firstGuildInFolder ? [
-								!(folders.indexOf(folder) == 0 && i == 0) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								!(folders.indexOf(folder) == 0 && i == 0) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
@@ -217,7 +249,7 @@ module.exports = (_ => {
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 											className: BDFDB.disCN.guildfoldericonwrapper,
 											children: BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+												className: BDFDB.disCN.guildfoldericon,
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 													name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
 													color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || "var(--bdfdb-blurple)"
@@ -226,7 +258,7 @@ module.exports = (_ => {
 										})
 									}),
 									label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-										children: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${folders.indexOf(folder) + 1}`
+										children: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.FOLDER} #${folders.indexOf(folder) + 1}`
 									}),
 									suffix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
 										value: !hiddenFolderIds.includes(folder.folderId),
@@ -234,14 +266,14 @@ module.exports = (_ => {
 									})
 								})
 							] : null,
-							(i > 0 || folder) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							(i > 0 || folder) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 								className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
-								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
+								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIcon, {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listavatar, folder && BDFDB.disCN.marginleft8),
 									guild: guild,
-									size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.MEDIUM
+									size: BDFDB.LibraryComponents.GuildIcon.Sizes.MEDIUM
 								}),
 								label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 									children: guild.name
@@ -259,7 +291,7 @@ module.exports = (_ => {
 						color: "BRAND",
 						close: true
 					}, {
-						contents: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL,
+						contents: BDFDB.LanguageUtils.LanguageStrings.ALL,
 						color: "TRANSPARENT",
 						look: "LINK",
 						onClick: (modal, instance) => {
@@ -289,219 +321,219 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							context_serverhider:				"Видимост на сървъра",
+							context_serverhider:					"Видимост на сървъра",
 							modal_header:						"Управление на сървърния списък",
 							submenu_hidefolder:					"Скриване на папката",
 							submenu_hideserver:					"Скриване на сървъра",
-							submenu_openhidemenu:				"Управление на сървърния списък"
+							submenu_openhidemenu:					"Управление на сървърния списък"
 						};
 					case "da":		// Danish
 						return {
-							context_serverhider:				"Server synlighed",
+							context_serverhider:					"Server synlighed",
 							modal_header:						"Administration af serverliste",
 							submenu_hidefolder:					"Skjul mappe",
 							submenu_hideserver:					"Skjul server",
-							submenu_openhidemenu:				"Administrer serverliste"
+							submenu_openhidemenu:					"Administrer serverliste"
 						};
 					case "de":		// German
 						return {
-							context_serverhider:				"Serversichtbarkeit",
+							context_serverhider:					"Serversichtbarkeit",
 							modal_header:						"Serverlistenverwaltung",
 							submenu_hidefolder:					"Ordner ausblenden",
 							submenu_hideserver:					"Server ausblenden",
-							submenu_openhidemenu:				"Serverliste verwalten"
+							submenu_openhidemenu:					"Serverliste verwalten"
 						};
 					case "el":		// Greek
 						return {
-							context_serverhider:				"Ορατότητα διακομιστή",
+							context_serverhider:					"Ορατότητα διακομιστή",
 							modal_header:						"Διαχείριση λίστας διακομιστών",
 							submenu_hidefolder:					"Απόκρυψη φακέλου",
 							submenu_hideserver:					"Απόκρυψη διακομιστή",
-							submenu_openhidemenu:				"Διαχείριση λίστας διακομιστών"
+							submenu_openhidemenu:					"Διαχείριση λίστας διακομιστών"
 						};
 					case "es":		// Spanish
 						return {
-							context_serverhider:				"Visibilidad del servidor",
+							context_serverhider:					"Visibilidad del servidor",
 							modal_header:						"Gestión de la lista de servidores",
 							submenu_hidefolder:					"Ocultar carpeta",
 							submenu_hideserver:					"Ocultar servidor",
-							submenu_openhidemenu:				"Administrar lista de servidores"
+							submenu_openhidemenu:					"Administrar lista de servidores"
 						};
 					case "fi":		// Finnish
 						return {
-							context_serverhider:				"Palvelimen näkyvyys",
+							context_serverhider:					"Palvelimen näkyvyys",
 							modal_header:						"Palvelinluettelon hallinta",
 							submenu_hidefolder:					"Piilota kansio",
 							submenu_hideserver:					"Piilota palvelin",
-							submenu_openhidemenu:				"Hallitse palvelinluetteloa"
+							submenu_openhidemenu:					"Hallitse palvelinluetteloa"
 						};
 					case "fr":		// French
 						return {
-							context_serverhider:				"Visibilité du serveur",
+							context_serverhider:					"Visibilité du serveur",
 							modal_header:						"Gestion de la liste des serveurs",
 							submenu_hidefolder:					"Masquer le dossier",
 							submenu_hideserver:					"Masquer le serveur",
-							submenu_openhidemenu:				"Gérer la liste des serveurs"
+							submenu_openhidemenu:					"Gérer la liste des serveurs"
 						};
 					case "hr":		// Croatian
 						return {
-							context_serverhider:				"Vidljivost poslužitelja",
+							context_serverhider:					"Vidljivost poslužitelja",
 							modal_header:						"Upravljanje popisom poslužitelja",
 							submenu_hidefolder:					"Sakrij mapu",
 							submenu_hideserver:					"Sakrij poslužitelj",
-							submenu_openhidemenu:				"Upravljanje popisom poslužitelja"
+							submenu_openhidemenu:					"Upravljanje popisom poslužitelja"
 						};
 					case "hu":		// Hungarian
 						return {
-							context_serverhider:				"Szerver láthatósága",
+							context_serverhider:					"Szerver láthatósága",
 							modal_header:						"Szerverlista kezelése",
 							submenu_hidefolder:					"Mappa elrejtése",
 							submenu_hideserver:					"Szerver elrejtése",
-							submenu_openhidemenu:				"Szerverlista kezelése"
+							submenu_openhidemenu:					"Szerverlista kezelése"
 						};
 					case "it":		// Italian
 						return {
-							context_serverhider:				"Visibilità del server",
+							context_serverhider:					"Visibilità del server",
 							modal_header:						"Gestione dell'elenco dei server",
 							submenu_hidefolder:					"Nascondi cartella",
 							submenu_hideserver:					"Nascondi server",
-							submenu_openhidemenu:				"Gestisci elenco server"
+							submenu_openhidemenu:					"Gestisci elenco server"
 						};
 					case "ja":		// Japanese
 						return {
-							context_serverhider:				"サーバーの可視性",
+							context_serverhider:					"サーバーの可視性",
 							modal_header:						"サーバーリストの管理",
 							submenu_hidefolder:					"フォルダを隠す",
 							submenu_hideserver:					"サーバーを隠す",
-							submenu_openhidemenu:				"サーバーリストの管理"
+							submenu_openhidemenu:					"サーバーリストの管理"
 						};
 					case "ko":		// Korean
 						return {
-							context_serverhider:				"서버 가시성",
+							context_serverhider:					"서버 가시성",
 							modal_header:						"서버 목록 관리",
 							submenu_hidefolder:					"폴더 숨기기",
 							submenu_hideserver:					"서버 숨기기",
-							submenu_openhidemenu:				"서버 목록 관리"
+							submenu_openhidemenu:					"서버 목록 관리"
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_serverhider:				"Serverio matomumas",
+							context_serverhider:					"Serverio matomumas",
 							modal_header:						"Serverių sąrašo tvarkymas",
 							submenu_hidefolder:					"Slėpti aplanką",
 							submenu_hideserver:					"Slėpti serverį",
-							submenu_openhidemenu:				"Tvarkyti serverių sąrašą"
+							submenu_openhidemenu:					"Tvarkyti serverių sąrašą"
 						};
 					case "nl":		// Dutch
 						return {
-							context_serverhider:				"Zichtbaarheid van de server",
+							context_serverhider:					"Zichtbaarheid van de server",
 							modal_header:						"Serverlijst beheren",
 							submenu_hidefolder:					"Verberg map",
 							submenu_hideserver:					"Verberg server",
-							submenu_openhidemenu:				"Beheer serverlijst"
+							submenu_openhidemenu:					"Beheer serverlijst"
 						};
 					case "no":		// Norwegian
 						return {
-							context_serverhider:				"Server synlighet",
+							context_serverhider:					"Server synlighet",
 							modal_header:						"Administrere serverliste",
 							submenu_hidefolder:					"Skjul mappe",
 							submenu_hideserver:					"Skjul server",
-							submenu_openhidemenu:				"Administrer serverliste"
+							submenu_openhidemenu:					"Administrer serverliste"
 						};
 					case "pl":		// Polish
 						return {
-							context_serverhider:				"Widoczność serwera",
+							context_serverhider:					"Widoczność serwera",
 							modal_header:						"Zarządzanie listą serwerów",
 							submenu_hidefolder:					"Ukryj folder",
 							submenu_hideserver:					"Ukryj serwer",
-							submenu_openhidemenu:				"Zarządzaj listą serwerów"
+							submenu_openhidemenu:					"Zarządzaj listą serwerów"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_serverhider:				"Visibilidade do servidor",
+							context_serverhider:					"Visibilidade do servidor",
 							modal_header:						"Gerenciando a lista de servidores",
 							submenu_hidefolder:					"Ocultar pasta",
 							submenu_hideserver:					"Esconder Servidor",
-							submenu_openhidemenu:				"Gerenciar lista de servidores"
+							submenu_openhidemenu:					"Gerenciar lista de servidores"
 						};
 					case "ro":		// Romanian
 						return {
-							context_serverhider:				"Vizibilitatea serverului",
+							context_serverhider:					"Vizibilitatea serverului",
 							modal_header:						"Gestionarea listei serverelor",
 							submenu_hidefolder:					"Ascundeți dosarul",
 							submenu_hideserver:					"Ascundeți serverul",
-							submenu_openhidemenu:				"Gestionați lista serverelor"
+							submenu_openhidemenu:					"Gestionați lista serverelor"
 						};
 					case "ru":		// Russian
 						return {
-							context_serverhider:				"Видимость сервера",
+							context_serverhider:					"Видимость сервера",
 							modal_header:						"Управление списком серверов",
 							submenu_hidefolder:					"Скрыть папку",
 							submenu_hideserver:					"Скрыть сервер",
-							submenu_openhidemenu:				"Управление списком серверов"
+							submenu_openhidemenu:					"Управление списком серверов"
 						};
 					case "sv":		// Swedish
 						return {
-							context_serverhider:				"Servers synlighet",
+							context_serverhider:					"Servers synlighet",
 							modal_header:						"Hantera serverlista",
 							submenu_hidefolder:					"Dölj mapp",
 							submenu_hideserver:					"Dölj server",
-							submenu_openhidemenu:				"Hantera serverlista"
+							submenu_openhidemenu:					"Hantera serverlista"
 						};
 					case "th":		// Thai
 						return {
-							context_serverhider:				"การเปิดเผยเซิร์ฟเวอร์",
+							context_serverhider:					"การเปิดเผยเซิร์ฟเวอร์",
 							modal_header:						"การจัดการรายชื่อเซิร์ฟเวอร์",
 							submenu_hidefolder:					"ซ่อนโฟลเดอร์",
 							submenu_hideserver:					"ซ่อนเซิร์ฟเวอร์",
-							submenu_openhidemenu:				"จัดการรายชื่อเซิร์ฟเวอร์"
+							submenu_openhidemenu:					"จัดการรายชื่อเซิร์ฟเวอร์"
 						};
 					case "tr":		// Turkish
 						return {
-							context_serverhider:				"Sunucu Görünürlüğü",
+							context_serverhider:					"Sunucu Görünürlüğü",
 							modal_header:						"Sunucu Listesini Yönetme",
 							submenu_hidefolder:					"Klasörü Gizle",
 							submenu_hideserver:					"Sunucuyu Gizle",
-							submenu_openhidemenu:				"Sunucu Listesini Yönetin"
+							submenu_openhidemenu:					"Sunucu Listesini Yönetin"
 						};
 					case "uk":		// Ukrainian
 						return {
-							context_serverhider:				"Видимість сервера",
+							context_serverhider:					"Видимість сервера",
 							modal_header:						"Керування списком серверів",
 							submenu_hidefolder:					"Сховати папку",
 							submenu_hideserver:					"Сховати сервер",
-							submenu_openhidemenu:				"Керування списком серверів"
+							submenu_openhidemenu:					"Керування списком серверів"
 						};
 					case "vi":		// Vietnamese
 						return {
-							context_serverhider:				"Hiển thị Máy chủ",
+							context_serverhider:					"Hiển thị Máy chủ",
 							modal_header:						"Quản lý danh sách máy chủ",
 							submenu_hidefolder:					"Ẩn thư mục",
 							submenu_hideserver:					"Ẩn máy chủ",
-							submenu_openhidemenu:				"Quản lý danh sách máy chủ"
+							submenu_openhidemenu:					"Quản lý danh sách máy chủ"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_serverhider:				"服务器可见性",
+							context_serverhider:					"服务器可见性",
 							modal_header:						"管理服务器列表",
 							submenu_hidefolder:					"隐藏资料夹",
 							submenu_hideserver:					"隐藏服务器",
-							submenu_openhidemenu:				"管理服务器列表"
+							submenu_openhidemenu:					"管理服务器列表"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_serverhider:				"服務器可見性",
+							context_serverhider:					"服務器可見性",
 							modal_header:						"管理服務器列表",
 							submenu_hidefolder:					"隱藏資料夾",
 							submenu_hideserver:					"隱藏服務器",
-							submenu_openhidemenu:				"管理服務器列表"
+							submenu_openhidemenu:					"管理服務器列表"
 						};
 					default:		// English
 						return {
-							context_serverhider:				"Server Visibility",
+							context_serverhider:					"Server Visibility",
 							modal_header:						"Managing Server List",
 							submenu_hidefolder:					"Hide Folder",
 							submenu_hideserver:					"Hide Server",
-							submenu_openhidemenu:				"Manage Server List"
+							submenu_openhidemenu:					"Manage Server List"
 						};
 				}
 			}

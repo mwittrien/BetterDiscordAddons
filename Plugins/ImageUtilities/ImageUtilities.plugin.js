@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.2.6
+ * @version 5.6.7
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"added": {
-			"Click Zoom Mode": "Added Option to click an Image to Zoom instead of having to hold down the Mouse Button"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -27,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -37,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -53,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -62,12 +65,11 @@ module.exports = (_ => {
 		var firedEvents = [];
 		var ownLocations = {}, downloadsFolder;
 		
-		var firstViewedImage, viewedImage, viewedImageTimeout;
+		var firstViewedImage, viewedImage;
+		var viewedImageTimeout, updateTimeout;
 		var switchedImageProps;
 		var cachedImages;
 		var eventTypes = {};
-		
-		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
 		const rescaleOptions = {
 			NONE: "No Resize",
@@ -136,14 +138,20 @@ module.exports = (_ => {
 		const ImageDetailsComponent = class ImageDetails extends BdApi.React.Component {
 			componentDidMount() {
 				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemosaiconebyonegridsingle, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._imageutilitiesimagedetailsadded);
-				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
-				BDFDB.ReactUtils.forceUpdate(this);
+				let item = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "item", {up: true});
+				if (item && item.originalItem) {
+					this.props.attachment = item.originalItem;
+					BDFDB.ReactUtils.forceUpdate(this);
+				}
 			}
 			componentDidUpdate() {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
 					this.props.loaded = true;
-					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
-					BDFDB.ReactUtils.forceUpdate(this);
+					let item = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "item", {up: true});
+					if (item && item.originalItem) {
+						this.props.attachment = item.originalItem;
+						BDFDB.ReactUtils.forceUpdate(this);
+					}
 				}
 			}
 			render() {
@@ -207,50 +215,48 @@ module.exports = (_ => {
 					},
 					viewerSettings: {
 						zoomMode: 				{value: true,	description: "Enables Zoom Mode to zoom into Images while holding down your Mouse"},
-						galleryMode: 			{value: true,	description: "Enables Gallery Mode to quick-switch between Images"},
-						details: 				{value: true,	description: "Adds Image Details (Name, Size, Amount)"},
-						copyImage: 				{value: true,	description: "Adds a 'Copy Image' Option"},
-						saveImage: 				{value: true,	description: "Adds a 'Save Image as' Option"},
-						jumpTo: 				{value: true,	description: "Adds a 'Jump to Message' Option in Gallery Mode"}
+						galleryMode: 				{value: true,	description: "Enables Gallery Mode to quick-switch between Images"},
+						details: 				{value: true,	description: "Adds Image Details (Name, Size, Amount)"}
 					},
 					galleryFilter: {},
 					zoomSettings: {
 						pixelMode: 				{value: false,	label: "Uses Pixel Lens instead of a Blur Lens"},
 						clickMode: 				{value: false,	label: "Click Image to zoom instead of holding the Mouse Button"},
 						lensSize:				{value: 200,	digits: 0,	minValue: 50,	maxValue: 5000,	unit: "px",		label: "context_lenssize"},
-						zoomLevel:				{value: 2,		digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
+						zoomLevel:				{value: 2,	digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ZOOM_LEVEL"},
 						zoomSpeed: 				{value: 0.1,	digits: 2,	minValue: 0.01,	maxValue: 1,	unit: "",		label: "context_zoomspeed"}
 					},
 					rescaleSettings: {
 						messages: 				{value: "NONE",	description: "Messages"},
-						imageViewer: 			{value: "NONE",	description: "Image Viewer"}
+						imageViewer: 				{value: "NONE",	description: "Image Viewer"},
+						rescaleEmbeds: 				{value: true,	description: "Resize Image Embeds"}
 					},
 					detailsSettings: {
-						footnote:				{value: true, 	description: "in the Image Description"},
-						tooltip:				{value: false, 	description: "as a Hover Tooltip"},
-						tooltipDelay:			{value: 0, 		min: 0,			description: "Image Tooltip Delay (in ms)"}
+						footnote:				{value: true, 			description: "in the Image Description"},
+						tooltip:				{value: false, 			description: "as a Hover Tooltip"},
+						tooltipDelay:				{value: 0, 	min: 0,		description: "Image Tooltip Delay (in ms)"}
 					},
 					places: {
-						userAvatars: 			{value: true, 	description: "User Avatars"},
-						groupIcons: 			{value: true, 	description: "Group Icons"},
-						guildIcons: 			{value: true, 	description: "Server Icons"},
-						streamPreviews: 		{value: true, 	description: "Stream Previews"},
+						userAvatars: 				{value: true, 	description: "User Avatars"},
+						groupIcons: 				{value: true, 	description: "Group Icons"},
+						guildIcons: 				{value: true, 	description: "Server Icons"},
+						streamPreviews: 			{value: true, 	description: "Stream Previews"},
 						emojis: 				{value: true, 	description: "Custom Emojis/Emotes"}
 					},
 					engines: {
-						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
-						Baidu: 		{value: true, 	name: "Baidu", 					url: "http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
-						Bing: 		{value: true, 	name: "Bing", 					url: "https://www.bing.com/images/search?q=imgurl:" + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
-						Google:		{value: true, 	name: "Google", 				url: "https://www.google.com/searchbyimage?sbisrc=1&image_url=" + imgUrlReplaceString},
-						GoogleLens:	{value: true, 	name: "Google Lens",			url: "https://lens.google.com/uploadbyurl?url=" + imgUrlReplaceString},
-						ImgOps:		{value: true, 	name: "ImgOps",		raw: true, 	url: "https://imgops.com/specialized+reverse/" + imgUrlReplaceString},
-						IQDB:		{value: true, 	name: "IQDB", 					url: "https://iqdb.org/?url=" + imgUrlReplaceString},
-						Reddit: 	{value: true, 	name: "Reddit", 				url: "http://karmadecay.com/search?q=" + imgUrlReplaceString},
-						SauceNAO: 	{value: true, 	name: "SauceNAO", 				url: "https://saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
-						Sogou: 		{value: true, 	name: "Sogou", 					url: "http://pic.sogou.com/ris?flag=1&drag=0&query=" + imgUrlReplaceString + "&flag=1"},
-						TinEye:		{value: true, 	name: "TinEye", 				url: "https://tineye.com/search?url=" + imgUrlReplaceString},
-						WhatAnime:	{value: true,	name: "WhatAnime",				url: "https://trace.moe/?url=" + imgUrlReplaceString},
-						Yandex: 	{value: true, 	name: "Yandex", 				url: "https://yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
+						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.ALL, 		url: null},
+						Baidu: 		{value: true, 	name: "Baidu", 						url: "http://image.baidu.com/pcdutu?queryImageUrl="},
+						Bing: 		{value: true, 	name: "Bing", 						url: "https://www.bing.com/images/search?view=detailv2&iss=sbi&FORM=IRSBIQ&q=imgurl:"},
+						Google:		{value: true, 	name: "Google", 					url: "https://www.google.com/searchbyimage?sbisrc=cr_1&image_url="},
+						GoogleLens:	{value: true, 	name: "Google Lens",					url: "https://lens.google.com/uploadbyurl?url="},
+						ImgOps:		{value: true, 	name: "ImgOps",			raw: true, 		url: "https://imgops.com/specialized+reverse/"},
+						IQDB:		{value: true, 	name: "IQDB", 						url: "https://iqdb.org/?url="},
+						Reddit: 	{value: true, 	name: "Reddit", 					url: "http://karmadecay.com/search?q="},
+						SauceNAO: 	{value: true, 	name: "SauceNAO", 					url: "https://saucenao.com/search.php?db=999&url="},
+						Sogou: 		{value: true, 	name: "Sogou", 						url: "http://pic.sogou.com/ris?flag=1&drag=0&flag=1&query="},
+						TinEye:		{value: true, 	name: "TinEye", 					url: "https://tineye.com/search?url="},
+						WhatAnime:	{value: true,	name: "WhatAnime",					url: "https://trace.moe/?url="},
+						Yandex: 	{value: true, 	name: "Yandex", 					url: "https://yandex.com/images/search?rpt=imageview&url="}
 					}
 				};
 				
@@ -259,16 +265,15 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"ImageModal",
-						"ImageVideoModal",
+						"ImageModalBar",
 						"MessageAccessories",
 						"Spoiler"
 					],
 					after: [
 						"ImageModal",
-						"ImageVideoModal",
+						"ImageModalButtons",
 						"LazyImage",
 						"LazyImageZoomable",
-						"ModalCarousel",
 						"Spoiler",
 						"UserBanner"
 					],
@@ -332,6 +337,12 @@ module.exports = (_ => {
 						filter: unset !important;
 						backdrop-filter: unset !important;
 					}
+					${BDFDB.dotCN._imageutilitiesviewer} {
+						pointer-events: none;
+					}
+					${BDFDB.dotCN._imageutilitiesviewer} > * > *${BDFDB.notCN._imageutilitiesdetailswrapper} {
+						pointer-events: initial;
+					}
 					${BDFDB.dotCN._imageutilitiesgallery} ~ ${BDFDB.dotCN.imagemodalnavbutton} {
 						display: none;
 					}
@@ -350,9 +361,15 @@ module.exports = (_ => {
 						align-items: center;
 						min-width: 500px;
 					}
+					${BDFDB.dotCN.imagemodal + BDFDB.dotCNS.modalcarouselmodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} {
+						min-width: unset;
+					}
 					${BDFDB.dotCNS.imagemodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} img {
 						object-fit: contain;
 						width: unset;
+					}
+					${BDFDB.dotCNS.imagemodal + BDFDB.dotCN.imagemodalimagemediawrapper}:has(video) {
+						pointer-events: none !important;
 					}
 					${BDFDB.dotCN.imagemodalnavbutton} {
 						background: rgba(0, 0, 0, 0.3);
@@ -430,14 +447,7 @@ module.exports = (_ => {
 					${BDFDB.dotCN._imageutilitiesoperations} {
 						position: absolute;
 						display: flex;
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.downloadlink} {
-						position: relative !important;
-						white-space: nowrap !important;
-					}
-					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.anchor + BDFDB.dotCN.downloadlink} {
-						margin: 0 !important;
-					}
+					5
 				`;
 			}
 			
@@ -501,9 +511,9 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Resize Settings",
 							collapseStates: collapseStates,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Automatically Resize Images in: ",
-								children: Object.keys(this.defaults.rescaleSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								children: Object.keys(this.defaults.rescaleSettings).filter(key => typeof this.defaults.rescaleSettings[key].value != "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Select",
 									plugin: this,
 									keys: ["rescaleSettings", key],
@@ -512,7 +522,13 @@ module.exports = (_ => {
 									options: Object.keys(rescaleOptions).map(n => ({value: n, label: rescaleOptions[n]})),
 									value: this.settings.rescaleSettings[key]
 								}))
-							})
+							})].concat(Object.keys(this.defaults.rescaleSettings).filter(key => typeof this.defaults.rescaleSettings[key].value == "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["rescaleSettings", key],
+								label: this.defaults.rescaleSettings[key].description,
+								value: this.settings.rescaleSettings[key]
+							})))
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -545,9 +561,9 @@ module.exports = (_ => {
 							title: "Download Locations",
 							collapseStates: collapseStates,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 									className: BDFDB.disCN.marginbottom4,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H3,
+									tag: BDFDB.LibraryComponents.FormTitle.Tags.H3,
 									children: "Add additional Download Locations"
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -555,7 +571,7 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.END,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Name:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													value: locationInputs.name,
@@ -565,7 +581,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Location:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													value: locationInputs.location,
@@ -575,7 +591,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-											style: {marginBottom: 1},
+											style: {marginBottom: 4},
 											onClick: _ => {
 												for (let key in locationInputs) if (!locationInputs[key] || !locationInputs[key].trim()) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new Location", {type: "danger"});
 												let name = locationInputs.name.trim();
@@ -619,6 +635,7 @@ module.exports = (_ => {
 												})
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												grow: 1,
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													value: ownLocations[locationName].location,
 													placeholder: ownLocations[locationName].location,
@@ -633,7 +650,6 @@ module.exports = (_ => {
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
 													value: ownLocations[locationName].enabled,
-													size: BDFDB.LibraryComponents.Switch.Sizes.MINI,
 													onChange: value => {
 														ownLocations[locationName].enabled = value;
 														BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
@@ -705,7 +721,9 @@ module.exports = (_ => {
 					let banner = BDFDB.GuildUtils.getBanner(e.instance.props.guild.id);
 					if (banner) this.injectItem(e, [banner.replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.banner) && banner.replace(/\.webp|\.png/, ".gif")], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildbanner, id: "banner"});
 				}
-				else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.channels, e.instance.props.target)) this.injectItem(e, [(e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true)], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildicon, id: "icon"});
+				else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildchannels, e.instance.props.target)) {
+					this.injectItem(e, [(BDFDB.GuildUtils.getIcon(e.instance.props.guild.id, 4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && BDFDB.GuildUtils.getIcon(e.instance.props.guild.id, 4096, true)], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildicon, id: "icon"});
+				}
 			}
 
 			onUserContextMenu (e) {
@@ -766,7 +784,6 @@ module.exports = (_ => {
 				if (nativeIndex > -1) {
 					if (validUrls.length == 1) config.isNative = true;
 					nativeParent.splice(nativeIndex, 1);
-					nativeIndex -= 1;
 				}
 				for (let id of ["open-native-link", "copy-image", "save-image"]) {
 					let [removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: id, group: true});
@@ -819,12 +836,13 @@ module.exports = (_ => {
 			}
 			
 			getPosterUrl (url) {
-				return (url || "").replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg";
+				url = (url || "").replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0];
+				return url + (url.indexOf("?") > -1 ? "&format=jpeg" : "?format=jpeg");
 			}
 			
 			createSubMenus (data) {
 				return data.urls.length == 1 ? this.createUrlMenu(data.instance, data.urls[0], data.target) : data.urls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-					label: [urlData.isGuildSpecific && BDFDB.LanguageUtils.LanguageStrings.CHANGE_IDENTITY_SERVER_PROFILE, data.prefix, urlData.fileType.toUpperCase()].filter(n => n).join(" "),
+					label: [urlData.isGuildSpecific && BDFDB.LanguageUtils.LanguageStrings.SERVER_PROFILE, data.prefix, urlData.fileType.toUpperCase()].filter(n => n).join(" "),
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
 					children: this.createUrlMenu(data.instance, urlData, data.target)
 				}));
@@ -839,14 +857,14 @@ module.exports = (_ => {
 				
 				let isVideo = this.isValid(urlData.file, "video");
 				let type = isVideo ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-				
 				return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
 						urlData.original && urlData.original.indexOf("data:") != 0 && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
-								let url = urlData.original.split("?width=")[0].split("?height=")[0].split("?size=")[0];
+								let url = this.removeSizeInUrl(urlData.original);
+								url = this.removeFormatInUrl(url);
 								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
@@ -856,7 +874,8 @@ module.exports = (_ => {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_MEDIA_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-media-link"),
 							action: _ => {
-								let url = urlData.file.split("?width=")[0].split("?height=")[0].split("?size=")[0];
+								let url = this.removeSizeInUrl(urlData.file);
+								url = this.removeFormatInUrl(url);
 								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
 								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
@@ -879,30 +898,38 @@ module.exports = (_ => {
 								const imageThrowaway = document.createElement(isVideo ? "video" : "img");
 								imageThrowaway.addEventListener(isVideo ? "loadedmetadata" : "load", function() {
 									_this.cacheClickedImage(target);
-									BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
-										return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
-											className: BDFDB.disCN.imagemodal
-										}, modalData, {
-											size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
-											"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
-											children: isVideo ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageVideoModal, {
-												src: imageThrowaway.src,
-												poster: _this.getPosterUrl(imageThrowaway.src),
-												width: this.videoWidth,
-												naturalWidth: this.videoWidth,
-												height: this.videoHeight,
-												naturalHeight: this.videoHeight,
-												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
-											}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-												src: imageThrowaway.src,
-												original: urlData.original,
-												width: this.width,
-												height: this.height,
-												className: BDFDB.disCN.imagemodalimage,
-												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
+									let open = _ => BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
+										return BDFDB.ReactUtils.createElement("div", {
+											className: _this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCNS.modalcarouselmodal + BDFDB.disCNS.imagemodal + BDFDB.disCNS.modal + BDFDB.disCN._imageutilitiesviewer,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
+													location: "LazyImageZoomable",
+													onClose: _ => modalData.onClose(),
+													items: [isVideo ? {
+														src: imageThrowaway.src,
+														poster: _this.getPosterUrl(imageThrowaway.src),
+														width: this.videoWidth,
+														naturalWidth: this.videoWidth,
+														height: this.videoHeight,
+														naturalHeight: this.videoHeight
+													} : {
+														animated: false,
+														height: this.height,
+														original: imageThrowaway.src,
+														srcIsAnimated: false,
+														trigger: "CLICK",
+														type: "IMAGE",
+														url: imageThrowaway.src,
+														width: this.width,
+														zoomThumbnailPlaceholder: imageThrowaway.src
+													}]
+												})
 											})
-										}), true);
+										}, true);
 									});
+									if (BDFDB.LibraryComponents.ImageModal != "div") open();
+									else BDFDB.ModuleUtils.lazyLoadModuleImports(BDFDB.LibraryComponents.ImageModalOuter).then(_ => open());	
 								});
 								imageThrowaway.src = urlData.src || urlData.file;
 							}
@@ -912,11 +939,20 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-file-as"),
 							action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, null, urlData.alternativeName),
 							children: locations.length && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-								children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
-									label: name,
-									action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, ownLocations[name].location, urlData.alternativeName)
-								}))
+								children: locations.map((name, i) => {
+									let path = ownLocations[name].location.replace(/\\\*$/, "");
+									let subpaths = !/\\\*$/.test(ownLocations[name].location) ? null : BDFDB.LibraryRequires.fs.readdirSync(path).filter(n => n.indexOf(".") == -1);
+									return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
+										label: name,
+										action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, path, urlData.alternativeName),
+										children: subpaths && subpaths.length && subpaths.map(subname => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+											id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, subname),
+											label: subname,
+											action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, path + "\\" + subname, urlData.alternativeName)
+										}))
+									})
+								})
 							})
 						}),
 						!this.isValid(urlData.original, "searchable") || !engineKeys.length ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -925,7 +961,7 @@ module.exports = (_ => {
 							persisting: true,
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(instance);
-								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(urlData.original)), {
+								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url + encodeURIComponent(urlData.original), {
 									minimized: event.shiftKey
 								});
 							}
@@ -942,7 +978,7 @@ module.exports = (_ => {
 								color: key == "_all" ? BDFDB.DiscordConstants.MenuItemColors.DANGER : BDFDB.DiscordConstants.MenuItemColors.DEFAULT,
 								persisting: true,
 								action: event => {
-									const open = (url, k) => BDFDB.DiscordUtils.openLink(this.defaults.engines[k].url.replace(imgUrlReplaceString, this.defaults.engines[k].raw ? url : encodeURIComponent(url)), {minimized: event.shiftKey});
+									const open = (url, k) => BDFDB.DiscordUtils.openLink(this.defaults.engines[k].url + (this.defaults.engines[k].raw ? url : encodeURIComponent(url)), {minimized: event.shiftKey});
 									if (!event.shiftKey) BDFDB.ContextMenuUtils.close(instance);
 									if (key == "_all") {
 										for (let key2 in enginesWithoutAll) open(urlData.original, key2);
@@ -955,187 +991,47 @@ module.exports = (_ => {
 				});
 			}
 			
-			processModalCarousel (e) {
-				if (!this.settings.viewerSettings.galleryMode || !BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ImageVideoModal", "ImageModal"]})) return;
-				e.returnvalue.props.className = "";
-				e.returnvalue.props.children[0] = null;
-				e.returnvalue.props.children[2] = null;
-				if (e.returnvalue.props.children[1] && switchedImageProps) {
-					e.returnvalue.props.children[1].props = Object.assign(e.returnvalue.props.children[1].props, switchedImageProps);
+			processImageModal (e, filterForVideos = false) {
+				if (switchedImageProps) {
+					e.instance.props.items = [switchedImageProps];
+					e.instance.props.startIndex = 0;
 					switchedImageProps = null;
 				}
-			}
-			
-			processImageVideoModal (e) {
-				this.processImageModal(e, true);
-			}
-			
-			processImageModal (e, filterForVideos) {
-				if (!e.returnvalue) {
-					if (switchedImageProps) {
-						e.instance.props = Object.assign(e.instance.props, switchedImageProps);
-						switchedImageProps = null;
-					}
-				}
-				else {
-					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})).props.src || e.instance.props.src);
-				
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
-					if (index > -1) {
-						let type = filterForVideos ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-						let openContext = event => BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-							children: Object.keys(this.defaults.zoomSettings).map(type => {
-								let isBoolean = typeof this.defaults.zoomSettings[type].value == "boolean";
-								return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems[isBoolean ? "MenuCheckboxItem" : "MenuSliderItem"], Object.assign({
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, type)
-								}, isBoolean ? {
-									checked: this.settings.zoomSettings[type],
-									action: value => {
-										this.settings.zoomSettings[type] = value;
-										BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
-									}
-								} : {
-									value: this.settings.zoomSettings[type],
-									renderLabel: (value, instance) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-										children: [
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-												children: `${this.labels[this.defaults.zoomSettings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.zoomSettings[type].label]}:`
-											}),
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-												type: "number",
-												size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-												style: {width: 70},
-												min: 1,
-												max: this.defaults.zoomSettings[type].maxValue,
-												value: this.settings.zoomSettings[type],
-												onChange: value => value && value >= this.defaults.zoomSettings[type].minValue && instance.handleValueChange(BDFDB.NumberUtils.mapRange([this.defaults.zoomSettings[type].minValue, this.defaults.zoomSettings[type].maxValue], [0, 100], value))
-											}),
-											BDFDB.ReactUtils.createElement("span", {
-												style: {width: 20},
-												children: this.defaults.zoomSettings[type].unit
-											})
-										]
-									}),
-									onValueRender: value => `${value}${this.defaults.zoomSettings[type].unit}`,
-									onValueChange: value => {
-										this.settings.zoomSettings[type] = value;
-										BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
-									}
-								}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], isBoolean ? ["label"] : ["digits", "minValue", "maxValue"])));
-							})
-						}));
-						children[index] = BDFDB.ReactUtils.createElement("span", {
-							className: BDFDB.disCN._imageutilitiesoperations,
+				else if (e.returnvalue) {
+					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || e.instance.props.items[0].src || e.instance.props.items[0].original);
+					
+					if (this.settings.viewerSettings.details) {
+						e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN._imageutilitiesdetailswrapper,
 							children: [
-								children[index],
-								this.settings.viewerSettings.saveImage && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: this.labels.context_saveas.replace("{{var0}}", type),
-										onClick: event => {
-											BDFDB.ListenerUtils.stopEvent(event);
-											this.downloadFile({url: url});
-										},
-										onContextMenu: event => {
-											let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
-											if (locations.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-												children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-													id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
-													label: name,
-													action: _ => this.downloadFile({url: url}, ownLocations[name].location)
-												}))
-											}));
-										}
-									})
-								],
-								this.settings.viewerSettings.copyImage && this.isValid(url, "copyable") && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: this.labels.context_copy.replace("{{var0}}", type),
-										onClick: event => {
-											BDFDB.ListenerUtils.stopEvent(event);
-											this.copyFile({url: url});
-										}
-									})
-								],
-								this.settings.viewerSettings.galleryMode && viewedImage && this.settings.viewerSettings.jumpTo && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: BDFDB.LanguageUtils.LanguageStrings.JUMP,
-										onClick: event => {
-											let layerContainer = !event.shiftKey && BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayercontainer, event.currentTarget)
-											let backdrop = layerContainer && layerContainer.querySelector(BDFDB.dotCN.backdrop);
-											if (backdrop) backdrop.click();
-											let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-											if (channel) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, viewedImage.messageId));
-										}
-									})
-								],
-								this.settings.viewerSettings.zoomMode && !filterForVideos && !this.isValid(e.instance.props.src, "gif") && [
-									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.downloadlink,
-										children: "|",
-										style: {margin: "0 5px"}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-										className: BDFDB.disCN.downloadlink, 
-										children: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-										onClick: openContext,
-										onContextMenu: openContext
-									})
-								]
-							].flat(10).filter(n => n)
-						});
-						
-						if (this.settings.viewerSettings.details) {
-							e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN._imageutilitiesdetailswrapper,
+								e.instance.props.items[0].alt && {label: "Alt", text: e.instance.props.items[0].alt},
+								{label: "Source", text: this.removeSizeInUrl(this.removeFormatInUrl(url))},
+								{label: "Size", text: `${e.instance.props.items[0].width}x${e.instance.props.items[0].height}px`},
+								cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? "Video" : "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
+							].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+								className: BDFDB.disCN._imageutilitiesdetails,
 								children: [
-									e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
-									{label: "Source", text: url.split("?width=")[0].split("?height=")[0].split("?size=")[0]},
-									{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
-									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? "Video" : "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
-								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									className: BDFDB.disCN._imageutilitiesdetails,
-									children: [
-										BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN._imageutilitiesdetailslabel,
-											children: data.label + ":"
-										}),
-										data.text
-									]
-								}))
-							}));
-						}
+									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN._imageutilitiesdetailslabel,
+										children: data.label + ":"
+									}),
+									data.text
+								]
+							}))
+						}));
 					}
 					if (this.settings.viewerSettings.galleryMode && viewedImage) {
 						if (!cachedImages || cachedImages.channelId != viewedImage.channelId || cachedImages.amount && this.getImageIndex(cachedImages.all, viewedImage) == -1) {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
 							let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-							BDFDB.LibraryModules.APIUtils.get({
+							BDFDB.LibraryModules.HTTPUtils.get({
 								url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 								query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 									channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 									has: "image",
 									include_nsfw: true,
 									limit: 100,
-									around: viewedImage.messageId
+									around: viewedImage.message.id
 								})
 							}).catch(err => {
 								cachedImages = {
@@ -1196,34 +1092,102 @@ module.exports = (_ => {
 								this.addListener("keydown", "Gallery", event => {
 									if (!firedEvents.includes("Gallery")) {
 										firedEvents.push("Gallery");
-										if (event.keyCode == 37) this.switchImages(-1, filterForVideos);
-										else if (event.keyCode == 39) this.switchImages(1, filterForVideos);
+										if (event.keyCode == 37) {
+											BDFDB.ListenerUtils.stopEvent(event);
+											this.switchImages(-1, filterForVideos);
+										}
+										else if (event.keyCode == 39) {
+											BDFDB.ListenerUtils.stopEvent(event);
+											this.switchImages(1, filterForVideos);
+										}
 									}
 								});
 								this.addListener("keyup", "Gallery", _ => BDFDB.ArrayUtils.remove(firedEvents, "Gallery", true));
 							}
 						}
+						e.returnvalue.props.className = "";
+						e.returnvalue.props.children[0] = null;
+						e.returnvalue.props.children[2] = null;
 					}
 				}
 			}
 			
+			processImageModalBar (e) {
+				if (viewedImage && viewedImage.url) {
+					let item = {};
+					for (let key in viewedImage) item[key.split("_").map((n, i) => i > 0 ? BDFDB.StringUtils.upperCaseFirstChar(n) : n).join("")] = viewedImage[key];
+					item.alt = undefined;
+					item.contentScanMetadata = {version: item.contentScanVersion, flags: 0};
+					item.original = item.url;
+					item.loadingState = 2;
+					item.srcIsAnimated = false;
+					item.type = "IMAGE";
+					item.sourceMetadata = {
+						message: new BDFDB.DiscordObjects.Message(Object.assign({}, item.message, {author: new BDFDB.DiscordObjects.User(item.message.author)})),
+						identifier: {
+							attachmentId: item.id,
+							filename: item.filename,
+							size: item.size,
+							title: undefined,
+							type: "attachment"
+						}
+					};
+					for (let key of ["size", "filename", "id", "message", "channelId", "contentScanVersion"]) delete item[key];
+					e.instance.props.item = item;
+				}
+			}
+			
+			processImageModalButtons (e) {
+				let children = e.returnvalue.props.children;
+				e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+					let returnValue = children(...args);
+					let [buttons, index] = BDFDB.ReactUtils.findParent(returnValue, {filter: n => n && n.type && n.type.toString().indexOf("ZOOM") > -1});
+					if (index > -1) buttons[index] = this.settings.viewerSettings.zoomMode && !this.isValid(e.instance.props.item.original, "gif") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+						tooltipConfig: {
+							type: BDFDB.LibraryComponents.TooltipContainer.Positions.BOTTOM
+						},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+							className: BDFDB.disCNS.imagemodalactionbutton + BDFDB.disCN.imagemodalactionbuttonwrapper,
+							innerClassName: BDFDB.disCN.imagemodalactionbuttoninner,
+							look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+							color: BDFDB.LibraryComponents.Button.Colors.TRANSPARENT,
+							size: BDFDB.LibraryComponents.Button.Sizes.ICON,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								nativeClass: true,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.ZOOM,
+								width: 18,
+								height: 18
+							}),
+							onClick: event => this.openZoomSettings(event)
+						})
+					}) : null;
+					return returnValue;
+				}, "Error in Children Render of ImageModalButtons!");
+			}
+			
 			processLazyImage (e) {
 				if (e.node) {
+					if (!e.instance.props.src.split("?")[0].endsWith(".gif") && !e.instance.props.src.split("?")[0].endsWith(".mp4") && !e.instance.props.animated && !e.instance.props.children) for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeFormatInUrl(ele.src);
 					if (e.instance.props.resized) {
-						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"]) {
+						let selectors = ["embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"];
+
+						if (this.settings.rescaleSettings.rescaleEmbeds) selectors.push("embedfull", "embedinlinemedia");
+
+						for (let selector of selectors) {
 							let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN[selector], e.node);
 							if (parent) parent.style.setProperty("max-width", "unset", "important");
 							if (parent) parent.style.setProperty("max-height", "unset", "important");
 						}
-						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:']")].filter(n => n)) {
+						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:'], video")].filter(n => n)) {
 							ele.style.setProperty("width", e.instance.props.width + "px");
 							ele.style.setProperty("max-width", e.instance.props.width + "px");
 							ele.style.setProperty("height", e.instance.props.height + "px");
 							ele.style.setProperty("max-height", e.instance.props.height + "px");
 						}
-						for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = ele.src.split("?width=")[0].split("?height=")[0].split("?size=")[0];
-						if (e.instance.state.readyState != BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY) {
-							e.instance.state.readyState = BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY;
+						for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = this.removeSizeInUrl(ele.src);
+						if (e.instance.state.readyState != BDFDB.DiscordConstants.ImageReadyStates.READY) {
+							e.instance.state.readyState = BDFDB.DiscordConstants.ImageReadyStates.READY;
 							BDFDB.ReactUtils.forceUpdate(e.instance);
 						}
 					}
@@ -1240,24 +1204,25 @@ module.exports = (_ => {
 						let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
 						if (modal) {
 							modal.parentElement.className = BDFDB.DOMUtils.formatClassName(modal.parentElement.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
-							if (this.settings.viewerSettings.galleryMode) {
-								BDFDB.DOMUtils.addClass(modal, BDFDB.disCN.imagemodal);
-								BDFDB.DOMUtils.removeClass(modal, BDFDB.disCN.modalcarouselmodal, BDFDB.disCN.modalcarouselmodalzoomed);
-							}
+							if (this.settings.viewerSettings.galleryMode) BDFDB.DOMUtils.addClass(modal, BDFDB.disCN.imagemodal);
 						}
 						
 						if (this.isValid(e.instance.props.src, "gif")) e.node.style.setProperty("pointer-events", "none");
 						if (this.settings.viewerSettings.zoomMode && typeof e.instance.props.children != "function" && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling)) {
-							e.node.style.setProperty("cursor", "zoom-in");
-							e.node.addEventListener(this.settings.zoomSettings.clickMode ? "click" : "mousedown", event => {
+							let overlay = BDFDB.DOMUtils.create(`<div style="cursor: zoom-in; position: absolute; top: 0; right: 0; bottom: 0; left: 0; pointer-events: all;"></div>`);
+							e.node.parentElement.parentElement.appendChild(overlay);
+							e.node.parentElement.parentElement.style.setProperty("position", "relative");
+							overlay.addEventListener("contextmenu", event => e.node.querySelector("img").dispatchEvent(new MouseEvent("contextmenu", event)));
+							overlay.addEventListener(this.settings.zoomSettings.clickMode ? "click" : "mousedown", event => {
 								BDFDB.ListenerUtils.stopEvent(event);
 								if (event.which != 1 || e.node.querySelector("video")) return;
 								
 								let vanishObserver;
 								
 								let zoomLevel = this.settings.zoomSettings.zoomLevel;
-								let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
-								let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${!this.isValid(e.instance.props.src, "video") ? e.instance.props.src : this.getPosterUrl(e.instance.props.src)}" style="width: ${imgRects.width * zoomLevel}px; height: ${imgRects.height * zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+								let img = e.node.querySelector("img, video");
+								let imgRects = BDFDB.DOMUtils.getRects(img);
+								let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${img.tagName} src="${!this.isValid(e.instance.props.src, "video") ? e.instance.props.src : this.getPosterUrl(e.instance.props.src)}" style="width: ${imgRects.width * zoomLevel}px; height: ${imgRects.height * zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${img.tagName == "VIDEO" ? " loop autoplay" : ""}></${img.tagName}></div></div>`);
 								let pane = lens.firstElementChild.firstElementChild;
 								let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: all !important; z-index: 8000 !important;"></div>`);
 								let appMount = document.querySelector(BDFDB.dotCN.appmount);
@@ -1342,8 +1307,7 @@ module.exports = (_ => {
 					}
 				}
 				else {
-					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
-					if (this.settings.rescaleSettings.imageViewer != "NONE" && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimage) > -1) {
+					if (this.settings.rescaleSettings.imageViewer != "NONE" && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimagemedia) > -1) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (this.settings.viewerSettings.galleryMode ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
 						ratio = this.settings.rescaleSettings.imageViewer == "ORIGINAL" && ratio > 1 ? 1 : ratio;
@@ -1358,12 +1322,15 @@ module.exports = (_ => {
 							e.instance.props.resized = true;
 						}
 					}
-					if (this.settings.rescaleSettings.messages != "NONE" && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedvideoimagecomponent, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true}) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(reactInstance, "mediaAttachments", {up: true}) || []).length < 2)) {
+					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
+					if (this.settings.rescaleSettings.messages != "NONE" && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedvideoimagecomponent, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true}) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(reactInstance, "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length < 2)) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
 						if (mRects.width || mwRects.width) {
 							let embed = BDFDB.ReactUtils.findValue(reactInstance, "embed", {up: true});
+							if (embed && !this.settings.rescaleSettings.rescaleEmbeds) return;
+
 							let ratio = ((mRects.width || (mwRects.width - 120)) - (embed && embed.color ? 100 : 0)) / e.instance.props.width;
 							ratio = this.settings.rescaleSettings.messages == "ORIGINAL" && ratio > 1 ? 1 : ratio;
 							let width = Math.round(ratio * e.instance.props.width);
@@ -1387,30 +1354,27 @@ module.exports = (_ => {
 			}
 
 			processLazyImageZoomable (e) {
-				if (!e.instance.props.original || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
-				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "mediaAttachments", {up: true}) || []).length > 1) {
-					const attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
-					if (attachment) {
-						const onMouseEnter = e.returnvalue.props.onMouseEnter;
-						e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
-							BDFDB.TooltipUtils.create(args[0].target, [
-								attachment.filename,
-								BDFDB.NumberUtils.formatBytes(attachment.size),
-								`${attachment.width}x${attachment.height}px`
-							].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
-								type: "right",
-								delay: this.settings.detailsSettings.tooltipDelay
-							});
-							return onMouseEnter(...args);
-						}, "Error in onMouseEnter of LazyImageZoomable!");
-					}
+				if (!e.instance.props.item || !e.instance.props.item.originalItem || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
+				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length > 1) {
+					const onMouseEnter = e.returnvalue.props.onMouseEnter || (_ => {});
+					e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
+						BDFDB.TooltipUtils.create(args[0].target, [
+							e.instance.props.item.originalItem.filename,
+							BDFDB.NumberUtils.formatBytes(e.instance.props.item.originalItem.size),
+							`${e.instance.props.item.originalItem.width}x${e.instance.props.item.originalItem.height}px`
+						].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
+							type: "right",
+							delay: this.settings.detailsSettings.tooltipDelay
+						});
+						return onMouseEnter(...args);
+					}, "Error in onMouseEnter of LazyImageZoomable!");
 				}
-				if (this.settings.detailsSettings.footnote && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedmedia, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "mediaAttachments", {up: true}) || []).length < 2)) {
+				if (this.settings.detailsSettings.footnote && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedmedia, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length < 2)) {
 					e.returnvalue = BDFDB.ReactUtils.createElement("div", {
 						children: [
 							e.returnvalue,
 							BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
-								original: e.instance.props.original,
+								original: e.instance.props.item.original,
 								attachment: {
 									height: 0,
 									width: 0,
@@ -1437,14 +1401,14 @@ module.exports = (_ => {
 					if (this.settings.rescaleSettings.messages != "NONE" && !e.instance.props.inline && e.instance.props.type == "attachment" && e.instance.props.containerStyles) e.instance.props.containerStyles.maxWidth = "100%";
 				}
 				else {
+					if (e.instance.state && e.instance.state.visible) return;
 					if (this.settings.general.nsfwMode && typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
 						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let returnedChildren = childrenRender(...args);
-							let attachment = BDFDB.ReactUtils.findValue(returnedChildren, "attachment");
-							if (attachment && attachment.nsfw) {
-								let [children, index] = BDFDB.ReactUtils.findParent(returnedChildren, {name: "SpoilerWarning"});
-								if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
+							let item = BDFDB.ReactUtils.findValue(returnedChildren, "item");
+							if (item && item.originalItem && item.originalItem.nsfw) {
+								returnedChildren.props.children[0] = BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.spoilerwarning,
 									children: "NSFW"
 								});
@@ -1464,14 +1428,14 @@ module.exports = (_ => {
 						children: validUrls.length == 1 ? this.createSubMenus({
 							instance: {},
 							urls: validUrls,
-							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
+							prefix: BDFDB.LanguageUtils.LanguageStrings.PROFILE_BANNER
 						}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_imageactions,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 							children: this.createSubMenus({
 								instance: {},
 								urls: validUrls,
-								prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
+								prefix: BDFDB.LanguageUtils.LanguageStrings.PROFILE_BANNER
 							})
 						})
 					}));
@@ -1485,9 +1449,10 @@ module.exports = (_ => {
 				const message = BDFDB.ReactUtils.findValue(image, "message", {up: true});
 				if (!message) return;
 				BDFDB.DOMUtils.hide(document.querySelectorAll(BDFDB.dotCN.tooltip));
-				firstViewedImage = {messageId: message.id, channelId: message.channel_id, proxy_url: image.src};
+				firstViewedImage = {message: message, channelId: message.channel_id, proxy_url: image.src};
 				viewedImage = firstViewedImage;
 				if (cachedImages) cachedImages.index = this.getImageIndex(cachedImages.all, viewedImage);
+				BDFDB.TimeUtils.clear(viewedImageTimeout);
 				viewedImageTimeout = BDFDB.TimeUtils.timeout(_ => {
 					firstViewedImage = null;
 					viewedImage = null;
@@ -1496,22 +1461,16 @@ module.exports = (_ => {
 			
 			requestFile (urls, onLoad, onError, config = {}) {
 				if (!urls || typeof onLoad != "function") return typeof onError == "function" && onError();
-				let url = urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url;
-				let isResized = !config.orignalSizeChecked && (url.indexOf("?width=") > -1 || url.indexOf("?height=") > -1 || url.indexOf("?size=") > -1);
-				url = isResized ? url.split("?width=")[0].split("?height=")[0].split("?size=")[0] : url;
+				let url = (urls.url && urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url || "");
+				let isResized = !config.orignalSizeChecked && (url.indexOf("width=") > -1 || url.indexOf("height=") > -1 || url.indexOf("size=") > -1);
+				url = isResized ? this.removeSizeInUrl(url) : url;
+				let isFormatted = (url.indexOf("format=") > -1);
+				url = isFormatted ? this.removeFormatInUrl(url) : url;
 				url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
-				if (!config.fallbackToRequest) BDFDB.DiscordUtils.requestFileData(url, (error, buffer) => {
-					if (error || !buffer) {
-						if (isResized) this.requestFile(urls, onLoad, onError, {orignalSizeChecked: true});
-						else if (urls.fallbackUrl && urls.url != urls.fallbackUrl) this.requestFile({url: urls.fallbackUrl, oldUrl: urls.url}, onLoad, onError);
-						else this.requestFile({url: urls.oldUrl || urls.url, fallbackUrl: urls.oldUrl ? urls.url : undefined}, onLoad, onError, {fallbackToRequest: true});
-					}
-					else onLoad(url, buffer);
-				});
-				else BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, buffer) => {
+				BDFDB.LibraryRequires.request(url, {toBuffer: true}, (error, response, buffer) => {
 					if (error || response.statusCode != 200 || response.headers["content-type"].indexOf("text/html") > -1) {
-						if (isResized) this.requestFile(urls, onLoad, onError, {orignalSizeChecked: true, fallbackToRequest: true});
-						else if (urls.fallbackUrl && urls.url != urls.fallbackUrl) this.requestFile({url: urls.fallbackUrl}, onLoad, onError, {fallbackToRequest: true});
+						if (isResized) this.requestFile(urls, onLoad, onError, {orignalSizeChecked: true});
+						else if (urls.fallbackUrl && urls.url != urls.fallbackUrl) this.requestFile({url: urls.fallbackUrl}, onLoad, onError);
 						else if (typeof onError == "function") onError();
 					}
 					else onLoad(url, buffer);
@@ -1524,7 +1483,7 @@ module.exports = (_ => {
 					if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
 					else {
 						let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-						if (path) BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
+						if (path) BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), new Uint8Array(buffer), error => {
 							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
 							else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
 						});
@@ -1543,9 +1502,9 @@ module.exports = (_ => {
 			}
 			
 			copyFile (urls) {
-				this.requestFile(urls, (url, buffer) => {
+				this.requestFile(urls, url => {
 					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-					BDFDB.LibraryModules.WindowUtils.copyImage(url);
+					BDFDB.LibraryModules.WindowUtils.copyImage(url.replace("https://media.discordapp.net", "https://cdn.discordapp.com"));
 					BDFDB.NotificationUtils.toast(this.labels.toast_copy_success.replace("{{var0}}", type), {type: "success"});
 				}, _ => {
 					BDFDB.NotificationUtils.toast(this.labels.toast_copy_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE), {type: "danger"});
@@ -1587,11 +1546,11 @@ module.exports = (_ => {
 			}
 			
 			getImageIndex (messages, img) {
-				return messages.findIndex(i => i.messageId == img.messageId && (messages.filter(n => n.messageId == i.messageId).length < 2 || i.url && img.proxy_url && img.proxy_url.indexOf(i.url) > -1 || i.proxy_url && img.proxy_url && img.proxy_url.indexOf(i.proxy_url) > -1));
+				return messages.findIndex(i => i.message.id == img.message.id && (messages.filter(n => n.message.id == i.message.id).length < 2 || i.url && img.proxy_url && img.proxy_url.indexOf(i.url) > -1 || i.proxy_url && img.proxy_url && img.proxy_url.indexOf(i.proxy_url) > -1));
 			}
 			
 			filterMessagesForImages (messages, img, filterForVideos) {
-				return messages.filter(m => m && m.channel_id == img.channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(m.author.id) && (firstViewedImage && m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.filter(e => e.image || e.thumbnail || e.video).length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10).filter(n => {
+				return messages.filter(m => m && m.channel_id == img.channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(m.author.id) && (firstViewedImage && m.id == firstViewedImage.message.id || m.id == img.message.id || m.embeds.filter(e => e.image || e.thumbnail || e.video).length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({message: m, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10).filter(n => {
 					if (!n) return false;
 					let type = (n.type || n.content_type || "").split("/")[0];
 					if (type && (filterForVideos && type != "video" || !filterForVideos && type == "video")) return false;
@@ -1612,7 +1571,7 @@ module.exports = (_ => {
 				
 				if (offset > 0 && !cachedImages.lastReached && cachedImages.index == (cachedImages.amount - 1)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-					BDFDB.LibraryModules.APIUtils.get({
+					BDFDB.LibraryModules.HTTPUtils.get({
 						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
@@ -1633,13 +1592,13 @@ module.exports = (_ => {
 								newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
 								lastReached: index == (cachedImages.all.length - 1)
 							});
-							this.updateImageModal();
+							this.updateImageModal(true);
 						}
 					});
 				}
 				if (offset < 0 && !cachedImages.firstReached && cachedImages.index == 0) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
-					BDFDB.LibraryModules.APIUtils.get({
+					BDFDB.LibraryModules.HTTPUtils.get({
 						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
@@ -1660,7 +1619,7 @@ module.exports = (_ => {
 								index: index,
 								amount: cachedImages.all.length
 							});
-							this.updateImageModal();
+							this.updateImageModal(true);
 						}
 					});
 				}
@@ -1668,12 +1627,8 @@ module.exports = (_ => {
 				let thisViewedImage = viewedImage;
 				switchedImageProps = {
 					animated: !!isVideo,
-					original: thisViewedImage.proxy_url,
-					placeholder: isVideo && (thisViewedImage.thumbnail && thisViewedImage.thumbnail.proxy_url || thisViewedImage.proxy_url),
-					src: thisViewedImage.proxy_url,
-					width: thisViewedImage.width,
-					height: thisViewedImage.height,
 					children: !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
+						className: BDFDB.disCNS.embedvideo + BDFDB.disCN.embedmedia,
 						ignoreMaxSize: true,
 						poster: this.getPosterUrl(thisViewedImage.proxy_url),
 						src: thisViewedImage.proxy_url,
@@ -1683,19 +1638,88 @@ module.exports = (_ => {
 						naturalHeight: thisViewedImage.height,
 						play: true,
 						playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
-					}))
+					})),
+					height: thisViewedImage.height,
+					original: thisViewedImage.url,
+					sourceMetadata: {
+						identifier: {type: isVideo ? "embed" : "attachment", [isVideo ? "embedIndex" : "attachmentId"]: thisViewedImage.id ? thisViewedImage.id : 0},
+						message: thisViewedImage.message
+					},
+					srcIsAnimated: undefined,
+					trigger: "CLICK",
+					type: "IMAGE",
+					url: thisViewedImage.url,
+					width: thisViewedImage.width,
+					zoomThumbnailPlaceholder: thisViewedImage.proxy_url,
 				};
-				this.updateImageModal();
+				this.updateImageModal(true);
 			}
 			
-			updateImageModal () {
-				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.imagemodal), {up: true, filter: n => n && n.stateNode && n.stateNode.props && n.stateNode.props.isTopModal && n.stateNode.props.modalKey}));
+			openZoomSettings (event) {
+				BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: Object.keys(this.defaults.zoomSettings).map(type => {
+						let isBoolean = typeof this.defaults.zoomSettings[type].value == "boolean";
+						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems[isBoolean ? "MenuCheckboxItem" : "MenuSliderItem"], Object.assign({
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, type)
+						}, isBoolean ? {
+							checked: this.settings.zoomSettings[type],
+							action: value => {
+								this.settings.zoomSettings[type] = value;
+								BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
+							}
+						} : {
+							value: this.settings.zoomSettings[type],
+							renderLabel: (value, instance) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										children: `${this.labels[this.defaults.zoomSettings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.zoomSettings[type].label]}:`
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										type: "number",
+										size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+										style: {width: 70},
+										min: 1,
+										max: this.defaults.zoomSettings[type].maxValue,
+										value: this.settings.zoomSettings[type],
+										onChange: value => value && value >= this.defaults.zoomSettings[type].minValue && instance.handleValueChange(BDFDB.NumberUtils.mapRange([this.defaults.zoomSettings[type].minValue, this.defaults.zoomSettings[type].maxValue], [0, 100], value))
+									}),
+									BDFDB.ReactUtils.createElement("span", {
+										style: {width: 20},
+										children: this.defaults.zoomSettings[type].unit
+									})
+								]
+							}),
+							onValueRender: value => `${value}${this.defaults.zoomSettings[type].unit}`,
+							onValueChange: value => {
+								this.settings.zoomSettings[type] = value;
+								BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
+							}
+						}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], isBoolean ? ["label"] : ["digits", "minValue", "maxValue"])));
+					})
+				}));
+			}
+			
+			updateImageModal (switched) {
+				BDFDB.TimeUtils.clear(updateTimeout);
+				updateTimeout = BDFDB.TimeUtils.timeout(_ => {
+					let ownerInstance = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.imagemodal), {up: true, filter: n => n && n.stateNode && n.stateNode.props && n.stateNode.props.isTopModal && n.stateNode.props.modalKey});
+					BDFDB.ReactUtils.forceUpdate(ownerInstance);
+				}, switched ? 0 : 500);
 			}
 			
 			filterForCopies (messages) {
 				let filtered = [];
-				for (let message of messages) if (!filtered.find(n => n.messageId == message.messageId && n.id == message.id)) filtered.push(message);
+				for (let message of messages) if (!filtered.find(n => n.message.id == message.message.id && n.id == message.id)) filtered.push(message);
 				return filtered;
+			}
+			
+			removeSizeInUrl (url) {
+				return (url || "").split(/[&?]width=/)[0].split(/[&?]height=/)[0].split(/[&?]size=/)[0].split(/[&?]width=/)[0].split(/[&?]height=/)[0].split(/[&?]size=/)[0];
+			}
+
+			removeFormatInUrl (url) {
+				return (url || "").replace(/format\=[A-z]+(\&){0,1}/g, "");
 			}
 			
 			addListener (eventType, type, callback) {
@@ -1721,12 +1745,12 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							context_copy:						"Копирайте {{var0}}",
-							context_imageactions:				"Действия с изображения",
+							context_imageactions:					"Действия с изображения",
 							context_lenssize:					"Размер на обектива",
 							context_saveas:						"Запазете {{var0}} като ...",
 							context_searchwith:					"Търсете {{var0}} с ...",
-							context_streamactions:				"Действия за визуализация на потока",
-							context_videoactions:				"Видео действия",
+							context_streamactions:					"Действия за визуализация на потока",
+							context_videoactions:					"Видео действия",
 							context_view:						"Преглед {{var0}}",
 							context_zoomspeed:					"Скорост на мащабиране",
 							submenu_disabled:					"Всички инвалиди",
@@ -1738,12 +1762,12 @@ module.exports = (_ => {
 					case "cs":		// Czech
 						return {
 							context_copy:						"Zkopírovat {{var0}}",
-							context_imageactions:				"Akce s obrázky",
+							context_imageactions:					"Akce s obrázky",
 							context_lenssize:					"Velikost lupy",
 							context_saveas:						"Uložit {{var0}} jako...",
 							context_searchwith:					"Hledat {{var0}} pomocí...",
-							context_streamactions:				"Akce náhledu streamu",
-							context_videoactions:				"Video akce",
+							context_streamactions:					"Akce náhledu streamu",
+							context_videoactions:					"Video akce",
 							context_view:						"Zobrazit {{var0}}",
 							context_zoomspeed:					"Rychlost zoomu",
 							submenu_disabled:					"Vše zakázáno",
@@ -1755,12 +1779,12 @@ module.exports = (_ => {
 					case "da":		// Danish
 						return {
 							context_copy:						"Kopiér {{var0}}",
-							context_imageactions:				"Billedhandlinger",
+							context_imageactions:					"Billedhandlinger",
 							context_lenssize:					"Objektivstørrelse",
 							context_saveas:						"Gem {{var0}} som ...",
 							context_searchwith:					"Søg i {{var0}} med ...",
-							context_streamactions:				"Stream forhåndsvisningshandlinger",
-							context_videoactions:				"Videohandlinger",
+							context_streamactions:					"Stream forhåndsvisningshandlinger",
+							context_videoactions:					"Videohandlinger",
 							context_view:						"Se {{var0}}",
 							context_zoomspeed:					"Zoomhastighed",
 							submenu_disabled:					"Alle handicappede",
@@ -1772,12 +1796,12 @@ module.exports = (_ => {
 					case "de":		// German
 						return {
 							context_copy:						"{{var0}} kopieren",
-							context_imageactions:				"Bildaktionen",
+							context_imageactions:					"Bildaktionen",
 							context_lenssize:					"Linsengröße",
 							context_saveas:						"{{var0}} speichern als ...",
 							context_searchwith:					"{{var0}} suchen mit ...",
-							context_streamactions:				"Stream-Vorschau-Aktionen",
-							context_videoactions:				"Videoaktionen",
+							context_streamactions:					"Stream-Vorschau-Aktionen",
+							context_videoactions:					"Videoaktionen",
 							context_view:						"{{var0}} ansehen",
 							context_zoomspeed:					"Zoomgeschwindigkeit",
 							submenu_disabled:					"Alle deaktiviert",
@@ -1789,12 +1813,12 @@ module.exports = (_ => {
 					case "el":		// Greek
 						return {
 							context_copy:						"Αντιγραφή {{var0}}",
-							context_imageactions:				"Ενέργειες εικόνας",
+							context_imageactions:					"Ενέργειες εικόνας",
 							context_lenssize:					"Μέγεθος φακού",
 							context_saveas:						"Αποθήκευση {{var0}} ως ...",
 							context_searchwith:					"Αναζήτηση {{var0}} με ...",
-							context_streamactions:				"Ενέργειες προεπισκόπησης ροής",
-							context_videoactions:				"Ενέργειες βίντεο",
+							context_streamactions:					"Ενέργειες προεπισκόπησης ροής",
+							context_videoactions:					"Ενέργειες βίντεο",
 							context_view:						"Προβολή {{var0}}",
 							context_zoomspeed:					"Ταχύτητα ζουμ",
 							submenu_disabled:					"Όλα τα άτομα με ειδικές ανάγκες",
@@ -1806,12 +1830,12 @@ module.exports = (_ => {
 					case "es":		// Spanish
 						return {
 							context_copy:						"Copiar {{var0}}",
-							context_imageactions:				"Acciones de imagen",
+							context_imageactions:					"Acciones de imagen",
 							context_lenssize:					"Tamaño de la lente",
 							context_saveas:						"Guardar {{var0}} como ...",
 							context_searchwith:					"Buscar {{var0}} con ...",
-							context_streamactions:				"Acciones de vista previa de transmisión",
-							context_videoactions:				"Acciones de vídeo",
+							context_streamactions:					"Acciones de vista previa de transmisión",
+							context_videoactions:					"Acciones de vídeo",
 							context_view:						"Ver {{var0}}",
 							context_zoomspeed:					"Velocidad de zoom",
 							submenu_disabled:					"Todos discapacitados",
@@ -1823,12 +1847,12 @@ module.exports = (_ => {
 					case "fi":		// Finnish
 						return {
 							context_copy:						"Kopioi {{var0}}",
-							context_imageactions:				"Kuvatoiminnot",
+							context_imageactions:					"Kuvatoiminnot",
 							context_lenssize:					"Linssin koko",
 							context_saveas:						"Tallenna {{var0}} nimellä ...",
 							context_searchwith:					"Tee haku {{var0}} ...",
-							context_streamactions:				"Streamin esikatselutoiminnot",
-							context_videoactions:				"Videotoiminnot",
+							context_streamactions:					"Streamin esikatselutoiminnot",
+							context_videoactions:					"Videotoiminnot",
 							context_view:						"Näytä {{var0}}",
 							context_zoomspeed:					"Zoomausnopeus",
 							submenu_disabled:					"Kaikki vammaiset",
@@ -1840,12 +1864,12 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							context_copy:						"Copier {{var0}}",
-							context_imageactions:				"Actions sur les images",
+							context_imageactions:					"Actions sur les images",
 							context_lenssize:					"Taille de l'objectif",
 							context_saveas:						"Enregistrer {{var0}} sous ...",
 							context_searchwith:					"Rechercher {{var0}} avec ...",
-							context_streamactions:				"Actions d'aperçu de flux",
-							context_videoactions:				"Actions vidéo",
+							context_streamactions:					"Actions d'aperçu de flux",
+							context_videoactions:					"Actions vidéo",
 							context_view:						"Afficher {{var0}}",
 							context_zoomspeed:					"Vitesse de zoom",
 							submenu_disabled:					"Tout désactivé",
@@ -1857,12 +1881,12 @@ module.exports = (_ => {
 					case "hi":		// Hindi
 						return {
 							context_copy:						"कॉपी {{var0}}",
-							context_imageactions:				"छवि क्रियाएँ",
+							context_imageactions:					"छवि क्रियाएँ",
 							context_lenssize:					"लेंस का आकार",
 							context_saveas:						"{{var0}} को इस रूप में सेव करें...",
 							context_searchwith:					"इसके साथ {{var0}} खोजें ...",
-							context_streamactions:				"स्ट्रीम पूर्वावलोकन क्रियाएं",
-							context_videoactions:				"वीडियो क्रिया",
+							context_streamactions:					"स्ट्रीम पूर्वावलोकन क्रियाएं",
+							context_videoactions:					"वीडियो क्रिया",
 							context_view:						"देखें {{var0}}",
 							context_zoomspeed:					"ज़ूम गति",
 							submenu_disabled:					"सभी अक्षम",
@@ -1874,12 +1898,12 @@ module.exports = (_ => {
 					case "hr":		// Croatian
 						return {
 							context_copy:						"Kopiraj {{var0}}",
-							context_imageactions:				"Radnje slike",
+							context_imageactions:					"Radnje slike",
 							context_lenssize:					"Veličina leće",
 							context_saveas:						"Spremi {{var0}} kao ...",
 							context_searchwith:					"Traži {{var0}} sa ...",
-							context_streamactions:				"Radnje pregleda streama",
-							context_videoactions:				"Video radnje",
+							context_streamactions:					"Radnje pregleda streama",
+							context_videoactions:					"Video radnje",
 							context_view:						"Pogledajte {{var0}}",
 							context_zoomspeed:					"Brzina zumiranja",
 							submenu_disabled:					"Svi invalidi",
@@ -1891,12 +1915,12 @@ module.exports = (_ => {
 					case "hu":		// Hungarian
 						return {
 							context_copy:						"{{var0}} másolása",
-							context_imageactions:				"Képműveletek",
+							context_imageactions:					"Képműveletek",
 							context_lenssize:					"Lencse mérete",
 							context_saveas:						"{{var0}} mentése másként ...",
 							context_searchwith:					"Keresés a következőben: {{var0}} a következővel:",
-							context_streamactions:				"Stream előnézeti műveletek",
-							context_videoactions:				"Videóműveletek",
+							context_streamactions:					"Stream előnézeti műveletek",
+							context_videoactions:					"Videóműveletek",
 							context_view:						"Megtekintés: {{var0}}",
 							context_zoomspeed:					"Zoom sebesség",
 							submenu_disabled:					"Minden fogyatékkal él",
@@ -1908,12 +1932,12 @@ module.exports = (_ => {
 					case "it":		// Italian
 						return {
 							context_copy:						"Copia {{var0}}",
-							context_imageactions:				"Azioni immagine",
+							context_imageactions:					"Azioni immagine",
 							context_lenssize:					"Dimensione della lente",
 							context_saveas:						"Salva {{var0}} come ...",
 							context_searchwith:					"Cerca {{var0}} con ...",
-							context_streamactions:				"Azioni di anteprima del flusso",
-							context_videoactions:				"Azioni video",
+							context_streamactions:					"Azioni di anteprima del flusso",
+							context_videoactions:					"Azioni video",
 							context_view:						"Visualizza {{var0}}",
 							context_zoomspeed:					"Velocità dello zoom",
 							submenu_disabled:					"Tutti disabilitati",
@@ -1925,12 +1949,12 @@ module.exports = (_ => {
 					case "ja":		// Japanese
 						return {
 							context_copy:						"{{var0}} をコピーします",
-							context_imageactions:				"画像アクション",
+							context_imageactions:					"画像アクション",
 							context_lenssize:					"レンズサイズ",
 							context_saveas:						"{{var0}} を...として保存します",
 							context_searchwith:					"{{var0}} を...で検索",
-							context_streamactions:				"ストリーム プレビュー アクション",
-							context_videoactions:				"ビデオ アクション",
+							context_streamactions:					"ストリーム プレビュー アクション",
+							context_videoactions:					"ビデオ アクション",
 							context_view:						"{{var0}} を表示",
 							context_zoomspeed:					"ズーム速度",
 							submenu_disabled:					"すべて無効",
@@ -1942,12 +1966,12 @@ module.exports = (_ => {
 					case "ko":		// Korean
 						return {
 							context_copy:						"{{var0}} 복사",
-							context_imageactions:				"이미지 작업",
+							context_imageactions:					"이미지 작업",
 							context_lenssize:					"렌즈 크기",
 							context_saveas:						"{{var0}} 을 다른 이름으로 저장 ...",
 							context_searchwith:					"{{var0}} 검색 ...",
-							context_streamactions:				"스트림 미리보기 작업",
-							context_videoactions:				"비디오 작업",
+							context_streamactions:					"스트림 미리보기 작업",
+							context_videoactions:					"비디오 작업",
 							context_view:						"{{var0}} 보기",
 							context_zoomspeed:					"줌 속도",
 							submenu_disabled:					"모두 비활성화 됨",
@@ -1959,12 +1983,12 @@ module.exports = (_ => {
 					case "lt":		// Lithuanian
 						return {
 							context_copy:						"Kopijuoti {{var0}}",
-							context_imageactions:				"Vaizdo veiksmai",
+							context_imageactions:					"Vaizdo veiksmai",
 							context_lenssize:					"Objektyvo dydis",
 							context_saveas:						"Išsaugoti '{{var0}}' kaip ...",
 							context_searchwith:					"Ieškoti {{var0}} naudojant ...",
-							context_streamactions:				"Srauto peržiūros veiksmai",
-							context_videoactions:				"Vaizdo įrašų veiksmai",
+							context_streamactions:					"Srauto peržiūros veiksmai",
+							context_videoactions:					"Vaizdo įrašų veiksmai",
 							context_view:						"Žiūrėti {{var0}}",
 							context_zoomspeed:					"Priartinimo greitis",
 							submenu_disabled:					"Visi neįgalūs",
@@ -1976,12 +2000,12 @@ module.exports = (_ => {
 					case "nl":		// Dutch
 						return {
 							context_copy:						"Kopieer {{var0}}",
-							context_imageactions:				"Afbeeldingsacties",
+							context_imageactions:					"Afbeeldingsacties",
 							context_lenssize:					"Lens Maat",
 							context_saveas:						"Bewaar {{var0}} als ...",
 							context_searchwith:					"Zoek {{var0}} met ...",
-							context_streamactions:				"Stream Preview-acties",
-							context_videoactions:				"Video-acties",
+							context_streamactions:					"Stream Preview-acties",
+							context_videoactions:					"Video-acties",
 							context_view:						"Bekijk {{var0}}",
 							context_zoomspeed:					"Zoom snelheid",
 							submenu_disabled:					"Allemaal uitgeschakeld",
@@ -1993,12 +2017,12 @@ module.exports = (_ => {
 					case "no":		// Norwegian
 						return {
 							context_copy:						"Kopier {{var0}}",
-							context_imageactions:				"Bildehandlinger",
+							context_imageactions:					"Bildehandlinger",
 							context_lenssize:					"Linsestørrelse",
 							context_saveas:						"Lagre {{var0}} som ...",
 							context_searchwith:					"Søk på {{var0}} med ...",
-							context_streamactions:				"Strøm forhåndsvisningshandlinger",
-							context_videoactions:				"Videohandlinger",
+							context_streamactions:					"Strøm forhåndsvisningshandlinger",
+							context_videoactions:					"Videohandlinger",
 							context_view:						"Vis {{var0}}",
 							context_zoomspeed:					"Zoomhastighet",
 							submenu_disabled:					"Alle funksjonshemmede",
@@ -2010,12 +2034,12 @@ module.exports = (_ => {
 					case "pl":		// Polish
 						return {
 							context_copy:						"Kopiuj {{var0}}",
-							context_imageactions:				"Działania związane z obrazem",
+							context_imageactions:					"Działania związane z obrazem",
 							context_lenssize:					"Rozmiar soczewki",
 							context_saveas:						"Zapisz {{var0}} jako ...",
 							context_searchwith:					"Wyszukaj {{var0}} za pomocą ...",
-							context_streamactions:				"Akcje podglądu strumienia",
-							context_videoactions:				"Akcje wideo",
+							context_streamactions:					"Akcje podglądu strumienia",
+							context_videoactions:					"Akcje wideo",
 							context_view:						"Wyświetl {{var0}}",
 							context_zoomspeed:					"Szybkość zoomu",
 							submenu_disabled:					"Wszystkie wyłączone",
@@ -2027,12 +2051,12 @@ module.exports = (_ => {
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							context_copy:						"Copiar {{var0}}",
-							context_imageactions:				"Ações de imagem",
+							context_imageactions:					"Ações de imagem",
 							context_lenssize:					"Tamanho da lente",
 							context_saveas:						"Salvar {{var0}} como ...",
 							context_searchwith:					"Pesquisar {{var0}} com ...",
-							context_streamactions:				"Ações de visualização de fluxo",
-							context_videoactions:				"Ações de vídeo",
+							context_streamactions:					"Ações de visualização de fluxo",
+							context_videoactions:					"Ações de vídeo",
 							context_view:						"Visualizar {{var0}}",
 							context_zoomspeed:					"Velocidade do zoom",
 							submenu_disabled:					"Todos desativados",
@@ -2044,12 +2068,12 @@ module.exports = (_ => {
 					case "ro":		// Romanian
 						return {
 							context_copy:						"Copiați {{var0}}",
-							context_imageactions:				"Acțiuni de imagine",
+							context_imageactions:					"Acțiuni de imagine",
 							context_lenssize:					"Dimensiunea obiectivului",
 							context_saveas:						"Salvați {{var0}} ca ...",
 							context_searchwith:					"Căutați {{var0}} cu ...",
-							context_streamactions:				"Acțiuni de previzualizare în flux",
-							context_videoactions:				"Acțiuni video",
+							context_streamactions:					"Acțiuni de previzualizare în flux",
+							context_videoactions:					"Acțiuni video",
 							context_view:						"Vizualizați {{var0}}",
 							context_zoomspeed:					"Viteza de zoom",
 							submenu_disabled:					"Toate sunt dezactivate",
@@ -2061,12 +2085,12 @@ module.exports = (_ => {
 					case "ru":		// Russian
 						return {
 							context_copy:						"Скопируйте {{var0}}",
-							context_imageactions:				"Действия с изображением",
+							context_imageactions:					"Действия с изображением",
 							context_lenssize:					"Размер линзы",
 							context_saveas:						"Сохранить {{var0}} как ...",
 							context_searchwith:					"Искать {{var0}} с помощью ...",
-							context_streamactions:				"Действия предварительного просмотра трансляции",
-							context_videoactions:				"Действия с видео",
+							context_streamactions:					"Действия предварительного просмотра трансляции",
+							context_videoactions:					"Действия с видео",
 							context_view:						"Посмотреть {{var0}}",
 							context_zoomspeed:					"Скорость масштабирования",
 							submenu_disabled:					"Все отключены",
@@ -2078,12 +2102,12 @@ module.exports = (_ => {
 					case "sv":		// Swedish
 						return {
 							context_copy:						"Kopiera {{var0}}",
-							context_imageactions:				"Bildåtgärder",
+							context_imageactions:					"Bildåtgärder",
 							context_lenssize:					"Linsstorlek",
 							context_saveas:						"Spara {{var0}} som ...",
 							context_searchwith:					"Sök {{var0}} med ...",
-							context_streamactions:				"Streama förhandsgranskningsåtgärder",
-							context_videoactions:				"Videoåtgärder",
+							context_streamactions:					"Streama förhandsgranskningsåtgärder",
+							context_videoactions:					"Videoåtgärder",
 							context_view:						"Visa {{var0}}",
 							context_zoomspeed:					"Zoomhastighet",
 							submenu_disabled:					"Alla funktionshindrade",
@@ -2095,12 +2119,12 @@ module.exports = (_ => {
 					case "th":		// Thai
 						return {
 							context_copy:						"คัดลอก{{var0}}",
-							context_imageactions:				"การทำงานของรูปภาพ",
+							context_imageactions:					"การทำงานของรูปภาพ",
 							context_lenssize:					"ขนาดเลนส์",
 							context_saveas:						"บันทึก{{var0}}เป็น ...",
 							context_searchwith:					"ค้นหา{{var0}} ้วย ...",
-							context_streamactions:				"การดำเนินการแสดงตัวอย่างสตรีม",
-							context_videoactions:				"การกระทำของวิดีโอ",
+							context_streamactions:					"การดำเนินการแสดงตัวอย่างสตรีม",
+							context_videoactions:					"การกระทำของวิดีโอ",
 							context_view:						"ดู{{var0}}",
 							context_zoomspeed:					"ความเร็วในการซูม",
 							submenu_disabled:					"ปิดใช้งานทั้งหมด",
@@ -2112,12 +2136,12 @@ module.exports = (_ => {
 					case "tr":		// Turkish
 						return {
 							context_copy:						"{{var0}} kopyala",
-							context_imageactions:				"Görüntü Eylemleri",
+							context_imageactions:					"Görüntü Eylemleri",
 							context_lenssize:					"Lens Boyutu",
 							context_saveas:						"{{var0}} farklı kaydet ...",
 							context_searchwith:					"{{var0}} şununla ara ...",
-							context_streamactions:				"Akış Önizleme İşlemleri",
-							context_videoactions:				"Video Eylemleri",
+							context_streamactions:					"Akış Önizleme İşlemleri",
+							context_videoactions:					"Video Eylemleri",
 							context_view:						"{{var0}} görüntüle",
 							context_zoomspeed:					"yakınlaştırma hızı",
 							submenu_disabled:					"Hepsi devre dışı",
@@ -2129,12 +2153,12 @@ module.exports = (_ => {
 					case "uk":		// Ukrainian
 						return {
 							context_copy:						"Копіювати {{var0}}",
-							context_imageactions:				"Дії із зображеннями",
+							context_imageactions:					"Дії із зображеннями",
 							context_lenssize:					"Розмір лінзи",
 							context_saveas:						"Збережіть {{var0}} як ...",
 							context_searchwith:					"Шукати {{var0}} за допомогою ...",
-							context_streamactions:				"Дії попереднього перегляду потоку",
-							context_videoactions:				"Відео дії",
+							context_streamactions:					"Дії попереднього перегляду потоку",
+							context_videoactions:					"Відео дії",
 							context_view:						"Переглянути {{var0}}",
 							context_zoomspeed:					"Швидкість масштабування",
 							submenu_disabled:					"Всі інваліди",
@@ -2146,12 +2170,12 @@ module.exports = (_ => {
 					case "vi":		// Vietnamese
 						return {
 							context_copy:						"Sao chép {{var0}}",
-							context_imageactions:				"Hành động hình ảnh",
+							context_imageactions:					"Hành động hình ảnh",
 							context_lenssize:					"Kích thước ống kính",
 							context_saveas:						"Lưu {{var0}} dưới dạng ...",
 							context_searchwith:					"Tìm kiếm {{var0}} bằng ...",
-							context_streamactions:				"Tác vụ xem trước luồng",
-							context_videoactions:				"Hành động video",
+							context_streamactions:					"Tác vụ xem trước luồng",
+							context_videoactions:					"Hành động video",
 							context_view:						"Xem {{var0}}",
 							context_zoomspeed:					"tốc độ thu phóng",
 							submenu_disabled:					"Tất cả đã bị vô hiệu hóa",
@@ -2163,12 +2187,12 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							context_copy:						"复制 {{var0}}",
-							context_imageactions:				"图像动作",
+							context_imageactions:					"图像动作",
 							context_lenssize:					"缩放尺寸",
 							context_saveas:						"将 {{var0}} 另存到...",
 							context_searchwith:					"搜索 {{var0}} 使用...",
-							context_streamactions:				"流预览操作",
-							context_videoactions:				"视频动作",
+							context_streamactions:					"流预览操作",
+							context_videoactions:					"视频动作",
 							context_view:						"查看 {{var0}}",
 							context_zoomspeed:					"变焦速度",
 							submenu_disabled:					"全部禁用",
@@ -2180,12 +2204,12 @@ module.exports = (_ => {
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_copy:						"複製 {{var0}}",
-							context_imageactions:				"圖像動作",
+							context_imageactions:					"圖像動作",
 							context_lenssize:					"縮放尺寸",
 							context_saveas:						"將 {{var0}} 另存到...",
 							context_searchwith:					"搜尋 {{var0}} 使用...",
-							context_streamactions:				"流預覽操作",
-							context_videoactions:				"視頻動作",
+							context_streamactions:					"流預覽操作",
+							context_videoactions:					"視頻動作",
 							context_view:						"預覽 {{var0}}",
 							context_zoomspeed:					"变焦速度",
 							submenu_disabled:					"全部關閉",
@@ -2197,12 +2221,12 @@ module.exports = (_ => {
 					default:		// English
 						return {
 							context_copy:						"Copy {{var0}}",
-							context_imageactions:				"Image Actions",
-							context_lenssize:					"Lens Size",
+							context_imageactions:					"Image Actions",
+							context_lenssize:					"Lens size",
 							context_saveas:						"Save {{var0}} as ...",
 							context_searchwith:					"Search {{var0}} with ...",
-							context_streamactions:				"Stream Preview Actions",
-							context_videoactions:				"Video Actions",
+							context_streamactions:					"Stream Preview Actions",
+							context_videoactions:					"Video Actions",
 							context_view:						"View {{var0}}",
 							context_zoomspeed:					"Zoom speed",
 							submenu_disabled:					"All disabled",

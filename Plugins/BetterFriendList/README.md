@@ -1,4 +1,4 @@
-# Better Friend List [![Download][download-badge]][download-link] [![Support][support-badge]][support-link] [![PayPal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
+# Better Friend List - [![Download][download-badge]][download-link] [![Support][support-badge]][support-link] [![PayPal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
 
 [download-badge]: https://img.shields.io/badge/Download-%233a71c1.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAYAAAAIXrg4AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAd5gAAHeYBMKt3fAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAE9SURBVEiJ7ZQ7TsNAFEWv06IAShOkEDD5UNCwB8RCWEYWAqkIYiEgZQERoqLgFz4hUIaC+tCM4cmyk4mxCyRfaSRL8+49781YI3kKOASmwBtw4OvzFnDJry58fZUlGGvme70IQCaVgBLwXwBADegDp0AjaxjQAAbACVCzG+fmGRgDYYJ5ZGpGCfuh80Ya/EwgqWpqQ0lDoLVE5y1JQ+eNVLUFXfdSWr0A7UUTAG1XazUFuvEudoFJrPAd2EsDuMZeY56PyJM0aqohDljU0Lzz7KSMbMMmJB9px/fStoFH/PWMuS9fyBbw4Bnu/cclQe7nhD8BO5nCDaQJ3CWEj/8cbiAbwI0JvwU2cwk3kDpw7FY91/BShSoAmpKOJK3knP0l6SwAriXt5xwe6SoAPiWtFgSYVST1JM2KCJfU+wadgFl0/0HGbQAAAABJRU5ErkJggg==
 [download-link]: https://mwittrien.github.io/downloader/?plugin=BetterFriendList
@@ -12,7 +12,7 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-%23F96854.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAdhwAAHYcBj+XxZQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGBSURBVFiF7Za9ThtBFEbPBUpERWMwCorfJjY4aVLxBFHCKyCl4hWQUqVMBULmbfiRCNACqSJsDsXakjHGO8Y7ovFXrmbmO3NnZ74bqrzUeUR8HPP9mdQ60AZawCZQBwK4BC6ADnAUEZeTFhmnsxLjdfVAfXhl/rB66h/1QyUAalu9TzAe1Z26NROAutvf0VvVU7+/CUD9PKP5MMT2VADqhvqvAvOB7tQ1gIXXznpEP4HlxLEpWgH2AEInX0OLv/cUWKwQAKALbKZU4EsGc4AloJ0C8CmD+UDNFIBGRoBGCkAtI8B66i3IpccUgJuMANcpAKcZAc5SAE4yAnRSAA6BXgbzLnBUChARF8DvDAC/IuIqNYzqFYfRrVqDxDCKiL/AV6o5ikdgJyJuBrsrrcBQJX44W0/QVb+NLpoM0B/f6pdwWt2qL3NlWoD+nFV1X/2fYPxg0cCOfdJL+4ESkBqwDTQpQmuNoi2/onjAOsBxRFxPWmTqClSp9w6jOcAcYA7AE1OMk5ulhBZCAAAAAElFTkSuQmCC
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
+Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
 
 
 ![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/_res/cover.png)

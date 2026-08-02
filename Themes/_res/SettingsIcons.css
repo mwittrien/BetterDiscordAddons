@@ -1,329 +1,665 @@
-﻿:root {
-	--use-settingsicons: calc(var(--settingsicons, 1) / (var(--settingsicons, 1) + 0.00000000000000000000001));
+:root {
+	--settingsicons_v: var(--settingsicons_s, var(--settingsicons, 1));
+	--use-settingsicons: calc(var(--settingsicons_v) / (var(--settingsicons_v) + 0.00000000000000000000001));
 	--settingsicons-size: 18px;
 	--settingsicons-gap: 14px;
 	
-	--settingsicons-default: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/questionmark.svg);
-	--settingsicons-myaccount: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/account.svg);
-	--settingsicons-profile: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/profile.svg);
-	--settingsicons-privacy: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/privacy.svg);
-	--settingsicons-apps: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/apps.svg);
-	--settingsicons-sessions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/sessions.svg);
-	--settingsicons-connections: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/connections.svg);
-	--settingsicons-friendrequests: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/vanityurl.svg);
-	--settingsicons-nitro: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/nitro.svg);
-	--settingsicons-boosts: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boosts.svg);
-	--settingsicons-subscriptions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/subscriptions.svg);
-	--settingsicons-gifts: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/gift.svg);
-	--settingsicons-billing: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/billing.svg);
-	--settingsicons-appearance: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/appearance.svg);
-	--settingsicons-accessibility: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/accessibility.svg);
-	--settingsicons-voice: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/voice.svg);
-	--settingsicons-powermode: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/party.svg);
-	--settingsicons-text: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/text.svg);
-	--settingsicons-notifications: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/notifications.svg);
-	--settingsicons-keybinds: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/keybinds.svg);
-	--settingsicons-language: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/language.svg);
-	--settingsicons-windows: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/windows.svg);
-	--settingsicons-streamermode: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/streamermode.svg);
-	--settingsicons-advanced: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/advanced.svg);
-	--settingsicons-activityprivacy: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/activityprivacy.svg);
-	--settingsicons-games: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/games.svg);
-	--settingsicons-overlay: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overlay.svg);
-	--settingsicons-bd-settings: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/settings.svg);
-	--settingsicons-bd-changelog: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.svg);
-	--settingsicons-bd-customcss: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/custom.svg);
-	--settingsicons-bd-plugins: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/plugins.svg);
-	--settingsicons-bd-themes: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themes.svg);
-	--settingsicons-bd-pluginrepo: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/pluginrepo.svg);
-	--settingsicons-bd-themerepo: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themerepo.svg);
-	--settingsicons-changelog: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.svg);
-	--settingsicons-hypesquad: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hypesquad.svg);
-	--settingsicons-experiments: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/experiments.svg);
-	--settingsicons-developer: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/developer.svg);
-	--settingsicons-hotspots: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hotspots.svg);
-	--settingsicons-dismissable: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/dismissable.svg);
-	--settingsicons-paymentmodals: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/paymentmodals.svg);
-	--settingsicons-textplayground: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textcomponent.svg);
-	--settingsicons-textcomponent: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textcomponent.svg);
-	--settingsicons-logout: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/logout.svg);
+	--settingsicons-default: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/questionmark.png);
+	--settingsicons-myaccount: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/account.png);
+	--settingsicons-profile: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/profile.png);
+	--settingsicons-social: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/friendrequests.png);
+	--settingsicons-privacy: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/privacy.png);
+	--settingsicons-family: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/family.png);
+	--settingsicons-apps: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/apps.png);
+	--settingsicons-sessions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/sessions.png);
+	--settingsicons-connections: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/connections.png);
+	--settingsicons-clips: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/clips.png);
+	--settingsicons-nitro: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/nitro.png);
+	--settingsicons-boosts: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boosts.png);
+	--settingsicons-subscriptions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/subscriptions.png);
+	--settingsicons-gifts: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/gift.png);
+	--settingsicons-billing: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/billing.png);
+	--settingsicons-appearance: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/appearance.png);
+	--settingsicons-accessibility: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/accessibility.png);
+	--settingsicons-voice: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/voice.png);
+	--settingsicons-clickergame: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/clickergame.png);
+	--settingsicons-powermode: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/party.png);
+	--settingsicons-text: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/text.png);
+	--settingsicons-notifications: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/notifications.png);
+	--settingsicons-keybinds: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/keybinds.png);
+	--settingsicons-language: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/language.png);
+	--settingsicons-windows: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/windows.png);
+	--settingsicons-linux: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/linux.png);
+	--settingsicons-streamermode: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/streamermode.png);
+	--settingsicons-advanced: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/advanced.png);
+	--settingsicons-activityprivacy: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/activityprivacy.png);
+	--settingsicons-games: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/games.png);
+	--settingsicons-overlay: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overlay.png);
+	--settingsicons-bd-settings: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/settings.png);
+	--settingsicons-bd-updates: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/updates.png);
+	--settingsicons-bd-customcss: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/customcss.png);
+	--settingsicons-bd-plugins: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/plugins.png);
+	--settingsicons-bd-themes: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themes.png);
+	--settingsicons-vc-cloud: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/cloud.png);
+	--settingsicons-vc-backup-restore: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/backuprestore.png);
+	--settingsicons-changelog: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.png);
+	--settingsicons-merchandise: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/merchandise.png);
+	--settingsicons-hypesquad: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hypesquad.png);
+	--settingsicons-experiments: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/experiments.png);
+	--settingsicons-developer: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/developer.png);
+	--settingsicons-hotspots: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hotspots.png);
+	--settingsicons-dismissable: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/dismissable.png);
+	--settingsicons-paymentmodals: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/paymentmodals.png);
+	--settingsicons-revenue: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/revenue.png);
+	--settingsicons-virtualcurrency: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/virtualcurrency.png);
+	--settingsicons-designsystem: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/designsystem.png);
+	--settingsicons-textplayground: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textplayground.png);
+	--settingsicons-textcomponent: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/textcomponent.png);
+	--settingsicons-messagelink: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/messagelink.png);
+	--settingsicons-profilepreview: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/profilepreview.png);
+	--settingsicons-nameplates: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/nameplate.png);
+	--settingsicons-settingstree: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/settingstree.png);
+	--settingsicons-logout: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/logout.png);
+	
+	--settingsicons-overview: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overview.png);
+	--settingsicons-engagement: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/engagement.png);
+	--settingsicons-boostperks: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boosts.png);
+	--settingsicons-emotes: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/emotes.png);
+	--settingsicons-stickers: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/stickers.png);
+	--settingsicons-soundboard: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/soundboard.png);
+	--settingsicons-members: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/members.png);
+	--settingsicons-roles: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/roles.png);
+	--settingsicons-invites: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/invites.png);
+	--settingsicons-access: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/access.png);
+	--settingsicons-widgets: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/widgets.png);
+	--settingsicons-appdirectory: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/appdirectory.png);
+	--settingsicons-moderation: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/moderation.png);
+	--settingsicons-audit: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.png);
+	--settingsicons-bans: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/bans.png);
+	--settingsicons-automod: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/introductions.png);
+	--settingsicons-community: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/community.png);
+	--settingsicons-introductions: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/introductions.png);
+	--settingsicons-analytics: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/analytics.png);
+	--settingsicons-welcome: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/welcome.png);
+	--settingsicons-monetization: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/virtualcurrency.png);
+	--settingsicons-booststatus: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/booststatus.png);
+	--settingsicons-template: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/template.png);
+	--settingsicons-delete: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/delete.png);
 }
 
-body #app-mount .sidebarRegion-1VBisG:has(.socialLinks-3ywLUf) {
+body #app-mount .sidebarRegion__23e6b:has(.item_aa8da2:not([data-tab-id]) ~ .item_aa8da2:not([data-tab-id]) ~ .item_aa8da2:not([data-tab-id])) {
+	--use-settingsicons: 0 !important;
+}
+body #app-mount .sidebarRegion__23e6b {
 	flex-basis: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-body #app-mount .sidebar-nqHbhN:has(.socialLinks-3ywLUf),
-body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN:has(.socialLinks-3ywLUf) {
+body #app-mount .sidebar__23e6b,
+body #app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b {
 	width: calc(218px + (var(--use-settingsicons) * (var(--settingsicons-size) + var(--settingsicons-gap)))) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2 {
+	--settingsicons-icon: var(--settingsicons-default);
 	display: flex;
 	align-items: center;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy > div {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2 > div {
 	flex: 1 1 auto;
 }
-
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy::before {
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::before,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::after {
 	content: "";
 	flex: 0 0 auto;
 	width: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	height: calc(var(--use-settingsicons) * var(--settingsicons-size));
 	margin-right: calc(var(--use-settingsicons) * var(--settingsicons-size)/2);
+}
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::before {
 	background: currentColor;
 	z-index: 2;
-	-webkit-mask: var(--settingsicons-default) center/contain no-repeat;
+	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
+}
+.sidebar__23e6b .side_aa8da2 .item_aa8da2::after {
+	position: absolute;
+	z-index: 1;
+	background: var(--settingsicons-icon) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(2)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="my-account-tab" i]::before {
-	-webkit-mask: var(--settingsicons-myaccount) center/contain no-repeat;
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-settings-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-settings,
+#app-mount .standardSidebarView__23e6b:has(.bd-settings-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.vc-settings[aria-selected="true"]) .contentColumn__23e6b {
+	--settingsicons-icon: var(--settingsicons-bd-settings) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(3)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="profile-customization-tab" i]::before {
-	-webkit-mask: var(--settingsicons-profile) center/contain no-repeat;
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-updates-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-updater,
+#app-mount .standardSidebarView__23e6b:has(.bd-updates-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.bd-updater[aria-selected="true"]) .contentColumn__23e6b {
+	--settingsicons-icon: var(--settingsicons-bd-updates) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(4)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="privacy-&-safety-tab" i]::before {
-	-webkit-mask: var(--settingsicons-privacy) center/contain no-repeat;
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-customcss-tab,
+#app-mount .standardSidebarView__23e6b:has(.bd-customcss-tab[aria-selected="true"]) .contentColumn__23e6b {
+	--settingsicons-icon: var(--settingsicons-bd-customcss) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(5)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="authorized-apps-tab" i]::before {
-	-webkit-mask: var(--settingsicons-apps) center/contain no-repeat;
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-plugins-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-plugins ,
+#app-mount .standardSidebarView__23e6b:has(.bd-plugins-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.vc-plugins[aria-selected="true"]) .contentColumn__23e6b{
+	--settingsicons-icon: var(--settingsicons-bd-plugins) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(6)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="sessions-tab" i]::before {
-	-webkit-mask: var(--settingsicons-sessions) center/contain no-repeat;
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.bd-themes-tab,
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-themes,
+#app-mount .standardSidebarView__23e6b:has(.bd-themes-tab[aria-selected="true"]) .contentColumn__23e6b,
+#app-mount .standardSidebarView__23e6b:has(.vc-themes[aria-selected="true"]) .contentColumn__23e6b {
+	--settingsicons-icon: var(--settingsicons-bd-themes) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(7)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="connections-tab" i]::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="passport-tab" i]::before {
-	-webkit-mask: var(--settingsicons-connections) center/contain no-repeat;
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-cloud,
+#app-mount .standardSidebarView__23e6b:has(.vc-cloud[aria-selected="true"]) .contentColumn__23e6b {
+	--settingsicons-icon: var(--settingsicons-vc-cloud) !important;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(8)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="friend-requests-tab" i]::before {
-	-webkit-mask: var(--settingsicons-friendrequests) center/contain no-repeat;
-}
-
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(11)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="discord-nitro-tab" i]::before {
-	-webkit-mask: var(--settingsicons-nitro) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(12)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="nitro-server-boost-tab" i]::before {
-	-webkit-mask: var(--settingsicons-boosts) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(13)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="subscriptions-tab" i]::before {
-	-webkit-mask: var(--settingsicons-subscriptions) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(14)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="library-inventory-tab" i]::before {
-	-webkit-mask: var(--settingsicons-gifts) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(15)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="billing-tab" i]::before {
-	-webkit-mask: var(--settingsicons-billing) center/contain no-repeat;
+.sidebar__23e6b .side_aa8da2 .item_aa8da2.vc-backup-restore,
+#app-mount .standardSidebarView__23e6b:has(.vc-backup-restore[aria-selected="true"]) .contentColumn__23e6b {
+	--settingsicons-icon: var(--settingsicons-vc-backup-restore) !important;
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(18)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="appearance-tab" i]::before {
-	-webkit-mask: var(--settingsicons-appearance) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="My Account" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="my-account-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="my-account-tab" i] {
+	--settingsicons-icon: var(--settingsicons-myaccount);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(19)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="accessibility-tab" i]::before {
-	-webkit-mask: var(--settingsicons-accessibility) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Profile Customization" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-customization-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-customization-tab" i] {
+	--settingsicons-icon: var(--settingsicons-profile);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(20)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="voice-&-video-tab" i]::before {
-	-webkit-mask: var(--settingsicons-voice) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Content & Social" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="content-&-social-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="content-&-social-tab" i] {
+	--settingsicons-icon: var(--settingsicons-social);
 }
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="powermode-settings-tab" i]::before {
-	-webkit-mask: var(--settingsicons-powermode) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Data & Privacy" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="data-&-privacy-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="data-&-privacy-tab" i] {
+	--settingsicons-icon: var(--settingsicons-privacy);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(21)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-&-images-tab" i]::before {
-	-webkit-mask: var(--settingsicons-text) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Family Center" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="family-center-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="family-center-tab" i] {
+	--settingsicons-icon: var(--settingsicons-family);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(22)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="notifications-tab" i]::before {
-	-webkit-mask: var(--settingsicons-notifications) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Authorized Apps" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="authorized-apps-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="authorized-apps-tab" i] {
+	--settingsicons-icon: var(--settingsicons-apps);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(23)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="keybinds-tab" i]::before {
-	-webkit-mask: var(--settingsicons-keybinds) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Sessions" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="sessions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="sessions-tab" i] {
+	--settingsicons-icon: var(--settingsicons-sessions);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(24)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="language-tab" i]::before {
-	-webkit-mask: var(--settingsicons-language) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Connections" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="connections-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="connections-tab" i] {
+	--settingsicons-icon: var(--settingsicons-connections);
 }
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(25)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="windows-tab" i]::before {
-	-webkit-mask: var(--settingsicons-windows) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(25)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="streamer-mode-tab" i]::before {
-	-webkit-mask: var(--settingsicons-streamermode) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(26)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(27)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="advanced-tab" i]::before {
-	-webkit-mask: var(--settingsicons-advanced) center/contain no-repeat;
-}
-
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(29)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(30)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="activity-privacy-tab" i]::before {
-	-webkit-mask: var(--settingsicons-activityprivacy) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(30)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="game-activity-tab" i]::before {
-	-webkit-mask: var(--settingsicons-games) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(31)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(32)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="overlay-tab" i]::before {
-	-webkit-mask: var(--settingsicons-overlay) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Settings Clips" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="settings-clips-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="settings-clips-tab" i] {
+	--settingsicons-icon: var(--settingsicons-clips);
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-settings-tab::before {
-	-webkit-mask: var(--settingsicons-bd-settings) center/contain no-repeat !important;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Discord Nitro" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="discord-nitro-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="discord-nitro-tab" i] {
+	--settingsicons-icon: var(--settingsicons-nitro);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-updates-tab::before {
-	-webkit-mask: var(--settingsicons-bd-changelog) center/contain no-repeat !important;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Nitro Server Boost" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="nitro-server-boost-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="nitro-server-boost-tab" i] {
+	--settingsicons-icon: var(--settingsicons-boosts);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-customcss-tab::before {
-	-webkit-mask: var(--settingsicons-bd-customcss) center/contain no-repeat !important;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Subscriptions" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="subscriptions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="subscriptions-tab" i] {
+	--settingsicons-icon: var(--settingsicons-subscriptions);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-plugins-tab::before {
-	-webkit-mask: var(--settingsicons-bd-plugins) center/contain no-repeat !important;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Library Inventory" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="library-inventory-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="library-inventory-tab" i] {
+	--settingsicons-icon: var(--settingsicons-gifts);
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.bd-themes-tab::before {
-	-webkit-mask: var(--settingsicons-bd-themes) center/contain no-repeat !important;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab::before {
-	-webkit-mask: var(--settingsicons-bd-pluginrepo) center/contain no-repeat !important;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab::before {
-	-webkit-mask: var(--settingsicons-bd-themerepo) center/contain no-repeat !important;
-}
-
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(40)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(41)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="changelog-tab" i]::before {
-	-webkit-mask: var(--settingsicons-changelog) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(41)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(42)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hypesquad-online-tab" i]::before {
-	-webkit-mask: var(--settingsicons-hypesquad) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(42)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(43)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="experiments-tab" i]::before {
-	-webkit-mask: var(--settingsicons-experiments) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(43)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(44)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="developer-options-tab" i]::before {
-	-webkit-mask: var(--settingsicons-developer) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(44)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(45)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="hotspot-options-tab" i]::before {
-	-webkit-mask: var(--settingsicons-hotspots) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(45)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(46)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="dismissible-content-options-tab" i]::before {
-	-webkit-mask: var(--settingsicons-dismissable) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(46)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(47)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="payment-flow-modals-tab" i]::before {
-	-webkit-mask: var(--settingsicons-paymentmodals) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(47)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(48)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-playground-tab" i]::before {
-	-webkit-mask: var(--settingsicons-textplayground) center/contain no-repeat;
-}
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(48)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(49)::before,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-child(49)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(50)::before,
-.platform-win .sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy.pluginrepo-tab ~ .item-2GWPIy.themerepo-tab ~ .item-2GWPIy:nth-child(51)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="text-component-tab" i]::before {
-	-webkit-mask: var(--settingsicons-textcomponent) center/contain no-repeat;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Billing" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="billing-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="billing-tab" i] {
+	--settingsicons-icon: var(--settingsicons-billing);
 }
 
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy:nth-last-child(4)::before,
-#app-mount .sidebar-nqHbhN .side-1lrxIh .item-2GWPIy[aria-controls="logout-tab" i]::before {
-	-webkit-mask: var(--settingsicons-logout) center/contain no-repeat !important;
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Appearance" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="appearance-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="appearance-tab" i] {
+	--settingsicons-icon: var(--settingsicons-appearance);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Accessibility" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="accessibility-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="accessibility-tab" i] {
+	--settingsicons-icon: var(--settingsicons-accessibility);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Voice & Video" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="voice-&-video-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="voice-&-video-tab" i] {
+	--settingsicons-icon: var(--settingsicons-voice);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Clicker Game Settings" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="clicker-game-settings-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="clicker-game-settings-tab" i] {
+	--settingsicons-icon: var(--settingsicons-clickergame);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Powermode Settings" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="powermode-settings-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="powermode-settings-tab" i] {
+	--settingsicons-icon: var(--settingsicons-powermode);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text & Images" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-&-images-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-&-images-tab" i] {
+	--settingsicons-icon: var(--settingsicons-text);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Notifications" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="notifications-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="notifications-tab" i] {
+	--settingsicons-icon: var(--settingsicons-notifications);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Keybinds" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="keybinds-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="keybinds-tab" i] {
+	--settingsicons-icon: var(--settingsicons-keybinds);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Language" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="language-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="language-tab" i] {
+	--settingsicons-icon: var(--settingsicons-language);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Windows" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="windows-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="windows-tab" i] {
+	--settingsicons-icon: var(--settingsicons-windows);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Linux" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="linux-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="linux-tab" i] {
+	--settingsicons-icon: var(--settingsicons-linux);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Streamer Mode" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="streamer-mode-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="streamer-mode-tab" i] {
+	--settingsicons-icon: var(--settingsicons-streamermode);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Advanced" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="advanced-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="advanced-tab" i] {
+	--settingsicons-icon: var(--settingsicons-advanced);
 }
 
-.bd-server-search ~ .item-2GWPIy::before {
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Activity Privacy" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="activity-privacy-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="activity-privacy-tab" i] {
+	--settingsicons-icon: var(--settingsicons-activityprivacy);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Game Activity" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="game-activity-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="game-activity-tab" i] {
+	--settingsicons-icon: var(--settingsicons-games);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Overlay" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="overlay-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="overlay-tab" i] {
+	--settingsicons-icon: var(--settingsicons-overlay);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Changelog" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="changelog-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="changelog-tab" i] {
+	--settingsicons-icon: var(--settingsicons-changelog);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Merchandise" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="merchandise-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="merchandise-tab" i] {
+	--settingsicons-icon: var(--settingsicons-merchandise);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hypesquad Online" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hypesquad-online-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hypesquad-online-tab" i] {
+	--settingsicons-icon: var(--settingsicons-hypesquad);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Experiments" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="experiments-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="experiments-tab" i] {
+	--settingsicons-icon: var(--settingsicons-experiments);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Developer Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="developer-options-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="developer-options-tab" i] {
+	--settingsicons-icon: var(--settingsicons-developer);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hotspot Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hotspot-options-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hotspot-options-tab" i] {
+	--settingsicons-icon: var(--settingsicons-hotspots);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Dismissible Content Options" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="dismissible-content-options-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="dismissible-content-options-tab" i] {
+	--settingsicons-icon: var(--settingsicons-dismissable);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Payment Flow Modals" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="payment-flow-modals-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="payment-flow-modals-tab" i] {
+	--settingsicons-icon: var(--settingsicons-paymentmodals);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Revenue Storybook" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="revenue-storybook-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="revenue-storybook-tab" i] {
+	--settingsicons-icon: var(--settingsicons-revenue);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Virtual Currency Configuration" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="virtual-currency-configuration-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="virtual-currency-configuration-tab" i] {
+	--settingsicons-icon: var(--settingsicons-virtualcurrency);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Design System" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="design-system-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="design-system-tab" i] {
+	--settingsicons-icon: var(--settingsicons-designsystem);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text Playground" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-playground-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-playground-tab" i] {
+	--settingsicons-icon: var(--settingsicons-textplayground);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Text Component" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="text-component-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="text-component-tab" i] {
+	--settingsicons-icon: var(--settingsicons-textcomponent);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Intl Testing" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="intl-testing-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="intl-testing-tab" i] {
+	--settingsicons-icon: var(--settingsicons-messagelink);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Profile Effects Preview Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-effects-preview-tool-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-effects-preview-tool-tab" i] {
+	--settingsicons-icon: var(--settingsicons-profilepreview);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Nameplates Preview Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="nameplates-preview-tool-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="nameplates-preview-tool-tab" i] {
+	--settingsicons-icon: var(--settingsicons-nameplates);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Web Setting Tree Tool" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="web-setting-tree-tool-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="web-setting-tree-tool-tab" i] {
+	--settingsicons-icon: var(--settingsicons-settingstree);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Changelog" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="changelog-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="changelog-tab" i] {
+	--settingsicons-icon: var(--settingsicons-changelog);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Merchandise" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="merchandise-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="merchandise-tab" i] {
+	--settingsicons-icon: var(--settingsicons-merchandise);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Hypesquad Online" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="hypesquad-online-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="hypesquad-online-tab" i] {
+	--settingsicons-icon: var(--settingsicons-hypesquad);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="Logout" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="logout-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="logout-tab" i] {
+	--settingsicons-icon: var(--settingsicons-logout);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="PROFILE" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="profile-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="profile-tab" i] {
+	--settingsicons-icon: var(--settingsicons-overview);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="OVERVIEW" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="overview-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="overview-tab" i] {
+	--settingsicons-icon: var(--settingsicons-overview);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ENGAGEMENT" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="engagement-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="engagement-tab" i] {
+	--settingsicons-icon: var(--settingsicons-engagement);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="BOOST_PERKS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="boost_perks-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="boost_perks-tab" i] {
+	--settingsicons-icon: var(--settingsicons-boostperks);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="EMOJI" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="emoji-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="emoji-tab" i] {
+	--settingsicons-icon: var(--settingsicons-emotes);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="STICKERS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="stickers-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="stickers-tab" i] {
+	--settingsicons-icon: var(--settingsicons-stickers);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="SOUNDBOARD" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="soundboard-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="soundboard-tab" i] {
+	--settingsicons-icon: var(--settingsicons-soundboard);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="MEMBERS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="members-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="members-tab" i] {
+	--settingsicons-icon: var(--settingsicons-members);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ROLES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="roles-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="roles-tab" i] {
+	--settingsicons-icon: var(--settingsicons-roles);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="PERMISSIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="permissions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="permissions-tab" i] {
+	--settingsicons-icon: var(--settingsicons-roles);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INVITES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="invites-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="invites-tab" i] {
+	--settingsicons-icon: var(--settingsicons-invites);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INSTANT_INVITES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="instant_invites-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="instant_invites-tab" i] {
+	--settingsicons-icon: var(--settingsicons-invites);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ACCESS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="access-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="access-tab" i] {
+	--settingsicons-icon: var(--settingsicons-access);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="INTEGRATIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="integrations-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="integrations-tab" i] {
+	--settingsicons-icon: var(--settingsicons-widgets);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="APP_DIRECTORY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="app_directory-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="app_directory-tab" i] {
+	--settingsicons-icon: var(--settingsicons-appdirectory);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="SAFETY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="safety-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="safety-tab" i] {
+	--settingsicons-icon: var(--settingsicons-moderation);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="MODERATION" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="moderation-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="moderation-tab" i] {
+	--settingsicons-icon: var(--settingsicons-moderation);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="AUDIT_LOG" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="audit_log-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="audit_log-tab" i] {
+	--settingsicons-icon: var(--settingsicons-audit);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="BANS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="bans-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="bans-tab" i] {
+	--settingsicons-icon: var(--settingsicons-bans);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_AUTOMOD" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_automod-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_automod-tab" i] {
+	--settingsicons-icon: var(--settingsicons-automod);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="COMMUNITY" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="community-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community-tab" i] {
+	--settingsicons-icon: var(--settingsicons-community);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ONBOARDING" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="onboarding-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="onboarding-tab" i] {
+	--settingsicons-icon: var(--settingsicons-introductions);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ANALYTICS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="analytics-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="analytics-tab" i] {
+	--settingsicons-icon: var(--settingsicons-analytics);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="COMMUNITY_WELCOME" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="community_welcome-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="community_welcome-tab" i] {
+	--settingsicons-icon: var(--settingsicons-welcome);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="ROLE_SUBSCRIPTIONS" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="role_subscriptions-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="role_subscriptions-tab" i] {
+	--settingsicons-icon: var(--settingsicons-monetization);
+}
+
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_PREMIUM" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_premium-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_premium-tab" i] {
+	--settingsicons-icon: var(--settingsicons-booststatus);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="GUILD_TEMPLATES" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="guild_templates-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="guild_templates-tab" i] {
+	--settingsicons-icon: var(--settingsicons-template);
+}
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[data-tab-id="DELETE" i],
+#app-mount .sidebar__23e6b .side_aa8da2 .item_aa8da2[aria-controls="delete-tab" i],
+#app-mount .standardSidebarView__23e6b .contentColumn__23e6b[id="delete-tab" i] {
+	--settingsicons-icon: var(--settingsicons-delete);
+}
+
+
+.bd-server-search ~ .item_aa8da2::before {
 	display: none;
 }
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .item-2GWPIy .icon-3FU6Ir,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .premiumLabel-3HPvdB > svg,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .premiumLabel-3HPvdB img,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .tabBarItemContainer-2HdIlr > svg,
-.sidebar-nqHbhN:has(.socialLinks-3ywLUf) .side-1lrxIh .tabBarItemContainer-2HdIlr img {
+.sidebar__23e6b .side_aa8da2 .premiumLabel_e681d1 > svg,
+.sidebar__23e6b .side_aa8da2 .premiumLabel_e681d1 img,
+.sidebar__23e6b .side_aa8da2 .tabBarItemContainer_c7e907 > svg,
+.sidebar__23e6b .side_aa8da2 .tabBarItemContainer_c7e907 img {
 	transform: scaleX(calc(1 - var(--use-settingsicons)));
+}
+
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > fieldset:first-child > legend:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle_e335a7:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .stack_dbd263:first-child > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > .stack_dbd263 > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child,
+.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child,
+.standardSidebarView__23e6b .emojiSettings_e7d73e h2.title_b717a1 {
+	display: flex;
+	align-items: center;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title {
+	justify-content: flex-start;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title .bd-addon-title {
+	flex: 1 1 auto;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .bd-settings-title > .bd-button {
+	margin-left: auto;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b,
+.standardSidebarView__23e6b .contentColumnWide__23e6b {
+	--settingsicons-icon: var(--settingsicons-default);
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e {
+	margin-left: calc(var(--use-settingsicons) * 30px);
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsPage_f131e9 > h3:first-child::before,
+.standardSidebarView__23e6b .contentColumnWide__23e6b .settingsPage_f131e9 > h3:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > fieldset:first-child > legend:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > .sectionTitle_e335a7:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > div:first-child > h2.title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .stack_dbd263:first-child > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b div:first-child > .stack_dbd263 > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b main:first-child > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > div:first-child > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b .contentColumnWide__23e6b > h2:first-child::before,
+.standardSidebarView__23e6b .emojiSettings_e7d73e h2.title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
+	content: "";
+	display: inline-block;
+	color: var(--text-strong);
+	position: relative;
+	flex: 0 0 auto;
+	width: calc(var(--use-settingsicons) * 18px);
+	height: calc(var(--use-settingsicons) * 18px);
+	margin-right: calc(var(--use-settingsicons) * 8px);
+	left: 0;
+	background: currentColor;
+	z-index: 2;
+	-webkit-mask: var(--settingsicons-icon) center/contain no-repeat;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > *:first-child > .settingsTabBar_dc2e0e::before {
+	position: absolute;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .tabBar_d6f9e9:first-child::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b > .settingsTabBar_dc2e0e:first-child::before {
+	left: 40px;
+}
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * h2::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .tabBar_d6f9e9 ~ * .title_b717a1::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsTabBar_dc2e0e ~ * h2::before,
+.standardSidebarView__23e6b .contentColumnDefault__23e6b .settingsTabBar_dc2e0e ~ * .title_b717a1::before {
+	display: none !important;
+}
+
+.standardSidebarView__23e6b .contentColumnDefault__23e6b h2 .lockIcon__0eeee {
+	width: calc((1 - var(--use-settingsicons)) * 24px);
+	margin-right: calc((1 - var(--use-settingsicons)) * 8px);
 }
 
 #BDFDB-card svg path[d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"],

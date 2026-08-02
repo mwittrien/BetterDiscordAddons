@@ -1,4 +1,4 @@
-# Translator [![Download][download-badge]][download-link] [![Support][support-badge]][support-link] [![PayPal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
+# Translator - [![Download][download-badge]][download-link] [![Support][support-badge]][support-link] [![PayPal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
 
 [download-badge]: https://img.shields.io/badge/Download-%233a71c1.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAYAAAAIXrg4AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAd5gAAHeYBMKt3fAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAE9SURBVEiJ7ZQ7TsNAFEWv06IAShOkEDD5UNCwB8RCWEYWAqkIYiEgZQERoqLgFz4hUIaC+tCM4cmyk4mxCyRfaSRL8+49781YI3kKOASmwBtw4OvzFnDJry58fZUlGGvme70IQCaVgBLwXwBADegDp0AjaxjQAAbACVCzG+fmGRgDYYJ5ZGpGCfuh80Ya/EwgqWpqQ0lDoLVE5y1JQ+eNVLUFXfdSWr0A7UUTAG1XazUFuvEudoFJrPAd2EsDuMZeY56PyJM0aqohDljU0Lzz7KSMbMMmJB9px/fStoFH/PWMuS9fyBbw4Bnu/cclQe7nhD8BO5nCDaQJ3CWEj/8cbiAbwI0JvwU2cwk3kDpw7FY91/BShSoAmpKOJK3knP0l6SwAriXt5xwe6SoAPiWtFgSYVST1JM2KCJfU+wadgFl0/0HGbQAAAABJRU5ErkJggg==
 [download-link]: https://mwittrien.github.io/downloader/?plugin=Translator
@@ -31,3 +31,23 @@ Translation Options Button:
 Translation Options:
 
 ![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/Translator/_res/screenshot5.png)
+
+Translation Prefixes:
+
+![screenshot6](https://mwittrien.github.io/BetterDiscordAddons/Plugins/Translator/_res/screenshot6.png)
+
+## Translation Prefixes
+
+You can now use prefixes to translate messages to specific languages, even when auto-translation is disabled. For example:
+
+- Type `$fr Hello world` to translate "Hello world" to French
+- Type `$de How are you?` to translate "How are you?" to German
+- Type `$jp Nice to meet you` to translate "Nice to meet you" to Japanese
+
+The prefix is removed from the message before translation and sending.
+
+## Disable Translation Prefixes
+
+You can also define prefixes that will disable translation for a message, useful when you want to send a message in its original language even when auto-translation is enabled.
+
+Configure these prefixes in the plugin settings.

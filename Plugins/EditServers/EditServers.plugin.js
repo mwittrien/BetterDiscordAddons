@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.1
+ * @version 2.4.8
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"Banners": "work again"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -27,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -37,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -53,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -67,10 +70,10 @@ module.exports = (_ => {
 						addOriginalTooltip:		{value: true, 			description: "Hovering over a changed Server Header shows the original Name as Tooltip"},
 					},
 					places: {
-						guildList:				{value: true, 			description: "Server List"},
+						guildList:			{value: true, 			description: "Server List"},
 						guildHeader:			{value: true, 			description: "Server Header"},
-						invites:				{value: true, 			description: "Server Invites"},
-						chat:					{value: true, 			description: "Chat (Welcome Message, etc.)"},
+						invites:			{value: true, 			description: "Server Invites"},
+						chat:				{value: true, 			description: "Chat (Welcome Message, etc.)"},
 						mutualGuilds:			{value: true, 			description: "Mutual Servers"},
 						recentMentions:			{value: true, 			description: "Recent Mentions Popout"},
 						quickSwitcher:			{value: true, 			description: "Quick Switcher"}
@@ -94,6 +97,7 @@ module.exports = (_ => {
 						"GuildIcon",
 						"GuildIconWrapper",
 						"GuildItem",
+						"GuildItemWrapper",
 						"UserProfileMutualGuilds",
 						"RecentsChannelHeader"
 					]
@@ -110,6 +114,11 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildIconURL", {after: e => {
+					let data = changedGuilds[e.methodArguments[0].id];
+					if (data && e.returnValue) e.returnValue = data.removeIcon ? "" : data.url || e.returnValue;
+				}});
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
 					let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.methodArguments[0].id);
 					if (guild) {
@@ -229,23 +238,27 @@ module.exports = (_ => {
 				}));
 			}
 
+			processGuildItemWrapper (e) {
+				if (!this.settings.places.guildList || !BDFDB.GuildUtils.is(e.returnvalue.props.guild) || !e.returnvalue.props.guild.joinedAt) return;
+				e.returnvalue.props.guild = this.getGuildData(e.returnvalue.props.guild.id);
+			}
+
 			processGuildItem (e) {
 				if (!this.settings.places.guildList || !BDFDB.GuildUtils.is(e.instance.props.guild) || !e.instance.props.guild.joinedAt) return;
 				if (!e.returnvalue) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 				else {
 					let data = changedGuilds[e.instance.props.guild.id];
 					if (data && (data.color3 || data.color4)) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
-						if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							tooltipConfig: {
 								type: "right",
 								guild: e.instance.props.guild,
 								list: true,
-								offset: 12,
+								offset: 4,
 								backgroundColor: data.color3,
 								fontColor: data.color4
 							},
-							children: children[index].props.children
+							children: typeof e.returnvalue.props.children == "function" ? e.instance.props.children : e.returnvalue.props.children
 						});
 					}
 				}
@@ -296,19 +309,32 @@ module.exports = (_ => {
 			
 			processChannelsList (e) {
 				if (!this.settings.places.guildHeader || !e.instance.props.guild || !changedGuilds[e.instance.props.guild.id]) return;
-				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-				if (e.instance.props.guild.banner && !e.instance.props.guildBanner) e.instance.props.guildBanner = e.instance.props.guild.banner;
+				let newGuild = this.getGuildData(e.instance.props.guild.id);
+				if (newGuild.banner) {
+					e.instance.props.bannerVisible = true;
+					e.instance.props.guildBanner = newGuild.banner;
+				}
+				else {
+					e.instance.props.bannerVisible = false;
+					e.instance.props.guildBanner = null;
+				}
 			}
 			
 			processGuildHeader (e) {
 				if (!this.settings.places.guildHeader || !e.instance.props.guild || !changedGuilds[e.instance.props.guild.id]) return;
-				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-				if (e.instance.props.guild.banner && !e.instance.props.guildBanner) {
+				let newGuild = this.getGuildData(e.instance.props.guild.id);
+				if (newGuild.banner) {
 					e.instance.props.bannerVisible = true;
-					e.instance.props.guildBanner = e.instance.props.guild.banner;
+					e.instance.props.guildBanner = newGuild.banner;
+				}
+				else {
+					e.instance.props.bannerVisible = false;
+					e.instance.props.guildBanner = null;
 				}
 				let oldName = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
-				if (e.returnvalue && this.settings.general.addOriginalTooltip && oldName != e.instance.props.guild.name) {
+				if (e.returnvalue && this.settings.general.addOriginalTooltip && oldName != newGuild.name) {
+					let name = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildheadername]]});
+					if (name) name.props.children = newGuild.name;
 					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: oldName,
 						children: e.returnvalue.props.children[0],
@@ -333,18 +359,13 @@ module.exports = (_ => {
 				if (!guild) return new BDFDB.DiscordObjects.Guild({});
 				let data = change && changedGuilds[guild.id];
 				if (data) {
-					let newGuildObject = {}, nativeObject = new BDFDB.DiscordObjects.Guild(guild);
-					for (let key in nativeObject) newGuildObject[key] = nativeObject[key];
+					let nativeObject = new BDFDB.DiscordObjects.Guild(guild);
+					let newGuildObject = BDFDB.ObjectUtils.copy(nativeObject);
+					newGuildObject.toString = _ => newGuildObject.name;
 					newGuildObject.name = data.name || nativeObject.name;
 					newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.StringUtils.getAcronym(!data.ignoreCustomName && data.name || nativeObject.name);
-					if (data.removeIcon) {
-						newGuildObject.icon = null;
-						newGuildObject.getIconURL = _ => {return null;};
-					}
-					else if (data.url) {
-						newGuildObject.icon = data.url;
-						newGuildObject.getIconURL = _ => {return data.url;};
-					}
+					if (data.removeIcon) newGuildObject.icon = null;
+					else if (data.url) newGuildObject.icon = data.url;
 					if (data.removeBanner) newGuildObject.banner = null;
 					else if (data.banner) newGuildObject.banner = data.banner;
 					return newGuildObject;
@@ -368,7 +389,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_guildname,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -385,7 +406,7 @@ module.exports = (_ => {
 										}
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_guildacronym,
 									className: BDFDB.disCN.marginbottom8,
 									children: 
@@ -400,7 +421,7 @@ module.exports = (_ => {
 									type: "Switch",
 									className: BDFDB.disCN.marginbottom20,
 									label: this.labels.modal_ignorecustomname,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+									tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 									value: data.ignoreCustomName,
 									onChange: value => {
 										newData.ignoreCustomName = value;
@@ -416,9 +437,9 @@ module.exports = (_ => {
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													children: BDFDB.LanguageUtils.LibraryStrings.guildicon
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -426,7 +447,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
 													onChange: value => {
 														newData.removeIcon = value;
@@ -465,9 +486,9 @@ module.exports = (_ => {
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													children: BDFDB.LanguageUtils.LibraryStrings.guildbanner
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -475,7 +496,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+													tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 													value: data.removeBanner && guild.id != "410787888507256842",
 													disabled: guild.id == "410787888507256842",
 													onChange: value => {
@@ -512,7 +533,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader2,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker3,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
@@ -522,7 +543,7 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 									title: this.labels.modal_colorpicker4,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
@@ -610,7 +631,7 @@ module.exports = (_ => {
 						return {
 							confirm_reset:						"Наистина ли искате да нулирате този сървър?",
 							confirm_resetall:					"Наистина ли искате да нулирате всички сървъри?",
-							context_localserversettings:		"Настройки на локалния сървър",
+							context_localserversettings:				"Настройки на локалния сървър",
 							modal_colorpicker1:					"Цвят на иконата",
 							modal_colorpicker2:					"Цвят на шрифта",
 							modal_colorpicker3:					"Цвят на подсказка",
@@ -618,18 +639,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Локален сървър Акроним",
 							modal_guildname:					"Име на локален сървър",
 							modal_header:						"Настройки на локалния сървър",
-							modal_ignorecustomname:				"Използвайте оригиналното име на сървъра за съкращението на сървъра",
+							modal_ignorecustomname:					"Използвайте оригиналното име на сървъра за съкращението на сървъра",
 							modal_invalidurl:					"Невалиден адрес",
 							modal_tabheader1:					"Сървър",
 							modal_tabheader2:					"Цвят на подсказка",
-							submenu_resetsettings:				"Нулиране на сървъра",
-							submenu_serversettings:				"Промяна на настройките"
+							submenu_resetsettings:					"Нулиране на сървъра",
+							submenu_serversettings:					"Промяна на настройките"
 						};
 					case "da":		// Danish
 						return {
 							confirm_reset:						"Er du sikker på, at du vil nulstille denne server?",
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle servere?",
-							context_localserversettings:		"Lokale serverindstillinger",
+							context_localserversettings:				"Lokale serverindstillinger",
 							modal_colorpicker1:					"Ikonfarve",
 							modal_colorpicker2:					"Skrift farve",
 							modal_colorpicker3:					"Værktøjstip farve",
@@ -637,18 +658,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Lokal server akronym",
 							modal_guildname:					"Lokalt servernavn",
 							modal_header:						"Lokale serverindstillinger",
-							modal_ignorecustomname:				"Brug det originale servernavn til serverakronymet",
+							modal_ignorecustomname:					"Brug det originale servernavn til serverakronymet",
 							modal_invalidurl:					"Ugyldig URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Værktøjstip farve",
-							submenu_resetsettings:				"Nulstil server",
-							submenu_serversettings:				"Ændre indstillinger"
+							submenu_resetsettings:					"Nulstil server",
+							submenu_serversettings:					"Ændre indstillinger"
 						};
 					case "de":		// German
 						return {
 							confirm_reset:						"Möchtest du diesen Server wirklich zurücksetzen?",
 							confirm_resetall:					"Möchtest du wirklich alle Server zurücksetzen?",
-							context_localserversettings:		"Lokale Servereinstellungen",
+							context_localserversettings:				"Lokale Servereinstellungen",
 							modal_colorpicker1:					"Symbolfarbe",
 							modal_colorpicker2:					"Schriftfarbe",
 							modal_colorpicker3:					"Tooltipfarbe",
@@ -656,18 +677,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Lokales Serverakronym",
 							modal_guildname:					"Lokaler Servername",
 							modal_header:						"Lokale Servereinstellungen",
-							modal_ignorecustomname:				"Verwenden Sie den ursprünglichen Servernamen für das Serverakronym",
+							modal_ignorecustomname:					"Verwenden Sie den ursprünglichen Servernamen für das Serverakronym",
 							modal_invalidurl:					"Ungültige URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Tooltipfarbe",
-							submenu_resetsettings:				"Server zurücksetzen",
-							submenu_serversettings:				"Einstellungen ändern"
+							submenu_resetsettings:					"Server zurücksetzen",
+							submenu_serversettings:					"Einstellungen ändern"
 						};
 					case "el":		// Greek
 						return {
 							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον διακομιστή;",
 							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους διακομιστές;",
-							context_localserversettings:		"Ρυθμίσεις διακομιστή (τοπικά)",
+							context_localserversettings:				"Ρυθμίσεις διακομιστή (τοπικά)",
 							modal_colorpicker1:					"Χρώμα εικονιδίου",
 							modal_colorpicker2:					"Χρώμα γραμματοσειράς",
 							modal_colorpicker3:					"Χρώμα επεξήγησης εργαλείου",
@@ -675,18 +696,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Τοπικό αρκτικόλεξο διακομιστή",
 							modal_guildname:					"Τοπικό όνομα διακομιστή",
 							modal_header:						"Ρυθμίσεις διακομιστή (τοπικά)",
-							modal_ignorecustomname:				"Χρησιμοποιήστε το αρχικό όνομα διακομιστή για το αρκτικόλεξο διακομιστή",
+							modal_ignorecustomname:					"Χρησιμοποιήστε το αρχικό όνομα διακομιστή για το αρκτικόλεξο διακομιστή",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
 							modal_tabheader1:					"Διακομιστής",
 							modal_tabheader2:					"Χρώμα επεξήγησης εργαλείου",
-							submenu_resetsettings:				"Επαναφορά διακομιστή",
-							submenu_serversettings:				"Αλλαγή ρυθμίσεων"
+							submenu_resetsettings:					"Επαναφορά διακομιστή",
+							submenu_serversettings:					"Αλλαγή ρυθμίσεων"
 						};
 					case "es":		// Spanish
 						return {
 							confirm_reset:						"¿Está seguro de que desea restablecer este servidor?",
 							confirm_resetall:					"¿Está seguro de que desea restablecer todos los servidores?",
-							context_localserversettings:		"Configuración del servidor local",
+							context_localserversettings:				"Configuración del servidor local",
 							modal_colorpicker1:					"Color del icono",
 							modal_colorpicker2:					"Color de fuente",
 							modal_colorpicker3:					"Color de información sobre herramientas",
@@ -694,18 +715,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Acrónimo del servidor local",
 							modal_guildname:					"Nombre del servidor local",
 							modal_header:						"Configuración del servidor local",
-							modal_ignorecustomname:				"Utilice el nombre del servidor original para el acrónimo del servidor",
+							modal_ignorecustomname:					"Utilice el nombre del servidor original para el acrónimo del servidor",
 							modal_invalidurl:					"URL invalida",
 							modal_tabheader1:					"Servidor",
 							modal_tabheader2:					"Color de información sobre herramientas",
-							submenu_resetsettings:				"Restablecer servidor",
-							submenu_serversettings:				"Cambiar ajustes"
+							submenu_resetsettings:					"Restablecer servidor",
+							submenu_serversettings:					"Cambiar ajustes"
 						};
 					case "fi":		// Finnish
 						return {
 							confirm_reset:						"Haluatko varmasti nollata tämän palvelimen?",
 							confirm_resetall:					"Haluatko varmasti nollata kaikki palvelimet?",
-							context_localserversettings:		"Paikallisen palvelimen asetukset",
+							context_localserversettings:				"Paikallisen palvelimen asetukset",
 							modal_colorpicker1:					"Kuvakkeen väri",
 							modal_colorpicker2:					"Fontin väri",
 							modal_colorpicker3:					"Työkaluvihjeen väri",
@@ -713,18 +734,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Paikallisen palvelimen lyhenne",
 							modal_guildname:					"Paikallisen palvelimen nimi",
 							modal_header:						"Paikallisen palvelimen asetukset",
-							modal_ignorecustomname:				"Käytä palvelimen lyhenteessä alkuperäistä palvelimen nimeä",
+							modal_ignorecustomname:					"Käytä palvelimen lyhenteessä alkuperäistä palvelimen nimeä",
 							modal_invalidurl:					"Virheellinen URL",
 							modal_tabheader1:					"Palvelin",
 							modal_tabheader2:					"Työkaluvihjeen väri",
-							submenu_resetsettings:				"Nollaa palvelin",
-							submenu_serversettings:				"Vaihda asetuksia"
+							submenu_resetsettings:					"Nollaa palvelin",
+							submenu_serversettings:					"Vaihda asetuksia"
 						};
 					case "fr":		// French
 						return {
 							confirm_reset:						"Êtes-vous sûr de vouloir réinitialiser ce serveur?",
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser tous les serveurs?",
-							context_localserversettings:		"Paramètres locaux du serveur",
+							context_localserversettings:				"Paramètres locaux du serveur",
 							modal_colorpicker1:					"Couleur de l'icône",
 							modal_colorpicker2:					"Couleur de la police",
 							modal_colorpicker3:					"Couleur de l'info-bulle",
@@ -732,18 +753,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Acronyme local du serveur",
 							modal_guildname:					"Nom local du serveur",
 							modal_header:						"Paramètres locaux du serveur",
-							modal_ignorecustomname:				"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
+							modal_ignorecustomname:					"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
 							modal_invalidurl:					"URL invalide",
 							modal_tabheader1:					"Serveur",
 							modal_tabheader2:					"Couleur de l'info-bulle",
-							submenu_resetsettings:				"Réinitialiser le serveur",
-							submenu_serversettings:				"Modifier les paramètres"
+							submenu_resetsettings:					"Réinitialiser le serveur",
+							submenu_serversettings:					"Modifier les paramètres"
 						};
 					case "hr":		// Croatian
 						return {
 							confirm_reset:						"Jeste li sigurni da želite resetirati ovaj poslužitelj?",
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve poslužitelje?",
-							context_localserversettings:		"Postavke lokalnog poslužitelja",
+							context_localserversettings:				"Postavke lokalnog poslužitelja",
 							modal_colorpicker1:					"Ikona Boja",
 							modal_colorpicker2:					"Boja fonta",
 							modal_colorpicker3:					"Boja opisa",
@@ -751,18 +772,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Lokalni poslužitelj kratica",
 							modal_guildname:					"Naziv lokalnog poslužitelja",
 							modal_header:						"Postavke lokalnog poslužitelja",
-							modal_ignorecustomname:				"Koristite izvorno ime poslužitelja za kraticu poslužitelja",
+							modal_ignorecustomname:					"Koristite izvorno ime poslužitelja za kraticu poslužitelja",
 							modal_invalidurl:					"Neispravna poveznica",
 							modal_tabheader1:					"Poslužitelj",
 							modal_tabheader2:					"Boja opisa",
-							submenu_resetsettings:				"Resetiraj poslužitelj",
-							submenu_serversettings:				"Promijeniti postavke"
+							submenu_resetsettings:					"Resetiraj poslužitelj",
+							submenu_serversettings:					"Promijeniti postavke"
 						};
 					case "hu":		// Hungarian
 						return {
 							confirm_reset:						"Biztosan visszaállítja ezt a szervert?",
 							confirm_resetall:					"Biztosan visszaállítja az összes szervert?",
-							context_localserversettings:		"Helyi kiszolgáló beállításai",
+							context_localserversettings:				"Helyi kiszolgáló beállításai",
 							modal_colorpicker1:					"Ikon színe",
 							modal_colorpicker2:					"Betű szín",
 							modal_colorpicker3:					"Tooltip Color",
@@ -770,18 +791,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Helyi szerver betűszó",
 							modal_guildname:					"Helyi kiszolgáló neve",
 							modal_header:						"Helyi kiszolgáló beállításai",
-							modal_ignorecustomname:				"A kiszolgáló rövidítéshez használja az eredeti kiszolgáló nevet",
+							modal_ignorecustomname:					"A kiszolgáló rövidítéshez használja az eredeti kiszolgáló nevet",
 							modal_invalidurl:					"Érvénytelen URL",
 							modal_tabheader1:					"Szerver",
 							modal_tabheader2:					"Tooltip Color",
-							submenu_resetsettings:				"Reset Server",
-							submenu_serversettings:				"Beállítások megváltoztatása"
+							submenu_resetsettings:					"Reset Server",
+							submenu_serversettings:					"Beállítások megváltoztatása"
 						};
 					case "it":		// Italian
 						return {
 							confirm_reset:						"Sei sicuro di voler reimpostare questo server?",
 							confirm_resetall:					"Sei sicuro di voler ripristinare tutti i server?",
-							context_localserversettings:		"Impostazioni locale del server",
+							context_localserversettings:				"Impostazioni locale del server",
 							modal_colorpicker1:					"Colore dell'icona",
 							modal_colorpicker2:					"Colore del carattere",
 							modal_colorpicker3:					"Colore della descrizione comando",
@@ -789,18 +810,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Acronimo locale del server",
 							modal_guildname:					"Nome locale server",
 							modal_header:						"Impostazioni locale del server",
-							modal_ignorecustomname:				"Utilizzare il nome del server originale per l'acronimo del server",
+							modal_ignorecustomname:					"Utilizzare il nome del server originale per l'acronimo del server",
 							modal_invalidurl:					"URL non valido",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Colore della descrizione comando",
-							submenu_resetsettings:				"Reimposta server",
-							submenu_serversettings:				"Cambia impostazioni"
+							submenu_resetsettings:					"Reimposta server",
+							submenu_serversettings:					"Cambia impostazioni"
 						};
 					case "ja":		// Japanese
 						return {
 							confirm_reset:						"このサーバーをリセットしてもよろしいですか？",
 							confirm_resetall:					"すべてのサーバーをリセットしてもよろしいですか？",
-							context_localserversettings:		"ローカルサーバー設定",
+							context_localserversettings:				"ローカルサーバー設定",
 							modal_colorpicker1:					"アイコンの色",
 							modal_colorpicker2:					"フォントの色",
 							modal_colorpicker3:					"ツールチップの色",
@@ -808,18 +829,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"ローカルサーバーの頭字語",
 							modal_guildname:					"ローカルサーバー名",
 							modal_header:						"ローカルサーバー設定",
-							modal_ignorecustomname:				"サーバーの頭字語には元のサーバー名を使用します",
+							modal_ignorecustomname:					"サーバーの頭字語には元のサーバー名を使用します",
 							modal_invalidurl:					"無効なURL",
 							modal_tabheader1:					"サーバ",
 							modal_tabheader2:					"ツールチップの色",
-							submenu_resetsettings:				"サーバーのリセット",
-							submenu_serversettings:				"設定を変更する"
+							submenu_resetsettings:					"サーバーのリセット",
+							submenu_serversettings:					"設定を変更する"
 						};
 					case "ko":		// Korean
 						return {
 							confirm_reset:						"이 서버를 재설정 하시겠습니까?",
 							confirm_resetall:					"모든 서버를 재설정 하시겠습니까?",
-							context_localserversettings:		"로컬 서버 설정",
+							context_localserversettings:				"로컬 서버 설정",
 							modal_colorpicker1:					"아이콘 색상",
 							modal_colorpicker2:					"글자 색",
 							modal_colorpicker3:					"툴팁 색상",
@@ -827,18 +848,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"로컬 서버 약어",
 							modal_guildname:					"로컬 서버 이름",
 							modal_header:						"로컬 서버 설정",
-							modal_ignorecustomname:				"서버 약어에 원래 서버 이름 사용",
+							modal_ignorecustomname:					"서버 약어에 원래 서버 이름 사용",
 							modal_invalidurl:					"잘못된 URL",
 							modal_tabheader1:					"섬기는 사람",
 							modal_tabheader2:					"툴팁 색상",
-							submenu_resetsettings:				"서버 재설정",
-							submenu_serversettings:				"설정 변경"
+							submenu_resetsettings:					"서버 재설정",
+							submenu_serversettings:					"설정 변경"
 						};
 					case "lt":		// Lithuanian
 						return {
 							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį serverį?",
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus serverius?",
-							context_localserversettings:		"Vietinio serverio nustatymai",
+							context_localserversettings:				"Vietinio serverio nustatymai",
 							modal_colorpicker1:					"Piktogramos spalva",
 							modal_colorpicker2:					"Šrifto spalva",
 							modal_colorpicker3:					"Patarimo spalva",
@@ -846,18 +867,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Vietinio serverio santrumpa",
 							modal_guildname:					"Vietinio serverio pavadinimas",
 							modal_header:						"Vietinio serverio nustatymai",
-							modal_ignorecustomname:				"Serverio akronimui naudokite originalų serverio pavadinimą",
+							modal_ignorecustomname:					"Serverio akronimui naudokite originalų serverio pavadinimą",
 							modal_invalidurl:					"Neteisingas URL",
 							modal_tabheader1:					"Serveris",
 							modal_tabheader2:					"Patarimo spalva",
-							submenu_resetsettings:				"Iš naujo nustatyti serverį",
-							submenu_serversettings:				"Pakeisti nustatymus"
+							submenu_resetsettings:					"Iš naujo nustatyti serverį",
+							submenu_serversettings:					"Pakeisti nustatymus"
 						};
 					case "nl":		// Dutch
 						return {
 							confirm_reset:						"Weet u zeker dat u deze server opnieuw wilt instellen?",
 							confirm_resetall:					"Weet u zeker dat u alle servers wilt resetten?",
-							context_localserversettings:		"Lokale serverinstellingen",
+							context_localserversettings:				"Lokale serverinstellingen",
 							modal_colorpicker1:					"Icoonkleur",
 							modal_colorpicker2:					"Letterkleur",
 							modal_colorpicker3:					"Tooltipkleur",
@@ -865,18 +886,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Lokale serveracroniem",
 							modal_guildname:					"Lokale servernaam",
 							modal_header:						"Lokale serverinstellingen",
-							modal_ignorecustomname:				"Gebruik de oorspronkelijke servernaam voor het serveracroniem",
+							modal_ignorecustomname:					"Gebruik de oorspronkelijke servernaam voor het serveracroniem",
 							modal_invalidurl:					"Ongeldige URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Tooltipkleur",
-							submenu_resetsettings:				"Reset server",
-							submenu_serversettings:				"Instellingen veranderen"
+							submenu_resetsettings:					"Reset server",
+							submenu_serversettings:					"Instellingen veranderen"
 						};
 					case "no":		// Norwegian
 						return {
 							confirm_reset:						"Er du sikker på at du vil tilbakestille denne serveren?",
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle serverne?",
-							context_localserversettings:		"Lokale serverinnstillinger",
+							context_localserversettings:				"Lokale serverinnstillinger",
 							modal_colorpicker1:					"Ikonfarge",
 							modal_colorpicker2:					"Skriftfarge",
 							modal_colorpicker3:					"Verktøytipsfarge",
@@ -884,18 +905,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Lokal serverakronymet",
 							modal_guildname:					"Lokalt servernavn",
 							modal_header:						"Lokale serverinnstillinger",
-							modal_ignorecustomname:				"Bruk det originale servernavnet for serverakronymet",
+							modal_ignorecustomname:					"Bruk det originale servernavnet for serverakronymet",
 							modal_invalidurl:					"Ugyldig URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Verktøytipsfarge",
-							submenu_resetsettings:				"Tilbakestill server",
-							submenu_serversettings:				"Endre innstillinger"
+							submenu_resetsettings:					"Tilbakestill server",
+							submenu_serversettings:					"Endre innstillinger"
 						};
 					case "pl":		// Polish
 						return {
 							confirm_reset:						"Czy na pewno chcesz zresetować ten serwer?",
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie serwery?",
-							context_localserversettings:		"Ustawienia serwera lokalnego",
+							context_localserversettings:				"Ustawienia serwera lokalnego",
 							modal_colorpicker1:					"Kolor ikony",
 							modal_colorpicker2:					"Kolor czcionki",
 							modal_colorpicker3:					"Kolor etykiety narzędzi",
@@ -903,18 +924,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Akronim lokalnego serwera",
 							modal_guildname:					"Nazwa serwera lokalnego",
 							modal_header:						"Ustawienia serwera lokalnego",
-							modal_ignorecustomname:				"Użyj oryginalnej nazwy serwera dla akronimu serwera",
+							modal_ignorecustomname:					"Użyj oryginalnej nazwy serwera dla akronimu serwera",
 							modal_invalidurl:					"Nieprawidłowy URL",
 							modal_tabheader1:					"Serwer",
 							modal_tabheader2:					"Kolor etykiety narzędzi",
-							submenu_resetsettings:				"Zresetuj serwer",
-							submenu_serversettings:				"Zmień ustawienia"
+							submenu_resetsettings:					"Zresetuj serwer",
+							submenu_serversettings:					"Zmień ustawienia"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							confirm_reset:						"Tem certeza que deseja redefinir este servidor?",
 							confirm_resetall:					"Tem certeza de que deseja redefinir todos os servidores?",
-							context_localserversettings:		"Configurações do servidor local",
+							context_localserversettings:				"Configurações do servidor local",
 							modal_colorpicker1:					"Cor do ícone",
 							modal_colorpicker2:					"Cor da fonte",
 							modal_colorpicker3:					"Cor da dica de ferramenta",
@@ -922,18 +943,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Acrônimo de servidor local",
 							modal_guildname:					"Nome do servidor local",
 							modal_header:						"Configurações do servidor local",
-							modal_ignorecustomname:				"Use o nome do servidor original para o acrônimo do servidor",
+							modal_ignorecustomname:					"Use o nome do servidor original para o acrônimo do servidor",
 							modal_invalidurl:					"URL inválida",
 							modal_tabheader1:					"Servidor",
 							modal_tabheader2:					"Cor da dica de ferramenta",
-							submenu_resetsettings:				"Reiniciar Servidor",
-							submenu_serversettings:				"Mudar configurações"
+							submenu_resetsettings:					"Reiniciar Servidor",
+							submenu_serversettings:					"Mudar configurações"
 						};
 					case "ro":		// Romanian
 						return {
 							confirm_reset:						"Sigur doriți să resetați acest server?",
 							confirm_resetall:					"Sigur doriți să resetați toate serverele?",
-							context_localserversettings:		"Setări locale ale serverului",
+							context_localserversettings:				"Setări locale ale serverului",
 							modal_colorpicker1:					"Culoare pictogramă",
 							modal_colorpicker2:					"Culoarea fontului",
 							modal_colorpicker3:					"Culoare sfat de instrumente",
@@ -941,18 +962,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Acronim de server local",
 							modal_guildname:					"Numele serverului local",
 							modal_header:						"Setări locale ale serverului",
-							modal_ignorecustomname:				"Utilizați numele serverului original pentru acronimul serverului",
+							modal_ignorecustomname:					"Utilizați numele serverului original pentru acronimul serverului",
 							modal_invalidurl:					"URL invalid",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Culoare sfat",
-							submenu_resetsettings:				"Resetați serverul",
-							submenu_serversettings:				"Schimbă setările"
+							submenu_resetsettings:					"Resetați serverul",
+							submenu_serversettings:					"Schimbă setările"
 						};
 					case "ru":		// Russian
 						return {
 							confirm_reset:						"Вы уверены, что хотите сбросить этот сервер?",
 							confirm_resetall:					"Вы уверены, что хотите сбросить все серверы?",
-							context_localserversettings:		"Настройки локального сервера",
+							context_localserversettings:				"Настройки локального сервера",
 							modal_colorpicker1:					"Цвет значка",
 							modal_colorpicker2:					"Цвет шрифта",
 							modal_colorpicker3:					"Цвет всплывающей подсказки",
@@ -960,18 +981,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Акроним локального сервера",
 							modal_guildname:					"Имя локального сервера",
 							modal_header:						"Настройки локального сервера",
-							modal_ignorecustomname:				"Используйте исходное имя сервера для аббревиатуры сервера",
+							modal_ignorecustomname:					"Используйте исходное имя сервера для аббревиатуры сервера",
 							modal_invalidurl:					"Неверная ссылка",
 							modal_tabheader1:					"Сервер",
 							modal_tabheader2:					"Цвет всплывающей подсказки",
-							submenu_resetsettings:				"Сбросить сервер",
-							submenu_serversettings:				"Изменить настройки"
+							submenu_resetsettings:					"Сбросить сервер",
+							submenu_serversettings:					"Изменить настройки"
 						};
 					case "sv":		// Swedish
 						return {
 							confirm_reset:						"Är du säker på att du vill återställa den här servern?",
 							confirm_resetall:					"Är du säker på att du vill återställa alla servrar?",
-							context_localserversettings:		"Lokala serverinställningar",
+							context_localserversettings:				"Lokala serverinställningar",
 							modal_colorpicker1:					"Ikonfärg",
 							modal_colorpicker2:					"Fontfärg",
 							modal_colorpicker3:					"Verktygstipsfärg",
@@ -979,18 +1000,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Lokal servernakronym",
 							modal_guildname:					"Lokalt servernamn",
 							modal_header:						"Lokala serverinställningar",
-							modal_ignorecustomname:				"Använd det ursprungliga servernamnet för servernakronym",
+							modal_ignorecustomname:					"Använd det ursprungliga servernamnet för servernakronym",
 							modal_invalidurl:					"Ogiltig URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Verktygstipsfärg",
-							submenu_resetsettings:				"Återställ server",
-							submenu_serversettings:				"Ändra inställningar"
+							submenu_resetsettings:					"Återställ server",
+							submenu_serversettings:					"Ändra inställningar"
 						};
 					case "th":		// Thai
 						return {
 							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตเซิร์ฟเวอร์นี้",
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตเซิร์ฟเวอร์ทั้งหมด",
-							context_localserversettings:		"การตั้งค่าเซิร์ฟเวอร์ภายใน",
+							context_localserversettings:				"การตั้งค่าเซิร์ฟเวอร์ภายใน",
 							modal_colorpicker1:					"ไอคอนสี",
 							modal_colorpicker2:					"สีตัวอักษร",
 							modal_colorpicker3:					"เคล็ดลับเครื่องมือสี",
@@ -998,18 +1019,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"ตัวย่อเซิร์ฟเวอร์ภายใน",
 							modal_guildname:					"ชื่อเซิร์ฟเวอร์ภายใน",
 							modal_header:						"การตั้งค่าเซิร์ฟเวอร์ภายใน",
-							modal_ignorecustomname:				"ใช้ชื่อเซิร์ฟเวอร์เดิมสำหรับตัวย่อเซิร์ฟเวอร์",
+							modal_ignorecustomname:					"ใช้ชื่อเซิร์ฟเวอร์เดิมสำหรับตัวย่อเซิร์ฟเวอร์",
 							modal_invalidurl:					"URL ไม่ถูกต้อง",
 							modal_tabheader1:					"เซิร์ฟเวอร์",
 							modal_tabheader2:					"เคล็ดลับเครื่องมือสี",
-							submenu_resetsettings:				"รีเซ็ตเซิร์ฟเวอร์",
-							submenu_serversettings:				"เปลี่ยนการตั้งค่า"
+							submenu_resetsettings:					"รีเซ็ตเซิร์ฟเวอร์",
+							submenu_serversettings:					"เปลี่ยนการตั้งค่า"
 						};
 					case "tr":		// Turkish
 						return {
 							confirm_reset:						"Bu Sunucuyu sıfırlamak istediğinizden emin misiniz?",
 							confirm_resetall:					"Tüm Sunucuları sıfırlamak istediğinizden emin misiniz?",
-							context_localserversettings:		"Yerel Sunucu Ayarları",
+							context_localserversettings:				"Yerel Sunucu Ayarları",
 							modal_colorpicker1:					"Simge Rengi",
 							modal_colorpicker2:					"Yazı rengi",
 							modal_colorpicker3:					"Araç İpucu Rengi",
@@ -1017,18 +1038,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Yerel Sunucu Kısaltması",
 							modal_guildname:					"Yerel Sunucu Adı",
 							modal_header:						"Yerel Sunucu Ayarları",
-							modal_ignorecustomname:				"Sunucu Kısaltması için orijinal Sunucu Adını kullanın",
+							modal_ignorecustomname:					"Sunucu Kısaltması için orijinal Sunucu Adını kullanın",
 							modal_invalidurl:					"Geçersiz URL",
 							modal_tabheader1:					"Sunucu",
 							modal_tabheader2:					"Araç İpucu Rengi",
-							submenu_resetsettings:				"Sunucuyu Sıfırla",
-							submenu_serversettings:				"Ayarları değiştir"
+							submenu_resetsettings:					"Sunucuyu Sıfırla",
+							submenu_serversettings:					"Ayarları değiştir"
 						};
 					case "uk":		// Ukrainian
 						return {
 							confirm_reset:						"Справді скинути цей сервер?",
 							confirm_resetall:					"Ви впевнені, що хочете скинути всі сервери?",
-							context_localserversettings:		"Налаштування локального сервера",
+							context_localserversettings:				"Налаштування локального сервера",
 							modal_colorpicker1:					"Значок Колір",
 							modal_colorpicker2:					"Колір шрифту",
 							modal_colorpicker3:					"Колір підказки",
@@ -1036,18 +1057,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Акронім локального сервера",
 							modal_guildname:					"Назва локального сервера",
 							modal_header:						"Налаштування локального сервера",
-							modal_ignorecustomname:				"Використовуйте оригінальне ім’я сервера для абревіатури сервера",
+							modal_ignorecustomname:					"Використовуйте оригінальне ім’я сервера для абревіатури сервера",
 							modal_invalidurl:					"Недійсна URL-адреса",
 							modal_tabheader1:					"Сервер",
 							modal_tabheader2:					"Колір підказки",
-							submenu_resetsettings:				"Скинути сервер",
-							submenu_serversettings:				"Змінити налаштування"
+							submenu_resetsettings:					"Скинути сервер",
+							submenu_serversettings:					"Змінити налаштування"
 						};
 					case "vi":		// Vietnamese
 						return {
 							confirm_reset:						"Bạn có chắc chắn muốn đặt lại Máy chủ này không?",
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả Máy chủ không?",
-							context_localserversettings:		"Cài đặt máy chủ cục bộ",
+							context_localserversettings:				"Cài đặt máy chủ cục bộ",
 							modal_colorpicker1:					"Màu biểu tượng",
 							modal_colorpicker2:					"Màu phông chữ",
 							modal_colorpicker3:					"Màu chú giải công cụ",
@@ -1055,18 +1076,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"Từ viết tắt của máy chủ cục bộ",
 							modal_guildname:					"Tên máy chủ cục bộ",
 							modal_header:						"Cài đặt máy chủ cục bộ",
-							modal_ignorecustomname:				"Sử dụng tên máy chủ ban đầu cho từ viết tắt máy chủ",
+							modal_ignorecustomname:					"Sử dụng tên máy chủ ban đầu cho từ viết tắt máy chủ",
 							modal_invalidurl:					"URL không hợp lệ",
 							modal_tabheader1:					"Người phục vụ",
 							modal_tabheader2:					"Màu chú giải công cụ",
-							submenu_resetsettings:				"Đặt lại máy chủ",
-							submenu_serversettings:				"Thay đổi cài đặt"
+							submenu_resetsettings:					"Đặt lại máy chủ",
+							submenu_serversettings:					"Thay đổi cài đặt"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此服务器吗？",
 							confirm_resetall:					"您确定要重置所有服务器吗？",
-							context_localserversettings:		"本地服务器设置",
+							context_localserversettings:				"本地服务器设置",
 							modal_colorpicker1:					"图标颜色",
 							modal_colorpicker2:					"字体颜色",
 							modal_colorpicker3:					"工具提示颜色",
@@ -1074,18 +1095,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"本地服务器缩写",
 							modal_guildname:					"本地服务器名称",
 							modal_header:						"本地服务器设置",
-							modal_ignorecustomname:				"使用原始服务器名称作为服务器首字母缩写词",
+							modal_ignorecustomname:					"使用原始服务器名称作为服务器首字母缩写词",
 							modal_invalidurl:					"无效的网址",
 							modal_tabheader1:					"服务器",
 							modal_tabheader2:					"工具提示颜色",
-							submenu_resetsettings:				"重置服务器",
-							submenu_serversettings:				"更改设置"
+							submenu_resetsettings:					"重置服务器",
+							submenu_serversettings:					"更改设置"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此服務器嗎？",
 							confirm_resetall:					"您確定要重置所有服務器嗎？",
-							context_localserversettings:		"本地服務器設置",
+							context_localserversettings:				"本地服務器設置",
 							modal_colorpicker1:					"圖標顏色",
 							modal_colorpicker2:					"字體顏色",
 							modal_colorpicker3:					"工具提示顏色",
@@ -1093,18 +1114,18 @@ module.exports = (_ => {
 							modal_guildacronym:					"本地服務器縮​​寫",
 							modal_guildname:					"本地服務器名稱",
 							modal_header:						"本地服務器設置",
-							modal_ignorecustomname:				"使用原始服務器名稱作為服務器首字母縮寫詞",
+							modal_ignorecustomname:					"使用原始服務器名稱作為服務器首字母縮寫詞",
 							modal_invalidurl:					"無效的網址",
 							modal_tabheader1:					"服務器",
 							modal_tabheader2:					"工具提示顏色",
-							submenu_resetsettings:				"重置服務器",
-							submenu_serversettings:				"更改設置"
+							submenu_resetsettings:					"重置服務器",
+							submenu_serversettings:					"更改設置"
 						};
 					default:		// English
 						return {
 							confirm_reset:						"Are you sure you want to reset this Server?",
 							confirm_resetall:					"Are you sure you want to reset all Servers?",
-							context_localserversettings:		"Local Server Settings",
+							context_localserversettings:				"Local Server Settings",
 							modal_colorpicker1:					"Icon Color",
 							modal_colorpicker2:					"Font Color",
 							modal_colorpicker3:					"Tooltip Color",
@@ -1112,12 +1133,12 @@ module.exports = (_ => {
 							modal_guildacronym:					"Local Server Acronym",
 							modal_guildname:					"Local Server Name",
 							modal_header:						"Local Server Settings",
-							modal_ignorecustomname:				"Use the original Server Name for the Server Acronym",
+							modal_ignorecustomname:					"Use the original Server Name for the Server Acronym",
 							modal_invalidurl:					"Invalid URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Tooltip Color",
-							submenu_resetsettings:				"Reset Server",
-							submenu_serversettings:				"Change Settings"
+							submenu_resetsettings:					"Reset Server",
+							submenu_serversettings:					"Change Settings"
 						};
 				}
 			}

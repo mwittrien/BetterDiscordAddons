@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.4
+ * @version 4.6.4
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -67,32 +72,29 @@ module.exports = (_ => {
 					},
 					places: {
 						chatTextarea:		{value: true, 			description: "Chat Textarea"},
-						chatWindow:			{value: true, 			description: "Messages"},
-						mentions:			{value: true, 			description: "Mentions"},
+						chatWindow:		{value: true, 			description: "Messages"},
+						mentions:		{value: true, 			description: "Mentions"},
 						channelList:		{value: true, 			description: "Channel/Group List"},
 						channelHeader:		{value: true, 			description: "Channel/Group Header"},
-						recentDms:			{value: true, 			description: "Group Notifications"},
+						recentDms:		{value: true, 			description: "Group Notifications"},
 						recentMentions:		{value: true, 			description: "Recent Mentions Popout"},
-						threads:			{value: true, 			description: "Thread Overview"},
+						threads:		{value: true, 			description: "Thread Overview"},
 						autocompletes:		{value: true, 			description: "Autocomplete Menu"},
-						auditLog:			{value: true, 			description: "Audit Log"},
-						inviteLog:			{value: true, 			description: "Invite Log"},
 						quickSwitcher:		{value: true, 			description: "Quick Switcher"},
 						searchResults:		{value: true, 			description: "Search Results"},
 						searchPopout:		{value: true, 			description: "Search Popout"},
-						appTitle:			{value: true, 			description: "Discord App Title (Channels)"}
+						appTitle:		{value: true, 			description: "Discord App Title (Channels)"}
 					}
 				};
 			
 				this.modulePatches = {
 					before: [
-						"AuditLogEntry",
 						"AutocompleteChannelResult",
+						"ChannelCallHeader",
 						"ChannelEmptyMessages",
 						"ChannelsList",
 						"ChannelTextAreaEditor",
 						"ChannelThreadItem",
-						"GuildInvites",
 						"MessageContent",
 						"QuickSwitchChannelResult",
 						"RecentsChannelHeader",
@@ -101,9 +103,10 @@ module.exports = (_ => {
 						"ThreadMessageAccessories"
 					],
 					after: [
-						"AuditLogEntry",
 						"AutocompleteChannelResult",
-						"ChannelItem",
+						"ChannelCallHeader",
+						"ChannelFloatingSidebar",
+						"ChannelItemIcon",
 						"ChannelThreadItem",
 						"DirectMessage",
 						"FocusRingScope",
@@ -123,10 +126,13 @@ module.exports = (_ => {
 				this.patchPriority = 9;
 				
 				this.css = `
-					${BDFDB.dotCN.messagespopoutchannelname}:hover > span[style*="color"],
-					${BDFDB.dotCN.recentmentionschannelname}:hover span[style*="color"],
-					${BDFDB.dotCN.searchresultschannelname}:hover > span[style*="color"] {
-						text-decoration: underline;
+					${BDFDB.dotCN.mention}[style*="--edited-mention-color"] {
+						background-color: rgba(var(--edited-mention-color), .1) !important;
+						color: rgb(var(--edited-mention-color)) !important;
+					}
+					${BDFDB.dotCN.mention + BDFDB.dotCN.mentioninteractive}[style*="--edited-mention-color"]:hover {
+						background-color: rgba(var(--edited-mention-color), .3) !important;
+						color: rgb(var(--edited-mention-color)) !important;
 					}
 				`;
 			}
@@ -260,8 +266,8 @@ module.exports = (_ => {
 			}
 			
 			processChannelTextAreaEditor (e) {
-				if (!this.settings.places.chatTextarea || e.instance.props.disabled || !e.instance.props.channel || !changedChannels[e.instance.props.channel.id] || e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL && e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY && e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.SIDEBAR) return;
-				if (changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
+				if (!this.settings.places.chatTextarea || e.instance.props.disabled || !e.instance.props.channel || !changedChannels[e.instance.props.channel.id] || e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL && e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.SIDEBAR) return;
+				if (changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("SEND_A_MESSAGE_IN_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
 			}
 			
 			processChannelEmptyMessages (e) {
@@ -324,22 +330,31 @@ module.exports = (_ => {
 					}, "Error in Children Render of AutocompleteChannelResult!", this);
 				}
 			}
-
-			processAuditLogEntry (e) {
-				if (!this.settings.places.auditLog) return;
-				let channel = BDFDB.ObjectUtils.get(e.instance, "props.log.options.channel");
-				if (!channel) return;
-				if (!e.returnvalue) e.instance.props.log.options.channel = this.getChannelData(channel.id);
-				else {
-					let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["children", [["#" + channel.name]]]]});
-					if (channelName) this.changeChannelColor(channelName, channel.id);
+			
+			processChannelFloatingSidebar (e) {
+				if (!this.settings.places.channelHeader) return;
+				let channel = e.instance.props && e.instance.props.children && e.instance.props.children[0] && e.instance.props.children[0].props && e.instance.props.children[0].props.channel;
+				if (!channel || channel.isDM()) return;
+				let headerBar = BDFDB.ReactUtils.findChild(e.instance.props.children, {name: "HeaderBar"});
+				if (!headerBar) return;
+				let channelName = BDFDB.ReactUtils.findChild(headerBar, {name: "HeaderBarTitle"});
+				if (channelName) {
+					channelName.props.children = this.getChannelData(channel.id).name;
+					this.changeChannelColor(channelName, channel.id);
 				}
+				let channelIcon = BDFDB.ReactUtils.findChild(headerBar, {name: "HeaderBarTitleIcon"});
+				if (channelIcon) this.changeChannelIconColor(channelIcon, channel.id);
 			}
-
-			processGuildInvites (e) {
-				if (!this.settings.places.inviteLog || !e.instance.props.invites) return;
-				e.instance.props.invites = Object.assign({}, e.instance.props.invites);
-				for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {channel: this.getChannelData(e.instance.props.invites[id].channel.id)}));
+			
+			processChannelCallHeader (e) {
+				if (!this.settings.places.channelHeader || !e.instance.props.channel || e.instance.props.channel.isDM()) return;
+				if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+				else {
+					let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "HeaderBarTitle"});
+					if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
+					let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "HeaderBarTitleIcon"});
+					if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id);
+				}
 			}
 			
 			processHeaderBarContainer (e) {
@@ -417,6 +432,9 @@ module.exports = (_ => {
 			processFocusRingScope (e) {
 				if (!e.returnvalue || !e.returnvalue.props.className) return;
 				let change, hoveredEvents, channelId, nameClass, categoyClass, iconClass, modify = {};
+				if (this.settings.places.mentions && e.returnvalue.props.className.indexOf(BDFDB.disCN.mention) > -1 && e.instance.props["edited-mention-color"]) {
+					e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {"--edited-mention-color": e.instance.props["edited-mention-color"]});
+				}
 				if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1) {
 					change = true;
 					hoveredEvents = true;
@@ -425,13 +443,19 @@ module.exports = (_ => {
 					iconClass = BDFDB.disCN.categoryicon;
 					modify = {muted: BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), channelId)};
 				}
+				if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.channeliconvisibility) > -1) {
+					change = true;
+					hoveredEvents = true;
+					channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("___").pop();
+					nameClass = BDFDB.disCN.channelname;
+					modify = {muted: BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), channelId)};
+				}
 				else if (this.settings.places.searchPopout && e.returnvalue.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
 					change = true;
-					let channel = (BDFDB.ReactUtils.findValue(e.returnvalue._owner, "result", {up: true}) || {}).channel;
+					let channel = BDFDB.ReactUtils.findValue(e.returnvalue, "channel");
 					channelId = channel && channel.id;
 					nameClass = BDFDB.disCN.searchpopoutresultchannel;
-					categoyClass = BDFDB.disCN.searchpopoutsearchresultchannelcategory;
-					iconClass = BDFDB.disCN.searchpopoutsearchresultchannelicon;
+					iconClass = BDFDB.disCN.searchpopoutresultchannelicon;
 				}
 				if (change && channelId) {
 					if (hoveredEvents) {
@@ -457,10 +481,11 @@ module.exports = (_ => {
 					}
 					let name = nameClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", nameClass]]});
 					if (name) {
+						if (name.props && typeof name.props.children == "string") name.props.children = BDFDB.ReactUtils.createElement("span", {children: name.props.children});
 						name = name.props && name.props.children || name;
 						this.changeChannelColor(BDFDB.ArrayUtils.is(name) ? name.find(c => c.type == "strong") || name[0] : name, channelId, modify);
 					}
-					let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", iconClass]]});
+					let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {someProps:true, props: [["className", iconClass], ["iconClassName", iconClass]]});
 					if (icon) this.changeChannelIconColor(icon, channelId, modify);
 					let categoryId = (BDFDB.LibraryStores.ChannelStore.getChannel(channelId) || {}).parent_id;
 					if (categoryId) {
@@ -475,7 +500,7 @@ module.exports = (_ => {
 			
 			processChannelsList (e) {
 				if (!this.settings.places.channelList || !e.instance.props.guildChannels) return;
-				e.instance.props.guildChannels = new e.instance.props.guildChannels.constructor(e.instance.props.guild.id, e.instance.props.guildChannels.communitySection && e.instance.props.guildChannels.communitySection.communityRows || []);
+				e.instance.props.guildChannels = new e.instance.props.guildChannels.constructor(e.instance.props.guild.id, e.instance.props.guildChannels.guildActionSection && e.instance.props.guildChannels.guildActionSection.guildActionRows || [], e.instance.props.guildChannels.channelNoticeSection && e.instance.props.guildChannels.channelNoticeSection.rows || []);
 				for (let id in e.instance.props.guildChannels.categories) e.instance.props.guildChannels.categories[id].record = this.getChannelData(id, true, e.instance.props.guildChannels.categories[id].record);
 				let getChannelFromSectionRow = e.instance.props.guildChannels.getChannelFromSectionRow.bind(e.instance.props.guildChannels);
 				e.instance.props.guildChannels.getChannelFromSectionRow = BDFDB.TimeUtils.suppress((...args) => {
@@ -489,27 +514,11 @@ module.exports = (_ => {
 				}, "Error in getChannelFromSectionRow of ChannelsList!", this);
 			}
 			
-			processChannelItem (e) {
+			processChannelItemIcon (e) {
 				if (!this.settings.places.channelList || !e.instance.props.channel) return;
 				let modify = BDFDB.ObjectUtils.extract(e.instance.props, "muted", "locked", "selected", "unread", "connected", "hovered");
-				let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelname]]});
-				if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
-				let channelIcon = this.settings.general.changeChannelIcon && BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelItemIcon"});
-				if (channelIcon && typeof channelIcon.type == "function") {
-					let type = channelIcon.type;
-					channelIcon.type = BDFDB.TimeUtils.suppress((...args) => {
-						let returnValue = type(...args);
-						if (returnValue && typeof returnValue.props.children == "function") {
-							let childrenRender = returnValue.props.children;
-							returnValue.props.children = BDFDB.TimeUtils.suppress((...args2) => {
-								let renderedChildren = childrenRender(...args2);
-								this.changeChannelIconColor(renderedChildren.props.children, e.instance.props.channel.id, modify);
-								return renderedChildren;
-							}, "Error in Children Render of ChannelItem!", this);
-						}
-						return returnValue;
-					}, "Error in Type Render of ChannelItem!", this);
-				}
+				let icon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["color", "currentColor"]]});
+				this.changeChannelIconColor(icon, e.instance.props.channel.id, modify);
 			}
 
 			processChannelThreadItem (e) {
@@ -615,40 +624,30 @@ module.exports = (_ => {
 
 			processMessageContent (e) {
 				if (!this.settings.places.mentions || !BDFDB.ArrayUtils.is(e.instance.props.content)) return;
-				for (let ele of e.instance.props.content) if (BDFDB.ReactUtils.isValidElement(ele) && ele.type && ele.type.prototype && ele.type.prototype.renderTooltip && typeof ele.props.children == "function") {
-					let children = ele.props.children({});
-					if (!children || !children.props || !children.props.iconType || !children.props.className || children.props.className.indexOf("channelMention") != 0) return;
-					const checkChild = channelName => {
-						let guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
-						let channels = guildId && [].concat(BDFDB.LibraryStores.GuildChannelStore.getChannels(guildId).SELECTABLE, Object.keys(BDFDB.LibraryStores.ActiveThreadsStore.getThreadsForGuild(guildId)).map(id => ({channel: BDFDB.LibraryStores.ChannelStore.getChannel(id)})));
-						if (!BDFDB.ArrayUtils.is(channels)) return;
-						for (let channelObj of channels) {
-							if (channelName == channelObj.channel.name) {
-								let category = BDFDB.LibraryStores.ChannelStore.getChannel(channelObj.channel.parent_id);
-								if (!category || category && ele.props.text == category.name) {
-									if (category) {
-										let categoryData = changedChannels[category.id];
-										if (categoryData && categoryData.name) ele.props.text = categoryData.name;
-									}
-									let name = (changedChannels[channelObj.channel.id] || {}).name;
-									let color = this.getChannelDataColor(channelObj.channel.id);
-									if (name || color) {
-										let renderChildren = ele.props.children;
-										ele.props.children = BDFDB.TimeUtils.suppress((...args) => {
-											let renderedChildren = renderChildren(...args);
-											this.changeMention(renderedChildren, {name, color});
-											return renderedChildren;
-										}, "Error in Children Render of ChannelMention in MessageContent!", this);
-									}
-									break;
-								}
+				for (let ele of e.instance.props.content) if (BDFDB.ReactUtils.isValidElement(ele) && ele.type) {
+					let children = ele.props && ele.props.className && ele.props.className.indexOf("channelMention") == 0 ? ele : ele.type.prototype && ele.type.prototype.renderTooltip && typeof ele.props.children == "function" && ele.props.children({});
+					if (!children || !children.props || !children.props.className || children.props.className.indexOf("channelMention") != 0) return;
+					let channelNameWrapper = BDFDB.ReactUtils.findChild(children, {props: ["iconType"]});
+					let channelName = channelNameWrapper && BDFDB.ReactUtils.findChild(channelNameWrapper, {type: "span"});
+					if (!channelNameWrapper || !channelName) return;
+					let guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
+					let channels = guildId && [].concat(BDFDB.LibraryStores.GuildChannelStore.getChannels(guildId).SELECTABLE, BDFDB.LibraryStores.GuildChannelStore.getChannels(guildId).VOCAL, Object.keys(BDFDB.LibraryStores.ActiveThreadsStore.getThreadsForGuild(guildId)).map(id => ({channel: BDFDB.LibraryStores.ChannelStore.getChannel(id)})));
+					if (!BDFDB.ArrayUtils.is(channels)) return;
+					for (let channelObj of channels) if (channelName.props.children == channelObj.channel.name && (channelNameWrapper.props.iconType == "text" && !channelObj.channel.isVocal() || channelNameWrapper.props.iconType == "voice" && channelObj.channel.isVocal())) {
+						let name = (changedChannels[channelObj.channel.id] || {}).name;
+						let color = this.getChannelDataColor(channelObj.channel.id);
+						if (name || color) {
+							if (typeof ele.props.children == "function") {
+								let renderChildren = ele.props.children;
+								ele.props.children = BDFDB.TimeUtils.suppress((...args) => {
+									let renderedChildren = renderChildren(...args);
+									this.changeMention(renderedChildren, {name, color});
+									return renderedChildren;
+								}, "Error in Children Render of ChannelMention in MessageContent!", this);
 							}
+							else this.changeMention(channelNameWrapper, {name, color}, ele);
 						}
-					};
-					if (typeof children.props.children == "string") checkChild(children.props.children);
-					else if (BDFDB.ArrayUtils.is(children.props.children)) for (let i in children.props.children) {
-						if (typeof children.props.children[i] == "string") checkChild(children.props.children[i]);
-						else if (BDFDB.ArrayUtils.is(children.props.children[i])) for (let j in children.props.children[i]) if (typeof children.props.children[i][j] == "string") checkChild(children.props.children[i][j]);
+						break;
 					}
 				}
 			}
@@ -679,7 +678,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			changeMention (mention, data) {
+			changeMention (mention, data, wrapper) {
 				if (!mention) return;
 				if (data.name) {
 					const changeMentionName = (child, name) => {
@@ -693,6 +692,7 @@ module.exports = (_ => {
 						}
 						else if (child.props) {
 							if (child.props.iconType && typeof child.props.children == "string") child.props.children = data.name;
+							else if (child.props.iconType && BDFDB.ArrayUtils.is(child.props.children) && child.props.children.length == 1 && child.props.children[0] && child.props.children[0].props) child.props.children[0].props.children = data.name;
 							else if (child.props.iconType && BDFDB.ArrayUtils.is(child.props.children) && child.props.children.length == 1) child.props.children = [data.name];
 							else if (typeof child.props.children == "string" && child.props.children[0] == "#") child.props.children = "#" + data.name;
 							else if (BDFDB.ArrayUtils.is(child.props.children)) changeMentionName(child.props.children);
@@ -700,7 +700,15 @@ module.exports = (_ => {
 					};
 					changeMentionName(mention);
 				}
-				if (data.color) mention.props.color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "INT");
+				if (data.color) {
+					wrapper = wrapper || mention;
+					wrapper.props.color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "INT");
+					wrapper.props["edited-mention-color"] = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "RGBCOMP").slice(0, 3).join(",");
+					if (wrapper.props.children && wrapper.props.children.props) {
+						wrapper.props.children.props.color = wrapper.props.color;
+						wrapper.props.children.props["edited-mention-color"] = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "RGBCOMP").slice(0, 3).join(",");
+					}
+				}
 			}
 			
 			changeChannelColor (child, channelId, modify) {
@@ -708,7 +716,7 @@ module.exports = (_ => {
 				let color = this.getChannelDataColor(channelId);
 				if (color) {
 					color = modify ? this.chooseColor(color, modify) : BDFDB.ColorUtils.convert(color, "RGBA");
-					let childProp = child.props.children ? "children" : "text";
+					let childProp = child.props.children ? "children" : child.props.name ? "name" : "text";
 					let fontGradient = BDFDB.ObjectUtils.is(color);
 					if (fontGradient) child.props[childProp] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
 						gradient: BDFDB.ColorUtils.createGradient(color),
@@ -723,16 +731,18 @@ module.exports = (_ => {
 			
 			changeChannelIconColor (child, channelId, modify) {
 				if (!this.settings.general.changeChannelIcon) return;
-				let color = child && this.getChannelDataColor(channelId);
+				let color = child && child.props && this.getChannelDataColor(channelId);
 				if (!color) return;
 				color = modify ? this.chooseColor(BDFDB.ObjectUtils.is(color) ? color[0] : color, modify) : BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color) ? color[0] : color, "RGBA");
 				if (!color) return;
 				child.props.foreground = null;
 				child.props.color = color || "currentColor";
-				child.props.children = [child.props.children].flat(10).filter(n => n);
-				for (let c of child.props.children) {
-					if (c && c.props && c.props.fill == "currentColor") c.props.fill = color || "currentColor";
-					if (c && c.props && c.props.path == "currentColor") c.props.path = color || "currentColor";
+				if (typeof child.props.children != "function") {
+					child.props.children = [child.props.children].flat(10).filter(n => n);
+					for (let c of child.props.children) {
+						if (c && c.props && c.props.fill == "currentColor") c.props.fill = color || "currentColor";
+						if (c && c.props && c.props.path == "currentColor") c.props.path = color || "currentColor";
+					}
 				}
 			}
 
@@ -796,7 +806,7 @@ module.exports = (_ => {
 					header: this.labels.modal_header,
 					subHeader: channel.name,
 					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 							title: this.labels.modal_channelname,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
@@ -806,12 +816,12 @@ module.exports = (_ => {
 									autoFocus: true,
 									onChange: value => {newData.name = value;}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
 								})
 							]
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 							title: this.labels.modal_colorpicker1,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
@@ -825,7 +835,7 @@ module.exports = (_ => {
 							type: "Switch",
 							margin: 20,
 							label: this.labels.modal_inheritcolor,
-							tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+							tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 							value: channel.isCategory() && data.inheritColor,
 							disabled: !channel.isCategory(),
 							onChange: value => {newData.inheritColor = value;}
@@ -833,7 +843,7 @@ module.exports = (_ => {
 						channel.isGroupDM() && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.marginbottom20,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom20
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -841,9 +851,9 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormTitle.Title, {
 											className: BDFDB.disCN.marginreset,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											children: this.labels.modal_channelicon
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -851,7 +861,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
+											tag: BDFDB.LibraryComponents.FormTitle.Tags.H5,
 											value: data.removeIcon,
 											onChange: value => {
 												newData.removeIcon = value;
@@ -951,379 +961,379 @@ module.exports = (_ => {
 						return {
 							confirm_reset:						"Наистина ли искате да нулирате този канал?",
 							confirm_resetall:					"Наистина ли искате да нулирате всички канали?",
-							context_localchannelsettings:		"Настройки на местния канал",
+							context_localchannelsettings:				"Настройки на местния канал",
 							modal_channelname:					"Име на местния канал",
 							modal_channelicon:					"Икона",
 							modal_colorpicker1:					"Локален цвят на канала",
 							modal_header:						"Настройки на местния канал",
 							modal_inheritcolor:					"Наследете цвета на подканали",
 							modal_invalidurl:					"Невалиден адрес",
-							submenu_channelsettings:			"Промяна на настройките",
-							submenu_resetsettings:				"Нулиране на канала"
+							submenu_channelsettings:				"Промяна на настройките",
+							submenu_resetsettings:					"Нулиране на канала"
 						};
 					case "da":		// Danish
 						return {
 							confirm_reset:						"Er du sikker på, at du vil nulstille denne kanal?",
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle kanaler?",
-							context_localchannelsettings:		"Lokale kanalindstillinger",
+							context_localchannelsettings:				"Lokale kanalindstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfarve",
 							modal_header:						"Lokale kanalindstillinger",
 							modal_inheritcolor:					"Arv farve til underkanaler",
 							modal_invalidurl:					"Ugyldig URL",
-							submenu_channelsettings:			"Ændre indstillinger",
-							submenu_resetsettings:				"Nulstil kanal"
+							submenu_channelsettings:				"Ændre indstillinger",
+							submenu_resetsettings:					"Nulstil kanal"
 						};
 					case "de":		// German
 						return {
 							confirm_reset:						"Möchtest du diesen Kanal wirklich zurücksetzen?",
 							confirm_resetall:					"Möchtest du wirklich alle Kanäle zurücksetzen?",
-							context_localchannelsettings:		"Lokale Kanaleinstellungen",
+							context_localchannelsettings:				"Lokale Kanaleinstellungen",
 							modal_channelname:					"Lokaler Kanalname",
 							modal_channelicon:					"Symbol",
 							modal_colorpicker1:					"Lokale Kanalfarbe",
 							modal_header:						"Lokale Kanaleinstellungen",
 							modal_inheritcolor:					"Vererbung der Farbe an Unterkanäle",
 							modal_invalidurl:					"Ungültige URL",
-							submenu_channelsettings:			"Einstellungen ändern",
-							submenu_resetsettings:				"Kanal zurücksetzen"
+							submenu_channelsettings:				"Einstellungen ändern",
+							submenu_resetsettings:					"Kanal zurücksetzen"
 						};
 					case "el":		// Greek
 						return {
 							confirm_reset:						"Θέλετε την επαναφορά αυτού του καναλιού;",
 							confirm_resetall:					"Θέλετε την επαναφορά όλων των καναλιών;",
-							context_localchannelsettings:		"Ρυθμίσεις Τοπικού Καναλιού",
+							context_localchannelsettings:				"Ρυθμίσεις Τοπικού Καναλιού",
 							modal_channelname:					"Ονομασία Τοπικού Καναλιού",
 							modal_channelicon:					"Εικονίδιο",
 							modal_colorpicker1:					"Χρώμα Τοπικού Καναλιού",
 							modal_header:						"Ρυθμίσεις Τοπικού Καναλιού",
 							modal_inheritcolor:					"Εφαρμογή του χρώματος στα υπό-κανάλια",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
-							submenu_channelsettings:			"Αλλαγή Ρυθμίσεων",
-							submenu_resetsettings:				"Επαναφορά καναλιού"
+							submenu_channelsettings:				"Αλλαγή Ρυθμίσεων",
+							submenu_resetsettings:					"Επαναφορά καναλιού"
 						};
 					case "es":		// Spanish
 						return {
 							confirm_reset:						"¿Estás seguro de que deseas restablecer este canal?",
 							confirm_resetall:					"¿Está seguro de que desea restablecer todos los canales?",
-							context_localchannelsettings:		"Configuración de canal local",
+							context_localchannelsettings:				"Configuración de canal local",
 							modal_channelname:					"Nombre del canal local",
 							modal_channelicon:					"Icono",
 							modal_colorpicker1:					"Color del canal local",
 							modal_header:						"Configuración de canal local",
 							modal_inheritcolor:					"Heredar color a subcanales",
 							modal_invalidurl:					"URL invalida",
-							submenu_channelsettings:			"Cambiar ajustes",
-							submenu_resetsettings:				"Restablecer canal"
+							submenu_channelsettings:				"Cambiar ajustes",
+							submenu_resetsettings:					"Restablecer canal"
 						};
 					case "fi":		// Finnish
 						return {
 							confirm_reset:						"Haluatko varmasti nollata tämän kanavan?",
 							confirm_resetall:					"Haluatko varmasti nollata kaikki kanavat?",
-							context_localchannelsettings:		"Paikallisen kanavan asetukset",
+							context_localchannelsettings:				"Paikallisen kanavan asetukset",
 							modal_channelname:					"Paikallisen kanavan nimi",
 							modal_channelicon:					"Kuvake",
 							modal_colorpicker1:					"Paikallisen kanavan väri",
 							modal_header:						"Paikallisen kanavan asetukset",
 							modal_inheritcolor:					"Peri väri alikanaville",
 							modal_invalidurl:					"Virheellinen URL",
-							submenu_channelsettings:			"Vaihda asetuksia",
-							submenu_resetsettings:				"Nollaa kanava"
+							submenu_channelsettings:				"Vaihda asetuksia",
+							submenu_resetsettings:					"Nollaa kanava"
 						};
 					case "fr":		// French
 						return {
 							confirm_reset:						"Voulez-vous vraiment réinitialiser cette salon?",
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser toutes les salons?",
-							context_localchannelsettings:		"Paramètres  de la salon",
+							context_localchannelsettings:				"Paramètres  de la salon",
 							modal_channelname:					"Nom local de la salon",
 							modal_channelicon:					"Icône",
 							modal_colorpicker1:					"Couleur locale de la salon",
 							modal_header:						"Paramètres locaux de la salon",
 							modal_inheritcolor:					"Hériter de la couleur aux sous-canaux",
 							modal_invalidurl:					"URL invalide",
-							submenu_channelsettings:			"Modifier les paramètres",
-							submenu_resetsettings:				"Réinitialiser la salon"
+							submenu_channelsettings:				"Modifier les paramètres",
+							submenu_resetsettings:					"Réinitialiser la salon"
 						};
 					case "hr":		// Croatian
 						return {
 							confirm_reset:						"Jeste li sigurni da želite resetirati ovaj kanal?",
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve kanale?",
-							context_localchannelsettings:		"Postavke lokalnog kanala",
+							context_localchannelsettings:				"Postavke lokalnog kanala",
 							modal_channelname:					"Naziv lokalnog kanala",
 							modal_channelicon:					"Ikona",
 							modal_colorpicker1:					"Lokalna boja kanala",
 							modal_header:						"Postavke lokalnog kanala",
 							modal_inheritcolor:					"Naslijedi boju na podkanalima",
 							modal_invalidurl:					"Neispravna poveznica",
-							submenu_channelsettings:			"Promijeniti postavke",
-							submenu_resetsettings:				"Resetiraj kanal"
+							submenu_channelsettings:				"Promijeniti postavke",
+							submenu_resetsettings:					"Resetiraj kanal"
 						};
 					case "hu":		// Hungarian
 						return {
 							confirm_reset:						"Biztosan vissza akarja állítani ezt a csatornát?",
 							confirm_resetall:					"Biztosan visszaállítja az összes csatornát?",
-							context_localchannelsettings:		"Helyi csatorna beállításai",
+							context_localchannelsettings:				"Helyi csatorna beállításai",
 							modal_channelname:					"Helyi csatorna neve",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Helyi csatorna színe",
 							modal_header:						"Helyi csatorna beállításai",
 							modal_inheritcolor:					"Örökli a színt az alcsatornákra",
 							modal_invalidurl:					"Érvénytelen URL",
-							submenu_channelsettings:			"Beállítások megváltoztatása",
-							submenu_resetsettings:				"Csatorna visszaállítása"
+							submenu_channelsettings:				"Beállítások megváltoztatása",
+							submenu_resetsettings:					"Csatorna visszaállítása"
 						};
 					case "it":		// Italian
 						return {
 							confirm_reset:						"Sei sicuro di voler ripristinare questo canale?",
 							confirm_resetall:					"Sei sicuro di voler ripristinare tutti i canali?",
-							context_localchannelsettings:		"Impostazioni del canale locale",
+							context_localchannelsettings:				"Impostazioni del canale locale",
 							modal_channelname:					"Nome canale locale",
 							modal_channelicon:					"Icona",
 							modal_colorpicker1:					"Colore canale locale",
 							modal_header:						"Impostazioni del canale locale",
 							modal_inheritcolor:					"Eredita colore ai canali secondari",
 							modal_invalidurl:					"URL non valido",
-							submenu_channelsettings:			"Cambia impostazioni",
-							submenu_resetsettings:				"Reimposta canale"
+							submenu_channelsettings:				"Cambia impostazioni",
+							submenu_resetsettings:					"Reimposta canale"
 						};
 					case "ja":		// Japanese
 						return {
 							confirm_reset:						"このチャンネルをリセットしてもよろしいですか？",
 							confirm_resetall:					"すべてのチャンネルをリセットしてもよろしいですか？",
-							context_localchannelsettings:		"ローカルチャンネル設定",
+							context_localchannelsettings:				"ローカルチャンネル設定",
 							modal_channelname:					"ローカルチャネル名",
 							modal_channelicon:					"アイコン",
 							modal_colorpicker1:					"ローカルチャンネルの色",
 							modal_header:						"ローカルチャンネル設定",
 							modal_inheritcolor:					"サブチャネルに色を継承する",
 							modal_invalidurl:					"無効なURL",
-							submenu_channelsettings:			"設定を変更する",
-							submenu_resetsettings:				"チャネルをリセット"
+							submenu_channelsettings:				"設定を変更する",
+							submenu_resetsettings:					"チャネルをリセット"
 						};
 					case "ko":		// Korean
 						return {
 							confirm_reset:						"이 채널을 재설정 하시겠습니까?",
 							confirm_resetall:					"모든 채널을 재설정 하시겠습니까?",
-							context_localchannelsettings:		"로컬 채널 설정",
+							context_localchannelsettings:				"로컬 채널 설정",
 							modal_channelname:					"로컬 채널 이름",
 							modal_channelicon:					"상",
 							modal_colorpicker1:					"로컬 채널 색상",
 							modal_header:						"로컬 채널 설정",
 							modal_inheritcolor:					"하위 채널에 색상 상속",
 							modal_invalidurl:					"잘못된 URL",
-							submenu_channelsettings:			"설정 변경",
-							submenu_resetsettings:				"채널 재설정"
+							submenu_channelsettings:				"설정 변경",
+							submenu_resetsettings:					"채널 재설정"
 						};
 					case "lt":		// Lithuanian
 						return {
 							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį kanalą?",
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus kanalus?",
-							context_localchannelsettings:		"Vietinio kanalo nustatymai",
+							context_localchannelsettings:				"Vietinio kanalo nustatymai",
 							modal_channelname:					"Vietinio kanalo pavadinimas",
 							modal_channelicon:					"Piktograma",
 							modal_colorpicker1:					"Vietinio kanalo spalva",
 							modal_header:						"Vietinio kanalo nustatymai",
 							modal_inheritcolor:					"Paveldėkite spalvas subkanalams",
 							modal_invalidurl:					"Neteisingas URL",
-							submenu_channelsettings:			"Pakeisti nustatymus",
-							submenu_resetsettings:				"Iš naujo nustatyti kanalą"
+							submenu_channelsettings:				"Pakeisti nustatymus",
+							submenu_resetsettings:					"Iš naujo nustatyti kanalą"
 						};
 					case "nl":		// Dutch
 						return {
 							confirm_reset:						"Weet u zeker dat u dit kanaal opnieuw wilt instellen?",
 							confirm_resetall:					"Weet u zeker dat u alle kanalen opnieuw wilt instellen?",
-							context_localchannelsettings:		"Lokale kanaalinstellingen",
+							context_localchannelsettings:				"Lokale kanaalinstellingen",
 							modal_channelname:					"Lokale kanaalnaam",
 							modal_channelicon:					"Icoon",
 							modal_colorpicker1:					"Lokale kanaalkleur",
 							modal_header:						"Lokale kanaalinstellingen",
 							modal_inheritcolor:					"Overerf kleur naar subkanalen",
 							modal_invalidurl:					"Ongeldige URL",
-							submenu_channelsettings:			"Instellingen veranderen",
-							submenu_resetsettings:				"Kanaal resetten"
+							submenu_channelsettings:				"Instellingen veranderen",
+							submenu_resetsettings:					"Kanaal resetten"
 						};
 					case "no":		// Norwegian
 						return {
 							confirm_reset:						"Er du sikker på at du vil tilbakestille denne kanalen?",
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle kanaler?",
-							context_localchannelsettings:		"Lokale kanalinnstillinger",
+							context_localchannelsettings:				"Lokale kanalinnstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfarge",
 							modal_header:						"Lokale kanalinnstillinger",
 							modal_inheritcolor:					"Arv farge til underkanaler",
 							modal_invalidurl:					"Ugyldig URL",
-							submenu_channelsettings:			"Endre innstillinger",
-							submenu_resetsettings:				"Tilbakestill kanal"
+							submenu_channelsettings:				"Endre innstillinger",
+							submenu_resetsettings:					"Tilbakestill kanal"
 						};
 					case "pl":		// Polish
 						return {
 							confirm_reset:						"Czy na pewno chcesz zresetować ten kanał?",
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie kanały?",
-							context_localchannelsettings:		"Ustawienia kanału lokalnego",
+							context_localchannelsettings:				"Ustawienia kanału lokalnego",
 							modal_channelname:					"Nazwa kanału lokalnego",
 							modal_channelicon:					"Ikona",
 							modal_colorpicker1:					"Kolor kanału lokalnego",
 							modal_header:						"Ustawienia kanału lokalnego",
 							modal_inheritcolor:					"Dziedzicz kolor do kanałów podrzędnych",
 							modal_invalidurl:					"Nieprawidłowy URL",
-							submenu_channelsettings:			"Zmień ustawienia",
-							submenu_resetsettings:				"Resetuj kanał"
+							submenu_channelsettings:				"Zmień ustawienia",
+							submenu_resetsettings:					"Resetuj kanał"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							confirm_reset:						"Tem certeza que deseja redefinir este canal?",
 							confirm_resetall:					"Tem certeza de que deseja redefinir todos os canais?",
-							context_localchannelsettings:		"Configurações de canal local",
+							context_localchannelsettings:				"Configurações de canal local",
 							modal_channelname:					"Nome do canal local",
 							modal_channelicon:					"Ícone",
 							modal_colorpicker1:					"Cor do Canal Local",
 							modal_header:						"Configurações de canal local",
 							modal_inheritcolor:					"Herdar cor para subcanais",
 							modal_invalidurl:					"URL inválida",
-							submenu_channelsettings:			"Mudar configurações",
-							submenu_resetsettings:				"Reiniciar canal"
+							submenu_channelsettings:				"Mudar configurações",
+							submenu_resetsettings:					"Reiniciar canal"
 						};
 					case "ro":		// Romanian
 						return {
 							confirm_reset:						"Sigur doriți să resetați acest canal?",
 							confirm_resetall:					"Sigur doriți să resetați toate canalele?",
-							context_localchannelsettings:		"Setări canale locale",
+							context_localchannelsettings:				"Setări canale locale",
 							modal_channelname:					"Numele canalului local",
 							modal_channelicon:					"Pictogramă",
 							modal_colorpicker1:					"Culoare canal local",
 							modal_header:						"Setări canale locale",
 							modal_inheritcolor:					"Moșteniți culoarea la sub-canale",
 							modal_invalidurl:					"URL invalid",
-							submenu_channelsettings:			"Schimbă setările",
-							submenu_resetsettings:				"Resetați canalul"
+							submenu_channelsettings:				"Schimbă setările",
+							submenu_resetsettings:					"Resetați canalul"
 						};
 					case "ru":		// Russian
 						return {
 							confirm_reset:						"Вы уверены, что хотите сбросить этот канал?",
 							confirm_resetall:					"Вы уверены, что хотите сбросить все каналы?",
-							context_localchannelsettings:		"Настройки локального канала",
+							context_localchannelsettings:				"Настройки локального канала",
 							modal_channelname:					"Имя локального канала",
 							modal_channelicon:					"Икона",
 							modal_colorpicker1:					"Цвет локального канала",
 							modal_header:						"Настройки локального канала",
 							modal_inheritcolor:					"Наследовать цвет для субканалов",
 							modal_invalidurl:					"Неверная ссылка",
-							submenu_channelsettings:			"Изменить настройки",
-							submenu_resetsettings:				"Сбросить канал"
+							submenu_channelsettings:				"Изменить настройки",
+							submenu_resetsettings:					"Сбросить канал"
 						};
 					case "sv":		// Swedish
 						return {
 							confirm_reset:						"Är du säker på att du vill återställa den här kanalen?",
 							confirm_resetall:					"Är du säker på att du vill återställa alla kanaler?",
-							context_localchannelsettings:		"Lokala kanalinställningar",
+							context_localchannelsettings:				"Lokala kanalinställningar",
 							modal_channelname:					"Lokalt kanalnamn",
 							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfärg",
 							modal_header:						"Lokala kanalinställningar",
 							modal_inheritcolor:					"Ärva färg till underkanaler",
 							modal_invalidurl:					"Ogiltig URL",
-							submenu_channelsettings:			"Ändra inställningar",
-							submenu_resetsettings:				"Återställ kanal"
+							submenu_channelsettings:				"Ändra inställningar",
+							submenu_resetsettings:					"Återställ kanal"
 						};
 					case "th":		// Thai
 						return {
 							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตช่องนี้",
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตช่องทั้งหมด",
-							context_localchannelsettings:		"การตั้งค่าช่องท้องถิ่น",
+							context_localchannelsettings:				"การตั้งค่าช่องท้องถิ่น",
 							modal_channelname:					"ชื่อช่องท้องถิ่น",
 							modal_channelicon:					"ไอคอน",
 							modal_colorpicker1:					"ช่องท้องถิ่นสี",
 							modal_header:						"การตั้งค่าช่องท้องถิ่น",
 							modal_inheritcolor:					"สืบทอดสีไปยังช่องย่อย",
 							modal_invalidurl:					"URL ไม่ถูกต้อง",
-							submenu_channelsettings:			"เปลี่ยนการตั้งค่า",
-							submenu_resetsettings:				"รีเซ็ตช่อง"
+							submenu_channelsettings:				"เปลี่ยนการตั้งค่า",
+							submenu_resetsettings:					"รีเซ็ตช่อง"
 						};
 					case "tr":		// Turkish
 						return {
 							confirm_reset:						"Bu kanalı sıfırlamak istediğinizden emin misiniz?",
 							confirm_resetall:					"Tüm kanalları sıfırlamak istediğinizden emin misiniz?",
-							context_localchannelsettings:		"Yerel Kanal Ayarları",
+							context_localchannelsettings:				"Yerel Kanal Ayarları",
 							modal_channelname:					"Yerel Kanal Adı",
 							modal_channelicon:					"Simge",
 							modal_colorpicker1:					"Yerel Kanal Rengi",
 							modal_header:						"Yerel Kanal Ayarları",
 							modal_inheritcolor:					"Renkleri Alt Kanallara Devral",
 							modal_invalidurl:					"Geçersiz URL",
-							submenu_channelsettings:			"Ayarları değiştir",
-							submenu_resetsettings:				"Kanalı Sıfırla"
+							submenu_channelsettings:				"Ayarları değiştir",
+							submenu_resetsettings:					"Kanalı Sıfırla"
 						};
 					case "uk":		// Ukrainian
 						return {
 							confirm_reset:						"Справді скинути цей канал?",
 							confirm_resetall:					"Ви впевнені, що хочете скинути всі канали?",
-							context_localchannelsettings:		"Налаштування локального каналу",
+							context_localchannelsettings:				"Налаштування локального каналу",
 							modal_channelname:					"Назва місцевого каналу",
 							modal_channelicon:					"Піктограма",
 							modal_colorpicker1:					"Колір локального каналу",
 							modal_header:						"Налаштування локального каналу",
 							modal_inheritcolor:					"Успадковувати колір для підканалів",
 							modal_invalidurl:					"Недійсна URL-адреса",
-							submenu_channelsettings:			"Змінити налаштування",
-							submenu_resetsettings:				"Скинути канал"
+							submenu_channelsettings:				"Змінити налаштування",
+							submenu_resetsettings:					"Скинути канал"
 						};
 					case "vi":		// Vietnamese
 						return {
 							confirm_reset:						"Bạn có chắc chắn muốn đặt lại kênh này không?",
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả các kênh không?",
-							context_localchannelsettings:		"Cài đặt kênh cục bộ",
+							context_localchannelsettings:				"Cài đặt kênh cục bộ",
 							modal_channelname:					"Tên kênh địa phương",
 							modal_channelicon:					"Biểu tượng",
 							modal_colorpicker1:					"Màu kênh địa phương",
 							modal_header:						"Cài đặt kênh cục bộ",
 							modal_inheritcolor:					"Kế thừa màu cho các kênh phụ",
 							modal_invalidurl:					"URL không hợp lệ",
-							submenu_channelsettings:			"Thay đổi cài đặt",
-							submenu_resetsettings:				"Đặt lại kênh"
+							submenu_channelsettings:				"Thay đổi cài đặt",
+							submenu_resetsettings:					"Đặt lại kênh"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此频道吗？",
 							confirm_resetall:					"您确定要重置所有频道吗？",
-							context_localchannelsettings:		"本地频道设置",
+							context_localchannelsettings:				"本地频道设置",
 							modal_channelname:					"本地频道名称",
 							modal_channelicon:					"图标",
 							modal_colorpicker1:					"本地频道颜色",
 							modal_header:						"本地频道设置",
 							modal_inheritcolor:					"继承颜色到子通道",
 							modal_invalidurl:					"无效的网址",
-							submenu_channelsettings:			"更改设置",
-							submenu_resetsettings:				"重置频道"
+							submenu_channelsettings:				"更改设置",
+							submenu_resetsettings:					"重置频道"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此頻道嗎？",
 							confirm_resetall:					"您確定要重置所有頻道嗎？",
-							context_localchannelsettings:		"本地頻道設置",
+							context_localchannelsettings:				"本地頻道設置",
 							modal_channelname:					"本地頻道名稱",
 							modal_channelicon:					"圖標",
 							modal_colorpicker1:					"本地頻道顏色",
 							modal_header:						"本地頻道設置",
 							modal_inheritcolor:					"繼承顏色到子通道",
 							modal_invalidurl:					"無效的網址",
-							submenu_channelsettings:			"更改設置",
-							submenu_resetsettings:				"重置頻道"
+							submenu_channelsettings:				"更改設置",
+							submenu_resetsettings:					"重置頻道"
 						};
 					default:		// English
 						return {
 							confirm_reset:						"Are you sure you want to reset this Channel?",
 							confirm_resetall:					"Are you sure you want to reset all Channels?",
-							context_localchannelsettings:		"Local Channel Settings",
+							context_localchannelsettings:				"Local Channel Settings",
 							modal_channelname:					"Local Channel Name",
 							modal_channelicon:					"Icon",
 							modal_colorpicker1:					"Local Channel Color",
 							modal_header:						"Local Channel Settings",
 							modal_inheritcolor:					"Inherit Color to Sub-Channels",
 							modal_invalidurl:					"Invalid URL",
-							submenu_channelsettings:			"Change Settings",
-							submenu_resetsettings:				"Reset Channel"
+							submenu_channelsettings:				"Change Settings",
+							submenu_resetsettings:					"Reset Channel"
 						};
 				}
 			}

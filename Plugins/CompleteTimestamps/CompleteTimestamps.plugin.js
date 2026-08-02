@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.7.7
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -74,17 +79,18 @@ module.exports = (_ => {
 						markup:					{value: true, 			description: "Markup Timestamp Tooltips"}
 					},
 					dates: {
-						timestampDate:			{value: {}, 			description: "Chat Timestamps"},
-						tooltipDate:			{value: {}, 			description: "Tooltip Timestamps"}
+						timestampDate:				{value: {}, 			description: "Chat Timestamps"},
+						tooltipDate:				{value: {}, 			description: "Tooltip Timestamps"}
 					}
 				};
 				
 				this.modulePatches = {
+					before: [
+					],
 					after: [
-						"AuditLogEntry",
 						"Embed",
-						"MessageTimestamp",
-						"UserMemberSince"
+						"MessageForwarded",
+						"MessageTimestamp"
 					]
 				};
 				
@@ -147,7 +153,7 @@ module.exports = (_ => {
 							}))
 						}));
 						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 							className: BDFDB.disCN.marginbottom8
 						}));
 						
@@ -180,47 +186,50 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 			
+			processMessageForwarded (e) {
+				if (!this.settings.places.chat || !e.instance.props.snapshot || !e.instance.props.snapshot.message) return;
+				e.returnvalue.props.children[2].props.children = [e.returnvalue.props.children[2].props.children.split(" ").slice(0, -1), this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.snapshot.message.timestamp._i || e.instance.props.snapshot.message.timestamp)].flat(10).join(" ")
+			}
+			
 			processMessageTimestamp (e) {
-				let tooltipWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "TooltipContainer"});
+				let tooltipWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {name: ["TooltipContainer", "TooltipContainerWithShortcut"]});
 				if (!tooltipWrapper) return;
 				let childClassName = BDFDB.ObjectUtils.get(e, "instance.props.children.props.className");
 				if (childClassName && childClassName.indexOf(BDFDB.disCN.messageedited) > -1) {
-					if (this.settings.tooltips.edit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+					if (this.settings.tooltips.edit) {
+						if (tooltipWrapper.props.text) tooltipWrapper.props.text = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+						else tooltipWrapper.props.__unsupportedReactNodeAsText = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+					}
 				}
 				else {
 					if (!e.instance.props.cozyAlt) {
 						if (this.settings.places.chat) {
 							if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
-							let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
-							let renderChildren = tooltipWrapper.props.children;
-							tooltipWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
-								let renderedChildren = renderChildren(...args);
-								let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {props: [["className", BDFDB.disCN.messagetimestampseparator]]});
-								if (index > -1) children[index + 1] = timestamp;
-								else renderedChildren.props.children = timestamp;
-								return renderedChildren;
-							}, "Error in Children Render of TooltipContainer in MessageTimestamp!", this);
+							let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+							if (typeof tooltipWrapper.props.children == "function") {
+								let renderChildren = tooltipWrapper.props.children;
+								tooltipWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+									let renderedChildren = renderChildren(...args);
+									let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {props: [["className", BDFDB.disCN.messagetimestampseparator]]});
+									if (index > -1) children[index + 1] = timestamp;
+									else renderedChildren.props.children = timestamp;
+									return renderedChildren;
+								}, "Error in Children Render of TooltipContainer in MessageTimestamp!", this);
+							}
+							else if (tooltipWrapper.props.children && tooltipWrapper.props.children.props && tooltipWrapper.props.children.props.timeFormatted) {
+								tooltipWrapper.props.children.props.timeFormatted = timestamp;
+							}
 							this.setMaxWidth(e.returnvalue, e.instance.props.compact);
 						}
 					}
 					if (this.settings.tooltips.chat) {
-						let timestamp = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
-						if (tooltipWrapper.props.text && tooltipWrapper.props.text.props && BDFDB.ArrayUtils.is(tooltipWrapper.props.text.props.children)) tooltipWrapper.props.text.props.children[0] = timestamp;
-						else tooltipWrapper.props.text = timestamp;
+						if (tooltipWrapper.props.text && tooltipWrapper.props.text.props && BDFDB.ArrayUtils.is(tooltipWrapper.props.text.props.children)) tooltipWrapper.props.text.props.children[0] = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+						else {
+							if (tooltipWrapper.props.text) tooltipWrapper.props.text = _ => this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+							else tooltipWrapper.props.__unsupportedReactNodeAsText = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i || e.instance.props.timestamp);
+						}
 					}
 				}
-			}
-			
-			processUserMemberSince (e) {
-				let bodys = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutsectionbody]], all: true});
-				if (bodys[0]) bodys[0].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: this.formatTimestamp(this.settings.dates.tooltipDate, BDFDB.LibraryModules.TimestampUtils.extractTimestamp(e.instance.props.userId)),
-					children: BDFDB.ReactUtils.createElement("span", {children: bodys[0].props.children})
-				});
-				if (e.instance.props.guildMember && e.instance.props.guildMember.joinedAt && bodys[1]) bodys[1].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.guildMember.joinedAt),
-					children: BDFDB.ReactUtils.createElement("span", {children: bodys[1].props.children})
-				});
 			}
 
 			processEmbed (e) {
@@ -228,8 +237,8 @@ module.exports = (_ => {
 				let process = returnvalue => {
 					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.embedfootertext]]});
 					if (index > -1) {
-						if (BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children[children[index].props.children.length - 1] = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i);
-						else children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i);
+						if (BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children[children[index].props.children.length - 1] = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i || e.instance.props.embed.timestamp);
+						else children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i || e.instance.props.embed.timestamp);
 					}
 				};
 				if (typeof e.returnvalue.props.children == "function") {
@@ -239,23 +248,6 @@ module.exports = (_ => {
 						process(children);
 						return children;
 					}, "Error in Children Render of Embed!", this);
-				}
-				else process(e.returnvalue);
-			}
-
-			processAuditLogEntry (e) {
-				if (!this.settings.places.auditLogs || !e.instance.props.log) return;
-				let process = returnvalue => {
-					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.auditlogtimestamp]]});
-					if (index > -1) children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.log.timestampStart._i);
-				};
-				if (typeof e.returnvalue.props.children == "function") {
-					let childrenRender = e.returnvalue.props.children;
-					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let children = childrenRender(...args);
-						process(children);
-						return children;
-					}, "", this);
 				}
 				else process(e.returnvalue);
 			}

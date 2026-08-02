@@ -1,0 +1,20 @@
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/spritesheets.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/people.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/nature.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/food.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/activity.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/travel.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/objects.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/symbols.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/src/Huawei/flags.css);
+@namespace xlink 'http://www.w3.org/1999/xlink';
+.sprite__04eed {
+	-webkit-mask: none !important;
+	background-color: transparent !important;
+	background-position: var(--custom-emoji-sprite-bg-position) !important;
+	background-size: var(--custom-emoji-sprite-bg-size) !important;
+}
+.spriteGreyscale__04eed {
+	filter: grayscale(1) !important;
+}

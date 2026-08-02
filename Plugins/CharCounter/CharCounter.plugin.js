@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.2
+ * @version 1.7.1
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -63,9 +68,10 @@ module.exports = (_ => {
 		};
 		const typeMap = {
 			normal: "chat",
+			form: "upload",
 			sidebar: "chat",
 			thread_creation: "threadcreation",
-			form: "upload"
+			user_profile: "userprofile"
 		};
 		const nativeCounters = ["profile_bio_input"];
 	
@@ -74,7 +80,7 @@ module.exports = (_ => {
 				this.modulePatches = {
 					after: [
 						"ChannelTextAreaContainer",
-						"CustomStatusModal",
+						"CustomStatusModalWithPreview",
 						"Note"
 					]
 				};
@@ -88,6 +94,7 @@ module.exports = (_ => {
 				this.css = `
 					${BDFDB.dotCN._charcountercounteradded} {
 						position: relative !important;
+						width: 100%;
 					}
 					${BDFDB.dotCN._charcountercounter} {
 						display: block;
@@ -97,20 +104,22 @@ module.exports = (_ => {
 						pointer-events: none;
 					}
 					${BDFDB.dotCN._charcounterchatcounter} {
-						right: 0;
-						bottom: -1.3em;
+						right: 0.15em;
+						bottom: 0.75em;
+						font-size: 12px;
 					}
 					${BDFDB.dotCN._charcountereditcounter} {
 						right: 0;
 						bottom: -1.3em;
 					}
 					${BDFDB.dotCN._charcounterthreadcreationcounter} {
-						right: 0;
-						bottom: -1.1em;
+						right: 16px;
+						bottom: 0.3em;
 					}
-					${BDFDB.dotCN._charcounteruploadcounter} {
+					${BDFDB.dotCN._charcounteruserprofilecounter} {
 						right: 0;
-						bottom: -1.0em;
+						bottom: -1.3em;
+						font-size: 12px;
 					}
 					${BDFDB.dotCN._charcountercustomstatuscounter} {
 						right: 0 !important;
@@ -126,7 +135,9 @@ module.exports = (_ => {
 						bottom: -10px !important;
 						font-size: 12px !important;
 					}
-					${BDFDB.dotCN.usernotetextarea}:not(:focus) ~ ${BDFDB.dotCN._charcountercounter} {
+					${BDFDB.dotCN.channelsettingstopiccontainer} ~ ${BDFDB.dotCN._charcountercounter},
+					${BDFDB.dotCN.usernotetextarea}:not(:focus) ~ ${BDFDB.dotCN._charcountercounter},
+					${BDFDB.dotCNS.userpopoutouter + BDFDB.dotCN.textareawrapall}:not(:focus-within) ~ ${BDFDB.dotCN._charcountercounter} {
 						display: none;
 					}
 				`;
@@ -194,7 +205,7 @@ module.exports = (_ => {
 				});
 			}
 
-			processCustomStatusModal (e) {
+			processCustomStatusModalWithPreview (e) {
 				let formItem = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.emojiinputcontainer]]});
 				if (formItem) this.injectCounter(formItem, formItem.props.children, "customstatus", BDFDB.dotCN.input);
 			}
@@ -212,10 +223,14 @@ module.exports = (_ => {
 					parsing: parsing,
 					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.LibraryStores.UserStore.getCurrentUser()) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
 					showPercentage: this.settings.sliders.showPercentage,
+					style: {visibility: "hidden"},
 					onChange: instance => {
 						let node = BDFDB.ReactUtils.findDOMNode(instance);
+						node && node.style.removeProperty("visibility");
 						let form = node && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, node);
 						if (form) {
+							let widthDifference = BDFDB.DOMUtils.getWidth(form.firstElementChild) - BDFDB.DOMUtils.getWidth(node.parentElement);
+							if (widthDifference > 0) node.style.setProperty("right", `-${widthDifference}px`);
 							let typing = form.querySelector(BDFDB.dotCN.typing);
 							if (typing) typing.style.setProperty("margin-right", `${BDFDB.DOMUtils.getWidth(node) + 10}px`);
 						}

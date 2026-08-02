@@ -1,8 +1,8 @@
-﻿/**
+/**
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.6
+ * @version 1.5.7
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -60,7 +65,7 @@ module.exports = (_ => {
 		var loadedUsers, requestedUsers, queuedInstances;
 		var currentPopout, currentProfile;
 		
-		const LastMessageDateComponents = class LastMessageDate extends BdApi.React.Component {
+		const LastMessageDateComponent = class LastMessageDate extends BdApi.React.Component {
 			render() {
 				if (!loadedUsers[this.props.guildId]) loadedUsers[this.props.guildId] = {};
 				if (!requestedUsers[this.props.guildId]) requestedUsers[this.props.guildId] = {};
@@ -68,7 +73,7 @@ module.exports = (_ => {
 				if (loadedUsers[this.props.guildId][this.props.user.id] === undefined && !requestedUsers[this.props.guildId][this.props.user.id]) {
 					requestedUsers[this.props.guildId][this.props.user.id] = true;
 					queuedInstances[this.props.guildId][this.props.user.id] = [].concat(queuedInstances[this.props.guildId][this.props.user.id]).filter(n => n);
-					BDFDB.LibraryModules.APIUtils.get({
+					BDFDB.LibraryModules.HTTPUtils.get({
 						url: this.props.isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(this.props.guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(this.props.channelId),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							author_id: this.props.user.id,
@@ -97,24 +102,26 @@ module.exports = (_ => {
 					nativeClass: false,
 					name: BDFDB.LibraryComponents.SvgIcon.Names.NUMPAD
 				});
-				return BDFDB.ReactUtils.createElement(this.props.isInPopout ? BDFDB.LibraryComponents.UserPopoutSection : BDFDB.ReactUtils.Fragment, {
+				return BDFDB.ReactUtils.createElement("section", {
+					className: BDFDB.disCN.userprofilesection,
+					onPointerDownCapture: e => { if (!e.button && channel) { e.nativeEvent.stopImmediatePropagation(); e.preventDefault(); BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, loadedUsers[this.props.guildId][this.props.user.id].id)); } },
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
-							className: !this.props.isInPopout ? BDFDB.disCN.userprofileinfosectionheader : BDFDB.disCN.userpopoutsectiontitle,
-							variant: "eyebrow",
+							className: BDFDB.disCN.userprofilesectionheading,
+							variant: "text-xs/semibold",
+							style: {color: "var(--text-strong)"},
+							color: null,
 							children: _this.labels.last_message
 						}),
 						BDFDB.ReactUtils.createElement(loadedUsers[this.props.guildId][this.props.user.id] ? BDFDB.LibraryComponents.Clickable : "div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.membersince, !this.props.isInPopout && BDFDB.disCN.userprofileinfotext),
-							onClick: _ => loadedUsers[this.props.guildId][this.props.user.id] && BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, loadedUsers[this.props.guildId][this.props.user.id].id)),
+							className: BDFDB.disCN.membersince,
 							children: [
 								!channel ? icon : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 									text: channel.guild_id ? "#" + channel.name : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES,
 									children: icon
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Text, {
-									className: this.props.isInPopout && BDFDB.disCN.userpopoutsectionbody,
-									variant: "text-sm/normal",
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_14,
 									children: loadedUsers[this.props.guildId][this.props.user.id] ? BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.lastMessageDate, new Date(loadedUsers[this.props.guildId][this.props.user.id].timestamp)) : "---"
 								})
 							]
@@ -133,22 +140,23 @@ module.exports = (_ => {
 
 				this.defaults = {
 					places: {
-						userPopout:				{value: true, 			description: "User Popouts"},
+						userPopout:			{value: true, 			description: "User Popouts"},
 						userProfile:			{value: true, 			description: "User Profile Modal"}
 					},
 					dates: {
 						lastMessageDate:		{value: {}, 			description: "Last Message Date"},
 					}
 				};
+				
+				this.patchPriority = 9;
 			
 				this.modulePatches = {
 					before: [
-						"UserPopout",
-						"UserProfile"
+						"UserThemeContainer"
 					],
 					after: [
-						"UserMemberSinceSection",
-						"UserProfileBody"
+						"UserHeaderUsername",
+						"UserProfile"
 					]
 				};
 				
@@ -156,7 +164,7 @@ module.exports = (_ => {
 					${BDFDB.dotCN._lastmessagedateicon} {
 						width: 16px;
 						height: 16px;
-						color: var(--interactive-normal);
+						color: var(--text-default);
 					}
 				`;
 			}
@@ -202,7 +210,7 @@ module.exports = (_ => {
 							}))
 						}));
 						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 							className: BDFDB.disCN.marginbottom8
 						}));
 						
@@ -227,40 +235,37 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				currentPopout = e.instance;
+			processUserThemeContainer (e) {
+				let popout = {props: e.instance.props.value || e.instance.props};
+				if (popout.props.layout == "POPOUT" || popout.props.layout == "SIDEBAR") currentPopout = popout;
+				if (popout.props.layout == "MODAL" || popout.props.layout == "MODAL_V2") currentProfile = popout;
 			}
 
-			processUserMemberSinceSection (e) {
-				if (!currentPopout) return;
+			processUserHeaderUsername (e) {
+				let themeType = BDFDB.ObjectUtils.get(e.instance, "props.trailing.props.themeType");
+				if (!currentPopout || themeType != "SIDEBAR" && themeType != "POPOUT" || e.instance.props.className) return;
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
-				e.returnvalue = [
-					BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
-						isInPopout: true,
-						guildId: currentPopout.props.guildId || BDFDB.DiscordConstants.ME,
-						channelId: currentPopout.props.channelId,
-						isGuild: !!currentPopout.props.guildId,
-						user: user
-					}, true),
-					e.returnvalue
-				];
-			}
-
-			processUserProfile (e) {
-				currentProfile = e.instance;
-			}
-
-			processUserProfileBody (e) {
-				if (!currentProfile) return;
-				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
-				if (!user || user.isNonUserBot()) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserMemberSince"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponents, {
-					isInPopout: false,
+				e.returnvalue = [e.returnvalue].flat(10);
+				e.returnvalue.push(BDFDB.ReactUtils.createElement(LastMessageDateComponent, {
+					isInPopout: true,
 					guildId: currentPopout.props.guildId || BDFDB.DiscordConstants.ME,
 					channelId: currentPopout.props.channelId,
 					isGuild: !!currentPopout.props.guildId,
+					user: user
+				}, true));
+			}
+
+			processUserProfile (e) {
+				if (!currentProfile || e.instance.props.themeType != "MODAL_V2") return;
+				let user = currentProfile.props.user || BDFDB.LibraryStores.UserStore.getUser(currentProfile.props.userId);
+				if (!user || user.isNonUserBot()) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["heading", BDFDB.LanguageUtils.LanguageStrings.MEMBER_SINCE]]});
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(LastMessageDateComponent, {
+					isInPopout: false,
+					guildId: currentProfile.props.guildId || BDFDB.DiscordConstants.ME,
+					channelId: currentProfile.props.channelId,
+					isGuild: !!currentProfile.props.guildId,
 					user: user
 				}, true));
 			}

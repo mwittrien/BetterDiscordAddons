@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.8.1
+ * @version 4.0.8
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,29 +56,30 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
 		var audios, choices, firedEvents;
 		var volumes = {};
+		var toggles = {};
 		
 		const removeAllKey = "REMOVE_ALL_BDFDB_DEVILBRO_DO_NOT_COPY";
 		const defaultDevice = "default";
 		
 		var currentDevice = defaultDevice, createdAudios = {};
 		
-		let types = {};
+		let types = {}, soundPacks = [];
 		
 		const message1Types = {
-			dm:			{src: "./message3.mp3", name: "Message (Direct Message)", force: null, focus: true},
-			groupdm:	{src: "./message3.mp3", name: "Message (Group Message)", force: null, focus: true},
-			mentioned:	{src: "./message2.mp3", name: "Message Mentioned", force: false, focus: true},
-			reply:		{src: "./message2.mp3", name: "Message Mentioned (reply)", force: false, focus: true},
-			role:		{src: "./mention1.mp3", name: "Message Mentioned (role)", force: false, focus: true},
-			everyone:	{src: "./mention2.mp3", name: "Message Mentioned (@everyone)", force: false, focus: true},
-			here:		{src: "./mention3.mp3", name: "Message Mentioned (@here)", force: false, focus: true}
+			dm:		{src: "./message3.mp3", name: "Message (Direct Message)"},
+			groupdm:	{src: "./message3.mp3", name: "Message (Group Message)"},
+			mentioned:	{src: "./message2.mp3", name: "Message Mentioned"},
+			reply:		{src: "./message2.mp3", name: "Message Mentioned (reply)"},
+			role:		{src: "./mention1.mp3", name: "Message Mentioned (role)"},
+			everyone:	{src: "./mention2.mp3", name: "Message Mentioned (@everyone)"},
+			here:		{src: "./mention3.mp3", name: "Message Mentioned (@here)"}
 		};
 		
 		const namePrefixes = {
@@ -83,6 +89,7 @@ module.exports = (_ => {
 		};
 		
 		const nameSynonymes = {
+			"message3":	"Message (Current Channel)",
 			"reconnect":	"Invited To Speak"
 		};
 		
@@ -109,6 +116,16 @@ module.exports = (_ => {
 				this._ensureAudio().then(audio => {
 					audio.loop = false;
 					audio.play();
+				});
+			}
+			playWithListener (duration) {
+				return new Promise((callback, errorCallback) => {
+					this._ensureAudio().then(audio => {
+						if (!duration && duration !== 0) errorCallback(new Error("sound has no duration"));
+						audio.loop = false;
+						audio.play();
+						setTimeout(_ => callback(true), duration);
+					});
 				});
 			}
 			pause () {
@@ -162,7 +179,10 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					volumes: {
-						globalVolume:				{value: 100,				description: "Global Notification Sounds Volume"}
+						globalVolume:		{value: 100,	description: "Global Notification Sounds Volume"}
+					},
+					toggles: {
+						playIfMuted: 		{value: false,	description: "Play Sounds Of Muted Channels/Servers"}
 					}
 				};
 				
@@ -170,6 +190,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				soundPacks = [];
 				const soundKeys = BDFDB.LibraryModules.SoundParser.keys();
 				for (let key of soundKeys) {	
 					const id = key.replace("./", "").replace(".mp3", "");
@@ -177,7 +198,8 @@ module.exports = (_ => {
 					const src = BDFDB.LibraryModules.SoundParser(key);	
 					
 					let soundPackName = id.split("_")[0];
-					if (soundPackName != id && soundKeys.filter(n => n.indexOf(`./${soundPackName}`) > -1).length > 10) {
+					if (soundPackName != id && soundKeys.filter(n => n.indexOf(`./${soundPackName}`) > -1).length > 8) {
+						soundPacks.push(soundPackName);
 						soundPackName = BDFDB.StringUtils.upperCaseFirstChar(soundPackName);
 						if (!defaultAudios[soundPackName]) defaultAudios[soundPackName] = {};
 						defaultAudios[soundPackName][name.replace(new RegExp(`${soundPackName} `, "i"), "").replace(/bootup/i, "Discodo")] = src;
@@ -189,22 +211,18 @@ module.exports = (_ => {
 							src: src,
 							mute: id.startsWith("call_") ? null : false,
 							streamMute: false,
-							invisibleMute: false,
-							force: id == "message1" ? false : null,
-							focus: id == "message1" ? true : false
+							invisibleMute: false
 						};
-						if (id == "message1") {
+						if (id == "message1" || id == "message3") {
 							types[id].mute = true;
 							types[id].streamMute = false;
 							types[id].invisibleMute = false;
-							for (let subType in message1Types) types[subType] = {
+							if (id == "message1") for (let subType in message1Types) types[subType] = {
 								name: message1Types[subType].name,
 								src: BDFDB.LibraryModules.SoundParser(message1Types[subType].src),
 								mute: true,
 								streamMute: false,
-								invisibleMute: false,
-								force: message1Types[subType].force,
-								focus: message1Types[subType].focus
+								invisibleMute: false
 							}
 						}
 					}
@@ -233,58 +251,77 @@ module.exports = (_ => {
 					change();
 				}
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {before: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && (e.methodArguments[0].type == "CALL_DELETE" || e.methodArguments[0].type == "CALL_UPDATE" && !e.methodArguments[0].ringing.includes(BDFDB.UserUtils.me.id))) {
+						["call_ringing", "call_calling"].forEach(type => {
+							if (createdAudios[type]) createdAudios[type].stop();
+						});
+					}
+					
+				}, before: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "MESSAGE_CREATE" && e.methodArguments[0].message) {
 						const message = e.methodArguments[0].message;
 						const guildId = message.guild_id || null;
 						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryStores.RelationshipStore.isBlocked(message.author.id)) {
 							const channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
+							
+							const isCurrent = BDFDB.LibraryStores.SelectedChannelStore.getChannelId() == channel.id;
 							const isGroupDM = channel.isGroupDM();
-							const muted = BDFDB.ChannelUtils.isThread(channel) ? BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id) : BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id);
-							const focused = document.hasFocus() && BDFDB.LibraryStores.SelectedChannelStore.getChannelId() == channel.id;
-							if (!guildId && !muted && !(choices[isGroupDM ? "groupdm" : "dm"].focus && focused)) {
+							const isThread = BDFDB.ChannelUtils.isThread(channel);
+							const isCurrentAndFocused = isCurrent && document.hasFocus();
+							
+							if (!toggles.playIfMuted) {
+								if ((isThread && BDFDB.LibraryStores.JoinedThreadsStore.isMuted(channel.id)) || (!isThread && BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId, channel.id))) return;
+							}
+							
+							if (isCurrent && BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel()) {
+								this.fireEvent("message3");
+								this.playAudio("message3");
+								return;
+							}
+							else if (!guildId) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
-								this.playAudio(isGroupDM ? "groupdm" : "dm");
+								!isCurrentAndFocused && this.playAudio(isGroupDM ? "groupdm" : "dm");
 								return;
 							}
 							else if (guildId) {
 								if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned({rawMessage: message, userId: BDFDB.UserUtils.me.id})) {
 									if (message.mentions.length && !this.isSuppressMentionsEnabled(guildId, channel.id)) for (const mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
-										if (message.message_reference && !message.interaction && (!muted || choices.reply.force) && !(choices.reply.focus && focused)) {
+										if (message.message_reference && !message.interaction) {
 											this.fireEvent("reply");
-											this.playAudio("reply");
+											!isCurrentAndFocused && this.playAudio("reply");
 											return;
 										}
-										if (!message.message_reference && (!muted || choices.mentioned.force) && !(choices.mentioned.focus && focused)) {
+										if (!message.message_reference) {
 											this.fireEvent("mentioned");
-											this.playAudio("mentioned");
+											!isCurrentAndFocused && this.playAudio("mentioned");
 											return;
 										}
 									}
-									if (message.mention_roles.length && !BDFDB.LibraryStores.UserGuildSettingsStore.isSuppressRolesEnabled(guildId, channel.id) && (!muted || choices.role.force) && !(choices.role.focus && focused)) {
+									if (message.mention_roles.length && !BDFDB.LibraryStores.UserGuildSettingsStore.isSuppressRolesEnabled(guildId, channel.id)) {
 										const member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, BDFDB.UserUtils.me.id);
 										if (member && member.roles.length) for (const roleId of message.mention_roles) if (member.roles.includes(roleId)) {
 											this.fireEvent("role");
-											this.playAudio("role");
+											!isCurrentAndFocused && this.playAudio("role");
 											return;
 										}
 									}
 									if (message.mention_everyone && !BDFDB.LibraryStores.UserGuildSettingsStore.isSuppressEveryoneEnabled(guildId, channel.id)) {
-										if (message.content.indexOf("@everyone") > -1 && (!muted || choices.everyone.force) && !(choices.everyone.focus && focused)) {
+										if (message.content.indexOf("@everyone") > -1) {
 											this.fireEvent("everyone");
-											this.playAudio("everyone");
+											!isCurrentAndFocused && this.playAudio("everyone");
 											return;
 										}
-										if (message.content.indexOf("@here") > -1 && (!muted || choices.here.force) && !(choices.here.focus && focused)) {
+										if (message.content.indexOf("@here") > -1) {
 											this.fireEvent("here");
-											this.playAudio("here");
+											!isCurrentAndFocused && this.playAudio("here");
 											return;
 										}
 									}
 								}
-								if (BDFDB.LibraryStores.UserGuildSettingsStore.allowAllMessages(channel) && (!muted || choices.message1.force) && !(choices.message1.focus && focused)) {
+								if (BDFDB.LibraryStores.UserGuildSettingsStore.allowAllMessages(channel) && !(isThread && !BDFDB.LibraryStores.JoinedThreadsStore.hasJoined(channel.id))) {
 									this.fireEvent("message1");
-									this.playAudio("message1");
+									!isCurrentAndFocused && this.playAudio("message1");
 									return;
 								}
 							}
@@ -300,25 +337,22 @@ module.exports = (_ => {
 					let cancel = BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
 						if (e.returnValue && e.returnValue.constructor && e.returnValue.constructor.prototype && typeof e.returnValue.constructor.prototype.play == "function") {
 							cancel();
-							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, ["play", "loop"], {instead: e2 => {
+							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, ["play", "loop", "playWithListener"], {instead: e2 => {
 								let type = e2.instance && e2.instance.name;
-								let loop = e2.originalMethodName == "loop";
 								if (type && choices[type]) {
 									e2.stopOriginalMethodCall();
-									BDFDB.TimeUtils.timeout(_ => {
-										if (type == "message1") {
-											let called = false;
-											for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
-												delete firedEvents[subType];
-												called = true;
-												break;
-											}
-											if (!called) this.playAudio(type, loop);
+									if (type == "message1" || type == "message3") BDFDB.TimeUtils.timeout(_ => {
+										let called = false;
+										for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
+											delete firedEvents[subType];
+											called = true;
+											break;
 										}
-										else this.playAudio(type, loop);
+										if (!called) return this.playAudio(type, e2.originalMethodName, e2.instance.duration);
 									});
+									else return this.playAudio(type, e2.originalMethodName, e2.instance.duration);
 								}
-								else this.playAudio(type, loop);
+								else return this.playAudio(type, e2.originalMethodName, e2.instance.duration);
 							}});
 							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, "stop", {after: e2 => {
 								let type = e2.instance && e2.instance.name;
@@ -358,14 +392,23 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(volumes).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Slider",
-								plugin: this,
-								keys: ["volumes", key],
-								basis: "50%",
-								label: this.defaults.volumes[key].description,
-								value: volumes[key]
-							}))
+							children: [
+								...Object.keys(volumes).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Slider",
+									plugin: this,
+									keys: ["volumes", key],
+									basis: "50%",
+									label: this.defaults.volumes[key].description,
+									value: volumes[key]
+								})),
+								...Object.keys(toggles).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["toggles", key],
+									label: this.defaults.toggles[key].description,
+									value: toggles[key]
+								}))
+							]
 						}));
 					
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -376,7 +419,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.margintop4,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Categoryname",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newsound input-category",
@@ -386,7 +429,7 @@ module.exports = (_ => {
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Soundname",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newsound input-sound",
@@ -402,36 +445,33 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.END,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Source",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 													className: "input-newsound input-source",
 													type: "file",
 													filter: ["audio", "video"],
-													useFilePath: true,
 													value: "",
 													placeholder: "Source"
 												})
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-											style: {marginBottom: 1},
+											style: {marginBottom: 4},
 											onClick: _ => {
-												for (let input of settingsPanel.props._node.querySelectorAll(".input-newsound " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new sound", {type: "danger"});
+												for (let input of settingsPanel.props._node.querySelectorAll(".input-newsound " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all Fields to add a new Sound", {type: "danger"});
 												let category = settingsPanel.props._node.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
 												let sound = settingsPanel.props._node.querySelector(".input-sound " + BDFDB.dotCN.input).value.trim();
-												let source = settingsPanel.props._node.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
-												if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
+												let source = settingsPanel.props._node.querySelector(".input-source " + BDFDB.dotCN.input);
+												let value = source && (source.getAttribute("file") || source.value).trim();
+												if (value.indexOf("http") == 0) BDFDB.LibraryRequires.request(value, (error, response, result) => {
 													if (response) {
 														let type = response.headers["content-type"];
-														if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return successSavedAudio({category, sound, source});
+														if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return successSavedAudio({category, sound, source: value});
 													}
 													BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
 												});
-												else BDFDB.LibraryRequires.fs.readFile(source, "", (error, buffer) => {
-													if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists", {type: "danger"});
-													else return successSavedAudio({category, sound, source: `data:audio/mpeg;base64,${Buffer.from(buffer).toString("base64")}`});
-												});
+												else if (value.indexOf("data:") == 0) return successSavedAudio({category, sound, source: value});
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.SAVE
 										})
@@ -443,7 +483,7 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Sound Configuration",
 							collapseStates: collapseStates,
-							children: Object.keys(types).map(type => [
+							children: Object.keys(types).map(type => type == "message3" && !BDFDB.LibraryStores.NotificationSettingsStore.getNotifyMessagesInSelectedChannel() ? null : [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 									className: BDFDB.disCN.marginbottom8,
 									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
@@ -452,34 +492,20 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
 											label: types[type].name
 										}),
-										["force", "focus", "mute", "streamMute", "invisibleMute"].some(n => types[type][n] !== null) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+										["mute", "streamMute", "invisibleMute"].some(n => types[type][n] !== null) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 											onClick: event => BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 												children: [
-													{key: "force", label: "Force Play", hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-														text: "Plays the Message Sound even if the Channel of the Message is muted",
-														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-															name: BDFDB.LibraryComponents.SvgIcon.Names.QUESTIONMARK,
-															width: 18,
-															height: 18
-														})
-													})},
-													{key: "focus", label: "Focus Mute", hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-														text: "Does not play the Message Sound when the Channel of the Message is currently opened",
-														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-															name: BDFDB.LibraryComponents.SvgIcon.Names.QUESTIONMARK,
-															width: 18,
-															height: 18
-														})
-													})},
-													{key: "mute", label: ["Mute in", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.DND})]},
-													{key: "invisibleMute", label: ["Mute in", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.INVISIBLE})]},
-													{key: "streamMute", label: ["Mute while", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.STREAMING})]}
+													{key: "mute", label: ["Mute in", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.DiscordConstants.StatusTypes.DND})]},
+													{key: "invisibleMute", label: ["Mute in", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.DiscordConstants.StatusTypes.INVISIBLE})]},
+													{key: "streamMute", label: ["Mute while", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.DiscordConstants.StatusTypes.STREAMING})]}
 												].map(n => types[type][n.key] !== null && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
 													label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 														align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 														children: n.label
 													}),
-													hint: n.hint,
+													icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+														hint: n.hint
+													}),
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, type, n.key),
 													checked: choices[type][n.key],
 													action: state => {
@@ -503,7 +529,7 @@ module.exports = (_ => {
 											grow: 0,
 											shrink: 0,
 											basis: "31%",
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Category",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 													value: choices[type].category,
@@ -523,7 +549,7 @@ module.exports = (_ => {
 											grow: 0,
 											shrink: 0,
 											basis: "31%",
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Sound",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 													value: choices[type].sound,
@@ -541,7 +567,7 @@ module.exports = (_ => {
 											grow: 0,
 											shrink: 0,
 											basis: "31%",
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 												title: "Volume",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Slider, {
 													defaultValue: choices[type].volume,
@@ -558,15 +584,15 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormDivider, {
 									className: BDFDB.disCN.marginbottom8
 								})
 							]).flat(10).filter(n => n)
 						}));
 						
-						let removeableCategories = [{value: removeAllKey, label: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios).filter(category => !(defaultAudios[category] && !Object.keys(audios[category] || {}).filter(sound => defaultAudios[category][sound] === undefined).length)).map(name => ({value: name, label: name})));
+						let removeableCategories = [{value: removeAllKey, label: BDFDB.LanguageUtils.LanguageStrings.ALL}].concat(Object.keys(audios).filter(category => !(defaultAudios[category] && !Object.keys(audios[category] || {}).filter(sound => defaultAudios[category][sound] === undefined).length)).map(name => ({value: name, label: name})));
 						let removeableSounds = {};
-						for (let category of removeableCategories) removeableSounds[category.value] = [{value: removeAllKey, label: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios[category.value] || {}).filter(sound => !(defaultAudios[category.value] && defaultAudios[category.value][sound] !== undefined)).map(name => ({value: name, label: name})));
+						for (let category of removeableCategories) removeableSounds[category.value] = [{value: removeAllKey, label: BDFDB.LanguageUtils.LanguageStrings.ALL}].concat(Object.keys(audios[category.value] || {}).filter(sound => !(defaultAudios[category.value] && defaultAudios[category.value][sound] !== undefined)).map(name => ({value: name, label: name})));
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Remove Sounds",
 							collapseStates: collapseStates,
@@ -578,7 +604,7 @@ module.exports = (_ => {
 										grow: 0,
 										shrink: 0,
 										basis: "35%",
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 											title: "Category",
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 												key: "REMOVE_CATEGORY",
@@ -587,8 +613,8 @@ module.exports = (_ => {
 												searchable: true,
 												onChange: (category, instance) => {
 													let soundSelectIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "REMOVE_SOUND"});
-													if (soundSelectIns && removeableSounds[category.value]) {
-														soundSelectIns.props.options = removeableSounds[category.value];
+													if (soundSelectIns && removeableSounds[category]) {
+														soundSelectIns.props.options = removeableSounds[category];
 														soundSelectIns.props.value = removeAllKey;
 														BDFDB.ReactUtils.forceUpdate(soundSelectIns);
 													}
@@ -600,7 +626,7 @@ module.exports = (_ => {
 										grow: 0,
 										shrink: 0,
 										basis: "35%",
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormItem, {
 											title: "Sound",
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 												key: "REMOVE_SOUND",
@@ -615,7 +641,7 @@ module.exports = (_ => {
 										shrink: 1,
 										basis: "25%",
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-											style: {marginBottom: 1},
+											style: {marginBottom: 4},
 											color: BDFDB.LibraryComponents.Button.Colors.RED,
 											onClick: (event, instance) => {
 												let wrapperIns = BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true});
@@ -667,6 +693,7 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				volumes = BDFDB.DataUtils.get(this, "volumes");
+				toggles = BDFDB.DataUtils.get(this, "toggles");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.DiscordUtils.rerenderAll();
@@ -691,8 +718,7 @@ module.exports = (_ => {
 						volume: 100,
 						mute: types[type].mute,
 						streamMute: types[type].streamMute,
-						invisibleMute: types[type].invisibleMute,
-						focus: types[type].focus
+						invisibleMute: types[type].invisibleMute
 					};
 					choices[type] = choice;
 					this.saveChoice(type, false);
@@ -708,11 +734,12 @@ module.exports = (_ => {
 				}
 			}
 
-			playAudio (type, loop = false) {
+			playAudio (type, functionCall = "play", duration = 0) {
+				type = soundPacks.some(soundPack => type.startsWith(soundPack + "_")) ? type.split("_").splice(1).join("_") : type;
 				if (this.dontPlayAudio(type) || BDFDB.LibraryStores.StreamerModeStore.disableSounds) return;
 				if (createdAudios[type]) createdAudios[type].stop();
 				createdAudios[type] = new WebAudioSound(type);
-				createdAudios[type][loop ? "loop" : "play"]();
+				return createdAudios[type][typeof createdAudios[type][functionCall] == "function" ? functionCall : "play"](duration);
 			}
 			
 			isSuppressMentionsEnabled (guildId, channelId) {
@@ -731,7 +758,7 @@ module.exports = (_ => {
 			}
 			
 			isSoundUsedAnywhere (type) {
-				return type && type.indexOf("poggermode_") != 0 && type != "human_man" && type != "robot_man" && type != "discodo" && type != "overlayunlock" && type != "call_ringing_beat" && !(type != "message1" && /\d$/.test(type));
+				return type && type.indexOf("poggermode_") != 0 && type != "human_man" && type != "robot_man" && type != "discodo" && type != "overlayunlock" && type != "call_ringing_beat" && !(type != "message1" && type != "message3" && /\d$/.test(type));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

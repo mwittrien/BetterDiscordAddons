@@ -2,7 +2,7 @@
  * @name BetterSearchPage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.3
+ * @version 1.3.2
  * @description Makes the Controls in the Search Results Page sticky
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"improved": {
-			"New Version": "Instead of copying the controls to the top, the controls are now sticky in the list"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -27,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -37,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -53,28 +56,15 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var stickySearchPagination, SearchResultsPaginationComponent;
-		const StickySearchPaginationComponent = class StickySearchPagination extends BdApi.React.Component {
-			componentDidMount() {
-				stickySearchPagination = this;
-			}
-			render() {
-				if (!SearchResultsPaginationComponent) return null;
-				return BDFDB.ReactUtils.createElement(SearchResultsPaginationComponent, this.props);
-			}
-		};
-		
+		var currentSearch;
 		return class BetterSearchPage extends Plugin {
 			onLoad () {
 				this.modulePatches = {
-					before: [
-						"SearchResultsPagination"
-					],
 					after: [
 						"SearchResults"
 					]
@@ -82,15 +72,15 @@ module.exports = (_ => {
 				
 				this.css = `
 					${BDFDB.dotCN.searchresultspagination} {
-						background-color: var(--background-tertiary);
+						background-color: var(--background-base-lowest);
 					}
 					${BDFDB.dotCNS.searchresultspagination + BDFDB.dotCN.input} {
-						background-color: var(--background-floating);
+						background-color: var(--background-base-lowest);
 					}
 					${BDFDB.dotCNS.searchresultspagination + BDFDB.dotCN.paginationcontainer} {
 						margin-top: 0;
 					}
-					${BDFDB.dotCN.searchresultswrap} [role="list"] ~ ${BDFDB.dotCN.searchresultspagination} {
+					${BDFDB.dotCNS.searchresultsscroller + BDFDB.dotCN.searchresultspagination} {
 						display: none !important;
 					}
 				`;
@@ -104,21 +94,23 @@ module.exports = (_ => {
 
 			processSearchResults (e) {
 				if (!e.instance.props.search) return;
+				if (!currentSearch || e.instance.props.selectedChannelId != currentSearch.id) currentSearch = {id: e.instance.props.selectedChannelId, currentPage: 1};
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SearchResultsHeader"});
 				if (index == -1) return;
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(StickySearchPaginationComponent, {
-					changePage: newPage => !e.instance.props.search.searching && BDFDB.LibraryModules.SearchPageUtils.changePage(e.instance.props.searchId, newPage - 1),
+				let onPageChange = BDFDB.ReactUtils.findValue(e.returnvalue, "onPageChange");
+				let renderPageWrapper = BDFDB.ReactUtils.findValue(e.returnvalue, "renderPageWrapper");
+				if (onPageChange && renderPageWrapper) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Paginator, {
+					currentPage: currentSearch.currentPage,
+					onPageChange: newPage => {
+						currentSearch.currentPage = newPage;
+						!e.instance.props.search.searching && onPageChange(newPage-1);
+					},
+					renderPageWrapper: renderPageWrapper,
+					maxVisiblePages: 5,
 					offset: e.instance.props.search.offset,
-					totalResults: e.instance.props.search.totalResults,
-					pageLength: BDFDB.DiscordConstants.SEARCH_PAGE_SIZE
+					totalCount: e.instance.props.search.totalResults > 9975 ? 9975 : e.instance.props.search.totalResults,
+					pageSize: BDFDB.DiscordConstants.SEARCH_PAGE_SIZE
 				}));
-			}
-			
-			processSearchResultsPagination (e) {
-				if (!SearchResultsPaginationComponent) {
-					SearchResultsPaginationComponent = e.component;
-					BDFDB.ReactUtils.forceUpdate(stickySearchPagination);
-				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

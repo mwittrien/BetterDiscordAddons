@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.7
+ * @version 2.0.1
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.UI.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.UI.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -35,7 +40,7 @@ module.exports = (_ => {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.UI.showConfirmationModal("Library Missing", `The Library Plugin needed for ${this.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -51,7 +56,7 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--text-strong); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${this.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
@@ -69,22 +74,22 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						"addHints":					{value: true, 	description: "Add Key Combo hints to Context Menus"},
-						"clearOnEscape":			{value: true, 	description: "Clear Chat Input when Escape is pressed"}
+						"addHints":			{value: true, 	description: "Add Key Combo hints to Context Menus"},
+						"clearOnEscape":		{value: true, 	description: "Clear Chat Input when Escape is pressed"}
 					},
 					toasts: {},
 					bindingsState: {},
 					bindings: {
-						"Edit_Message":				{name: "Edit Message",			func: this.doEdit,		value: {click: 1, 	keycombo: []}		},
-						"Delete_Message":			{name: "Delete Message",		func: this.doDelete,	value: {click: 0, 	keycombo: [46]}		},
-						"Pin/Unpin_Message":		{name: "Pin/Unpin Message",		func: this.doPinUnPin,	value: {click: 0, 	keycombo: [17]}		},
-						"Reply_to_Message":			{name: "Reply to Message",		func: this.doReply,		value: {click: 0, 	keycombo: [17,72]}	},
-						"React_to_Message":			{name: "Open React Menu",		func: this.doOpenReact,	value: {click: 0, 	keycombo: [17,83]}	},
-						"Copy_Raw":					{name: "Copy raw Message",		func: this.doCopyRaw,	value: {click: 0, 	keycombo: [17,68]}	},
-						"Copy_Link":				{name: "Copy Message Link",		func: this.doCopyLink,	value: {click: 0, 	keycombo: [17,81]}	},
-						"__Quote_Message":			{name: "Quote Message",			func: this.doQuote,		value: {click: 0, 	keycombo: [17,87]}, plugin: "CustomQuoter"},
-						"__Note_Message":			{name: "Note Message",			func: this.doNote,		value: {click: 0, 	keycombo: [16]}, 	plugin: "PersonalPins"},
-						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate,	value: {click: 0, 	keycombo: [20]}, 	plugin: "Translator"}
+						"Edit_Message":			{name: "Edit Message",			func: this.doEdit,						value: {click: 1, keycombo: []}},
+						"Delete_Message":		{name: "Delete Message",		func: this.doDelete,						value: {click: 0, keycombo: [46]}},
+						"Pin/Unpin_Message":		{name: "Pin/Unpin Message",		func: this.doPinUnPin,						value: {click: 0, keycombo: [17]}},
+						"Reply_to_Message":		{name: "Reply to Message",		func: this.doReply,						value: {click: 0, keycombo: [17,72]}},
+						"React_to_Message":		{name: "Open React Menu",		func: this.doOpenReact,						value: {click: 0, keycombo: [17,83]}},
+						"Copy_Raw":			{name: "Copy raw Message",		func: this.doCopyRaw,						value: {click: 0, keycombo: [17,68]}},
+						"Copy_Link":			{name: "Copy Message Link",		func: this.doCopyLink,						value: {click: 0, keycombo: [17,81]}},
+						"__Quote_Message":		{name: "Quote Message",			func: this.doQuote, 		plugin: "CustomQuoter",		value: {click: 0, keycombo: [17,87]}},
+						"__Note_Message":		{name: "Note Message",			func: this.doNote, 		plugin: "PersonalPins",		value: {click: 0, keycombo: [16]}},
+						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate, 	plugin: "Translator",		value: {click: 0, keycombo: [20]}}
 					}
 				};
 				
@@ -265,7 +270,7 @@ module.exports = (_ => {
 								}
 								if (action) hint = this.getActiveShortcutString(action);
 							}
-							if (hint) item.props.hint = _ => {
+							if (hint) item.props.icon = _ => {
 								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 									hint: hint
 								});
@@ -361,7 +366,7 @@ module.exports = (_ => {
 			doDelete (execute, {messageDiv, message}, action, event) {
 				let deleteLink = messageDiv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
 				if (deleteLink) deleteLink.click();
-				else if (BDFDB.DiscordConstants.MessageTypeGroups.DELETABLE.has(message.type)) {
+				else if (!BDFDB.DiscordConstants.MessageTypeGroups.UNDELETABLE.has(message.type)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.UserUtils.can("MANAGE_MESSAGES") || message.author.id == BDFDB.UserUtils.me.id)) {
 						if (execute) {
@@ -423,7 +428,7 @@ module.exports = (_ => {
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type)) {
 						if (execute) {
 							BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, {});
-							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
+							if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.REPLY_TO_MESSAGE), {type: "success"});
 						}
 						return true;
 					}
@@ -435,7 +440,7 @@ module.exports = (_ => {
 				if (message.content) {
 					if (execute) {
 						BDFDB.LibraryModules.WindowUtils.copy(message.content);
-						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_TEXT), {type: "success"});
+						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_MESSAGE_TEXT), {type: "success"});
 					}
 					return true;
 				}
