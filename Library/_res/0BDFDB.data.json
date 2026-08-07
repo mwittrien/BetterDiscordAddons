@@ -364,7 +364,7 @@
 			"PrivateChannel": ["getUser", "getRecipientId"]
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "padding-left"]},
-		"Scrollers": {"strings": ["useImperativeHandle", "disableFocusRingScope", "scrollerRef", "paddingFix"]},
+		"Scrollers": {"strings": ["useImperativeHandle", "disableFocusRingScope", "scrollerRef", "gap:O"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
@@ -1375,6 +1375,7 @@
 		"Pagination": "c15210",
 		"PollModal": "_01c8c",
 		"RecentMentions": "d06995",
+		"SearchPopout": "_971b5",
 		"SearchResults": "a98f3b",
 		"SearchResultsMessage": "_80bf8",
 		"Select": "a16aea",
