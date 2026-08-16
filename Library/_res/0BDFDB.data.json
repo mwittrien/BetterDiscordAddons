@@ -364,7 +364,7 @@
 			"PrivateChannel": ["getUser", "getRecipientId"]
 		}},
 		"ScrollerBase": {"strings": ["paddingFix", "padding-left"]},
-		"Scrollers": {"strings": ["useImperativeHandle", "disableFocusRingScope", "scrollerRef", "gap:O"]},
+		"Scrollers": {"strings": ["useImperativeHandle", "disableFocusRingScope", "scrollerRef", "gap:"]},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
