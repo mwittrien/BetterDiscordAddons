@@ -1474,7 +1474,10 @@ module.exports = (_ => {
 						content: translationPrompt
 					}],
 					temperature: 0.2,
-					top_p: 0.8
+					top_p: 0.8,
+					thinking: {
+						type: "disabled"
+					}
 				};
 
 				BDFDB.LibraryRequires.request("https://api.deepseek.com/v1/chat/completions", {
