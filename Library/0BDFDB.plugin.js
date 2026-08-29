@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.4
+ * @version 4.5.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3140,7 +3140,7 @@ module.exports = (_ => {
 					return returnValue;
 				};
 				MyReact.unmountComponentAtNode = function (node) {
-					node && node.root && node.root.unmount ? node.root.unmount() : (Internal.LibraryModules.ReactDOM.unmountComponentAtNode && Internal.LibraryModules.ReactDOM.unmountComponentAtNode(node));
+					node && node.root && node.root.unmount ? node.root.unmount() : (typeof Internal.LibraryModules.ReactDOM.unmountComponentAtNode == "function" && Internal.LibraryModules.ReactDOM.unmountComponentAtNode(node));
 				};
 				BDFDB.ReactUtils = new Proxy({}, {
 					get: function (_, item) {
