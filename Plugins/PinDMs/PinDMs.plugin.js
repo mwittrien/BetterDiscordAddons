@@ -84,13 +84,9 @@ module.exports = (_ => {
 				};
 				
 				this.modulePatches = {
-					before: [
-						"PrivateChannelsList"
-					],
 					after: [
 						"DirectMessage",
-						"PrivateChannel",
-						"PrivateChannelsList"
+						"PrivateChannel"
 					],
 					componentDidMount: [
 						"DirectMessage"
@@ -179,11 +175,13 @@ module.exports = (_ => {
 				}});
 				
 				pinnedChannels = BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id) || {};
+				this.patchPrivateChannelsList();
 				
 				this.forceUpdateAll();
 			}
 			
 			onStop () {
+				clearTimeout(this.privateChannelsListPatchTimer);
 				this.forceUpdateAll();
 			}
 
@@ -858,12 +856,42 @@ module.exports = (_ => {
 							channelListIsRenderendering = true;
 							BDFDB.TimeUtils.timeout(_ => channelListIsRenderendering = false, 3000);
 						}
-						else BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
+						const instance = this.getPrivateChannelsListInstance();
+						if (instance) BDFDB.ReactUtils.forceUpdate(instance);
+						else this.patchPrivateChannelsList();
 						break;
 					case "guildList":
 						BDFDB.DiscordUtils.rerenderAll(true);
 						break;
 				}
+			}
+
+			getPrivateChannelsListInstance () {
+				const list = document.querySelector('nav[class*="privateChannels"] ul');
+				return list && BDFDB.ReactUtils.findOwner(list, {
+					up: true,
+					unlimited: true,
+					filter: fiber => fiber.stateNode && fiber.stateNode.props && Array.isArray(fiber.stateNode.props.privateChannelIds) && typeof fiber.stateNode.renderDM == "function" && typeof fiber.stateNode.renderRow == "function"
+				});
+			}
+
+			patchPrivateChannelsList () {
+				clearTimeout(this.privateChannelsListPatchTimer);
+				const instance = this.getPrivateChannelsListInstance();
+				const prototype = instance && Object.getPrototypeOf(instance);
+				if (!prototype || typeof prototype.render != "function") {
+					this.privateChannelsListPatchTimer = setTimeout(_ => this.patchPrivateChannelsList(), 1000);
+					return;
+				}
+				if (!BDFDB.PatchUtils.isPatched(this, prototype, "render")) BDFDB.PatchUtils.patch(this, prototype, "render", {
+					before: e => this.processPrivateChannelsList({instance: e.instance}),
+					after: e => {
+						const event = {instance: e.instance, returnvalue: e.returnValue};
+						this.processPrivateChannelsList(event);
+						return event.returnvalue;
+					}
+				}, {name: "PrivateChannelsList"});
+				BDFDB.ReactUtils.forceUpdate(instance);
 			}
 
 			sortAndUpdate (type) {
