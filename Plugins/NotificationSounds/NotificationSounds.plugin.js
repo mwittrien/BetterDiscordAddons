@@ -330,8 +330,8 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DesktopNotificationUtils, "showNotification", {before: e => {
-					let soundObjIndex = Array.from(e.methodArguments).findIndex(n => n && n.sound);
-					if (soundObjIndex && e.methodArguments[soundObjIndex].sound.includes("message")) e.methodArguments[soundObjIndex].sound = null;
+					const soundObj = Array.from(e.methodArguments).find(n => n && typeof n.sound == "string");
+					if (soundObj && soundObj.sound.includes("message")) soundObj.sound = null;
 				}});
 				if (BDFDB.LibraryModules.SoundUtils && BDFDB.LibraryModules.SoundUtils.createSound) {
 					let cancel = BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
