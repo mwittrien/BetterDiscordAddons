@@ -2641,9 +2641,10 @@ module.exports = (_ => {
 				LibraryModules.LanguageStore = (LanguageStores.find(n => n && hasDiscordStringHash(n.exports)) || LanguageStores.find(n => n && n.exports && hasDiscordStringHash(n.exports.default)) || {}).exports || {};
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
 				
-				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
-				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
-				LibraryModules.ReactPortal = BDFDB.ModuleUtils.findByProperties("flushSync", "createPortal");
+				LibraryModules.React = BdApi.React;
+				const ReactDOMClient = BDFDB.ModuleUtils.find(m => typeof m.createRoot == "function" && typeof m.hydrateRoot == "function" && m);
+				LibraryModules.ReactDOM = Object.assign({}, BdApi.ReactDOM, ReactDOMClient);
+				LibraryModules.ReactPortal = LibraryModules.ReactDOM;
 				
 				Internal.LibraryModules = new Proxy(LibraryModules, {
 					get: function (_, item) {
@@ -2770,7 +2771,7 @@ module.exports = (_ => {
 				MyReact.findDOMNode = function (instance, onlyChildren) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater) return null;
-					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance);
+					let node = typeof Internal.LibraryModules.ReactDOM.findDOMNode == "function" && Internal.LibraryModules.ReactDOM.findDOMNode(instance);
 					for (let path of ["child.stateNode", "child.ref.current", !onlyChildren && "return.stateNode", !onlyChildren && "return.return.stateNode"]) if (!node && path) {
 						node = BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, path);
 						node = Node.prototype.isPrototypeOf(node) ? node : null;
@@ -3110,7 +3111,7 @@ module.exports = (_ => {
 					if (!BDFDB.ReactUtils.isValidElement(component) || !Node.prototype.isPrototypeOf(node)) return;
 					try {
 						let root;
-						if (Internal.LibraryModules.ReactDOM.render) Internal.LibraryModules.ReactDOM.render(component, node);
+						if (typeof Internal.LibraryModules.ReactDOM.render == "function") Internal.LibraryModules.ReactDOM.render(component, node);
 						else {
 							root = BDFDB.ReactUtils.createRoot(node);
 							BDFDB.ReactUtils.flushSync(_ => root.render(component));
@@ -5131,6 +5132,30 @@ module.exports = (_ => {
 							]
 						});
 					}
+				};
+				CustomComponents.Button.Looks = {
+					BLANK: BDFDB.disCN.buttonlookblank,
+					FILLED: BDFDB.disCN.buttonlookfilled,
+					LINK: BDFDB.disCN.buttonlooklink,
+					OUTLINED: BDFDB.disCN.buttonlookoutlined
+				};
+				CustomComponents.Button.Colors = {
+					BRAND: BDFDB.disCN.buttoncolorbrand,
+					GREEN: BDFDB.disCN.buttoncolorgreen,
+					LINK: BDFDB.disCN.buttoncolorlink,
+					PRIMARY: BDFDB.disCN.buttoncolorprimary,
+					RED: BDFDB.disCN.buttoncolorred,
+					TRANSPARENT: BDFDB.disCN.buttoncolortransparent,
+					WHITE: BDFDB.disCN.buttoncolorwhite
+				};
+				CustomComponents.Button.Sizes = {
+					ICON: BDFDB.disCN.buttonsizeicon,
+					LARGE: BDFDB.disCN.buttonsizelarge,
+					MAX: BDFDB.disCN.buttonsizemax,
+					MEDIUM: BDFDB.disCN.buttonsizemedium,
+					MIN: BDFDB.disCN.buttonsizemin,
+					NONE: "",
+					SMALL: BDFDB.disCN.buttonsizesmall
 				};
 				
 				CustomComponents.Card = reactInitialized && class BDFDB_Card extends Internal.LibraryModules.React.Component {
@@ -7977,22 +8002,13 @@ module.exports = (_ => {
 										this.props.initiated = true;
 										if (document.contains(ele.parentElement)) BDFDB.ReactUtils.forceUpdate(this);
 									}, 3000);
-									const Animation = new Internal.LibraryModules.AnimationUtils.Value(0);
-									Animation.interpolate({inputRange: [0, 1], outputRange: [0, (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width) * -1]}).addListener(v => {
-										ele.firstElementChild.style.setProperty("display", v.value == 0 ? "inline" : "block", "important");
-										ele.firstElementChild.style.setProperty("left", `${v.value}px`, "important");
-									});
 									scroll = p => {
-										const display = ele.firstElementChild.style.getPropertyValue("display");
 										ele.firstElementChild.style.setProperty("display", "inline", "important");
 										const innerWidth = BDFDB.DOMUtils.getRects(ele.firstElementChild).width;
 										const outerWidth = BDFDB.DOMUtils.getRects(ele).width;
-										ele.firstElementChild.style.setProperty("display", display, "important");
-										
-										let w = p + parseFloat(ele.firstElementChild.style.getPropertyValue("left")) / (innerWidth - outerWidth);
-										w = isNaN(w) || !isFinite(w) ? p : w;
-										w *= innerWidth / (outerWidth * 2);
-										Internal.LibraryModules.AnimationUtils.parallel([Internal.LibraryModules.AnimationUtils.timing(Animation, {toValue: p, duration: Math.sqrt(w**2) * 4000 / (parseInt(this.props.speed) || 1)})]).start();
+										const offset = Math.min(0, outerWidth - innerWidth);
+										ele.firstElementChild.style.setProperty("display", p ? "block" : "inline", "important");
+										ele.firstElementChild.style.setProperty("left", `${p ? offset : 0}px`, "important");
 									};
 								}
 							},
