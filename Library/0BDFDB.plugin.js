@@ -1254,6 +1254,11 @@ module.exports = (_ => {
 					return [strings].flat(10).filter(n => typeof n == "string").map(config.ignoreCase ? (n => n.toLowerCase()) : (n => n)).every(string => module && ((typeof module == "function" || typeof module == "string") && (check(module, string) || typeof module.__originalFunction == "function" && check(module.__originalFunction, string)) || typeof module.type == "function" && check(module.type, string) || (typeof module == "function" || typeof module == "object") && module.prototype && Object.keys(module.prototype).filter(n => n.indexOf("render") == 0).some(n => check(module.prototype[n], string))));
 				};
 				Internal.checkModuleProps = function (module, properties, config = {}) {
+					// Discord ships catch-all Proxy exports (IntlMessagesProxy and friends) that answer every property name, so probe an impossible key first
+					if (!config.hasNot && module && (typeof module == "object" || typeof module == "function")) {
+						try {if (module.BDFDB_nonexistent_property_probe !== undefined) return false;}
+						catch (err) {return false;}
+					}
 					return [properties].flat(10).filter(n => typeof n == "string").every(prop => {
 						const value = module[prop];
 						return config.hasNot ? value === undefined : (value !== undefined && !(typeof value == "string" && !value));
@@ -2642,7 +2647,7 @@ module.exports = (_ => {
 				LibraryModules.LanguageStore = LibraryModules.LanguageStore.default || LibraryModules.LanguageStore;
 				
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
-				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode", {noWarnings: true}) || BDFDB.ModuleUtils.findByProperties("createRoot");
+				LibraryModules.ReactDOM = BDFDB.ModuleUtils.find(m => m && typeof m.render == "function" && typeof m.findDOMNode == "function", {noWarnings: true}) || (BdApi.ReactDOM && typeof BdApi.ReactDOM.createRoot == "function" && typeof BdApi.ReactDOM.flushSync == "function" ? BdApi.ReactDOM : null) || BDFDB.ModuleUtils.find(m => m && typeof m.createRoot == "function");
 				LibraryModules.ReactPortal = BDFDB.ModuleUtils.findByProperties("flushSync", "createPortal");
 				
 				Internal.LibraryModules = new Proxy(LibraryModules, {
@@ -2770,7 +2775,7 @@ module.exports = (_ => {
 				MyReact.findDOMNode = function (instance, onlyChildren) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater) return null;
-					let node = Internal.LibraryModules.ReactDOM.findDOMNode && Internal.LibraryModules.ReactDOM.findDOMNode(instance);
+					let node = typeof Internal.LibraryModules.ReactDOM.findDOMNode == "function" ? Internal.LibraryModules.ReactDOM.findDOMNode(instance) : null;
 					for (let path of ["child.stateNode", "child.ref.current", !onlyChildren && "return.stateNode", !onlyChildren && "return.return.stateNode"]) if (!node && path) {
 						node = BDFDB.ObjectUtils.get(instance[BDFDB.ReactUtils.instanceKey] || instance, path);
 						node = Node.prototype.isPrototypeOf(node) ? node : null;
@@ -3110,7 +3115,7 @@ module.exports = (_ => {
 					if (!BDFDB.ReactUtils.isValidElement(component) || !Node.prototype.isPrototypeOf(node)) return;
 					try {
 						let root;
-						if (Internal.LibraryModules.ReactDOM.render) Internal.LibraryModules.ReactDOM.render(component, node);
+						if (typeof Internal.LibraryModules.ReactDOM.render == "function") Internal.LibraryModules.ReactDOM.render(component, node);
 						else {
 							root = BDFDB.ReactUtils.createRoot(node);
 							BDFDB.ReactUtils.flushSync(_ => root.render(component));
