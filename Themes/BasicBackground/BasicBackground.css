@@ -2429,13 +2429,6 @@ body:has(#app-mount)::after {
 #app-mount .peopleListItem_cc6179:hover {
 	background-color: rgba(var(--transparencycolor_v), .3);
 }
-#app-mount .peopleListItem_cc6179 .listItemContents_fc004c {
-	border-top: 1px solid var(--border-subtle);
-}
-#app-mount .peopleListItem_cc6179.active_cc6179 .listItemContents_fc004c,
-#app-mount .peopleListItem_cc6179:hover .listItemContents_fc004c {
-	border-top-color: transparent;
-}
 #app-mount .peopleListItem_cc6179.active_cc6179 .actionButton_f8fa06,
 #app-mount .peopleListItem_cc6179:hover .actionButton_f8fa06 {
 	background-color: rgba(var(--transparencycolor_v), .3);
