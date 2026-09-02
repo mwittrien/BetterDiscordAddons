@@ -903,18 +903,17 @@ body:has(#app-mount)::after {
 
 /* ----		5.3.		DMCHANNELS					---- */
 
-.interactive_bf202d:focus-within,							/* dmchannel/page			inner								*/
-.interactive_bf202d:hover {
+.interactive__972a0:focus-within,							/* dmchannel/page			inner								*/
+.interactive__972a0:hover {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
-.selected_bf202d,
-.selected_bf202d:focus-within,
-.selected_bf202d:hover {
+.interactive__972a0:active,
+.interactiveSelected__972a0 {
 	background-color: rgb(var(--accentcolor_v));
 	color: var(--text-strong);
 	text-shadow: 1px 1px var(--textshadow_v);
 }
-.selected_bf202d svg:not(.svg__44b0c) {
+.interactiveSelected__972a0 svg:not(.svg__44b0c) {
 	filter: drop-shadow(1px 1px var(--textshadow_v));
 }
 

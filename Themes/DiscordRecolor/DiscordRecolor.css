@@ -948,9 +948,8 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ----		3.3.		DMCHANNELS					---- */
 
-.selected_bf202d,
-.selected_bf202d:focus-within,
-.selected_bf202d:hover {
+.interactive__972a0:focus-within,
+.interactive__972a0:hover {
 	background-color: var(--background-modifier-hover);
 	color: var(--text-strong);
 }
