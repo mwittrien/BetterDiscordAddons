@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.4
+ * @version 2.8.4+gtxfix.2
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1337,18 +1337,21 @@ module.exports = (_ => {
 			}
 			
 			googleApiTranslate (data, callback) {
-				BDFDB.LibraryRequires.request("https://translate.googleapis.com/translate_a/single", {
-					form: {
-						"client": "gtx",
-						"dt": "t",
-						"dj": "1",
-						"source": "input",
-						"sl": data.input.id,
-						"tl": data.output.id,
-						"q": encodeURIComponent(data.text)
-					}
+				// Keep request parameters separate from q and encode each value exactly once.
+				const query = new URLSearchParams({
+					"client": "gtx",
+					"dt": "t",
+					"dj": "1",
+					"source": "input",
+					"sl": data.input.id,
+					"tl": data.output.id,
+					"q": data.text
+				});
+				BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?${query.toString()}`, {
+					method: "GET",
+					bdVersion: true
 				}, (error, response, body) => {
-					if (!error && body && response.statusCode == 200) {
+					if (!error && body && response && response.statusCode == 200) {
 						try {
 							body = JSON.parse(body);
 							if (!data.specialCase && body.src && body.src && languages[body.src]) {
@@ -1360,7 +1363,7 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_hourlylimit}`, {
+						if (response && response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_hourlylimit}`, {
 							type: "danger",
 							position: "center"
 						});
