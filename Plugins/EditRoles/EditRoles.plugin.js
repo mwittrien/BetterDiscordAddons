@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.7
+ * @version 1.2.8
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -115,7 +115,7 @@ module.exports = (_ => {
 					}
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "getRoleIconData", {after: e => {
-					if (e.returnValue && e.methodArguments[0].id && changedRoles[e.methodArguments[0].id]) {
+					if (e.methodArguments[0].id && changedRoles[e.methodArguments[0].id]) {
 						if (changedRoles[e.methodArguments[0].id].icon) return {customIconSrc: changedRoles[e.methodArguments[0].id].icon};
 						else if (changedRoles[e.methodArguments[0].id].removeIcon) return {customIconSrc: null};
 					}
