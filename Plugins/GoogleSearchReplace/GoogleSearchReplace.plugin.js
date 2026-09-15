@@ -2,7 +2,7 @@
  * @name GoogleSearchReplace
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.1
+ * @version 1.4.2
  * @description Replaces the default Google Text Search with a custom Search Engine
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -261,13 +261,20 @@ module.exports = (_ => {
 					let ownEnabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.load(this, "ownEngines"), n => n.enabled);
 					let engineKeys = Object.keys(Object.assign({}, enginesWithoutAll, ownEnabledEngines)).sort();
 					if (engineKeys.length == 1) {
+						let key = engineKeys[0];
 						children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_googlesearchreplace.replace("...", this.defaults.engines[engineKeys[0]].name),
+							label: this.labels.context_googlesearchreplace.replace("...", this.defaults.engines[key] && this.defaults.engines[key].name || key),
 							id: children[index].props.id,
 							persisting: true,
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.SEARCH
+								})
+							},
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url + encodeURIComponent(text), {
+								BDFDB.DiscordUtils.openLink((this.defaults.engines[key] || ownEnabledEngines[key]).url + encodeURIComponent(text), {
 									minimized: event.shiftKey
 								});
 							}
@@ -300,6 +307,12 @@ module.exports = (_ => {
 						children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_googlesearchreplace,
 							id: children[index].props.id,
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.SEARCH
+								})
+							},
 							children: items
 						}));
 					}
@@ -310,137 +323,137 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							context_googlesearchreplace:		"Търсене с ...",
+							context_googlesearchreplace:				"Търсене с ...",
 							submenu_disabled:					"Всички инвалиди"
 						};
 					case "da":		// Danish
 						return {
-							context_googlesearchreplace:		"Søg med ...",
+							context_googlesearchreplace:				"Søg med ...",
 							submenu_disabled:					"Alle handicappede"
 						};
 					case "de":		// German
 						return {
-							context_googlesearchreplace:		"Suche mit ...",
+							context_googlesearchreplace:				"Suche mit ...",
 							submenu_disabled:					"Alle deaktiviert"
 						};
 					case "el":		// Greek
 						return {
-							context_googlesearchreplace:		"Αναζήτηση με ...",
+							context_googlesearchreplace:				"Αναζήτηση με ...",
 							submenu_disabled:					"Όλα τα άτομα με ειδικές ανάγκες"
 						};
 					case "es":		// Spanish
 						return {
-							context_googlesearchreplace:		"Buscar con ...",
+							context_googlesearchreplace:				"Buscar con ...",
 							submenu_disabled:					"Todos discapacitados"
 						};
 					case "fi":		// Finnish
 						return {
-							context_googlesearchreplace:		"Hae ...",
+							context_googlesearchreplace:				"Hae ...",
 							submenu_disabled:					"Kaikki vammaiset"
 						};
 					case "fr":		// French
 						return {
-							context_googlesearchreplace:		"Rechercher avec ...",
+							context_googlesearchreplace:				"Rechercher avec ...",
 							submenu_disabled:					"Tout désactivé"
 						};
 					case "hr":		// Croatian
 						return {
-							context_googlesearchreplace:		"Traži sa ...",
+							context_googlesearchreplace:				"Traži sa ...",
 							submenu_disabled:					"Svi invalidi"
 						};
 					case "hu":		// Hungarian
 						return {
-							context_googlesearchreplace:		"Keresés a következővel:",
+							context_googlesearchreplace:				"Keresés a következővel:",
 							submenu_disabled:					"Minden fogyatékkal él"
 						};
 					case "it":		// Italian
 						return {
-							context_googlesearchreplace:		"Cerca con ...",
+							context_googlesearchreplace:				"Cerca con ...",
 							submenu_disabled:					"Tutti disabilitati"
 						};
 					case "ja":		// Japanese
 						return {
-							context_googlesearchreplace:		"で検索 ...",
+							context_googlesearchreplace:				"で検索 ...",
 							submenu_disabled:					"すべて無効"
 						};
 					case "ko":		// Korean
 						return {
-							context_googlesearchreplace:		"다음으로 검색 ...",
+							context_googlesearchreplace:				"다음으로 검색 ...",
 							submenu_disabled:					"모두 비활성화 됨"
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_googlesearchreplace:		"Ieškoti naudojant ...",
+							context_googlesearchreplace:				"Ieškoti naudojant ...",
 							submenu_disabled:					"Visi neįgalūs"
 						};
 					case "nl":		// Dutch
 						return {
-							context_googlesearchreplace:		"Zoeken met ...",
+							context_googlesearchreplace:				"Zoeken met ...",
 							submenu_disabled:					"Allemaal uitgeschakeld"
 						};
 					case "no":		// Norwegian
 						return {
-							context_googlesearchreplace:		"Søk med ...",
+							context_googlesearchreplace:				"Søk med ...",
 							submenu_disabled:					"Alle funksjonshemmede"
 						};
 					case "pl":		// Polish
 						return {
-							context_googlesearchreplace:		"Szukaj za pomocą ...",
+							context_googlesearchreplace:				"Szukaj za pomocą ...",
 							submenu_disabled:					"Wszystkie wyłączone"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_googlesearchreplace:		"Pesquise com ...",
+							context_googlesearchreplace:				"Pesquise com ...",
 							submenu_disabled:					"Todos desativados"
 						};
 					case "ro":		// Romanian
 						return {
-							context_googlesearchreplace:		"Căutați cu ...",
+							context_googlesearchreplace:				"Căutați cu ...",
 							submenu_disabled:					"Toate sunt dezactivate"
 						};
 					case "ru":		// Russian
 						return {
-							context_googlesearchreplace:		"Искать с ...",
+							context_googlesearchreplace:				"Искать с ...",
 							submenu_disabled:					"Все отключены"
 						};
 					case "sv":		// Swedish
 						return {
-							context_googlesearchreplace:		"Sök med ...",
+							context_googlesearchreplace:				"Sök med ...",
 							submenu_disabled:					"Alla funktionshindrade"
 						};
 					case "th":		// Thai
 						return {
-							context_googlesearchreplace:		"ค้นหาด้วย ...",
+							context_googlesearchreplace:				"ค้นหาด้วย ...",
 							submenu_disabled:					"ปิดใช้งานทั้งหมด"
 						};
 					case "tr":		// Turkish
 						return {
-							context_googlesearchreplace:		"Şununla ara ...",
+							context_googlesearchreplace:				"Şununla ara ...",
 							submenu_disabled:					"Hepsi devre dışı"
 						};
 					case "uk":		// Ukrainian
 						return {
-							context_googlesearchreplace:		"Шукати за допомогою ...",
+							context_googlesearchreplace:				"Шукати за допомогою ...",
 							submenu_disabled:					"Всі інваліди"
 						};
 					case "vi":		// Vietnamese
 						return {
-							context_googlesearchreplace:		"Tìm kiếm với ...",
+							context_googlesearchreplace:				"Tìm kiếm với ...",
 							submenu_disabled:					"Tất cả đã bị vô hiệu hóa"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_googlesearchreplace:		"用 ... 搜索",
+							context_googlesearchreplace:				"用 ... 搜索",
 							submenu_disabled:					"全部禁用"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_googlesearchreplace:		"用 ... 搜索",
+							context_googlesearchreplace:				"用 ... 搜索",
 							submenu_disabled:					"全部禁用"
 						};
 					default:		// English
 						return {
-							context_googlesearchreplace:		"Search with ...",
+							context_googlesearchreplace:				"Search with ...",
 							submenu_disabled:					"All disabled"
 						};
 				}
