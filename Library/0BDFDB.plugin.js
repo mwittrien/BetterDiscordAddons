@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.6
+ * @version 4.5.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4891,9 +4891,9 @@ module.exports = (_ => {
 							},
 							"aria-disabled": this.props.disabled,
 							children: [
-								this.props.icon && this.props.showIconFirst && BDFDB.ReactUtils.createElement("div", {
+								this.props.leadingAccessory && this.props.leadingAccessory.icon && BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.menuiconcontainerleft,
-									children: BDFDB.ReactUtils.createElement(this.props.icon, {
+									children: BDFDB.ReactUtils.createElement(this.props.leadingAccessory.icon, {
 										className: BDFDB.disCN.menuicon
 									})
 								}),
@@ -4907,18 +4907,6 @@ module.exports = (_ => {
 											children: typeof this.props.subtext == "function" ? this.props.subtext(this) : this.props.subtext
 										})
 									].filter(n => n)
-								}),
-								this.props.hint && !this.props.showIconFirst && BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.menuiconcontainer,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuHint, {
-										children: typeof this.props.hint == "function" ? this.props.hint(this) : this.props.hint
-									})
-								}),
-								this.props.icon && !this.props.showIconFirst && BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.menuiconcontainer,
-									children: BDFDB.ReactUtils.createElement(this.props.icon, {
-										className: BDFDB.disCN.menuicon
-									})
 								}),
 								this.props.input && BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.menuiconcontainer,
