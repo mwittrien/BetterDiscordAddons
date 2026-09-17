@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.5
+ * @version 2.8.6
  * @description Allows you to translate incoming and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1337,19 +1337,16 @@ module.exports = (_ => {
 			}
 			
 			googleApiTranslate (data, callback) {
-				// Keep request parameters separate from q and encode each value exactly once.
-				const query = new URLSearchParams({
-					"client": "gtx",
-					"dt": "t",
-					"dj": "1",
-					"source": "input",
-					"sl": data.input.id,
-					"tl": data.output.id,
-					"q": data.text
-				});
-				BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?${query.toString()}`, {
-					method: "GET",
-					bdVersion: true
+				BDFDB.LibraryRequires.request("https://translate.googleapis.com/translate_a/single", {
+					form: {
+						"client": "gtx",
+						"dt": "t",
+						"dj": "1",
+						"source": "input",
+						"sl": data.input.id,
+						"tl": data.output.id,
+						"q": encodeURIComponent(data.text)
+					}
 				}, (error, response, body) => {
 					if (!error && body && response && response.statusCode == 200) {
 						try {
@@ -1358,7 +1355,7 @@ module.exports = (_ => {
 								data.input.name = languages[body.src].name;
 								data.input.ownlang = languages[body.src].ownlang;
 							}
-							callback(body.sentences.map(n => n && n.trans).filter(n => n).join(""));
+							callback(body.sentences.map(n => n && n.trans).filter(n => n).join("").replace(/\?client\=gtx/g, ""));
 						}
 						catch (err) {callback("");}
 					}
