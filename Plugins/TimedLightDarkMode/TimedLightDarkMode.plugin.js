@@ -2,7 +2,7 @@
  * @name TimedLightDarkMode
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.2
+ * @version 1.2.3
  * @description Adds a Time Slider to the Appearance Settings
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -148,11 +148,12 @@ module.exports = (_ => {
 			}
 
 			processSettingsPanel (e) {
-				if (e.instance.props.panelKey != "appearance_panel" || e.instance.props.layout[0].layout[0].layout.some(n => n.key == "timed_light_dark_slider")) return;
-				e.instance.props.layout[0].layout[0].layout.splice(1, 0, {
+				console.log(e);
+				if (e.arguments[2] != "appearance_panel" || e.instance.props.children.props.layout.some(n => n.key == "timed_light_dark_slider")) return;
+				e.instance.props.children.props.layout.splice(1, 0, {
 					Component: TimerSliderComponent,
 					key: "timed_light_dark_slider",
-					parent: e.instance.props.layout[0].layout[0],
+					parent: e.instance.props.children,
 					type: 19
 				});
 			}
