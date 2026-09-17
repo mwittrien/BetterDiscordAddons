@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.7
+ * @version 1.7.8
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -188,7 +188,7 @@ module.exports = (_ => {
 			
 			processMessageForwarded (e) {
 				if (!this.settings.places.chat || !e.instance.props.snapshot || !e.instance.props.snapshot.message) return;
-				e.returnvalue.props.children[2].props.children = [e.returnvalue.props.children[2].props.children.split(" ").slice(0, -1), this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.snapshot.message.timestamp._i || e.instance.props.snapshot.message.timestamp)].flat(10).join(" ")
+				e.returnvalue.props.children[1].props.children = [e.returnvalue.props.children[1].props.children.split(" ").slice(0, -1), this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.snapshot.message.timestamp._i || e.instance.props.snapshot.message.timestamp)].flat(10).join(" ")
 			}
 			
 			processMessageTimestamp (e) {
