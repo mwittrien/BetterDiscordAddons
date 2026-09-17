@@ -148,7 +148,6 @@ module.exports = (_ => {
 			}
 
 			processSettingsPanel (e) {
-				console.log(e);
 				if (e.arguments[2] != "appearance_panel" || e.instance.props.children.props.layout.some(n => n.key == "timed_light_dark_slider")) return;
 				e.instance.props.children.props.layout.splice(1, 0, {
 					Component: TimerSliderComponent,
