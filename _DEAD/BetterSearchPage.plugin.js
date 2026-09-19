@@ -2,14 +2,8 @@
  * @name BetterSearchPage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
- * @description Makes the Controls in the Search Results Page sticky
- * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://mwittrien.github.io/
- * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage/
- * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterSearchPage/BetterSearchPage.plugin.js
+ * @version 9.9.9
+ * @description PLUGIN WAS DISCONTINUED
  */
 
 module.exports = (_ => {
@@ -63,54 +57,23 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var currentSearch;
 		return class BetterSearchPage extends Plugin {
-			onLoad () {
-				this.modulePatches = {
-					after: [
-						"SearchResults"
-					]
-				};
-				
-				this.css = `
-					${BDFDB.dotCN.searchresultspagination} {
-						background-color: var(--background-base-lowest);
-					}
-					${BDFDB.dotCNS.searchresultspagination + BDFDB.dotCN.input} {
-						background-color: var(--background-base-lowest);
-					}
-					${BDFDB.dotCNS.searchresultspagination + BDFDB.dotCN.paginationcontainer} {
-						margin-top: 0;
-					}
-					${BDFDB.dotCNS.searchresultsscroller + BDFDB.dotCN.searchresultspagination} {
-						display: none !important;
-					}
-				`;
-			}
+			onLoad () {}
 			
 			onStart () {
-			}
-			
-			onStop () {
-			}
-
-			processSearchResults (e) {
-				if (!e.instance.props.search) return;
-				if (!currentSearch || e.instance.props.selectedChannelId != currentSearch.id) currentSearch = {id: e.instance.props.selectedChannelId, currentPage: 1};
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SearchResultsHeader"});
-				if (index == -1) return;
-				let onPageChange = BDFDB.ReactUtils.findValue(e.returnvalue, "onPageChange");
-				let renderPageWrapper = BDFDB.ReactUtils.findValue(e.returnvalue, "renderPageWrapper");
-				if (onPageChange && renderPageWrapper) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Paginator, {
-					currentPage: currentSearch.currentPage,
-					onPageChange: newPage => {
-						currentSearch.currentPage = newPage;
-						!e.instance.props.search.searching && onPageChange(newPage-1);
-					},
-					renderPageWrapper: renderPageWrapper,
-					maxVisiblePages: 5,
-					offset: e.instance.props.search.offset,
-					totalCount: e.instance.props.search.totalResults > 9975 ? 9975 : e.instance.props.search.totalResults,
-					pageSize: BDFDB.DiscordConstants.SEARCH_PAGE_SIZE
-				}));
+				BDFDB.ModalUtils.open(this, {
+					header: "PLUGIN WAS DISCONTINUED",
+					children: [
+						BDFDB.ReactUtils.createElement("span", {children: "DISCORD ADDED THIS FEATURE BY THEMSELVES, MAKING THIS PLUGIN USELESS "}),
+						BDFDB.ReactUtils.createElement("strong", {children: "DELETE"}),
+						BDFDB.ReactUtils.createElement("span", {children: " TO REMOVE THIS EMPTY PLUGIN FILE."})
+					],
+					buttons: [
+						{contents: "DELETE", close: true, color: "RED", onClick: _ => {
+							BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "BetterSearchPage.plugin.js"), error => {});
+							BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "BetterSearchPage.config.json"), error => {});
+						}}
+					]
+				});
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
