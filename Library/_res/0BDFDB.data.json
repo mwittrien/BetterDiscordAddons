@@ -322,7 +322,7 @@
 			"AnimatedAvatar": ["{\"compare\":null}"],
 			"Avatar": ["statusColor", ".UNKNOWN"]
 		}},
-		"Badges": {"strings": ["disableColor", "BADGE", "ROUND"], "exported": false, "value": "exports", "map": {
+		"Badges": {"strings": ["disableColor", "BADGE", "ROUND_LEFT", "icon:"], "exported": false, "value": "exports", "map": {
 			"BadgeShapes": ["baseShapeRoundRight", "baseShapeRoundLeft"],
 			"IconBadge": ["icon:"],
 			"NumberBadge": ["count:"],
