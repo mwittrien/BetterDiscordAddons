@@ -8,6 +8,8 @@
 		"EmojiStatistics": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/EmojiStatistics.plugin.js",
 		"ForceImagePreviews": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ForceImagePreviews.plugin.js",
 		"JoinedAtDate": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/JoinedAtDate.plugin.js",
+		"RemoveBlockedUsers": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/RemoveBlockedUsers.plugin.js",
+		"RemoveNicknames": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/RemoveNicknames.plugin.js",
 		"ShowHiddenChannels": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ShowHiddenChannels.plugin.js",
 		"ThemeSettings": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ThemeSettings.plugin.js"
 	},
@@ -1100,9 +1102,6 @@
 		"BetterNsfwTag": {
 			"nsfwTag": "nsfwTag_efc92a"
 		},
-		"BetterSearchPage": {
-			"pagination": "pagination_4b5900"
-		},
 		"ChatFilter": {
 			"blocked": "blocked_5616f4",
 			"blockedStamp": "blockedStamp_5616f4",
@@ -1671,7 +1670,6 @@
 		"_betterfriendlistnamecell": ["BetterFriendList", "nameCell"],
 		"_betterfriendlisttitle": ["BetterFriendList", "title"],
 		"_betternsfwtagtag": ["BetterNsfwTag", "nsfwTag"],
-		"_bettersearchpagepagination": ["BetterSearchPage", "pagination"],
 		"_chatfilterblocked": ["ChatFilter", "blocked"],
 		"_chatfilterblockedstamp": ["ChatFilter", "blockedStamp"],
 		"_chatfiltercensored": ["ChatFilter", "censored"],
