@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.6
+ * @version 2.1.7
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -381,14 +381,14 @@ module.exports = (_ => {
 			processUserBadges (e) {
 				if (!e.instance.props.custom) return;
 				let filter = e.instance.props.place != "settings";
-				for (let i in e.returnvalue.props.children) if (e.returnvalue.props.children[i]) {
-					let keyName = filter && Object.keys(badges).find(n => badges[n].keys.includes(e.returnvalue.props.children[i].key.split("-")[0]));
-					if (keyName && badgeConfigs[keyName] && !badgeConfigs[keyName][e.instance.props.place]) e.returnvalue.props.children[i] = null;
-					else if (typeof e.returnvalue.props.children[i].props.children == "function" && e.returnvalue.props.children[i].props.text) {
-						e.returnvalue.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[i].props);
+				for (let i in e.returnvalue.props.children[1]) if (e.returnvalue.props.children[1][i]) {
+					let keyName = filter && Object.keys(badges).find(n => badges[n].keys.includes(e.returnvalue.props.children[1][i].key.split("-")[0]));
+					if (keyName && badgeConfigs[keyName] && !badgeConfigs[keyName][e.instance.props.place]) e.returnvalue.props.children[1][i] = null;
+					else if (typeof e.returnvalue.props.children[1][i].props.children == "function" && e.returnvalue.props.children[1][i].props.text) {
+						e.returnvalue.props.children[1][i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[1][i].props);
 					}
 				}
-				if (!e.returnvalue.props.children.filter(n => n).length) return null;
+				if (!e.returnvalue.props.children.flat(10).filter(n => n).length) return null;
 			}
 
 			injectBadges (children, user, guildId, place) {
