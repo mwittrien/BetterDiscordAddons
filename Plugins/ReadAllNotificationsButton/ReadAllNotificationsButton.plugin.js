@@ -158,6 +158,10 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
+					/* Keep server and folder controls clickable during the rail's scrolling state. */
+					#app-mount ${BDFDB.dotCN.guildsscroller}[class*="scrolling_"] > * {
+						pointer-events: auto;
+					}
 					${BDFDB.dotCN.messagespopouttabbar} {
 						flex: 1 0 auto;
 					}
