@@ -5101,7 +5101,7 @@ body:has(#app-mount)::after {
 
 #app-mount .messagesPopoutWrap__432f4,							/* popout				wrapper								*/
 #app-mount .recentMentionsPopout__95796,						/* popout				wrapper	(for you)						*/
-#app-mount .container__2692d {								/* popout				wrapper	(inbox)							*/
+#app-mount .container__8cb2e {								/* popout				wrapper	(inbox)							*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor_v), .3);
 	border: none;
@@ -5109,14 +5109,15 @@ body:has(#app-mount)::after {
 }
 .messagesPopoutWrap__432f4 > *,
 .recentMentionsPopout__95796 > *,
-.container__2692d > * {
+.container__8cb2e > * {
 	z-index: 1000;
 }
 .messagesPopoutWrap__432f4::before,
 .recentMentionsPopout__95796::before,
+.container__8cb2e::before,
 .messagesPopoutWrap__432f4::after,
 .recentMentionsPopout__95796::after,
-.container__2692d::after {
+.container__8cb2e::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5130,13 +5131,13 @@ body:has(#app-mount)::after {
 }
 .messagesPopoutWrap__432f4::before,
 .recentMentionsPopout__95796::before,
-.container__2692d::before {
+.container__8cb2e::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
 .messagesPopoutWrap__432f4::after,
 .recentMentionsPopout__95796::after,
-.container__2692d::after {
+.container__8cb2e::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
@@ -5150,7 +5151,9 @@ body:has(#app-mount)::after {
 }
 
 #app-mount .header__432f4,								/* popout				header								*/
-#app-mount .header_d9c882 {								/* popout				header								*/
+#app-mount .header_d9c882,								/* popout				header								*/
+#app-mount .box__376cb,									/* popout				header								*/
+#app-mount .channelHeader__5d903 {							/* popout				header								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border: none;
 }
@@ -5298,10 +5301,10 @@ body:has(#app-mount)::after {
 	border-radius: 0 0 5px 5px;
 }
 
-#app-mount .tutorial__2692d {								/* popout				tutorial (inbox)						*/
+#app-mount .tutorial__8cb2e {								/* popout				tutorial (inbox)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
-#app-mount .tutorialIcon__2692d {							/* popout				tutorial (inbox)						*/
+#app-mount .tutorialIcon__8cb2e {							/* popout				tutorial (inbox)						*/
 	background-color: rgba(var(--transparencycolor_v), .4);
 }
 
