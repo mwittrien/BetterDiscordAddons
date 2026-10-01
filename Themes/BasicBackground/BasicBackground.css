@@ -1282,7 +1282,7 @@ body:has(#app-mount)::after {
 	opacity: calc(1 - var(--usechatbubbles));
 }
 
-#app-mount .hasMore_e8b59c:hover {
+#app-mount .hasMore__432f4:hover {
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 #app-mount .jumpToPresentBar__0f481 {							/* bar					jumptopresent							*/
@@ -1334,7 +1334,7 @@ body:has(#app-mount)::after {
 .message__95796,									/* message				mention popout							*/
 .message__1ccd1,									/* message				inbox popout							*/
 .message_fd14e0 .wrapper_c19a55,							/* message				settings preview						*/
-.messageGroupCozy_e8b59c,								/* message				pin popout							*/
+.messageGroupCozy__432f4,								/* message				pin popout							*/
 .message__02a39 .wrapper_c19a55 {							/* message				searchpage							*/
 	background-color: rgba(var(--transparencycolor_v), var(--messagetransparency_v)) !important;
 	contain: unset;
@@ -1434,10 +1434,10 @@ body:has(#app-mount)::after {
 #app-mount .repliedMessage_c19a55 ~ * .avatar_c19a55 {
 	top: 24px;
 }
-#app-mount .messageGroupWrapper_e8b59c .avatar_c19a55 {
+#app-mount .messageGroupWrapper__432f4 .avatar_c19a55 {
 	top: 6px;
 }
-#app-mount .messageGroupWrapper_e8b59c .repliedMessage_c19a55 ~ * .avatar_c19a55 {
+#app-mount .messageGroupWrapper__432f4 .repliedMessage_c19a55 ~ * .avatar_c19a55 {
 	top: 28px;
 }
 #app-mount .avatarDecoration_c19a55 {							/* message				avatar decoration						*/
@@ -1449,7 +1449,7 @@ body:has(#app-mount)::after {
 #app-mount .repliedMessage_c19a55 ~ * .avatarDecoration_c19a55 {
 	top: 24px;
 }
-#app-mount .messageGroupWrapper_e8b59c .repliedMessage_c19a55 ~ * .avatarDecoration_c19a55 {
+#app-mount .messageGroupWrapper__432f4 .repliedMessage_c19a55 ~ * .avatarDecoration_c19a55 {
 	top: 28px;
 }
 
@@ -1525,8 +1525,8 @@ body:has(#app-mount)::after {
 #app-mount .compact_c19a55 .spine__9271d::after {
 	border-color: transparent;
 }
-#app-mount .messageGroupWrapper_e8b59c .repliedMessage_c19a55::before,
-#app-mount .messageGroupWrapper_e8b59c .repliedMessage_c19a55::after {
+#app-mount .messageGroupWrapper__432f4 .repliedMessage_c19a55::before,
+#app-mount .messageGroupWrapper__432f4 .repliedMessage_c19a55::after {
 	top: 0px;
 }
 
@@ -1584,7 +1584,7 @@ body:has(#app-mount)::after {
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--transparencycolor_v), var(--messagetransparency_v));
 }
-.messageGroupWrapper_e8b59c .messageGroupCozy_e8b59c .header_c19a55::after {
+.messageGroupWrapper__432f4 .messageGroupCozy__432f4 .header_c19a55::after {
 	top: 2px;
 }
 .message__02a39 .wrapper_c19a55 .header_c19a55::after {
@@ -1668,7 +1668,7 @@ body:has(#app-mount)::after {
 .messageContainer__95796 .wrapper_c19a55,
 .messages__1ccd1 .wrapper_c19a55,
 .message_fd14e0 .wrapper_c19a55,
-.messageGroupWrapper_e8b59c .messageGroupCozy_e8b59c,
+.messageGroupWrapper__432f4 .messageGroupCozy__432f4,
 .message__02a39 .wrapper_c19a55 {
 	border-radius: 5px;
 	margin-left: calc(60px * var(--usechatbubbles));
@@ -5099,7 +5099,7 @@ body:has(#app-mount)::after {
 
 /* ----		14.4.		PINS/MENTIONS					---- */
 
-#app-mount .messagesPopoutWrap_e8b59c,							/* popout				wrapper								*/
+#app-mount .messagesPopoutWrap__432f4,							/* popout				wrapper								*/
 #app-mount .recentMentionsPopout__95796,						/* popout				wrapper	(for you)						*/
 #app-mount .container__2692d {								/* popout				wrapper	(inbox)							*/
 	background-color: transparent;
@@ -5107,14 +5107,14 @@ body:has(#app-mount)::after {
 	border: none;
 	overflow: hidden;
 }
-.messagesPopoutWrap_e8b59c > *,
+.messagesPopoutWrap__432f4 > *,
 .recentMentionsPopout__95796 > *,
 .container__2692d > * {
 	z-index: 1000;
 }
-.messagesPopoutWrap_e8b59c::before,
+.messagesPopoutWrap__432f4::before,
 .recentMentionsPopout__95796::before,
-.messagesPopoutWrap_e8b59c::after,
+.messagesPopoutWrap__432f4::after,
 .recentMentionsPopout__95796::after,
 .container__2692d::after {
 	content: "";
@@ -5128,19 +5128,19 @@ body:has(#app-mount)::after {
 	pointer-events: none;
 	z-index: -1;
 }
-.messagesPopoutWrap_e8b59c::before,
+.messagesPopoutWrap__432f4::before,
 .recentMentionsPopout__95796::before,
 .container__2692d::before {
 	background: var(--popout_v) var(--popoutposition_v)/var(--popoutsize_v);
 	background-attachment: fixed;
 }
-.messagesPopoutWrap_e8b59c::after,
+.messagesPopoutWrap__432f4::after,
 .recentMentionsPopout__95796::after,
 .container__2692d::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.25));
 	backdrop-filter: blur(var(--popoutblur_v));
 }
-#app-mount .messagesPopout_e8b59c,							/* popout				innerwrap							*/
+#app-mount .messagesPopout__432f4,							/* popout				innerwrap							*/
 #app-mount .container__0f711,								/* popout				for you								*/
 #app-mount .container__6764b {								/* popout				threads								*/
 	background-color: transparent;
@@ -5149,13 +5149,13 @@ body:has(#app-mount)::after {
 	color: var(--text-subtle) !important;
 }
 
-#app-mount .header_e8b59c,								/* popout				header								*/
+#app-mount .header__432f4,								/* popout				header								*/
 #app-mount .header_d9c882 {								/* popout				header								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 	border: none;
 }
 
-#app-mount .footer_e8b59c {								/* popout				footer								*/
+#app-mount .footer__432f4 {								/* popout				footer								*/
 	background-color: rgba(var(--transparencycolor_v), .2);
 }
 
@@ -5164,13 +5164,13 @@ body:has(#app-mount)::after {
 	border-radius: 5px;
 }
 
-#app-mount .messageGroupWrapper_e8b59c {
+#app-mount .messageGroupWrapper__432f4 {
 	background-color: transparent;
 	border: none;
 	overflow: visible;
 	padding: 11px 10px 10px 10px;
 }
-.messageGroupWrapper_e8b59c + .messageGroupWrapper_e8b59c::before {
+.messageGroupWrapper__432f4 + .messageGroupWrapper__432f4::before {
 	content: "";
 	border-top: 1px solid var(--border-subtle);
 	position: absolute;
@@ -5178,20 +5178,20 @@ body:has(#app-mount)::after {
 	left: 0;
 	width: 100%;
 }
-.actionButtons_e8b59c {									/* popout				actionbuttonscontainer						*/
+.actionButtons__432f4 {									/* popout				actionbuttonscontainer						*/
 	top: 4px;
 	right: 14px;
 }
 
 #app-mount .jumpButton_ed0c8c,
-#app-mount .jumpButton_e8b59c {
+#app-mount .jumpButton__432f4 {
 	background: transparent;
 	z-index: 1000;
 }
 #app-mount .jumpButton_ed0c8c::before,
 #app-mount .jumpButton_ed0c8c::after,
-#app-mount .jumpButton_e8b59c::before,
-#app-mount .jumpButton_e8b59c::after {
+#app-mount .jumpButton__432f4::before,
+#app-mount .jumpButton__432f4::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5205,34 +5205,34 @@ body:has(#app-mount)::after {
 	z-index: -1;
 }
 #app-mount .jumpButton_ed0c8c::before,
-#app-mount .jumpButton_e8b59c::before {
+#app-mount .jumpButton__432f4::before {
 	background: var(--background_v) var(--backgroundposition_v)/var(--backgroundsize_v);
 	background-attachment: fixed;
 }
 #app-mount .jumpButton_ed0c8c::after,
-#app-mount .jumpButton_e8b59c::after {
+#app-mount .jumpButton__432f4::after {
 	background-color: rgba(var(--transparencycolor_v), calc(var(--transparencyalpha_v) + 0.4));
 	backdrop-filter: blur(var(--backgroundblur_v));
 }
 #app-mount .jumpButton_ed0c8c:hover::before,
 #app-mount .jumpButton_ed0c8c:hover::after,
-#app-mount .jumpButton_e8b59c:hover::before,
-#app-mount .jumpButton_e8b59c:hover::after {
+#app-mount .jumpButton__432f4:hover::before,
+#app-mount .jumpButton__432f4:hover::after {
 	display: none;
 }
 #app-mount .jumpButton_ed0c8c:hover,
-#app-mount .jumpButton_e8b59c:hover {
+#app-mount .jumpButton__432f4:hover {
 	background-color: rgb(var(--accentcolor_v));
 }
 .jumpButton_ed0c8c + .jumpButton_ed0c8c,
-.jumpButton_e8b59c + .jumpButton_e8b59c {
+.jumpButton__432f4 + .jumpButton__432f4 {
 	margin-left: 2px;
 }
 
-.image_e8b59c {										/* popout				emptyimage							*/
+.image__432f4 {										/* popout				emptyimage							*/
 	opacity: 0.6;
 }
-.image_e8b59c[style*='url("/assets/9e2f412156e2ac1f14e9.svg")'] {
+.image__432f4[style*='url("/assets/9e2f412156e2ac1f14e9.svg")'] {
 	background-image: url(https://discord.com/assets/64df6f04b850029d2e78.svg) !important;
 }
 											/* popout				active tab							*/
@@ -6926,10 +6926,10 @@ input.input__0ed4f:hover:not(:focus) {
 	opacity: .5;
 }
 
-.image_e8b59c {
+.image__432f4 {
 	opacity: .5;
 }
-.image_e8b59c[style*='url("/assets/9e2f412156e2ac1f14e9.svg")'] {
+.image__432f4[style*='url("/assets/9e2f412156e2ac1f14e9.svg")'] {
 	background-image: url(https://discord.com/assets/64df6f04b850029d2e78.svg) !important;
 }
 
