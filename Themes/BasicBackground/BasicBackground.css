@@ -7778,7 +7778,7 @@ html:only-child > head + body div.bar_c38106 > div.title_c38106::after {
 	left: 60px !important;
 	bottom: unset !important;
 	right: unset !important;
-	opacity: 1 !important;
+	opacity: 0.1 !important;
 	padding: 0 !important;
 	margin: 4px 0 0 0 !important;
 	visibility: visible !important;
