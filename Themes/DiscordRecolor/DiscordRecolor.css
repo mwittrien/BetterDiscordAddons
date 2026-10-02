@@ -2386,6 +2386,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary_v), .6), 0 2px 10px 0 rgba(0,0,0, .2);
 }
 
+.outer_c0bea0:not(.custom-theme-background) {
+	--user-profile-overlay-background: var(--background-surface-highest);
+	--user-profile-overlay-background-hover: var(--background-base-lower);
+}
 .outer_c0bea0:not(.custom-user-profile-theme) .container__8061a {
 	background: var(--background-base-low);
 	border-color: var(--background-base-low);
