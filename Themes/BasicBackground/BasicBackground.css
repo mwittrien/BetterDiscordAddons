@@ -7816,11 +7816,10 @@ html:only-child > head + body div.app_a3002d > div.app__160d8 > div.layers__960e
 	pointer-events: none !important;
 	z-index: -1 !important;
 }
-html > body div > div > div > div > div > div.sidebar__409aa > div.navScroller__409aa.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.nav__409aa {
+html:only-child > head + body div.layerContainer__59d0d > div.layer_bc663c div.outerContainer_e44912 > div.container__8a031.modal_e44912 > div.modalContent_e44912 > div.modalContentInner_e44912 > div.container_abd9a8 > aside.sidebar__409aa > nav.nav__409aa > div.navScroller__409aa.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > ul.sublist__409aa + div {
 	position: relative !important;
-	margin-bottom: -20px !important;
 }
-html > body div > div > div > div > div > div.sidebar__409aa > div.navScroller__409aa.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.nav__409aa::after {
+html:only-child > head + body div.layerContainer__59d0d > div.layer_bc663c div.outerContainer_e44912 > div.container__8a031.modal_e44912 > div.modalContent_e44912 > div.modalContentInner_e44912 > div.container_abd9a8 > aside.sidebar__409aa > nav.nav__409aa > div.navScroller__409aa.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > ul.sublist__409aa + div::after {
 	content: "BasicBackground by" !important;
 	font-size: 12px !important;
 	color: var(--text-muted) !important;
@@ -7831,15 +7830,15 @@ html > body div > div > div > div > div > div.sidebar__409aa > div.navScroller__
 	margin: 0 !important;
 	cursor: text !important;
 	visibility: visible !important;
-	position: relative !important;
-	top: unset !important;
-	left: 10px !important;
+	position: absolute !important;
+	top: -14px !important;
+	left: 0 !important;
 	bottom: unset !important;
 	right: unset !important;
 	transform: unset !important;
 	animation: unset !important;
 }
-html > body div > div > div > div > div > div.sidebar__409aa > div.navScroller__409aa.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > nav.nav__409aa::before {
+html:only-child > head + body div.layerContainer__59d0d > div.layer_bc663c div.outerContainer_e44912 > div.container__8a031.modal_e44912 > div.modalContent_e44912 > div.modalContentInner_e44912 > div.container_abd9a8 > aside.sidebar__409aa > nav.nav__409aa > div.navScroller__409aa.thin_d125d2.scrollerBase_d125d2.fade_d125d2 > ul.sublist__409aa + div::before {
 	content: "DevilBro" !important;
 	font-size: 12px !important;
 	font-weight: 600 !important;
@@ -7851,9 +7850,9 @@ html > body div > div > div > div > div > div.sidebar__409aa > div.navScroller__
 	cursor: pointer !important;
 	visibility: visible !important;
 	position: absolute !important;
-	top: unset !important;
+	top: -14px !important;
 	left: 108px !important;
-	bottom: -1px !important;
+	bottom: unset !important;
 	right: unset !important;
 	transform: unset !important;
 	animation: unset !important;
