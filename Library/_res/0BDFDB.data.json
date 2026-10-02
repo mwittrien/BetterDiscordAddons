@@ -2326,6 +2326,7 @@
 		"guildserror": ["GuildsError", "guildsError"],
 		"guildslabel": ["BDFDB", "guildsLabel"],
 		"guildsscroller": ["GuildsWrapper", "scroller"],
+		"guildsscrolling": ["GuildsWrapper", "scrolling"],
 		"guildstree": ["GuildsWrapper", "tree"],
 		"guildsummaryclickableicon": ["BDFDB", "guildSummaryClickableIcon"],
 		"guildsummarycontainer": ["BDFDB", "guildSummaryContainer"],

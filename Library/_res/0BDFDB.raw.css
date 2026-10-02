@@ -1434,6 +1434,9 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 .platform-osx [REPLACE_CLASS_noticewrapper] ~ * [REPLACE_CLASS_guildsscroller] {
 	padding-top: 4px;
 }
+[REPLACE_CLASS_guildsscroller][REPLACE_CLASS_guildsscrolling] > * {
+	pointer-events: auto !important;
+}
 [REPLACE_CLASS_guildsscroller] > [hidden]:has([REPLACE_CLASS_guildouter]) {
 	margin-top: unset;
 	visibility: unset;
