@@ -1148,11 +1148,11 @@ module.exports = (_ => {
 							name: "Morse",
 							id: "morse"
 						},
-                        hex: {
-                            special: true,
-                            name: "Hexadecimal",
-                            id: "hex"
-                        },
+			hex: {
+			    special: true,
+			    name: "Hexadecimal",
+			    id: "hex"
+			},
 					}
 				);
 				for (let id in languages) languages[id].fav = favorites.includes(id) ? 0 : 1;
@@ -1279,7 +1279,7 @@ module.exports = (_ => {
 							case "binary": newText = this.binary2string(newText); break;
 							case "braille": newText = this.braille2string(newText); break;
 							case "morse": newText = this.morse2string(newText); break;
-                            case "hex": newText = this.hex2string(newText); break;
+			    case "hex": newText = this.hex2string(newText); break;
 						}
 					}
 					if (output.special) {
@@ -1287,7 +1287,7 @@ module.exports = (_ => {
 							case "binary": newText = this.string2binary(newText); break;
 							case "braille": newText = this.string2braille(newText); break;
 							case "morse": newText = this.string2morse(newText); break;
-                            case "hex": newText = this.string2hex(newText); break;
+			    case "hex": newText = this.string2hex(newText); break;
 						}
 						finishTranslation(newText);
 					}
