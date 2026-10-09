@@ -87,6 +87,10 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrowcontrol] {
 	margin-left: 8px;
 }
+[REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrowcontrol] [REPLACE_CLASS_settingsrowcontrol] {
+	flex-grow: 1;
+	margin-left: 0;
+}
 [REPLACE_CLASS_settingsrowcontainer] [REPLACE_CLASS_settingsrowtitlemini] {
 	line-height: 18px;
 	font-size: 12px;
