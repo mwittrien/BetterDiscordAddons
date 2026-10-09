@@ -172,7 +172,7 @@
 	--home-background: rgb(var(--backgroundprimary_v)) !important;
 	
 	--modal-background: rgb(var(--backgroundprimary_v)) !important;
-	--modal-footer-background: rgb(var(--backgroundsecondary_v)) !important;
+	--modal-footer-background: rgb(var(--backgroundprimary_v)) !important;
 	
 	--background-accent: rgb(var(--backgroundaccent_v)) !important;
 	--background-code: rgb(var(--backgroundcode_v)) !important;
