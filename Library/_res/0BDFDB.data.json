@@ -303,7 +303,7 @@
 		"PopoutContainer": {"strings": ["Unsupported animation config"]},
 		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"], "funcStrings": ["description"]},
 		"SearchBar": {"strings": ["onClear", "query", "inputRef"]},
-		"SearchableSelect": {"strings": ["onSearchChange", "debounceTime"]},
+		"SearchableSelect": {"strings": ["onSelectionChange", "itemsForMeasurement", "renderListItem"]},
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"Switch": {"strings": ["displayOnly", "SWITCH_BACKGROUND_DEFAULT"]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
@@ -337,7 +337,7 @@
 		"FlowerStar": {"strings": ["style:", "flowerStarClassName", "allowFullSizedIcon"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FormDivider": {"strings": ["let{className:", "gap:", ",style:", "marginTop:", "marginBottom:"]},
-		"FormText": {"strings": ["DESCRIPTION",".Text",".DEFAULT"], "exported": false, "value": "exports", "map": {
+		"FormText": {"strings": ["modeDefault", "text-sm/normal", ".DEFAULT"], "exported": false, "value": "exports", "map": {
 			"Text": [".DEFAULT", "className"],
 			"Types": ["\"DESCRIPTION\"", "\"DEFAULT\""]
 		}},
@@ -378,7 +378,7 @@
 		"StatusComponents": {"strings": ["OFFLINE", "mask", "isMobile", "1.5*"], "exported": false, "value": "exports", "map": {
 			"Status": ["status", "mask"]
 		}},
-		"Text": {"strings": ["lineClamp:", "fontScaling"], "funcStrings": ["fontScaling"]},
+		"Text": {"strings": ["lineClamp:", "fontScaling"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
 		"UnreadDMs": {"strings": ["getMutablePrivateChannels", "selectedVoiceGuildId", "selectedVoiceChannelId:"]},
 		"UserBadgesWrapper": {"strings": ["QUEST_CONTENT_VIEWED", "\"PRESS_BADGE\"", "badgeClassName"], "funcStrings": ["shouldGlowTenureBadge"]},
@@ -1041,7 +1041,6 @@
 			"noticeUpdateSeparator": "separator_f3337b",
 			"noticeWrapper": "noticeWrapper_f3337b",
 			"searchBarWrapper": "searchBarWrapper_ddc25b",
-			"selectWrapper": "selectWrapper_9d6c62",
 			"settingsGuild": "guild_bd9487",
 			"settingsGuildDisabled": "disabled_bd9487",
 			"settingsPanel": "settingsPanel_3aa079",
@@ -2952,7 +2951,6 @@
 		"selectouter": ["Select", "wrapper"],
 		"selectsearchinput": ["Select", "searchInput"],
 		"selectselectedicon": ["Select", "selectedIcon"],
-		"selectwrapper": ["BDFDB", "selectWrapper"],
 		"settingsclosebutton": ["SettingsCloseButton", "closeButton"],
 		"settingsclosebuttoncontainer": ["SettingsCloseButton", "container"],
 		"settingsguild": ["BDFDB", "settingsGuild"],
