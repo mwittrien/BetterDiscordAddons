@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.7
+ * @version 4.5.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -27,6 +27,25 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {}
+	};
+			
+	const getSettingsPanel = function (plugin) {
+		BDFDB.DOMUtils.appendLocalStyle(`${plugin.name} SettingsHider`, `.bd-addon-modal {display: none !important}`);
+		BDFDB.ModalUtils.open(plugin, {
+			size: "LARGE",
+			header: `${plugin.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+			subHeader: "",
+			children: plugin.getSettingsPanelComponents()
+		});
+		let modalObserver = new MutationObserver(changes => {
+			let button = document.querySelector(".bd-addon-modal .bd-button");
+			if (button) {
+				button.click();
+				modalObserver.disconnect();
+				BDFDB.TimeUtils.timeout(_ => BDFDB.DOMUtils.removeLocalStyle(`${plugin.name} SettingsHider`), 2000);
+			}
+		});
+		modalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree: true});
 	};
 	
 	return class BDFDB_Frame {
@@ -111,6 +130,10 @@ module.exports = (_ => {
 						this.loaded = true;
 						this.defaults = {};
 						this.labels = {};
+						if (this.getSettingsPanel && !this.getSettingsPanelComponents) {
+							this.getSettingsPanelComponents = this.getSettingsPanel;
+							this.getSettingsPanel = _ => getSettingsPanel(this);
+						}
 						if (window.BDFDB_Global.loading) {
 							if (!PluginStores.delayed.loads.includes(this)) PluginStores.delayed.loads.push(this);
 						}
@@ -994,8 +1017,8 @@ module.exports = (_ => {
 						settingsPanel.props._instance.props = Object.assign({}, settingsPanel.props._instance.props, ...args);
 						BDFDB.ReactUtils.forceUpdate(settingsPanel.props._instance);
 					}
-					else if (typeof plugin.getSettingsPanel == "function" && Node.prototype.isPrototypeOf(settingsPanel) && settingsPanel.parentElement) {
-						settingsPanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
+					else if (typeof plugin.getSettingsPanelComponents == "function" && Node.prototype.isPrototypeOf(settingsPanel) && settingsPanel.parentElement) {
+						settingsPanel.parentElement.appendChild(plugin.getSettingsPanelComponents(...args));
 						settingsPanel.remove();
 					}
 				}
@@ -6593,6 +6616,7 @@ module.exports = (_ => {
 										}),
 										typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormText.Text, {
 											type: Internal.LibraryComponents.FormText.Types.DESCRIPTION,
+											color: "currentColor",
 											children: this.props.note
 										}) : null
 									].filter(n => n)
@@ -7183,24 +7207,26 @@ module.exports = (_ => {
 				CustomComponents.Select = reactInitialized && class BDFDB_Select extends Internal.LibraryModules.React.Component {
 					render () {
 						return BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
+							getSelectedValue() {
+								return [this.props.options.find(i => i.value == this.props.value)];
+							}
 							handleChange(value) {
 								this.props.value = value.value || value;
+								this.props.selectedItems = this.getSelectedValue();
 								if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 								BDFDB.ReactUtils.forceUpdate(this);
 							}
 							render() {
-								return BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.selectwrapper),
-									children: BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.SearchableSelect, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-										className: this.props.inputClassName,
-										autoFocus: this.props.autoFocus ? this.props.autoFocus : false,
-										maxVisibleItems: this.props.maxVisibleItems || 7,
-										renderOptionLabel: typeof this.props.optionRenderer == "function" ? this.props.optionRenderer : (n => n.label),
-										select: this.handleChange.bind(this),
-										serialize: typeof this.props.serialize == "function" ? this.props.serialize : _ => {},
-										isSelected: typeof this.props.isSelected == "function" ? this.props.isSelected : (value => this.props.value == value)
-									}), "inputClassName", "optionRenderer"))
-								});
+								for (let i in this.props.options) this.props.options[i].id = this.props.options[i].value;
+								return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.SearchableSelect, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+									className: this.props.className,
+									autoFocus: this.props.autoFocus ? this.props.autoFocus : false,
+									selectionMode: this.props.selectionMode ? this.props.selectionMode : "single",
+									maxVisibleItems: this.props.maxVisibleItems || 7,
+									fullWidth: true,
+									selectedItems: this.getSelectedValue(),
+									onSelectionChange: this.handleChange.bind(this),
+								}), "className", "optionRenderer"));
 							}
 						}, this.props);
 					}
@@ -7358,11 +7384,11 @@ module.exports = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 											className: BDFDB.disCNS.settingsrowcontrol + BDFDB.disCN.flexchild,
-											grow: 0,
+											grow: this.props.basis ? 0 : 1,
 											shrink: this.props.basis ? 0 : 1,
 											basis: this.props.basis,
 											wrap: true,
-											style: {"flex-direction": "row", "align-items": "center"},
+											style: {"flex-direction": "row", "align-items": "center", "justify-content": "right"},
 											children: [
 												this.props.labelChildren,
 												BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
@@ -8740,7 +8766,11 @@ module.exports = (_ => {
 			
 		}
 		
-		getSettingsPanel (collapseStates = {}) {
+		getSettingsPanel () {
+			getSettingsPanel(this);
+		}
+		
+		getSettingsPanelComponents (collapseStates = {}) {
 			let settingsPanel;
 			let getString = (type, key, property) => {
 				return BDFDB.LanguageUtils.LibraryStringsCheck[`settings_${key}_${property}`] ? BDFDB.LanguageUtils.LibraryStringsFormat(`settings_${key}_${property}`, BDFDB.BDUtils.getSettingsProperty("name", BDFDB.BDUtils.settingsIds[key]) || BDFDB.StringUtils.upperCaseFirstChar(key.replace(/([A-Z])/g, " $1"))) : Internal.defaults[type][key][property];
@@ -8756,7 +8786,6 @@ module.exports = (_ => {
 						keys: ["choices", key],
 						label: getString("choices", key, "description"),
 						note: getString("choices", key, "note"),
-						basis: "50%",
 						value: Internal.settings.choices[key],
 						options: Object.keys(Internal.DiscordConstants[Internal.defaults.choices[key].items] || {}).map(p => ({
 							value: p,
@@ -8797,7 +8826,6 @@ module.exports = (_ => {
 						type: "Button",
 						label: BDFDB.LanguageUtils.LibraryStrings.update_check_info,
 						dividerTop: true,
-						basis: "20%",
 						children: BDFDB.LanguageUtils.LibraryStrings.check_for_updates,
 						labelChildren: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
 							children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
