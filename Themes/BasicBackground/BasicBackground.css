@@ -600,13 +600,6 @@ body:has(#app-mount)::after {
 	width: 100%;
 	background-color: rgba(var(--transparencycolor_v), calc(0.1 + var(--guildchanneltransparency_v) * 2));
 }
-.platform-osx .wrapper_ef3116 {
-	margin-top: 0;
-	padding-top: 32px;
-}
-.platform-osx .standardSidebarView__23e6b::before {
-	left: 72px;
-}
 .winButtonMinMax__421ed:hover,
 .winButtonMinMax_c38106:hover {
 	background-color: rgba(var(--transparencycolor_v), .2);
@@ -7785,6 +7778,9 @@ html:only-child > head + body div.bar_c38106 > div.title_c38106::after {
 	transform: unset !important;
 	animation: unset !important;
 	transition: opacity 1s ease !important;
+}
+html.platform-osx:only-child > head + body div.bar_c38106 > div.title_c38106::after {
+	left: calc(60px + (100/var(--custom-zoom, 100)*(var(--custom-guild-list-width) + var(--space-md)))) !important;
 }
 html:only-child > head + body div.bar_c38106:hover > div.title_c38106::after {
 	opacity: 1 !important;
