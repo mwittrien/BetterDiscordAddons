@@ -338,7 +338,7 @@ module.exports = (_ => {
 			}
 			
 			observer (change) {
-				if (change.type != "childList" || !change.addedNodes.length) return;
+				if (change.type != "childList" || !change.addedNodes.length || !BDFDB.DOMUtils) return;
 				Array.from(change.addedNodes).forEach(n => {
 					if (BDFDB.DOMUtils.containsClass(n, BDFDB.disCN.userpopoutstatusbubbleeditable) || n.querySelector && n.querySelector(BDFDB.dotCN.userpopoutstatusbubbleeditable)) {
 						let bubble = n.querySelector(BDFDB.dotCN.userpopoutstatusbubbleeditable) || n;
