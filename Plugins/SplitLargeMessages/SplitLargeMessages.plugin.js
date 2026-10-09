@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.7
+ * @version 1.8.8
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -234,7 +234,7 @@ module.exports = (_ => {
 				const splitMessageLength = this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter;
 				
 				text = text.replace(/\t/g, "    ");
-				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${splitMessageLength * (19/20)},}`, "gm"));
+				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${Math.ceil(splitMessageLength * (19/20))},}`, "gm"));
 				if (longWords) for (let longWord of longWords) {
 					let count1 = 0;
 					let shortWords = [];
