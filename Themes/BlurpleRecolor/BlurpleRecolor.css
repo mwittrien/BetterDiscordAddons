@@ -1966,19 +1966,15 @@ a.metadataDownload_cf09d8 {
 
 /* ----		12.4.		TAGS						---- */
 
-.botTagRegular__82f07 {								/* bottag				regular								*/
+.botTagRegular__82f07 {									/* bottag				regular								*/
 	background-color: rgb(var(--accentcolor_v));
 }
-.botTagInvert__82f07 {								/* bottag				inverted							*/
+.botTagInvert__82f07 {									/* bottag				inverted							*/
 	color: rgb(var(--accentcolor_v));
 }
 .botTagOP__82f07 {									/* bottag				op								*/
 	background: white linear-gradient(rgba(var(--accentcolor_v), .5), rgba(var(--accentcolor_v), .5));
 	color: rgb(var(--accentcolor_v));
-}
-#app-mount .newBadge_faa96b {								/* bottag				new forum post							*/
-	background: white linear-gradient(rgba(var(--accentcolor_v), .5), rgba(var(--accentcolor_v), .5)) !important;
-	color: rgb(var(--accentcolor_v)) !important;
 }
 
 #app-mount .tag_d0ccaf {
