@@ -152,8 +152,7 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					after: [
-						"UnreadDMs",
-						"InboxHeader"
+						"UnreadDMs"
 					]
 				};
 				
@@ -192,11 +191,153 @@ module.exports = (_ => {
 				let loadedBlacklist = BDFDB.DataUtils.load(this, "blacklist");
 				this.saveBlacklist(!BDFDB.ArrayUtils.is(loadedBlacklist) ? [] : loadedBlacklist);
 
+				this.patchInboxPopoutHeader();
+
 				this.forceUpdateAll();
 			}
 			
 			onStop () {
+				if (this._inboxHeaderAbort) this._inboxHeaderAbort.abort();
+				if (BdApi?.Patcher?.unpatchAll) BdApi.Patcher.unpatchAll(this.name + "-InboxPopoutHeader");
 				this.forceUpdateAll();
+			}
+
+			patchInboxPopoutHeader () {
+				if (!BdApi?.Webpack?.waitForModule || !BdApi?.Patcher?.after) return;
+
+				let isHeaderFn = m => typeof m === "function" && (() => {
+					try {
+						let src = m.toString();
+						return src.includes("closePopout") && src.includes("setTab") && src.includes("handleMentionsJump");
+					}
+					catch (err) { return false; }
+				})();
+
+				this._inboxHeaderAbort = new AbortController();
+				BdApi.Webpack.waitForModule(isHeaderFn, {signal: this._inboxHeaderAbort.signal}).then(headerModule => {
+					if (!headerModule) return;
+
+					let moduleInfo = BdApi.Webpack.getModule(isHeaderFn, {first: true, raw: true});
+					let moduleExports = moduleInfo && moduleInfo.exports;
+					let propName = moduleExports ? Object.keys(moduleExports).find(key => moduleExports[key] === headerModule) : null;
+					if (!moduleExports || !propName) {
+						BDFDB.LogUtils.warn("Located the Inbox popout header module but could not resolve its export key, 'read all' button will not be added", this);
+						return;
+					}
+
+					BdApi.Patcher.after(this.name + "-InboxPopoutHeader", moduleExports, propName, (thisObject, args, returnValue) => {
+						try {
+							this.injectReadAllIntoPopoutHeader(args && args[0], returnValue);
+						}
+						catch (err) {
+							BDFDB.LogUtils.warn("Failed to inject 'read all' button into Inbox popout header", this, err);
+						}
+					});
+				}).catch(err => {
+					if (err && err.name === "AbortError") return;
+					BDFDB.LogUtils.warn("Could not locate the Inbox popout header module, 'read all' button will not be added", this, err);
+				});
+			}
+
+			injectReadAllIntoPopoutHeader (props, element) {
+				if (!props || !element || props.tab != BDFDB.DiscordConstants.InboxTabs.MENTIONS) return;
+				if (!this.settings.general.addClearButton) return;
+				let mentionedMessages = BDFDB.LibraryStores.RecentMentionsStore.getMentions();
+				if (!mentionedMessages || !mentionedMessages.length) return;
+
+				let found = this.findNodeByPropSignature(element, ["tab", "setTab", "closePopout"], 0);
+				if (!found || !found.parent || !found.key) {
+					let controls = BDFDB.ReactUtils.findChild(element, {props: [["className", BDFDB.disCN.messagespopoutcontrols]]});
+					if (controls) this.appendReadAllButtonToChildren(controls, mentionedMessages);
+					return;
+				}
+
+				this.wrapNodeWithReadAllButton(found.parent, found.key, mentionedMessages);
+			}
+
+			findNodeByPropSignature (node, requiredProps, depth, parent, key) {
+				if (!node || depth > 14) return null;
+				if (Array.isArray(node)) {
+					for (let i = 0; i < node.length; i++) {
+						let found = this.findNodeByPropSignature(node[i], requiredProps, depth + 1, parent, key);
+						if (found) return found;
+					}
+					return null;
+				}
+				if (typeof node != "object") return null;
+				if (node.props && requiredProps.every(k => k in node.props) && parent) return {node, parent, key};
+				if (!node.props) return null;
+				for (let propKey in node.props) {
+					let value = node.props[propKey];
+					if (!value || typeof value != "object") continue;
+					if (Array.isArray(value) || "props" in value || "type" in value) {
+						let found = this.findNodeByPropSignature(value, requiredProps, depth + 1, node, propKey);
+						if (found) return found;
+					}
+				}
+				return null;
+			}
+
+			wrapNodeWithReadAllButton (node, key, mentionedMessages) {
+				let original = node.props[key];
+				let button = this.buildReadAllButtonElement(mentionedMessages);
+				node.props[key] = BDFDB.ReactUtils.createElement("div", {
+					style: {display: "flex", alignItems: "center", flex: "0 0 auto"},
+					children: [original, button]
+				});
+			}
+
+			appendReadAllButtonToChildren (containerNode, mentionedMessages) {
+				let button = this.buildReadAllButtonElement(mentionedMessages);
+				let children = BDFDB.ArrayUtils.is(containerNode.props.children) ? containerNode.props.children.slice() : [containerNode.props.children];
+				children.push(button);
+				containerNode.props.children = children;
+			}
+
+			buildReadAllButtonElement (mentionedMessages) {
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.ALL})`,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+						className: BDFDB.disCNS.messagespopoutbutton + BDFDB.disCNS.messagespopoutbuttonsm + BDFDB.disCN.messagespopoutbuttonsecondary,
+						style: {marginLeft: "8px"},
+						children: BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.messagespopoutbuttonchildrenwrapper,
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.messagespopoutbuttonchildren,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									nativeClass: true,
+									name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE,
+									width: 16,
+									height: 16
+								})
+							})
+						}),
+						onClick: _ => {
+							let clear = _ => {
+								if (clearing) return BDFDB.NotificationUtils.toast(`${this.labels.toast_alreadyclearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {type: "danger"});
+								let messages = [].concat(mentionedMessages).filter(n => n);
+								if (messages.length) {
+									clearing = true;
+									let toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_clearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
+									for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
+										BDFDB.LibraryModules.HTTPUtils.del({
+											url: BDFDB.DiscordConstants.Endpoints.MENTIONS_MESSAGE_ID(messages[i].id),
+											retries: 2,
+											oldFormErrors: true
+										});
+										if (i == messages.length - 1) {
+											clearing = false;
+											toast.close();
+											BDFDB.NotificationUtils.toast(this.labels.toastcleared, {type: "success"});
+										}
+									}, i * 1000);
+								}
+							};
+							if (this.settings.general.confirmClear) BDFDB.ModalUtils.confirm(this, this.labels.modal_confirmmentions, clear);
+							else clear();
+						}
+					})
+				});
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -283,57 +424,7 @@ module.exports = (_ => {
 				e.returnvalue.push(BDFDB.ReactUtils.createElement(ReadAllButtonComponent, {}));
 			}
 
-			processInboxHeader (e) {
-				if (!this.settings.general.addClearButton || e.instance.props.tab != BDFDB.DiscordConstants.InboxTabs.MENTIONS) return;
-				let mentionedMessages = BDFDB.LibraryStores.RecentMentionsStore.getMentions();
-				if (!mentionedMessages || !mentionedMessages.length) return;
-				let controls = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagespopoutcontrols]]});
-				if (controls) controls.props.children = [
-					controls.props.children,
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.ALL})`,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCNS.messagespopoutbutton + BDFDB.disCNS.messagespopoutbuttonsm + BDFDB.disCN.messagespopoutbuttonsecondary,
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.messagespopoutbuttonchildrenwrapper,
-								children: BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.messagespopoutbuttonchildren,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										nativeClass: true,
-										name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE,
-										width: 16,
-										height: 16
-									})
-								})
-							}),
-							onClick: _ => {
-								let clear = _ => {
-									if (clearing) return BDFDB.NotificationUtils.toast(`${this.labels.toast_alreadyclearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {type: "danger"});
-									let messages = [].concat(mentionedMessages).filter(n => n);
-									if (messages.length) {
-										clearing = true;
-										let toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_clearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
-										for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
-											BDFDB.LibraryModules.HTTPUtils.del({
-												url: BDFDB.DiscordConstants.Endpoints.MENTIONS_MESSAGE_ID(messages[i].id),
-												retries: 2,
-												oldFormErrors: true
-											});
-											if (i == messages.length - 1) {
-												clearing = false;
-												toast.close();
-												BDFDB.NotificationUtils.toast(this.labels.toastcleared, {type: "success"});
-											}
-										}, i * 1000);
-									}
-								};
-								if (this.settings.general.confirmClear) BDFDB.ModalUtils.confirm(this, this.labels.modal_confirmmentions, clear);
-								else clear();
-							}
-						})
-					})
-				].flat(10);
-			}
+
 			
 			saveBlacklist (savedBlacklist) {
 				blacklist = savedBlacklist;
