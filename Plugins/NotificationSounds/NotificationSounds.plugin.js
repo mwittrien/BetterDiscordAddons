@@ -252,10 +252,8 @@ module.exports = (_ => {
 				}
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && (e.methodArguments[0].type == "CALL_DELETE" || e.methodArguments[0].type == "CALL_UPDATE" && !e.methodArguments[0].ringing.includes(BDFDB.UserUtils.me.id))) {
-						["call_ringing", "call_calling"].forEach(type => {
-							if (createdAudios[type]) createdAudios[type].stop();
-						});
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && (e.methodArguments[0].type == "CALL_DELETE" || e.methodArguments[0].type == "CALL_UPDATE" && Array.isArray(e.methodArguments[0].ringing) && !e.methodArguments[0].ringing.includes(BDFDB.UserUtils.me.id))) {
+						this.stopCallAudios();
 					}
 					
 				}, before: e => {
@@ -354,9 +352,12 @@ module.exports = (_ => {
 								}
 								else return this.playAudio(type, e2.originalMethodName, e2.instance.duration);
 							}});
-							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, "stop", {after: e2 => {
-								let type = e2.instance && e2.instance.name;
-								if (type && createdAudios[type]) createdAudios[type].stop();
+							const lifecycleMethods = ["pause", "stop", "setLoop"].filter(method => typeof e.returnValue.constructor.prototype[method] == "function");
+							if (lifecycleMethods.length) BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, lifecycleMethods, {after: e2 => {
+								const originalType = e2.instance && e2.instance.name;
+								let type = this.normalizeAudioType(originalType);
+								const isCallSound = originalType && originalType.startsWith("call_") || type && type.startsWith("call_");
+								if (type && (e2.originalMethodName == "stop" || isCallSound && (e2.originalMethodName == "pause" || e2.originalMethodName == "setLoop" && e2.methodArguments[0] === false))) this.stopAudio(type);
 							}});
 						}
 					}}, {noCache: true});
@@ -738,11 +739,28 @@ module.exports = (_ => {
 			}
 
 			playAudio (type, functionCall = "play", duration = 0) {
-				type = soundPacks.some(soundPack => type.startsWith(soundPack + "_")) ? type.split("_").splice(1).join("_") : type;
+				type = this.normalizeAudioType(type);
 				if (this.dontPlayAudio(type) || BDFDB.LibraryStores.StreamerModeStore.disableSounds) return;
-				if (createdAudios[type]) createdAudios[type].stop();
+				this.stopAudio(type);
 				createdAudios[type] = new WebAudioSound(type);
 				return createdAudios[type][typeof createdAudios[type][functionCall] == "function" ? functionCall : "play"](duration);
+			}
+
+			stopAudio (type) {
+				type = this.normalizeAudioType(type);
+				const audio = createdAudios[type];
+				if (!audio) return;
+				audio.stop();
+				if (createdAudios[type] == audio) delete createdAudios[type];
+			}
+
+			stopCallAudios () {
+				for (const type of Object.keys(createdAudios)) if (type.startsWith("call_") || this.normalizeAudioType(type).startsWith("call_")) this.stopAudio(type);
+			}
+
+			normalizeAudioType (type) {
+				if (!type) return type;
+				return soundPacks.some(soundPack => type.startsWith(soundPack + "_")) ? type.split("_").splice(1).join("_") : type;
 			}
 			
 			isSuppressMentionsEnabled (guildId, channelId) {
