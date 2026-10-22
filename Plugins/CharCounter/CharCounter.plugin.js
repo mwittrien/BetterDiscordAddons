@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -215,6 +215,7 @@ module.exports = (_ => {
 				if (parent.props.className) parent.props.className = BDFDB.DOMUtils.formatClassName(parent.props.className, BDFDB.disCN._charcountercounteradded);
 				else parent.props.children = BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN._charcountercounteradded,
+					style: {width: "100%"},
 					children: parent.props.children
 				});
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
