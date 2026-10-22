@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.4
+ * @version 1.7.5
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,10 +86,7 @@ module.exports = (_ => {
 				};
 			
 				this.modulePatches = {
-					componentDidMount: [
-						"ChannelTextAreaEditor"
-					],
-					componentDidUpdate: [
+					before: [
 						"ChannelTextAreaEditor"
 					]
 				};
@@ -252,37 +249,38 @@ module.exports = (_ => {
 				let newText = BDFDB.SlateUtils.toTextValue(e.instance.props.richValue);
 				if (newText != currentText) {
 					currentText = newText;
-					let textarea = e.node.parentElement.querySelector(BDFDB.dotCN.textarea);
-					BDFDB.DOMUtils.remove(textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
 					BDFDB.TimeUtils.clear(checkTimeout);
 					checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-						let overlay = textarea.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, textarea);
-						BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
-						let style = Object.assign({}, getComputedStyle(textarea));
-						for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
-						overlay.style.setProperty("color", "transparent", "important");
-						overlay.style.setProperty("background", "none", "important");
-						overlay.style.setProperty("mask", "none", "important");
-						overlay.style.setProperty("pointer-events", "none", "important");
-						overlay.style.setProperty("position", "absolute", "important");
-						overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(textarea).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
-						overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(textarea).width - style.paddingLeft - style.paddingRight + "px", "important");
-						overlay.style.setProperty("height", style.height, "important");
-						for (let child of overlay.querySelectorAll("*")) {
-							child.style.setProperty("color", "transparent", "important");
-							child.style.setProperty("background-color", "transparent", "important");
-							child.style.setProperty("border-color", "transparent", "important");
-							child.style.setProperty("text-shadow", "none", "important");
-							child.style.setProperty("object-position", "-999999px -999999px", "important");
-							child.style.setProperty("pointer-events", "none", "important");
-							if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
-								let newline = child.querySelector("br");
-								if (newline) newline.remove();
-								child.innerHTML = this.spellCheckText(child.textContent);
-								if (newline) child.appendChild(newline);
+						for (let textarea of Array.from(document.querySelectorAll(BDFDB.dotCN.textarea + BDFDB.notCN._spellcheckoverlay))) {
+							BDFDB.DOMUtils.remove(textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
+							let overlay = textarea.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, textarea);
+							BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
+							let style = Object.assign({}, getComputedStyle(textarea));
+							for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
+							overlay.style.setProperty("color", "transparent", "important");
+							overlay.style.setProperty("background", "none", "important");
+							overlay.style.setProperty("mask", "none", "important");
+							overlay.style.setProperty("pointer-events", "none", "important");
+							overlay.style.setProperty("position", "absolute", "important");
+							overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(textarea).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
+							overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(textarea).width - style.paddingLeft - style.paddingRight + "px", "important");
+							overlay.style.setProperty("height", style.height, "important");
+							for (let child of overlay.querySelectorAll("*")) {
+								child.style.setProperty("color", "transparent", "important");
+								child.style.setProperty("background-color", "transparent", "important");
+								child.style.setProperty("border-color", "transparent", "important");
+								child.style.setProperty("text-shadow", "none", "important");
+								child.style.setProperty("object-position", "-999999px -999999px", "important");
+								child.style.setProperty("pointer-events", "none", "important");
+								if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
+									let newline = child.querySelector("br");
+									if (newline) newline.remove();
+									child.innerHTML = this.spellCheckText(child.textContent);
+									if (newline) child.appendChild(newline);
+								}
 							}
+							textarea.parentElement.appendChild(overlay);
 						}
-						textarea.parentElement.appendChild(overlay);
 					}, 300);
 				}
 			}
