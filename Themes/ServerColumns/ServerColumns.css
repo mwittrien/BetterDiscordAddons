@@ -30,6 +30,9 @@
 .wrapper_ef3116 .unreadMentionsIndicatorBottom_ef3116 {
 	width: calc(1px * (var(--guildsize_v) * var(--columns_v) + 20 * (var(--guildsize_v)/50) + 14 * (var(--guildsize_v)/50) * (var(--columns_v) - 1))) !important;
 }
+.wrapper_ef3116 .scroller_ef3116 > .stack_dbd263 {
+	min-width: calc(1px * ((var(--guildsize_v) + 12 * var(--guildsize_v)/50)) * var(--columns_v)) !important;
+}
 .titleBar__421ed.typeMacOS__421ed .macButtons__421ed {
 	padding-right: calc(1px * ((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * var(--columns) - 50)) !important;
 }
