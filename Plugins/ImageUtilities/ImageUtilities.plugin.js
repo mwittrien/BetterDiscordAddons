@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.7
+ * @version 5.6.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -82,7 +82,7 @@ module.exports = (_ => {
 			"avi":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x41, 0x56, 0x49, 0x20]]},
 			"flv":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x46, 0x4C, 0x56]]},
 			"jpeg":		{copyable: true,	searchable: true,	gif: false,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xEE]]},
-			"jpg":		{copyable: true,	searchable: true,	gif: false,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xDB], [0xFF, 0xD8, 0xFF, 0xE0], [0xFF, 0xD8, 0xFF, 0xE1]]},
+			"jpg":		{copyable: true,	searchable: true,	gif: false,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xDB], [0xFF, 0xD8, 0xFF, 0xE0], [0xFF, 0xD8, 0xFF, 0xE1], [0xFF, 0xD8, 0xFF, 0xFE]]},
 			"gif":		{copyable: false,	searchable: true,	gif: true,	video: false,	signs: [[0x47, 0x49, 0x46, 0x38, 0x37, 0x61], [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]]},
 			"mov":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[null, null, null, null, 0x6D, 0x6F, 0x6F, 0x76], [null, null, null, null, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20]]},
 			"mp4":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[null, null, null, null, 0x66, 0x74, 0x79, 0x70]]},
