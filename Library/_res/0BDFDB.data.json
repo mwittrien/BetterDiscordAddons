@@ -1412,7 +1412,7 @@
 		"Avatar": {"props": ["avatar", "mask", "wrapper"]},
 		"AvatarIcon": {"props": ["iconActiveLarge", "iconActiveMedium"]},
 		"Backdrop": {"props": ["backdrop", "withLayer"]},
-		"Badge": {"props": ["numberBadge", "textBadge", "iconBadge"]},
+		"Badge": {"props": ["numberBadge", "base", "iconBadge"]},
 		"BotTag": {"props": ["botTagRegular", "botTagInvert"]},
 		"Button": {"props": ["colorBrand", "lookBlank"]},
 		"ButtonRevamp": {"props": ["expressive", "buttonChildren"]},
