@@ -1905,7 +1905,6 @@
 		"badgeshaperound": ["Badge", "baseShapeRound"],
 		"badgeshaperoundleft": ["Badge", "baseShapeRoundLeft"],
 		"badgeshaperoundright": ["Badge", "baseShapeRoundRight"],
-		"badgetextbadge": ["Badge", "textBadge"],
 		"bdfdbbadge": ["BDFDB", "avatarBadge"],
 		"bdfdbbadgeavatar": ["BDFDB", "avatarBadgeAvatar"],
 		"bdfdbdev": ["BDFDB", "avatarBadgeDev"],

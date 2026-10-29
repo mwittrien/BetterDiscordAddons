@@ -2,7 +2,7 @@
  * @name BetterNsfwTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Adds a more noticeable Tag to NSFW Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -88,12 +88,13 @@ module.exports = (_ => {
 			}
 
 			processChannelItem (e) {
+				console.log(e);
 				if (e.instance.props.channel && e.instance.props.channel.nsfw && !BDFDB.ReactUtils.findChild(e.instance.props.children, {key: "NFSW_TAG"})) e.instance.props.children.push(BDFDB.ReactUtils.createElement("div", {
 					key: "NFSW_TAG",
 					className: BDFDB.disCNS._betternsfwtagtag + BDFDB.disCN.channelchildiconbase,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
-						style: {borderRadius: "3px"},
-						text: "NSFW"
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
+						style: {backgroundColor: BDFDB.DiscordConstants.ColorsCSS.STATUS_DANGER},
+						tag: "NSFW"
 					})
 				}));
 			}
