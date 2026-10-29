@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.7
+ * @version 2.3.8
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -173,6 +173,7 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.recentmentionsmessage,
 						key: message.id,
+						style: {position: "relative"},
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								className: BDFDB.disCN.recentmentionsjumpbutton,
@@ -230,15 +231,15 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP,
 								justify: BDFDB.LibraryComponents.Flex.Justify.END,
-								children: [note.tags].flat(10).filter(n => n).map(label => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+								children: [note.tags].flat(10).filter(n => n).map(label => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
 									className: BDFDB.disCN._personalpinsmessagetag,
-									color: "var(--background-base-lowest)",
+									style: {backgroundColor: "var(--background-base-lowest)"},
 									onClick: _ => {
 										BDFDB.ArrayUtils.remove(note.tags, label, true);
 										BDFDB.DataUtils.save(notes, _this, "notes");
 										BDFDB.ReactUtils.forceUpdate(this);
 									},
-									text: [
+									tag: [
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN._personalpinsmessagetagname,
 											children: label
@@ -254,10 +255,10 @@ module.exports = (_ => {
 										})
 									]
 								})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
 										className: BDFDB.disCNS._personalpinsmessagetag + BDFDB.disCN._personalpinsmessagetagadd,
-										color: "var(--background-base-lowest)",
-										text: "+"
+										style: {backgroundColor: "var(--background-base-lowest)"},
+										tag: "+"
 									}),
 									animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
 									position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
@@ -409,9 +410,13 @@ module.exports = (_ => {
 						visibility: hidden;
 					}
 					${BDFDB.dotCNS._personalpinsmessagetag + BDFDB.dotCN._personalpinsmessagetagdelete} {
+						height: 0;
 						visibility: hidden;
+						display: flex;
+						justify-content: center;
 					}
 					${BDFDB.dotCN._personalpinsmessagetag}:hover ${BDFDB.dotCN._personalpinsmessagetagdelete} {
+						height: unset;
 						visibility: visible;
 					}
 					${BDFDB.dotCN._personalpinsmessagetag + BDFDB.notCN._personalpinsmessagetagadd}:hover {
