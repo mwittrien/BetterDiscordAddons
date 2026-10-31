@@ -437,6 +437,10 @@ body,											/* body													*/
 .sidebar__5e434:after {
 	display: none;
 }
+
+#app-mount .bar_c38106 {								/* appbar												*/
+	background-color: rgba(var(--transparencycolor_v), calc(0.1 + var(--guildchanneltransparency_v) * 2));
+}
 #app-mount .wrapper_ef3116 {								/* guilds				container							*/
 	background-color: rgba(var(--transparencycolor_v), calc(var(--guildchanneltransparency_v) * 2));
 	mask: unset !important;
@@ -586,20 +590,6 @@ body:has(#app-mount)::after {
 
 /* ~~~~		3.		TITLEBAR					~~~~ */
 
-.bar_c38106 {
-	z-index: 5001;
-}
-.bar_c38106::after {
-	content: "";
-	pointer-events: none;
-	position: absolute;
-	z-index: -1;
-	top: 0;
-	left: 0;
-	height: var(--custom-app-top-bar-height);
-	width: 100%;
-	background-color: rgba(var(--transparencycolor_v), calc(0.1 + var(--guildchanneltransparency_v) * 2));
-}
 .winButtonMinMax__421ed:hover,
 .winButtonMinMax_c38106:hover {
 	background-color: rgba(var(--transparencycolor_v), .2);
