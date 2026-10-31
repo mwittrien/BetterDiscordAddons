@@ -1338,7 +1338,8 @@ module.exports = (_ => {
 					const isSearchable = (m, checkObject) => m && (checkObject && typeof m == "object" || typeof m == "function") && !(m instanceof DOMTokenList) && m[Symbol.toStringTag] !== "IntlMessagesProxy";
 					if (!onlySearchUnloaded) {
 						if (!_moduleIndex) {
-							_moduleIndex = []; _moduleIndexCount = 0;
+							_moduleIndex = [];
+							_moduleIndexCount = 0;
 							for (let i in req.c) {
 								_moduleIndexCount++;
 								if (req.c[i].exports == window) continue;
@@ -1347,26 +1348,55 @@ module.exports = (_ => {
 								let subs = null, keys = Object.keys(m);
 								if (keys.length < 400) {
 									subs = [];
-									for (let ki = 0; ki < keys.length; ki++) try { let sub = m[keys[ki]]; if (sub && isSearchable(sub, true)) subs.push(sub); } catch (e) {}
+									for (let ki = 0; ki < keys.length; ki++) try {
+										let sub = m[keys[ki]];
+										if (sub && isSearchable(sub, true)) subs.push(sub);
+									} catch (e) {}
 									if (!subs.length) subs = null;
 								}
 								let def = m.__esModule && isSearchable(m.default, true) ? m.default : null;
 								_moduleIndex.push({m, mod: req.c[i], subs, def, defType: def && isSearchable(m.default.type, true) ? m.default.type : null});
 							}
 						}
-						const _stale = () => { let c = 0; for (let i in req.c) c++; if (c !== _moduleIndexCount) { _moduleIndex = null; return true; } return false; };
+						const _stale = _ => {
+							let c = 0;
+							for (let i in req.c) c++;
+							if (c !== _moduleIndexCount) {
+								_moduleIndex = null;
+								return true;
+							}
+							return false;
+						};
 						if (all && _stale()) return BDFDB.ModuleUtils.find(filter, config);
 						for (let j = 0; j < _moduleIndex.length; j++) {
 							let e = _moduleIndex[j], r = null;
-							if (!!(r = filter(e.m))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
-							if (e.subs) for (let k = 0; k < e.subs.length; k++) if (!!(r = filter(e.subs[k]))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
+							if (!!(r = filter(e.m))) {
+								if (all) found.push(defaultExport ? r : e.mod);
+								else return defaultExport ? r : e.mod;
+							}
+							if (e.subs) for (let k = 0; k < e.subs.length; k++) if (!!(r = filter(e.subs[k]))) {
+								if (all) found.push(defaultExport ? r : e.mod);
+								else return defaultExport ? r : e.mod;
+							}
 							if (config.moduleName && isSearchable(e.m[config.moduleName], true)) {
-								if (!!(r = filter(e.m[config.moduleName]))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
-								else if (e.m[config.moduleName].type && isSearchable(e.m[config.moduleName].type, true) && !!(r = filter(e.m[config.moduleName].type))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
+								if (!!(r = filter(e.m[config.moduleName]))) {
+									if (all) found.push(defaultExport ? r : e.mod);
+									else return defaultExport ? r : e.mod;
+								}
+								else if (e.m[config.moduleName].type && isSearchable(e.m[config.moduleName].type, true) && !!(r = filter(e.m[config.moduleName].type))) {
+									if (all) found.push(defaultExport ? r : e.mod);
+									else return defaultExport ? r : e.mod;
+								}
 							}
 							if (e.def) {
-								if (!!(r = filter(e.def))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
-								else if (e.defType && !!(r = filter(e.defType))) { if (all) found.push(defaultExport ? r : e.mod); else return defaultExport ? r : e.mod; }
+								if (!!(r = filter(e.def))) {
+									if (all) found.push(defaultExport ? r : e.mod);
+									else return defaultExport ? r : e.mod;
+								}
+								else if (e.defType && !!(r = filter(e.defType))) {
+									if (all) found.push(defaultExport ? r : e.mod);
+									else return defaultExport ? r : e.mod;
+								}
 							}
 						}
 						if (!all && _stale()) return BDFDB.ModuleUtils.find(filter, config);
@@ -1380,7 +1410,9 @@ module.exports = (_ => {
 							}
 							if (!req.c[i] && onlySearchUnloaded && filter(m)) {
 								let exp;
-								try { exp = req(i); } catch (e) {}
+								try {
+									exp = req(i);
+								} catch (e) {}
 								if (exp && isSearchable(exp, true) && (!config.exportsFilter || config.exportsFilter(exp))) {
 									if (all) found.push(defaultExport ? exp : req.c[i]);
 									else return defaultExport ? exp : req.c[i];
@@ -2288,22 +2320,32 @@ module.exports = (_ => {
 					for (let patchType in plugin.modulePatches) {
 						if (!PluginStores.modulePatches[patchType]) PluginStores.modulePatches[patchType] = {};
 						for (let type of plugin.modulePatches[patchType]) {
-							if (!InternalData.PatchModules[type]) { BDFDB.LogUtils.warn(`[${type}] not found in PatchModules InternalData`, plugin); continue; }
+							if (!InternalData.PatchModules[type]) {
+								BDFDB.LogUtils.warn(`[${type}] not found in PatchModules InternalData`, plugin);
+								continue;
+							}
 							if (!InternalData.PatchModules[type].noSearch && (patchType == "before" || patchType == "after")) searchEntries.push({patchType, type});
 							else lazyEntries.push({patchType, type});
 						}
 					}
 					let foundExports = {};
 					let remaining = new Set(searchEntries.map(e => e.type));
+					if (plugin.name == "ImageUtilities") console.log(PluginStores.modulePatches);
 					if (remaining.size) {
 						const req = Internal.getWebModuleReq();
 						const isSearchable = (m, checkObject) => m && (checkObject && typeof m == "object" || typeof m == "function") && !(m instanceof DOMTokenList) && m[Symbol.toStringTag] !== "IntlMessagesProxy";
 						let moduleCache = BDFDB.DataUtils.load(BDFDB, "ModuleIdCache") || {};
 						let cacheChanged = false;
-						for (let k in moduleCache) if (moduleCache[k] === false || !InternalData.PatchModules[k]) { delete moduleCache[k]; cacheChanged = true; }
+						for (let k in moduleCache) if (moduleCache[k] === false || !InternalData.PatchModules[k]) {
+							delete moduleCache[k];
+							cacheChanged = true;
+						}
 						let sessionNF = Internal._sessionNF || (Internal._sessionNF = new Set());
 						for (let type of [...remaining]) {
-							if (sessionNF.has(type)) { remaining.delete(type); continue; }
+							if (sessionNF.has(type)) {
+								remaining.delete(type);
+								continue;
+							}
 							let cached = moduleCache[type];
 							if (cached != null && cached !== false) {
 								let modId = cached;
@@ -2312,14 +2354,25 @@ module.exports = (_ => {
 									let m = req.c[modId].exports;
 									if (isSearchable(m, true)) {
 										for (let key of Object.keys(m)) {
-											try { if (m[key] && isSearchable(m[key], true) && Internal.isCorrectModule(m[key], type)) { valid = true; break; } } catch(e) {}
+											try {
+												if (m[key] && isSearchable(m[key], true) && Internal.isCorrectModule(m[key], type)) {
+													valid = true;
+													break;
+												}
+											} catch(e) {}
 										}
 										if (!valid && typeof m == "function" && Internal.isCorrectModule(m, type)) valid = true;
 										if (!valid && req.m[modId] && isSearchable(req.m[modId]) && Internal.isCorrectModule(req.m[modId], type)) valid = true;
-										if (valid) { foundExports[type] = m; remaining.delete(type); }
+										if (valid) {
+											foundExports[type] = m;
+											remaining.delete(type);
+										}
 									}
 								}
-								if (!valid) { delete moduleCache[type]; cacheChanged = true; }
+								if (!valid) {
+									delete moduleCache[type];
+									cacheChanged = true;
+								}
 							}
 						}
 						if (remaining.size) {
@@ -2328,16 +2381,41 @@ module.exports = (_ => {
 								let m = req.c[i].exports;
 								if (!isSearchable(m, true)) continue;
 								let mKeys = Object.keys(m);
-								let searchableKeys = mKeys.length < 400 ? mKeys.filter(key => { try { return m[key] && isSearchable(m[key], true); } catch(e) { return false; } }) : null;
+								let searchableKeys = mKeys.length < 400 ? mKeys.filter(key => {
+									try {
+										return m[key] && isSearchable(m[key], true);
+									} catch(e) {
+										return false;
+									}
+								}) : null;
 								for (let type of remaining) {
-									if (typeof m == "function" && Internal.isCorrectModule(m, type)) { foundExports[type] = m; moduleCache[type] = i; cacheChanged = true; remaining.delete(type); continue; }
-									if (m[type] && isSearchable(m[type], true) && Internal.isCorrectModule(m[type], type)) { foundExports[type] = m; moduleCache[type] = i; cacheChanged = true; remaining.delete(type); }
-									else if (m.__esModule && m.default && isSearchable(m.default, true) && Internal.isCorrectModule(m.default, type)) { foundExports[type] = m; moduleCache[type] = i; cacheChanged = true; remaining.delete(type); }
+									if (typeof m == "function" && Internal.isCorrectModule(m, type)) {
+										foundExports[type] = m;
+										moduleCache[type] = i;
+										cacheChanged = true;
+										remaining.delete(type);
+										continue;
+									}
+									if (m[type] && isSearchable(m[type], true) && Internal.isCorrectModule(m[type], type)) {
+										foundExports[type] = m;
+										moduleCache[type] = i;
+										cacheChanged = true;
+										remaining.delete(type);
+									}
+									else if (m.__esModule && m.default && isSearchable(m.default, true) && Internal.isCorrectModule(m.default, type)) {
+										foundExports[type] = m;
+										moduleCache[type] = i;
+										cacheChanged = true;
+										remaining.delete(type);
+									}
 								}
 								if (remaining.size && searchableKeys) for (let ki = 0; ki < searchableKeys.length && remaining.size; ki++) {
 									let fn = m[searchableKeys[ki]];
-									for (let type of remaining) {
-										if (Internal.isCorrectModule(fn, type)) { foundExports[type] = m; moduleCache[type] = i; cacheChanged = true; remaining.delete(type); }
+									for (let type of remaining) if (Internal.isCorrectModule(fn, type)) {
+										foundExports[type] = m;
+										moduleCache[type] = i;
+										cacheChanged = true;
+										remaining.delete(type);
 									}
 								}
 								if (!remaining.size) break;
@@ -2345,7 +2423,12 @@ module.exports = (_ => {
 							if (remaining.size) for (let i in req.m) if (req.m.hasOwnProperty(i)) {
 								let m = req.m[i];
 								if (m && isSearchable(m) && req.c[i] && isSearchable(req.c[i].exports, true)) {
-									for (let type of remaining) if (Internal.isCorrectModule(m, type)) { foundExports[type] = req.c[i].exports; moduleCache[type] = i; cacheChanged = true; remaining.delete(type); }
+									for (let type of remaining) if (Internal.isCorrectModule(m, type)) {
+										foundExports[type] = req.c[i].exports;
+										moduleCache[type] = i;
+										cacheChanged = true;
+										remaining.delete(type);
+									}
 								}
 								if (!remaining.size) break;
 							}
@@ -2716,7 +2799,7 @@ module.exports = (_ => {
 							let code = Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode;
 							return codeMap[code] || "UNK".concat(code)
 						}).filter(n => n != null);
-						if (!upperCase) return strings.join("+"); 
+						if (!upperCase) return strings.join("+");
 						else {
 							strings = window.navigator.appVersion.indexOf("Mac OS X") != -1 ? strings.map(mapKeys) : strings;
 							return strings.join(" + ").toUpperCase();
@@ -3039,7 +3122,8 @@ module.exports = (_ => {
 							let foundName = "";
 							if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (
 								config.name && instance.type && config.name.some(name => {if (instance.type.displayName == name || instance.type.name == name || Internal.isCorrectModule(instance.type.render || instance.type.type || instance.type, name)) {
-									foundName = name; return true;
+									foundName = name;
+									return true;
 								}}) ||
 								config.type && instance.type && config.type.some(type => instance.type == type) ||
 								config.key && instance.key && config.key.some(key => instance.key == key) ||
@@ -4612,7 +4696,8 @@ module.exports = (_ => {
 						if (DiscordClassModules[item]) {
 							let req = Internal.getWebModuleReq();
 							for (let i in req.c) if (req.c[i].exports === DiscordClassModules[item]) {
-								classCache[item] = i; break;
+								classCache[item] = i;
+								break;
 							}
 						}
 						else delete classCache[item];
