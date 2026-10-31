@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.8
+ * @version 5.6.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -906,6 +906,7 @@ module.exports = (_ => {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
 													location: "LazyImageZoomable",
 													onClose: _ => modalData.onClose(),
+													transitionState: 0,
 													items: [isVideo ? {
 														src: imageThrowaway.src,
 														poster: _this.getPosterUrl(imageThrowaway.src),
@@ -1372,7 +1373,6 @@ module.exports = (_ => {
 				if (this.settings.detailsSettings.footnote && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedmedia, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length < 2)) {
 					e.returnvalue = BDFDB.ReactUtils.createElement("div", {
 						children: [
-							e.returnvalue,
 							BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
 								original: e.instance.props.item.original,
 								attachment: {
