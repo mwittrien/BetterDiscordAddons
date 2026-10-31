@@ -2330,7 +2330,6 @@ module.exports = (_ => {
 					}
 					let foundExports = {};
 					let remaining = new Set(searchEntries.map(e => e.type));
-					if (plugin.name == "ImageUtilities") console.log(PluginStores.modulePatches);
 					if (remaining.size) {
 						const req = Internal.getWebModuleReq();
 						const isSearchable = (m, checkObject) => m && (checkObject && typeof m == "object" || typeof m == "function") && !(m instanceof DOMTokenList) && m[Symbol.toStringTag] !== "IntlMessagesProxy";
