@@ -345,7 +345,7 @@
 		"Heading": {"strings": ["data-excessive", "tag"], "funcStrings": ["tag"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["innerRef", "zoomable", "LOADING"]},
-		"ImageModal": {"strings": ["CLOSE", "MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"]},
+		"ImageModal": {"strings": ["CLOSE", "MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "value": "default"},
 		"ImageModalOuter": {"strings": ["numMediaItem", "LIGHTBOX"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
