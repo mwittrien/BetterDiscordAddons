@@ -325,9 +325,7 @@
 		"Badges": {"strings": ["disableColor", "BADGE", "ROUND_LEFT", "icon:"], "exported": false, "value": "exports", "map": {
 			"BadgeShapes": ["baseShapeRoundRight", "baseShapeRoundLeft"],
 			"IconBadge": ["icon:"],
-			"NumberBadge": ["count:"],
-			"PremiumBadge": ["text:"],
-			"TextBadge": ["color", "text:"]
+			"NumberBadge": ["count:"]
 		}},
 		"Checkmark": {"strings": ["M21.7 5.3a1 1 0 0 1 0 1.4l-12 12a1 1 0 0 1-1.4 0l-6-6a1 1 0 1 1 1.4-1.4L9 16.58l11.3-11.3a1 1 0 0 1 1.4 0Z"]},
 		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["shouldAnimate"]},
@@ -347,7 +345,7 @@
 		"Heading": {"strings": ["data-excessive", "tag"], "funcStrings": ["tag"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"Image": {"strings": ["innerRef", "zoomable", "LOADING"]},
-		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"]},
+		"ImageModal": {"strings": ["CLOSE", "MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"]},
 		"ImageModalOuter": {"strings": ["numMediaItem", "LIGHTBOX"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
@@ -490,7 +488,7 @@
 		"HomeButtonDefault": {"strings": [".BUTTON_HOME", "showProgressBadge"], "noSearch": true},
 		"I18nLoader": {"strings": ["default.locale", ".loading", "__OVERLAY__"]},
 		"IconBadge": {"strings": [".icon}", "ROUND,disableColor", ".iconBadge,"]},
-		"ImageModal": {"strings": ["MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "noSearch": true},
+		"ImageModal": {"strings": ["CLOSE", "MODAL_CAROUSEL_NEXT", "shouldHideMediaOptions"], "noSearch": true},
 		"ImageModalBar": {"strings": ["sourceMetadata", "hideMediaOptions", "onClose"]},
 		"ImageModalButtons": {"strings": ["hideMediaOptions", "\"IMAGE\"", "FOCUS_SENSITIVE"]},
 		"InboxHeader": {"strings": ["closePopout", "getOverdueMessageReminderCount", "selectedItem"], "noSearch": true},
