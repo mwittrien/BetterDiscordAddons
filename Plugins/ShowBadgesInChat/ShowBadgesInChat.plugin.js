@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.7
+ * @version 2.1.8
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -282,12 +282,19 @@ module.exports = (_ => {
 											children: cardData.key.split("_").map(n => BDFDB.StringUtils.upperCaseFirstChar(n.toLowerCase())).join(" ")
 										})
 									}),
-									badges[cardData.key] && badges[cardData.key].keys.map(key => BDFDB.ReactUtils.createElement(UserBadgesComponent, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN._showbadgesinchatbadgessettings),
-										place: "settings",
-										custom: true,
-										badges: [{id: key, icon: BDFDB.DiscordConstants.UserBadges[key]}]
-									}))
+									badges[cardData.key] && badges[cardData.key].keys.map(key => {
+										let hasFallbackIcon = BDFDB.DiscordConstants.UserBadges[key].endsWith(".png") || BDFDB.DiscordConstants.UserBadges[key].endsWith(".svg");
+										return BDFDB.ReactUtils.createElement(UserBadgesComponent, {
+											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN._showbadgesinchatbadgessettings),
+											place: "settings",
+											custom: true,
+											badges: [{
+												id: key,
+												icon: hasFallbackIcon ? null : BDFDB.DiscordConstants.UserBadges[key],
+												iconSrc: hasFallbackIcon ? ("https://cdn.discordapp.com/assets/content/" + BDFDB.DiscordConstants.UserBadges[key]) : null
+											}]
+										});
+									})
 								]
 							}),
 							onHeaderClick: (settingId, instance) => {
@@ -382,7 +389,10 @@ module.exports = (_ => {
 				if (!e.instance.props.custom) return;
 				let filter = e.instance.props.place != "settings";
 				for (let i in e.returnvalue.props.children[1]) if (e.returnvalue.props.children[1][i]) {
-					let keyName = filter && Object.keys(badges).find(n => badges[n].keys.includes(e.returnvalue.props.children[1][i].key.split("-")[0]));
+					let keyName = filter && Object.keys(badges).find(n => {
+						let key = e.returnvalue.props.children[1][i].key.split("-")[0];
+						return n == key || badges[n].keys.includes(key);
+					});
 					if (keyName && badgeConfigs[keyName] && !badgeConfigs[keyName][e.instance.props.place]) e.returnvalue.props.children[1][i] = null;
 					else if (typeof e.returnvalue.props.children[1][i].props.children == "function" && e.returnvalue.props.children[1][i].props.text) {
 						e.returnvalue.props.children[1][i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[1][i].props);
