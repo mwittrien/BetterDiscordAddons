@@ -1779,15 +1779,12 @@ a.metadataDownload_cf09d8 {
 	background-color: #fff !important;
 }
 
-.label_c1e9c4,									/* contextmenu				label								*/
-.icon_c1e9c4,										/* contextmenu				icon								*/
-.caret_c1e9c4 {									/* contextmenu				caret								*/
+.label_c1e9c4,											/* contextmenu				label								*/
+.icon_c1e9c4,											/* contextmenu				icon								*/
+.caret_c1e9c4 {											/* contextmenu				caret								*/
 	color: currentColor !important;
 }
-.icon_c1e9c4 path {									/* contextmenu				icon								*/
-	fill: currentColor !important;
-}
-.item_c1e9c4 .checkbox__09aca:not(.checked__09aca) {		/* contextmenu				checkbox							*/
+.item_c1e9c4 .checkbox__09aca:not(.checked__09aca) {						/* contextmenu				checkbox							*/
 	border-color: currentColor !important;
 }
 												/* contextmenu				radio								*/
