@@ -1956,7 +1956,7 @@
 		"badgeshaperound": ["Badge", "baseShapeRound"],
 		"badgeshaperoundleft": ["Badge", "baseShapeRoundLeft"],
 		"badgeshaperoundright": ["Badge", "baseShapeRoundRight"],
-		"badgestyle": ["Heading", "experimental/body-xs/semibold"],
+		"badgestyle": ["Heading", "body-xs/semibold"],
 		"bdfdbbadge": ["BDFDB", "avatarBadge"],
 		"bdfdbbadgeavatar": ["BDFDB", "avatarBadgeAvatar"],
 		"bdfdbdev": ["BDFDB", "avatarBadgeDev"],
