@@ -11,7 +11,7 @@
 	--settingsbackground_v: 	var(--settingsbackground_s, var(--settingsbackground));
 }
 
-#app-mount .baseLayer__960e4 {
+#app-mount .baseLayer_Fd0FEH {
 	opacity: 1 !important;
 	transform: unset !important;
 	will-change: unset !important;
@@ -21,7 +21,7 @@
 	transition-property: inherit !important;
 	animation: inherit !important;
 }
-#app-mount .layer__960e4.stop-animations:first-child::after,
+#app-mount .layer_Fd0FEH.stop-animations:first-child::after,
 #app-mount .BA__layerContainer .BA__layer--hidden:first-child::after {
 	content: "" !important;
 	position: fixed !important;
@@ -37,7 +37,7 @@
 	pointer-events: none !important;
 }
 
-#app-mount .layer__960e4 ~ .layer__960e4,
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH,
 #app-mount .BA__layerContainer ~ .BA__layerContainer {
 	position: absolute !important;
 	top: 0 !important;
@@ -56,17 +56,17 @@
 	z-index: 1000 !important;
 	--settingsiconsadditionalsize: var(--use-settingsicons, 0) * (var(--settingsicons-size, 0px) + var(--settingsicons-gap, 0px));
 }
-#app-mount .BA__layerContainer ~ .BA__layerContainer > .layer__960e4 {
+#app-mount .BA__layerContainer ~ .BA__layerContainer > .layer_Fd0FEH {
 	position: unset !important;
 	padding: unset !important;
 	overflow: unset !important;
 	contain: unset !important;
 	height: 100% !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 > div,
-#app-mount .layer__960e4 ~ .layer__960e4 .standardSidebarView__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer > .layer__960e4 > div,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .standardSidebarView__23e6b {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH > div,
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .standardSidebarView_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer > .layer_Fd0FEH > div,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .standardSidebarView_jnk11m {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -75,39 +75,39 @@
 	padding: unset !important;
 	overflow: hidden !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .sidebarRegion__23e6b,
-#app-mount .layer__960e4 ~ .layer__960e4 .sidebarRegionScroller__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebarRegion__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebarRegionScroller__23e6b {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .sidebarRegion_jnk11m,
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .sidebarRegionScroller_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebarRegion_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebarRegionScroller_jnk11m {
 	flex: 0 0 auto !important;
 	margin-top: 0 !important;
 	z-index: 3 !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .sidebar__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebar__23e6b {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .sidebar_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebar_jnk11m {
 	width: 218px !important;
 	padding: 20px 6px 20px 20px !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .contentColumnDefault__23e6b,
-#app-mount .layer__960e4 ~ .layer__960e4 .contentColumnWide__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .contentColumnDefault__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .contentColumnWide__23e6b {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .contentColumnDefault_jnk11m,
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .contentColumnWide_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .contentColumnDefault_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .contentColumnWide_jnk11m {
 	padding: 20px 40px !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .contentRegionScroller__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .contentRegionScroller__23e6b {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .contentRegionScroller_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .contentRegionScroller_jnk11m {
 	margin-top: 0 !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .sidebar_e29cd7,
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .sidebar_e29cd7,
 #app-mount .BA__layerContainer ~ .BA__layerContainer .sidebar_e29cd7 {
 	height: var(--settingsheight_v) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .standardSidebarView__23e6b .editor,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .standardSidebarView__23e6b .editor {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .standardSidebarView_jnk11m .editor,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .standardSidebarView_jnk11m .editor {
 	height: calc(var(--settingsheight_v) - 120px) !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m {
 	position: fixed !important;
 	inset: 0 !important;
 	width: 100% !important;
@@ -118,13 +118,13 @@
 	padding-top: 0 !important;
 	opacity: 0 !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .tools__23e6b,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .tools__23e6b {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .tools_jnk11m,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .tools_jnk11m {
 	width: 100% !important;
 	height: 100% !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .closeButton_c2b141 {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_c2b141,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_c2b141 {
 	border: none !important;
 	border-radius: 0 !important;
 	width: 100% !important;
@@ -135,26 +135,26 @@
 	flex: unset !important;
 	transition: unset !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141:hover,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .closeButton_c2b141:hover {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_c2b141:hover,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_c2b141:hover {
 	transition: unset !important;
 	background: unset !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .toolsContainer__23e6b .closeButton_c2b141 > svg,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer__23e6b .closeButton_c2b141 > svg {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_c2b141 > svg,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_c2b141 > svg {
 	display: none !important;
 }
-#app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion__23e6b .toolsContainer__23e6b .container_c2b141 {
+#app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion_jnk11m .toolsContainer_jnk11m .container_c2b141 {
 	height: 100% !important;
 }
-#app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion__23e6b .toolsContainer__23e6b .keybind_c2b141 {
+#app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion_jnk11m .toolsContainer_jnk11m .keybind_c2b141 {
 	display: none !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .settingsToolbar_8227b0,
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .settingsToolbar_8227b0,
 #app-mount .BA__layerContainer ~ .BA__layerContainer .settingsToolbar_8227b0 {
 	display: none !important;
 }
-#app-mount .layer__960e4 ~ .layer__960e4 .container__9293f.headerBar__80679.
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .container__9293f.headerBar__80679.
 #app-mount .BA__layerContainer ~ .BA__layerContainer .container__9293f.headerBar__80679 {
 	position: static !important;
 }
@@ -182,8 +182,8 @@
 #app-mount .root__5c9fc .closeIconWrapper__6fd0e,
 #app-mount .root__5c9fc .closeIconWrapper__6fd0e .container_c2b141,
 #app-mount .root__5c9fc .closeIconWrapper__6fd0e .closeButton_c2b141,
-#app-mount .layer__960e4 > .shop__6db1d .container_c2b141,
-#app-mount .layer__960e4 > .shop__6db1d .closeButton_c2b141 {
+#app-mount .layer_Fd0FEH > .shop__6db1d .container_c2b141,
+#app-mount .layer_Fd0FEH > .shop__6db1d .closeButton_c2b141 {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -204,9 +204,9 @@
 	animation: unset !important;
 	transition: unset !important;
 }
-#app-mount .layer__960e4 > .shop__6db1d .shopHomeLink__80679,
-#app-mount .layer__960e4 > .shop__6db1d .tabs__80679,
-#app-mount .layer__960e4 > .shop__6db1d .shopScroll__08415 {
+#app-mount .layer_Fd0FEH > .shop__6db1d .shopHomeLink__80679,
+#app-mount .layer_Fd0FEH > .shop__6db1d .tabs__80679,
+#app-mount .layer_Fd0FEH > .shop__6db1d .shopScroll__08415 {
 	z-index: 2 !important;
 }
 #app-mount .root__5c9fc .closeIconWrapper__6fd0e {

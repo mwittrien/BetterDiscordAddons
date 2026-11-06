@@ -695,11 +695,11 @@ svg [fill="#4F545C"] {
 	color: var(--text-strong);
 }
 
-#app-mount .top_aa8da2 .item_aa8da2.selected_aa8da2 {
+#app-mount .top_6zZYhF .item_6zZYhF.selected_6zZYhF {
 	color: var(--text-strong);
 }
-.side_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:hover:not(.disabled_aa8da2):not(.addFriend__133bf),
-.topPill_aa8da2 .themed_aa8da2.selected_aa8da2.item_aa8da2:hover:not(.disabled_aa8da2):not(.addFriend__133bf) {
+.side_6zZYhF .themed_6zZYhF.selected_6zZYhF.item_6zZYhF:hover:not(.disabled_6zZYhF):not(.addFriend__133bf),
+.topPill_6zZYhF .themed_6zZYhF.selected_6zZYhF.item_6zZYhF:hover:not(.disabled_6zZYhF):not(.addFriend__133bf) {
 	background-color: var(--button-secondary-background);
 }
 
@@ -1613,7 +1613,7 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 
 /* ~~~~		9.		USERSETTINGS					~~~~ */
 
-#app-mount .customContainer__23e6b::before {
+#app-mount .customContainer_jnk11m::before {
 	box-shadow: 0 1px 4px rgba(0,0,0, .2);
 	border-bottom: 1px solid rgba(0,0,0, .2);
 }
@@ -1634,10 +1634,10 @@ img[src='/assets/387a7c504c96b992872d.svg'] {
 	opacity: .5;
 }
 
-.contentRegion__23e6b div[role="tabpanel"] {
+.contentRegion_jnk11m div[role="tabpanel"] {
 	width: 100%;
 }
-.toolsContainer__23e6b {
+.toolsContainer_jnk11m {
 	margin-right: 37px;
 }
 #app-mount .closeButton_c2b141 {
