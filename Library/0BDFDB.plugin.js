@@ -1455,8 +1455,8 @@ module.exports = (_ => {
 				Internal.findClassValue = function (m, prop) {
 					try {
 						for (let v of Object.values(m)) if (typeof v == "string") {
-							let firstClass = v.split(" ")[0];
-							if (firstClass.startsWith(`${prop}_`) || firstClass.endsWith(`-${prop}`)) return v;
+							let classes = v.split(" ");
+							for (let i in classes) if (classes[i].startsWith(`${prop}_`) || classes[i].endsWith(`-${prop}`)) return classes.slice(i).join(" ");
 						}
 					}
 					catch (err) {}
