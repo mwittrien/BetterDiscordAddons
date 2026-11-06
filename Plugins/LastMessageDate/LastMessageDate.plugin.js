@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.7
+ * @version 1.5.8
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -75,7 +75,7 @@ module.exports = (_ => {
 					queuedInstances[this.props.guildId][this.props.user.id] = [].concat(queuedInstances[this.props.guildId][this.props.user.id]).filter(n => n);
 					BDFDB.LibraryModules.HTTPUtils.get({
 						url: this.props.isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(this.props.guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(this.props.channelId),
-						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
+						query: BDFDB.StringUtils.encodeForAPI({
 							author_id: this.props.user.id,
 							include_nsfw: true
 						})
