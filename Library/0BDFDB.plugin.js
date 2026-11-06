@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.8
+ * @version 4.5.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1452,8 +1452,6 @@ module.exports = (_ => {
 					}
 					return Internal.findModule("proto", JSON.stringify(protoProps), m => Internal.checkModuleProtos(m, protoProps) && m, config);
 				};
-				// Discord minifies CSS module export names (Av:"isExpanded_RTMSuZ"), so a class prop
-				// also matches when any exported class string carries the `${prop}_` prefix.
 				Internal.findClassValue = function (m, prop) {
 					try {
 						for (let v of Object.values(m)) if (typeof v == "string") {
@@ -4727,27 +4725,35 @@ module.exports = (_ => {
 				
 				const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
 				BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
+				const callWarning = (...strings) => {
+					let text = [strings].flat(10).filter(n => n);
+					if (!callWarning[text]) {
+						BDFDB.LogUtils.warn(text);
+						callWarning[text] = true;
+						BDFDB.TimeUtils.timeout(_ => {delete callWarning[text];}, 5000);
+					}
+				};
 				Internal.getDiscordClass = function (item, selector) {
 					let className, fallbackClassName, notFoundAndLazyloaded = false;
 					className = fallbackClassName = `${Internal.DiscordClassModules.BDFDB.BDFDBundefined}_${Internal.generateClassId()}`;
 					if (DiscordClasses[item] === undefined) {
-						BDFDB.LogUtils.warn([item, "not found in DiscordClasses"]);
+						callWarning([item, "not found in DiscordClasses"]);
 						return className;
 					} 
 					else if (!BDFDB.ArrayUtils.is(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
-						BDFDB.LogUtils.warn([item, "is not an Array of Length 2 in DiscordClasses"]);
+						callWarning([item, "is not an Array of Length 2 in DiscordClasses"]);
 						return className;
 					}
 					else if (Internal.DiscordClassModules[DiscordClasses[item][0]] === undefined) {
 						if (!InternalData.LazyloadedClassModules || !InternalData.LazyloadedClassModules[DiscordClasses[item][0]]) {
-							BDFDB.LogUtils.warn([DiscordClasses[item][0], "not found in DiscordClassModules"]);
+							callWarning([DiscordClasses[item][0], "not found in DiscordClassModules"]);
 							return className;
 						}
 						else notFoundAndLazyloaded = true;
 					}
 					else if ([DiscordClasses[item][1]].flat().every(prop => Internal.DiscordClassModules[DiscordClasses[item][0]][prop] === undefined && !Internal.findClassValue(Internal.DiscordClassModules[DiscordClasses[item][0]], prop))) {
 						if (!InternalData.LazyloadedClassModules || !InternalData.LazyloadedClassModules[DiscordClasses[item][0]]) {
-							BDFDB.LogUtils.warn([DiscordClasses[item][1], "not found in", DiscordClasses[item][0], "in DiscordClassModules"]);
+							callWarning([DiscordClasses[item][1], "not found in", DiscordClasses[item][0], "in DiscordClassModules"]);
 							return className;
 						}
 						else notFoundAndLazyloaded = true;
