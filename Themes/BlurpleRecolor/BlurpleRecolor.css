@@ -521,50 +521,50 @@
 	fill: rgb(var(--accentcolor_v));
 }
 
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 1"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 1"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 1"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 1"] {
 	background-color: rgba(var(--accentcolor_v), 1) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.9"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.9"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.9"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.9"] {
 	background-color: rgba(var(--accentcolor_v), 0.9) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.8"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.8"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.8"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.8"] {
 	background-color: rgba(var(--accentcolor_v), 0.8) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.7"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.7"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.7"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.7"] {
 	background-color: rgba(var(--accentcolor_v), 0.7) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.6"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.6"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.6"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.6"] {
 	background-color: rgba(var(--accentcolor_v), 0.6) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.5"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.5"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.5"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.5"] {
 	background-color: rgba(var(--accentcolor_v), 0.5) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.4"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.4"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.4"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.4"] {
 	background-color: rgba(var(--accentcolor_v), 0.4) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.3"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.3"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.3"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.3"] {
 	background-color: rgba(var(--accentcolor_v), 0.3) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.2"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.2"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.2"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.2"] {
 	background-color: rgba(var(--accentcolor_v), 0.2) !important;
 }
-.folderPreviewWrapper__48112[style*="background-color: rgba(88, 101, 242, 0.1"],
-.folderPreviewWrapper__48112[style*="background-color: rgba(87, 100, 242, 0.1"] {
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(88, 101, 242, 0.1"],
+.folderPreviewWrapper_RTMSuZ[style*="background-color: rgba(87, 100, 242, 0.1"] {
 	background-color: rgba(var(--accentcolor_v), 0.1) !important;
 }
-.folderPreviewWrapper__48112 svg[style^="color: rgb(88, 101, 242)"],
-.folderPreviewWrapper__48112 svg[style*=" color: rgb(88, 101, 242)"],
-.folderPreviewWrapper__48112 svg[style^="color: rgb(87, 100, 242)"],
-.folderPreviewWrapper__48112 svg[style*=" color: rgb(87, 100, 242)"] {
+.folderPreviewWrapper_RTMSuZ svg[style^="color: rgb(88, 101, 242)"],
+.folderPreviewWrapper_RTMSuZ svg[style*=" color: rgb(88, 101, 242)"],
+.folderPreviewWrapper_RTMSuZ svg[style^="color: rgb(87, 100, 242)"],
+.folderPreviewWrapper_RTMSuZ svg[style*=" color: rgb(87, 100, 242)"] {
 	color: rgb(var(--accentcolor_v)) !important;
 }
 
@@ -1989,10 +1989,10 @@ a.metadataDownload_cf09d8 {
 	filter: brightness(75%);
 }
 
-.base__463b7[style*="background-color: rgb(88, 101, 242)"],
-.base__463b7[style*="background-color: rgb(87, 100, 242)"],
-.base__463b7[style*="background-color: hsl(227, "],
-.base__463b7[style*="background-color: hsl(235, "] {
+.base_lMvXrQ[style*="background-color: rgb(88, 101, 242)"],
+.base_lMvXrQ[style*="background-color: rgb(87, 100, 242)"],
+.base_lMvXrQ[style*="background-color: hsl(227, "],
+.base_lMvXrQ[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor_v)) !important;
 }
 
