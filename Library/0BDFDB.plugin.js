@@ -1452,11 +1452,26 @@ module.exports = (_ => {
 					}
 					return Internal.findModule("proto", JSON.stringify(protoProps), m => Internal.checkModuleProtos(m, protoProps) && m, config);
 				};
+				// Discord minifies CSS module export names (Av:"isExpanded_RTMSuZ"), so a class prop
+				// also matches when any exported class string carries the `${prop}_` prefix.
+				Internal.findClassValue = function (m, prop) {
+					try {
+						for (let v of Object.values(m)) if (typeof v == "string") {
+							let className = v.split(" ").find(n => n.startsWith(`${prop}_`) || n.endsWith(`-${prop}`));
+							if (className) return className;
+						}
+					}
+					catch (err) {}
+					return "";
+				};
+				Internal.hasClassProp = function (m, prop) {
+					return typeof m[prop] == "string" || !!Internal.findClassValue(m, prop);
+				};
 				BDFDB.ModuleUtils.findStringObject = function (props, config = {}) {
 					let nonProps = [config.nonProps].flat(10).filter(n => n);
 					let firstReturn = BDFDB.ModuleUtils.find(m => {
 						let amount = Object.keys(m).length;
-						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(prop => typeof m[prop] == "string") && (!nonProps.length || nonProps.every(prop => typeof m[prop] == "undefined")) && m;
+						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(prop => Internal.hasClassProp(m, prop)) && (!nonProps.length || nonProps.every(prop => !Internal.hasClassProp(m, prop))) && m;
 					}, {all: config.all, defaultExport: config.defaultExport});
 					if (!config.all && firstReturn) return firstReturn;
 					let secondReturn = BDFDB.ModuleUtils.find(m => {
@@ -4688,7 +4703,7 @@ module.exports = (_ => {
 						if (!InternalData.DiscordClassModules[item]) return;
 						if (item in classCache) {
 							let m = Internal.getWebModuleReq().c[classCache[item]]?.exports;
-							if (m && m != window && [InternalData.DiscordClassModules[item].props].flat(10).every(p => typeof m[p] == "string")) return DiscordClassModules[item] = m;
+							if (m && m != window && [InternalData.DiscordClassModules[item].props].flat(10).every(p => Internal.hasClassProp(m, p))) return DiscordClassModules[item] = m;
 							delete classCache[item];
 						}
 						DiscordClassModules[item] = BDFDB.ModuleUtils.findStringObject(InternalData.DiscordClassModules[item].props, Object.assign({}, InternalData.DiscordClassModules[item]));
@@ -4730,7 +4745,7 @@ module.exports = (_ => {
 						}
 						else notFoundAndLazyloaded = true;
 					}
-					else if ([DiscordClasses[item][1]].flat().every(prop => Internal.DiscordClassModules[DiscordClasses[item][0]][prop] === undefined && !(JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`) || n.endsWith(`-${prop}`)) || "").split("\"")[0])) {
+					else if ([DiscordClasses[item][1]].flat().every(prop => Internal.DiscordClassModules[DiscordClasses[item][0]][prop] === undefined && !Internal.findClassValue(Internal.DiscordClassModules[DiscordClasses[item][0]], prop))) {
 						if (!InternalData.LazyloadedClassModules || !InternalData.LazyloadedClassModules[DiscordClasses[item][0]]) {
 							BDFDB.LogUtils.warn([DiscordClasses[item][1], "not found in", DiscordClasses[item][0], "in DiscordClassModules"]);
 							return className;
@@ -4742,7 +4757,7 @@ module.exports = (_ => {
 						DiscordClassModules[DiscordClasses[item][0]] = Object.assign({}, DiscordClassModules[item], {[DiscordClasses[item][1]]: className});
 					}
 					else for (let prop of [DiscordClasses[item][1]].flat()) {
-						className = Internal.DiscordClassModules[DiscordClasses[item][0]][prop] || (JSON.stringify(Internal.DiscordClassModules[DiscordClasses[item][0]]).split(" ").find(n => n.startsWith(`${prop}_`) || n.endsWith(`-${prop}`)) || "").split("\"")[0];
+						className = Internal.DiscordClassModules[DiscordClasses[item][0]][prop] || Internal.findClassValue(Internal.DiscordClassModules[DiscordClasses[item][0]], prop);
 						if (className) break;
 						else className = fallbackClassName;
 					}
