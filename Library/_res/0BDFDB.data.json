@@ -331,7 +331,6 @@
 		"TimeoutUtils": {"strings": ["_timeout.isStarted()"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
-		"URLParser": {"props": ["parse", "resolveObject"]},
 		"UserBadgeUtils": {"strings": ["getBadges", "STREAMER_MODE_ENABLED", "description"], "exported": false, "value": "exports", "map": {
 			"getBadges": ["getBadges", "STREAMER_MODE_ENABLED"]
 		}},
