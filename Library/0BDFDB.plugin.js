@@ -4430,6 +4430,9 @@ module.exports = (_ => {
 					ele.innerText = string;
 					return ele.innerHTML;
 				};
+				BDFDB.StringUtils.encodeForAPI = function (object) {
+					return Object.entries(object).map(n => `${encodeURIComponent(n[0])}=${encodeURIComponent(n[1])}`).join("&");
+				};
 				BDFDB.StringUtils.regEscape = function (string) {
 					return typeof string == "string" && string.replace(/([\-\/\\\^\$\*\+\?\.\(\)\|\[\]\{\}])/g, "\\$1");
 				};
