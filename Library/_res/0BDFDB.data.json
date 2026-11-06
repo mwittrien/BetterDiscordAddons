@@ -191,7 +191,6 @@
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
 		"AnimationUtils": {"props": ["spring", "decay"]},
-		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
 		"APIUtils": {"strings": ["window.GLOBAL_ENV.API_ENDPOINT+", "GLOBAL_ENV.API_VERSION"], "exported": false, "value": "exports", "map": {
 			"getAPIBaseURL": ["window.GLOBAL_ENV.API_ENDPOINT+"]
 		}},
