@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.6.9
+ * @version 5.7.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1027,7 +1027,7 @@ module.exports = (_ => {
 							let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
 							BDFDB.LibraryModules.HTTPUtils.get({
 								url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
-								query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
+								query: BDFDB.StringUtils.encodeForAPI({
 									channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 									has: "image",
 									include_nsfw: true,
@@ -1573,7 +1573,7 @@ module.exports = (_ => {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
 					BDFDB.LibraryModules.HTTPUtils.get({
 						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
-						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
+						query: BDFDB.StringUtils.encodeForAPI({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 							has: "image",
 							include_nsfw: true,
@@ -1600,7 +1600,7 @@ module.exports = (_ => {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
 					BDFDB.LibraryModules.HTTPUtils.get({
 						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
-						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
+						query: BDFDB.StringUtils.encodeForAPI({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 							has: "image",
 							include_nsfw: true,
