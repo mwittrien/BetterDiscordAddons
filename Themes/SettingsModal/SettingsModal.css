@@ -98,8 +98,8 @@
 #app-mount .BA__layerContainer ~ .BA__layerContainer .contentRegionScroller_jnk11m {
 	margin-top: 0 !important;
 }
-#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .sidebar_e29cd7,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebar_e29cd7 {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .sidebar_7NrAL2,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .sidebar_7NrAL2 {
 	height: var(--settingsheight_v) !important;
 }
 #app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .standardSidebarView_jnk11m .editor,
@@ -123,8 +123,8 @@
 	width: 100% !important;
 	height: 100% !important;
 }
-#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_c2b141,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_c2b141 {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_e76OBR,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_e76OBR {
 	border: none !important;
 	border-radius: 0 !important;
 	width: 100% !important;
@@ -135,31 +135,31 @@
 	flex: unset !important;
 	transition: unset !important;
 }
-#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_c2b141:hover,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_c2b141:hover {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_e76OBR:hover,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_e76OBR:hover {
 	transition: unset !important;
 	background: unset !important;
 }
-#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_c2b141 > svg,
-#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_c2b141 > svg {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .toolsContainer_jnk11m .closeButton_e76OBR > svg,
+#app-mount .BA__layerContainer ~ .BA__layerContainer .toolsContainer_jnk11m .closeButton_e76OBR > svg {
 	display: none !important;
 }
-#app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion_jnk11m .toolsContainer_jnk11m .container_c2b141 {
+#app-mount > .appAsidePanelWrapper_YRXZu0 > .notAppAsidePanel_YRXZu0 .contentRegion_jnk11m .toolsContainer_jnk11m .container_e76OBR {
 	height: 100% !important;
 }
-#app-mount > .appAsidePanelWrapper_a3002d > .notAppAsidePanel_a3002d .contentRegion_jnk11m .toolsContainer_jnk11m .keybind_c2b141 {
+#app-mount > .appAsidePanelWrapper_YRXZu0 > .notAppAsidePanel_YRXZu0 .contentRegion_jnk11m .toolsContainer_jnk11m .keybind_e76OBR {
 	display: none !important;
 }
 #app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .settingsToolbar_8227b0,
 #app-mount .BA__layerContainer ~ .BA__layerContainer .settingsToolbar_8227b0 {
 	display: none !important;
 }
-#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .container__9293f.headerBar__80679.
-#app-mount .BA__layerContainer ~ .BA__layerContainer .container__9293f.headerBar__80679 {
+#app-mount .layer_Fd0FEH ~ .layer_Fd0FEH .container_ybUK7Z.headerBar_ViLURN.
+#app-mount .BA__layerContainer ~ .BA__layerContainer .container_ybUK7Z.headerBar_ViLURN {
 	position: static !important;
 }
 
-#app-mount .root__5c9fc:not(:has(.introAnimation__33f0b)) {
+#app-mount .root_oez3v3:not(:has(.introAnimation__33f0b)) {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -176,14 +176,14 @@
 	contain: unset !important;
 	z-index: 1000 !important;
 }
-#app-mount .root__5c9fc.enterDone__5c9fc {
+#app-mount .root_oez3v3.enterDone_oez3v3 {
 	transform: unset !important;
 }
-#app-mount .root__5c9fc .closeIconWrapper__6fd0e,
-#app-mount .root__5c9fc .closeIconWrapper__6fd0e .container_c2b141,
-#app-mount .root__5c9fc .closeIconWrapper__6fd0e .closeButton_c2b141,
-#app-mount .layer_Fd0FEH > .shop__6db1d .container_c2b141,
-#app-mount .layer_Fd0FEH > .shop__6db1d .closeButton_c2b141 {
+#app-mount .root_oez3v3 .closeIconWrapper__6fd0e,
+#app-mount .root_oez3v3 .closeIconWrapper__6fd0e .container_e76OBR,
+#app-mount .root_oez3v3 .closeIconWrapper__6fd0e .closeButton_e76OBR,
+#app-mount .layer_Fd0FEH > .shop_Mqg79R .container_e76OBR,
+#app-mount .layer_Fd0FEH > .shop_Mqg79R .closeButton_e76OBR {
 	position: fixed !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -204,11 +204,11 @@
 	animation: unset !important;
 	transition: unset !important;
 }
-#app-mount .layer_Fd0FEH > .shop__6db1d .shopHomeLink__80679,
-#app-mount .layer_Fd0FEH > .shop__6db1d .tabs__80679,
-#app-mount .layer_Fd0FEH > .shop__6db1d .shopScroll__08415 {
+#app-mount .layer_Fd0FEH > .shop_Mqg79R .shopHomeLink_ViLURN,
+#app-mount .layer_Fd0FEH > .shop_Mqg79R .tabs__80679,
+#app-mount .layer_Fd0FEH > .shop_Mqg79R .shopScroll__08415 {
 	z-index: 2 !important;
 }
-#app-mount .root__5c9fc .closeIconWrapper__6fd0e {
+#app-mount .root_oez3v3 .closeIconWrapper__6fd0e {
 	top: 22px !important;
 }
