@@ -234,6 +234,9 @@ module.exports = (_ => {
 					${BDFDB.dotCN._imageutilitiesviewer} > * > *${BDFDB.notCN._imageutilitiesdetailswrapper} {
 						pointer-events: initial;
 					}
+					${BDFDB.dotCNS._imageutilitiesgallery + BDFDB.dotCN.imagemodalimagemediawrapper} * {
+						max-width: calc(80vw - 20px) !important;
+					}
 					${BDFDB.dotCN._imageutilitiesgallery} ~ ${BDFDB.dotCN.imagemodalnavbutton} {
 						display: none;
 					}
