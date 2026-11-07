@@ -87,9 +87,10 @@ body.folderContentIsOpen_ac0584 .titleBar_gnMEnp.typeMacOS_gnMEnp .macButtons_gn
 .wrapper_5dqHTG #server-search .wrapper__o8_Xq {
 	display: none;
 }
-.wrapper_5dqHTG .listItem_rwEpIL:first-child .listItemWrapper_tQErD4,				/*	home		*/ 
-.wrapper_5dqHTG .listItem_rwEpIL .tutorialContainer_rwEpIL .listItemWrapper_tQErD4,		/*	add server	*/ 
-.wrapper_5dqHTG .tutorialContainer_rwEpIL + .listItem_rwEpIL {					/*	discovery	*/ 
+.wrapper_5dqHTG .listItem_rwEpIL:first-child .listItemWrapper_tQErD4,				/*	home		*/
+.wrapper_5dqHTG .listItem_rwEpIL:has(.favoriteIcon_850pDF),					/*	favorites	*/
+.wrapper_5dqHTG .listItem_rwEpIL .tutorialContainer_rwEpIL .listItemWrapper_tQErD4,		/*	add server	*/
+.wrapper_5dqHTG .tutorialContainer_rwEpIL + .listItem_rwEpIL {					/*	discovery	*/
 	margin: 0 calc(1px * (((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2)) calc(1px * var(--guildgap_v)) calc(1px * ((((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2))) !important;
 }
 .wrapper_5dqHTG .tutorialContainer_rwEpIL:nth-last-child(2) .listItem_rwEpIL {
