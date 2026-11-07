@@ -167,12 +167,12 @@ module.exports = (_ => {
 					}
 
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildsscroller} {
-						padding-top: 4px;
+						padding-top: 4px !important;
 					}
 					
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.channelheaderheaderbar},
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.channelheaderdiscovery} {
-						padding-right: 8px;
+						padding-right: 8px !important;
 					}
 					
 					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.channelheaderdiscoverysearchfloating} {
@@ -298,7 +298,8 @@ module.exports = (_ => {
 				if (!e.returnvalue) {
 					titleBarLeading = e.instance.props.leading;
 					titleBarTrailing = e.instance.props.trailing;
-				} else return null;
+				}
+				else return null;
 			}
 			
 			processHeaderBarDiscovery (e) {
