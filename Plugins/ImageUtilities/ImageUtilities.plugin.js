@@ -753,6 +753,12 @@ module.exports = (_ => {
 						urlData.original && urlData.original.indexOf("data:") != 0 && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.COPY_LINK
+								})
+							},
 							action: _ => {
 								let url = this.removeSizeInUrl(urlData.original);
 								url = this.removeFormatInUrl(url);
@@ -764,6 +770,12 @@ module.exports = (_ => {
 						urlData.file != urlData.original && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_MEDIA_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-media-link"),
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.COPY_LINK
+								})
+							},
 							action: _ => {
 								let url = this.removeSizeInUrl(urlData.file);
 								url = this.removeFormatInUrl(url);
@@ -775,16 +787,34 @@ module.exports = (_ => {
 						urlData.original && urlData.original.indexOf("data:") != 0 && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.OPEN_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "open-link"),
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.IMAGE_OPEN
+								})
+							},
 							action: _ => BDFDB.DiscordUtils.openLink(urlData.original)
 						}),
 						!this.isValid(urlData.file, "copyable") ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_copy.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-file"),
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.COPY
+								})
+							},
 							action: _ => this.copyFile({url: urlData.original, fallbackUrl: urlData.src})
 						}),
 						!document.querySelector(BDFDB.dotCN.imagemodal) && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_view.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "view-file"),
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.IMAGE
+								})
+							},
 							action: _ => {
 								const imageThrowaway = document.createElement(isVideo ? "video" : "img");
 								imageThrowaway.addEventListener(isVideo ? "loadedmetadata" : "load", function() {
@@ -830,6 +860,12 @@ module.exports = (_ => {
 							label: this.labels.context_saveas.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-file-as"),
 							action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, null, urlData.alternativeName),
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.IMAGE
+								})
+							},
 							children: locations.length && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: locations.map((name, i) => {
 									let path = ownLocations[name].location.replace(/\\\*$/, "");
@@ -851,6 +887,12 @@ module.exports = (_ => {
 							label: this.labels.context_searchwith.replace("{{var0}}", type).replace("...", this.defaults.engines[engineKeys[0]].name),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
 							persisting: true,
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.SEARCH
+								})
+							},
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(instance);
 								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url + encodeURIComponent(urlData.original), {
@@ -860,6 +902,12 @@ module.exports = (_ => {
 						}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_searchwith.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-search"),
+							leadingAccessory: {
+								type: "icon",
+								icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+									icon: BDFDB.LibraryComponents.SvgIcon.Names.SEARCH
+								})
+							},
 							children: !engineKeys.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.submenu_disabled,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "disabled"),
