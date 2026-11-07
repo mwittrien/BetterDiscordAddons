@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.7.0
+ * @version 5.7.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -135,72 +135,6 @@ module.exports = (_ => {
 			}
 		};
 		
-		const ImageDetailsComponent = class ImageDetails extends BdApi.React.Component {
-			componentDidMount() {
-				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemosaiconebyonegridsingle, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._imageutilitiesimagedetailsadded);
-				let item = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "item", {up: true});
-				if (item && item.originalItem) {
-					this.props.attachment = item.originalItem;
-					BDFDB.ReactUtils.forceUpdate(this);
-				}
-			}
-			componentDidUpdate() {
-				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
-					this.props.loaded = true;
-					let item = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "item", {up: true});
-					if (item && item.originalItem) {
-						this.props.attachment = item.originalItem;
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-				}
-			}
-			render() {
-				return !this.props.attachment ? null : BDFDB.ReactUtils.createElement("span", {
-					className: BDFDB.disCN._imageutilitiesimagedetails,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-							title: this.props.original,
-							href: this.props.original,
-							children: this.props.attachment.filename,
-							onClick: event => {
-								BDFDB.ListenerUtils.stopEvent(event);
-								BDFDB.DiscordUtils.openLink(this.props.original);
-							}
-						}),
-						BDFDB.ReactUtils.createElement("span", {
-							children: BDFDB.NumberUtils.formatBytes(this.props.attachment.size)
-						}),
-						BDFDB.ReactUtils.createElement("span", {
-							children: `${this.props.attachment.width}x${this.props.attachment.height}px`
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LibraryStrings.download,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.cursorpointer,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.DOWNLOAD,
-								width: 16,
-								height: 16,
-								onClick: event => {
-									BDFDB.ListenerUtils.stopEvent(event);
-									_this.downloadFile({url: this.props.attachment.proxy_url || this.props.original});
-								},
-								onContextMenu: event => {
-									let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
-									if (locations.length) BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-										children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "download", name, i),
-											label: name,
-											action: _ => _this.downloadFile({url: this.props.attachment.proxy_url || this.props.original}, ownLocations[name].location)
-										}))
-									}));
-								}
-							})
-						})
-					]
-				});
-			}
-		};
-		
 		return class ImageUtilities extends Plugin {
 			onLoad () {
 				_this = this;
@@ -232,8 +166,7 @@ module.exports = (_ => {
 						rescaleEmbeds: 				{value: true,	description: "Resize Image Embeds"}
 					},
 					detailsSettings: {
-						footnote:				{value: true, 			description: "in the Image Description"},
-						tooltip:				{value: false, 			description: "as a Hover Tooltip"},
+						tooltip:				{value: false, 			description: "Show Image Details on Hover"},
 						tooltipDelay:				{value: 0, 	min: 0,		description: "Image Tooltip Delay (in ms)"}
 					},
 					places: {
@@ -289,48 +222,6 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCN._imageutilitiesimagedetailsadded} {
-						max-height: unset !important;
-					}
-					${BDFDB.dotCNS._imageutilitiesimagedetailsadded + BDFDB.dotCN.imagewrapper} {
-						border-radius: 8px !important;
-						height: calc(100% - 1rem - 16px) !important;
-						max-height: unset !important;
-						margin-left: unset !important;
-					}
-					${BDFDB.dotCNS._imageutilitiesimagedetailsadded + BDFDB.dotCN.imagealttextcontainer} {
-						bottom: calc(1rem + 16px) !important;
-					}
-					${BDFDB.dotCN._imageutilitiesimagedetails} {
-						display: inline-flex;
-						font-weight: 500;
-						color: var(--text-muted);
-						font-size: 12px;
-						margin: .25rem 0 .75rem;
-						line-height: 16px;
-					}
-					${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._imageutilitiesimagedetails} {
-						visibility: hidden;
-					}
-					span + ${BDFDB.dotCN._imageutilitiesimagedetails} {
-						margin-left: 12px;
-					}
-					${BDFDB.dotCN._imageutilitiesimagedetails} > * {
-						display: inline-block;
-						margin-right: 12px;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-					}
-					${BDFDB.dotCN._imageutilitiesimagedetails} > a {
-						max-width: 300px;
-					}
-					span + ${BDFDB.dotCN._imageutilitiesimagedetails} > a {
-						max-width: 200px;
-					}
-					${BDFDB.dotCN._imageutilitiesimagedetails} > span {
-						max-width: 100px;
-					}
 					${BDFDB.dotCNS._imageutilitiesgallery + BDFDB.dotCN.modal},
 					${BDFDB.dotCNS._imageutilitiesdetailsadded + BDFDB.dotCN.modal} {
 						transform: unset !important;
@@ -534,16 +425,13 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Image Details Settings",
 							collapseStates: collapseStates,
-							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-								title: "Show Image Details",
-								children: Object.keys(this.defaults.detailsSettings).filter(key => typeof this.defaults.detailsSettings[key].value == "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									type: "Switch",
-									plugin: this,
-									keys: ["detailsSettings", key],
-									label: this.defaults.detailsSettings[key].description,
-									value: this.settings.detailsSettings[key]
-								}))
-							})].concat(Object.keys(this.defaults.detailsSettings).filter(key => typeof this.defaults.detailsSettings[key].value != "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.detailsSettings).filter(key => typeof this.defaults.detailsSettings[key].value == "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["detailsSettings", key],
+								label: this.defaults.detailsSettings[key].description,
+								value: this.settings.detailsSettings[key]
+							})).concat(Object.keys(this.defaults.detailsSettings).filter(key => typeof this.defaults.detailsSettings[key].value != "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",
 								plugin: this,
 								keys: ["detailsSettings", key],
@@ -817,7 +705,7 @@ module.exports = (_ => {
 						if (fileUrl.split("/https/").length > 1) fileUrl = "https://" + fileUrl.split("/https/").pop();
 						else if (url.split("/http/").length > 1) fileUrl = "http://" + fileUrl.split("/http/").pop();
 					}
-					const file = fileUrl && (BDFDB.LibraryModules.URLParser.parse(fileUrl).pathname || "").toLowerCase();
+					const file = fileUrl && (new URL(fileUrl).pathname || "").toLowerCase();
 					const fileType = file && (file.split(".").pop() || "");
 					return fileUrl && fileType && !addedUrls.includes(srcUrl) && addedUrls.push(srcUrl) && {file: fileUrl, src: srcUrl, original: originalUrl, isGuildSpecific: /^https:\/\/cdn\.discordapp\.com\/guilds\/\d+\/users\/\d+/.test(srcUrl), fileType, alternativeName: escape((n.alternativeName || "").replace(/:/g, ""))};
 				}).filter(n => n);
@@ -830,7 +718,7 @@ module.exports = (_ => {
 					return !type && fileTypes[fileType] || type && type != "searchable" && fileTypes[fileType] && fileTypes[fileType][type];
 				}
 				else {
-					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split("%3A")[0].toLowerCase();
+					const file = url && (new URL(url).pathname || "").split("%3A")[0].toLowerCase();
 					return file && (!type && (url.indexOf("discord.com/streams/guild:") > -1 || url.indexOf("discordapp.com/streams/guild:") > -1 || url.indexOf("discordapp.net/streams/guild:") > -1 || url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || ((type == "copyable" || type == "searchable") && (url.indexOf("discord.com/streams/guild:") > -1 || url.indexOf("discordapp.com/streams/guild:") > -1 || url.indexOf("discordapp.net/streams/guild:") > -1)) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 				}
 			}
@@ -1355,35 +1243,19 @@ module.exports = (_ => {
 			}
 
 			processLazyImageZoomable (e) {
-				if (!e.instance.props.item || !e.instance.props.item.originalItem || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
-				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length > 1) {
-					const onMouseEnter = e.returnvalue.props.onMouseEnter || (_ => {});
-					e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
-						BDFDB.TooltipUtils.create(args[0].target, [
-							e.instance.props.item.originalItem.filename,
-							BDFDB.NumberUtils.formatBytes(e.instance.props.item.originalItem.size),
-							`${e.instance.props.item.originalItem.width}x${e.instance.props.item.originalItem.height}px`
-						].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
-							type: "right",
-							delay: this.settings.detailsSettings.tooltipDelay
-						});
-						return onMouseEnter(...args);
-					}, "Error in onMouseEnter of LazyImageZoomable!");
-				}
-				if (this.settings.detailsSettings.footnote && [e.instance.props.className, e.instance.props.containerClassName].every(n => [BDFDB.disCN.embedmedia, BDFDB.disCN.embedthumbnail].every(m => (n || "").indexOf(m) == -1)) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "message", {up: true}) || {attachments: []}).attachments.filter(n => n.content_type && n.content_type.startsWith("image")).length < 2)) {
-					e.returnvalue = BDFDB.ReactUtils.createElement("div", {
-						children: [
-							BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
-								original: e.instance.props.item.original,
-								attachment: {
-									height: 0,
-									width: 0,
-									filename: "unknown.png"
-								}
-							}, true)
-						]
+				if (!this.settings.detailsSettings.tooltip || !e.instance.props.item || !e.instance.props.item.originalItem || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
+				const onMouseEnter = e.returnvalue.props.onMouseEnter || (_ => {});
+				e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
+					BDFDB.TooltipUtils.create(args[0].target, [
+						e.instance.props.item.originalItem.filename,
+						BDFDB.NumberUtils.formatBytes(e.instance.props.item.originalItem.size),
+						`${e.instance.props.item.originalItem.width}x${e.instance.props.item.originalItem.height}px`
+					].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
+						type: "right",
+						delay: this.settings.detailsSettings.tooltipDelay
 					});
-				}
+					return onMouseEnter(...args);
+				}, "Error in onMouseEnter of LazyImageZoomable!");
 			}
 
 			processMessageAccessories (e) {
