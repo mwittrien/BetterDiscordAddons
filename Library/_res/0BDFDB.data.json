@@ -1354,7 +1354,7 @@
 		"NotFound": {
 			"_": "",
 			"emoji": "emoji",
-			"carouselModal": "carouselModal_d3a6f0",
+			"carouselModal": "carouselModal_7QK1F9",
 			"enableForcedColors": "enable-forced-colors",
 			"highlight": "highlight",
 			"hueCursor": "hue_cursor",
@@ -1423,6 +1423,7 @@
 		"HotKeyRecorderBase": "_BLAbN",
 		"HoverCardRemoveButton": "e18686",
 		"ImageModalButtons": "Q2cxvN",
+		"ImageModalMediaWrapper": "RtjmOP",
 		"Message": "SY_P2T",
 		"MessageBody": "2i8Bfm",
 		"MessageReactionsModal": "quI2qP",
