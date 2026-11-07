@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.5
+ * @version 2.0.6
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -598,7 +598,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandedbackground} {
 						top: -2px;
-						right: 10px;
+						right: 0px;
 						bottom: -2px;
 						left: 6px;
 						width: auto;
@@ -629,8 +629,7 @@ module.exports = (_ => {
 						height: ${this.settings.amounts.serverElementHeight}px;
 						transform: unset;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildbuttoninner} svg,
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfavoritesring} {
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildbuttoninner} svg {
 						width: ${this.settings.amounts.serverElementHeight/32 * 20}px;
 						height: ${this.settings.amounts.serverElementHeight/32 * 20}px;
 						transform: unset;
