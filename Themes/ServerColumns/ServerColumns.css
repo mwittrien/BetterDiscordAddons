@@ -143,18 +143,18 @@ body.folderContentIsOpen_ac0584 .titleBar_gnMEnp.typeMacOS_gnMEnp .macButtons_gn
 .wrapper_5dqHTG .lowerLeftBadge_820890 .base_lMvXrQ {
 	transform: translate(calc(-3px * ((38 - var(--guildsize_v))/10)), calc(3px * ((38 - var(--guildsize_v))/10))) scale(calc(var(--guildsize_v)/50 * var(--badgescale_v))) !important;
 }
-.wrapper_5dqHTG .wrapper__o8_Xq {				/* 	guild/button	*/
+.wrapper_5dqHTG .wrapper__o8_Xq {								/* 	guild/button	*/
 	top: calc(-5px * var(--guildsize_v)/50) !important;
 	left: calc(-10px * var(--guildsize_v)/50) !important;
 	height: calc(1px * (var(--guildsize_v) + 10 * var(--guildsize_v)/50)) !important;
 	transform: scale(calc(var(--guildsize_v)/50)) !important;
 	transform-origin: 0 50% !important;
 }
-.wrapper_5dqHTG #guild-list-unread-dms .wrapper__o8_Xq {	/*	dm		*/ 
-	left: calc(1px * ((var(--aligndms_v) + ((((var(--guildsize_v) + 10 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2) * (1 - var(--aligndms_v)))) - 8)) !important;
+.wrapper_5dqHTG .tutorialContainer_1IyMuq .wrapper__o8_Xq {					/*	home		*/ 
+	left: calc(1px * ((((var(--guildsize_v) + 6 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2) - 4)) !important;
 }
-.wrapper_5dqHTG .tutorialContainer_1IyMuq .wrapper__o8_Xq {	/*	home		*/ 
-	left: calc(1px * ((((var(--guildsize_v) + 10 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2) - 5)) !important;
+.wrapper_5dqHTG #guild-list-unread-dms .wrapper__o8_Xq {					/*	dm		*/ 
+	left: calc(1px * ((var(--aligndms_v) + ((((var(--guildsize_v) + 10 * var(--guildsize_v)/50) * (var(--columns_v) - 1))/2) * (1 - var(--aligndms_v)))) - 8)) !important;
 }
 .wrapper_5dqHTG .guildSeparator_3WHVfy {
 	width: calc(1px * ((var(--guildsize_v) + 12 * var(--guildsize_v)/50) * var(--columns_v) - (12 * var(--guildsize_v)/50))) !important;
