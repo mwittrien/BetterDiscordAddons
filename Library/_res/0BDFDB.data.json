@@ -1537,7 +1537,7 @@
 		"GuildChannelsWrapper": {"props": ["hubContainer", "container"]},
 		"GuildDiscovery": {"props": ["pageWrapper", "guildList"]},
 		"GuildEdges": {"props": ["wrapper", "target", "centerTarget"]},
-		"GuildFavorites": {"props": ["favoriteIcon", "ring"]},
+		"GuildFavorites": {"props": ["favoriteIcon"], "length": 4, "smaller": true},
 		"GuildFolder": {"props": ["folderGroup", "isExpanded"]},
 		"GuildHeader": {"props": ["header", "name", "bannerImage"]},
 		"GuildHeaderButton": {"props": ["button", "open"]},
