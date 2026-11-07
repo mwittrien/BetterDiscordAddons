@@ -1760,8 +1760,6 @@
 		"_imageutilitiesdetailslabel": ["ImageUtilities", "detailsLabel"],
 		"_imageutilitiesdetailswrapper": ["ImageUtilities", "detailsWrapper"],
 		"_imageutilitiesgallery": ["ImageUtilities", "gallery"],
-		"_imageutilitiesimagedetails": ["ImageUtilities", "imageDetails"],
-		"_imageutilitiesimagedetailsadded": ["ImageUtilities", "imageDetailsAdded"],
 		"_imageutilitieslense": ["ImageUtilities", "lens"],
 		"_imageutilitieslensebackdrop": ["ImageUtilities", "lensBackdrop"],
 		"_imageutilitiesnext": ["ImageUtilities", "next"],
