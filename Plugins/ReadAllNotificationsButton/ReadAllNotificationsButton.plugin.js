@@ -152,7 +152,6 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					after: [
-						"UnreadDMs",
 						"InboxHeader"
 					]
 				};
@@ -193,10 +192,34 @@ module.exports = (_ => {
 				this.saveBlacklist(!BDFDB.ArrayUtils.is(loadedBlacklist) ? [] : loadedBlacklist);
 
 				this.forceUpdateAll();
+				this.mountButton();
+				this.mountInterval = setInterval(_ => this.mountButton(), 1000);
 			}
 			
 			onStop () {
+				clearInterval(this.mountInterval);
+				this.unmountButton();
 				this.forceUpdateAll();
+			}
+
+			mountButton () {
+				let scroller = document.querySelector(BDFDB.dotCN.guildsscroller);
+				if (!scroller || !scroller.parentNode) return;
+				if (this.host && this.host.isConnected && this.host.nextSibling === scroller) return;
+				this.unmountButton();
+				let host = document.createElement("div");
+				host.id = "readallnotificationsbutton-host";
+				host.style.cssText = "flex: 0 0 auto; display: flex; justify-content: center; padding: 6px 0 4px 0;";
+				scroller.parentNode.insertBefore(host, scroller);
+				this.host = host;
+				BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(ReadAllButtonComponent, {}), host);
+			}
+
+			unmountButton () {
+				if (!this.host) return;
+				try {BDFDB.ReactUtils.unmountComponentAtNode(this.host);} catch (err) {}
+				this.host.remove();
+				this.host = null;
 			}
 
 			getSettingsPanel (collapseStates = {}) {
