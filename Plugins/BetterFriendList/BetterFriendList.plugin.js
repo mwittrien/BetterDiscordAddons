@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.2
+ * @version 1.7.3
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and Amount Numbers, new Tabs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -128,10 +128,6 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._betterfriendlistnamecell} {
 						width: 170px;
-					}
-					${BDFDB.dotCNS.peoplespeoplecolumn + BDFDB.dotCN.searchbar} {
-						padding-bottom: 0;
-						margin-bottom: 0;
 					}
 					${BDFDB.dotCN.peoplesuser} {
 						flex: 1 1 auto;
